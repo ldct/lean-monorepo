@@ -108,8 +108,9 @@ def C_A : Subgroup (DihedralGroup 4) := Subgroup.centralizer A
 example (G : Type) [Group G] (H : Subgroup G) : Subgroup.centralizer H ≤ Subgroup.normalizer H := by {
   intros g g_centralizes_h
   have ginv_centralizes_h : g⁻¹ ∈ Subgroup.centralizer H := by {
-    exact Subgroup.inv_mem (Subgroup.centralizer ↑H) g_centralizes_h
+    exact?
   }
+
   have conj_by_ginv' (h : G) : h ∈ H → g⁻¹ * h * g ∈ H := by {
     intro hh
     specialize ginv_centralizes_h h
@@ -209,6 +210,5 @@ theorem A_eq_CA : A = C_A := by {
   intro ha
   exact h2 (h1 (h2 ha))
 }
-
 
 example : (1 : ZMod 4) ≠ -1 := by decide
