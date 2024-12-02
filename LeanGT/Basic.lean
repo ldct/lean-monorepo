@@ -52,13 +52,11 @@ example (n : ℕ): Subgroup (DihedralGroup n) where
   carrier := { r (2*i) | i : ZMod n }
   mul_mem' := by
     intros a b ha hb
-    simp at ha
-    simp at hb
     cases' ha with i ha
     cases' hb with j hb
     rw [← ha, ← hb]
-    simp
     use i + j
+    simp
     ring
   one_mem' := by
     use 0
@@ -70,10 +68,8 @@ example (n : ℕ): Subgroup (DihedralGroup n) where
     cases' hx with i hi
     use -i
     rw [← hi]
-
     have rr : (r (2 * i))⁻¹ = r (- (2 * i)) := by
       rfl
-
     rw [rr]
     ring_nf
 
