@@ -18,8 +18,6 @@ example (h : (1 = 0 ∨ 1 = 2)) : False := by
   have h' : ¬(1 = 0 ∨ 1 = 2) := by decide
   exact h' h
 
-
-
 theorem target : B = Subgroup.center (DihedralGroup 4) := by
   ext a
   rw [←Subgroup.mem_carrier]
@@ -41,6 +39,8 @@ theorem target : B = Subgroup.center (DihedralGroup 4) := by
   rw [mem_B_iff] at h
   simp at h
   exfalso
+
+
   have e : ¬((1 : Fin 4) = 0 ∨ (1 : Fin 4) = 2) := by decide
   apply e
   exact h
