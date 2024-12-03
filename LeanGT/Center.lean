@@ -35,10 +35,14 @@ theorem target : B = Subgroup.center (DihedralGroup 4) := by
 
   simp
   constructor
+
   intro h
   rw [mem_B_iff] at h
   simp at h
   exfalso
+
+  revert h
+  decide
 
 
   have e : ¬((1 : Fin 4) = 0 ∨ (1 : Fin 4) = 2) := by decide

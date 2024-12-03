@@ -5,6 +5,14 @@ open Day2Data
 
 #eval lst2.length
 
+def l1 := [1]
+def l2 := [2]
+
+example (h : l1 = l2) : False := by
+  have h' : l1 ≠ l2 := by decide
+  exact h' h
+
+
 def differences_ (prev : Int) (lst : List Int) : List Int :=
   match lst with
     | [] => []
