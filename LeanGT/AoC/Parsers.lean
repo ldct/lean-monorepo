@@ -45,35 +45,54 @@ def matchPair := matchPair_ (.mk 0 #[])
 
 #eval matchPair "1,0)".mkIterator
 
-structure MulStruct: Type where
-  n1: Int
-  n2: Int
-deriving Inhabited, Repr, BEq
+inductive Token: Type where
+  | mul (n1: Int) (n2: Int)
+  | start
+  | halt
+  deriving Inhabited, Repr, BEq
 
-def mulOfPair (x : PairState) : MulStruct :=
+def mulOfPair (x : PairState) : Token :=
   if x.acc.size == 2 then
-    .mk (x.acc.get! 0) (x.acc.get! 1)
+    .mul (x.acc.get! 0) (x.acc.get! 1)
   else
-    .mk 0 0
+    .mul 0 0
 
 -- Mul
 
 structure MulState : Type where
-  head: String
-  acc: Array MulStruct
+  mulHead: String
+  startHead: String
+  stopHead: String
+  acc: Array Token
 deriving Repr, BEq
 
 namespace MulState
-  def consume (p : MulState)  (c : Char) (s : String.Iterator): MulState :=
-    if p.head.isEmpty then
-      let lookahead := matchPair s
+  def consume (p : MulState)  (c : Char) (it : String.Iterator): MulState :=
+    let m := p.mulHead
+    let s := p.startHead
+    let t := p.stopHead
+
+    let m' := if c == m.mkIterator.curr then m.tail else m
+    let s' := if c == s.mkIterator.curr then s.tail else s
+    let t' := if c == t.mkIterator.curr then t.tail else t
+
+    -- dbgTrace [p.startHead, p.mulHead, p.stopHead, "<-", c.toString, "->", m', s'].toString fun _ =>
+
+    if m'.isEmpty then
+      let lookahead := matchPair it.next
       match lookahead with
-      | none => .mk "mul(" p.acc
-      | some p' => .mk "mul(" (p.acc.push (mulOfPair p'))
-    else if c == p.head.mkIterator.curr then
-      .mk p.head.tail p.acc
+      | none => .mk "mul(" "do()" "don't()" p.acc
+      | some p' => .mk "mul(" "do()" "don't()" (p.acc.push (mulOfPair p'))
+    else if s'.isEmpty then
+      .mk "mul(" "do()" "don't()" (p.acc.push .start)
+    else if t'.isEmpty then
+      .mk "mul(" "do()" "don't()" (p.acc.push .halt)
     else
-      .mk "mul(" p.acc
+      .mk
+        (if m == m' then "mul(" else m')
+        (if s == s' then "do(" else s')
+        (if t == t' then "don't(" else t')
+        p.acc
 end MulState
 
 def matchMul_ (p : MulState) (s : String.Iterator) : MulState :=
@@ -84,4 +103,6 @@ def matchMul_ (p : MulState) (s : String.Iterator) : MulState :=
     matchMul_ p' s.next
 
 
-def matchMul := matchMul_ (.mk "mul(" #[])
+def matchMul := matchMul_ (.mk "mul(" "do()" "don't()" #[])
+
+#eval matchMul "don't()do()".mkIterator
