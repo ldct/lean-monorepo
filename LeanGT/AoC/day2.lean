@@ -9,6 +9,7 @@ def l1 := [1]
 def l2 := [2]
 
 example (h : l1 = l2) : False := by
+  unfold l1 at h
   have h' : l1 ≠ l2 := by decide
   exact h' h
 
