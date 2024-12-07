@@ -177,4 +177,32 @@ theorem A_eq_CA : A = C_A := by {
   exact h2 (h1 (h2 ha))
 }
 
+-- The image of a homomorphism is a subgroup
+
+example (G H: Type) [Group G] [Group H] (φ : G →* H): Subgroup H where
+  carrier := { φ g | g : G }
+  mul_mem' := by
+    intros a b a_in_G b_in_G
+    simp at a_in_G
+    simp at b_in_G
+    cases' a_in_G with a' phi_a'_is_a
+    cases' b_in_G with b' phi_b'_is_b
+    simp
+    use a' * b'
+    have h : φ (a' * b') = (φ a') * φ b' := by
+      exact MonoidHom.map_mul φ a' b'
+    rw [h, phi_a'_is_a, phi_b'_is_b]
+  one_mem' := by
+    simp
+    use 1
+    exact MonoidHom.map_one φ
+  inv_mem' := by
+    intros g hg
+    simp at hg
+    cases' hg with g' phi_g'_is_g
+    simp
+    use g'⁻¹
+    simp
+    exact phi_g'_is_g
+
 example : (1 : ZMod 4) ≠ -1 := by decide

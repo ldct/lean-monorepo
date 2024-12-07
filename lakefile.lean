@@ -11,9 +11,6 @@ package «LeanGT» where
 require mathlib from git
   "https://github.com/leanprover-community/mathlib4.git"
 
-require Regex from git
-  "https://github.com/bergmannjg/regex" @ "main"
-
 @[default_target]
 lean_lib «LeanGT» where
   -- add any library configuration options here
