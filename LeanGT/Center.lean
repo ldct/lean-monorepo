@@ -43,6 +43,7 @@ theorem target : B = Subgroup.center (DihedralGroup 4) := by
 
   revert h
 
+
   decide
 
 

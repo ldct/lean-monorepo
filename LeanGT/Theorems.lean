@@ -1,6 +1,6 @@
 import Mathlib
 
-example (G : Type) [Group G] (H : Subgroup G) : Subgroup.centralizer H ≤ Subgroup.normalizer H := by {
+theorem centralizer_le_normalizer (G : Type) [Group G] (H : Subgroup G) : Subgroup.centralizer H ≤ Subgroup.normalizer H := by {
   intros g g_centralizes_h
   have ginv_centralizes_h : g⁻¹ ∈ Subgroup.centralizer H := by {
     exact?
@@ -28,3 +28,10 @@ example (G : Type) [Group G] (H : Subgroup G) : Subgroup.centralizer H ≤ Subgr
   group at spec
   exact spec
 }
+
+theorem neg_1_eq_n_minus_1 : ((-1 : ZMod n) = n-1) := by {
+  simp only [CharP.cast_eq_zero, zero_sub]
+}
+
+example (a : ZMod n) (b : ZMod n) (h : a = b) : a.val = b.val := by
+  exact congrArg ZMod.val h
