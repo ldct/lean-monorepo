@@ -15,7 +15,9 @@ example (n: ℕ) : (sr 2: DihedralGroup n) * (r 1) = r (-1) * (sr 2) := by simp
 -- x r x = r^-1
 example (n k: ℕ) : (sr k: DihedralGroup n) * (r 1) * (sr k) = r (-1) := by simp
 
--- Various concrete subgroups of concrete dihedral groups
+-- 10 subgroups - https://people.maths.bris.ac.uk/~matyd/GroupNames/1/D4.html
+
+-- ⊥
 
 example : Subgroup (DihedralGroup 4) where
   carrier := {r 0}
@@ -23,11 +25,43 @@ example : Subgroup (DihedralGroup 4) where
   one_mem' := by decide
   inv_mem' := by decide
 
+-- Isomorphic to C2
+
+-- 4 flips
+
 example : Subgroup (DihedralGroup 4) where
   carrier := { r 0 , sr 0 }
   mul_mem' := by decide
   one_mem' := by decide
   inv_mem' := by decide
+
+example : Subgroup (DihedralGroup 4) where
+  carrier := { r 0 , sr 1 }
+  mul_mem' := by decide
+  one_mem' := by decide
+  inv_mem' := by decide
+
+example : Subgroup (DihedralGroup 4) where
+  carrier := { r 0 , sr 2 }
+  mul_mem' := by decide
+  one_mem' := by decide
+  inv_mem' := by decide
+
+example : Subgroup (DihedralGroup 4) where
+  carrier := { r 0 , sr 4 }
+  mul_mem' := by decide
+  one_mem' := by decide
+  inv_mem' := by decide
+
+-- half-rotations, center
+
+example : Subgroup (DihedralGroup 4) where
+  carrier := { r 0 , r 2 }
+  mul_mem' := by decide
+  one_mem' := by decide
+  inv_mem' := by decide
+
+-- V4
 
 example : Subgroup (DihedralGroup 4) where
   carrier := { r 0, r 2, sr 0, sr 2 }
@@ -41,8 +75,10 @@ example : Subgroup (DihedralGroup 4) where
   one_mem' := by decide
   inv_mem' := by decide
 
-example : Subgroup (DihedralGroup 6) where
-  carrier := { r 0 } ∪ { sr 0 }
+-- C4
+
+example : Subgroup (DihedralGroup 4) where
+  carrier := { r 0, r 1, r 2, r 3 }
   mul_mem' := by decide
   one_mem' := by decide
   inv_mem' := by decide
