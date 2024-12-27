@@ -19,9 +19,7 @@ example (n k: ℕ) : (sr k: DihedralGroup n) * (r 1) * (sr k) = r (-1) := by sim
 example (n : ℕ): Subgroup (DihedralGroup n) where
   carrier := { r (2*i) | i : ZMod n }
   mul_mem' := by
-    intros a b ha hb
-    cases' ha with i ha
-    cases' hb with j hb
+    rintro a b ⟨i, ha⟩ ⟨j, hb⟩
     rw [← ha, ← hb]
     use i + j
     simp

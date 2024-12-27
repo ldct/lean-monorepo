@@ -73,6 +73,31 @@ def rot : Subgroup (DihedralGroup 4) where
   one_mem' := by decide
   inv_mem' := by decide
 
+instance (g : DihedralGroup 4) : Decidable (g ∈ rot) :=
+  match g with
+  | r 0 => isTrue (by rw [rot]; simp)
+  | r 1 => isTrue (by rw [rot]; simp)
+  | r 2 => isTrue (by rw [rot]; simp)
+  | r 3 => isTrue (by rw [rot]; simp)
+  | sr 0 => isFalse (by rw [rot]; simp)
+  | sr 1 => isFalse (by rw [rot]; simp)
+  | sr 2 => isFalse (by rw [rot]; simp)
+  | sr 3 => isFalse (by rw [rot]; simp)
+
+example : IsCyclic (rot) := ⟨ ⟨r 1, by decide⟩, by
+  intro x
+  fin_cases x
+  use 0
+  rfl
+  use 1
+  rfl
+  use 2
+  rfl
+  use 3
+  rfl
+⟩
+
+
 example : c ≤ rot := by
   intro x hx
   have mem_c_iff : x ∈ c ↔ x = r 0 ∨ x = r 2 := by rfl

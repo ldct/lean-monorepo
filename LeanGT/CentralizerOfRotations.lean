@@ -7,9 +7,7 @@ namespace DihedralGroup
 def Rot (n : ℕ): Subgroup (DihedralGroup n) where
   carrier := { r i | i : ZMod n }
   mul_mem' := by
-    intros a b a_is_ri b_is_ri
-    cases' a_is_ri with i1 r_i1_is_a
-    cases' b_is_ri with i2 r_i1_is_b
+    intro a b ⟨i1, r_i1_is_a⟩ ⟨i2, r_i1_is_b⟩
     use i1 + i2
     rw [←r_i1_is_a, ←r_i1_is_b]
     rw [r_mul_r]
@@ -17,8 +15,7 @@ def Rot (n : ℕ): Subgroup (DihedralGroup n) where
     use 0
     rfl
   inv_mem' := by
-    intros x x_in_A
-    cases' x_in_A with i ri_is_x
+    intro x ⟨i, ri_is_x⟩
     use -i
     rw [← ri_is_x]
     rfl
