@@ -35,17 +35,13 @@ theorem mem_rot_iff' (g : DihedralGroup n) : g ∈ (Rot n).carrier ↔ g ∈ { r
 theorem inv_r_simp (i : ZMod n) : (r i)⁻¹ = r (-i) := by
   rfl
 
-theorem test [Group G] (a b : G) (a_eq_b : a = b) :  a⁻¹ = b⁻¹ := by
-  exact congrArg Inv.inv a_eq_b
-
 theorem r_one_pow'' (k : ℤ) : (r 1 : DihedralGroup n) ^ k = r k := by
-  have d := le_or_lt 0 k
-  cases' d with pos neg
+  cases' (le_or_lt 0 k) with pos neg
   lift k to ℕ using pos
-  simp
+  simp only [zpow_natCast, r_one_pow, Int.cast_natCast]
   suffices : ((r (1: ZMod n)) ^ k)⁻¹ = (r k)⁻¹
-  have := test _ _ this
-  simp at this
+  have := congrArg Inv.inv this
+  simp only [inv_inv] at this
   exact this
   let l := -k
   have k_eq_nl : k = -l := by exact Int.eq_neg_comm.mp rfl
@@ -53,8 +49,7 @@ theorem r_one_pow'' (k : ℤ) : (r 1 : DihedralGroup n) ^ k = r k := by
   rw [k_eq_nl]
   have : ∃ l' : ℤ, l' = l := by use l
   cases' this with l' lp_eq_l
-  have : l' ≥ 0 := by
-    exact?
+  have : l' ≥ 0 := le_of_le_of_eq l_pos (id (Eq.symm lp_eq_l))
   lift l' to ℕ using this
   simp
   rw [←lp_eq_l]
