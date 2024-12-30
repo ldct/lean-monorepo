@@ -1,45 +1,14 @@
 import Mathlib.Tactic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
+import LeanGT.Rot
 
 namespace DihedralGroup
-
--- The subgroup of rotations
-def Rot (n : ℕ): Subgroup (DihedralGroup n) where
-  carrier := { r i | i : ZMod n }
-  mul_mem' := by
-    intros a b a_is_ri b_is_ri
-    cases' a_is_ri with i1 r_i1_is_a
-    cases' b_is_ri with i2 r_i1_is_b
-    use i1 + i2
-    rw [←r_i1_is_a, ←r_i1_is_b]
-    rw [r_mul_r]
-  one_mem' := by
-    use 0
-    rfl
-  inv_mem' := by
-    intros x x_in_A
-    cases' x_in_A with i ri_is_x
-    use -i
-    rw [← ri_is_x]
-    rfl
-
--- API for `Rot n`
-theorem mem_rot_iff (g : DihedralGroup n) : g ∈ Rot n ↔ g ∈ { r i | i : ZMod n } := by
-  rfl
-
--- API for `Rot n`
-theorem mem_rot_iff' (g : DihedralGroup n) : g ∈ (Rot n).carrier ↔ g ∈ { r i | i : ZMod n } := by
-  rfl
 
 -- The normalizer of the group of rotations
 def N_A (n : ℕ) : Subgroup (DihedralGroup n) := (Rot n).normalizer
 
 @[simp]
 theorem inv_sr_simp (i : ZMod n) : (sr i)⁻¹ = sr i := by
-  rfl
-
-@[simp]
-theorem inv_r_simp (i : ZMod n) : (r i)⁻¹ = r (-i) := by
   rfl
 
 @[simp]
@@ -122,6 +91,7 @@ example : (Subgroup.center (DihedralGroup 4)) = R2 := by
     ext x
     rw [mem_rot_iff']
     simp
+    sorry
   sorry
 
 -- center of DihedralGroup n
@@ -136,26 +106,11 @@ example [NeZero n] (H : (Subgroup (DihedralGroup n))) (i : ZMod n) : r 1 ∈ H �
 
 example (i : ℤ) : i < 0 ∨ i ≥ 0 := by exact Int.lt_or_le i 0
 
-theorem r_one_pow' (k : ℤ) : (r 1 : DihedralGroup n) ^ k = r k := by
-  have := Int.lt_or_le k 0
-  cases' this with neg pos
-  have : ∃ p, k = -p ∧ p ≥ 0 := by
-    use -k
-    simp
-    exact Int.le_of_lt neg
-  cases' this with p hp
-  cases' hp with k_is_np p_pos
-  lift p to ℕ using p_pos
-  rw [k_is_np]
-  simp
-  lift k to ℕ using pos
-  simp
-
 example (H : (Subgroup (DihedralGroup 0))) (i : ZMod 0) : r 1 ∈ H → r i ∈ H := by
   intro r_in_H
   change ℤ at i
   have : (r (1 : ZMod 0))^i = r i := by
-    exact r_one_pow' i
+    exact r_one_pow'' i
 
 -- a subgroup that contains r contains all powers of r
 theorem r1_then_rj [NeZero n] (H : (Subgroup (DihedralGroup n))) : (r 1 ∈ H) → r i ∈ H := by

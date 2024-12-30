@@ -2,6 +2,7 @@ import Mathlib.Tactic
 import Mathlib.Algebra.Group.Defs
 import Mathlib.GroupTheory.SpecificGroups.Cyclic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
+import LeanGT.ZMul
 
 example : (IsAddCyclic ℤ) := ⟨ 1, by
   intro x
@@ -15,24 +16,89 @@ example : (IsAddCyclic ℤ) := ⟨ -1, by
   simp
 ⟩
 
-namespace DihedralGroup
+-- example : ¬ IsCyclic ((DihedralGroup 6) × (DihedralGroup 6)) := by
+--   intro x
+--   sorry
 
--- The subgroup of rotations
-def Rot (n : ℕ): Subgroup (DihedralGroup n) where
-  carrier := { r i | i : ZMod n }
-  mul_mem' := by
-    intro a b ⟨i1, r_i1_is_a⟩ ⟨i2, r_i1_is_b⟩
-    use i1 + i2
-    rw [←r_i1_is_a, ←r_i1_is_b]
-    rw [r_mul_r]
-  one_mem' := by
-    use 0
-    rfl
-  inv_mem' := by
-    intro x ⟨i, ri_is_x⟩
-    use -i
-    rw [← ri_is_x]
-    rfl
+namespace ZMul
+
+example (a b : ℤ) : a * b = 1 → a = 1 ∨ a = -1 := by
+  exact fun a_1 ↦
+  Int.eq_one_or_neg_one_of_mul_eq_one a_1
+
+example (a b : ℤ) : a * b = 1 → b = 1 ∨ b = -1 := by
+  rw [mul_comm]
+  exact fun a_1 ↦ Int.eq_one_or_neg_one_of_mul_eq_one a_1
+
+example (a : ℤ) (Hpos : a ≠ 0) : a / a = 1 := by
+  exact Int.ediv_self Hpos
+
+theorem mul_div_cancel (a b : ℤ) (b_ne_0 : b ≠ 0) : (a * b) / b = a * (b / b) := by
+  refine (Int.ediv_eq_iff_eq_mul_left ?_ ?_).mpr ?_
+  exact b_ne_0
+  exact Int.dvd_mul_left a b
+  simp
+  left
+  have : b / b = 1 := by exact Int.ediv_self b_ne_0
+  rw [this]
+  simp
+
+-- 12c, p60
+example : ¬ IsCyclic ((ZMul) × (ZMul)) := by
+  rintro ⟨ g, g_surj ⟩
+  obtain ⟨ e, he ⟩ := g_surj (r 0, r 1)
+  simp at he
+  have : g^e = (_, (r g.2.1)^e) := rfl
+  rw [this] at he
+  simp only [Prod.mk.injEq] at he
+  obtain hg01 := he.2
+  rw [r_pow] at hg01
+  simp at hg01
+  have fst_nz : g.2.1 ≠ 0 := by exact left_ne_zero_of_mul_eq_one hg01
+
+  obtain ⟨ e, he ⟩ := g_surj (r 1, r 0)
+  simp at he
+  have : g^e = ((r g.1.1)^e, _) := rfl
+  rw [this] at he
+  simp only [Prod.mk.injEq] at he
+  obtain hg01 := he.1
+  rw [r_pow] at hg01
+  simp at hg01
+  have snd_nz : g.1.1 ≠ 0 := by exact left_ne_zero_of_mul_eq_one hg01
+
+  obtain ⟨ k, hk ⟩ := g_surj (r g.1.1, r (- g.2.1))
+  simp at hk
+
+  have : g^k = ((r g.1.1)^k, (r g.2.1)^k) := rfl
+  rw [this] at hk
+  simp only [Prod.mk.injEq] at hk
+
+  have := hk.left
+  rw [r_pow] at this
+  simp at this
+  have k_eq_1 : k = 1 := by exact Int.eq_one_of_mul_eq_self_right snd_nz this
+
+  have := hk.right
+  rw [r_pow] at this
+  simp at this
+  have t : k = -g.2.1/g.2.1 := by exact Int.eq_ediv_of_mul_eq_right fst_nz this
+
+
+
+  have : -g.2.1 = -1 * g.2.1 := by exact Int.neg_eq_neg_one_mul g.2.1
+
+  rw [this] at t
+
+  simp only [mul_div_cancel (-1) _ fst_nz] at t
+  have : g.2.1 / g.2.1 = 1 := by exact Int.ediv_self fst_nz
+  rw [this] at t
+  simp at t
+
+  rw [k_eq_1] at t
+  norm_num at t
+
+
+
 
 theorem test [Group G] (a b : G) (a_eq_b : a = b) :  a⁻¹ = b⁻¹ := by
   exact congrArg Inv.inv a_eq_b
@@ -43,42 +109,7 @@ theorem t [Group G] (h g : G) : h⁻¹ = g⁻¹ → h = g  := by
   simp at this
   exact this
 
-theorem inv_r_simp (i : ZMod n) : (r i)⁻¹ = r (-i) := by
-  rfl
-
-theorem r_one_pow' (k : ℤ) : (r 1 : DihedralGroup n) ^ k = r k := by
-  have : k ≥ 0 ∨ k < 0 := by exact le_or_lt 0 k
-  cases' this with pos neg
-  lift k to ℕ using pos
-  simp
-  suffices : ((r (1: ZMod n)) ^ k)⁻¹ = (r k)⁻¹
-  have := test _ _ this
-  simp at this
-  exact this
-  let l := -k
-  have k_eq_nl : k = -l := by exact Int.eq_neg_comm.mp rfl
-  have l_pos : l ≥ 0 := by linarith
-  rw [k_eq_nl]
-  have : ∃ l' : ℤ, l' = l := by use l
-  cases' this with l' lp_eq_l
-  have : l' ≥ 0 := by
-    exact?
-  lift l' to ℕ using this
-  simp
-  rw [←lp_eq_l]
-  simp [inv_r_simp]
-
-example (n : ℕ) : IsCyclic (Rot n) := ⟨ ⟨r 1, by use 1⟩, by
-  intro ⟨x, ⟨i, hi⟩⟩
-  use i.valMinAbs
-  simp
-  refine SetLike.coe_eq_coe.mp ?_
-  simp
-  rw [r_one_pow']
-  rw [← hi]
-  simp
-⟩
-
+-- probably not what it seems
 example : IsCyclic ((ZMod 2) × (ZMod 3)) := by
   use (1, 1)
   refine Function.HasRightInverse.surjective ?_
