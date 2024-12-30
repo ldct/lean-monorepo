@@ -36,24 +36,21 @@ theorem inv_r_simp (i : ZMod n) : (r i)⁻¹ = r (-i) := by
   rfl
 
 theorem r_one_pow'' (k : ℤ) : (r 1 : DihedralGroup n) ^ k = r k := by
-  cases' (le_or_lt 0 k) with pos neg
-  lift k to ℕ using pos
-  simp only [zpow_natCast, r_one_pow, Int.cast_natCast]
-  suffices : ((r (1: ZMod n)) ^ k)⁻¹ = (r k)⁻¹
-  have := congrArg Inv.inv this
-  simp only [inv_inv] at this
-  exact this
-  let l := -k
-  have k_eq_nl : k = -l := by exact Int.eq_neg_comm.mp rfl
-  have l_pos : l ≥ 0 := by linarith
-  rw [k_eq_nl]
-  have : ∃ l' : ℤ, l' = l := by use l
-  cases' this with l' lp_eq_l
-  have : l' ≥ 0 := le_of_le_of_eq l_pos (id (Eq.symm lp_eq_l))
-  lift l' to ℕ using this
-  simp
-  rw [←lp_eq_l]
-  simp [inv_r_simp]
+  rcases (le_or_lt 0 k) with pos | neg
+  . lift k to ℕ using pos
+    simp only [zpow_natCast, r_one_pow, Int.cast_natCast]
+  . suffices : ((r (1: ZMod n)) ^ k)⁻¹ = (r k)⁻¹
+    have := congrArg Inv.inv this
+    simp only [inv_inv] at this
+    exact this
+    have : ∃ l : ℤ, l = -k ∧ k = -l ∧ l ≥ 0 := by
+      use -k
+      simp only [neg_neg, ge_iff_le, Left.nonneg_neg_iff, true_and]
+      linarith
+    cases' this with l conds
+    rw [conds.2.1]
+    lift l to ℕ using conds.2.2
+    simp [inv_r_simp]
 
 example (n : ℕ) : IsCyclic (Rot n) := ⟨ ⟨r 1, by use 1⟩, by
   intro ⟨x, ⟨i, hi⟩⟩
