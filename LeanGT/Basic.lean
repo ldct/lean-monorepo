@@ -11,6 +11,14 @@ example (n: ℕ) : (sr 1: DihedralGroup n) * (r 1) = r (-1) * (sr 1) := by simp
 
 example (n: ℕ) : (sr 2: DihedralGroup n) * (r 1) = r (-1) * (sr 2) := by simp
 
+def _s := sr (0 : ZMod 6)
+def _r := r (1 : ZMod 6)
+
+#eval _s * _s * _s
+#eval (ConjAct.toConjAct _s) • _s
+#eval (_s : ConjAct (DihedralGroup 6)) • _s
+
+
 -- Let x be a reflection (i.e. x = sr k), then x acts on r by inversion.
 -- x r x = r^-1
 example (n k: ℕ) : (sr k: DihedralGroup n) * (r 1) * (sr k) = r (-1) := by simp

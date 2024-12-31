@@ -10,10 +10,7 @@ structure AffineQ : Type where
   m_ne_0 : m ≠ 0
   deriving DecidableEq
 
--- have (m c m' c' : ℚ) : AffineQ.mk m c _ = AffineQ.mk m' c' _ ↔
-
--- m'(mx + c) + c' = m'm x + m'c + c'
-def mul2 (a b : AffineQ): AffineQ :=
+def mul (a b : AffineQ): AffineQ :=
   .mk (a.m*b.m) (a.m*b.c + a.c) (mul_ne_zero a.m_ne_0 b.m_ne_0)
 
 private def one : AffineQ :=
@@ -24,17 +21,17 @@ theorem mul_times (a b : ℚ) : Mul.mul a b = a * b := by exact rfl
 instance : One AffineQ :=
   ⟨⟨1, 0, (by norm_num)⟩⟩
 
-
 def inv (g : AffineQ) : AffineQ :=
-  .mk g.m⁻¹ (g.c/g.m) (inv_ne_zero g.m_ne_0)
+  .mk g.m⁻¹ (-g.c/g.m) (inv_ne_zero g.m_ne_0)
 
 example (r : ℚ): 1 * r = r := by
   exact Rat.one_mul r
+
 instance : Group AffineQ where
-  mul := mul2
+  mul := mul
   mul_assoc := by
     intro a b c
-    simp [(· * ·), mul2]
+    simp [(· * ·), mul]
     ring_nf
     constructor
     repeat rw [mul_times]
@@ -44,7 +41,7 @@ instance : Group AffineQ where
   one := one
   one_mul := by
     intro a
-    simp [(· * ·), mul2]
+    simp [(· * ·), mul]
     cases' a with m c
     simp
     constructor
@@ -60,7 +57,7 @@ instance : Group AffineQ where
     simp
   mul_one := by
     intro a
-    simp [(· * ·), mul2]
+    simp [(· * ·), mul]
     cases' a with m c
     simp
     constructor
@@ -74,5 +71,92 @@ instance : Group AffineQ where
   inv := inv
   inv_mul_cancel := by
     intro r
-    simp [(· * ·), mul2]
-    suggest_tactics
+    simp [(· * ·), mul]
+    have : (1 : AffineQ) = AffineQ.mk 1 0 (by norm_num):= by rfl
+    rw [this]
+    simp
+    constructor
+    rw [inv, mul_times]
+    simp [r.3]
+    rw [inv, mul_times]
+    field_simp
+
+theorem inv_eq (g : AffineQ) : g⁻¹ = AffineQ.mk g.m⁻¹ (-g.c/g.m) (inv_ne_zero g.m_ne_0) := by rfl
+
+theorem mul_eq (a b : AffineQ) : a * b = .mk (a.m*b.m) (a.m*b.c + a.c) (mul_ne_zero a.m_ne_0 b.m_ne_0)
+ := by rfl
+
+def TranslatesZ : Subgroup AffineQ where
+  carrier := { AffineQ.mk 1 i (by decide) | i : ℤ }
+  mul_mem' := by
+    rintro a b ⟨i1, a_def⟩ ⟨i2, b_def⟩
+    use i1 + i2
+    rw [←a_def, ←b_def]
+    rw [mul_eq]
+    simp
+    exact Rat.add_comm ↑i1 ↑i2
+  one_mem' := by
+    use 0
+    rfl
+  inv_mem' := by
+    intros x x_in_A
+    cases' x_in_A with i hx
+    use -i
+    rw [inv_eq]
+    simp
+    constructor
+    rw [← hx]
+    rw [← hx]
+    simp
+
+
+def Translates2Z : Subgroup AffineQ where
+  carrier := { AffineQ.mk 1 (2*i) (by decide) | i : ℤ }
+  mul_mem' := by
+    rintro a b ⟨i1, a_def⟩ ⟨i2, b_def⟩
+    use i1 + i2
+    rw [←a_def, ←b_def]
+    rw [mul_eq]
+    field_simp
+    ring
+  one_mem' := by
+    use 0
+    simp
+    rfl
+  inv_mem' := by
+    intros x x_in_A
+    cases' x_in_A with i hx
+    use -i
+    rw [inv_eq]
+    simp
+    constructor
+    rw [← hx]
+    rw [← hx]
+    simp
+
+def g := AffineQ.mk 2 0 (by decide)
+def t := AffineQ.mk 1 1 (by decide)
+
+open Pointwise
+
+#eval (ConjAct.toConjAct g) • t
+
+def C := (ConjAct.toConjAct g) • TranslatesZ
+
+example : t ∉ C := by
+  intro t_in_C
+  cases' t_in_C with w h
+  simp at h
+  cases' h with w_in_tz g_act_w_is_t
+  simp at g_act_w_is_t
+  rw [ConjAct.toConjAct_smul] at g_act_w_is_t
+  cases' w_in_tz with i hi
+  have : g = AffineQ.mk 2 0 (by decide) := by decide
+  rw [this] at g_act_w_is_t
+  rw [← hi] at g_act_w_is_t
+  simp [mul_eq, inv_eq] at g_act_w_is_t
+  have : t = AffineQ.mk 1 1 (by decide) := by decide
+  rw [this] at g_act_w_is_t
+  simp at g_act_w_is_t
+  norm_cast at g_act_w_is_t
+  omega

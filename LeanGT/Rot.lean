@@ -39,11 +39,7 @@ theorem r_one_pow'' (k : ℤ) : (r 1 : DihedralGroup n) ^ k = r k := by
   rcases (le_or_lt 0 k) with pos | neg
   . lift k to ℕ using pos
     simp only [zpow_natCast, r_one_pow, Int.cast_natCast]
-  . suffices : ((r (1: ZMod n)) ^ k)⁻¹ = (r k)⁻¹
-    have := congrArg Inv.inv this
-    simp only [inv_inv] at this
-    exact this
-    have : ∃ l : ℤ, l = -k ∧ k = -l ∧ l ≥ 0 := by
+  . have : ∃ l : ℤ, l = -k ∧ k = -l ∧ l ≥ 0 := by
       use -k
       simp only [neg_neg, ge_iff_le, Left.nonneg_neg_iff, true_and]
       linarith

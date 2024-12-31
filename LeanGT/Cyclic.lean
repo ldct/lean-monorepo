@@ -38,7 +38,7 @@ example : ¬ IsCyclic ((ZMul) × (ZMul)) := by
   rw [this] at he
   simp only [Prod.mk.injEq] at he
   obtain hg01 := he.2
-  rw [r_pow] at hg01
+  rw [rz_zpow] at hg01
   simp at hg01
   have fst_nz : g.2.1 ≠ 0 := by exact left_ne_zero_of_mul_eq_one hg01
 
@@ -48,7 +48,7 @@ example : ¬ IsCyclic ((ZMul) × (ZMul)) := by
   rw [this] at he
   simp only [Prod.mk.injEq] at he
   obtain hg01 := he.1
-  rw [r_pow] at hg01
+  rw [rz_zpow] at hg01
   simp at hg01
   have snd_nz : g.1.1 ≠ 0 := by exact left_ne_zero_of_mul_eq_one hg01
 
@@ -60,12 +60,12 @@ example : ¬ IsCyclic ((ZMul) × (ZMul)) := by
   simp only [Prod.mk.injEq] at hk
 
   have := hk.left
-  rw [r_pow] at this
+  rw [rz_zpow] at this
   simp at this
   have k_eq_1 : k = 1 := by exact Int.eq_one_of_mul_eq_self_right snd_nz this
 
   have := hk.right
-  rw [r_pow] at this
+  rw [rz_zpow] at this
   simp at this
   have t : k = -g.2.1/g.2.1 := by exact Int.eq_ediv_of_mul_eq_right fst_nz this
 

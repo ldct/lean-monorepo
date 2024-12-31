@@ -79,9 +79,21 @@ theorem r_one_pow' (k : ℤ) : (r 1 : ZMul) ^ k = r k := by
   exact r_one_pow l'
 
 @[simp]
-theorem r_pow (k : ℤ) : ((r t) : ZMul) ^ k = r (t * k) := by
+theorem r_pow (t : ℕ) (k : ℤ) : (r t) ^ k = r (t * k) := by
+  induction' t with t IH
+  norm_cast
+  have : r 0 = 1 := by rfl
+  rw [this]
+  simp
+  exact this
+  have : r (t + 1) = (r t) * (r 0) := by sorry
+  norm_cast at this
+  rw [this]
+
   sorry
 
+theorem rz_zpow (t k : ℤ) : (r t) ^ k = r (t * k) := by
+  sorry
 
 def a : (ZMul) × (ZMul) := (r 1, r 2)
 def b : (ZMul) × (ZMul) := (r 1, r 3)

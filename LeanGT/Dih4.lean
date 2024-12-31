@@ -65,7 +65,15 @@ def v2 : Subgroup (DihedralGroup 4) where
   one_mem' := by decide
   inv_mem' := by decide
 
--- The subgroup of rotations
+open Pointwise
+
+def g : ConjAct (DihedralGroup 4) := r 1
+#eval g • (r (0 : ZMod 4))
+#eval g • (r (2 : ZMod 4))
+#eval g • (sr (1 : ZMod 4))
+#eval g • (sr (3 : ZMod 4))
+
+#eval Set.toFinset {1, 2}
 
 def rot : Subgroup (DihedralGroup 4) where
   carrier := { r 0, r 1, r 2, r 3 }
@@ -83,6 +91,12 @@ instance (g : DihedralGroup 4) : Decidable (g ∈ rot) :=
   | sr 1 => isFalse (by rw [rot]; simp)
   | sr 2 => isFalse (by rw [rot]; simp)
   | sr 3 => isFalse (by rw [rot]; simp)
+
+example (h : (r (i : ZMod n)) = 1) : i = 0 := by
+  have : 1 = r (0 : ZMod n) := by rfl
+  rw [this] at h
+  simp at h
+  exact h
 
 example : IsCyclic (rot) := ⟨ ⟨r 1, by decide⟩, by
   intro x
