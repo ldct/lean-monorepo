@@ -10,6 +10,8 @@ structure AffineQ : Type where
   m_ne_0 : m ≠ 0
   deriving DecidableEq
 
+example : (1 : ℝ) ≠ 0 := by norm_num
+
 def mul (a b : AffineQ): AffineQ :=
   .mk (a.m*b.m) (a.m*b.c + a.c) (mul_ne_zero a.m_ne_0 b.m_ne_0)
 
@@ -142,6 +144,10 @@ open Pointwise
 #eval (ConjAct.toConjAct g) • t
 
 def C := (ConjAct.toConjAct g) • TranslatesZ
+
+example : t ∈ TranslatesZ := by
+  use 1
+  decide
 
 example : t ∉ C := by
   intro t_in_C

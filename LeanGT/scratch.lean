@@ -4,24 +4,39 @@ import Mathlib.GroupTheory.SpecificGroups.Cyclic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
 import LeanGT.ZMul
 
--- example : ¬ IsCyclic ((DihedralGroup 6) × (DihedralGroup 6)) := by
---   intro x
---   sorry
+-- pg 52, q2
+example [Group G] : Subgroup.centralizer (Subgroup.center G).carrier = ⊤ := by
+  exact Subgroup.centralizer_eq_top_iff_subset.mpr fun ⦃a⦄ a ↦ a
 
+-- reprove the above theorem
+-- D&F pg 52, q2. Note that `exact?` also solves this.
+example [Group G] : Subgroup.centralizer (Subgroup.center G).carrier = ⊤ := by
+  rw [eq_top_iff] -- use some lattice theory to rewrite as ⊤ ≤ ...
+  intro g _ h h_in_center
+  exact h_in_center.comm g
 
+example [Lattice L] [OrderTop L] (a b c : L) : a ≤ b → b ≤ c → a ≤ c := by
+  exact fun a_1 a_2 ↦ Preorder.le_trans a b c a_1 a_2
 
-theorem test [Group G] (a b : G) (a_eq_b : a = b) :  a⁻¹ = b⁻¹ := by
-  exact congrArg Inv.inv a_eq_b
+example [Lattice L] [OrderTop L] (a: L) : ⊤ ≤ a → a = ⊤ := by
+  rw [eq_top_iff]
+  exact fun a ↦ a
 
-theorem t [Group G] (h g : G) : h⁻¹ = g⁻¹ → h = g  := by
-  intro x
-  have := test h⁻¹ g⁻¹ x
-  simp at this
-  exact this
+theorem C_Z_ge_top [Group G] : Subgroup.centralizer (Subgroup.center G).carrier ≥ ⊤ := by
+  intro g _ h h_in_center
+  exact h_in_center.comm g
 
--- probably not what it seems
-example : IsCyclic ((ZMod 2) × (ZMod 3)) := by
-  use (1, 1)
-  refine Function.HasRightInverse.surjective ?_
-
+example [Group G] : Subgroup.centralizer (Subgroup.center G).carrier = ⊤ := by
+  have : Subgroup.centralizer (Subgroup.center G).carrier ≤ ⊤ := by exact fun ⦃x⦄ a ↦ trivial
   sorry
+
+example [Lattice L] [OrderTop L] (a b c : L) : a ≤ b → b ≤ c → a ≤ c := by
+  exact fun a_1 a_2 ↦ Preorder.le_trans a b c a_1 a_2
+
+example [Lattice L] [OrderTop L] (a: L) : a ≥ ⊤ → a = ⊤ := by
+  exact?
+
+
+
+example [Group G] (A B : Set G) (A_le_B : A ≤ B) : Subgroup.centralizer (B) ≤ Subgroup.centralizer A := by
+  exact Subgroup.centralizer_le A_le_B
