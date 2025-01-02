@@ -119,3 +119,45 @@ example : c ≤ rot := by
   rw [mem_c_iff] at hx
   rw [mem_rot_iff]
   tauto
+
+example : Subgroup.closure {r (1 : ZMod 4)} = rot := by
+  -- current goal is `⊢ Subgroup.closure {r 1} = rot`
+  apply Subgroup.closure_eq_of_le
+  intro x hx
+  simp at hx
+  subst hx
+  exact (by decide : r 1 ∈ rot)
+
+  intro x hx
+  rw [rot] at hx
+  have r_1_in_closure := Subgroup.mem_closure_singleton_self (r (1: ZMod 4))
+  rcases hx with (h0 | h1 | h2 | h3)
+  -- r 0 case
+  rw [h0]
+  exact Subgroup.one_mem _
+  rw [h1]
+
+  have r_1_in_closure := Subgroup.mem_closure_singleton_self (r (1: ZMod 4))
+
+  -- r 1 case
+  exact r_1_in_closure
+
+  -- r 2 case
+  have r_1_sq : (r (1 : ZMod 4))^2 ∈ Subgroup.closure {r 1} := by
+    exact
+    Subgroup.pow_mem (Subgroup.closure {r 1}) r_1_in_closure 2
+  simp at r_1_sq
+  rw [h2]
+  exact r_1_sq
+
+  -- r 3 case
+  have r_1_cube : (r (1 : ZMod 4))^3 ∈ Subgroup.closure {r 1} := by
+    exact
+    Subgroup.pow_mem (Subgroup.closure {r 1}) r_1_in_closure 3
+  simp at r_1_cube
+  rw [h3]
+  exact r_1_cube
+
+example : Subgroup.IsCommutative rot where
+  is_comm := .mk fun a => fun b => by
+    fin_cases a <;> fin_cases b <;> decide

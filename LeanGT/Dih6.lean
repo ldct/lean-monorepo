@@ -47,6 +47,7 @@ instance : MulAction (DihedralGroup 6) (ZMod 6) where
 
 open Polynomial Real Complex
 
+-- the action where rotation does nothing
 instance : MulAction (DihedralGroup 6) ℂ where
   smul := by
     intro g z

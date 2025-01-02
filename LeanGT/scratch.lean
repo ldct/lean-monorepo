@@ -1,42 +1,28 @@
 import Mathlib.Tactic
-import Mathlib.Algebra.Group.Defs
-import Mathlib.GroupTheory.SpecificGroups.Cyclic
-import Mathlib.GroupTheory.SpecificGroups.Dihedral
-import LeanGT.ZMul
+import Mathlib.Data.Nat.Fib.Basic
 
--- pg 52, q2
-example [Group G] : Subgroup.centralizer (Subgroup.center G).carrier = ⊤ := by
-  exact Subgroup.centralizer_eq_top_iff_subset.mpr fun ⦃a⦄ a ↦ a
+open Nat
 
--- reprove the above theorem
--- D&F pg 52, q2. Note that `exact?` also solves this.
-example [Group G] : Subgroup.centralizer (Subgroup.center G).carrier = ⊤ := by
-  rw [eq_top_iff] -- use some lattice theory to rewrite as ⊤ ≤ ...
-  intro g _ h h_in_center
-  exact h_in_center.comm g
+example : fib (n+2) = fib n + fib (n+1) := by
+  exact fib_add_two
 
-example [Lattice L] [OrderTop L] (a b c : L) : a ≤ b → b ≤ c → a ≤ c := by
-  exact fun a_1 a_2 ↦ Preorder.le_trans a b c a_1 a_2
-
-example [Lattice L] [OrderTop L] (a: L) : ⊤ ≤ a → a = ⊤ := by
-  rw [eq_top_iff]
-  exact fun a ↦ a
-
-theorem C_Z_ge_top [Group G] : Subgroup.centralizer (Subgroup.center G).carrier ≥ ⊤ := by
-  intro g _ h h_in_center
-  exact h_in_center.comm g
-
-example [Group G] : Subgroup.centralizer (Subgroup.center G).carrier = ⊤ := by
-  have : Subgroup.centralizer (Subgroup.center G).carrier ≤ ⊤ := by exact fun ⦃x⦄ a ↦ trivial
+example (h : n > 1 ): fib (n) = fib (n-1) + fib (n-2) := by
+  let n' := n - 2
+  have h' : n = n' + 2 := by
+    omega
+  rw [h']
+  simp
   sorry
 
-example [Lattice L] [OrderTop L] (a b c : L) : a ≤ b → b ≤ c → a ≤ c := by
-  exact fun a_1 a_2 ↦ Preorder.le_trans a b c a_1 a_2
+example (m : ℕ) : fib (m + 2) * fib m - fib (m + 1) ^ 2 = (-1 : ℤ) ^ (m + 1) := by
+  induction m with
+  | zero => rfl
+  | succ n ih =>
+    rw [pow_add, pow_one]
+    repeat rw [fib_add_two] at *
+    push_cast at *
+    linear_combination -(1 * ih)
 
-example [Lattice L] [OrderTop L] (a: L) : a ≥ ⊤ → a = ⊤ := by
-  exact?
 
 
-
-example [Group G] (A B : Set G) (A_le_B : A ≤ B) : Subgroup.centralizer (B) ≤ Subgroup.centralizer A := by
-  exact Subgroup.centralizer_le A_le_B
+#eval fib 22

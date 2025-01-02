@@ -100,3 +100,14 @@ def b : (ZMul) × (ZMul) := (r 1, r 3)
 
 #eval (a*b).fst
 #eval (a*b).snd
+
+example : CommGroup ZMul where
+  mul_comm := by
+    intro ⟨i⟩ ⟨j⟩
+    simp only [r_mul_r, r.injEq]
+    exact Int.add_comm i j
+
+example : AddCommGroup ℤ where
+  add_comm := by
+    intro a b
+    exact AddCommMagma.add_comm a b
