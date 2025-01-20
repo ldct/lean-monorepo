@@ -5,14 +5,12 @@ noncomputable def max_prefix : ((ℕ → ℝ)) → ℕ → ℝ
 | _, 0   => 0
 | f, x+1 => max (f x) (max_prefix f x)
 
-theorem mp_def (f : ℕ → ℝ) (b : ℕ) : max_prefix f (b+1) = max (f b) (max_prefix f b) := by rfl
-
 theorem mp_increasing (f : ℕ → ℝ) (a : ℕ) (b : ℕ) (hi : a < b): f a ≤ max_prefix f b := by
   induction' b with x y
   exfalso
   exact Nat.not_succ_le_zero a hi
-  rw [mp_def]
-  have a_cases : a < x ∨ a = x := by exact Nat.lt_succ_iff_lt_or_eq.mp hi
+  unfold max_prefix
+  have a_cases : a < x ∨ a = x := Nat.lt_succ_iff_lt_or_eq.mp hi
   cases' a_cases with p q
   apply y at p
   exact le_max_of_le_right p
@@ -26,11 +24,11 @@ theorem FinitePrefixMax (f : ℕ → ℝ) (N : ℕ) : ∃ B, ∀ n : ℕ, n < N 
   apply mp_increasing
   exact hnB
 
--- Any finite prefix of a sequence has a magnitude bound
+-- Any finite prefix of a sequence is bounded in magnitude
 theorem FinitePrefixMax' (f : ℕ → ℝ) (N : ℕ) : ∃ B, ∀ n : ℕ, n < N → |f n| ≤ B := by
   exact FinitePrefixMax (fun n ↦ |f n|) N
 
--- Theorem 2.3.2 from Abbott. Converges => Bounded
+-- Theorem 2.3.2. A convengent sequence is bounded
 theorem ConvergesThenBounded (f : ℕ → ℝ) (hc : ∃ t, TendsTo f t) : Bounded f := by
   cases' hc with l h_TendsTo_l
   specialize h_TendsTo_l 1 (by norm_num)
@@ -103,7 +101,7 @@ theorem tendsTo_mul_constant
   exact tendsTo_const 0
   exact tendsTo_mul_constant_nz c_ne_0 ha
 
--- Theorem 2.3.3.ii
+-- Theorem 2.3.3.ii (Algebraic Limit Theorem, sum)
 theorem tendsTo_sum
   {a b : ℕ → ℝ}
   {A B : ℝ}
@@ -125,7 +123,7 @@ theorem tendsTo_sum
     _ < ε / 2 + ε / 2 := by gcongr ; exact hN₂ n hn2
     _ = ε := by ring
 
--- Theorem 2.3.3.iii (algebraic limit theorem, product)
+-- Theorem 2.3.3.iii (Algebraic Limit Theorem, product)
 theorem tendsTo_mul
   {a b : ℕ → ℝ}
   {A B : ℝ}
@@ -176,7 +174,7 @@ theorem tendsTo_mul
       ring
     }
 
--- Theorem 2.3.3.iv (algebraic limit theorem, product)
+-- Theorem 2.3.3.iv (Algebraic Limit Theorem, inverses)
 theorem tendsTo_inv
   {b : ℕ → ℝ}
   {B : ℝ}
