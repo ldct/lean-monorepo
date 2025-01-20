@@ -176,6 +176,7 @@ theorem tendsTo_mul
       ring
     }
 
+-- Theorem 2.3.3.iv (algebraic limit theorem, product)
 theorem tendsTo_inv
   {b : ℕ → ℝ}
   {B : ℝ}
@@ -193,20 +194,38 @@ theorem tendsTo_inv
   specialize hN₂ n (by omega)
 
   specialize b_nz n
-  have : 0 < |b n| := by positivity
 
-
-  have l1 : 1 / b n = B / ((B * b n)) := by
+  have l1 : 1 / b n = B / (B * b n) := by
     have : B / (B * b n) = (b n)⁻¹ := by exact div_mul_cancel_left₀ B_nz (b n)
     rw [inv_eq_one_div (b n)] at this
     rw [← this]
 
-  have l2 : 1 / B = b n / ((B * b n)) := by sorry
+  have l2 : 1 / B = b n / (B * b n) := by
+    have : b n / (B * b n) = (B)⁻¹ := by exact div_mul_cancel_right₀ b_nz B
+    rw [inv_eq_one_div B] at this
+    rw [← this]
 
   have : |B| / 2 < |b n| := by
-    sorry
+    have : 0 < B ∨ B < 0 := by exact lt_or_gt_of_ne (Ne.symm B_nz)
+    cases' this with B_pos B_neg
+    rw [abs_of_pos B_pos] at hN₁ ⊢
+    rw [abs_lt] at hN₁
+    rw [lt_abs]
+    left
+    linarith
+    rw [abs_of_neg B_neg] at hN₁ ⊢
+    rw [abs_lt] at hN₁
+    rw [lt_abs]
+    right
+    linarith
 
-  have : 1 / |b n| < 2 / |B| := by sorry
+  have :  1 / |b n| < 1 / (|B| / 2) := by
+    rw [one_div_lt_one_div (show 0 < |b n| by positivity) (show 0 < |B| / 2 by positivity)]
+    exact this
+
+  have : 1 / |b n| < 2 / |B| := by
+    field_simp at this
+    exact this
 
   calc
     |1 / b n - 1 / B| = |(B - b n) / (B * b n)| := by
@@ -214,18 +233,23 @@ theorem tendsTo_inv
       rw [l1, l2]
       ring
     _ = |(B - b n)| / |(B * b n)| := by exact abs_div (B - b n) (B * b n)
-    _ = |(B - b n)| * 1 / |B * b n| := by field_simp
-    _ = |(B - b n)| * 1 / |B| * 1 / |b n| := by sorry
-    _ < ε * |B|^2 / 2 * 1 / |B| * 1 / |b n| := by
+    _ = |(B - b n)| * (1 / |B * b n|) := by field_simp
+    _ = |(B - b n)| * (1 / |B| * 1 / |b n|) := by
+      apply congrArg
+      field_simp
+      exact Eq.symm (abs_mul B (b n))
+    _ < (ε * |B|^2 / 2) * (1 / |B| * 1 / |b n|) := by
       gcongr
       rw [show |B - b n| = |b n - B| by exact abs_sub_comm B (b n)]
       exact hN₂
-    _ = ε * |B| / 2 * 1 / |b n| := by
+    _ = ε * (|B| / 2 * (1 / |b n|)) := by
       field_simp
       rw [show B^2 = |B|^2 by exact Eq.symm (sq_abs B)]
       ring
-    _ < ε * |B| / 2 * 2 / |B| := by
-
-
+    _ < ε * (|B| / 2 * (2 / |B|)) := by
+      apply (mul_lt_mul_left hε).mpr _
+      have haux : 0 < |B| / 2 := by positivity
+      apply (mul_lt_mul_left (show 0 < |B| / 2 by positivity)).mpr
+      exact this
     _ = ε := by
       field_simp
