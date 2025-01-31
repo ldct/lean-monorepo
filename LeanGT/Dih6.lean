@@ -9,6 +9,13 @@ def v1 : Subgroup (DihedralGroup 6) where
   one_mem' := by decide
   inv_mem' := by decide
 
+def f : (DihedralGroup 6) →* (DihedralGroup 6) where
+  toFun := fun x => x
+  map_one' := by rfl
+  map_mul' := by simp
+
+#check f.ker
+
 def v2 : Subgroup (DihedralGroup 6) where
   carrier := { r 0, r 3, sr 1, sr 4 }
   mul_mem' := by decide

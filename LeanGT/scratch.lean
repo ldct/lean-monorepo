@@ -1,8 +1,16 @@
-import Mathlib.Tactic
-import Mathlib.Data.Nat.Fib.Basic
-import Mathlib.Algebra.Order.BigOperators.Group.Finset
+import Mathlib
 
-#min_imports in example (a : ℕ) (ha : a ≠ 0) : (0 < a ∨ a < 0) := by exact?
+example (a b k : ℝ) (k_pos : k ≠ 0) (eq : k*a = k*b) : a = b := by
+  apply_fun (fun r ↦ (1/k) * r) at eq
+  field_simp at eq
+  exact eq
+
+example (a b k : ℝ) (k_pos : 0 ≠ k) (eq : k*a = k*b) : a = b := by
+  apply_fun (fun r ↦ k * r)
+  dsimp
+  exact eq
+  exact mul_right_injective₀ (id (Ne.symm k_pos))
+-- #min_imports in example (a : ℕ) (ha : a ≠ 0) : (0 < a ∨ a < 0) := by exact?
 
 -- open Nat Finset
 
