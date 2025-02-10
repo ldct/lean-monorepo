@@ -71,7 +71,7 @@ theorem r_one_pow' (k : ℤ) : (r 1 : ZMul) ^ k = r k := by
   have : ∃ l' : ℤ, l' = l := by use l
   cases' this with l' lp_eq_l
   have : l' ≥ 0 := by
-    exact?
+    exact le_of_le_of_eq l_pos (id (Eq.symm lp_eq_l))
   lift l' to ℕ using this
   simp
   rw [←lp_eq_l]

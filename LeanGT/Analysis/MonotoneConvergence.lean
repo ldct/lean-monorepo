@@ -2,7 +2,6 @@ import LeanGT.Analysis.TendsTo
 
 -- def Monotone: we use the Mathlib defn
 def BoundedAbove (a : ℕ → ℝ) : Prop := ∃ B, ∀ n, a n ≤ B
-def Converges (a : ℕ → ℝ) : Prop := ∃ l, TendsTo a l
 
 -- Monotone Convergence Theorem: an increasing bounded sequence converges
 theorem MCT_formula

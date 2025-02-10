@@ -3,6 +3,8 @@ import Mathlib.Tactic
 def TendsTo (a : ℕ → ℝ) (t : ℝ) : Prop :=
   ∀ ε > 0, ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε
 
+def Converges (a : ℕ → ℝ) : Prop := ∃ l, TendsTo a l
+
 theorem tendsTo_thirtyseven : TendsTo (fun _ ↦ 37) 37 := by
   intro ε hε
   use 100

@@ -4,13 +4,9 @@ import Mathlib.Tactic
 def Bounded (a : ℕ → ℝ) : Prop :=
   ∃ M : ℝ, 0 < M ∧ (∀ n, |a n| < M)
 
-theorem Bounded_def {a : ℕ → ℝ} :
-    Bounded a ↔ ∃ M : ℝ, 0 < M ∧ (∀ n, |a n| < M) := by
-  rfl
-
 -- The sequence 1/x is bounded
 example : Bounded (fun n ↦ 1/(n+1)) := by
-  rw [Bounded_def] at *
+  unfold Bounded
   use 2
   constructor
   norm_num

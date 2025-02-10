@@ -1,29 +1,6 @@
 import LeanGT.Analysis.MonotoneConvergence
+import LeanGT.Analysis.InfiniteSums
 import Mathlib
-
--- Infinite sums
-
-def partialSums (b : ℕ → ℝ) : (ℕ → ℝ) :=
-  fun n ↦ ∑ i in Finset.range n, b i
-
-def Summable' (b : ℕ → ℝ) : Prop := Converges (partialSums b)
-
--- The partial sum of a positive sequence is monotone
-theorem monotone_psum_of_pos
-  {a : ℕ → ℝ}
-  (a_pos : ∀ i, 0 ≤ a i)
-: Monotone (partialSums a) := by
-
-  -- In a general preorder, proving monotonicity requires checking f(x) ≤ f(y) for all x ≤ y, but since ℕ is discrete, we can just check adjacent pairs x ≤ x+1
-  apply monotone_nat_of_le_succ
-  intro x
-  unfold partialSums
-
-  -- f(x) ≤ f(x+1) becomes ∑ range(x) ai ≤ ∑ range(x+1) ai, and we can rewrite the RHS as ∑ range(x) ai + (x-th term)
-  rw [Finset.sum_range_succ_comm]
-
-  -- Simp cancels common terms, leaving just 0 ≤ a x
-  simp [a_pos x]
 
 def inv_squares (i : ℕ) : ℝ := (1 / ((i+1)^2):ℚ)
 def bassel := partialSums inv_squares
@@ -117,67 +94,3 @@ theorem c1 : Summable' inv_squares := by
   use 2
   intro n
   exact final
-
-def inv_nats (i : ℕ) : ℝ := (1 / (i+1):ℚ)
-
--- The nth harmonic number
-def s := partialSums inv_nats
-
-example (f : ℕ → ℝ) (h1 : a ≤ b) (h2 : b ≤ c): (∑ i ∈ Finset.Ico a c, f i) = ∑ i ∈ Finset.Ico a b, f i +  ∑ i ∈ Finset.Ico b c, f i := by
-  exact Eq.symm (Finset.sum_Ico_consecutive f h1 h2)
-
-theorem e1 (k : ℕ) : (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i) ≥ (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats (2^(k+1)-1)) := by
-  gcongr with i hi
-  unfold inv_nats
-  simp
-  gcongr
-  norm_cast
-  simp [Finset.mem_Ico] at hi
-  linarith
-
-theorem e2 (k : ℕ) : (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats (2^(k+1)-1)) = (1/2) := by
-
-  have : 2^(k + 1) - 2^k = 2^k := by
-    simp [Nat.pow_succ', show 2*2^k = 2^k+2^k by omega]
-
-  simp
-  unfold inv_nats
-  simp
-  rw [this]
-  field_simp
-  ring
-
-
-
-
-theorem h_div (k : ℕ) : s (2^k) ≥ 1 + (k:ℝ)/2 := by
-  induction k with
-  | zero =>
-    simp
-    unfold s partialSums inv_nats
-    simp
-  | succ k IH =>
-    unfold s partialSums
-    unfold s partialSums at IH
-    rw [congrFun Finset.range_eq_Ico (2 ^ (k + 1))]
-
-    rw [← Finset.sum_Ico_consecutive inv_nats (show 0 ≤ 2^k by positivity) (show 2^k ≤ 2^(k+1) by gcongr <;> omega)]
-
-    have : (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i) ≥ 1/2 := by
-      calc
-        (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i) ≥ (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats (2^(k+1)-1)) := e1 k
-        _ = 1/2 := e2 k
-
-    have t := calc
-      (∑ i ∈ Finset.Ico 0 (2 ^ k), inv_nats i + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i) = (∑ i ∈ Finset.range (2 ^ k), inv_nats i + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i) := by
-        congr
-        rw [congrFun Finset.range_eq_Ico]
-      (∑ i ∈ Finset.range (2 ^ k), inv_nats i + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i) ≥  (1 + k/2) + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i := by
-        gcongr
-      _ ≥ 1 + k/2 + 1/2 := by
-        gcongr
-      _ = 1 + (k+1)/2 := by ring
-
-    push_cast at t
-    push_cast
-    exact t
