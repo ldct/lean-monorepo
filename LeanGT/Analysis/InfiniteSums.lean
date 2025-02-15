@@ -3,6 +3,7 @@ import Mathlib
 
 -- Infinite sums
 
+-- The sequence 0 → 0, 1 → b₀, 2 → b₀ + b₁, …
 def partialSums (b : ℕ → ℝ) : (ℕ → ℝ) :=
   fun n ↦ ∑ i in Finset.range n, b i
 

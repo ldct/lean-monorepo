@@ -95,3 +95,68 @@ theorem s_diverges : ¬ (Summable' inv_nats) := by
   unfold Summable' at h
   rw [show partialSums inv_nats = s by rfl] at h
   exact s_unbounded (ConvergesThenBounded h)
+
+def condense (a : ℕ → ℝ) : (ℕ → ℝ):= fun (i : ℕ) ↦ a (2^i)
+
+theorem a_le_2_pow_a (a : ℕ) : a ≤ 2^a := by
+  induction a with
+  | zero => norm_num
+  | succ n IH =>
+    rw [show 2 ^ (n+1) = 2^n * 2 by omega]
+    have : 1 ≤ 2^n := Nat.one_le_two_pow
+    linarith
+
+-- cauchy condensation test 2.4.6
+theorem cct1
+  {b : ℕ → ℝ}
+  (b_pos : ∀ n, 0 ≤ b n)
+  (b_antitone : Antitone b)
+  (c_summable : Summable' (condense b))
+: Summable' b := by
+  unfold Summable' at c_summable
+  have bdd := ConvergesThenBounded c_summable
+  cases' bdd with M hM
+  cases' hM with M_pos M_bounds
+  have M_bounds' : ∀ n, (partialSums (condense b) n) < M := by
+    exact fun n ↦ lt_of_abs_lt (M_bounds n)
+
+  apply MCT
+
+  -- Monotone (partialSums b)
+
+  apply monotone_psum_of_pos
+  exact fun i ↦ b_pos i
+
+  -- We need to show that sm = b1 + b2 + … bm is bounded. The bound used in the book is sm ≤ tk ≤ M where k is to be defined.
+  use M
+  intro m
+
+  -- We have fixed m. Let k be large enough to ensure m ≤ 2^{k+1}-1
+
+  have : ∃ k : ℕ, m ≤ 2^(k+1) := by
+    have : ∃ k', 1 ≤ k' ∧ m ≤ k' := by
+      use max 1 m
+      constructor
+      exact Nat.le_max_left 1 m
+      exact Nat.le_max_right 1 m
+    cases' this with k hk
+    use k
+    rw [show 2^(k+1) = 2^k * 2 by omega]
+    have : k ≤ 2^k := a_le_2_pow_a k
+    linarith
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  sorry
