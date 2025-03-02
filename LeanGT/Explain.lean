@@ -99,6 +99,30 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
     | #[a, b, c, d, e, f] => return s!"\\frac \{ {expr_to_latex e ctx} } \{{expr_to_latex f ctx}}"
     | _ => return brute_force_pp expr
 
+  if (← pure (expr.isAppOfArity ``LT.lt 4)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a, b, c, d] => return s!"{expr_to_latex c ctx} < {expr_to_latex d ctx}"
+    | _ => return brute_force_pp expr
+
+  if (← pure (expr.isAppOfArity ``LE.le 4)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a, b, c, d] => return s!"{expr_to_latex c ctx} \\leq {expr_to_latex d ctx}"
+    | _ => return brute_force_pp expr
+
+  if (← pure (expr.isAppOfArity ``HSub.hSub 6)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a, b, c, d, e, f] => return s!"{expr_to_latex e ctx} - {expr_to_latex f ctx}"
+    | _ => return brute_force_pp expr
+
+  if (← pure (expr.isAppOfArity ``HMul.hMul 6)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a, b, c, d, e, f] => return s!"{expr_to_latex e ctx} {expr_to_latex f ctx}"
+    | _ => return brute_force_pp expr
+
+  if (← pure (expr.isAppOfArity ``HPow.hPow 6)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a, b, c, d, e, f] => return s!"{expr_to_latex e ctx}^{expr_to_latex f ctx}"
+    | _ => return brute_force_pp expr
 
   if (← pure (expr.isAppOfArity ``Eq 3)) then
     match (← pure (getAppArgs expr)) with
@@ -117,10 +141,14 @@ def elabExplainTac : Tactic := fun stx =>
     let localCtx ← Lean.getLCtx
 
     -- dbg_trace f!"goal type: {goalType}"
+    -- displayMarkdown s!"{(expr_to_latex goalType localCtx)}" tk
     displayMarkdown s!"${(expr_to_latex goalType localCtx)}$" tk
   | _ => throwUnsupportedSyntax
 
 
-example (x y :ℝ): x = x / y := by
+example (x y :ℝ): 0 < (x/y) := by
   explain "This is the first step. $x+y$"
   sorry
+
+theorem motzkin (x y : ℝ) : 0 ≤ x^4 * y^2 + x^2 * y^4  - 3 * x^2 * y^2 + 1 := by
+  explain "This is the first step. $x+y$"
