@@ -113,21 +113,25 @@ theorem cct1
   (b_antitone : Antitone b)
   (c_summable : Summable' (condense b))
 : Summable' b := by
+
+  -- Let sm = b0+b1+…b{m-1}
+  let s := partialSums b
+  have s_Monotone : Monotone s := monotone_psum_of_pos b_pos
+
+  -- Let tm = ...
+  let t := partialSums (condense b)
+
   unfold Summable' at c_summable
   have bdd := ConvergesThenBounded c_summable
+  refold_let t at *
   cases' bdd with M hM
   cases' hM with M_pos M_bounds
   have M_bounds' : ∀ n, (partialSums (condense b) n) < M := by
     exact fun n ↦ lt_of_abs_lt (M_bounds n)
 
-  apply MCT
+  apply MCT s_Monotone
 
-  -- Monotone (partialSums b)
-
-  apply monotone_psum_of_pos
-  exact fun i ↦ b_pos i
-
-  -- We need to show that sm = b1 + b2 + … bm is bounded. The bound used in the book is sm ≤ tk ≤ M where k is to be defined.
+  -- We need to show that sm is bounded. The bound used in the book is sm ≤ tk ≤ M where k is to be defined.
   use M
   intro m
 
@@ -144,6 +148,16 @@ theorem cct1
     rw [show 2^(k+1) = 2^k * 2 by omega]
     have : k ≤ 2^k := a_le_2_pow_a k
     linarith
+
+  cases' this with k hk
+
+  have c1 : s m ≤ s (2^(k+1)) := by
+    apply s_Monotone
+    linarith
+
+
+
+
 
 
 
