@@ -39,9 +39,30 @@ partial def brute_force_pp (expr : Expr) : String := match expr with
   | .lit (.strVal s) => s!"\"{s}\""
   | _ => "???"
 
+-- For the expression a * expr, return whether we would need parentheses around expr.
+partial def bind_mul (expr : Expr) : Bool := match expr with
+  | .const ``HAdd.hAdd _ => true
+  | .const ``HSub.hSub _ => true
+  | .app f a => bind_mul f || bind_mul a
+  | .lam _ _ body _ => true
+  | .forallE _ _ body _ => true
+  | .letE _ _ value body _ => true
+  | _ => false
+
+-- For the expression expr^a, return whether we would need parentheses around expr.
+partial def bind_pow (expr : Expr) : Bool := match expr with
+  | .const ``HAdd.hAdd _ => true
+  | .const ``HMul.hMul _ => true
+  | .const ``HPow.hPow _ => true
+  | .const ``HDiv.hDiv _ => true
+  | .app f a => bind_pow f || bind_pow a
+  | .lam _ _ body _ => true
+  | .forallE _ _ body _ => true
+  | .letE _ _ value body _ => true
+  | _ => false
+
 /-- Try to pretty print an expression in latex form. -/
 partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run do
-
   if expr.isFVar then
     match expr with
     | .fvar id =>
@@ -97,14 +118,28 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
 
   if (← pure (expr.isAppOfArity ``HMul.hMul 6)) then
     match (← pure (getAppArgs expr)) with
-    | #[a, b, c, d, e, f] => return s!"{expr_to_latex e ctx} {expr_to_latex f ctx}"
+    | #[a, b, c, d, e, f] =>
+      let e_latex ← expr_to_latex e ctx
+      let f_latex ← expr_to_latex f ctx
+
+      match (bind_mul e, bind_mul f) with
+      | (true, true) => return s!"({e_latex})({f_latex})"
+      | (true, false) => return s!"({e_latex}){f_latex}"
+      | (false, true) => return s!"{e_latex}({f_latex})"
+      | (false, false) => return s!"{e_latex} {f_latex}"
     | _ =>
       dbg_trace f!"unexpected arity for HMul.hMul"
       return brute_force_pp expr
 
   if (← pure (expr.isAppOfArity ``HPow.hPow 6)) then
     match (← pure (getAppArgs expr)) with
-    | #[a, b, c, d, e, f] => return s!"({expr_to_latex e ctx})^{expr_to_latex f ctx}"
+    | #[a, b, c, d, e, f] =>
+      let e_latex ← expr_to_latex e ctx
+      let f_latex ← expr_to_latex f ctx
+
+      match bind_pow e with
+      | true => return s!"({e_latex})^{f_latex}"
+      | false => return s!"{e_latex}^{f_latex}"
     | _ =>
       dbg_trace f!"unexpected arity for HPow.hPow"
       return brute_force_pp expr
@@ -134,7 +169,33 @@ def elabExplainTac : Tactic := fun stx =>
   | _ => throwUnsupportedSyntax
 
 
+-- Test cases : x*(x ∘ y)
+
 example (x y : ℝ): 0 < (x*(x+y)) := by
+  texify
+  sorry
+
+example (x y : ℝ): 0 < (x*(x-y)) := by
+  texify
+  sorry
+
+example (x y : ℝ): 0 < (x*(x^y)) := by
+  texify
+  sorry
+
+example (x y : ℝ): 0 < (x*(x*y)) := by
+  texify
+  sorry
+
+example (x y : ℝ): 0 < x^2 * y^2 := by
+  texify
+  sorry
+
+example (x y : ℝ): 0 < (x*y)^2 := by
+  texify
+  sorry
+
+example (x y : ℝ): 0 < (x+y)^2 := by
   texify
   sorry
 
@@ -157,7 +218,7 @@ theorem example_111 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
   texify
   sorry
 
-theorem imosl1998 (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) (h : x*y*z = 1)
+theorem imosl1998SL (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) (h : x*y*z = 1)
   : (3:ℝ) / 4 ≤ x^3 / ((1 + y) * (1 + z)) + y^3 / ((1 + z) * (1 + x)) + z^3 / ((1 + x) * (1 + y)):= by
   texify
   sorry
