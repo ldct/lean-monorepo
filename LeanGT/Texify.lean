@@ -173,8 +173,7 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
 
 end Lean.Expr
 
-syntax (name := texifyTacticSyntax) "texify" : tactic
-syntax (name := texifyAtTacticSyntax) "texify" "at" ident* : tactic
+syntax (name := texifyTacticSyntax) "texify" ("at" ident*)? : tactic
 
 namespace Lean.Expr
 
@@ -190,13 +189,6 @@ def elabTexify : Tactic := fun stx =>
     -- dbg_trace f!"goal type: {goalType}"
     -- displayMarkdown s!"{(expr_to_latex goalType localCtx)}" tk
     displayMarkdown s!"${(expr_to_latex goalType localCtx)}$" tk
-  | _ => throwUnsupportedSyntax
-
-open Tactic in
-
-@[tactic texifyAtTacticSyntax]
-def elabTexifyAt : Tactic := fun stx =>
-  match stx with
   | `(tactic|texify at $[$ids]* ) => do
     let localCtx ← Lean.getLCtx
 
