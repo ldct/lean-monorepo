@@ -54,8 +54,7 @@ def displayMarkdown (md : String) (stx : Syntax) : CoreM Unit := do
     (return json% { html: $(← Server.RpcEncodable.rpcEncode html) })
     stx
 
-/-- Syntax for the `explain` tactic elaborator. -/
-syntax (name := explainTacStx) "explain" str ("in" ppIndent(tactic))? : tactic
+syntax (name := explainTacStx) "texify" : tactic
 
 
 set_option linter.unusedTactic false
@@ -121,7 +120,7 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
 
   if (← pure (expr.isAppOfArity ``HPow.hPow 6)) then
     match (← pure (getAppArgs expr)) with
-    | #[a, b, c, d, e, f] => return s!"{expr_to_latex e ctx}^{expr_to_latex f ctx}"
+    | #[a, b, c, d, e, f] => return s!"({expr_to_latex e ctx})^{expr_to_latex f ctx}"
     | _ => return brute_force_pp expr
 
   if (← pure (expr.isAppOfArity ``Eq 3)) then
@@ -136,7 +135,7 @@ open Tactic in
 @[tactic explainTacStx]
 def elabExplainTac : Tactic := fun stx =>
   match stx with
-  | `(tactic|explain%$tk $s:str) => do
+  | `(tactic|texify%$tk) => do
     let goalType ← Lean.Elab.Tactic.getMainTarget
     let localCtx ← Lean.getLCtx
 
@@ -146,9 +145,16 @@ def elabExplainTac : Tactic := fun stx =>
   | _ => throwUnsupportedSyntax
 
 
-example (x y :ℝ): 0 < (x/y) := by
-  explain "This is the first step. $x+y$"
+example (x y : ℝ): 0 < (x/y) := by
+  texify
   sorry
 
 theorem motzkin (x y : ℝ) : 0 ≤ x^4 * y^2 + x^2 * y^4  - 3 * x^2 * y^2 + 1 := by
-  explain "This is the first step. $x+y$"
+  texify
+  sorry
+
+theorem inequalities_23797 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (h : 1 / a + 1 / b + 1 / c = a + b + c) :
+    1 / (2 * a + b + c) ^ 2 + 1 / (2 * b + c + a) ^ 2 + 1 / (2 * c + a + b) ^ 2 ≤ 3 / 16 := by
+  texify
+  sorry
