@@ -52,6 +52,14 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
   if let some num ← pure expr.numeral? then
     return toString num
 
+  if (← pure (expr.isAppOfArity ``Real.sqrt 1)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a] => return s!"\\sqrt {expr_to_latex a ctx}"
+    | _ =>
+      dbg_trace f!"unexpected arity for Real.sqrt"
+      return brute_force_pp expr
+
+
   if (← pure (expr.isAppOfArity ``HAdd.hAdd 6)) then
     match (← pure (getAppArgs expr)) with
     | #[a, b, c, d, e, f] => return s!"{expr_to_latex e ctx} + {expr_to_latex f ctx}"
@@ -134,8 +142,22 @@ theorem motzkin (x y : ℝ) : 0 ≤ x^4 * y^2 + x^2 * y^4  - 3 * x^2 * y^2 + 1 :
   texify
   sorry
 
-theorem inequalities_23797 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
-    (h : 1 / a + 1 / b + 1 / c = a + b + c) :
-    1 / (2 * a + b + c) ^ 2 + 1 / (2 * b + c + a) ^ 2 + 1 / (2 * c + a + b) ^ 2 ≤ 3 / 16 := by
+theorem nesbitt (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+  : (3:ℝ) / 2 ≤ a / (b + c) + b / (a + c) + c / (a + b) := by
+  texify
+  sorry
+
+theorem nesbitt' (a b c d : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (hd : 0 < d)
+  : 2 ≤ a / (b + c) + b / (c + d) + c / (d + a) + d / (a + b) := by
+  texify
+  sorry
+
+theorem example_111 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+  : a*b + b*c + c*a ≤ Real.sqrt a + Real.sqrt b + Real.sqrt c := by
+  texify
+  sorry
+
+theorem imosl1998 (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) (h : x*y*z = 1)
+  : (3:ℝ) / 4 ≤ x^3 / ((1 + y) * (1 + z)) + y^3 / ((1 + z) * (1 + x)) + z^3 / ((1 + x) * (1 + y)):= by
   texify
   sorry
