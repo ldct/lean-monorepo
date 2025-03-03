@@ -174,7 +174,7 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
 end Lean.Expr
 
 syntax (name := texifyTacticSyntax) "texify" : tactic
-syntax (name := texifyAtTacticSyntax) "texify" "at" ident : tactic
+syntax (name := texifyAtTacticSyntax) "texify" "at" ident* : tactic
 
 namespace Lean.Expr
 
@@ -197,10 +197,18 @@ open Tactic in
 @[tactic texifyAtTacticSyntax]
 def elabTexifyAt : Tactic := fun stx =>
   match stx with
-  | `(tactic|texify%$tk at $h:ident) => do
+  | `(tactic|texify at $[$ids]* ) => do
     let localCtx ← Lean.getLCtx
-    let some decl := localCtx.findFromUserName? h.getId | throwError "Unknown hypothesis {h.getId}"
-    displayMarkdown s!"${(expr_to_latex decl.type localCtx)}$" tk
+
+    -- Extract identifiers from the comma-separated list using getElems
+
+    -- Loop over each identifier and display its LaTeX
+    ids.forM (fun h =>
+      match localCtx.findFromUserName? h.getId with
+      | some decl => 
+        let texifiedExpr := expr_to_latex decl.type localCtx
+        displayMarkdown s!"${expr_to_latex decl.type localCtx}$" stx
+      | none => throwError "Unknown hypothesis {h.getId}")
   | _ => throwUnsupportedSyntax
 
 end Lean.Expr
