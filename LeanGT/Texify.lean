@@ -16,9 +16,6 @@ def displayMarkdown (md : String) (stx : Syntax) : CoreM Unit := do
     (return json% { html: $(← Server.RpcEncodable.rpcEncode html) })
     stx
 
-syntax (name := texifyTacticSyntax) "texify" : tactic
-
-
 set_option linter.unusedTactic false
 set_option linter.unusedVariables false
 
@@ -153,11 +150,17 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
 
   return brute_force_pp expr
 
+end Lean.Expr
+
+syntax (name := texifyTacticSyntax) "texify" : tactic
+syntax (name := texifyAtTacticSyntax) "texify" "at" ident : tactic
+
+namespace Lean.Expr
+
 open Tactic in
 
-/-- A tactic that adds an explanation widget in markdown form. -/
 @[tactic texifyTacticSyntax]
-def elabExplainTac : Tactic := fun stx =>
+def elabTexify : Tactic := fun stx =>
   match stx with
   | `(tactic|texify%$tk) => do
     let goalType ← Lean.Elab.Tactic.getMainTarget
@@ -168,6 +171,18 @@ def elabExplainTac : Tactic := fun stx =>
     displayMarkdown s!"${(expr_to_latex goalType localCtx)}$" tk
   | _ => throwUnsupportedSyntax
 
+open Tactic in
+
+@[tactic texifyAtTacticSyntax]
+def elabTexifyAt : Tactic := fun stx =>
+  match stx with
+  | `(tactic|texify%$tk at $h:ident) => do
+    let localCtx ← Lean.getLCtx
+    let some decl := localCtx.findFromUserName? h.getId | throwError "Unknown hypothesis {h.getId}"
+    displayMarkdown s!"${(expr_to_latex decl.type localCtx)}$" tk
+  | _ => throwUnsupportedSyntax
+
+end Lean.Expr
 
 -- Test cases : x*(x ∘ y)
 
