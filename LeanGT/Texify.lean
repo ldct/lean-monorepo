@@ -148,6 +148,27 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
       dbg_trace f!"unexpected arity for Eq"
       return brute_force_pp expr
 
+  if (← pure (expr.isAppOfArity ``HMod.hMod 6)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a, b, c, d, e, f] => return s!"{expr_to_latex e ctx} \\bmod {expr_to_latex f ctx}"
+    | _ =>
+      dbg_trace f!"unexpected arity for HMod.hMod"
+      return brute_force_pp expr
+
+  if (← pure (expr.isAppOfArity ``Finset.Icc 5)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a, b, c, d, e] => return s!"[{expr_to_latex d ctx}, {expr_to_latex e ctx}]"
+    | _ =>
+      dbg_trace f!"unexpected arity for Finset.Icc"
+      return brute_force_pp expr
+
+  if (← pure (expr.isAppOfArity ``Finset.Ico 5)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a, b, c, d, e] => return s!"[{expr_to_latex d ctx}, {expr_to_latex e ctx})"
+    | _ =>
+      dbg_trace f!"unexpected arity for Finset.Ico"
+      return brute_force_pp expr
+
   return brute_force_pp expr
 
 end Lean.Expr
@@ -233,7 +254,35 @@ theorem example_111 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
   texify
   sorry
 
+-- This one is tough to format nicely...
+theorem multi (a b c d : ℝ)
+  : 0 ≤ (a+b)*(a+c)*(a+d)*(b+c)*(b+d)*(c+d) := by
+  texify
+  sorry
+
 theorem imosl1998SL (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) (h : x*y*z = 1)
   : (3:ℝ) / 4 ≤ x^3 / ((1 + y) * (1 + z)) + y^3 / ((1 + z) * (1 + x)) + z^3 / ((1 + x) * (1 + y)):= by
+  texify
+  sorry
+
+theorem usamo1998 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+  : 1 / (a*b*c) ≤ 1 / (a^3 + b^3 + a*b*c) + 1 / (b^3 + c^3 + a*b*c) + 1 / (c^3 + a^3 + a*b*c) := by
+  texify
+  sorry
+
+theorem mathlinks (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (h : a*b*c = 1)
+: 3 ≤ Real.sqrt ((a + b) / (a + 1)) + Real.sqrt ((b + c) / (b + 1)) + Real.sqrt ((c + a) / (c + 1)) := by
+  texify
+  sorry
+
+example : 3 % 2 = 1 := by
+  texify
+  norm_num
+
+example : Finset.Icc 1 3 = Finset.Ico 1 4 := by
+  texify
+  decide
+
+lemma lemma0 (n : ℕ) : (∑ x ∈ Finset.Icc 1 (4 * n + 2), (x:ℤ) % 2) % 2 = 1 := by
   texify
   sorry

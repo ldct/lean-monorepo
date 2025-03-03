@@ -1,14 +1,14 @@
 import Mathlib
-import LeanGT.Explain
+import LeanGT.Texify
 
 set_option linter.unusedTactic false
 
 example : True := by
-  explain "This is the first step. $x+y$"
+  texify
   exact trivial
 
 theorem motzkin (x y : ℝ) : 0 ≤ x^4 * y^2 + x^2 * y^4  - 3 * x^2 * y^2 + 1 := by
-  explain "This is the first step. $x+y$"
+  texify
 
   let w : Fin 3 → ℝ := fun _ => (1:ℝ)/3
 

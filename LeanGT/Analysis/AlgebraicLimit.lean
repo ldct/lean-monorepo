@@ -1,3 +1,4 @@
+import LeanGT.Texify
 import LeanGT.Analysis.Bounded
 import LeanGT.Analysis.TendsTo
 
@@ -158,7 +159,7 @@ theorem tendsTo_mul
       specialize m_bounds n
       have hpos : 0 ≤ |a n - A| := abs_nonneg (a n - A)
       suffices : |b n| ≤ M
-      exact mul_le_mul_of_nonneg_right this hpos
+      · exact mul_le_mul_of_nonneg_right this hpos
       exact LT.lt.le m_bounds
     }
     _ < M * (ε / (2*M)) + |A| * |b n - B| := by
@@ -204,7 +205,7 @@ theorem tendsTo_inv
     rw [← this]
 
   have : |B| / 2 < |b n| := by
-    have : 0 < B ∨ B < 0 := by exact lt_or_gt_of_ne (Ne.symm B_nz)
+    have : 0 < B ∨ B < 0 := lt_or_gt_of_ne (Ne.symm B_nz)
     cases' this with B_pos B_neg
     rw [abs_of_pos B_pos] at hN₁ ⊢
     rw [abs_lt] at hN₁
