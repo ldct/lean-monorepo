@@ -6,6 +6,13 @@ Adapted from explanation widget by Adam Topaz.
 import Mathlib
 import ProofWidgets.Component.HtmlDisplay
 
+axiom anotherSorryAx {P} : P
+
+macro "intensional_sorry" : tactic => `(tactic| exact anotherSorryAx)
+
+example : ∀ (P Q : Prop), P → (P → Q) → Q := by
+  intensional_sorry
+
 open Lean Elab ProofWidgets ProofWidgets.Jsx
 
 /-- Displays the markdown source in `md` in a widget when the cursor is placed at `stx`. -/
@@ -18,6 +25,8 @@ def displayMarkdown (md : String) (stx : Syntax) : CoreM Unit := do
 
 set_option linter.unusedTactic false
 set_option linter.unusedVariables false
+
+
 
 namespace Lean.Expr
 
@@ -66,7 +75,9 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
   if expr.isMData then
     match expr with
     | .mdata _ e => return expr_to_latex e ctx
-    | _ => return brute_force_pp expr
+    | _ =>
+      dbg_trace f!"unexpected arity for mdata"
+      return brute_force_pp expr
 
   if expr.isFVar then
     match expr with
@@ -250,24 +261,30 @@ def elabTexify : Tactic := fun stx =>
 
 end Lean.Expr
 
+-- function calls
+example
+  (f : ℝ → ℝ)
+: 0 < f 0 := by
+  texify
+  intensional_sorry
 
 -- Test case: metadata is skipped
 example (x y : ℝ) : 0 < x^(x + y) := by
   have triv : 1 = 1 := by decide
   texify
-  sorry
+  intensional_sorry
 
 -- Why is this failing?
 example (x y : ℝ) : 0 < x^(x + y) := by
   have triv: x = y := by
     texify -- ok
-    sorry
+    intensional_sorry
 
   have triv'' (a : ℝ) : a = a := by
     texify -- fails
-    sorry
+    intensional_sorry
 
-  sorry
+  intensional_sorry
 
 
 def f (x : ZMod 5) : ℕ := 2
@@ -275,10 +292,10 @@ def f (x : ZMod 5) : ℕ := 2
 example (i : ZMod 102) : i = 3 := by
   have (x y : ℝ) : x = y := by
     texify
-    sorry
+    intensional_sorry
 
   texify
-  sorry
+  intensional_sorry
 
 example (x : ZMod 5) : x = x := by
   texify at x
@@ -296,99 +313,99 @@ example : ∑ j, f j = 10 := by
 
 example (x y : ℝ) : 0 < x^(x + y) := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ) : 0 < x^(x * y) := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ) : 0 < x^(x / y) := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ) : 0 < x^(x^y) := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ) : 0 < (x^x)^y := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ) : 0 < (x+x)^y := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ) : 0 < (x+x)^(x+y) := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ): 0 < (x*(x+y)) := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ): 0 < (x*(x-y)) := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ): 0 < (x*(x^y)) := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ): 0 < (x*(x*y)) := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ): 0 < x^2 * y^2 := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ): 0 < (x*y)^2 := by
   texify
-  sorry
+  intensional_sorry
 
 example (x y : ℝ): 0 < (x+y)^2 := by
   texify
-  sorry
+  intensional_sorry
 
 theorem motzkin (x y : ℝ) : 0 ≤ x^4 * y^2 + x^2 * y^4  - 3 * x^2 * y^2 + 1 := by
   texify
-  sorry
+  intensional_sorry
 
 theorem nesbitt (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
   : (3:ℝ) / 2 ≤ a / (b + c) + b / (a + c) + c / (a + b) := by
   texify
-  sorry
+  intensional_sorry
 
 theorem nesbitt' (a b c d : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (hd : 0 < d)
   : 2 ≤ a / (b + c) + b / (c + d) + c / (d + a) + d / (a + b) := by
   texify
-  sorry
+  intensional_sorry
 
 theorem example_111 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
   : a*b + b*c + c*a ≤ Real.sqrt a + Real.sqrt b + Real.sqrt c := by
   texify
-  sorry
+  intensional_sorry
 
 -- This one is tough to format nicely...
 theorem multi (a b c d : ℝ)
   : 0 ≤ (a+b)*(a+c)*(a+d)*(b+c)*(b+d)*(c+d) := by
   texify
-  sorry
+  intensional_sorry
 
 theorem imosl1998SL (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) (h : x*y*z = 1)
   : (3:ℝ) / 4 ≤ x^3 / ((1 + y) * (1 + z)) + y^3 / ((1 + z) * (1 + x)) + z^3 / ((1 + x) * (1 + y)):= by
   texify
-  sorry
+  intensional_sorry
 
 theorem usamo1998 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
   : 1 / (a*b*c) ≤ 1 / (a^3 + b^3 + a*b*c) + 1 / (b^3 + c^3 + a*b*c) + 1 / (c^3 + a^3 + a*b*c) := by
   texify
-  sorry
+  intensional_sorry
 
 theorem mathlinks (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (h : a*b*c = 1)
 : 3 ≤ Real.sqrt ((a + b) / (a + 1)) + Real.sqrt ((b + c) / (b + 1)) + Real.sqrt ((c + a) / (c + 1)) := by
   texify
-  sorry
+  intensional_sorry
 
 example : 3 % 2 = 1 := by
   texify
