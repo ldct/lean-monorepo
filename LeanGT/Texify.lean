@@ -31,10 +31,10 @@ partial def brute_force_pp (expr : Expr) : String := match expr with
   | .app f a => s!"{brute_force_pp f}({brute_force_pp a})"
   | .lam name type body _ => s!"\\lambda {name} : {brute_force_pp type} \\mapsto {brute_force_pp body}"
   | .forallE name type body _ => s!"\\forall {name} : {brute_force_pp type}, {brute_force_pp body}"
-  | .letE name type value body _ => s!"???"
+  | .letE name type value body _ => s!"??let??"
   | .lit (.natVal n) => toString n
   | .lit (.strVal s) => s!"\"{s}\""
-  | _ => "???"
+  | _ => s!"??unknown {expr}??"
 
 -- For the expression a * expr, return whether we would need parentheses around expr.
 partial def bind_mul (expr : Expr) : Bool := match expr with
