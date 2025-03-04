@@ -71,8 +71,10 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
   if expr.isFVar then
     match expr with
     | .fvar id =>
-      let x ← ctx.get! id
-      return x.userName.toString
+      if let some x ← ctx.find? id then
+        return x.userName.toString
+      else
+        return "??unknown_fvar??"
     | _ => return brute_force_pp expr
 
   if expr.isConstOf ``Real then return "ℝ"
@@ -261,13 +263,11 @@ example (x y : ℝ) : 0 < x^(x + y) := by
     texify -- ok
     sorry
 
-  have triv' (a : ℝ) : a = a := by
-    texify
-    sorry
-
   have triv'' (a : ℝ) : a = a := by
     texify -- fails
     sorry
+
+  sorry
 
 
 def f (x : ZMod 5) : ℕ := 2
