@@ -34,6 +34,7 @@ partial def brute_force_pp (expr : Expr) : String := match expr with
   | .letE name type value body _ => s!"??let??"
   | .lit (.natVal n) => toString n
   | .lit (.strVal s) => s!"\"{s}\""
+  | .mdata _ e => s!"{brute_force_pp e}"
   | _ => s!"??unknown {expr}??"
 
 -- For the expression a * expr, return whether we would need parentheses around expr.
@@ -60,6 +61,13 @@ partial def bind_pow (expr : Expr) : Bool := match expr with
 
 /-- Try to pretty print an expression in latex form. -/
 partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run do
+
+  -- skip metadata
+  if expr.isMData then
+    match expr with
+    | .mdata _ e => return expr_to_latex e ctx
+    | _ => return brute_force_pp expr
+
   if expr.isFVar then
     match expr with
     | .fvar id =>
@@ -239,6 +247,28 @@ def elabTexify : Tactic := fun stx =>
   | _ => throwUnsupportedSyntax
 
 end Lean.Expr
+
+
+-- Test case: metadata is skipped
+example (x y : ℝ) : 0 < x^(x + y) := by
+  have triv : 1 = 1 := by decide
+  texify
+  sorry
+
+-- Why is this failing?
+example (x y : ℝ) : 0 < x^(x + y) := by
+  have triv: x = y := by
+    texify -- ok
+    sorry
+
+  have triv' (a : ℝ) : a = a := by
+    texify
+    sorry
+
+  have triv'' (a : ℝ) : a = a := by
+    texify -- fails
+    sorry
+
 
 def f (x : ZMod 5) : ℕ := 2
 
