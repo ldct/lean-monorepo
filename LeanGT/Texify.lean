@@ -80,28 +80,28 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
 
   if (← pure (expr.isAppOfArity ``HAdd.hAdd 6)) then
     match (← pure (getAppArgs expr)) with
-    | #[a, b, c, d, e, f] => return s!"{expr_to_latex e ctx} + {expr_to_latex f ctx}"
+    | #[_, _, _, _, e, f] => return s!"{expr_to_latex e ctx} + {expr_to_latex f ctx}"
     | _ =>
       dbg_trace f!"unexpected arity for HAdd.hAdd"
       return brute_force_pp expr
 
   if (← pure (expr.isAppOfArity ``HDiv.hDiv 6)) then
     match (← pure (getAppArgs expr)) with
-    | #[a, b, c, d, e, f] => return s!"\\frac \{ {expr_to_latex e ctx} } \{{expr_to_latex f ctx}}"
+    | #[_, _, _, _, e, f] => return s!"\\frac \{ {expr_to_latex e ctx} } \{{expr_to_latex f ctx}}"
     | _ =>
       dbg_trace f!"unexpected arity for HDiv.hDiv"
       return brute_force_pp expr
 
   if (← pure (expr.isAppOfArity ``LT.lt 4)) then
     match (← pure (getAppArgs expr)) with
-    | #[a, b, c, d] => return s!"{expr_to_latex c ctx} < {expr_to_latex d ctx}"
+    | #[_, _, c, d] => return s!"{expr_to_latex c ctx} < {expr_to_latex d ctx}"
     | _ =>
       dbg_trace f!"unexpected arity for LT.lt"
       return brute_force_pp expr
 
   if (← pure (expr.isAppOfArity ``LE.le 4)) then
     match (← pure (getAppArgs expr)) with
-    | #[a, b, c, d] => return s!"{expr_to_latex c ctx} \\leq {expr_to_latex d ctx}"
+    | #[_, _, c, d] => return s!"{expr_to_latex c ctx} \\leq {expr_to_latex d ctx}"
     | _ =>
       dbg_trace f!"unexpected arity for LE.le"
       return brute_force_pp expr
@@ -115,7 +115,7 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
 
   if (← pure (expr.isAppOfArity ``HMul.hMul 6)) then
     match (← pure (getAppArgs expr)) with
-    | #[a, b, c, d, e, f] =>
+    | #[_, _, _, _, e, f] =>
       let e_latex ← expr_to_latex e ctx
       let f_latex ← expr_to_latex f ctx
 
@@ -130,20 +130,20 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
 
   if (← pure (expr.isAppOfArity ``HPow.hPow 6)) then
     match (← pure (getAppArgs expr)) with
-    | #[a, b, c, d, e, f] =>
+    | #[_, _, _, _, e, f] =>
       let e_latex ← expr_to_latex e ctx
       let f_latex ← expr_to_latex f ctx
 
       match bind_pow e with
-      | true => return s!"({e_latex})^{f_latex}"
-      | false => return s!"{e_latex}^{f_latex}"
+      | true => return s!"({e_latex})^\{{f_latex}}"
+      | false => return s!"{e_latex}^\{{f_latex}}"
     | _ =>
       dbg_trace f!"unexpected arity for HPow.hPow"
       return brute_force_pp expr
 
   if (← pure (expr.isAppOfArity ``Eq 3)) then
     match (← pure (getAppArgs expr)) with
-    | #[a, b, c] => return s!"{expr_to_latex b ctx} = {expr_to_latex c ctx}"
+    | #[_, b, c] => return s!"{expr_to_latex b ctx} = {expr_to_latex c ctx}"
     | _ =>
       dbg_trace f!"unexpected arity for Eq"
       return brute_force_pp expr
@@ -197,7 +197,7 @@ def elabTexify : Tactic := fun stx =>
     -- Loop over each identifier and display its LaTeX
     ids.forM (fun h =>
       match localCtx.findFromUserName? h.getId with
-      | some decl => 
+      | some decl =>
         let texifiedExpr := expr_to_latex decl.type localCtx
         displayMarkdown s!"${expr_to_latex decl.type localCtx}$" stx
       | none => throwError "Unknown hypothesis {h.getId}")
@@ -206,6 +206,34 @@ def elabTexify : Tactic := fun stx =>
 end Lean.Expr
 
 -- Test cases : x*(x ∘ y)
+
+example (x y : ℝ) : 0 < x^(x + y) := by
+  texify
+  sorry
+
+example (x y : ℝ) : 0 < x^(x * y) := by
+  texify
+  sorry
+
+example (x y : ℝ) : 0 < x^(x / y) := by
+  texify
+  sorry
+
+example (x y : ℝ) : 0 < x^(x^y) := by
+  texify
+  sorry
+
+example (x y : ℝ) : 0 < (x^x)^y := by
+  texify
+  sorry
+
+example (x y : ℝ) : 0 < (x+x)^y := by
+  texify
+  sorry
+
+example (x y : ℝ) : 0 < (x+x)^(x+y) := by
+  texify
+  sorry
 
 example (x y : ℝ): 0 < (x*(x+y)) := by
   texify
