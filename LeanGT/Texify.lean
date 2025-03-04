@@ -23,7 +23,7 @@ namespace Lean.Expr
 
 /-- A brute force pretty printer for expressions. -/
 partial def brute_force_pp (expr : Expr) : String := match expr with
-  | .bvar idx => s!"x_{idx}"
+  | .bvar idx => s!"ξ_{idx}"
   | .fvar id => "fvar"
   | .mvar id => s!"?{id.name}"
   | .sort lvl => s!"Type{lvl}"
@@ -67,6 +67,17 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
       return x.userName.toString
     | _ => return brute_force_pp expr
 
+  if expr.isConstOf ``Real then return "ℝ"
+  if expr.isConstOf ``Nat then return "ℕ"
+  if expr.isConstOf ``Int then return "ℤ"
+  if expr.isConstOf ``Rat then return "ℚ"
+
+  if expr.isLambda then
+    match expr with
+    | .lam name type body _ =>
+      return s!" {name} \\mapsto {expr_to_latex body ctx}"
+    | _ => return brute_force_pp expr
+
   if let some num ← pure expr.numeral? then
     return toString num
 
@@ -77,6 +88,12 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
       dbg_trace f!"unexpected arity for Real.sqrt"
       return brute_force_pp expr
 
+  if (← pure (expr.isAppOfArity ``ZMod 1)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a] => return s!"ℤ_\{{expr_to_latex a ctx}}"
+    | _ =>
+      dbg_trace f!"unexpected arity for ZMod"
+      return brute_force_pp expr
 
   if (← pure (expr.isAppOfArity ``HAdd.hAdd 6)) then
     match (← pure (getAppArgs expr)) with
@@ -169,6 +186,24 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
       dbg_trace f!"unexpected arity for Finset.Ico"
       return brute_force_pp expr
 
+  if (← pure (expr.isAppOfArity ``Finset.sum 5)) then
+    match (← pure (getAppArgs expr)) with
+    | #[_, _, _, d, e] =>
+      -- first 3 args are types
+      return s!"\\sum_\{{expr_to_latex d ctx}} \{{expr_to_latex e ctx}}"
+    | _ =>
+      dbg_trace f!"unexpected arity for Finset.Ico"
+      return brute_force_pp expr
+
+  if (← pure (expr.isAppOfArity ``Finset.univ 2)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a, _] =>
+      return s!"\{{expr_to_latex a ctx}}"
+    | _ =>
+      dbg_trace f!"unexpected arity for Finset.univ"
+      return brute_force_pp expr
+
+
   return brute_force_pp expr
 
 end Lean.Expr
@@ -204,6 +239,28 @@ def elabTexify : Tactic := fun stx =>
   | _ => throwUnsupportedSyntax
 
 end Lean.Expr
+
+def f (x : ZMod 5) : ℕ := 2
+
+example (i : ZMod 102) : i = 3 := by
+  have (x y : ℝ) : x = y := by
+    texify
+    sorry
+
+  texify
+  sorry
+
+example (x : ZMod 5) : x = x := by
+  texify at x
+  sorry
+
+example (a : ℕ) (x : ZMod a) : x = x := by
+  texify at x
+  sorry
+
+example : ∑ j, f j = 10 := by
+  texify
+  decide
 
 -- Test cases : x*(x ∘ y)
 
