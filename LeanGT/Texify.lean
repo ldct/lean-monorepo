@@ -224,7 +224,16 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
       dbg_trace f!"unexpected arity for Finset.univ"
       return brute_force_pp expr
 
+  if expr.isApp then
+    dbg_trace f!"app: {expr}"
+    match expr with
+    | .app f a =>
+      return s!"{expr_to_latex f ctx}({expr_to_latex a ctx})"
+    | _ =>
+      dbg_trace f!"unexpected arity for App"
+      return brute_force_pp expr
 
+  dbg_trace f!"unknown expression, falling back to brute force: {expr}"
   return brute_force_pp expr
 
 end Lean.Expr
