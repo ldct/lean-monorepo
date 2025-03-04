@@ -8,12 +8,29 @@ import ProofWidgets.Component.HtmlDisplay
 
 axiom anotherSorryAx {P} : P
 
-macro "intensional_sorry" : tactic => `(tactic| exact anotherSorryAx)
+macro "intentional_sorry" : tactic => `(tactic| exact anotherSorryAx)
 
 example : ∀ (P Q : Prop), P → (P → Q) → Q := by
-  intensional_sorry
+  intentional_sorry
 
 open Lean Elab ProofWidgets ProofWidgets.Jsx
+
+instance : ToString LocalDecl where
+  toString (decl : LocalDecl) := decl.userName.toString
+
+instance : ToString (Option LocalDecl) where
+  toString := fun o => match o with
+    | some decl => decl.userName.toString
+    | none => "none"
+
+partial def localCtxToString (ctx : LocalContext) : String := Id.run do
+  let decls := ctx.decls
+  let declsStr := decls.map (fun decl => s!"{decl}")
+  let ret := declsStr.foldl (fun acc str => s!"{acc} {str}") ""
+  return ret
+
+instance : ToString LocalContext where
+  toString := localCtxToString
 
 /-- Displays the markdown source in `md` in a widget when the cursor is placed at `stx`. -/
 def displayMarkdown (md : String) (stx : Syntax) : CoreM Unit := do
@@ -86,6 +103,12 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
         return x.userName.toString
       else
         return "??unknown_fvar??"
+    | _ => return brute_force_pp expr
+
+  if expr.isBVar then
+    -- dbg_trace f!"bvar: {expr} {ctx}"
+    match expr with
+    | .bvar id => return s!"ξ_{id}"
     | _ => return brute_force_pp expr
 
   if expr.isConstOf ``Real then return "ℝ"
@@ -224,11 +247,25 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
       dbg_trace f!"unexpected arity for Finset.univ"
       return brute_force_pp expr
 
+  if (← pure (expr.isAppOfArity ``Finset.range 1)) then
+    match (← pure (getAppArgs expr)) with
+    | #[n] =>
+      return s!"<\{{expr_to_latex n ctx}}"
+    | _ =>
+      dbg_trace f!"unexpected arity for Finset.range"
+      return brute_force_pp expr
+
   if expr.isApp then
-    dbg_trace f!"app: {expr}"
+    -- dbg_trace f!"app: {expr}"
     match expr with
     | .app f a =>
-      return s!"{expr_to_latex f ctx}({expr_to_latex a ctx})"
+      let f_expr ← expr_to_latex f ctx
+      if f_expr ∈ ["x", "y", "z", "a", "b", "c", "d", "e"] then
+        -- heuristic: these function names are usually used as series
+        -- so we should write it in subscript
+        return s!"{f_expr}_\{{expr_to_latex a ctx}}"
+      else
+        return s!"{f_expr}({expr_to_latex a ctx})"
     | _ =>
       dbg_trace f!"unexpected arity for App"
       return brute_force_pp expr
@@ -239,7 +276,6 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
 end Lean.Expr
 
 syntax (name := texifyTacticSyntax) "texify" ("at" ident*)? : tactic
-
 namespace Lean.Expr
 
 open Tactic in
@@ -275,25 +311,39 @@ example
   (f : ℝ → ℝ)
 : 0 < f 0 := by
   texify
-  intensional_sorry
+  intentional_sorry
 
--- Test case: metadata is skipped
+example (n : ℕ) : (∑ i ∈ Finset.range n, i) * 2 = n * (n - 1) := by
+  texify
+  exact Finset.sum_range_id_mul_two n
+
+#check Finset.sum_range_id_mul_two
+
+theorem inequalities_23913
+  (x : ZMod 102 → ℝ)
+  (h_nonneg : ∀ i, 0 ≤ x i)
+  (hx : ∀ i, x i + x (i + 1) + x (i + 2) ≤ 1)
+: ∑ i, x i * x (i + 2) ≤ 25 / 2 := by
+  texify
+  intentional_sorry
+
+--  metadata is skipped
 example (x y : ℝ) : 0 < x^(x + y) := by
   have triv : 1 = 1 := by decide
   texify
-  intensional_sorry
+  intentional_sorry
 
 -- Why is this failing?
 example (x y : ℝ) : 0 < x^(x + y) := by
   have triv: x = y := by
     texify -- ok
-    intensional_sorry
+    intentional_sorry
 
   have triv'' (a : ℝ) : a = a := by
     texify -- fails
-    intensional_sorry
+    intentional_sorry
 
-  intensional_sorry
+  intentional_sorry
 
 
 def f (x : ZMod 5) : ℕ := 2
@@ -301,10 +351,10 @@ def f (x : ZMod 5) : ℕ := 2
 example (i : ZMod 102) : i = 3 := by
   have (x y : ℝ) : x = y := by
     texify
-    intensional_sorry
+    intentional_sorry
 
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x : ZMod 5) : x = x := by
   texify at x
@@ -322,99 +372,99 @@ example : ∑ j, f j = 10 := by
 
 example (x y : ℝ) : 0 < x^(x + y) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ) : 0 < x^(x * y) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ) : 0 < x^(x / y) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ) : 0 < x^(x^y) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ) : 0 < (x^x)^y := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ) : 0 < (x+x)^y := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ) : 0 < (x+x)^(x+y) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ): 0 < (x*(x+y)) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ): 0 < (x*(x-y)) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ): 0 < (x*(x^y)) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ): 0 < (x*(x*y)) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ): 0 < x^2 * y^2 := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ): 0 < (x*y)^2 := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example (x y : ℝ): 0 < (x+y)^2 := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 theorem motzkin (x y : ℝ) : 0 ≤ x^4 * y^2 + x^2 * y^4  - 3 * x^2 * y^2 + 1 := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 theorem nesbitt (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
   : (3:ℝ) / 2 ≤ a / (b + c) + b / (a + c) + c / (a + b) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 theorem nesbitt' (a b c d : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (hd : 0 < d)
   : 2 ≤ a / (b + c) + b / (c + d) + c / (d + a) + d / (a + b) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 theorem example_111 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
   : a*b + b*c + c*a ≤ Real.sqrt a + Real.sqrt b + Real.sqrt c := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 -- This one is tough to format nicely...
 theorem multi (a b c d : ℝ)
   : 0 ≤ (a+b)*(a+c)*(a+d)*(b+c)*(b+d)*(c+d) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 theorem imosl1998SL (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) (h : x*y*z = 1)
   : (3:ℝ) / 4 ≤ x^3 / ((1 + y) * (1 + z)) + y^3 / ((1 + z) * (1 + x)) + z^3 / ((1 + x) * (1 + y)):= by
   texify
-  intensional_sorry
+  intentional_sorry
 
 theorem usamo1998 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
   : 1 / (a*b*c) ≤ 1 / (a^3 + b^3 + a*b*c) + 1 / (b^3 + c^3 + a*b*c) + 1 / (c^3 + a^3 + a*b*c) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 theorem mathlinks (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (h : a*b*c = 1)
 : 3 ≤ Real.sqrt ((a + b) / (a + 1)) + Real.sqrt ((b + c) / (b + 1)) + Real.sqrt ((c + a) / (c + 1)) := by
   texify
-  intensional_sorry
+  intentional_sorry
 
 example : 3 % 2 = 1 := by
   texify
