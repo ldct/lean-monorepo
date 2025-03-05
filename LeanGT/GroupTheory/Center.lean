@@ -1,7 +1,7 @@
 import Mathlib.Tactic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
 
-import LeanGT.CentralizerOfRotations
+import LeanGT.GroupTheory.CentralizerOfRotations
 
 namespace DihedralGroup
 

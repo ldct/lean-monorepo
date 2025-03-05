@@ -1,6 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.Defs
-import LeanGT.ZMul
+import LeanGT.GroupTheory.ZMul
 
 open Subgroup
 

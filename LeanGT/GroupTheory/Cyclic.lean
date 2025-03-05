@@ -1,6 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.GroupTheory.SpecificGroups.Cyclic
-import LeanGT.ZMul
+import LeanGT.GroupTheory.ZMul
 
 -- prove that various groups are or are not cyclic
 
