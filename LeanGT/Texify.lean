@@ -2,6 +2,8 @@
 texify is a tactic that displays the goal in latex form.
 
 Adapted from explanation widget by Adam Topaz.
+
+Contributors: Li Xuanji, Frederick Pu
 -/
 import Mathlib
 import ProofWidgets.Component.HtmlDisplay
@@ -42,8 +44,6 @@ def displayMarkdown (md : String) (stx : Syntax) : CoreM Unit := do
 
 set_option linter.unusedTactic false
 set_option linter.unusedVariables false
-
-
 
 namespace Lean.Expr
 
@@ -130,6 +130,28 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
     | #[a] => return s!"\\sqrt {expr_to_latex a ctx}"
     | _ =>
       dbg_trace f!"unexpected arity for Real.sqrt"
+      return brute_force_pp expr
+
+  if (← pure (expr.isAppOfArity ``Real.sin 1)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a] => return s!"\\sin {expr_to_latex a ctx}"
+    | _ =>
+      dbg_trace f!"unexpected arity for Real.sin"
+      return brute_force_pp expr
+
+  if (← pure (expr.isAppOfArity ``Real.cos 1)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a] => return s!"\\cos {expr_to_latex a ctx}"
+    | _ =>
+      dbg_trace f!"unexpected arity for Real.cos"
+      return brute_force_pp expr
+
+
+  if (← pure (expr.isAppOfArity ``Real.tan 1)) then
+    match (← pure (getAppArgs expr)) with
+    | #[a] => return s!"\\tan {expr_to_latex a ctx}"
+    | _ =>
+      dbg_trace f!"unexpected arity for Real.tan"
       return brute_force_pp expr
 
   if (← pure (expr.isAppOfArity ``ZMod 1)) then
@@ -239,6 +261,15 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
       dbg_trace f!"unexpected arity for Finset.Ico"
       return brute_force_pp expr
 
+  if (← pure (expr.isAppOfArity ``Finset.prod 5)) then
+    match (← pure (getAppArgs expr)) with
+    | #[_, _, _, d, e] =>
+      -- first 3 args are types
+      return s!"\\prod_\{{expr_to_latex d ctx}} \{{expr_to_latex e ctx}}"
+    | _ =>
+      dbg_trace f!"unexpected arity for Finset.Ico"
+      return brute_force_pp expr
+
   if (← pure (expr.isAppOfArity ``Finset.univ 2)) then
     match (← pure (getAppArgs expr)) with
     | #[a, _] =>
@@ -253,6 +284,15 @@ partial def expr_to_latex (expr : Expr) (ctx : LocalContext) : String := Id.run 
       return s!"<\{{expr_to_latex n ctx}}"
     | _ =>
       dbg_trace f!"unexpected arity for Finset.range"
+      return brute_force_pp expr
+
+  if (← pure (expr.isAppOfArity ``Nat.cast 3)) then
+    match (← pure (getAppArgs expr)) with
+    | #[_, _, a] =>
+      -- suppress casts in latex
+      return s!"{expr_to_latex a ctx}"
+    | _ =>
+      dbg_trace f!"unexpected arity for Nat.cast"
       return brute_force_pp expr
 
   if expr.isApp then
@@ -288,8 +328,9 @@ def elabTexify : Tactic := fun stx =>
     let localCtx ← Lean.getLCtx
 
     -- dbg_trace f!"goal type: {goalType}"
-    -- displayMarkdown s!"{(expr_to_latex goalType localCtx)}" tk
-    displayMarkdown s!"${(expr_to_latex goalType localCtx)}$" tk
+    let texifiedExpr := expr_to_latex goalType localCtx
+    -- dbg_trace f!"texifiedExpr: {texifiedExpr}"
+    displayMarkdown s!"${texifiedExpr}$" tk
   | `(tactic|texify at $[$ids]* ) => do
     let localCtx ← Lean.getLCtx
 
@@ -310,20 +351,6 @@ end Lean.Expr
 example
   (f : ℝ → ℝ)
 : 0 < f 0 := by
-  texify
-  intentional_sorry
-
-example (n : ℕ) : (∑ i ∈ Finset.range n, i) * 2 = n * (n - 1) := by
-  texify
-  exact Finset.sum_range_id_mul_two n
-
-#check Finset.sum_range_id_mul_two
-
-theorem inequalities_23913
-  (x : ZMod 102 → ℝ)
-  (h_nonneg : ∀ i, 0 ≤ x i)
-  (hx : ∀ i, x i + x (i + 1) + x (i + 2) ≤ 1)
-: ∑ i, x i * x (i + 2) ≤ 25 / 2 := by
   texify
   intentional_sorry
 
@@ -426,53 +453,15 @@ example (x y : ℝ): 0 < (x+y)^2 := by
   texify
   intentional_sorry
 
-theorem motzkin (x y : ℝ) : 0 ≤ x^4 * y^2 + x^2 * y^4  - 3 * x^2 * y^2 + 1 := by
-  texify
-  intentional_sorry
-
-theorem nesbitt (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
-  : (3:ℝ) / 2 ≤ a / (b + c) + b / (a + c) + c / (a + b) := by
-  texify
-  intentional_sorry
-
-theorem nesbitt' (a b c d : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (hd : 0 < d)
-  : 2 ≤ a / (b + c) + b / (c + d) + c / (d + a) + d / (a + b) := by
-  texify
-  intentional_sorry
-
-theorem example_111 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
-  : a*b + b*c + c*a ≤ Real.sqrt a + Real.sqrt b + Real.sqrt c := by
-  texify
-  intentional_sorry
-
 -- This one is tough to format nicely...
 theorem multi (a b c d : ℝ)
   : 0 ≤ (a+b)*(a+c)*(a+d)*(b+c)*(b+d)*(c+d) := by
   texify
   intentional_sorry
 
-theorem imosl1998SL (x y z : ℝ) (hx : 0 < x) (hy : 0 < y) (hz : 0 < z) (h : x*y*z = 1)
-  : (3:ℝ) / 4 ≤ x^3 / ((1 + y) * (1 + z)) + y^3 / ((1 + z) * (1 + x)) + z^3 / ((1 + x) * (1 + y)):= by
-  texify
-  intentional_sorry
-
-theorem usamo1998 (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
-  : 1 / (a*b*c) ≤ 1 / (a^3 + b^3 + a*b*c) + 1 / (b^3 + c^3 + a*b*c) + 1 / (c^3 + a^3 + a*b*c) := by
-  texify
-  intentional_sorry
-
-theorem mathlinks (a b c : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c) (h : a*b*c = 1)
-: 3 ≤ Real.sqrt ((a + b) / (a + 1)) + Real.sqrt ((b + c) / (b + 1)) + Real.sqrt ((c + a) / (c + 1)) := by
-  texify
-  intentional_sorry
-
 example : 3 % 2 = 1 := by
   texify
   norm_num
-
-example : Finset.Icc 1 3 = Finset.Ico 1 4 := by
-  texify
-  decide
 
 lemma lemma0 (n : ℕ) : (∑ x ∈ Finset.Icc 1 (4 * n + 2), (x:ℤ) % 2) % 2 = 1 := by
   texify
