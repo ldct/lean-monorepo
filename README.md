@@ -2,6 +2,8 @@ Experiments in Lean
 
 File structure:
 
+- AoC:
+    - Advent of Code 2024
 - Analysis: 
     - Limits of sequences and series
 - Group Theory
