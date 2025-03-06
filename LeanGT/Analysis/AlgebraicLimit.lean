@@ -1,4 +1,4 @@
-import LeanGT.Texify
+import LeanTeXMathlib
 import LeanGT.Analysis.Bounded
 import LeanGT.Analysis.TendsTo
 
