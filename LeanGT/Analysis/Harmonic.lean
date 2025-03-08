@@ -191,7 +191,13 @@ theorem cct1
   have : ∃ k : ℕ, m ≤ 2^(k+1) - 1 := by
     use m
     -- idea: tactic to check m=0, m=1, ...
-    sorry
+    induction m with
+    | zero =>
+      norm_num
+    | succ m IH =>
+      rw [show 2^(m+1+1) = 2^(m+1) + 2^(m+1) by ring]
+      have : 1 ≤ 2^(m+1) := Nat.one_le_two_pow
+      omega
 
   cases' this with k hk
 
