@@ -5,9 +5,14 @@ import Mathlib
 
 -- The sequence 0 → 0, 1 → b₀, 2 → b₀ + b₁, …
 def partialSums (b : ℕ → ℝ) : (ℕ → ℝ) :=
-  fun n ↦ ∑ i in Finset.range n, b i
+  fun n ↦ ∑ i ∈ Finset.range n, b i
 
 def Summable' (b : ℕ → ℝ) : Prop := Converges (partialSums b)
+
+theorem partialSums_succ (b : ℕ → ℝ) (n : ℕ) : partialSums b (n + 1) = partialSums b n + b n := by
+  unfold partialSums
+  rw [Finset.sum_range_succ_comm]
+  rw [add_comm]
 
 -- The partial sum of a positive sequence is monotone
 theorem monotone_psum_of_pos

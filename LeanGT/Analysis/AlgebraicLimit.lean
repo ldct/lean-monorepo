@@ -31,10 +31,10 @@ theorem FinitePrefixMax' (f : ℕ → ℝ) (N : ℕ) : ∃ B, ∀ n : ℕ, n < N
 
 -- Theorem 2.3.2. A convengent sequence is bounded
 theorem ConvergesThenBounded {f : ℕ → ℝ} (hc : Converges f) : Bounded f := by
-  cases' hc with l h_TendsTo_l
-  specialize h_TendsTo_l 1 (by norm_num)
+  cases' hc with l hFTendsToL
+  specialize hFTendsToL 1 (by norm_num)
 
-  cases' h_TendsTo_l with N hN
+  cases' hFTendsToL with N hN
 
   have h := FinitePrefixMax' f N
 
@@ -59,7 +59,7 @@ theorem ConvergesThenBounded {f : ℕ → ℝ} (hc : Converges f) : Bounded f :=
     calc
       |f n| < |l| + 1 := sub_lt_iff_lt_add'.mp h7
       _ ≤ |l| + 2 := by linarith
-      _ ≤ ↑⌈|l| + 2⌉₊ := Nat.le_ceil (|l| + 2)
+      _ ≤ ⌈|l| + 2⌉₊ := Nat.le_ceil (|l| + 2)
   }
   | inr h1 => {
     simp

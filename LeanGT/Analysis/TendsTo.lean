@@ -1,9 +1,52 @@
 import Mathlib.Tactic
+import LeanTeXMathlib
 
 def TendsTo (a : ℕ → ℝ) (t : ℝ) : Prop :=
   ∀ ε > 0, ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε
 
 def Converges (a : ℕ → ℝ) : Prop := ∃ l, TendsTo a l
+
+-- Print `TendsTo f t` as `\lim f = t`
+latex_pp_app_rules (const := TendsTo)
+  | _, #[f, t] => do
+    let f ← LeanTeX.latexPP f
+    let t ← LeanTeX.latexPP t
+    let f := f.protectLeft 66
+    return "\\lim " ++ f ++ "=" ++ t |>.resetBP .Infinity .Infinity
+
+
+latex_pp_app_rules (const := Nat.ceil)
+  | _, #[_, _, _, e] => do
+    let e ← LeanTeX.latexPP e
+    return "\\lceil " ++ e ++ "\\rceil" |>.resetBP .Infinity .Infinity
+
+latex_pp_app_rules (const := Nat.floor)
+  | _, #[_, _, _, e] => do
+    let e ← LeanTeX.latexPP e
+    return "\\lfloor " ++ e ++ "\\rfloor" |>.resetBP .Infinity .Infinity
+
+latex_pp_app_rules (const := Int.ceil)
+  | _, #[_, _, _, e] => do
+    let e ← LeanTeX.latexPP e
+    return "\\lceil " ++ e ++ "\\rceil" |>.resetBP .Infinity .Infinity
+
+latex_pp_app_rules (const := Int.floor)
+  | _, #[_, _, _, e] => do
+    let e ← LeanTeX.latexPP e
+    return "\\lfloor " ++ e ++ "\\rfloor" |>.resetBP .Infinity .Infinity
+
+latex_pp_app_rules (const := Max.max)
+  | _, #[_, _, a, b] => do
+    let a ← LeanTeX.latexPP a
+    let b ← LeanTeX.latexPP b
+    return "\\max(" ++ a ++ "," ++ b ++ ")" |>.resetBP .Infinity .Infinity
+
+latex_pp_app_rules (const := Min.min)
+  | _, #[_, _, a, b] => do
+    let a ← LeanTeX.latexPP a
+    let b ← LeanTeX.latexPP b
+    return "\\min(" ++ a ++ "," ++ b ++ ")" |>.resetBP .Infinity .Infinity
+
 
 theorem tendsTo_thirtyseven : TendsTo (fun _ ↦ 37) 37 := by
   intro ε hε
@@ -30,6 +73,7 @@ theorem tendsTo_add_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t
 
 /-- If `a(n)` tends to `t` then `-a(n)` tends to `-t`.  -/
 example {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n => -a n) (-t) := by
+  texify
   intro ε hε
   specialize ha ε hε
   cases' ha with B hB

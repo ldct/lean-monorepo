@@ -2,18 +2,18 @@ import LeanGT.Analysis.MonotoneConvergence
 import LeanGT.Analysis.InfiniteSums
 import Mathlib
 
-def inv_squares (i : ℕ) : ℝ := (1 / ((i+1)^2):ℚ)
-def bassel := partialSums inv_squares
+noncomputable def invSquares (i : ℕ) : ℝ := (1 / ((i+1)^2))
+noncomputable def bassel := partialSums invSquares
 
 theorem monotone_bassel : Monotone bassel := by
   rw [bassel]
   apply monotone_psum_of_pos
   intro i
-  rw [inv_squares]
+  rw [invSquares]
   positivity
 
 -- first inequality
-theorem bb1 : bassel m ≤ ∑ i in Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i)) := by
+theorem bb1 (m : ℕ) : bassel m ≤ ∑ i in Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i)) := by
   -- Unfold everything to ∑ and do a term-by-term comparison
   unfold bassel partialSums
   gcongr with i hi
@@ -22,20 +22,18 @@ theorem bb1 : bassel m ≤ ∑ i in Finset.range m, if i = 0 then 1 else (1/((i:
 
   case h.inl i_ne_0 =>
     simp only [i_ne_0, reduceIte]
-    unfold inv_squares
-    push_cast
+    unfold invSquares
     rw [← (one_div_pow ((i:ℝ) + 1) 2)]
     rw [show (1 / ((i:ℝ) + 1))^2 = (1 / ((i:ℝ) + 1)) * (1 / ((i:ℝ) + 1)) by ring]
-    gcongr _ * ?_
     gcongr
-    linarith
+    norm_num
 
   case h.inr i_eq_0 =>
     simp [i_eq_0]
-    unfold inv_squares
+    unfold invSquares
     norm_num
 
-theorem bb2 : (∑ i in Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i))) = ∑ i in Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1)) := by
+theorem bb2 (m : ℕ) : (∑ i ∈ Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i))) = ∑ i ∈ Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1)) := by
   congr
   funext i
 
@@ -48,7 +46,12 @@ theorem bb2 : (∑ i in Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1
   case h.inr i_eq_0 =>
     simp [i_eq_0]
 
-theorem bb3 (hm : 1 ≤ m) : (∑ i in Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1))) = 2 - 1/(m:ℝ) := by
+latex_pp_app_rules (const := Singleton.singleton)
+  | _, #[_, _, _, a] => do
+    let a ← LeanTeX.latexPP a
+    return "\\{ " ++ a ++ " \\}" |>.resetBP .Infinity .Infinity
+
+theorem bb3 (m : ℕ) (hm : 1 ≤ m) : (∑ i ∈ Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1))) = 2 - 1/(m:ℝ) := by
   induction m, hm using Nat.le_induction with
   | base =>
     rw [show Finset.range 1 = {0} by decide]
@@ -56,17 +59,18 @@ theorem bb3 (hm : 1 ≤ m) : (∑ i in Finset.range m, if i = 0 then 1 else ((1/
     norm_num
   | succ n t IH =>
     rw [Finset.sum_range_succ_comm]
-    simp only [show n ≠ 0 by positivity]
+    simp only [show n ≠ 0 by positivity, reduceIte]
     rw [IH]
-    simp
+    push_cast
+    ring_nf
 
-theorem final : bassel m ≤ 2 := by
+theorem final (m : ℕ) : bassel m ≤ 2 := by
   cases Nat.le_total 1 m
 
   case inl hm => calc
-    bassel m ≤ ∑ i in Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i)) := bb1
-    _ = ∑ i in Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1)) := bb2
-    _ = 2 - 1/(m:ℝ) := bb3 hm
+    bassel m ≤ ∑ i in Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i)) := bb1 m
+    _ = ∑ i in Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1)) := bb2 m
+    _ = 2 - 1/(m:ℝ) := bb3 m hm
     _ ≤ 2 := by
       have : 0 < 1/(m:ℝ) := by positivity
       linarith
@@ -83,14 +87,14 @@ theorem final : bassel m ≤ 2 := by
 
     case inr m_eq_1 =>
       rw [m_eq_1]
-      unfold bassel partialSums inv_squares
+      unfold bassel partialSums invSquares
       simp
 
 -- Example 2.4.4: ∑ 1/n^2 converges to some (presently unknown) limit
-theorem c1 : Summable' inv_squares := by
+theorem c1 : Summable' invSquares := by
   rw [Summable']
   apply MCT
   exact monotone_bassel
   use 2
   intro n
-  exact final
+  exact final n
