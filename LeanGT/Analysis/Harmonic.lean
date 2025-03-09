@@ -4,26 +4,26 @@ import LeanGT.Analysis.Bounded
 import Mathlib
 
 -- The terms 1/i
-def inv_nats (i : ℕ) : ℝ := (1 / (i+1):ℚ)
+def invNats (i : ℕ) : ℝ := (1 / (i+1):ℚ)
 -- The nth harmonic number
-def s := partialSums inv_nats
+def s := partialSums invNats
 
-theorem e1 (k : ℕ) : (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i) ≥ (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats (2^(k+1)-1)) := by
+theorem e1 (k : ℕ) : (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i) ≥ (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats (2^(k+1)-1)) := by
   gcongr with i hi
-  unfold inv_nats
+  unfold invNats
   simp
   gcongr
   norm_cast
-  simp [Finset.mem_Ico] at hi
+  rw [Finset.mem_Ico] at hi
   linarith
 
-theorem e2 (k : ℕ) : (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats (2^(k+1)-1)) = (1/2) := by
+theorem e2 (k : ℕ) : (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats (2^(k+1)-1)) = (1/2) := by
 
   have : 2^(k + 1) - 2^k = 2^k := by
     simp [Nat.pow_succ', show 2*2^k = 2^k+2^k by omega]
 
   simp
-  unfold inv_nats
+  unfold invNats
   simp
   rw [this]
   field_simp
@@ -35,25 +35,25 @@ theorem s_unbounded_formula (k : ℕ) : s (2^k) ≥ 1 + (k:ℝ)/2 := by
   induction k with
   | zero =>
     simp
-    unfold s partialSums inv_nats
+    unfold s partialSums invNats
     simp
   | succ k IH =>
     unfold s partialSums
     unfold s partialSums at IH
     rw [congrFun Finset.range_eq_Ico (2 ^ (k + 1))]
 
-    rw [← Finset.sum_Ico_consecutive inv_nats (show 0 ≤ 2^k by positivity) (show 2^k ≤ 2^(k+1) by gcongr <;> omega)]
+    rw [← Finset.sum_Ico_consecutive invNats (show 0 ≤ 2^k by positivity) (show 2^k ≤ 2^(k+1) by gcongr <;> omega)]
 
-    have : (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i) ≥ 1/2 := by
+    have : (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i) ≥ 1/2 := by
       calc
-        (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i) ≥ (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats (2^(k+1)-1)) := e1 k
+        (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i) ≥ (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats (2^(k+1)-1)) := e1 k
         _ = 1/2 := e2 k
 
     have t := calc
-      (∑ i ∈ Finset.Ico 0 (2 ^ k), inv_nats i + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i) = (∑ i ∈ Finset.range (2 ^ k), inv_nats i + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i) := by
+      (∑ i ∈ Finset.Ico 0 (2 ^ k), invNats i + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i) = (∑ i ∈ Finset.range (2 ^ k), invNats i + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i) := by
         congr
         rw [congrFun Finset.range_eq_Ico]
-      (∑ i ∈ Finset.range (2 ^ k), inv_nats i + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i) ≥  (1 + k/2) + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), inv_nats i := by
+      (∑ i ∈ Finset.range (2 ^ k), invNats i + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i) ≥  (1 + k/2) + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i := by
         gcongr
       _ ≥ 1 + k/2 + 1/2 := by
         gcongr
@@ -90,10 +90,10 @@ theorem s_unbounded : ¬ (Bounded s) := by
   linarith
 
 -- Example 2.4.5: The harmonic series diverges
-theorem s_diverges : ¬ (Summable' inv_nats) := by
+theorem s_diverges : ¬ (Summable' invNats) := by
   intro h
   unfold Summable' at h
-  rw [show partialSums inv_nats = s by rfl] at h
+  rw [show partialSums invNats = s by rfl] at h
   exact s_unbounded (ConvergesThenBounded h)
 
 def condense (a : ℕ → ℝ) : (ℕ → ℝ):= fun (i : ℕ) ↦
@@ -123,7 +123,13 @@ theorem a_le_2_pow_a (a : ℕ) : a ≤ 2^a := by
     have : 1 ≤ 2^n := Nat.one_le_two_pow
     linarith
 
--- cauchy condensation test 2.4.6
+latex_pp_app_rules (const := HSMul.hSMul)
+  | _, #[_, _, _, _, a, b] => do
+    let a ← LeanTeX.latexPP a
+    let b ← LeanTeX.latexPP b
+    return "(" ++ a ++ " \\cdot " ++ b ++ ")" |>.resetBP .Infinity .Infinity
+
+-- cauchy condensation test 2.4.6, hard direction
 -- b₀ + b₁ ... converges iff b₁ + 2b₂ + 4b₄ + 8b₈ + ... converges
 theorem cct1
   {b : ℕ → ℝ}
@@ -146,8 +152,7 @@ theorem cct1
 
   repeat clear this
 
-
-  -- Let sm = b1+b1+…bm
+  -- Let sm = b1+b2+…bm
   let s := partialSums (fun n ↦ b (n+1))
 
   have : s 0 = 0 := by
@@ -176,13 +181,11 @@ theorem cct1
 
   clear M_bounds
 
-  apply MCT
+  refine MCT ?bIncreasing ?bBounded
 
-  exact monotone_psum_of_pos b_pos
+  case bIncreasing => exact monotone_psum_of_pos b_pos
 
-  texify
-
-  -- We need to show that sm is bounded. The bound used in the book is sm ≤ tk ≤ M where k is to be defined.
+  case bBounded =>
   use (b 0) + M
   intro m
 
@@ -206,6 +209,7 @@ theorem cct1
     apply sm
     linarith
 
+  -- The main argument: the partial sums of b, adding successively more powers of 2, is bounded by t
   have c2 (k' : ℕ): s (2^(k'+1) - 1) ≤ t k' := by
     induction k' with
     | zero =>
@@ -219,7 +223,8 @@ theorem cct1
       simp
       simp at IH
       rw [show k + 1 + 1 = (k + 2) by ring] at *
-      -- texify
+
+      -- Write the LHS as (LHS of induction hypothesis) + something
       have :  ∑ x ∈ Finset.range (2 ^ (k + 2) - 1), b (x + 1)
         = ∑ x ∈ Finset.range (2 ^ (k + 1) - 1), b (x + 1)
         + ∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), b (x + 1)
@@ -232,12 +237,12 @@ theorem cct1
           norm_num
         ]
         rw [Finset.sum_union]
-        -- texify
         rw [Finset.range_eq_Ico]
         exact Finset.Ico_disjoint_Ico_consecutive _ _ _
       rw [this]
       clear this
-      -- texify
+
+      -- Write the RHS as (RHS of induction hypothesis) + something
       have : ∑ i ∈ Finset.range (k + 2), 2 ^ i * b (2 ^ i)
         = ∑ i ∈ Finset.range (k + 1), 2 ^ i * b (2 ^ i)
         + ∑ i ∈ Finset.Ico (k + 1) (k + 2), 2 ^ i * b (2 ^ i)
@@ -255,11 +260,51 @@ theorem cct1
       rw [this]
       clear this
 
-      have : ∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), b (x + 1) ≤ ∑ i ∈ Finset.Ico (k + 1) (k + 2), 2 ^ i * b (2 ^ i) := by
-        rw [Nat.Ico_succ_singleton (k + 1)]
+      suffices t : ∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), b (x + 1) ≤ ∑ i ∈ Finset.Ico (k + 1) (k + 2), 2 ^ i * b (2 ^ i) from by linarith
+
+      -- Now we are comparing a sum of 2^(k+1) terms with a single term of the condensed series.
+      clear IH c_summable M_bounds'
+      texify
+      rw [Nat.Ico_succ_singleton (k + 1)]
+      simp
+      have : 2 ^ (k + 1) = ∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), 1 := by
+        rw [Finset.sum_const]
         simp
-        -- texify
-      linarith
+        rw [Nat.two_pow_succ (k + 1)]
+        have rwl (t : ℕ) : t = t + t - 1 - (t - 1) := by omega
+        exact rwl (2 ^ (k + 1))
+      conv =>
+        rhs
+        lhs
+        norm_cast
+        rw [show 2 ^ (k + 1) = ∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), 1 by
+          rw [Finset.sum_const]
+          simp
+          rw [Nat.two_pow_succ (k + 1)]
+          texify
+          have rwl (t : ℕ) : t = t + t - 1 - (t - 1) := by omega
+          exact rwl (2 ^ (k + 1))
+        ]
+
+      have ttt :
+        (∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), 1) * b (2 ^ (k + 1))
+        = (∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), b (2 ^ (k + 1))) := by
+        rw [Finset.sum_const]
+        rw [Finset.sum_const]
+        simp
+
+      texify
+
+      norm_cast at ttt
+      rw [ttt]
+      clear ttt
+      -- texify
+      gcongr with i a
+      simp at a
+      cases' a with al ar
+      -- texify
+      exact b_antitone al
+
 
   specialize c2 k
 

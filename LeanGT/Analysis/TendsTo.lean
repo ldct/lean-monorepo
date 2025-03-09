@@ -47,7 +47,6 @@ latex_pp_app_rules (const := Min.min)
     let b ← LeanTeX.latexPP b
     return "\\min(" ++ a ++ "," ++ b ++ ")" |>.resetBP .Infinity .Infinity
 
-
 theorem tendsTo_thirtyseven : TendsTo (fun _ ↦ 37) 37 := by
   intro ε hε
   use 100
