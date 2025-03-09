@@ -1,4 +1,4 @@
-import LeanGT.Analysis.MonotoneConvergence
+import LeanGT.Analysis.TendsTo
 import Mathlib
 
 -- Infinite sums
