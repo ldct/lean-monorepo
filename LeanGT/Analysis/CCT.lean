@@ -11,14 +11,6 @@ import Mathlib
 def condense (a : ℕ → ℝ) : (ℕ → ℝ):= fun (i : ℕ) ↦
   2^i * a (2^i)
 
-theorem a_le_2_pow_a (a : ℕ) : a ≤ 2^a := by
-  induction a with
-  | zero => norm_num
-  | succ n IH =>
-    rw [show 2 ^ (n+1) = 2^n * 2 by omega]
-    have : 1 ≤ 2^n := Nat.one_le_two_pow
-    linarith
-
 latex_pp_app_rules (const := HSMul.hSMul)
   | _, #[_, _, _, _, a, b] => do
     let a ← LeanTeX.latexPP a
