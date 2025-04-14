@@ -318,39 +318,33 @@ theorem invP_diverges (p : ℝ) (hp : 0 < p) (hp' : p < 1) : ¬ (Summable' (invP
     norm_cast
     simp
     norm_cast
+
     have hp' : 0 ≤ p := by linarith
 
-    cases Nat.eq_zero_or_pos n
-    case inl hn =>
-      simp [hn]
-      cases Nat.eq_zero_or_pos m
-      case inl hm =>
-        simp [hm]
-      case inr hm =>
-        simp [hm]
-        have : (m:NNReal)⁻¹ ≤ 1 := by
-          have : 1 ≤ m := by omega
-          exact Nat.cast_inv_le_one m
-        apply_fun (fun x:NNReal ↦ x^p) at this
-        simp at this
-        exact this
-        exact NNReal.monotone_rpow_of_nonneg hp'
-    case inr hn =>
-      simp [hn]
-      cases Nat.eq_zero_or_pos m
-      case inl hm =>
-        simp [hm]
-        linarith
-      case inr hm =>
-        simp [hm]
-        have : (m:NNReal)⁻¹ ≤ (n:NNReal)⁻¹ := by
-          rw [inv_le_inv₀]
-          exact Nat.cast_le.mpr hnm
-          all_goals positivity
-        apply_fun (fun x:NNReal ↦ x^p) at this
-        simp at this
-        exact this
-        exact NNReal.monotone_rpow_of_nonneg hp'
+    have : (m = 0 ∧ n = 0) ∨ (0 < m ∧ n = 0) ∨ (0 < m ∧ 0 < n) := by omega
+
+    rcases this with h | h | h
+    case inl h => simp [h]
+    case inr.inl h =>
+      simp [h]
+      have : (m:NNReal)⁻¹ ≤ 1 := by
+        have : 1 ≤ m := by omega
+        exact Nat.cast_inv_le_one m
+      apply_fun (fun x:NNReal ↦ x^p) at this
+      simp at this
+      exact this
+      exact NNReal.monotone_rpow_of_nonneg hp'
+    case inr.inr h =>
+      simp [h]
+      have : (m:NNReal)⁻¹ ≤ (n:NNReal)⁻¹ := by
+        cases' h with h1 h2
+        rw [inv_le_inv₀]
+        exact Nat.cast_le.mpr hnm
+        all_goals positivity
+      apply_fun (fun x:NNReal ↦ x^p) at this
+      simp at this
+      exact this
+      exact NNReal.monotone_rpow_of_nonneg hp'
 
   unfold condense pad
   unfold invP

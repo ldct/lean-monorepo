@@ -36,4 +36,15 @@ theorem test (p : ℝ) (x : ℕ): (2:ℝ)^x * ((2:ℝ)^x)⁻¹^p = ((2:ℝ)^x)^(
   ring
 
 example (p : ℝ) (n : ℕ) : (n < n + 1) := by
-  plausible
+  omega
+
+example (n : ℕ) : (1 ≤ 2^n) := by
+  exact Nat.one_le_two_pow
+
+example (n : ℕ) : (1 ≤ 2^n) := by
+  omega
+
+example (x y : ℝ)
+: abs (x^2 + y^2) = x^2 + y^2 := by
+
+: 0 ≤ x^2 + y^2 := by positivity
