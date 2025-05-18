@@ -2,6 +2,7 @@ import LeanGT.Analysis.AlgebraicLimit
 import LeanGT.Analysis.InfiniteSums
 import LeanGT.Analysis.Bounded
 import LeanGT.Analysis.MonotoneConvergence
+import LeanGT.Analysis.Reindex
 import Mathlib
 
 -- Cauchy condensation test
@@ -10,12 +11,6 @@ import Mathlib
 -- We will want to show that this is summable ↔ a is summable
 def condense (a : ℕ → ℝ) : (ℕ → ℝ):= fun (i : ℕ) ↦
   2^i * a (2^i)
-
-latex_pp_app_rules (const := HSMul.hSMul)
-  | _, #[_, _, _, _, a, b] => do
-    let a ← LeanTeX.latexPP a
-    let b ← LeanTeX.latexPP b
-    return "(" ++ a ++ " \\cdot " ++ b ++ ")" |>.resetBP .Infinity .Infinity
 
 -- cauchy condensation test 2.4.6, hard direction
 -- b₀ + b₁ ... converges ⟸ b₁ + 2b₂ + 4b₄ + 8b₈ + ... converges
@@ -167,7 +162,7 @@ theorem cct1
           rw [Finset.sum_const]
           simp
           rw [Nat.two_pow_succ (k + 1)]
-          -- texify
+          texify
           have rwl (t : ℕ) : t = t + t - 1 - (t - 1) := by omega
           exact rwl (2 ^ (k + 1))
         ]
@@ -175,8 +170,6 @@ theorem cct1
       have ttt :
         (∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), 1) * b (2 ^ (k + 1))
         = (∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), b (2 ^ (k + 1))) := by
-        rw [Finset.sum_const]
-        rw [Finset.sum_const]
         simp
 
       norm_cast at ttt
@@ -252,16 +245,6 @@ theorem cct3
 
 def invNats (i : ℕ) : ℝ := (1 / (i+1):ℚ)
 
-def drop (a : ℕ → ℝ) : ℕ → ℝ := fun i ↦ a (i + 1)
-
-def pad (a : ℕ → ℝ) : ℕ → ℝ := fun i ↦ a (i - 1)
-
-theorem conv_drop (a : ℕ → ℝ) : Summable' a ↔ Summable' (drop a) := by
-  sorry
-
-theorem conv_pad (a : ℕ → ℝ) : Summable' a ↔ Summable' (pad a) := by
-  sorry
-
 theorem s_diverges : ¬ (Summable' invNats) := by
   rw [conv_pad]
 
@@ -301,7 +284,6 @@ theorem s_diverges : ¬ (Summable' invNats) := by
 -- p-series, p ∈ (0, 1) diverges
 
 noncomputable def invP (p : ℝ) (i : ℕ) : ℝ := (1 / (i+1):ℝ)^p
-
 
 theorem invP_diverges (p : ℝ) (hp : 0 < p) (hp' : p < 1) : ¬ (Summable' (invP p)) := by
   rw [conv_pad]
@@ -386,9 +368,7 @@ theorem invP_diverges (p : ℝ) (hp : 0 < p) (hp' : p < 1) : ¬ (Summable' (invP
   clear test
 
   -- simproc candidate?
-  have : 0 ≤ ∑ x ∈ Finset.range m, ((2: ℝ) ^ x) ^ (1 - p) := by positivity
-  rw [abs_of_nonneg this] at M_bounds
-  clear this
+  rw [abs_of_nonneg (by positivity)] at M_bounds
 
   have sum_gt_sum_of_1 : ∑ x ∈ Finset.range m, 1 ≤ ∑ x ∈ Finset.range m, ((2 : ℝ) ^ x) ^ (1 - p) := by
     gcongr with i hi

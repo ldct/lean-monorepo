@@ -13,9 +13,9 @@ theorem monotone_bassel : Monotone bassel := by
   positivity
 
 -- first inequality
-theorem bb1 (m : ℕ) : bassel m ≤ ∑ i in Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i)) := by
+theorem bb1 (m : ℕ) : bassel m ≤ ∑ i ∈ Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i)) := by
   -- Unfold everything to ∑ and do a term-by-term comparison
-  unfold bassel partialSums
+  unfold bassel partialSums invSquares
   gcongr with i hi
 
   cases ne_or_eq i 0
@@ -45,11 +45,6 @@ theorem bb2 (m : ℕ) : (∑ i ∈ Finset.range m, if i = 0 then 1 else (1/((i:�
 
   case h.inr i_eq_0 =>
     simp [i_eq_0]
-
-latex_pp_app_rules (const := Singleton.singleton)
-  | _, #[_, _, _, a] => do
-    let a ← LeanTeX.latexPP a
-    return "\\{ " ++ a ++ " \\}" |>.resetBP .Infinity .Infinity
 
 theorem bb3 (m : ℕ) (hm : 1 ≤ m) : (∑ i ∈ Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1))) = 2 - 1/(m:ℝ) := by
   induction m, hm using Nat.le_induction with

@@ -14,39 +14,6 @@ latex_pp_app_rules (const := TendsTo)
     let f := f.protectLeft 66
     return "\\lim " ++ f ++ "=" ++ t |>.resetBP .Infinity .Infinity
 
-
-latex_pp_app_rules (const := Nat.ceil)
-  | _, #[_, _, _, e] => do
-    let e ← LeanTeX.latexPP e
-    return "\\lceil " ++ e ++ "\\rceil" |>.resetBP .Infinity .Infinity
-
-latex_pp_app_rules (const := Nat.floor)
-  | _, #[_, _, _, e] => do
-    let e ← LeanTeX.latexPP e
-    return "\\lfloor " ++ e ++ "\\rfloor" |>.resetBP .Infinity .Infinity
-
-latex_pp_app_rules (const := Int.ceil)
-  | _, #[_, _, _, e] => do
-    let e ← LeanTeX.latexPP e
-    return "\\lceil " ++ e ++ "\\rceil" |>.resetBP .Infinity .Infinity
-
-latex_pp_app_rules (const := Int.floor)
-  | _, #[_, _, _, e] => do
-    let e ← LeanTeX.latexPP e
-    return "\\lfloor " ++ e ++ "\\rfloor" |>.resetBP .Infinity .Infinity
-
-latex_pp_app_rules (const := Max.max)
-  | _, #[_, _, a, b] => do
-    let a ← LeanTeX.latexPP a
-    let b ← LeanTeX.latexPP b
-    return "\\max(" ++ a ++ "," ++ b ++ ")" |>.resetBP .Infinity .Infinity
-
-latex_pp_app_rules (const := Min.min)
-  | _, #[_, _, a, b] => do
-    let a ← LeanTeX.latexPP a
-    let b ← LeanTeX.latexPP b
-    return "\\min(" ++ a ++ "," ++ b ++ ")" |>.resetBP .Infinity .Infinity
-
 theorem tendsTo_thirtyseven : TendsTo (fun _ ↦ 37) 37 := by
   intro ε hε
   use 100

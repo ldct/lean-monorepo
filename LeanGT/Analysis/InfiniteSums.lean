@@ -20,7 +20,7 @@ theorem monotone_psum_of_pos
   (a_pos : ∀ i, 0 ≤ a i)
 : Monotone (partialSums a) := by
 
-  -- In a general preorder, proving monotonicity requires checking f(x) ≤ f(y) for all x ≤ y, but since ℕ is discrete, we can just check adjacent pairs x ≤ x+1
+  -- In a general preorder, proving monotonicity requires checking f(x) ≤ f(y) for all pairs {(x, y) | x ≤ y}, but since ℕ is discrete, we can just check adjacent pairs {(x, x+1) | x ∈ ℕ}
   apply monotone_nat_of_le_succ
   intro x
   unfold partialSums

@@ -1,106 +1,83 @@
 import Mathlib
+import LeanTeXMathlib
 
-open Lean
+-- example
+-- (m : ℕ)
+-- (M p: ℝ)
+-- (hm : M < m)
+-- (M_bounds : abs (∑ x ∈ Finset.range m, (2 ^ x) ^ (1 - p)) < M)
+-- : False := by
+--   rw [abs_of_nonneg (by positivity)] at M_bounds
+--   sorry
 
-syntax (name := cancelDischarger) "cancel_discharger " : tactic
-syntax (name := cancelAux) "cancel_aux " term " at " term : tactic
-syntax (name := cancel) "cancel " term " at " term : tactic
+-- theorem pd_false (a : ℕ → ℝ) : partialSums (drop a) = drop (partialSums a) := by
+--   sorry -- false theorem
 
-macro_rules | `(tactic| cancel_discharger) => `(tactic | positivity)
-macro_rules
-| `(tactic| cancel_discharger) =>`(tactic | fail "cancel failed, could not verify the following side condition:")
+example
+  (a b: ℝ)
+  (ha : 0 ≠ a)
+: 1 / b = a / (a * b) := by
+  have : b = 0 ∨ b ≠ 0 := by exact eq_or_ne b 0
+  cases' this with h1 h2
+  rw [h1]
+  simp
+  field_simp
 
-/-! ### powers -/
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := lt_of_pow_lt_pow (n := $a) (by cancel_discharger) $(mkIdent h))
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := le_of_pow_le_pow (n := $a) (by cancel_discharger) (by cancel_discharger) $(mkIdent h))
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := pow_eq_zero (n := $a) $(mkIdent h))
+example
+  (j : ℕ)
+  (sylvester : ℕ → ℕ)
+  (test : 2 ≤ sylvester j)
+: 0 ≠ (sylvester j) - (1:ℚ) := by
+  qify at test
+  linarith
+  omega
 
+example
+  (a b: ℝ)
+  (ha : 0 ≠ a)
+  -- (hb : 0 ≠ b)
+: 1 / b = a / (a * b) := by
+  field_simp
 
-/-! ### multiplication, LHS and RHS -/
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := mul_left_cancel₀ (a := $a) (by cancel_discharger) $(mkIdent h))
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := mul_right_cancel₀ (b := $a) (by cancel_discharger) $(mkIdent h))
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := le_of_mul_le_mul_left (a := $a) $(mkIdent h) (by cancel_discharger))
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := le_of_mul_le_mul_right (a := $a) $(mkIdent h) (by cancel_discharger))
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := lt_of_mul_lt_mul_left (a := $a) $(mkIdent h) (by cancel_discharger))
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := lt_of_mul_lt_mul_right (a := $a) $(mkIdent h) (by cancel_discharger))
+example
+  (a b : ℝ)
+  (h1 : a^2 ≤ 2)
+  (h2 : b^2 ≤ 3)
+: abs (a^2 + b^2) ≤ 5 := by
+  rw [abs_of_nonneg (by positivity)]
+  linarith
 
-/-! ### multiplication, just LHS -/
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := pos_of_mul_pos_right (a := $a) $(mkIdent h) (by cancel_discharger))
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := pos_of_mul_pos_left (b := $a) $(mkIdent h) (by cancel_discharger))
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := nonneg_of_mul_nonneg_right (a := $a) $(mkIdent h) (by cancel_discharger))
-macro_rules
-| `(tactic| cancel_aux $a at $h) =>
-  let h := h.raw.getId
-  `(tactic | replace $(mkIdent h):ident := nonneg_of_mul_nonneg_left (b := $a) $(mkIdent h) (by cancel_discharger))
+open LeanTeX
+macro "latex_pp_well_known_func_rule" c:ident tex:str : command =>
+  `(
+  latex_pp_app_rules (const := $c)
+    | _, #[x] => do
+      let v ← latexPP x
+      return LatexData.atomString $tex ++ " " ++ v.protect (funAppBP - 1)
+        |>.mergeBP (lbp := .NonAssoc funAppBP) (rbp := .NonAssoc funAppBP)
+  )
 
--- TODO to trigger this needs some `guard_hyp` in the `cancel_aux` implementations
-elab_rules : tactic
-  | `(tactic| cancel $a at $_) => do
-  let goals ← Elab.Tactic.getGoals
-  let goalsMsg := MessageData.joinSep (goals.map MessageData.ofGoal) m!"\n\n"
-  throwError "cancel failed: no '{a}' to cancel\n{goalsMsg}"
+latex_pp_well_known_func_rule Real.exp "\\exp"
+latex_pp_well_known_func_rule Real.log "\\log"
 
--- TODO build in a `try change 1 ≤ _ at h` to upgrade the `0 < _` result in the case of Nat
-macro_rules | `(tactic| cancel $a at $h) => `(tactic| cancel_aux $a at $h; try apply $h)
+example (x y : ℝ )
+  (hp : (x+y)^2 > 0)
+  (h' : 4 * x * y ≤ (x + y) ^ 2) :
+    x*y/(x+y)^2 ≤ 1 / 4 := by {
+  -- h' is almost the goal, mathematically just need to
+  -- "multiply both sides of the goal by 4 * (x + y) ^ 2, its fine because hp"
+  have hpp : 4 * (x + y) ^ 2 > 0 := by positivity
+  apply_fun OrderIso.mulRight₀ (4 * (x + y) ^ 2) hpp
+  simp
+  move_mul [← 4]
+  field_simp
+  rw [← mul_assoc]
+  convert h'
+}
 
-example {a b c : ℝ} {cpos : 0 < c} (h1 : c*a ≤ c*b) : a ≤ b := by
-  cancel c at h1
-
-example {a b c : ℝ} {cpos : 3 < c} (h1 : c*a ≤ c*b) : a ≤ b := by
-  cancel c at h1
-
-example {t : ℝ} (h1 : t ^ 2 = 3 * t) (h2 : t ≥ 1) : t ≥ 2 := by
-  have h3 :=
-    calc t * t = t ^ 2 := by ring
-      _ = 3 * t := by rw [h1]
-
-  cancel t at h3
-
-  linarith [h3]
-
-example (a b k : ℝ) (k_pos : k ≠ 0) (eq : k*a = k*b) : a = b := by
-  apply_fun (fun r ↦ (1/k) * r) at eq
-  field_simp at eq
-  exact eq
-
-example (a b p: ℝ) (h : a ≤ b) : a^p ≤ b^p := by exact?
-
-theorem h1 : -3 ≤ 2 := by norm_num
-
-#check pow_le_pow_left' h1
+example
+  (a b : ℝ)
+  (ha : a ≠ 0)
+: 1 = a/b := by
+  field_simp
+  exact?
