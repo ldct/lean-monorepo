@@ -156,48 +156,55 @@ example : TendsTo (fun n ↦ (n+1)/n) 1 := by
   simp only [one_div, inv_nonneg, Nat.cast_nonneg]
 
 -- The sequence (1,2,3...) not converge to any real number
-example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ n) t) := by {
+example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ n) t) := by
+  -- Assume the sequence converges to L
   intro L
   by_contra h_converges
 
-  cases' (h_converges (1/2) (by norm_num)) with B hB
+  -- Then n is "near L" eventually
+  -- i.e. there is a fixed B such that for all n ≥ B, n is "near L", i.e. |n - L| < 1/2
+  rcases (h_converges (1/2) (by norm_num)) with ⟨B, hB⟩
 
-  have exists_bad_n : ∃ bad_n : ℕ, (L+1) < bad_n ∧ B < bad_n := by {
+  -- Take bad_n greater than L+1 and B.
+  -- The first condition implies bad_n is "large"
+  -- The second condition implies bad_n is "near L"
+  have exists_bad_n : ∃ bad_n : ℕ, L + 1 < bad_n ∧ B ≤ bad_n := by
     use Nat.max (1 + Nat.ceil (L+1)) (1+B)
-    constructor
-    simp
-    left
-    calc
-      L + 1 ≤ ↑⌈L + 1⌉₊ := by exact Nat.le_ceil (L + 1)
-      _ < 1 + ↑⌈L + 1⌉₊ := by simp
-    simp
-  }
+    refine And.intro ?left ?right
 
-  cases' exists_bad_n with bad_n h_bad_n
+    case left =>
+      rw [add_comm]
+      simp only [Nat.add_max_add_left, Nat.cast_add, Nat.cast_one, Nat.cast_max, add_lt_add_iff_left,
+        lt_sup_iff]
+      left
+      calc
+        L < 1 + L := by linarith
+        _ ≤ Nat.ceil (1 + L) := by exact Nat.le_ceil (1 + L)
 
-  specialize hB bad_n
+    case right =>
+      simp only [Nat.add_max_add_left]
+      linarith [Nat.le_max_right (Nat.ceil (L + 1)) B]
 
-  cases' h_bad_n with h1 h2
+  rcases exists_bad_n with ⟨bad_n, ⟨h1, h2⟩⟩
 
-  have hBn : B ≤ bad_n := by linarith
+  -- bad_n is "near L"
+  specialize hB bad_n h2
+  dsimp at hB
+  rw [abs_lt] at hB
 
-  apply hB at hBn
-
-  have h1 : 1 < |↑bad_n - L| := by {
-    rw [lt_abs]
-    left
-    linarith
-  }
-
+  -- bad_n is "large"
   linarith
-}
 
 -- The sequence (1,0,1,0,...) does not converge to any real number
 example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ if n%2 = 0 then 1 else 0) t) := by
+  -- Assume the sequence converges to L
   intro L
   by_contra h_converges
-  cases' (h_converges (1/2) (by norm_num)) with B hB
 
+  -- Then |a_n - L| < 1/2 eventually (i.e. for all n ≥ B)
+  rcases (h_converges (1/2) (by norm_num)) with ⟨B, hB⟩
+
+  -- There exists a natural number n such that B ≤ n and n is even
   have : ∃ n, B ≤ n ∧ n % 2 = 0 := by
     have : B % 2 = 0 ∨ B % 2 = 1 := Nat.mod_two_eq_zero_or_one B
     rcases this with (l | r)
@@ -205,8 +212,8 @@ example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ if n%2 = 0 then 1 else 0) t) := by
     use B+1
     constructor; repeat omega
 
-  cases' this with n hn
-  cases' hn with l n_even
+  rcases this with ⟨n, ⟨l, n_even⟩⟩
+
   have n_plus_1_odd : (n + 1) % 2 = 1 := by omega
 
   have h1 := hB n l

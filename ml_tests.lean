@@ -60,6 +60,9 @@ example
 : ∑ x ∈ Finset.range 4, f x = f 0 + f 1 + f 2 + f 3 := by
   sorry
 
+-- 0/16
+example (L : ℝ) (B : ℕ) : ∃ bad_n : ℕ, (L+1) < bad_n ∧ B < bad_n := by sorry
+
 open Real
 
 example (n : ℕ) (h : 0 < n)

@@ -57,6 +57,21 @@ theorem ri
   rw [Finset.range_eq_Ico, Finset.sum_Ico_add']
   -- can also do apply Finset.sum_bij (fun x _ ↦ x + 1)
 
+theorem ri'
+(i : ℕ)
+(a : ℕ → ℝ)
+: ∑ x ∈ Finset.range i, a (x + 1) = ∑ x ∈ Finset.Ico 1 (i + 1), a x := by
+  apply Finset.sum_bij (fun x _ ↦ x + 1)
+  simp
+  simp
+  simp
+  intro b h1 h2
+  use b-1
+  constructor
+  omega
+  omega
+  exact fun a_1 ha ↦ rfl
+
 theorem pd (a : ℕ → ℝ) :
 drop (partialSums a) = fun i ↦ (partialSums (drop a) i) + a 0 := by
   ext i

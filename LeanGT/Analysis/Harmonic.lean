@@ -11,18 +11,18 @@ def s := partialSums invNats
 theorem e1 (k : ℕ) : (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i) ≥ (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats (2^(k+1)-1)) := by
   gcongr with i hi
   unfold invNats
-  simp
+  simp only [Nat.ofNat_pos, pow_pos, Nat.cast_pred, Nat.cast_pow, Nat.cast_ofNat, sub_add_cancel,
+    one_div, Rat.cast_inv, Rat.cast_pow, Rat.cast_ofNat, Rat.cast_add, Rat.cast_natCast,
+    Rat.cast_one]
   gcongr
   norm_cast
   rw [Finset.mem_Ico] at hi
-  linarith
+  omega
 
 theorem e2 (k : ℕ) : (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats (2^(k+1)-1)) = (1/2) := by
-
   have : 2^(k + 1) - 2^k = 2^k := by
-    simp [Nat.pow_succ', show 2*2^k = 2^k+2^k by omega]
-
-  simp
+    rw [pow_succ]
+    omega
   unfold invNats
   simp
   rw [this]
@@ -40,9 +40,9 @@ theorem s_unbounded_formula (k : ℕ) : s (2^k) ≥ 1 + (k:ℝ)/2 := by
   | succ k IH =>
     unfold s partialSums
     unfold s partialSums at IH
-    rw [congrFun Finset.range_eq_Ico (2 ^ (k + 1))]
+    rw [congrFun Finset.range_eq_Ico]
 
-    rw [← Finset.sum_Ico_consecutive invNats (show 0 ≤ 2^k by positivity) (show 2^k ≤ 2^(k+1) by gcongr <;> omega)]
+    rw [← Finset.sum_Ico_consecutive invNats (by positivity) (show 2^k ≤ 2^(k+1) by gcongr <;> omega)]
 
     have : (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i) ≥ 1/2 := by
       calc

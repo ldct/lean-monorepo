@@ -1,15 +1,8 @@
 import Mathlib
-import LeanGT.Texify
 
 set_option linter.unusedTactic false
 
-example : True := by
-  texify
-  exact trivial
-
 theorem motzkin (x y : ℝ) : 0 ≤ x^4 * y^2 + x^2 * y^4  - 3 * x^2 * y^2 + 1 := by
-  texify
-
   let w : Fin 3 → ℝ := fun _ => (1:ℝ)/3
 
   let f : Fin 3 → ℝ := fun i =>

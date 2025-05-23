@@ -2,15 +2,11 @@ import LeanGT.Analysis.MonotoneConvergence
 import LeanGT.Analysis.InfiniteSums
 import Mathlib
 
+-- This file proves that the series ∑ 1/n^2 converges to some limit
+-- The bulk of this is a series of inequalities that show that the partial sums are bounded above by 2
+
 noncomputable def invSquares (i : ℕ) : ℝ := (1 / ((i+1)^2))
 noncomputable def bassel := partialSums invSquares
-
-theorem monotone_bassel : Monotone bassel := by
-  rw [bassel]
-  apply monotone_psum_of_pos
-  intro i
-  rw [invSquares]
-  positivity
 
 -- first inequality
 theorem bb1 (m : ℕ) : bassel m ≤ ∑ i ∈ Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i)) := by
@@ -22,7 +18,6 @@ theorem bb1 (m : ℕ) : bassel m ≤ ∑ i ∈ Finset.range m, if i = 0 then 1 e
 
   case h.inl i_ne_0 =>
     simp only [i_ne_0, reduceIte]
-    unfold invSquares
     rw [← (one_div_pow ((i:ℝ) + 1) 2)]
     rw [show (1 / ((i:ℝ) + 1))^2 = (1 / ((i:ℝ) + 1)) * (1 / ((i:ℝ) + 1)) by ring]
     gcongr
@@ -30,8 +25,6 @@ theorem bb1 (m : ℕ) : bassel m ≤ ∑ i ∈ Finset.range m, if i = 0 then 1 e
 
   case h.inr i_eq_0 =>
     simp [i_eq_0]
-    unfold invSquares
-    norm_num
 
 theorem bb2 (m : ℕ) : (∑ i ∈ Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i))) = ∑ i ∈ Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1)) := by
   congr
@@ -63,8 +56,8 @@ theorem final (m : ℕ) : bassel m ≤ 2 := by
   cases Nat.le_total 1 m
 
   case inl hm => calc
-    bassel m ≤ ∑ i in Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i)) := bb1 m
-    _ = ∑ i in Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1)) := bb2 m
+    bassel m ≤ ∑ i ∈ Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i)) := bb1 m
+    _ = ∑ i ∈ Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1)) := bb2 m
     _ = 2 - 1/(m:ℝ) := bb3 m hm
     _ ≤ 2 := by
       have : 0 < 1/(m:ℝ) := by positivity
@@ -88,8 +81,16 @@ theorem final (m : ℕ) : bassel m ≤ 2 := by
 -- Example 2.4.4: ∑ 1/n^2 converges to some (presently unknown) limit
 theorem c1 : Summable' invSquares := by
   rw [Summable']
-  apply MCT
-  exact monotone_bassel
-  use 2
-  intro n
-  exact final n
+
+  refine MCT ?monotone ?bounded
+
+  case monotone =>
+    apply monotone_psum_of_pos
+    intro i
+    unfold invSquares
+    positivity
+
+  case bounded =>
+    use 2
+    intro n
+    exact final n

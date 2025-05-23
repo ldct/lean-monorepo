@@ -1,16 +1,85 @@
+import Mathlib
 import LeanGT.Analysis.AlgebraicLimit
 import LeanGT.Analysis.InfiniteSums
 import LeanGT.Analysis.Bounded
 import LeanGT.Analysis.MonotoneConvergence
 import LeanGT.Analysis.Reindex
-import Mathlib
+import LeanGT.FinsetInterval
 
 -- Cauchy condensation test
 
--- The sequence b₁, 2b₂, 4b₄, 8b₈, ...
--- We will want to show that this is summable ↔ a is summable
+-- https://math.montana.edu/malo/documents/172Su13/Cauchy.pdf
+
+/-- The sequence b₁, 2b₂, 4b₄, 8b₈, ... --/
 def condense (a : ℕ → ℝ) : (ℕ → ℝ):= fun (i : ℕ) ↦
   2^i * a (2^i)
+
+/-- Given a sequence a, s n = a₁ + ... a_n -/
+def s (a : ℕ → ℝ) (n : ℕ) : ℝ := ∑ i ∈ Finset.Icc 1 n, a i
+
+/-- Given a sequence a, t k = a₁ + 2a₂ + 4a₄ + ... + 2^k a_{2^k} -/
+def t (a : ℕ → ℝ) (k : ℕ) : ℝ := ∑ i ∈ Finset.Icc 0 k, 2^i * a (2^i)
+
+example (a : ℕ → ℝ)
+: t a 3 = a 1 + 2 * a 2 + 4 * a 4 + 8 * a 8 := by
+  unfold t
+  simp
+  ring
+
+lemma s_converges
+  (a : ℕ → ℝ)
+: Summable' a ↔ Converges (s a) := by
+  rw [conv_drop]
+  unfold Summable' partialSums drop s
+  have : (fun n ↦ ∑ i ∈ Finset.range n, a (i + 1)) = (fun n ↦ ∑ i ∈ Finset.Icc 1 n, a i) := by
+    ext n
+    rw [ri]
+    rw [Nat.Ico_succ_right]
+  rw [this]
+
+lemma s_le_t
+  (a : ℕ → ℝ)
+  (a_pos : ∀ n, 0 ≤ a n)
+  (a_antitone : Antitone a)
+  (n : ℕ)
+: ∃ k, s a n ≤ t a k := by
+  have : ∃ k, n < 2^(k+1) := by sorry
+  rcases this with ⟨k, hk⟩
+  use k
+
+  /-
+  The main argument:
+
+
+  the partial sums of b, adding successively more powers of 2, is bounded by t
+  -/
+  have c2 (k' : ℕ) (hk' : 1 ≤ k'): s a (2^k' - 1) ≤ t a k' := by
+    induction k', hk' using Nat.le_induction with
+    | base =>
+      unfold s t
+      simp
+      exact a_pos 2
+    | succ k hk IH =>
+      unfold s t
+      unfold s t at IH
+
+      -- Write the LHS as (LHS of induction hypothesis) + something
+      have : ∑ i ∈ Finset.Icc 1 (2 ^ (k + 2) - 1), a i = ∑ i ∈ Finset.Icc 1 (2 ^ (k + 1) - 1), a i + ∑ i ∈ Finset.Icc (2 ^ (k + 1)) (2 ^ (k + 2) - 1), a i := by
+        texify
+        sorry
+
+      -- Write the RHS as (RHS of induction hypothesis) + something
+      have : ∑ i ∈ Finset.Icc 1 (2 ^ (k + 1)), a i = ∑ i ∈ Finset.Icc 1 (2 ^ k), a i + ∑ i ∈ Finset.Icc (2 ^ k + 1) (2 ^ (k + 1)), a i := by
+        texify
+        sorry
+
+      texify
+      sorry
+
+  sorry
+
+
+
 
 -- cauchy condensation test 2.4.6, hard direction
 -- b₀ + b₁ ... converges ⟸ b₁ + 2b₂ + 4b₄ + 8b₈ + ... converges
@@ -142,6 +211,8 @@ theorem cct1
       rw [this]
       clear this
 
+      texify
+
       suffices t : ∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), b (x + 1) ≤ ∑ i ∈ Finset.Ico (k + 1) (k + 2), 2 ^ i * b (2 ^ i) from by linarith
 
       -- Now we are comparing a sum of 2^(k+1) terms with a single term of the condensed series.
@@ -202,7 +273,6 @@ theorem cct1
       simp [partialSums]
     | succ m' IH =>
       rw [partialSums_succ]
-      ring_nf
       rw [← add_assoc (b 0) _, IH]
       rw [partialSums_succ b (m' + 1)]
 
@@ -225,6 +295,44 @@ theorem cct2
   by_contra condense_diverges
   suffices b_diverges : (¬ (Summable' b)) from by
     exact b_diverges b_summable
+
+  -- We are now in the form requested by exercise 2.4.1
+  -- If the condensed series diverges, then the original series diverges
+
+  have s_unbounded_formula (j : ℕ) : partialSums (condense b) (j+1) ≤ partialSums b (2^j+1) := by
+    induction j with
+    | zero =>
+      simp
+      unfold condense partialSums
+      simp
+      sorry
+    | succ j IH =>
+      unfold partialSums
+      unfold partialSums at IH
+
+      rw [congrFun Finset.range_eq_Ico (2 ^ (j + 1))]
+      rw [← Finset.sum_Ico_consecutive b (show 0 ≤ 2^j by positivity) (show 2^j ≤ 2^(j+1) by gcongr <;> omega)]
+      rw [congrFun Finset.range_eq_Ico (j + 1)]
+      rw [Finset.sum_Ico_succ_top (show 0 ≤ j by positivity)]
+      gcongr ?_ + ?_
+      simp only [Nat.Ico_zero_eq_range, IH]
+      unfold condense
+      have : 2 ^ j * b (2 ^ j) = ∑ i ∈ Finset.Ico (2 ^ j) (2 ^ (j + 1)), b (2 ^ j) := by
+        rw [Finset.sum_const]
+        simp only [Nat.card_Ico, nsmul_eq_mul, mul_eq_mul_right_iff]
+        left
+        norm_cast
+        rw [pow_succ]
+        omega
+      rw [this]
+      texify
+      gcongr with i hi
+      apply b_antitone
+      apply
+
+
+
+
 
   sorry
 

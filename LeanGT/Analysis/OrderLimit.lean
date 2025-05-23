@@ -1,7 +1,6 @@
 import LeanGT.Analysis.AlgebraicLimit
 import MathLib
 
-
 -- Theorem 2.3.4.i (Order Limit Theorem)
 theorem tendsTo_pos
   {a : ℕ → ℝ}

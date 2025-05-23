@@ -7,16 +7,18 @@ noncomputable def max_prefix : ((ℕ → ℝ)) → ℕ → ℝ
 | f, x+1 => max (f x) (max_prefix f x)
 
 theorem mp_increasing (f : ℕ → ℝ) (a : ℕ) (b : ℕ) (hi : a < b): f a ≤ max_prefix f b := by
-  induction' b with x y
-  exfalso
-  exact Nat.not_succ_le_zero a hi
-  unfold max_prefix
-  have a_cases : a < x ∨ a = x := Nat.lt_succ_iff_lt_or_eq.mp hi
-  cases' a_cases with p q
-  apply y at p
-  exact le_max_of_le_right p
-  rw [q]
-  exact le_max_left (f x) (max_prefix f x)
+  induction b
+  case zero =>
+    exfalso
+    exact Nat.not_succ_le_zero a hi
+  case succ b IH =>
+    unfold max_prefix
+    have a_cases : a < b ∨ a = b := Nat.lt_succ_iff_lt_or_eq.mp hi
+    cases' a_cases with p q
+    apply IH at p
+    exact le_max_of_le_right p
+    rw [q]
+    exact le_max_left (f b) (max_prefix f b)
 
 -- Any finite prefix of a sequence has an upper bound
 theorem FinitePrefixMax (f : ℕ → ℝ) (N : ℕ) : ∃ B, ∀ n : ℕ, n < N → f n ≤ B := by
