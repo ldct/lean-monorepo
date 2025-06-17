@@ -1,5 +1,6 @@
 import Mathlib
 import LeanTeXMathlib
 
-example (a : ℕ → ℝ) (n : ℕ) : ∑ i ∈ Finset.range n, a (i + 1) = ∑ i ∈ Finset.Icc 1 n, a i := by
-  rw [Finset.sum_bij (fun x _ ↦ x + 1)]
+theorem add_gt_add_right {a b:ℤ} (c:ℤ) (h: a > b) : a+c > b+c := by
+  exact Int.add_lt_add_right h c
+  linarith
