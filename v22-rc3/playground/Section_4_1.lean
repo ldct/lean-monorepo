@@ -39,7 +39,7 @@ instance Int.decidableEq : DecidableEq Int := by
   intro a b
   have : ∀ (n:PreInt) (m: PreInt),
       Decidable (Quotient.mk PreInt.instSetoid n = Quotient.mk PreInt.instSetoid m) := by
-    intro ⟨ a,b ⟩ ⟨ c,d ⟩
+    intros
     rw [eq]
     exact decEq _ _
   exact Quotient.recOnSubsingleton₂ a b this
@@ -51,7 +51,10 @@ theorem Int.eq_diff (n:Int) : ∃ a b, n = a —— b := by apply n.ind _; intro
 instance Int.instAdd : Add Int where
   add := Quotient.lift₂ (fun ⟨ a, b ⟩ ⟨ c, d ⟩ ↦ (a+c) —— (b+d) ) (by
     intro ⟨ a, b ⟩ ⟨ c, d ⟩ ⟨ a', b' ⟩ ⟨ c', d' ⟩ h1 h2
-    simp [Setoid.r] at *
+    dsimp at *
+    rw [PreInt.eq] at *
+    rw [Quotient.eq] at *
+    simp only [Setoid.r] at *
     grind)
 
 /-- Definition 4.1.2 (Definition of addition) -/
@@ -65,17 +68,12 @@ theorem Int.mul_congr_left (a b a' b' c d : ℕ) (h: a —— b = a' —— b') 
 
 /-- Lemma 4.1.3 (Multiplication well-defined) -/
 theorem Int.mul_congr_right (a b c d c' d' : ℕ) (h: c —— d = c' —— d') :
-    (a*c+b*d) —— (a*d+b*c) = (a*c'+b*d') —— (a*d'+b*c') := by
-  simp only [eq] at h ⊢
-  calc
-    _ = a*(c+d') + b*(c'+d) := by ring
-    _ = a*(c'+d) + b*(c+d') := by rw [h]
-    _ = _ := by ring
+    (a*c+b*d) —— (a*d+b*c) = (a*c'+b*d') —— (a*d'+b*c') := by grind
 
 /-- Lemma 4.1.3 (Multiplication well-defined) -/
 theorem Int.mul_congr {a b c d a' b' c' d' : ℕ} (h1: a —— b = a' —— b') (h2: c —— d = c' —— d') :
   (a*c+b*d) —— (a*d+b*c) = (a'*c'+b'*d') —— (a'*d'+b'*c') := by
-  rw [mul_congr_left a b a' b' c d h1, mul_congr_right a' b' c d c' d' h2]
+  grind
 
 instance Int.instMul : Mul Int where
   mul := Quotient.lift₂ (fun ⟨ a, b ⟩ ⟨ c, d ⟩ ↦ (a * c + b * d) —— (a * d + b * c)) (by
@@ -108,7 +106,7 @@ theorem Int.ofNat_inj (n m:ℕ) : (ofNat(n) : Int) = (ofNat(m) : Int) ↔ ofNat(
 
 @[simp]
 theorem Int.natCast_inj (n m:ℕ) : (n : Int) = (m : Int) ↔ n = m := by
-  simp only [natCast_eq, eq, add_zero]
+  grind
 
 example : 3 = 3 —— 0 := rfl
 
@@ -148,12 +146,12 @@ theorem Int.not_pos_zero (x:Int) : x = 0 ∧ x.IsPos → False := by
 
 /-- Lemma 4.1.5 (trichotomy of integers)-/
 theorem Int.not_neg_zero (x:Int) : x = 0 ∧ x.IsNeg → False := by
-  rintro ⟨ rfl, ⟨ n, hn, hn' ⟩ ⟩; simp_rw [←natCast_ofNat, natCast_eq, neg_eq, eq] at hn'
+  rintro ⟨ rfl, ⟨ n, hn, hn' ⟩ ⟩;
+  simp_rw [←natCast_ofNat] at hn'
   grind
 
 /-- Lemma 4.1.5 (trichotomy of integers)-/
 theorem Int.not_pos_neg (x:Int) : x.IsPos ∧ x.IsNeg → False := by
-  rintro ⟨ ⟨ n, hn, rfl ⟩, ⟨ m, hm, hm' ⟩ ⟩; simp_rw [natCast_eq, neg_eq, eq] at hm'
   grind
 
 /-- Proposition 4.1.6 (laws of algebra) / Exercise 4.1.4 -/
@@ -172,7 +170,12 @@ instance Int.instAddGroup : AddGroup Int :=
 
 /-- Proposition 4.1.6 (laws of algebra) / Exercise 4.1.4 -/
 instance Int.instAddCommGroup : AddCommGroup Int where
-  add_comm := by sorry
+  add_comm := by
+    intro x y
+    obtain ⟨ a, b, rfl ⟩ := eq_diff x
+    obtain ⟨ c, d, rfl ⟩ := eq_diff y
+    grind
+
 
 /-- Proposition 4.1.6 (laws of algebra) / Exercise 4.1.4 -/
 instance Int.instCommMonoid : CommMonoid Int where
@@ -183,7 +186,7 @@ instance Int.instCommMonoid : CommMonoid Int where
     obtain ⟨ a, b, rfl ⟩ := eq_diff x
     obtain ⟨ c, d, rfl ⟩ := eq_diff y
     obtain ⟨ e, f, rfl ⟩ := eq_diff z
-    simp_rw [mul_eq]; congr 1 <;> ring
+    grind
   one_mul := by sorry
   mul_one := by sorry
 
