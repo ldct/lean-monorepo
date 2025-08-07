@@ -1,5 +1,40 @@
 import Mathlib
 
+
+/--
+The snake lemma is a standard tool in homological algebra. The basic situation
+is when we have a diagram as follows in an abelian category `C`, with exact rows:
+
+```
+    L₁.X₁ ⟶ L₁.X₂ ⟶ L₁.X₃ ⟶ 0
+      │       │       │
+      │v₁₂.τ₁ │v₁₂.τ₂ │v₁₂.τ₃
+      ↓       ↓       ↓
+0 ⟶ L₂.X₁ ⟶ L₂.X₂ ⟶ L₂.X₃
+```
+
+We shall think of this diagram as the datum of a morphism `v₁₂ : L₁ ⟶ L₂` in the
+-/
+example : 1 = 1 := by rfl
+
+/--
+```
+       0        0         0
+       │        │         │
+… ───▶ X₁,i ──▶ X₁,j ─d─▶ X₁,k ──▶ …
+       │        ↓ f       │
+… ───▶ X₂,i ──d─▶ X₂,j ─▶ X₂,k ──▶ …
+        │       │         │
+… ───▶ X₃,i ───▶ X₃,j ──▶ X₃,k ──▶ …
+        ↓       ↓         ↓
+        0       0         0
+```
+
+Some theorem
+-/
+example : 1 = 1 := by rfl
+
+
 example (a b k : ℝ) (k_pos : k ≠ 0) (eq : k*a = k*b)
 : a = b := by
   sorry
