@@ -165,6 +165,7 @@ instance Int.instAddGroup : AddGroup Int :=
   ) (by
     intro a
     obtain ⟨ b, c, rfl ⟩ := eq_diff a
+
     sorry
   ) (by sorry)
 
