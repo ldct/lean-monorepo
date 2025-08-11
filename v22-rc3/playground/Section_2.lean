@@ -8,30 +8,17 @@ set_option linter.style.multiGoal false
 
 namespace Chapter2
 
-/--
-  Assumption 2.6 (Existence of natural numbers).  Here we use an explicit construction of the
-  natural numbers (using an inductive type).  For a more axiomatic approach, see the epilogue to
-  this chapter.
--/
+@[grind]
 inductive Nat where
 | zero : Nat
 | succ : Nat → Nat
 deriving Repr, DecidableEq  -- this allows `decide` to work on `Nat`
 
-/-- Axiom 2.1 (0 is a natural number) -/
 instance Nat.instZero : Zero Nat := ⟨ zero ⟩
-#check (0:Nat)
 
-/-- Axiom 2.2 (Successor of a natural number is a natural number) -/
 postfix:100 "++" => Nat.succ
-#check (fun n ↦ n++)
 
 
-/--
-  Definition 2.1.3 (Definition of the numerals 0, 1, 2, etc.). Note: to avoid ambiguity, one may
-  need to use explicit casts such as (0:Nat), (1:Nat), etc. to refer to this chapter's version of
-  the natural numbers.
--/
 instance Nat.instOfNat {n:_root_.Nat} : OfNat Nat n where
   ofNat := _root_.Nat.rec 0 (fun _ n ↦ n++) n
 
@@ -39,47 +26,26 @@ instance Nat.instOne : One Nat := ⟨ 1 ⟩
 
 @[grind]
 lemma Nat.zero_succ : 0++ = 1 := by rfl
-#check (1:Nat)
 
+@[grind]
 lemma Nat.one_succ : 1++ = 2 := by rfl
-#check (2:Nat)
 
-/-- Proposition 2.1.4 (3 is a natural number)-/
+@[grind]
 lemma Nat.two_succ : 2++ = 3 := by rfl
-#check (3:Nat)
 
 theorem Nat.succ_ne (n:Nat) : n++ ≠ 0 := by grind
 
 theorem Nat.four_ne : (4:Nat) ≠ 0 := by grind
 
-/--
-  Axiom 2.4 (Different natural numbers have different successors).
-  Compare with Mathlib's `Nat.succ_inj`.
--/
 @[grind]
 theorem Nat.succ_cancel {n m:Nat} (hnm: n++ = m++) : n = m := by grind
 
-/--
-  Axiom 2.4 (Different natural numbers have different successors).
-  Compare with Mathlib's `Nat.succ_ne_succ`.
--/
+@[grind]
 theorem Nat.succ_ne_succ (n m:Nat) : n ≠ m → n++ ≠ m++ := by grind
 
-/-- Proposition 2.1.8 (6 is not equal to 2) -/
 theorem Nat.six_ne_two : (6:Nat) ≠ 2 := by
--- this proof is written to follow the structure of the original text.
-  by_contra h
-  replace h := succ_cancel h
-  grind
-
-/-- One can also prove this sort of result by the `decide` tactic -/
-theorem Nat.six_ne_two' : (6:Nat) ≠ 2 := by
   decide
 
-/--
-  Axiom 2.5 (Principle of mathematical induction). The `induction` (or `induction'`) tactic in
-  Mathlib serves as a substitute for this axiom.
--/
 theorem Nat.induction (P : Nat → Prop) (hbase : P 0) (hind : ∀ n, P n → P (n++)) :
     ∀ n, P n := by
   intro n
@@ -87,10 +53,6 @@ theorem Nat.induction (P : Nat → Prop) (hbase : P 0) (hind : ∀ n, P n → P 
   | zero => exact hbase
   | succ n ih => exact hind _ ih
 
-/--
-  Recursion. Analogous to the inbuilt Mathlib method `Nat.rec` associated to
-  the Mathlib natural numbers
--/
 abbrev Nat.recurse (f: Nat → Nat → Nat) (c: Nat) : Nat → Nat := fun n ↦ match n with
 | 0 => c
 | n++ => f n (recurse f c n)
@@ -155,7 +117,7 @@ example : (2:Nat) + 3 = 5 := by decide
 lemma Nat.add_zero (n:Nat) : n + 0 = n := by
   -- This proof is written to follow the structure of the original text.
   revert n; apply induction
-  · grind
+  · #count_heartbeats! in grind
   · grind
 
 @[grind =]

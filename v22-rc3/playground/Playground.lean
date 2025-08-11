@@ -1,7 +1,24 @@
 import Mathlib
 
-set_option linter.style.cdot false
-set_option linter.style.longLine false
+
+#synth Inv Rat
+#check Rat.inv
+
+example : (3/5 : ℚ).den = 5 := by norm_num
+
+structure Dyadic where
+  q : ℚ
+  den_pow_2 : q.den.isPowerOfTwo
+
+def d := Dyadic.mk (3/8) (by norm_num; use 3)
+
+instance : Semigroup Dyadic where
+  mul a b :=
+    Dyadic.mk (a.q * b.q) (by
+      sorry)
+  mul_assoc := sorry
+
+#check d
 
 class AffinePlane (X : Type) where
   IsLine : Set X → Prop
