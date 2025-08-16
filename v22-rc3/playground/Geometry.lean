@@ -26,15 +26,9 @@ abbrev addRight (a : ℝ) : Perm ℝ where
     dsimp
     ring
 
-/-- If, for some given real number `a`, `α` is the element `x ↦ x + a` of `Perm ℝ`, prove that, for
-any two real numbers `x` and `y`, `x - y = α x - α y`. -/
-example (a : ℝ) :
-    let α := addRight a
-    ∀ x y, x - y = α x - α y := by
-  intro α x y
-  rw [show α = addRight a by rfl]
-  dsimp
-  ring
+@[simp] lemma inv_addRight (a : ℝ) : (addRight a)⁻¹ = addRight (-a) := by
+  ext x
+  rfl
 
 /-- An element `α` of `Perm ℝ` such that, for any two real numbers `x` and `y`, `x - y = α x - α y`,
 is called a *translation* of `ℝ`. -/
@@ -42,7 +36,7 @@ def IsTranslation (α : Perm ℝ) : Prop :=
   ∀ x y : ℝ, α x - α y = x - y
 
 /-- Show that the translations form a subgroup of `Perm ℝ`. -/
-abbrev translationSubgroup : Subgroup (Perm ℝ) where
+def translationSubgroup : Subgroup (Perm ℝ) where
   carrier := { α | IsTranslation α }
   mul_mem' := by
     intro α β hα hβ x y
@@ -56,15 +50,64 @@ abbrev translationSubgroup : Subgroup (Perm ℝ) where
     specialize hα (α⁻¹ x) (α⁻¹ y)
     simp_all
 
+lemma mem_translationSubgroup_iff {α : Perm ℝ} : α ∈ translationSubgroup ↔ IsTranslation α := by rfl
+
 notation "T" => translationSubgroup
 
-/-- If `α ∈ T` and `α 0 = 0`, prove that `α x = x + a`. -/
-example {α : Perm ℝ} (hα : α ∈ T) {a : ℝ} (h : α 0 = a) : α = addRight a := by
+theorem mem_translationSubgroup_iff_exists_addRight {α : Perm ℝ} : α ∈ T ↔ ∃ a : ℝ, α = addRight a := by
+  constructor
+  intro hα
+  use α 0
   simp at hα
   ext x
   simp
   specialize hα x 0
   linarith
+
+  intro h
+  obtain ⟨a, hα⟩ := h
+  intro x y
+  rw [hα]
+  dsimp
+  ring
+
+/-! ## For fun: Integer translations -/
+
+def IsIntegerTranslation (α : Perm ℝ) : Prop :=
+  ∃ a : ℤ, α = addRight a
+
+def integerTranslationSubgroup : Subgroup (Perm ℝ) where
+  carrier := { α | IsIntegerTranslation α }
+  mul_mem' := by
+    intro α β ⟨a, hα⟩ ⟨b, hβ⟩
+    use a + b
+    rw [hα, hβ]
+    ext x
+    dsimp
+    push_cast
+    ring
+  one_mem' := by
+    use 0
+    ext x
+    simp
+  inv_mem' := by
+    intro α hα
+    dsimp at *
+    obtain ⟨a, hα⟩ := hα
+    use -a
+    ext x
+    rw [hα]
+    simp [inv_addRight]
+
+lemma mem_integerTranslationSubgroup_iff {α : Perm ℝ} : α ∈ integerTranslationSubgroup ↔ IsIntegerTranslation α := by rfl
+
+example : integerTranslationSubgroup ≤ translationSubgroup := by
+  intro α hα
+  rw [mem_translationSubgroup_iff_exists_addRight]
+  rw [mem_integerTranslationSubgroup_iff] at hα
+  obtain ⟨a, hα⟩ := hα
+  use a
+
 
 /-! ## Problem 2 -/
 
@@ -270,39 +313,85 @@ example (a b : ℝ) (ha' : a ≠ 1) :
 /-- If `α` is the element `x ↦ a * x + b` of `Perm ℝ` and `a ≠ 0`, compare the ratio
 `(x - y) / (x - z)` with the ratio `(α x - α y) / (α x - α z)` for any three distinct real numbers
 `x`, `y` and `z`. -/
-example (a b : ℝ) (ha : a ≠ 0) {x y z : ℝ} (hxy : x ≠ y) (hxz : x ≠ z) (hyz : y ≠ z) :
+example (a b : ℝ) (ha : a ≠ 0) {x y z : ℝ} (hxz : x ≠ z):
     let α := fun x ↦ a * x + b
     (x - y) / (x - z) = (α x - α y) / (α x - α z) := by
-  sorry
+  intro α
+  rw [show α x = a * x + b by rfl]
+  rw [show α y = a * y + b by rfl]
+  rw [show α z = a * z + b by rfl]
+  simp only [add_sub_add_right_eq_sub]
+  rw [show a * x - a * y = a * (x - y) by ring]
+  rw [show a * x - a * z = a * (x - z) by ring]
+
+  have : x - z ≠ 0 := by
+    intro h
+    have : x = z := by linarith
+    exact hxz this
+  field_simp
+  ring
 
 /-- A transformation which preserves ratios of lengths on the real line is called a *similarity* of
 the real line. -/
 def IsSimilarity (α : Perm ℝ) : Prop :=
-  ∀ {x y z : ℝ} (hxy : x ≠ y) (hxz : x ≠ z) (hyz : y ≠ z),
+  ∀ {x y z : ℝ}, (x ≠ y) → (x ≠ z) → (y ≠ z) →
     (x - y) / (x - z) = (α x - α y) / (α x - α z)
 
 #check Equiv.injective
 #check Function.Injective.ne
 
+lemma ne_iff_ne (a : Perm ℝ) {x y : ℝ} : a x ≠ a y ↔ x ≠ y := by
+  constructor
+  intro h h'
+  apply_fun (fun x ↦ a x) at h'
+  exact h h'
+  intro h
+  apply Function.Injective.ne
+  exact Equiv.injective a
+  exact h
+
 /-- Show that the similarities form a subgroup of `Perm ℝ`. -/
 abbrev similaritySubgroup : Subgroup (Perm ℝ) where
   carrier := { α | IsSimilarity α }
   mul_mem' := by
-    sorry
+    intro α β hα hβ x y z hxy hxz hyz
+    dsimp at *
+    unfold IsSimilarity at *
+    rw [hβ, hα]
+    repeat {rw [ne_iff_ne]; assumption }
+    repeat assumption
   one_mem' := by
-    sorry
+    intro x y z hxy hxz hyz
+    dsimp
   inv_mem' := by
-    sorry
+    intro α hα x y z h1 h2 h3
+    dsimp at *
+    unfold IsSimilarity at *
+    specialize @hα (α⁻¹ x) (α⁻¹ y) (α⁻¹ z) (by rw [ne_iff_ne]; assumption) (by rw [ne_iff_ne]; assumption) (by rw [ne_iff_ne]; assumption)
+    simp_all
 
 notation "A" => similaritySubgroup
 
 /-- Does `A` contain all the translations of `ℝ`? -/
 example : T ≤ A := by
-  sorry
+  intro α hα x y z h1 h2 h3
+  rw [mem_translationSubgroup_iff] at hα
+  rw [hα, hα]
 
 /-- Does `A` contain all the half-turns of `ℝ`? -/
 example {a : ℝ} : halfTurn a ∈ A := by
-  sorry
+  intro x y z h1 h2 h3
+  simp only [coe_fn_mk, add_sub_add_right_eq_sub, sub_neg_eq_add]
+  have : (x - z) ≠ 0 := by
+    intro h
+    have : x = z := by linarith
+    exact h2 this
+  have : (-x + z) ≠ 0 := by
+    intro h
+    have : x = z := by linarith
+    exact h2 this
+  field_simp
+  ring
 
 /-- If `α ∈ A`, `α 0 = 5` and `α 1 = 7`, find `α y`. -/
 example {α : Perm ℝ} (h : α ∈ A) (h0 : α 0 = 5) (h1 : α 1 = 7) (y : ℝ) :
