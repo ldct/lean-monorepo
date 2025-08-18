@@ -1,8 +1,8 @@
 import Mathlib
 
--- attribute [grind =] abs_eq_abs
--- attribute [grind =] lt_abs
--- attribute [grind =] abs_lt
+attribute [grind =] abs_eq_abs
+attribute [grind =] lt_abs
+attribute [grind =] abs_lt
 
 attribute [grind] max_comm
 attribute [grind] max_self

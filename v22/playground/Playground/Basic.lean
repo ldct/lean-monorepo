@@ -1,10 +1,9 @@
 import Mathlib
 
-
-#synth Inv Rat
-#check Rat.inv
-
 example : (3/5 : ℚ).den = 5 := by norm_num
+
+
+
 
 structure Dyadic where
   q : ℚ
@@ -19,6 +18,67 @@ instance : Semigroup Dyadic where
   mul_assoc := sorry
 
 #check d
+
+class IncidenceGeometry (X : Type) where
+  IsLine : Set X → Prop
+  -- For each two distinct points, there is a unique line containing both of them
+  a1 : ∀ P Q, P ≠ Q → (∃! l, IsLine l ∧ P ∈ l ∧ Q ∈ l)
+
+  -- For every line there exists at least two distinct points on it
+  a2 : ∀ l, IsLine l → ∃ P Q, P ≠ Q ∧ P ∈ l ∧ Q ∈ l
+
+  -- There exists at least three distinct points
+  a3 : ∃ P Q R : X, P ≠ Q ∧ Q ≠ R ∧ P ≠ R
+
+  -- Not all points lie on the same line
+  a4 : ¬∃ l, IsLine l ∧ ∀ P, P ∈ l
+
+lemma a1_aux (P Q : Fin 3) (h : P ≠ Q) :
+ ∃! l : Set (Fin 3), (l = ({0, 1} : Set (Fin 3)) ∨ l = ({0, 2} : Set (Fin 3)) ∨ l = ({1, 2} : Set (Fin 3))) ∧ P ∈ l ∧ Q ∈ l := by
+  fin_cases P <;> fin_cases Q <;> dsimp at *
+  all_goals try { exfalso; exact h rfl }
+  · use {0, 1}
+    and_intros <;> grind
+  · use {0, 2}
+    and_intros <;> grind
+  · use {0, 1}
+    and_intros <;> grind
+  · use {1, 2}
+    and_intros <;> grind
+  · use {0, 2}
+    and_intros <;> grind
+  · use {1, 2}
+    and_intros <;> grind
+
+instance ThreePointGeometry : IncidenceGeometry (Fin 3) where
+  IsLine s := s = {0, 1} ∨ s = {0, 2} ∨ s = {1, 2}
+  a1 P Q h := by
+    apply a1_aux P Q h
+  a2 l hl := by
+    obtain h | h | h := hl
+    · use 0, 1
+      and_intros <;> grind
+    · use 0, 2
+      and_intros <;> grind
+    · use 1, 2
+      and_intros <;> grind
+  a3 := by
+    use 0, 1, 2
+    simp
+  a4 := by
+    by_contra h
+    obtain ⟨ l, h1, h2 ⟩ := h
+    obtain h | h | h := h1
+    · specialize h2 2
+      rw [h] at h2
+      simp at h2
+    · specialize h2 1
+      rw [h] at h2
+      simp at h2
+    · specialize h2 0
+      rw [h] at h2
+      simp at h2
+
 
 class AffinePlane (X : Type) where
   IsLine : Set X → Prop
