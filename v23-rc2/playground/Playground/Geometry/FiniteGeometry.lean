@@ -1,5 +1,4 @@
 import Mathlib
-import Canonical
 
 namespace FinsetFG
 
@@ -223,12 +222,6 @@ lemma test (α : Type) (p : α → Prop)
 example (α : Type) (p : α → Prop)
     (h : ∃! x, p x) (y₁ y₂ : α) (py₁ : p y₁) (py₂ : p y₂) : y₁ = y₂ := by
   exact test α p h y₁ y₂ py₁ py₂
-
-example (α : Type) (p : α → Prop)
-    (h : ∃! x, p x) (y₁ y₂ : α) (py₁ : p y₁) (py₂ : p y₂) : y₁ = y₂ := by
-  canonical [ExistsUnique.unique]
-
-
 
 
 -- Given a line l and two points P and Q on l, if P, Q, R are collinear, then R is on l
