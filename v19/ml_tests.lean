@@ -109,3 +109,10 @@ example (n : ℕ) (h : 0 < n)
   ring_nf
   norm_num [mul_comm (a := n), pow_mul, pi_nonneg]
   ac_rfl
+
+
+theorem binom_inv_telescope (n k : ℕ) (hk : 0 < k) :
+    1 / (Nat.choose (n + k + 1) n) =
+      (k + 1 : ℚ) / k *
+        (1 / (Nat.choose (n + k) n : ℚ) - 1 / (Nat.choose (n + k + 1) (n + 1) : ℚ)) := by
+  sorry
