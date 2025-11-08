@@ -10,52 +10,42 @@ autoImplicit = false
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.19.0"
+rev = "v4.20.0"
 
 [[require]]
 name = "plausible"
 scope = "leanprover-community"
-rev = "v4.19.0"
+rev = "v4.20.0"
 
 [[require]]
 name = "mathlib"
 scope = "leanprover-community"
-rev = "v4.19.0"
-
-[[require]]
-name = "proofwidgets"
-scope = "leanprover-community"
-rev = "v0.0.57"
+rev = "v4.20.0"
 
 [[require]]
 name = "batteries"
 scope = "leanprover-community"
-rev = "v4.19.0"
+rev = "v4.20.0"
 
 [[require]]
 name = "importGraph"
 scope = "leanprover-community"
-rev = "v4.19.0"
+rev = "v4.20.0"
 
 [[require]]
 name = "aesop"
 scope = "leanprover-community"
-rev = "v4.19.0"
+rev = "v4.20.0"
 
 [[require]]
 name = "Qq"
 scope = "leanprover-community"
-rev = "v4.19.0"
+rev = "v4.20.0"
 
 [[require]]
 name = "Cli"
 scope = "leanprover"
-rev = "v4.19.0"
-
-[[require]]
-name = "LeanTeX_Mathlib"
-git = "https://github.com/ldct/LeanTeX-mathlib"
-rev = "main"
+rev = "v4.20.0"
 
 [[lean_lib]]
 name = "LeanGT"

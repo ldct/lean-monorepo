@@ -11,7 +11,7 @@ import aristotlelib
 
 async def main():
     # Prove a theorem from a Lean file
-    solution_path = await aristotlelib.Project.prove_from_file("Playground/AristotleTest.lean")
+    solution_path = await aristotlelib.Project.prove_from_file("a1.lean")
     print(f"Solution saved to: {solution_path}")
 
 asyncio.run(main())

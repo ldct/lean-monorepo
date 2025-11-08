@@ -1,23 +1,4 @@
-/-
-This file was edited by Aristotle.
-
-Lean Toolchain version: leanprover/lean4:v4.20.0-rc5
-Mathlib version: d62eab0cc36ea522904895389c301cf8d844fd69 (May 9, 2025)
-
-Your Lean code is run in a custom environment, which uses these headers:
-
-set_option maxHeartbeats 0
-set_option maxRecDepth 4000
-set_option synthInstance.maxHeartbeats 20000
-set_option synthInstance.maxSize 128
-
-The following was proved by Aristotle:
-
-- example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G) (x : G) : ∃ n, Fintype.card G = n * Nat.card H
--/
-
 import Mathlib
-
 
 lemma either_r_or_sr
   (n : ℕ)
@@ -26,6 +7,7 @@ lemma either_r_or_sr
   match x with
   | DihedralGroup.r i => tauto
   | DihedralGroup.sr j => tauto
+
 
 example
   (n : ℕ)
@@ -110,6 +92,7 @@ instance {G} [Group G] : MulAction (MyTrivialAction G) G := {
   one_smul b := by simp [smul_eq'']
   mul_smul x y b := by simp [smul_eq'']
 }
+
 
 -- 1.7.3
 def MyEx3Action := ℝ
@@ -247,6 +230,7 @@ lemma smul_eq_ {A : Type*} (k : ℕ) (σ : Equiv.Perm A) (s : kElementSubsets A 
     exact h_card
 } := by rfl
 
+
 -- 1.7.8
 -- Let A be a nonempty set and let k be a positive integer with k ≤ |A|. The symmetric group S_A acts on the set of all subsets of A of cardinality k.
 def k1 (A : Type*) (k : ℕ) : MulAction (Equiv.Perm A) (kElementSubsets A k) := {
@@ -294,7 +278,6 @@ def IsFaithful {G A: Type*} [Group G] (σ : MulAction G A) : Prop := ∀ g₁ g�
 #eval permsOfFinset (⊤ : Finset (Fin 4))
 
 #check (1 : Equiv.Perm (Fin 4))
-
 #check (c[2, 3, 0, 1] : Equiv.Perm (Fin 4))
 
 -- 1.7.10 partial results
@@ -302,6 +285,7 @@ def IsFaithful {G A: Type*} [Group G] (σ : MulAction G A) : Prop := ∀ g₁ g�
 #check k2
 
 #eval List.map ((Equiv.swap 0 1) ∘ (Equiv.swap 2 3)) {(0 : Fin 4), (1 : Fin 4), (2 : Fin 4), (3 : Fin 4)}
+
 
 example : (fun x ↦ x + 1) '' { 1, 2, 3} = { 2, 3, 4} := by
   ext y
@@ -363,16 +347,13 @@ def myMap {G} [Group G] (H : Subgroup G) (x : G): H ≃ (orbit (Subgroup.instMul
 }
 
 example {X} (s : Set X) (h : Nat.card s = 3) : ∃ s' : Finset X, s = s' := by
-  -- Since $s$ is a finite set with cardinality 3, we can convert it to a Finset.
   have h_finite : Set.Finite s := by
-    -- Since the cardinality of $s$ is 3, which is a natural number, $s$ must be finite.
     apply Nat.finite_of_card_ne_zero; exact h.symm ▸ by decide;
   generalize_proofs at *;
-  -- Since $s$ is finite, we can use the fact that a finite set can be represented as a Finset.
   use h_finite.toFinset;
-  -- Since $s$ is finite, converting it to a Finset and then back to a set should give me the same set.
-  simp [h_finite]
+  simp
 
+-- Lagrange's Theorem
 example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G) : ∃ n, Fintype.card G = n * Nat.card H := by
   have {S} (s : Setoid S) : DecidableRel s.r := Classical.decRel ⇑s
   let myAction : MulAction H G:= Subgroup.instMulAction

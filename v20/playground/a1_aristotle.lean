@@ -373,8 +373,17 @@ example {X} (s : Set X) (h : Nat.card s = 3) : ∃ s' : Finset X, s = s' := by
   -- Since $s$ is finite, converting it to a Finset and then back to a set should give me the same set.
   simp [h_finite]
 
-example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G) : ∃ n, Fintype.card G = n * Nat.card H := by
-  have {S} (s : Setoid S) : DecidableRel s.r := Classical.decRel ⇑s
+#check MySetoid
+
+open Finpartition
+
+variable {S : Type*} [Fintype S] [DecidableEq S]
+
+noncomputable instance foo (s : Setoid S) : DecidableRel s.r := Classical.decRel ⇑s
+
+variable (G : Type) [Fintype G]
+
+example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G) (x : G) : ∃ n, Fintype.card G = n * Nat.card H := by
   let myAction : MulAction H G:= Subgroup.instMulAction
   let mySetoid := MySetoid myAction
   let myFP := Finpartition.ofSetoid mySetoid
@@ -382,27 +391,34 @@ example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G) : ∃ n, Fint
   have : ∀ t ∈ myFP.parts, Finset.card t = Nat.card H := by
     intro t ht
     unfold myFP at ht
-    unfold Finpartition.ofSetoid at ht
-    rw [Finpartition.ofSetSetoid_parts] at ht
+    unfold ofSetoid at ht
+    rw [ofSetSetoid_parts] at ht
     simp at ht
     obtain ⟨a, rfl⟩ := ht
     unfold mySetoid MySetoid
     simp
 
     have rwt : { b | IsSameOrbit myAction a b }  = orbit myAction a := rfl
+    -- Show that the map $h \mapsto h \cdot a$ is a bijection between $H$ and the orbit of $a$.
     have h_bij : Nonempty (↥H ≃ {b : G | IsSameOrbit myAction a b}) := by
       exact ⟨ Equiv.ofBijective ( fun g => ⟨ g • a, by
+        -- By definition of orbit, since $g \in H$, we have $g • a \in \text{orbit}(a)$.
         use g ⟩ ) ⟨ by
         intro g₁ g₂ h; aesop, by
         intro ⟨ b, hb ⟩ ; cases' hb with g hg ; use ⟨ g, by
+          -- Since $g$ is an element of $H$, by definition of the subgroup, it must be in $H$.
           aesop ⟩ ; aesop
         ⟩ ⟩;
+    -- Apply the fact that if there's a bijection between two types, their cardinalities are equal.
     have h_card_eq : Nat.card H = Nat.card {b : G | IsSameOrbit myAction a b} := by
       exact Nat.card_congr h_bij.some;
     rw [ ← Nat.card_eq_finsetCard ] ; aesop;
-  have h_sum : ∑ t ∈ myFP.parts, t.card = Fintype.card G := by
+  -- The sum of the cardinalities of the parts in the finpartition is equal to the cardinality of the universal set.
+  have h_sum : ∑ t in myFP.parts, t.card = Fintype.card G := by
     convert myFP.sum_card_parts;
-  have h_card_parts : ∑ t ∈ myFP.parts, t.card = (Finset.card myFP.parts) * Nat.card H := by
+  -- Since each part in the partition has cardinality H, the sum of the sizes of the parts is n * H, where n is the number of parts.
+  have h_card_parts : ∑ t in myFP.parts, t.card = (Finset.card myFP.parts) * Nat.card H := by
     rw [ Finset.sum_congr rfl this, Finset.sum_const, nsmul_eq_mul ];
+    -- Since multiplying by 1 doesn't change the value, we can simplify the expression.
     simp [Nat.cast_id];
   exact ⟨ _, h_sum.symm.trans h_card_parts ⟩
