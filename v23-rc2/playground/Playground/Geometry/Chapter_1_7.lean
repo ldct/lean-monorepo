@@ -286,7 +286,6 @@ def IsFaithful {G A: Type*} [Group G] (σ : MulAction G A) : Prop := ∀ g₁ g�
 
 #eval List.map ((Equiv.swap 0 1) ∘ (Equiv.swap 2 3)) {(0 : Fin 4), (1 : Fin 4), (2 : Fin 4), (3 : Fin 4)}
 
-
 example : (fun x ↦ x + 1) '' { 1, 2, 3} = { 2, 3, 4} := by
   ext y
   simp [Set.mem_image, eq_comm]
@@ -300,13 +299,14 @@ example : ¬ IsFaithful (k1 (Fin 4) 4) := by
   · use { elems := {0, 1, 2, 3}, card_eq_k := by simp }
     simp [smul_eq_]
     ext x
-    simp [Set.mem_image, eq_comm]
+    simp [eq_comm]
     decide +revert
   decide +revert
 
 def IsSameOrbit {H A} [Group H] (σ : MulAction H A) : A → A → Prop := fun a b ↦ ∃ h : H, h • a = b
 
-def IsSameOrbitEquivalence {H A} [Group H] (σ : MulAction H A) : Equivalence (IsSameOrbit σ) := {
+-- 1.7.18
+def IsSameOrbit.IsEquivalence {H A} [Group H] (σ : MulAction H A) : Equivalence (IsSameOrbit σ) := {
   refl a := by
     unfold IsSameOrbit
     use 1
@@ -323,12 +323,14 @@ def IsSameOrbitEquivalence {H A} [Group H] (σ : MulAction H A) : Equivalence (I
 
 def MySetoid {H A} [Group H] (σ : MulAction H A) : Setoid A := {
   r a b := IsSameOrbit σ a b
-  iseqv := IsSameOrbitEquivalence σ
+  iseqv := IsSameOrbit.IsEquivalence σ
 }
 
 def orbit {H A} [Group H] (σ : MulAction H A) (a : A) : Set A := { b | IsSameOrbit σ a b }
 
-def myMap {G} [Group G] (H : Subgroup G) (x : G): H ≃ (orbit (Subgroup.instMulAction : MulAction H G) x) := {
+def myMulAction {G} [Group G] (H : Subgroup G) : MulAction H G := Subgroup.instMulAction
+
+def myMap {G} [Group G] (H : Subgroup G) (x : G): H ≃ (orbit (myMulAction H) x) := {
   toFun := fun h ↦ ⟨ h • x, by
     use h
   ⟩
@@ -340,10 +342,8 @@ def myMap {G} [Group G] (H : Subgroup G) (x : G): H ≃ (orbit (Subgroup.instMul
     rw [show h • x = h * x by rfl]
     simp
   ⟩
-  left_inv h := by
-    simp [MulAction.mul_smul, Subgroup.smul_def]
-  right_inv _ := by
-    simp only [Subgroup.mk_smul, smul_eq_mul, inv_mul_cancel_right]
+  left_inv h := by simp [Subgroup.smul_def]
+  right_inv _ := by simp
 }
 
 example {X} (s : Set X) (h : Nat.card s = 3) : ∃ s' : Finset X, s = s' := by
@@ -353,10 +353,10 @@ example {X} (s : Set X) (h : Nat.card s = 3) : ∃ s' : Finset X, s = s' := by
   use h_finite.toFinset;
   simp
 
--- Lagrange's Theorem
+-- Lagrange's Theorem, 1.7.19
 example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G) : ∃ n, Fintype.card G = n * Nat.card H := by
   have {S} (s : Setoid S) : DecidableRel s.r := Classical.decRel ⇑s
-  let myAction : MulAction H G:= Subgroup.instMulAction
+  let myAction := myMulAction H
   let mySetoid := MySetoid myAction
   let myFP := Finpartition.ofSetoid mySetoid
 
