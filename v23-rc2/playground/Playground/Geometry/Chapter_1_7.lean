@@ -66,9 +66,9 @@ def action_kernel {G B} [Group G] (σ : MulAction G B) : Subgroup G := {
 }
 
 -- example
-def MyTrivialAction (G : Type u) : Type u := G
+def MyTrivialAction (G : Type _) : Type _ := G
 
-instance  {G} [Group G] : Group (MyTrivialAction G) := ‹Group G›
+instance {G} [Group G] : Group (MyTrivialAction G) := ‹Group G›
 
 def ofTrivialAction {G : Type*} [Group G] : MyTrivialAction G ≃* G where
   toFun := id
@@ -77,7 +77,8 @@ def ofTrivialAction {G : Type*} [Group G] : MyTrivialAction G ≃* G where
   right_inv := fun _ => rfl
   map_mul' := fun _ _ => rfl
 
-lemma ofTrivialAction_eq {G : Type*} [Group G] (g : MyTrivialAction G) : ofTrivialAction g = g := rfl
+lemma ofTrivialAction_eq {G : Type*} [Group G] (g : MyTrivialAction G)
+: ofTrivialAction g = g := rfl
 
 def toTrivialAction {G : Type*} [Group G] : G ≃* MyTrivialAction G :=
   MulEquiv.symm ofTrivialAction
@@ -114,7 +115,8 @@ def toEx3Action : ℝ ≃+ MyEx3Action :=
 instance : VAdd (MyEx3Action) (ℝ × ℝ) where
   vadd := fun r (x, y) ↦ (x + (ofEx3Action r) * y, y)
 
-lemma vadd_eq (r : MyEx3Action) (p : ℝ × ℝ): r +ᵥ p = (p.fst + (ofEx3Action r) * p.snd, p.snd) := by
+lemma vadd_eq (r : MyEx3Action) (p : ℝ × ℝ)
+: r +ᵥ p = (p.fst + (ofEx3Action r) * p.snd, p.snd) := by
   rfl
 
 -- 1.7.3
@@ -127,9 +129,9 @@ instance : AddAction (MyEx3Action) (ℝ × ℝ) := {
 }
 
 -- 1.7.15
-def MyRightMulAction (G : Type u) : Type u := G
+def MyRightMulAction (G : Type _) : Type _ := G
 
-instance  {G} [Group G] : Group (MyRightMulAction G) := ‹Group G›
+instance {G} [Group G] : Group (MyRightMulAction G) := ‹Group G›
 
 def ofRightMulAction {G : Type*} [Group G] : MyRightMulAction G ≃* G where
   toFun := id
@@ -138,7 +140,8 @@ def ofRightMulAction {G : Type*} [Group G] : MyRightMulAction G ≃* G where
   right_inv := fun _ => rfl
   map_mul' := fun _ _ => rfl
 
-lemma ofRightMulAction_eq {G : Type*} [Group G] (g : MyRightMulAction G) : ofRightMulAction g = g := rfl
+lemma ofRightMulAction_eq {G : Type*} [Group G] (g : MyRightMulAction G)
+: ofRightMulAction g = g := rfl
 
 def toRightMulAction {G : Type*} [Group G] : G ≃* MyRightMulAction G :=
   MulEquiv.symm ofRightMulAction
@@ -146,7 +149,8 @@ def toRightMulAction {G : Type*} [Group G] : G ≃* MyRightMulAction G :=
 instance {G} [Group G] : SMul (MyRightMulAction G) G where
   smul := fun g h ↦ h * (ofRightMulAction g)⁻¹
 
-lemma smul_eq' {G : Type*} [Group G] (g : MyRightMulAction G) (h : G) : g • h =  h * (ofRightMulAction g)⁻¹ := rfl
+lemma smul_eq' {G : Type*} [Group G] (g : MyRightMulAction G) (h : G)
+: g • h =  h * (ofRightMulAction g)⁻¹ := rfl
 
 -- 1.7.15
 instance {G} [Group G] : MulAction (MyRightMulAction G) G := {
@@ -158,9 +162,9 @@ instance {G} [Group G] : MulAction (MyRightMulAction G) G := {
 }
 
 -- 1.7.16
-def MyConjAct (G : Type u) : Type u := G
+def MyConjAct (G : Type _) : Type _ := G
 
-instance  {G} [Group G] : Group (MyConjAct G) := ‹Group G›
+instance {G} [Group G] : Group (MyConjAct G) := ‹Group G›
 
 def ofConjAct {G : Type*} [Group G] : MyConjAct G ≃* G where
   toFun := id
@@ -174,9 +178,10 @@ lemma ofConjAct_eq {G : Type*} [Group G] (g : MyConjAct G) : ofConjAct g = g := 
 def toConjAct {G : Type*} [Group G] : G ≃* MyConjAct G :=
   MulEquiv.symm ofConjAct
 
-instance [Group G] : SMul (MyConjAct G) G where smul g h := ofConjAct g * h * (ofConjAct g)⁻¹
+instance {G} [Group G] : SMul (MyConjAct G) G where smul g h := ofConjAct g * h * (ofConjAct g)⁻¹
 
-lemma smul_eq {G : Type*} [Group G] (g : MyConjAct G) (h : G) : g • h = ofConjAct g * h * (ofConjAct g)⁻¹ := rfl
+lemma smul_eq {G : Type*} [Group G] (g : MyConjAct G) (h : G)
+: g • h = ofConjAct g * h * (ofConjAct g)⁻¹ := rfl
 
 -- 1.7.16
 instance {G} [Group G] : MulAction (MyConjAct G) G := {
@@ -193,13 +198,14 @@ def conjIsomorphism {G} [Group G] (g : MyConjAct G) : G ≃* G := {
   invFun := fun x ↦ g⁻¹ • x
   left_inv := by
     intro x
-    simp [smul_eq']
+    simp [smul_eq]
+    group
   right_inv := by
     intro x
-    simp [smul_eq']
+    simp
   map_mul' := by
     intro x y
-    simp [smul_eq, ofRightMulAction_eq]
+    simp [smul_eq]
 }
 
 -- 1.7.17 part 2
@@ -209,7 +215,7 @@ example {G} [Group G] (g : G) (x : G): orderOf (g * x * g⁻¹) = orderOf x := b
 
 -- 1.7.8
 structure kElementSubsets (A : Type*) (k : ℕ) where
-  elems: Set A
+  elems : Set A
   card_eq_k: Nat.card elems = k
 
 instance {A : Type*} (k : ℕ) : SMul (Equiv.Perm A) (kElementSubsets A k) := {
@@ -232,12 +238,13 @@ lemma smul_eq_ {A : Type*} (k : ℕ) (σ : Equiv.Perm A) (s : kElementSubsets A 
 
 
 -- 1.7.8
--- Let A be a nonempty set and let k be a positive integer with k ≤ |A|. The symmetric group S_A acts on the set of all subsets of A of cardinality k.
+-- Let A be a nonempty set and let k be a positive integer with k ≤ |A|.
+--The symmetric group S_A acts on the set of all subsets of A of cardinality k.
 def k1 (A : Type*) (k : ℕ) : MulAction (Equiv.Perm A) (kElementSubsets A k) := {
   one_smul b := by
     simp [smul_eq_]
   mul_smul x y b := by
-    simp only [smul_eq_, Set.image_comp]
+    simp only [smul_eq_]
     dsimp
     rw [kElementSubsets.mk.injEq]
     rw [Set.image_comp]
@@ -248,7 +255,7 @@ example {A} (f : A → A) (g : A → A) (s : Set A)
 
 -- 1.7.9
 structure kElementLists (A : Type*) (k : ℕ) where
-  elems: List A
+  elems : List A
   card_eq_k: elems.length = k
 
 instance {A : Type*} (k : ℕ) : SMul (Equiv.Perm A) (kElementLists A k) := {
@@ -273,7 +280,8 @@ def k2 (A : Type*) (k : ℕ) : MulAction (Equiv.Perm A) (kElementLists A k) := {
     simp only [smul_eq_', Equiv.Perm.coe_mul, List.map_map]
 }
 
-def IsFaithful {G A: Type*} [Group G] (σ : MulAction G A) : Prop := ∀ g₁ g₂ : G, ∀ a : A, g₁ • a = g₂ • a → g₁ = g₂
+def IsFaithful {G A : Type*} [Group G] (σ : MulAction G A)
+: Prop := ∀ g₁ g₂ : G, ∀ a : A, g₁ • a = g₂ • a → g₁ = g₂
 
 #eval permsOfFinset (⊤ : Finset (Fin 4))
 
@@ -330,7 +338,8 @@ def orbit {H A} [Group H] (σ : MulAction H A) (a : A) : Set A := { b | IsSameOr
 
 def myMulAction {G} [Group G] (H : Subgroup G) : MulAction H G := Subgroup.instMulAction
 
-def myMap {G} [Group G] (H : Subgroup G) (x : G): H ≃ (orbit (myMulAction H) x) := {
+def myMap {G} [Group G] (H : Subgroup G) (x : G)
+: H ≃ (orbit (myMulAction H) x) := {
   toFun := fun h ↦ ⟨ h • x, by
     use h
   ⟩
@@ -354,7 +363,8 @@ example {X} (s : Set X) (h : Nat.card s = 3) : ∃ s' : Finset X, s = s' := by
   simp
 
 -- Lagrange's Theorem, 1.7.19
-example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G) : ∃ n, Fintype.card G = n * Nat.card H := by
+example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G)
+: ∃ n, Fintype.card G = n * Nat.card H := by
   have {S} (s : Setoid S) : DecidableRel s.r := Classical.decRel ⇑s
   let myAction := myMulAction H
   let mySetoid := MySetoid myAction
@@ -374,9 +384,11 @@ example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G) : ∃ n, Fint
     have h_bij : Nonempty (↥H ≃ {b : G | IsSameOrbit myAction a b}) := by
       exact ⟨ Equiv.ofBijective ( fun g => ⟨ g • a, by
         use g ⟩ ) ⟨ by
-        intro g₁ g₂ h; aesop, by
-        intro ⟨ b, hb ⟩ ; cases' hb with g hg ; use ⟨ g, by
-          aesop ⟩ ; aesop
+        intro g₁ g₂ h
+        aesop, by
+        rintro ⟨ b, ⟨ g, hg ⟩  ⟩
+        use ⟨ g, by grind ⟩
+        aesop
         ⟩ ⟩;
     have h_card_eq : Nat.card H = Nat.card {b : G | IsSameOrbit myAction a b} := by
       exact Nat.card_congr h_bij.some;
