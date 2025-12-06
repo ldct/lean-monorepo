@@ -1,0 +1,110 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath, amssymb}
+
+\begin{document}
+
+\section*{Bernoulli Trial 2025}
+
+\begin{enumerate}
+
+\item (2 minutes) \textbf{T/F:} There are infinitely many positive integers $d,n$ such that $d \mid n$ and 
+\[
+\binom{2d}{d} \nmid \binom{2n}{n}.
+\]
+
+\item (3 minutes) \textbf{T/F:} $x^{46} + 69x + 2025$ is irreducible in $\mathbb{Z}[x]$.
+
+\item (3 minutes) \textbf{T/F:} There is a unique digit $d = 1, \ldots, 9$ such that if $2^n$ and $5^n$ 
+start with the same digit for some $n \in \mathbb{N}$, then that digit is $d$.
+
+\item (4 minutes) \textbf{T/F:} For any odd prime $p$,
+\[
+\left( \frac{p-1}{2} \right)^3 \,\Bigg|\, 
+\sum_{o=1}^{p-1} \sum_{r=1}^{p-1} \sum_{z=1}^{p-1} 
+\left( \frac{orz}{p} \right).
+\]
+
+\item (4 minutes) \textbf{T/F:}
+\[
+\int_{2}^{\infty} \frac{1}{x^7 - x}\, dx > \frac{1}{365}.
+\]
+
+\item (4 minutes) Let $X_1, X_2, \ldots$ be i.i.d.\ random variables uniform on $(0,1)$.  
+Define
+\[
+R_n = \sum_{k=1}^{n} 
+\begin{cases}
+1, & X_k = \max\{X_1, \ldots, X_k\},\\[4pt]
+0, & \text{otherwise}.
+\end{cases}
+\]
+For a random variable $Y$, let $E(Y)$ denote expectation and 
+$\mathrm{Var}(Y)=E(Y^2)-E(Y)^2$ its variance.
+
+\textbf{T/F:}
+\[
+\lim_{n\to\infty} \left( E(R_n) - \mathrm{Var}(R_n) \right)
+< \frac{\pi}{2^{420/69}}.
+\]
+
+\item (5 minutes) \textbf{T/F:} For any integers $n,d \ge 3$, there exists a set 
+$S \subseteq \{1,2,\ldots, (2n)^d\}$ of size at least $n^{d - 2/d}$ that does not contain any 3-term arithmetic progression.
+
+\item (2 minutes) Let $(x_1,y_1), \ldots, (x_4,y_4)$ be four distinct points on both branches of the hyperbola $xy=1$. Suppose they lie on a circle.
+
+\textbf{T/F:} $x_1 x_2 x_3 x_4 = 1$.
+
+\item (3 minutes) \textbf{T/F:} There exist unique bijections $f,g,h : \mathbb{N} \to \mathbb{N}$ such that for all $n \in \mathbb{N}$,
+\[
+f(n)^3 + g(n)^3 + h(n)^3 = 3n g(n) h(n).
+\]
+
+\item (4 minutes) For any positive integer $n$, let $S_n$ denote the symmetric group of all permutations of $\{1,\ldots,n\}$.  
+For each $\sigma \in S_n$, let $\mathrm{Orb}(\sigma)$ be the number of cycles of $\sigma$.
+
+\textbf{T/F:}
+\[
+\frac{1}{69!} \sum_{\sigma \in S_{69}} \mathrm{Orb}(\sigma) < 4.
+\]
+
+\item (3 minutes) \textbf{T/F:} There does not exist $B \in M_{69\times 69}(\mathbb{R})$ such that
+\[
+\dim_\mathbb{R}\big( \{ BAB : A \in M_{69\times 69}(\mathbb{R}) \} \big)
+= 2025.
+\]
+
+\item (3 minutes) \textbf{T/F:} There exist $a,b,c \in \mathbb{Z}$ such that
+\[
+\left| \zeta_{13}^a + \zeta_{13}^b + \zeta_{13}^c + 1 \right|
+= \sqrt{3},
+\qquad \zeta_{13} = e^{2\pi i/13}.
+\]
+
+\item (4 minutes) \textbf{T/F:}
+\[
+\int_0^1 \left( 
+\sqrt{1 + 8x - 8x^3} - 
+\frac{\sqrt{x}}{4 - x + 1} -
+\frac{1}{4x}
+\right)\, dx \notin \mathbb{Q}.
+\]
+
+\item (4 minutes) A positive integer is a \emph{Gian's integer} if it is of the form $a^4 + b^3$ for some positive integers $a,b$.
+
+\textbf{T/F:} For any integer $n \ge 3$, there exist infinitely many integers $m$ such that there are exactly $n+1$ Gian's integers among
+\[
+m+1,\; m+2,\; \ldots,\; m+n^3.
+\]
+
+\item (5 minutes) For any positive integer $m$, let $S(m)$ be the number of positive integers $n < \mathrm{lcm}(1,2,\ldots,m)$ such that the remainders of $n$ modulo $2,3,\ldots,m$ are all distinct.
+
+\textbf{T/F:} $S(2025)-1$ is a power of $2$.
+
+\item (Tie-break, 3 minutes) Compute
+\[
+\sum_{k=1}^{8} e^{-k \cdot 2\pi/9}.
+\]
+
+\end{enumerate}
+
+\end{document}

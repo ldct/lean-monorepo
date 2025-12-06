@@ -1,0 +1,21 @@
+\textbf{Theorem.} Suppose $p$ and $q$ are primes with $q < p$ and $q$ does not divide
+$p - 1$. Then any group $G$ of order $pq$ is cyclic.
+
+\textbf{Proof.}
+Assume the statement is false. By Lagrange's Theorem we may assume that every
+nonidentity element of $G$ has order $p$ or $q$. Let $a \ne e$ belong to $G$.
+If $|C(a)| = pq$, then for any $b \notin \langle a \rangle$ we have $|b| \ne |a|$,
+for otherwise $|\langle a, b\rangle| = p^{2}$ or $q^{2}$. But $|b| \ne |a|$ and
+$b \in C(a)$ implies $|ab| = pq$. So, we may assume that for all nonidentity
+elements $a$ in $G$, $|C(a)| = p$ or $q$.
+
+We now count the elements of order $p$ and $q$. Since $|a| = p$ implies
+$|\mathrm{cl}(a)| = |G|/|C(a)| = q$, the number of elements of order $p$ is a
+multiple of $q$. Moreover, because $|a| = p$ implies $|a^{i}| = p$ for
+$i = 2, \dots, p-1$, the number of elements of order $p$ is also a multiple of
+$p - 1$. Since $\gcd(q, p - 1) = 1$, the number of elements of order $p$ is a
+multiple of $q(p - 1)$. Analogously, the number of elements of order $q$ is a
+multiple of $p(q - 1)$. Since neither $q(p - 1)$ nor $p(q - 1)$ divides $pq$,
+not all the nonidentity elements of $G$ can have the same order, thus there
+must be at least $q(p - 1) + p(q - 1) > pq$ elements in $G$. This contradiction
+finishes the proof.
