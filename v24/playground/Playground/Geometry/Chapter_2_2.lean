@@ -1,8 +1,6 @@
 import Mathlib
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
 
-namespace DihedralGroup
-
 -- Definition, p49. Define C_G(A), the centralizer of A in G, as a subgroup of G.
 def MyCentralizer {G} [Group G] (A : Set G) : Subgroup G := {
   carrier := { g : G | ∀ a ∈ A, g * a * g⁻¹ = a }
@@ -127,6 +125,54 @@ def MyNormalizer {G} [Group G] (A : Set G) : Subgroup G := {
     exact inv_normalizes hx
 }
 
+theorem my_normalizer_eq_normalizer {G} [Group G] (A : Subgroup G)
+: MyNormalizer A = Subgroup.normalizer A := by
+  ext g
+  constructor
+  · intro h1
+    simp [MyNormalizer] at h1
+    have h2 : Normalizes g⁻¹ A := by exact inv_normalizes h1
+    rw [Subgroup.mem_normalizer_iff]
+    intro a
+    rw [show a ∈ A ↔ a ∈ (A : Set G) by norm_cast]
+    rw [← h2]
+    simp
+    constructor
+    · intro h3
+      simp at *
+      simp [MyMap] at h3
+      obtain ⟨ a1, h2, h3 ⟩ := h3
+      rw [← h3]
+      rw [show g * (g⁻¹ * a1 * g) * g⁻¹ = a1 by group]
+      exact h2
+    · intro h3
+      simp [MyMap]
+      use (g * a * g⁻¹), h3
+      group
+  · intro h1
+    simp [MyNormalizer, Normalizes, MyMap]
+    ext a
+    constructor
+    · intro h2
+      simp at h2
+      obtain ⟨ a1, h2, rfl ⟩ := h2
+      rw [Subgroup.mem_normalizer_iff] at h1
+      specialize h1 a1
+      simp [h2] at h1
+      exact h1
+    · intro h2
+      simp at h2
+      simp
+      use (g⁻¹ * a * g)
+      constructor
+      · have : g⁻¹ ∈ A.normalizer := by exact (Subgroup.inv_mem_iff A.normalizer).mpr h1
+        rw [Subgroup.mem_normalizer_iff] at this
+        specialize this a
+        simp [h2] at this
+        exact this
+      group
+
+
 -- Example 1 (page 50)
 example {G} [CommGroup G] : Subgroup.center G = ⊤ := by
   rw [Subgroup.eq_top_iff']
@@ -136,6 +182,7 @@ example {G} [CommGroup G] : Subgroup.center G = ⊤ := by
   exact CommGroup.mul_comm g x
 
 -- The subgroup of rotations
+open DihedralGroup in
 def Rot (n : ℕ) : Subgroup (DihedralGroup n) where
   carrier := { r i | i : ZMod n }
   mul_mem' := by
@@ -150,13 +197,16 @@ def Rot (n : ℕ) : Subgroup (DihedralGroup n) where
     use -i
     rfl
 
+open DihedralGroup in
 theorem mem_rot_iff (n : ℕ) (g : DihedralGroup n) : g ∈ Rot n ↔ g ∈ { r i | i : ZMod n } := by
   rfl
 
+open DihedralGroup in
 theorem mem_rot_iff'' (n : ℕ) (g : DihedralGroup n)
 : g ∈ (Rot n) ↔ ∃ i : ZMod n, g = r i := by
   constructor <;> rintro ⟨i, rfl⟩ <;> simp [Rot]
 
+open DihedralGroup in
 theorem nmem_rot_iff (n : ℕ) (g : DihedralGroup n)
 : g ∉ Rot n ↔ ∃ i : ZMod n, g = sr i := by
   match g with
@@ -167,6 +217,7 @@ example {G} [Group G] (H : Subgroup G) (g : H) (n : ℕ)
 : g^n = g^n := by
   rfl
 
+open DihedralGroup in
 example (n : ℕ) : IsCyclic (Rot n) := ⟨ ⟨r 1, by use 1⟩, by
   rintro ⟨x, ⟨i, rfl⟩⟩
   use i.valMinAbs
@@ -175,9 +226,11 @@ example (n : ℕ) : IsCyclic (Rot n) := ⟨ ⟨r 1, by use 1⟩, by
   rw [SubgroupClass.coe_zpow, r_zpow, ZMod.coe_valMinAbs, one_mul]
 ⟩
 
+open DihedralGroup in
 theorem inv_r_simp (n : ℕ) (i : ZMod n) : (r i)⁻¹ = r (-i) := by
   rfl
 
+open DihedralGroup in
 theorem r_one_pow'' (n : ℕ) (k : ℤ) : (r 1 : DihedralGroup n) ^ k = r k := by exact r_one_zpow k
 
 -- The normalizer of the group of rotations
@@ -196,6 +249,7 @@ theorem rot_le_centralizer (n : ℕ) : Rot n ≤ Subgroup.centralizer (Rot n) :=
   simp
   grind
 
+open DihedralGroup in
 theorem s_nin_centralizer (n : ℕ) [Fact (2 < n)]
 : (sr 0 : DihedralGroup n) ∉ Subgroup.centralizer (Rot n) := by
   intro h
@@ -204,6 +258,7 @@ theorem s_nin_centralizer (n : ℕ) [Fact (2 < n)]
   simp at h
   exact (ZMod.neg_one_ne_one) h
 
+open DihedralGroup in
 theorem sri_nin_centralizer (n : ℕ) [Fact (2 < n)] (i : ZMod n)
 : (sr i : DihedralGroup n) ∉ Subgroup.centralizer (Rot n) := by
   intro h
@@ -235,6 +290,7 @@ theorem example_2 : Subgroup.centralizer (Rot 4) = Rot 4 := by
 -- We generalize this to any dihedral group: N(Rot n) = D_n.
 -- In fact, since Rot n is an index-2 subgroup, it is normal in D_n
 
+open DihedralGroup in
 theorem r1_then_rj (n : ℕ) (i : ZMod n) (H : (Subgroup (DihedralGroup n)))
 : (r 1 ∈ H) → r i ∈ H := by
   have h_closure (i : ℤ) (hi : DihedralGroup.r 1 ∈ H): DihedralGroup.r i ∈ H := by
@@ -247,6 +303,7 @@ theorem r1_then_rj (n : ℕ) (i : ZMod n) (H : (Subgroup (DihedralGroup n)))
   · convert h_closure i.val;
     simp_all
 
+open DihedralGroup in
 -- a subgroup that contains r and s is the whole group
 theorem top_of_r_mem_of_s_mem {n : ℕ} {H : Subgroup (DihedralGroup n)}
 (r_mem : r 1 ∈ H) (s_mem : sr 0 ∈ H)
@@ -261,12 +318,14 @@ theorem top_of_r_mem_of_s_mem {n : ℕ} {H : Subgroup (DihedralGroup n)}
     · exact s_mem
     · exact r1_then_rj _ _ _ r_mem
 
+open DihedralGroup in
 theorem r_in_normalizer (n : ℕ) (j : ZMod n) : ((r j) ∈ (Rot n).normalizer) := by
   have h' : (Rot n) ≤ (Rot n).normalizer := Subgroup.le_normalizer
   apply h'
   rw [mem_rot_iff'']
   simp
 
+open DihedralGroup in
 theorem s_in_normalizer (n : ℕ) : ((sr 0) ∈ N_A n) := by
   unfold N_A
   rw [Subgroup.mem_normalizer_iff]
@@ -303,6 +362,7 @@ theorem t1' (n : ℕ)
 -- Example 3
 example : (Rot 4).normalizer = ⊤ := t1' 4
 
+open DihedralGroup in
 -- The subgroup {1, r2}
 def R2 : Subgroup (DihedralGroup 4) where
   carrier := { r 0, r 2 }
@@ -310,6 +370,7 @@ def R2 : Subgroup (DihedralGroup 4) where
   one_mem' := by decide
   inv_mem' := by decide
 
+open DihedralGroup in
 -- example 4 on p50
 example : (Subgroup.center (DihedralGroup 4)) = R2 := by
 
@@ -477,25 +538,23 @@ theorem test3 (G : Type) [Group G] (H : Subgroup G) (g : G) (hg : g ∈ H.normal
     have := hg w
     grind [mul_assoc, mul_inv_cancel_left, mul_inv_cancel, mul_one]
 
-theorem centralizer_le_normalizer {G} [Group G] (H : Subgroup G) : Subgroup.centralizer H ≤ Subgroup.normalizer H := by {
+theorem centralizer_le_normalizer {G} [Group G] (H : Subgroup G)
+: Subgroup.centralizer H ≤ Subgroup.normalizer H := by
   rintro g g_centralizes_H
-  have ginv_centralizes_h : g⁻¹ ∈ Subgroup.centralizer H := by {
+  have ginv_centralizes_h : g⁻¹ ∈ Subgroup.centralizer H := by
     simp only [Subgroup.inv_mem_iff, g_centralizes_H]
-  }
   intro h
   constructor
-  intro h_in_H
-  rw [←(g_centralizes_H h h_in_H), mul_inv_cancel_right]
-  exact h_in_H
-  have conjAct_by_inv (h : G) (h_in_H : h ∈ H): g⁻¹ * h * g ∈ H := by {
+  · intro h_in_H
+    rw [←(g_centralizes_H h h_in_H), mul_inv_cancel_right]
+    exact h_in_H
+  have conjAct_by_inv (h : G) (h_in_H : h ∈ H): g⁻¹ * h * g ∈ H := by
     rw [←(ginv_centralizes_h h h_in_H), inv_mul_cancel_right]
     exact h_in_H
-  }
   intro g_conjAct_h_in_H
   have := conjAct_by_inv (g * h * g⁻¹) g_conjAct_h_in_H
   group at this
   exact this
-}
 
 example : Subgroup.normalizer A = A := by
   ext s
@@ -574,11 +633,9 @@ def IsAbelianSubgroup {G} [Group G] (H : Subgroup G) : Prop := ∀ x ∈ H, (∀
 example {G} [Group G] (H : Subgroup G)
 : H ≤ Subgroup.centralizer H ↔ IsAbelianSubgroup H := by
   constructor
-  · intro h
-    intro x hx y hy
+  · intro h x hx y hy
     exact h hy x hx
-  · intro h
-    intro x hx y hy
+  · intro h x hx y hy
     exact h y hy x hx
 
 
@@ -619,3 +676,68 @@ example {G} [Group G] (H : Subgroup G) (A : Set G)
     group
     exact h3
   · group
+
+
+-- Exercise 10
+example {G} [Group G] (H : Subgroup G) (h' : H.carrier.ncard = 2)
+: H.normalizer = Subgroup.centralizer H := by
+  suffices H.normalizer ≤ Subgroup.centralizer H by
+    have := centralizer_le_normalizer H
+    order
+
+  have h_has_non_identity : ∃ h ∈ H, h ≠ 1 := by
+    by_contra h_contra
+    have t : ∃ a, H.carrier = {a} := by aesop
+    rw [ Set.ncard_eq_one.mpr t ] at h'
+    norm_num at h'
+
+  obtain ⟨ h, h_in_H, h_ne_e ⟩ := h_has_non_identity
+  have : H.carrier = {1, h} := by
+    rw [ Set.ncard_eq_two ] at h'
+    obtain ⟨w, w_1, left, right⟩ := h'
+    simp_all only []
+    simp_all +decide [ Set.Subset.antisymm_iff, Set.subset_def ];
+    have := right.1 1 ( H.one_mem )
+    grind
+  clear h'
+  intro g g_in_N
+  have t : Normalizes g H := by rwa [← my_normalizer_eq_normalizer] at g_in_N
+  unfold Normalizes at t
+  have r : (H : Set G) = {1, h} := by exact this
+  rw [r] at t
+  simp [MyMap] at t
+  rw [show {x | 1 = x ∨ g * h * g⁻¹ = x} = {1, g * h * g⁻¹} by grind] at t
+  have : g * h * g⁻¹ = h := by grind
+  rw [Subgroup.mem_centralizer_iff, r]
+  intro a ha
+  cases ha with
+  | inl h1 =>
+    grind [mul_one, one_mul]
+  | inr h2 =>
+    rw [h2]
+    nth_rw 1 [← this]
+    group
+
+theorem mem_setNormalizer_iff
+{G} [Group G] {A : Set G} {g : G}
+: g ∈ Subgroup.setNormalizer A ↔ ∀ h, h ∈ A ↔ g * h * g⁻¹ ∈ A :=
+  Iff.rfl
+
+-- Exercise 11
+example {G} [Group G] (A : Set G)
+: Subgroup.center G ≤ Subgroup.setNormalizer A := by
+  intro g hg
+  rw [Subgroup.mem_center_iff] at hg
+  simp [Subgroup.setNormalizer]
+  intro h
+  constructor
+  · intro ha
+    specialize hg h
+    rw [← hg]
+    group
+    exact ha
+  · intro ha
+    specialize hg h
+    rw [← hg] at ha
+    group at ha
+    exact ha

@@ -1,0 +1,3 @@
+Let G = SL2(2, ℤ), that is,  Matrix.SpecialLinearGroup (Fin 2) ℤ
+
+For each n, define Hn = [[a, b], [c, d]] | c = 0 mod n as a subgroup of G.
