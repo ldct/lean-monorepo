@@ -1,9 +1,9 @@
 import Mathlib
 import Playground.Geometry.SmallGroups.GroupProps
 
-abbrev D10 := DihedralGroup 5
+abbrev Dih5 := DihedralGroup 5
 
-#eval Fintype.card D10
-#eval Group.IsAbelian D10
-#eval Group.FracInvolutions D10
-#eval Group.CommutingFraction D10
+#eval Fintype.card Dih5
+#eval Group.IsAbelian Dih5
+#eval Group.FracInvolutions Dih5
+#eval Group.CommutingFraction Dih5

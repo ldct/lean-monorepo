@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 40px auto;
             padding: 0 20px;
             background-color: #f5f5f5;
@@ -15,25 +15,57 @@
         h1 {
             color: #333;
             text-align: center;
+            margin-bottom: 10px;
+        }
+        .summary {
+            text-align: center;
+            color: #666;
             margin-bottom: 30px;
+            font-size: 18px;
+        }
+        .summary strong {
+            color: #4CAF50;
+        }
+        .order-section {
+            margin-bottom: 40px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .order-header {
+            padding: 15px 20px;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .order-header.complete {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .order-header.partial {
+            background-color: #FF9800;
+            color: white;
+        }
+        .progress {
+            font-size: 14px;
+            font-weight: normal;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         th, td {
             padding: 12px 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #f0f0f0;
         }
         th {
-            background-color: #4CAF50;
-            color: white;
+            background-color: #f9f9f9;
+            color: #333;
             font-weight: 600;
-            position: sticky;
-            top: 0;
         }
         tr:hover {
             background-color: #f5f5f5;
@@ -55,571 +87,2509 @@
         .gap-id {
             font-family: 'Courier New', monospace;
             color: #666;
+            font-size: 14px;
+        }
+        .group-name-cell {
+            padding: 8px 15px;
         }
         .group-name {
             font-weight: 500;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+        .group-abbrev {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #888;
+            line-height: 1.3;
         }
     </style>
 </head>
 <body>
-    <h1>Small Groups (Orders 1-12)</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>GAP ID</th>
-                <th>Group Name</th>
-                <th class="number">Order</th>
-                <th>Abelian?</th>
-                <th class="number">Frac. Involutions</th>
-                <th class="number">Commuting Fraction</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="gap-id">(1, 1)</td>
-                <td class="group-name">Trivial</td>
-                <td class="number">1</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(2, 1)</td>
-                <td class="group-name">ℤ₂</td>
-                <td class="number">2</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(3, 1)</td>
-                <td class="group-name">ℤ₃</td>
-                <td class="number">3</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/3</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(4, 1)</td>
-                <td class="group-name">ℤ₄</td>
-                <td class="number">4</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/2</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(4, 2)</td>
-                <td class="group-name">V₄ (Klein four-group)</td>
-                <td class="number">4</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(5, 1)</td>
-                <td class="group-name">ℤ₅</td>
-                <td class="number">5</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/5</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(6, 1)</td>
-                <td class="group-name">ℤ₆</td>
-                <td class="number">6</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/3</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(6, 2)</td>
-                <td class="group-name">S₃</td>
-                <td class="number">6</td>
-                <td class="abelian-no">No</td>
-                <td class="number">2/3</td>
-                <td class="number">1/2</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(7, 1)</td>
-                <td class="group-name">ℤ₇</td>
-                <td class="number">7</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/7</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(8, 1)</td>
-                <td class="group-name">ℤ₈</td>
-                <td class="number">8</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/4</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(8, 2)</td>
-                <td class="group-name">ℤ₄ × ℤ₂</td>
-                <td class="number">8</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/2</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(8, 3)</td>
-                <td class="group-name">D₈</td>
-                <td class="number">8</td>
-                <td class="abelian-no">No</td>
-                <td class="number">3/4</td>
-                <td class="number">5/8</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(8, 4)</td>
-                <td class="group-name">Q₈</td>
-                <td class="number">?</td>
-                <td class="abelian-no">No</td>
-                <td class="number">8</td>
-                <td class="number">false</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(8, 5)</td>
-                <td class="group-name">ℤ₂ × ℤ₂ × ℤ₂</td>
-                <td class="number">8</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(9, 1)</td>
-                <td class="group-name">ℤ₉</td>
-                <td class="number">9</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/9</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(9, 2)</td>
-                <td class="group-name">ℤ₃ × ℤ₃</td>
-                <td class="number">9</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/9</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(10, 1)</td>
-                <td class="group-name">D₁₀</td>
-                <td class="number">10</td>
-                <td class="abelian-no">No</td>
-                <td class="number">3/5</td>
-                <td class="number">2/5</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(10, 2)</td>
-                <td class="group-name">ℤ₁₀</td>
-                <td class="number">10</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/5</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(11, 1)</td>
-                <td class="group-name">ℤ₁₁</td>
-                <td class="number">11</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/11</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(12, 2)</td>
-                <td class="group-name">ℤ₁₂</td>
-                <td class="number">12</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/6</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(13, 1)</td>
-                <td class="group-name">Gap(13, 1)</td>
-                <td class="number">13</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/13</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(14, 2)</td>
-                <td class="group-name">Gap(14, 2)</td>
-                <td class="number">14</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/7</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(15, 1)</td>
-                <td class="group-name">Gap(15, 1)</td>
-                <td class="number">15</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/15</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(16, 1)</td>
-                <td class="group-name">Gap(16, 1)</td>
-                <td class="number">16</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/8</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(17, 1)</td>
-                <td class="group-name">Gap(17, 1)</td>
-                <td class="number">17</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/17</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(18, 2)</td>
-                <td class="group-name">Gap(18, 2)</td>
-                <td class="number">18</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/9</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(19, 1)</td>
-                <td class="group-name">Gap(19, 1)</td>
-                <td class="number">19</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/19</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(20, 2)</td>
-                <td class="group-name">Gap(20, 2)</td>
-                <td class="number">20</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/10</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(21, 2)</td>
-                <td class="group-name">Gap(21, 2)</td>
-                <td class="number">21</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/21</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(22, 2)</td>
-                <td class="group-name">Gap(22, 2)</td>
-                <td class="number">22</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/11</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(23, 1)</td>
-                <td class="group-name">Gap(23, 1)</td>
-                <td class="number">23</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/23</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(24, 2)</td>
-                <td class="group-name">Gap(24, 2)</td>
-                <td class="number">24</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/12</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(25, 1)</td>
-                <td class="group-name">Gap(25, 1)</td>
-                <td class="number">25</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/25</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(26, 2)</td>
-                <td class="group-name">Gap(26, 2)</td>
-                <td class="number">26</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/13</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(27, 1)</td>
-                <td class="group-name">Gap(27, 1)</td>
-                <td class="number">27</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/27</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(28, 2)</td>
-                <td class="group-name">Gap(28, 2)</td>
-                <td class="number">28</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/14</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(29, 1)</td>
-                <td class="group-name">Gap(29, 1)</td>
-                <td class="number">29</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/29</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(30, 4)</td>
-                <td class="group-name">Gap(30, 4)</td>
-                <td class="number">30</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/15</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(31, 1)</td>
-                <td class="group-name">Gap(31, 1)</td>
-                <td class="number">31</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/31</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(32, 1)</td>
-                <td class="group-name">Gap(32, 1)</td>
-                <td class="number">32</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/16</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(33, 1)</td>
-                <td class="group-name">Gap(33, 1)</td>
-                <td class="number">33</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/33</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(34, 2)</td>
-                <td class="group-name">Gap(34, 2)</td>
-                <td class="number">34</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/17</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(35, 1)</td>
-                <td class="group-name">Gap(35, 1)</td>
-                <td class="number">35</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/35</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(36, 2)</td>
-                <td class="group-name">Gap(36, 2)</td>
-                <td class="number">36</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/18</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(37, 1)</td>
-                <td class="group-name">Gap(37, 1)</td>
-                <td class="number">37</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/37</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(38, 2)</td>
-                <td class="group-name">Gap(38, 2)</td>
-                <td class="number">38</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/19</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(39, 1)</td>
-                <td class="group-name">Gap(39, 1)</td>
-                <td class="number">39</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/39</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(40, 2)</td>
-                <td class="group-name">Gap(40, 2)</td>
-                <td class="number">40</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/20</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(41, 1)</td>
-                <td class="group-name">Gap(41, 1)</td>
-                <td class="number">41</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/41</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(42, 6)</td>
-                <td class="group-name">Gap(42, 6)</td>
-                <td class="number">42</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/21</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(43, 1)</td>
-                <td class="group-name">Gap(43, 1)</td>
-                <td class="number">43</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/43</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(44, 2)</td>
-                <td class="group-name">Gap(44, 2)</td>
-                <td class="number">44</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/22</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(45, 1)</td>
-                <td class="group-name">Gap(45, 1)</td>
-                <td class="number">45</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/45</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(46, 2)</td>
-                <td class="group-name">Gap(46, 2)</td>
-                <td class="number">46</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/23</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(47, 1)</td>
-                <td class="group-name">Gap(47, 1)</td>
-                <td class="number">47</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/47</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(48, 2)</td>
-                <td class="group-name">Gap(48, 2)</td>
-                <td class="number">48</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/24</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(49, 1)</td>
-                <td class="group-name">Gap(49, 1)</td>
-                <td class="number">49</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/49</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(50, 2)</td>
-                <td class="group-name">Gap(50, 2)</td>
-                <td class="number">50</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/25</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(51, 1)</td>
-                <td class="group-name">Gap(51, 1)</td>
-                <td class="number">51</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/51</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(52, 2)</td>
-                <td class="group-name">Gap(52, 2)</td>
-                <td class="number">52</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/26</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(53, 1)</td>
-                <td class="group-name">Gap(53, 1)</td>
-                <td class="number">53</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/53</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(54, 2)</td>
-                <td class="group-name">Gap(54, 2)</td>
-                <td class="number">54</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/27</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(55, 2)</td>
-                <td class="group-name">Gap(55, 2)</td>
-                <td class="number">55</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/55</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(56, 2)</td>
-                <td class="group-name">Gap(56, 2)</td>
-                <td class="number">56</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/28</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(57, 2)</td>
-                <td class="group-name">Gap(57, 2)</td>
-                <td class="number">57</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/57</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(58, 2)</td>
-                <td class="group-name">Gap(58, 2)</td>
-                <td class="number">58</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/29</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(59, 1)</td>
-                <td class="group-name">Gap(59, 1)</td>
-                <td class="number">59</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/59</td>
-                <td class="number">1</td>
-            </tr>
-            <tr>
-                <td class="gap-id">(60, 4)</td>
-                <td class="group-name">Gap(60, 4)</td>
-                <td class="number">60</td>
-                <td class="abelian-yes">Yes</td>
-                <td class="number">1/30</td>
-                <td class="number">1</td>
-            </tr>
-        </tbody>
-    </table>
+    <h1>Small Groups (Orders 1-60)</h1>
+    <div class="summary">
+        <strong>128/312</strong> groups (41.0%) | 
+        <strong>36/60</strong> complete orders
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 1</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(1, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">Trivial</div>
+                        <div class="group-abbrev">abbrev Trivial := Multiplicative (ZMod 1)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 2</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(2, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂</div>
+                        <div class="group-abbrev">abbrev Z2 := Multiplicative (ZMod 2)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 3</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(3, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃</div>
+                        <div class="group-abbrev">abbrev Z3 := Multiplicative (ZMod 3)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/3</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 4</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(4, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄</div>
+                        <div class="group-abbrev">abbrev Z4 := Multiplicative (ZMod 4)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/2</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(4, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂²</div>
+                        <div class="group-abbrev">abbrev V4 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 5</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(5, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅</div>
+                        <div class="group-abbrev">abbrev Z5 := Multiplicative (ZMod 5)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/5</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 6</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(6, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₆</div>
+                        <div class="group-abbrev">abbrev Z6 := Multiplicative (ZMod 6)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/3</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(6, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">S₃</div>
+                        <div class="group-abbrev">abbrev S3 := Equiv.Perm (Fin 3)</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">2/3</td>
+                    <td class="number">1/2</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 7</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(7, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₇</div>
+                        <div class="group-abbrev">abbrev Z7 := Multiplicative (ZMod 7)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/7</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 8</span>
+            <span class="progress">5/5 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(8, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₈</div>
+                        <div class="group-abbrev">abbrev Z8 := Multiplicative (ZMod 8)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/4</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(8, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄ × ℤ₂</div>
+                        <div class="group-abbrev">abbrev C4_C2 := Multiplicative (ZMod 4) × Multiplicative (ZMod 2)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/2</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(8, 3)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₄</div>
+                        <div class="group-abbrev">abbrev Dih4 := DihedralGroup 4</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">3/4</td>
+                    <td class="number">5/8</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(8, 4)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">Q₈</div>
+                        <div class="group-abbrev">abbrev Q := QuaternionGroup 2</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">8</td>
+                    <td class="number">false</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(8, 5)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂³</div>
+                        <div class="group-abbrev">abbrev E8 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 9</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(9, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₉</div>
+                        <div class="group-abbrev">abbrev Z9 := Multiplicative (ZMod 9)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/9</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(9, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃²</div>
+                        <div class="group-abbrev">abbrev E9 := Multiplicative (ZMod 3) × Multiplicative (ZMod 3)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/9</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 10</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(10, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₅</div>
+                        <div class="group-abbrev">abbrev Dih5 := DihedralGroup 5</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">3/5</td>
+                    <td class="number">2/5</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(10, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₁₀</div>
+                        <div class="group-abbrev">abbrev Z10 := Multiplicative (ZMod 10)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/5</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 11</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(11, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₁₁</div>
+                        <div class="group-abbrev">abbrev Z11 := Multiplicative (ZMod 11)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/11</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 12</span>
+            <span class="progress">3/5 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(12, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₁₂</div>
+                        <div class="group-abbrev">abbrev Z12 := Multiplicative (ZMod 12)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/6</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(12, 4)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₆</div>
+                        <div class="group-abbrev">abbrev Dih6 := DihedralGroup 6</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">2/3</td>
+                    <td class="number">1/2</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(12, 5)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₆</div>
+                        <div class="group-abbrev">abbrev C2_C6 := Multiplicative (ZMod 2) × Multiplicative (ZMod 6)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/3</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 13</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(13, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₁₃</div>
+                        <div class="group-abbrev">abbrev Z13 := Multiplicative (ZMod 13)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/13</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 14</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(14, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₇</div>
+                        <div class="group-abbrev">abbrev Dih7 := DihedralGroup 7</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">4/7</td>
+                    <td class="number">5/14</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(14, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₁₄</div>
+                        <div class="group-abbrev">abbrev Z14 := Multiplicative (ZMod 14)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/7</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 15</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(15, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₁₅</div>
+                        <div class="group-abbrev">abbrev Z15 := Multiplicative (ZMod 15)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/15</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 16</span>
+            <span class="progress">6/14 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(16, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₁₆</div>
+                        <div class="group-abbrev">abbrev Z16 := Multiplicative (ZMod 16)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/8</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(16, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄ × ℤ₄</div>
+                        <div class="group-abbrev">abbrev C4_C4 := Multiplicative (ZMod 4) × Multiplicative (ZMod 4)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/4</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(16, 5)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₈</div>
+                        <div class="group-abbrev">abbrev C2_C8 := Multiplicative (ZMod 2) × Multiplicative (ZMod 8)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/4</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(16, 7)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₈</div>
+                        <div class="group-abbrev">abbrev Dih8 := DihedralGroup 8</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">5/8</td>
+                    <td class="number">7/16</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(16, 10)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₂ × ℤ₄</div>
+                        <div class="group-abbrev">abbrev C2_C2_C4 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 4)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/2</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(16, 14)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₂ × ℤ₂ × ℤ₂</div>
+                        <div class="group-abbrev">abbrev C2_C2_C2_C2 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 17</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(17, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₁₇</div>
+                        <div class="group-abbrev">abbrev Z17 := Multiplicative (ZMod 17)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/17</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 18</span>
+            <span class="progress">3/5 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(18, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₉</div>
+                        <div class="group-abbrev">abbrev Dih9 := DihedralGroup 9</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">5/9</td>
+                    <td class="number">1/3</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(18, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₁₈</div>
+                        <div class="group-abbrev">abbrev Z18 := Multiplicative (ZMod 18)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/9</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(18, 5)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃ × ℤ₆</div>
+                        <div class="group-abbrev">abbrev C3_C6 := Multiplicative (ZMod 3) × Multiplicative (ZMod 6)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/9</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 19</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(19, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₁₉</div>
+                        <div class="group-abbrev">abbrev Z19 := Multiplicative (ZMod 19)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/19</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 20</span>
+            <span class="progress">3/5 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(20, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂₀</div>
+                        <div class="group-abbrev">abbrev Z20 := Multiplicative (ZMod 20)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/10</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(20, 4)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₁₀</div>
+                        <div class="group-abbrev">abbrev Dih10 := DihedralGroup 10</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">3/5</td>
+                    <td class="number">2/5</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(20, 5)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₁₀</div>
+                        <div class="group-abbrev">abbrev C2_C10 := Multiplicative (ZMod 2) × Multiplicative (ZMod 10)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/5</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 21</span>
+            <span class="progress">1/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(21, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂₁</div>
+                        <div class="group-abbrev">abbrev Z21 := Multiplicative (ZMod 21)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/21</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 22</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(22, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₁₁</div>
+                        <div class="group-abbrev">abbrev Dih11 := DihedralGroup 11</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">6/11</td>
+                    <td class="number">7/22</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(22, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂₂</div>
+                        <div class="group-abbrev">abbrev Z22 := Multiplicative (ZMod 22)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/11</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 23</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(23, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂₃</div>
+                        <div class="group-abbrev">abbrev Z23 := Multiplicative (ZMod 23)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/23</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 24</span>
+            <span class="progress">5/15 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(24, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂₄</div>
+                        <div class="group-abbrev">abbrev Z24 := Multiplicative (ZMod 24)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/12</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(24, 6)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₁₂</div>
+                        <div class="group-abbrev">abbrev Dih12 := DihedralGroup 12</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">7/12</td>
+                    <td class="number">3/8</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(24, 9)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₁₂</div>
+                        <div class="group-abbrev">abbrev C2_C12 := Multiplicative (ZMod 2) × Multiplicative (ZMod 12)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/6</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(24, 12)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">S₄</div>
+                        <div class="group-abbrev">abbrev S4 := Equiv.Perm (Fin 4)</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">5/12</td>
+                    <td class="number">5/24</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(24, 15)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₂ × ℤ₆</div>
+                        <div class="group-abbrev">abbrev C2_C2_C6 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 6)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/3</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 25</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(25, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂₅</div>
+                        <div class="group-abbrev">abbrev Z25 := Multiplicative (ZMod 25)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/25</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(25, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅ × ℤ₅</div>
+                        <div class="group-abbrev">abbrev C5_C5 := Multiplicative (ZMod 5) × Multiplicative (ZMod 5)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/25</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 26</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(26, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₁₃</div>
+                        <div class="group-abbrev">abbrev Dih13 := DihedralGroup 13</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">7/13</td>
+                    <td class="number">4/13</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(26, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂₆</div>
+                        <div class="group-abbrev">abbrev Z26 := Multiplicative (ZMod 26)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/13</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 27</span>
+            <span class="progress">3/5 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(27, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂₇</div>
+                        <div class="group-abbrev">abbrev Z27 := Multiplicative (ZMod 27)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/27</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(27, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃ × ℤ₉</div>
+                        <div class="group-abbrev">abbrev C3_C9 := Multiplicative (ZMod 3) × Multiplicative (ZMod 9)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/27</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(27, 5)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃ × ℤ₃ × ℤ₃</div>
+                        <div class="group-abbrev">abbrev C3_C3_C3 := Multiplicative (ZMod 3) × Multiplicative (ZMod 3) × Multiplicative (ZMod 3)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/27</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 28</span>
+            <span class="progress">3/4 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(28, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂₈</div>
+                        <div class="group-abbrev">abbrev Z28 := Multiplicative (ZMod 28)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/14</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(28, 3)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₁₄</div>
+                        <div class="group-abbrev">abbrev Dih14 := DihedralGroup 14</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">4/7</td>
+                    <td class="number">5/14</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(28, 4)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₁₄</div>
+                        <div class="group-abbrev">abbrev C2_C14 := Multiplicative (ZMod 2) × Multiplicative (ZMod 14)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/7</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 29</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(29, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂₉</div>
+                        <div class="group-abbrev">abbrev Z29 := Multiplicative (ZMod 29)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/29</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 30</span>
+            <span class="progress">2/4 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(30, 3)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₁₅</div>
+                        <div class="group-abbrev">abbrev Dih15 := DihedralGroup 15</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">8/15</td>
+                    <td class="number">3/10</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(30, 4)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃₀</div>
+                        <div class="group-abbrev">abbrev Z30 := Multiplicative (ZMod 30)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/15</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 31</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(31, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃₁</div>
+                        <div class="group-abbrev">abbrev Z31 := Multiplicative (ZMod 31)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/31</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 32</span>
+            <span class="progress">7/51 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(32, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃₂</div>
+                        <div class="group-abbrev">abbrev Z32 := Multiplicative (ZMod 32)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/16</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(32, 3)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄ × ℤ₈</div>
+                        <div class="group-abbrev">abbrev C4_C8 := Multiplicative (ZMod 4) × Multiplicative (ZMod 8)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/8</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(32, 5)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₂ × ℤ₈</div>
+                        <div class="group-abbrev">abbrev C2_C2_C8 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 8)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/4</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(32, 16)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₁₆</div>
+                        <div class="group-abbrev">abbrev C2_C16 := Multiplicative (ZMod 2) × Multiplicative (ZMod 16)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/8</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(32, 18)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₁₆</div>
+                        <div class="group-abbrev">abbrev Dih16 := DihedralGroup 16</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">9/16</td>
+                    <td class="number">11/32</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(32, 21)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₄ × ℤ₄</div>
+                        <div class="group-abbrev">abbrev C2_C4_C4 := Multiplicative (ZMod 2) × Multiplicative (ZMod 4) × Multiplicative (ZMod 4)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/4</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(32, 36)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₂ × ℤ₂ × ℤ₄</div>
+                        <div class="group-abbrev">abbrev C2_C2_C2_C4 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 4)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/2</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 33</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(33, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃₃</div>
+                        <div class="group-abbrev">abbrev Z33 := Multiplicative (ZMod 33)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/33</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 34</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(34, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₁₇</div>
+                        <div class="group-abbrev">abbrev Dih17 := DihedralGroup 17</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">9/17</td>
+                    <td class="number">5/17</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(34, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃₄</div>
+                        <div class="group-abbrev">abbrev Z34 := Multiplicative (ZMod 34)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/17</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 35</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(35, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃₅</div>
+                        <div class="group-abbrev">abbrev Z35 := Multiplicative (ZMod 35)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/35</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 36</span>
+            <span class="progress">5/14 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(36, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃₆</div>
+                        <div class="group-abbrev">abbrev Z36 := Multiplicative (ZMod 36)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/18</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(36, 4)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₁₈</div>
+                        <div class="group-abbrev">abbrev Dih18 := DihedralGroup 18</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">5/9</td>
+                    <td class="number">1/3</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(36, 5)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₁₈</div>
+                        <div class="group-abbrev">abbrev C2_C18 := Multiplicative (ZMod 2) × Multiplicative (ZMod 18)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/9</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(36, 8)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃ × ℤ₁₂</div>
+                        <div class="group-abbrev">abbrev C3_C12 := Multiplicative (ZMod 3) × Multiplicative (ZMod 12)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/18</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(36, 14)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₆ × ℤ₆</div>
+                        <div class="group-abbrev">abbrev C6_C6 := Multiplicative (ZMod 6) × Multiplicative (ZMod 6)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/9</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 37</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(37, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃₇</div>
+                        <div class="group-abbrev">abbrev Z37 := Multiplicative (ZMod 37)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/37</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 38</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(38, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₁₉</div>
+                        <div class="group-abbrev">abbrev Dih19 := DihedralGroup 19</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">10/19</td>
+                    <td class="number">11/38</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(38, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃₈</div>
+                        <div class="group-abbrev">abbrev Z38 := Multiplicative (ZMod 38)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/19</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 39</span>
+            <span class="progress">1/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(39, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃₉</div>
+                        <div class="group-abbrev">abbrev Z39 := Multiplicative (ZMod 39)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/39</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 40</span>
+            <span class="progress">4/14 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(40, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄₀</div>
+                        <div class="group-abbrev">abbrev Z40 := Multiplicative (ZMod 40)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/20</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(40, 6)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₂₀</div>
+                        <div class="group-abbrev">abbrev Dih20 := DihedralGroup 20</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">11/20</td>
+                    <td class="number">13/40</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(40, 9)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₂₀</div>
+                        <div class="group-abbrev">abbrev C2_C20 := Multiplicative (ZMod 2) × Multiplicative (ZMod 20)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/10</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(40, 14)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₂ × ℤ₁₀</div>
+                        <div class="group-abbrev">abbrev C2_C2_C10 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 10)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/5</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 41</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(41, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄₁</div>
+                        <div class="group-abbrev">abbrev Z41 := Multiplicative (ZMod 41)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/41</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 42</span>
+            <span class="progress">2/6 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(42, 5)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₂₁</div>
+                        <div class="group-abbrev">abbrev Dih21 := DihedralGroup 21</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">11/21</td>
+                    <td class="number">2/7</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(42, 6)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄₂</div>
+                        <div class="group-abbrev">abbrev Z42 := Multiplicative (ZMod 42)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/21</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 43</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(43, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄₃</div>
+                        <div class="group-abbrev">abbrev Z43 := Multiplicative (ZMod 43)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/43</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 44</span>
+            <span class="progress">2/4 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(44, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄₄</div>
+                        <div class="group-abbrev">abbrev Z44 := Multiplicative (ZMod 44)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/22</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(44, 3)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₂₂</div>
+                        <div class="group-abbrev">abbrev Dih22 := DihedralGroup 22</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">6/11</td>
+                    <td class="number">7/22</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 45</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(45, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄₅</div>
+                        <div class="group-abbrev">abbrev Z45 := Multiplicative (ZMod 45)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/45</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(45, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃ × ℤ₁₅</div>
+                        <div class="group-abbrev">abbrev C3_C15 := Multiplicative (ZMod 3) × Multiplicative (ZMod 15)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/45</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 46</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(46, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₂₃</div>
+                        <div class="group-abbrev">abbrev Dih23 := DihedralGroup 23</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">12/23</td>
+                    <td class="number">13/46</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(46, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄₆</div>
+                        <div class="group-abbrev">abbrev Z46 := Multiplicative (ZMod 46)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/23</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 47</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(47, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄₇</div>
+                        <div class="group-abbrev">abbrev Z47 := Multiplicative (ZMod 47)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/47</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 48</span>
+            <span class="progress">6/52 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(48, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄₈</div>
+                        <div class="group-abbrev">abbrev Z48 := Multiplicative (ZMod 48)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/24</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(48, 7)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₂₄</div>
+                        <div class="group-abbrev">abbrev Dih24 := DihedralGroup 24</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">13/24</td>
+                    <td class="number">5/16</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(48, 20)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄ × ℤ₁₂</div>
+                        <div class="group-abbrev">abbrev C4_C12 := Multiplicative (ZMod 4) × Multiplicative (ZMod 12)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/12</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(48, 23)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₂₄</div>
+                        <div class="group-abbrev">abbrev C2_C24 := Multiplicative (ZMod 2) × Multiplicative (ZMod 24)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/12</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(48, 44)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₂ × ℤ₁₂</div>
+                        <div class="group-abbrev">abbrev C2_C2_C12 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 12)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/6</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(48, 52)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₂ × ℤ₂ × ℤ₆</div>
+                        <div class="group-abbrev">abbrev C2_C2_C2_C6 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 6)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/3</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 49</span>
+            <span class="progress">1/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(49, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₄₉</div>
+                        <div class="group-abbrev">abbrev Z49 := Multiplicative (ZMod 49)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/49</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 50</span>
+            <span class="progress">3/5 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(50, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₂₅</div>
+                        <div class="group-abbrev">abbrev Dih25 := DihedralGroup 25</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">13/25</td>
+                    <td class="number">7/25</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(50, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅₀</div>
+                        <div class="group-abbrev">abbrev Z50 := Multiplicative (ZMod 50)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/25</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(50, 5)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅ × ℤ₁₀</div>
+                        <div class="group-abbrev">abbrev C5_C10 := Multiplicative (ZMod 5) × Multiplicative (ZMod 10)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/25</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 51</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(51, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅₁</div>
+                        <div class="group-abbrev">abbrev Z51 := Multiplicative (ZMod 51)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/51</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 52</span>
+            <span class="progress">2/5 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(52, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅₂</div>
+                        <div class="group-abbrev">abbrev Z52 := Multiplicative (ZMod 52)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/26</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(52, 4)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₂₆</div>
+                        <div class="group-abbrev">abbrev Dih26 := DihedralGroup 26</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">7/13</td>
+                    <td class="number">4/13</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 53</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(53, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅₃</div>
+                        <div class="group-abbrev">abbrev Z53 := Multiplicative (ZMod 53)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/53</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 54</span>
+            <span class="progress">4/15 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(54, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₂₇</div>
+                        <div class="group-abbrev">abbrev Dih27 := DihedralGroup 27</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">14/27</td>
+                    <td class="number">5/18</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(54, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅₄</div>
+                        <div class="group-abbrev">abbrev Z54 := Multiplicative (ZMod 54)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/27</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(54, 9)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃ × ℤ₁₈</div>
+                        <div class="group-abbrev">abbrev C3_C18 := Multiplicative (ZMod 3) × Multiplicative (ZMod 18)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/27</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(54, 15)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₃ × ℤ₃ × ℤ₆</div>
+                        <div class="group-abbrev">abbrev C3_C3_C6 := Multiplicative (ZMod 3) × Multiplicative (ZMod 3) × Multiplicative (ZMod 6)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/27</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 55</span>
+            <span class="progress">1/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(55, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅₅</div>
+                        <div class="group-abbrev">abbrev Z55 := Multiplicative (ZMod 55)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/55</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 56</span>
+            <span class="progress">4/13 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(56, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅₆</div>
+                        <div class="group-abbrev">abbrev Z56 := Multiplicative (ZMod 56)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/28</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(56, 5)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₂₈</div>
+                        <div class="group-abbrev">abbrev Dih28 := DihedralGroup 28</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">15/28</td>
+                    <td class="number">17/56</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(56, 8)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₂₈</div>
+                        <div class="group-abbrev">abbrev C2_C28 := Multiplicative (ZMod 2) × Multiplicative (ZMod 28)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/14</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(56, 13)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₂ × ℤ₁₄</div>
+                        <div class="group-abbrev">abbrev C2_C2_C14 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 14)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/7</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 57</span>
+            <span class="progress">1/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(57, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅₇</div>
+                        <div class="group-abbrev">abbrev Z57 := Multiplicative (ZMod 57)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/57</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 58</span>
+            <span class="progress">2/2 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(58, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₂₉</div>
+                        <div class="group-abbrev">abbrev Dih29 := DihedralGroup 29</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">15/29</td>
+                    <td class="number">8/29</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(58, 2)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅₈</div>
+                        <div class="group-abbrev">abbrev Z58 := Multiplicative (ZMod 58)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/29</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header complete">
+            <span>✓ Order 59</span>
+            <span class="progress">1/1 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(59, 1)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₅₉</div>
+                        <div class="group-abbrev">abbrev Z59 := Multiplicative (ZMod 59)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/59</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="order-section">
+        <div class="order-header partial">
+            <span>⚠ Order 60</span>
+            <span class="progress">3/13 groups</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>GAP ID</th>
+                    <th>Group Name</th>
+                    <th>Abelian?</th>
+                    <th class="number">Frac. Involutions</th>
+                    <th class="number">Commuting Fraction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="gap-id">(60, 4)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₆₀</div>
+                        <div class="group-abbrev">abbrev Z60 := Multiplicative (ZMod 60)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/30</td>
+                    <td class="number">1</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(60, 12)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">D₃₀</div>
+                        <div class="group-abbrev">abbrev Dih30 := DihedralGroup 30</div>
+                    </td>
+                    <td class="abelian-no">No</td>
+                    <td class="number">8/15</td>
+                    <td class="number">3/10</td>
+                </tr>
+                <tr>
+                    <td class="gap-id">(60, 13)</td>
+                    <td class="group-name-cell">
+                        <div class="group-name">ℤ₂ × ℤ₃₀</div>
+                        <div class="group-abbrev">abbrev C2_C30 := Multiplicative (ZMod 2) × Multiplicative (ZMod 30)</div>
+                    </td>
+                    <td class="abelian-yes">Yes</td>
+                    <td class="number">1/15</td>
+                    <td class="number">1</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
