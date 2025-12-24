@@ -19,26 +19,49 @@ example {A} [Group A] (B : Subgroup A) [B.Normal] (h1 : Group.IsAbelian A)
 -- example from mm
 abbrev Q := QuaternionGroup 2
 
-example {G} [Group G] [Finite G] (N : Subgroup G) [N.Normal] :
+example (g : Multiplicative (ZMod 3)) : (g^4 = g) := by
+  fin_cases g <;> simp
+  all_goals decide
+
+example (g : DihedralGroup 3) : (g^7 = g) := by
+  fin_cases g <;> simp
+  all_goals decide
+
+example (g : Q) : (g^9 = g) := by
+  fin_cases g <;> simp
+  all_goals decide
+
+
+example : orderOf ((QuaternionGroup.a 1) : Q) = 4 := by
+  rw [QuaternionGroup.orderOf_a_one]
+
+#check QuotientGroup.fintype
+
+
+theorem card_quot {G} [Group G] (N : Subgroup G) [N.Normal] (h : Nat.card N ≠ 0) :
   Nat.card (G ⧸ N) = (Nat.card G) / (Nat.card N) := by
-  exact?
+  rw [Subgroup.card_eq_card_quotient_mul_card_subgroup N]
+  exact Nat.eq_div_of_mul_eq_left h rfl
+
+theorem nat_card_ne_zero_of_fintype_nonempty {T} [Fintype T] [Nonempty T] : Nat.card T ≠ 0 := by
+  rw [Nat.card_eq_fintype_card]
+  exact Fintype.card_ne_zero
+
 
 
 example : IsKleinFour (Q ⧸ (Subgroup.center Q)) := by
   constructor
-  · rw [ Nat.card_eq_fintype_card ]
-    have : Nat.card (Q ⧸ Subgroup.center Q) = (Nat.card Q) / (Fintype.card (Subgroup.center Q)) := by
-      exact?
-    rw [← @QuotientGroup.card_quotient_rightRel]
-    native_decide
+  · rw [card_quot _ nat_card_ne_zero_of_fintype_nonempty]
+    rw [ Nat.card_eq_fintype_card, Nat.card_eq_fintype_card]
+    rfl
   · simp +decide [ Monoid.exponent ];
     split_ifs;
-    · simp +decide only [Nat.find_eq_iff];
-      native_decide +revert;
+    · simp +decide only [Nat.find_eq_iff]
+
+      native_decide
     · rename_i h;
       exact h <| by haveI := Fact.mk ( show Nat.Prime 2 by decide ) ; exact
         Monoid.ExponentExists.of_finite;
-
 
 set_option pp.coercions false in
 example {G} [Group G] (N : Subgroup G) [N.Normal] (g : G) (α : ℕ)
