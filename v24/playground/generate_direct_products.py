@@ -2,9 +2,9 @@
 """
 Generate Lean files for all groups in the SmallGroups project.
 Consolidated generator handling cyclic, dihedral, abelian, and direct product groups.
-Based on GAP IDs from GroupNames webpage.
+Based on GAP IDs from GroupNames webpage (https://people.maths.bris.ac.uk/~matyd/GroupNames/index.html)
 
-Contains all 150 groups from orders 1-60, including:
+Contains 150 groups from orders 1-60, including:
 - Cyclic groups (ℤₙ)
 - Dihedral groups (Dₙ)
 - Abelian products (direct products of cyclic groups)
@@ -351,7 +351,7 @@ DIRECT_PRODUCTS = {
 LEAN_TEMPLATE = """import Mathlib
 import Playground.Geometry.SmallGroups.GroupProps{alternating_import}
 
-abbrev {name} := {lean_type}{quaternion_deriving}
+abbrev {name} := {lean_type}
 """
 
 
@@ -359,7 +359,7 @@ def main():
     """Generate all group files (cyclic, dihedral, abelian, and direct products)."""
     base_dir = Path("Playground/Geometry/SmallGroups")
     created = []
-    skipped = []
+    overwritten = []
 
     # Generate all groups
     for order, groups in sorted(DIRECT_PRODUCTS.items()):
@@ -371,38 +371,38 @@ def main():
             # Create file
             file_path = gap_dir / f"Gap_{order}_{gap_id}.lean"
 
-            if file_path.exists():
-                skipped.append((order, gap_id, name, description))
-                print(f"⚠️  Skipping {file_path.name} - already exists")
-                continue
+            existed = file_path.exists()
 
             # Determine conditional template parts
             alternating_import = "\nimport Playground.Geometry.SmallGroups.AlternatingGroup" if "AlternatingGroup" in lean_type else ""
-            quaternion_deriving = "\n\nderiving instance Repr for QuaternionGroup" if "QuaternionGroup" in lean_type else ""
 
             content = LEAN_TEMPLATE.format(
                 name=name,
                 lean_type=lean_type,
-                alternating_import=alternating_import,
-                quaternion_deriving=quaternion_deriving
+                alternating_import=alternating_import
             )
             file_path.write_text(content)
-            created.append((order, gap_id, name, description))
-            print(f"✓ Created {file_path.name}: {description}")
+
+            if existed:
+                overwritten.append((order, gap_id, name, description))
+                print(f"↻ Overwrote {file_path.name}: {description}")
+            else:
+                created.append((order, gap_id, name, description))
+                print(f"✓ Created {file_path.name}: {description}")
 
     # Report results
     print(f"\n{'='*60}")
-    print(f"Created {len(created)} group files")
+    print(f"Generated {len(created) + len(overwritten)} group files")
 
     if created:
-        print(f"\nNew groups:")
+        print(f"\n✓ Created {len(created)} new files:")
         for order, gap_id, name, description in created:
             print(f"  Gap({order},{gap_id}): {description} - {name}")
 
-    if skipped:
-        print(f"\n⚠️  Skipped {len(skipped)} existing files")
+    if overwritten:
+        print(f"\n↻ Overwrote {len(overwritten)} existing files")
 
-    print(f"\nTotal: {len(created)} created, {len(skipped)} skipped")
+    print(f"\nTotal: {len(created)} created, {len(overwritten)} overwritten")
 
     if created:
         print(f"\n⚠️  IMPORTANT: You need to:")
