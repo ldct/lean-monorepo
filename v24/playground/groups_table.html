@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Small Groups Table</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+            background-color: #f5f5f5;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #4CAF50;
+            color: white;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        tr:last-child td {
+            border-bottom: none;
+        }
+        .abelian-yes {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+        .abelian-no {
+            color: #f44336;
+            font-weight: 600;
+        }
+        .number {
+            text-align: right;
+        }
+        .gap-id {
+            font-family: 'Courier New', monospace;
+            color: #666;
+        }
+        .group-name {
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <h1>Small Groups (Orders 1-12)</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>GAP ID</th>
+                <th>Group Name</th>
+                <th class="number">Order</th>
+                <th>Abelian?</th>
+                <th class="number">Frac. Involutions</th>
+                <th class="number">Commuting Fraction</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="gap-id">(1, 1)</td>
+                <td class="group-name">Trivial</td>
+                <td class="number">1</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(2, 1)</td>
+                <td class="group-name">ℤ₂</td>
+                <td class="number">2</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(3, 1)</td>
+                <td class="group-name">ℤ₃</td>
+                <td class="number">3</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/3</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(4, 1)</td>
+                <td class="group-name">ℤ₄</td>
+                <td class="number">4</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/2</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(4, 2)</td>
+                <td class="group-name">V₄ (Klein four-group)</td>
+                <td class="number">4</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(5, 1)</td>
+                <td class="group-name">ℤ₅</td>
+                <td class="number">5</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/5</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(6, 1)</td>
+                <td class="group-name">ℤ₆</td>
+                <td class="number">6</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/3</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(6, 2)</td>
+                <td class="group-name">S₃</td>
+                <td class="number">6</td>
+                <td class="abelian-no">No</td>
+                <td class="number">2/3</td>
+                <td class="number">1/2</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(7, 1)</td>
+                <td class="group-name">ℤ₇</td>
+                <td class="number">7</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/7</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(8, 1)</td>
+                <td class="group-name">ℤ₈</td>
+                <td class="number">8</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/4</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(8, 2)</td>
+                <td class="group-name">ℤ₄ × ℤ₂</td>
+                <td class="number">8</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/2</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(8, 3)</td>
+                <td class="group-name">D₈</td>
+                <td class="number">8</td>
+                <td class="abelian-no">No</td>
+                <td class="number">3/4</td>
+                <td class="number">5/8</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(8, 4)</td>
+                <td class="group-name">Q₈</td>
+                <td class="number">?</td>
+                <td class="abelian-no">No</td>
+                <td class="number">8</td>
+                <td class="number">false</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(8, 5)</td>
+                <td class="group-name">ℤ₂ × ℤ₂ × ℤ₂</td>
+                <td class="number">8</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(9, 1)</td>
+                <td class="group-name">ℤ₉</td>
+                <td class="number">9</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/9</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(9, 2)</td>
+                <td class="group-name">ℤ₃ × ℤ₃</td>
+                <td class="number">9</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/9</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(10, 1)</td>
+                <td class="group-name">D₁₀</td>
+                <td class="number">10</td>
+                <td class="abelian-no">No</td>
+                <td class="number">3/5</td>
+                <td class="number">2/5</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(10, 2)</td>
+                <td class="group-name">ℤ₁₀</td>
+                <td class="number">10</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/5</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(11, 1)</td>
+                <td class="group-name">ℤ₁₁</td>
+                <td class="number">11</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/11</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(12, 2)</td>
+                <td class="group-name">ℤ₁₂</td>
+                <td class="number">12</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/6</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(13, 1)</td>
+                <td class="group-name">Gap(13, 1)</td>
+                <td class="number">13</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/13</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(14, 2)</td>
+                <td class="group-name">Gap(14, 2)</td>
+                <td class="number">14</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/7</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(15, 1)</td>
+                <td class="group-name">Gap(15, 1)</td>
+                <td class="number">15</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/15</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(16, 1)</td>
+                <td class="group-name">Gap(16, 1)</td>
+                <td class="number">16</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/8</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(17, 1)</td>
+                <td class="group-name">Gap(17, 1)</td>
+                <td class="number">17</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/17</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(18, 2)</td>
+                <td class="group-name">Gap(18, 2)</td>
+                <td class="number">18</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/9</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(19, 1)</td>
+                <td class="group-name">Gap(19, 1)</td>
+                <td class="number">19</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/19</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(20, 2)</td>
+                <td class="group-name">Gap(20, 2)</td>
+                <td class="number">20</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/10</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(21, 2)</td>
+                <td class="group-name">Gap(21, 2)</td>
+                <td class="number">21</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/21</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(22, 2)</td>
+                <td class="group-name">Gap(22, 2)</td>
+                <td class="number">22</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/11</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(23, 1)</td>
+                <td class="group-name">Gap(23, 1)</td>
+                <td class="number">23</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/23</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(24, 2)</td>
+                <td class="group-name">Gap(24, 2)</td>
+                <td class="number">24</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/12</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(25, 1)</td>
+                <td class="group-name">Gap(25, 1)</td>
+                <td class="number">25</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/25</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(26, 2)</td>
+                <td class="group-name">Gap(26, 2)</td>
+                <td class="number">26</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/13</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(27, 1)</td>
+                <td class="group-name">Gap(27, 1)</td>
+                <td class="number">27</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/27</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(28, 2)</td>
+                <td class="group-name">Gap(28, 2)</td>
+                <td class="number">28</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/14</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(29, 1)</td>
+                <td class="group-name">Gap(29, 1)</td>
+                <td class="number">29</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/29</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(30, 4)</td>
+                <td class="group-name">Gap(30, 4)</td>
+                <td class="number">30</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/15</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(31, 1)</td>
+                <td class="group-name">Gap(31, 1)</td>
+                <td class="number">31</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/31</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(32, 1)</td>
+                <td class="group-name">Gap(32, 1)</td>
+                <td class="number">32</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/16</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(33, 1)</td>
+                <td class="group-name">Gap(33, 1)</td>
+                <td class="number">33</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/33</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(34, 2)</td>
+                <td class="group-name">Gap(34, 2)</td>
+                <td class="number">34</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/17</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(35, 1)</td>
+                <td class="group-name">Gap(35, 1)</td>
+                <td class="number">35</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/35</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(36, 2)</td>
+                <td class="group-name">Gap(36, 2)</td>
+                <td class="number">36</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/18</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(37, 1)</td>
+                <td class="group-name">Gap(37, 1)</td>
+                <td class="number">37</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/37</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(38, 2)</td>
+                <td class="group-name">Gap(38, 2)</td>
+                <td class="number">38</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/19</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(39, 1)</td>
+                <td class="group-name">Gap(39, 1)</td>
+                <td class="number">39</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/39</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(40, 2)</td>
+                <td class="group-name">Gap(40, 2)</td>
+                <td class="number">40</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/20</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(41, 1)</td>
+                <td class="group-name">Gap(41, 1)</td>
+                <td class="number">41</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/41</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(42, 6)</td>
+                <td class="group-name">Gap(42, 6)</td>
+                <td class="number">42</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/21</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(43, 1)</td>
+                <td class="group-name">Gap(43, 1)</td>
+                <td class="number">43</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/43</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(44, 2)</td>
+                <td class="group-name">Gap(44, 2)</td>
+                <td class="number">44</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/22</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(45, 1)</td>
+                <td class="group-name">Gap(45, 1)</td>
+                <td class="number">45</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/45</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(46, 2)</td>
+                <td class="group-name">Gap(46, 2)</td>
+                <td class="number">46</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/23</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(47, 1)</td>
+                <td class="group-name">Gap(47, 1)</td>
+                <td class="number">47</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/47</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(48, 2)</td>
+                <td class="group-name">Gap(48, 2)</td>
+                <td class="number">48</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/24</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(49, 1)</td>
+                <td class="group-name">Gap(49, 1)</td>
+                <td class="number">49</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/49</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(50, 2)</td>
+                <td class="group-name">Gap(50, 2)</td>
+                <td class="number">50</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/25</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(51, 1)</td>
+                <td class="group-name">Gap(51, 1)</td>
+                <td class="number">51</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/51</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(52, 2)</td>
+                <td class="group-name">Gap(52, 2)</td>
+                <td class="number">52</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/26</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(53, 1)</td>
+                <td class="group-name">Gap(53, 1)</td>
+                <td class="number">53</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/53</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(54, 2)</td>
+                <td class="group-name">Gap(54, 2)</td>
+                <td class="number">54</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/27</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(55, 2)</td>
+                <td class="group-name">Gap(55, 2)</td>
+                <td class="number">55</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/55</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(56, 2)</td>
+                <td class="group-name">Gap(56, 2)</td>
+                <td class="number">56</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/28</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(57, 2)</td>
+                <td class="group-name">Gap(57, 2)</td>
+                <td class="number">57</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/57</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(58, 2)</td>
+                <td class="group-name">Gap(58, 2)</td>
+                <td class="number">58</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/29</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(59, 1)</td>
+                <td class="group-name">Gap(59, 1)</td>
+                <td class="number">59</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/59</td>
+                <td class="number">1</td>
+            </tr>
+            <tr>
+                <td class="gap-id">(60, 4)</td>
+                <td class="group-name">Gap(60, 4)</td>
+                <td class="number">60</td>
+                <td class="abelian-yes">Yes</td>
+                <td class="number">1/30</td>
+                <td class="number">1</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
