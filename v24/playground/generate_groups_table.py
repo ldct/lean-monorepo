@@ -31,6 +31,8 @@ def run_build():
 def parse_output(output):
     """Parse the build output to extract group information."""
     groups = defaultdict(dict)
+    # Track the sequence of evals for each group
+    eval_counts = defaultdict(int)
 
     # Pattern to match info lines
     pattern = r'info: Playground/Geometry/SmallGroups/Gap_(\d+)/Gap_\1_(\d+)\.lean:(\d+):0: (.+)'
@@ -45,14 +47,18 @@ def parse_output(output):
 
             key = (order, gap_id)
 
-            # Line 6: card, Line 7: IsAbelian, Line 8: FracInvolutions, Line 9: CommutingFraction
-            if line_num == 6:
+            # Track which eval this is (0-indexed)
+            eval_index = eval_counts[key]
+            eval_counts[key] += 1
+
+            # First eval: card, Second: IsAbelian, Third: FracInvolutions, Fourth: CommutingFraction
+            if eval_index == 0:
                 groups[key]['card'] = value
-            elif line_num == 7:
+            elif eval_index == 1:
                 groups[key]['abelian'] = value
-            elif line_num == 8:
+            elif eval_index == 2:
                 groups[key]['frac_involutions'] = value
-            elif line_num == 9:
+            elif eval_index == 3:
                 groups[key]['commuting_fraction'] = value
 
     return groups
@@ -148,6 +154,12 @@ def format_group_name_html(name):
     # Handle names like Gap_8_2 - parse from Lean definition would be better but this is a fallback
     if name.startswith('Gap_'):
         return name  # Keep as-is, will show Gap(order, id) in final output
+
+    # Handle alternating groups: A4 -> A₄, A5 -> A₅
+    if name.startswith('A') and len(name) <= 3 and name[1:].isdigit():
+        n = name[1:]
+        subscript = ''.join(['₀₁₂₃₄₅₆₇₈₉'[int(d)] for d in n])
+        return f"A{subscript}"
 
     # Handle special names
     if name == 'Trivial':
