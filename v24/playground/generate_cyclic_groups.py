@@ -19,11 +19,6 @@ LEAN_TEMPLATE = """import Mathlib
 import Playground.Geometry.SmallGroups.GroupProps
 
 abbrev Z{order} := Multiplicative (ZMod {order})
-
-#eval Fintype.card Z{order}
-#eval Group.IsAbelian Z{order}
-#eval Group.FracInvolutions Z{order}
-#eval Group.CommutingFraction Z{order}
 """
 
 

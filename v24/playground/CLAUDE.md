@@ -1,10 +1,18 @@
-To build the smallgroups project, run this command
+To build the smallgroups project, run these commands:
 
-```
+```bash
+# Build individual evaluation files
+lake build Playground.Geometry.SmallGroups.EvalCardinality
+lake build Playground.Geometry.SmallGroups.EvalAbelian
+lake build Playground.Geometry.SmallGroups.EvalFracInvolutions
+lake build Playground.Geometry.SmallGroups.EvalCommutingFraction
+lake build Playground.Geometry.SmallGroups.EvalNumSubgroups
+
+# Or build all groups (doesn't evaluate properties)
 lake build Playground.Geometry.SmallGroups.SmallGroups
 ```
 
-the command will only run if the current directory has a lakefile.toml
+The commands will only run if the current directory has a lakefile.toml
 
 ## Python Scripts
 

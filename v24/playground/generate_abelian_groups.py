@@ -75,11 +75,6 @@ LEAN_TEMPLATE = """import Mathlib
 import Playground.Geometry.SmallGroups.GroupProps
 
 abbrev {name} := {lean_type}
-
-#eval Fintype.card {name}
-#eval Group.IsAbelian {name}
-#eval Group.FracInvolutions {name}
-#eval Group.CommutingFraction {name}
 """
 
 

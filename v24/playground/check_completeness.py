@@ -6,10 +6,8 @@ A complete file should have:
 1. import Mathlib
 2. import Playground.Geometry.SmallGroups.GroupProps
 3. An abbrev for the group
-4. #eval Fintype.card
-5. #eval Group.IsAbelian
-6. #eval Group.FracInvolutions
-7. #eval Group.CommutingFraction
+
+Note: #eval blocks are now centralized in separate evaluation files.
 """
 
 import re
@@ -25,10 +23,6 @@ class FileCheck:
     has_mathlib_import: bool
     has_groupprops_import: bool
     has_abbrev: bool
-    has_card_eval: bool
-    has_abelian_eval: bool
-    has_frac_involutions_eval: bool
-    has_commuting_fraction_eval: bool
     abbrev_name: Optional[str] = None
 
     @property
@@ -38,10 +32,6 @@ class FileCheck:
             self.has_mathlib_import,
             self.has_groupprops_import,
             self.has_abbrev,
-            self.has_card_eval,
-            self.has_abelian_eval,
-            self.has_frac_involutions_eval,
-            self.has_commuting_fraction_eval,
         ])
 
     @property
@@ -54,14 +44,6 @@ class FileCheck:
             missing.append("import Playground.Geometry.SmallGroups.GroupProps")
         if not self.has_abbrev:
             missing.append("abbrev declaration")
-        if not self.has_card_eval:
-            missing.append("#eval Fintype.card")
-        if not self.has_abelian_eval:
-            missing.append("#eval Group.IsAbelian")
-        if not self.has_frac_involutions_eval:
-            missing.append("#eval Group.FracInvolutions")
-        if not self.has_commuting_fraction_eval:
-            missing.append("#eval Group.CommutingFraction")
         return missing
 
 
@@ -84,21 +66,11 @@ def check_file(file_path: Path) -> FileCheck:
             abbrev_name = abbrev_match.group(1)
             break
 
-    # Check for #eval statements
-    has_card_eval = any('#eval Fintype.card' in line for line in lines)
-    has_abelian_eval = any('#eval Group.IsAbelian' in line for line in lines)
-    has_frac_involutions_eval = any('#eval Group.FracInvolutions' in line for line in lines)
-    has_commuting_fraction_eval = any('#eval Group.CommutingFraction' in line for line in lines)
-
     return FileCheck(
         file_path=file_path,
         has_mathlib_import=has_mathlib_import,
         has_groupprops_import=has_groupprops_import,
         has_abbrev=has_abbrev,
-        has_card_eval=has_card_eval,
-        has_abelian_eval=has_abelian_eval,
-        has_frac_involutions_eval=has_frac_involutions_eval,
-        has_commuting_fraction_eval=has_commuting_fraction_eval,
         abbrev_name=abbrev_name,
     )
 

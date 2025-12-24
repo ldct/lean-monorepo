@@ -20,49 +20,83 @@ EXPECTED_GROUPS = {
 }
 
 def run_build():
-    """Run the lake build command and capture output."""
-    print("Running lake build...")
-    result = subprocess.run(
-        ["lake", "build", "Playground.Geometry.SmallGroups.SmallGroups"],
-        capture_output=True,
-        text=True
-    )
-    return result.stdout + result.stderr
+    """Run lake build for all eval files and capture outputs."""
+    eval_files = [
+        ("Playground.Geometry.SmallGroups.EvalCardinality", "cardinality"),
+        ("Playground.Geometry.SmallGroups.EvalAbelian", "abelian"),
+        ("Playground.Geometry.SmallGroups.EvalFracInvolutions", "fracinvolutions"),
+        ("Playground.Geometry.SmallGroups.EvalCommutingFraction", "commutingfraction"),
+        ("Playground.Geometry.SmallGroups.EvalNumSubgroups", "numsubgroups"),
+    ]
 
-def parse_output(output):
-    """Parse the build output to extract group information."""
+    outputs = {}
+    for eval_file, property_name in eval_files:
+        print(f"Building {eval_file}...")
+        result = subprocess.run(
+            ["lake", "build", eval_file],
+            capture_output=True,
+            text=True
+        )
+        outputs[property_name] = result.stdout + result.stderr
+
+    return outputs
+
+def get_group_order_from_smallgroups():
+    """Parse SmallGroups.lean to get ordered list of (order, gap_id) tuples."""
+    smallgroups_file = Path("Playground/Geometry/SmallGroups/SmallGroups.lean")
+    groups = []
+
+    with open(smallgroups_file, 'r') as f:
+        for line in f:
+            line = line.strip()
+            # Skip commented imports
+            if line.startswith('--'):
+                continue
+            # Match import statements: import Playground.Geometry.SmallGroups.Gap_N.Gap_N_M
+            match = re.match(r'import Playground\.Geometry\.SmallGroups\.Gap_(\d+)\.Gap_\d+_(\d+)', line)
+            if match:
+                order = int(match.group(1))
+                gap_id = int(match.group(2))
+                groups.append((order, gap_id))
+
+    return groups
+
+def parse_output(outputs):
+    """Parse the build outputs from all eval files to extract group information."""
     groups = defaultdict(dict)
-    # Track the sequence of evals for each group
-    eval_counts = defaultdict(int)
 
-    # Pattern to match info lines
-    pattern = r'info: Playground/Geometry/SmallGroups/Gap_(\d+)/Gap_\1_(\d+)\.lean:(\d+):0: (.+)'
+    # Get ordered list of groups from SmallGroups.lean
+    group_order = get_group_order_from_smallgroups()
 
-    for line in output.split('\n'):
-        match = re.search(pattern, line)
-        if match:
-            order = int(match.group(1))
-            gap_id = int(match.group(2))
-            line_num = int(match.group(3))
-            value = match.group(4)
+    # Pattern to match info lines from eval files
+    # Example: info: Playground/Geometry/SmallGroups/EvalCardinality.lean:4:0: 1
+    pattern = r'info: Playground/Geometry/SmallGroups/Eval(\w+)\.lean:(\d+):0: (.+)'
 
-            key = (order, gap_id)
+    # Property name mapping to dict keys
+    property_map = {
+        'Cardinality': 'card',
+        'Abelian': 'abelian',
+        'FracInvolutions': 'frac_involutions',
+        'CommutingFraction': 'commuting_fraction',
+        'NumSubgroups': 'num_subgroups',
+    }
 
-            # Track which eval this is (0-indexed)
-            eval_index = eval_counts[key]
-            eval_counts[key] += 1
+    # Parse each property's output
+    for property_name, output in outputs.items():
+        for line in output.split('\n'):
+            match = re.search(pattern, line)
+            if match:
+                eval_type = match.group(1)  # e.g., "Cardinality"
+                line_num = int(match.group(2))
+                value = match.group(3)
 
-            # First eval: card, Second: IsAbelian, Third: FracInvolutions, Fourth: CommutingFraction, Fifth: numSubgroups
-            if eval_index == 0:
-                groups[key]['card'] = value
-            elif eval_index == 1:
-                groups[key]['abelian'] = value
-            elif eval_index == 2:
-                groups[key]['frac_involutions'] = value
-            elif eval_index == 3:
-                groups[key]['commuting_fraction'] = value
-            elif eval_index == 4:
-                groups[key]['num_subgroups'] = value
+                # Map line number to group index
+                # Line 1: import, Line 2: blank, Line 3: comment, Line 4+: #eval statements
+                group_index = line_num - 4
+                if 0 <= group_index < len(group_order):
+                    key = group_order[group_index]
+                    dict_key = property_map.get(eval_type, eval_type.lower())
+                    groups[key][dict_key] = value
 
     return groups
 
@@ -400,14 +434,14 @@ def main():
     group_info = parse_lean_files()
     print(f"Found {len(group_info)} group definitions from Lean files")
 
-    # Run build and capture output
+    # Run build and capture outputs
     build_start = time.time()
-    output = run_build()
+    outputs = run_build()
     build_time = time.time() - build_start
     print(f"Lake build completed in {build_time:.2f}s")
 
-    # Parse the output
-    groups = parse_output(output)
+    # Parse the outputs
+    groups = parse_output(outputs)
     print(f"Found {len(groups)} groups from build output")
 
     # Generate HTML

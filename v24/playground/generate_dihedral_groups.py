@@ -41,11 +41,6 @@ LEAN_TEMPLATE = """import Mathlib
 import Playground.Geometry.SmallGroups.GroupProps
 
 abbrev Dih{n} := DihedralGroup {n}
-
-#eval Fintype.card Dih{n}
-#eval Group.IsAbelian Dih{n}
-#eval Group.FracInvolutions Dih{n}
-#eval Group.CommutingFraction Dih{n}
 """
 
 
