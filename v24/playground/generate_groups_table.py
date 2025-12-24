@@ -5,6 +5,7 @@ Generate an HTML table of small groups from Lean build output.
 
 import subprocess
 import re
+import time
 from collections import defaultdict
 from pathlib import Path
 
@@ -395,11 +396,13 @@ def main():
     print(f"Found {len(group_info)} group definitions from Lean files")
 
     # Run build and capture output
+    build_start = time.time()
     output = run_build()
+    build_time = time.time() - build_start
+    print(f"Lake build completed in {build_time:.2f}s")
 
     # Parse the output
     groups = parse_output(output)
-
     print(f"Found {len(groups)} groups from build output")
 
     # Generate HTML
@@ -408,7 +411,6 @@ def main():
     # Write to file
     output_file = Path("groups_table.html")
     output_file.write_text(html)
-
     print(f"HTML table written to {output_file.absolute()}")
 
 if __name__ == "__main__":
