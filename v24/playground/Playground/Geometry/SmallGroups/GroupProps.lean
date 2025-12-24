@@ -17,19 +17,17 @@ def Group.FracInvolutions (G) [Group G] [Fintype G] [DecidableEq G] : ℚ :=
 def Group.CommutingFraction (G) [Group G] [Fintype G] [DecidableEq G] : ℚ :=
   (Finset.card { (g, h) : G × G | g * h = h * g} : ℚ) / (Fintype.card G : ℚ)^2
 
-abbrev Z8 := Multiplicative (ZMod 8)
+def MyIsSubgroup (G) [Group G] [Fintype G] (H : Finset G) : Prop :=
+  1 ∈ H ∧ Fintype.card H ∣ Fintype.card G ∧ (∀ x ∈ H, ∀ y ∈ H, x * y ∈ H)
 
-def MyIsSubgroup (G) [Group G] (H : Finset G) : Prop :=
-  1 ∈ H ∧ (∀ x ∈ H, ∀ y ∈ H, x * y ∈ H)
-
-theorem MyIsSubgroup_iff {G} [Group G] (H : Finset G)
-: MyIsSubgroup G H ↔ 1 ∈ H ∧ (∀ x ∈ H, ∀ y ∈ H, x * y ∈ H) := by
+theorem MyIsSubgroup_iff {G} [Group G] [Fintype G] (H : Finset G)
+: MyIsSubgroup G H ↔ 1 ∈ H ∧ Fintype.card H ∣ Fintype.card G ∧ (∀ x ∈ H, ∀ y ∈ H, x * y ∈ H) := by
   simp [MyIsSubgroup]
 
-instance decidableMyIsSubgroup {G} [Group G] (H : Finset G)
-  [Decidable (1 ∈ H ∧ (∀ x ∈ H, ∀ y ∈ H, x * y ∈ H))]
+instance decidableMyIsSubgroup {G} [Group G] [Fintype G] (H : Finset G)
+  [Decidable (1 ∈ H ∧ Fintype.card H ∣ Fintype.card G ∧ (∀ x ∈ H, ∀ y ∈ H, x * y ∈ H))]
 : Decidable (MyIsSubgroup G H) :=
   decidable_of_iff' _ (MyIsSubgroup_iff H)
 
 def Group.numSubgroups (G) [Group G] [Fintype G] [DecidableEq G] : ℕ :=
-  if (Fintype.card G > 10) then 0 else Fintype.card {s : Finset G | MyIsSubgroup G s}
+  if (Fintype.card G > 12) then 0 else Fintype.card {s : Finset G | MyIsSubgroup G s}

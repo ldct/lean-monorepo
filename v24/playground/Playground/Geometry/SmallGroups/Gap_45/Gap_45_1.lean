@@ -7,3 +7,4 @@ abbrev Z45 := Multiplicative (ZMod 45)
 #eval Group.IsAbelian Z45
 #eval Group.FracInvolutions Z45
 #eval Group.CommutingFraction Z45
+#eval Group.numSubgroups Z45

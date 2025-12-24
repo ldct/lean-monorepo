@@ -7,3 +7,4 @@ abbrev Z34 := Multiplicative (ZMod 34)
 #eval Group.IsAbelian Z34
 #eval Group.FracInvolutions Z34
 #eval Group.CommutingFraction Z34
+#eval Group.numSubgroups Z34

@@ -8,3 +8,4 @@ abbrev A4 := AlternatingGroup 4
 #eval Group.IsAbelian A4
 #eval Group.FracInvolutions A4
 #eval Group.CommutingFraction A4
+#eval Group.numSubgroups A4

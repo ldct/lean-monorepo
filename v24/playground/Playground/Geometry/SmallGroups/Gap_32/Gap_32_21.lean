@@ -7,3 +7,4 @@ abbrev C2_C4_C4 := Multiplicative (ZMod 2) × Multiplicative (ZMod 4) × Multipl
 #eval Group.IsAbelian C2_C4_C4
 #eval Group.FracInvolutions C2_C4_C4
 #eval Group.CommutingFraction C2_C4_C4
+#eval Group.numSubgroups C2_C4_C4

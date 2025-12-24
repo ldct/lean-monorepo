@@ -7,3 +7,4 @@ abbrev Z7 := Multiplicative (ZMod 7)
 #eval Group.IsAbelian Z7
 #eval Group.FracInvolutions Z7
 #eval Group.CommutingFraction Z7
+#eval Group.numSubgroups Z7

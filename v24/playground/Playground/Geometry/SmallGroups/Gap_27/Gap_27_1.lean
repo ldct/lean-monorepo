@@ -7,3 +7,4 @@ abbrev Z27 := Multiplicative (ZMod 27)
 #eval Group.IsAbelian Z27
 #eval Group.FracInvolutions Z27
 #eval Group.CommutingFraction Z27
+#eval Group.numSubgroups Z27

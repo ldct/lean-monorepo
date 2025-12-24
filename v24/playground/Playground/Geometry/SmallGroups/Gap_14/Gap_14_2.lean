@@ -7,3 +7,4 @@ abbrev Z14 := Multiplicative (ZMod 14)
 #eval Group.IsAbelian Z14
 #eval Group.FracInvolutions Z14
 #eval Group.CommutingFraction Z14
+#eval Group.numSubgroups Z14

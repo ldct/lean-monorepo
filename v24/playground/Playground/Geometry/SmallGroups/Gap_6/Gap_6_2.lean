@@ -7,3 +7,4 @@ abbrev S3 := Equiv.Perm (Fin 3)
 #eval Group.IsAbelian S3
 #eval Group.FracInvolutions S3
 #eval Group.CommutingFraction S3
+#eval Group.numSubgroups S3

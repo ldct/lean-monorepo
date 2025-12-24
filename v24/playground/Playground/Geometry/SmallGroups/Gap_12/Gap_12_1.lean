@@ -7,3 +7,4 @@ abbrev Dic12 := DicyclicGroup 3
 #eval Group.IsAbelian Dic12
 #eval Group.FracInvolutions Dic12
 #eval Group.CommutingFraction Dic12
+#eval Group.numSubgroups Dic12

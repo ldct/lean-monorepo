@@ -7,3 +7,4 @@ abbrev Trivial := Multiplicative (ZMod 1)
 #eval Group.IsAbelian Trivial
 #eval Group.FracInvolutions Trivial
 #eval Group.CommutingFraction Trivial
+#eval Group.numSubgroups Trivial

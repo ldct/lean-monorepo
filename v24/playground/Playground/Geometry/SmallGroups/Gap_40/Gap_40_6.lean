@@ -7,3 +7,4 @@ abbrev Dih20 := DihedralGroup 20
 #eval Group.IsAbelian Dih20
 #eval Group.FracInvolutions Dih20
 #eval Group.CommutingFraction Dih20
+#eval Group.numSubgroups Dih20

@@ -7,3 +7,4 @@ abbrev Dih30 := DihedralGroup 30
 #eval Group.IsAbelian Dih30
 #eval Group.FracInvolutions Dih30
 #eval Group.CommutingFraction Dih30
+#eval Group.numSubgroups Dih30

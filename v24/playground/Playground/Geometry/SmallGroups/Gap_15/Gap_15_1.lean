@@ -7,3 +7,4 @@ abbrev Z15 := Multiplicative (ZMod 15)
 #eval Group.IsAbelian Z15
 #eval Group.FracInvolutions Z15
 #eval Group.CommutingFraction Z15
+#eval Group.numSubgroups Z15

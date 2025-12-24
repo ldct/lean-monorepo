@@ -7,3 +7,4 @@ abbrev E8 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicativ
 #eval Group.IsAbelian E8
 #eval Group.FracInvolutions E8
 #eval Group.CommutingFraction E8
+#eval Group.numSubgroups E8

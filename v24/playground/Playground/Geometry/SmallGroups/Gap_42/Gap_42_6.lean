@@ -7,3 +7,4 @@ abbrev Z42 := Multiplicative (ZMod 42)
 #eval Group.IsAbelian Z42
 #eval Group.FracInvolutions Z42
 #eval Group.CommutingFraction Z42
+#eval Group.numSubgroups Z42

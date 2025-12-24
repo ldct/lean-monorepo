@@ -7,3 +7,4 @@ abbrev Z29 := Multiplicative (ZMod 29)
 #eval Group.IsAbelian Z29
 #eval Group.FracInvolutions Z29
 #eval Group.CommutingFraction Z29
+#eval Group.numSubgroups Z29

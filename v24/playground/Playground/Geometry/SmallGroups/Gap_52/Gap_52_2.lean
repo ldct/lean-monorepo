@@ -7,3 +7,4 @@ abbrev Z52 := Multiplicative (ZMod 52)
 #eval Group.IsAbelian Z52
 #eval Group.FracInvolutions Z52
 #eval Group.CommutingFraction Z52
+#eval Group.numSubgroups Z52

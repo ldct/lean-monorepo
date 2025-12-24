@@ -7,3 +7,4 @@ abbrev Z5 := Multiplicative (ZMod 5)
 #eval Group.IsAbelian Z5
 #eval Group.FracInvolutions Z5
 #eval Group.CommutingFraction Z5
+#eval Group.numSubgroups Z5

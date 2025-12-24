@@ -7,3 +7,4 @@ abbrev C2_C2_C2_C6 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Mult
 #eval Group.IsAbelian C2_C2_C2_C6
 #eval Group.FracInvolutions C2_C2_C2_C6
 #eval Group.CommutingFraction C2_C2_C2_C6
+#eval Group.numSubgroups C2_C2_C2_C6

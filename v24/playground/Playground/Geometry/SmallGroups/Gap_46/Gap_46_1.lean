@@ -7,3 +7,4 @@ abbrev Dih23 := DihedralGroup 23
 #eval Group.IsAbelian Dih23
 #eval Group.FracInvolutions Dih23
 #eval Group.CommutingFraction Dih23
+#eval Group.numSubgroups Dih23

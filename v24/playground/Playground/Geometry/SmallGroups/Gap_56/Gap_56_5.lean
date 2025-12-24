@@ -7,3 +7,4 @@ abbrev Dih28 := DihedralGroup 28
 #eval Group.IsAbelian Dih28
 #eval Group.FracInvolutions Dih28
 #eval Group.CommutingFraction Dih28
+#eval Group.numSubgroups Dih28

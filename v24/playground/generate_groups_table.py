@@ -52,7 +52,7 @@ def parse_output(output):
             eval_index = eval_counts[key]
             eval_counts[key] += 1
 
-            # First eval: card, Second: IsAbelian, Third: FracInvolutions, Fourth: CommutingFraction
+            # First eval: card, Second: IsAbelian, Third: FracInvolutions, Fourth: CommutingFraction, Fifth: numSubgroups
             if eval_index == 0:
                 groups[key]['card'] = value
             elif eval_index == 1:
@@ -61,6 +61,8 @@ def parse_output(output):
                 groups[key]['frac_involutions'] = value
             elif eval_index == 3:
                 groups[key]['commuting_fraction'] = value
+            elif eval_index == 4:
+                groups[key]['num_subgroups'] = value
 
     return groups
 
@@ -343,6 +345,7 @@ def generate_html(groups, group_info):
                     <th>Abelian?</th>
                     <th class="number">Frac. Involutions</th>
                     <th class="number">Commuting Fraction</th>
+                    <th class="number"># Subgroups</th>
                 </tr>
             </thead>
             <tbody>
@@ -352,6 +355,7 @@ def generate_html(groups, group_info):
             abelian = data.get('abelian', '?')
             frac_inv = format_rational(data.get('frac_involutions', '?'))
             comm_frac = format_rational(data.get('commuting_fraction', '?'))
+            num_subgroups = data.get('num_subgroups', '?')
 
             abelian_class = 'abelian-yes' if abelian == 'true' else 'abelian-no'
             abelian_text = 'Yes' if abelian == 'true' else 'No'
@@ -375,6 +379,7 @@ def generate_html(groups, group_info):
                     <td class="{abelian_class}">{abelian_text}</td>
                     <td class="number">{frac_inv}</td>
                     <td class="number">{comm_frac}</td>
+                    <td class="number">{num_subgroups}</td>
                 </tr>
 """
 

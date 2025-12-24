@@ -7,3 +7,4 @@ abbrev Z25 := Multiplicative (ZMod 25)
 #eval Group.IsAbelian Z25
 #eval Group.FracInvolutions Z25
 #eval Group.CommutingFraction Z25
+#eval Group.numSubgroups Z25

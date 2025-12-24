@@ -7,3 +7,4 @@ abbrev Z10 := Multiplicative (ZMod 10)
 #eval Group.IsAbelian Z10
 #eval Group.FracInvolutions Z10
 #eval Group.CommutingFraction Z10
+#eval Group.numSubgroups Z10

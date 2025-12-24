@@ -9,3 +9,4 @@ deriving instance Repr for QuaternionGroup
 #eval Group.IsAbelian Q
 #eval Group.FracInvolutions Q
 #eval Group.CommutingFraction Q
+#eval Group.numSubgroups Q

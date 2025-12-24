@@ -7,3 +7,4 @@ abbrev Z46 := Multiplicative (ZMod 46)
 #eval Group.IsAbelian Z46
 #eval Group.FracInvolutions Z46
 #eval Group.CommutingFraction Z46
+#eval Group.numSubgroups Z46

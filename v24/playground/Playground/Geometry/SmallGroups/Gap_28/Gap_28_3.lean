@@ -7,3 +7,4 @@ abbrev Dih14 := DihedralGroup 14
 #eval Group.IsAbelian Dih14
 #eval Group.FracInvolutions Dih14
 #eval Group.CommutingFraction Dih14
+#eval Group.numSubgroups Dih14

@@ -7,3 +7,4 @@ abbrev Z47 := Multiplicative (ZMod 47)
 #eval Group.IsAbelian Z47
 #eval Group.FracInvolutions Z47
 #eval Group.CommutingFraction Z47
+#eval Group.numSubgroups Z47

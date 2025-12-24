@@ -7,3 +7,4 @@ abbrev Dih4 := DihedralGroup 4
 #eval Group.IsAbelian Dih4
 #eval Group.FracInvolutions Dih4
 #eval Group.CommutingFraction Dih4
+#eval Group.numSubgroups Dih4

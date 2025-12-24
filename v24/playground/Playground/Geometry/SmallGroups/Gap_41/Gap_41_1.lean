@@ -7,3 +7,4 @@ abbrev Z41 := Multiplicative (ZMod 41)
 #eval Group.IsAbelian Z41
 #eval Group.FracInvolutions Z41
 #eval Group.CommutingFraction Z41
+#eval Group.numSubgroups Z41

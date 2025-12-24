@@ -7,3 +7,4 @@ abbrev Z23 := Multiplicative (ZMod 23)
 #eval Group.IsAbelian Z23
 #eval Group.FracInvolutions Z23
 #eval Group.CommutingFraction Z23
+#eval Group.numSubgroups Z23

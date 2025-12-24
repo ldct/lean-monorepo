@@ -7,3 +7,4 @@ abbrev Dih13 := DihedralGroup 13
 #eval Group.IsAbelian Dih13
 #eval Group.FracInvolutions Dih13
 #eval Group.CommutingFraction Dih13
+#eval Group.numSubgroups Dih13

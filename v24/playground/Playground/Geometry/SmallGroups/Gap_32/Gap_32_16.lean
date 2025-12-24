@@ -7,3 +7,4 @@ abbrev C2_C16 := Multiplicative (ZMod 2) × Multiplicative (ZMod 16)
 #eval Group.IsAbelian C2_C16
 #eval Group.FracInvolutions C2_C16
 #eval Group.CommutingFraction C2_C16
+#eval Group.numSubgroups C2_C16
