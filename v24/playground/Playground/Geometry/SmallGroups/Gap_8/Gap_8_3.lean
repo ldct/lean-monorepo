@@ -1,4 +1,4 @@
 import Mathlib
 import Playground.Geometry.SmallGroups.GroupProps
 
-abbrev Dih4 := DihedralGroup 4
+abbrev Gap_8_3 := DihedralGroup 4

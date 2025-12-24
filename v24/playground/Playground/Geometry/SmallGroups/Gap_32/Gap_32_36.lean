@@ -1,4 +1,4 @@
 import Mathlib
 import Playground.Geometry.SmallGroups.GroupProps
 
-abbrev C2_C2_C2_C4 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 4)
+abbrev Gap_32_36 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 8)

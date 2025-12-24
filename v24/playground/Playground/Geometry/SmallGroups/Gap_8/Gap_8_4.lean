@@ -1,4 +1,4 @@
 import Mathlib
 import Playground.Geometry.SmallGroups.GroupProps
 
-abbrev Q := QuaternionGroup 2
+abbrev Gap_8_4 := QuaternionGroup 2

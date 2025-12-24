@@ -1,4 +1,4 @@
 import Mathlib
 import Playground.Geometry.SmallGroups.GroupProps
 
-abbrev C2_Dih4 := Multiplicative (ZMod 2) × DihedralGroup 4
+abbrev Gap_16_11 := Multiplicative (ZMod 2) × DihedralGroup 4

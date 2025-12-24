@@ -1,4 +1,4 @@
 import Mathlib
 import Playground.Geometry.SmallGroups.GroupProps
 
-abbrev S3 := Equiv.Perm (Fin 3)
+abbrev Gap_6_1 := Equiv.Perm (Fin 3)

@@ -1,4 +1,4 @@
 import Mathlib
 import Playground.Geometry.SmallGroups.GroupProps
 
-abbrev Z15 := Multiplicative (ZMod 15)
+abbrev Gap_15_1 := Multiplicative (ZMod 15)

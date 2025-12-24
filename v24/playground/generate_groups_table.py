@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
 """
 Generate an HTML table of small groups from Lean build output.
+Includes both implemented and unimplemented groups from TSV file.
 """
 
 import subprocess
 import re
 import time
+import csv
 from collections import defaultdict
 from pathlib import Path
+from parse_group_label import parse_group_label
 
 # Expected number of groups per order (1-60)
 EXPECTED_GROUPS = {
@@ -40,6 +43,36 @@ def run_build():
         outputs[property_name] = result.stdout + result.stderr
 
     return outputs
+
+def load_all_groups_from_tsv(tsv_file="group_names.tsv"):
+    """
+    Load all groups from TSV file with their labels.
+    Returns dict: {(order, gap_id): {'label': label, 'implemented': bool}}
+    """
+    all_groups = {}
+
+    with open(tsv_file, 'r') as f:
+        reader = csv.reader(f, delimiter='\t')
+        for row in reader:
+            if len(row) != 2:
+                continue
+
+            label = row[0]
+            gap_id_str = row[1]
+
+            # Parse gap_id as "order,id"
+            order, gap_id = map(int, gap_id_str.split(','))
+
+            # Check if this group is implementable
+            lean_type = parse_group_label(label, order)
+            implemented = lean_type is not None
+
+            all_groups[(order, gap_id)] = {
+                'label': label,
+                'implemented': implemented
+            }
+
+    return all_groups
 
 def get_group_order_from_smallgroups():
     """Parse SmallGroups.lean to get ordered list of (order, gap_id) tuples."""
@@ -218,27 +251,36 @@ def format_rational(rat_str):
             return f"{num}/{denom}"
     return rat_str
 
-def generate_html(groups, group_info):
-    """Generate HTML page with group table sectioned by order."""
-    # Group by order
+def generate_html(groups, group_info, all_groups_tsv):
+    """Generate HTML page with group table sectioned by order, including unimplemented groups."""
+    # Group by order - include ALL groups from TSV
     by_order = defaultdict(list)
-    for (order, gap_id), data in groups.items():
-        by_order[order].append((gap_id, data))
+    for (order, gap_id), tsv_data in all_groups_tsv.items():
+        # Get stats if implemented
+        stats = groups.get((order, gap_id), {})
+        by_order[order].append((gap_id, stats, tsv_data))
 
-    # Calculate statistics
+    # Calculate statistics - count implemented groups
     complete_orders = []
     partial_orders = []
-    for order in sorted(EXPECTED_GROUPS.keys()):
-        expected = EXPECTED_GROUPS[order]
-        actual = len(by_order.get(order, []))
-        if actual == expected:
-            complete_orders.append(order)
-        elif actual > 0:
-            partial_orders.append((order, actual, expected))
+    implemented_count_by_order = {}
 
-    total_expected = sum(EXPECTED_GROUPS.values())
+    for order in sorted(by_order.keys()):
+        groups_in_order = by_order[order]
+        implemented = sum(1 for _, stats, tsv_data in groups_in_order if tsv_data['implemented'])
+        total_in_order = len(groups_in_order)
+        implemented_count_by_order[order] = implemented
+
+        if implemented == total_in_order:
+            complete_orders.append(order)
+        elif implemented > 0:
+            partial_orders.append((order, implemented, total_in_order))
+
+    total_expected = sum(len(by_order[order]) for order in by_order.keys())
     total_actual = len(groups)
     percentage = (total_actual / total_expected * 100) if total_expected > 0 else 0
+
+    total_orders = len(by_order)
 
     html = """<!DOCTYPE html>
 <html lang="en">
@@ -351,16 +393,16 @@ def generate_html(groups, group_info):
     <h1>Small Groups (Orders 1-60)</h1>
     <div class="summary">
         <strong>""" + f"{total_actual}/{total_expected}</strong> groups ({percentage:.1f}%) | " + f"""
-        <strong>{len(complete_orders)}/{len(EXPECTED_GROUPS)}</strong> complete orders
+        <strong>{len(complete_orders)}/{total_orders}</strong> complete orders
     </div>
 """
 
     # Generate sections by order
     for order in sorted(by_order.keys()):
         groups_in_order = sorted(by_order[order], key=lambda x: x[0])
-        expected = EXPECTED_GROUPS.get(order, 0)
-        actual = len(groups_in_order)
-        is_complete = actual == expected
+        total_in_order = len(groups_in_order)
+        implemented_in_order = implemented_count_by_order.get(order, 0)
+        is_complete = implemented_in_order == total_in_order
 
         header_class = "complete" if is_complete else "partial"
         status_icon = "✓" if is_complete else "⚠"
@@ -369,7 +411,7 @@ def generate_html(groups, group_info):
     <div class="order-section">
         <div class="order-header {header_class}">
             <span>{status_icon} Order {order}</span>
-            <span class="progress">{actual}/{expected} groups</span>
+            <span class="progress">{implemented_in_order}/{total_in_order} groups</span>
         </div>
         <table>
             <thead>
@@ -385,24 +427,38 @@ def generate_html(groups, group_info):
             <tbody>
 """
 
-        for gap_id, data in groups_in_order:
-            abelian = data.get('abelian', '?')
-            frac_inv = format_rational(data.get('frac_involutions', '?'))
-            comm_frac = format_rational(data.get('commuting_fraction', '?'))
-            num_subgroups = data.get('num_subgroups', '?')
+        for gap_id, data, tsv_data in groups_in_order:
+            label = tsv_data['label']
+            implemented = tsv_data['implemented']
 
-            abelian_class = 'abelian-yes' if abelian == 'true' else 'abelian-no'
-            abelian_text = 'Yes' if abelian == 'true' else 'No'
+            if implemented and data:
+                # Implemented group - show full stats
+                abelian = data.get('abelian', '?')
+                frac_inv = format_rational(data.get('frac_involutions', '?'))
+                comm_frac = format_rational(data.get('commuting_fraction', '?'))
+                num_subgroups = data.get('num_subgroups', '?')
 
-            # Get formatted group name and abbrev from Lean file
-            info = group_info.get((order, gap_id), {})
-            lean_name = info.get('name', '')
-            lean_def = info.get('definition', '')
+                abelian_class = 'abelian-yes' if abelian == 'true' else 'abelian-no'
+                abelian_text = 'Yes' if abelian == 'true' else 'No'
 
-            group_name = format_group_name_html(lean_name) or f"Gap({order}, {gap_id})"
+                # Get formatted group name and abbrev from Lean file
+                info = group_info.get((order, gap_id), {})
+                lean_name = info.get('name', '')
+                lean_def = info.get('definition', '')
 
-            # Format the abbrev line
-            abbrev_line = f"abbrev {lean_name} := {lean_def}" if lean_name and lean_def else ""
+                group_name = format_group_name_html(lean_name) or f"Gap({order}, {gap_id})"
+
+                # Format the abbrev line
+                abbrev_line = f"abbrev {lean_name} := {lean_def}" if lean_name and lean_def else ""
+            else:
+                # Unimplemented group - show label, blank stats
+                abelian_class = ''
+                abelian_text = '-'
+                frac_inv = '-'
+                comm_frac = '-'
+                num_subgroups = '-'
+                group_name = label
+                abbrev_line = f'<span style="color: #999; font-style: italic;">Not implemented</span>'
 
             html += f"""                <tr>
                     <td class="gap-id">({order}, {gap_id})</td>
@@ -429,6 +485,13 @@ def generate_html(groups, group_info):
 
 def main():
     """Main function."""
+    # Load all groups from TSV (implemented and unimplemented)
+    print("Loading all groups from TSV file...")
+    all_groups_tsv = load_all_groups_from_tsv()
+    total_groups = len(all_groups_tsv)
+    implemented_groups = sum(1 for g in all_groups_tsv.values() if g['implemented'])
+    print(f"Found {total_groups} groups total, {implemented_groups} implementable")
+
     # Parse Lean files to get group names and definitions
     print("Parsing Lean files for group names and definitions...")
     group_info = parse_lean_files()
@@ -445,7 +508,7 @@ def main():
     print(f"Found {len(groups)} groups from build output")
 
     # Generate HTML
-    html = generate_html(groups, group_info)
+    html = generate_html(groups, group_info, all_groups_tsv)
 
     # Write to file
     output_file = Path("groups_table.html")

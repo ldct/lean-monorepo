@@ -1,4 +1,4 @@
 import Mathlib
 import Playground.Geometry.SmallGroups.GroupProps
 
-abbrev C2_Q := Multiplicative (ZMod 2) × QuaternionGroup 2
+abbrev Gap_16_12 := Multiplicative (ZMod 2) × QuaternionGroup 2
