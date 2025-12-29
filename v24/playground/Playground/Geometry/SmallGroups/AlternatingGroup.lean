@@ -1,32 +1,42 @@
 import Mathlib
 
--- Define the alternating group as even permutations (sign = 1)
 abbrev AlternatingGroup (n : ℕ) := {σ : Equiv.Perm (Fin n) // Equiv.Perm.sign σ = 1}
 
-def myMul (n : ℕ) (a b : AlternatingGroup n) : AlternatingGroup n := ⟨a.val * b.val, by
+instance (n : ℕ) : Mul (AlternatingGroup n) := {
+  mul a b := ⟨a.val * b.val, by
+    rw [Equiv.Perm.sign_mul, a.prop, b.prop]
+    norm_num
+  ⟩
+}
+
+theorem mul_eq (n : ℕ) (a b : AlternatingGroup n) : a * b = ⟨a.val * b.val, by
   rw [Equiv.Perm.sign_mul, a.prop, b.prop]
   norm_num
-⟩
+⟩ := rfl
 
-def myInv (n : ℕ) (a : AlternatingGroup n) : AlternatingGroup n :=
-  ⟨a.val⁻¹, by simp [Equiv.Perm.sign_inv, a.prop]⟩
+instance (n : ℕ) : Inv (AlternatingGroup n) := {
+  inv a := ⟨a.val⁻¹, by simp [Equiv.Perm.sign_inv, a.prop]⟩
+}
 
-theorem myInvMul (n : ℕ) (a : AlternatingGroup n) : (myMul n (myInv n a) a).val = 1 := by
-  simp [myMul, myInv]
+theorem inv_eq (n : ℕ) (a : AlternatingGroup n)
+: a⁻¹ = ⟨a.val⁻¹, by simp [Equiv.Perm.sign_inv, a.prop]⟩ := rfl
 
 instance (n : ℕ) : Group (AlternatingGroup n) where
-  mul := myMul n
   mul_assoc a b c := by
-    simp [(· * ·)]
+    simp [mul_eq]
     rfl
   one := ⟨1, by simp⟩
   one_mul a := by
-    simp [(· * ·)]
+    simp [mul_eq]
     rfl
   mul_one a := by
-    simp [(· * ·)]
+    simp [mul_eq]
     rfl
-  inv := myInv n
   inv_mul_cancel a := by
-    simp [(· * ·), myMul, myInv]
-    exact Subtype.eq (myInvMul n a)
+    simp [mul_eq, inv_eq]
+    rfl
+
+#eval Fintype.card (AlternatingGroup 3)
+#eval (∀ a b : AlternatingGroup 3, a * b = b * a)
+#eval Fintype.card (AlternatingGroup 4)
+#eval (∀ a b : AlternatingGroup 4, a * b = b * a)
