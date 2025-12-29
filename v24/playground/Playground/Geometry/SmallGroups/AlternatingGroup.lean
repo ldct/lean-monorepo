@@ -35,8 +35,3 @@ instance (n : ℕ) : Group (AlternatingGroup n) where
   inv_mul_cancel a := by
     simp [mul_eq, inv_eq]
     rfl
-
-#eval Fintype.card (AlternatingGroup 3)
-#eval (∀ a b : AlternatingGroup 3, a * b = b * a)
-#eval Fintype.card (AlternatingGroup 4)
-#eval (∀ a b : AlternatingGroup 4, a * b = b * a)

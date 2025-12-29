@@ -41,17 +41,30 @@ def run_build():
         ("Playground.Geometry.SmallGroups.EvalFracInvolutions", "fracinvolutions"),
         ("Playground.Geometry.SmallGroups.EvalCommutingFraction", "commutingfraction"),
         ("Playground.Geometry.SmallGroups.EvalNumSubgroups", "numsubgroups"),
+        ("Playground.Geometry.SmallGroups.EvalExponent", "exponent"),
     ]
 
     outputs = {}
     for eval_file, property_name in eval_files:
         print(f"Building {eval_file}...")
-        result = subprocess.run(
+
+        # Use Popen to stream output while also capturing it
+        process = subprocess.Popen(
             ["lake", "build", eval_file],
-            capture_output=True,
-            text=True
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            bufsize=1
         )
-        outputs[property_name] = result.stdout + result.stderr
+
+        # Stream output line by line while collecting it
+        collected_output = []
+        for line in process.stdout:
+            print(line, end='')  # Print to stdout in real-time
+            collected_output.append(line)
+
+        process.wait()
+        outputs[property_name] = ''.join(collected_output)
 
     return outputs
 
@@ -74,6 +87,7 @@ def parse_output(outputs):
         'FracInvolutions': 'frac_involutions',
         'CommutingFraction': 'commuting_fraction',
         'NumSubgroups': 'num_subgroups',
+        'Exponent': 'exponent',
     }
 
     # Parse each property's output
