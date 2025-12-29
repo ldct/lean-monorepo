@@ -62,6 +62,7 @@ theorem orderOf1 {G} [Group G] [Fintype G] [DecidableEq G] : finOrderOf (1 : G) 
   simp at *
   exact Fin.one_le_of_ne_zero hb
 
+-- actually this is the max order, exponent is LCM
 def exponent (G) [Group G] [Fintype G] [DecidableEq G] : Fin ((Fintype.card G) + 1) :=
   Finset.max' ( Finset.image (fun (g : G) ↦ finOrderOf g) (Finset.univ : Finset G)) (by
     use ⟨ 1, by grind [Fintype.card_pos] ⟩
