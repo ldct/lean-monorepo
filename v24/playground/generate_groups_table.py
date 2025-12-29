@@ -30,6 +30,7 @@ def run_build():
         ("Playground.Geometry.SmallGroups.EvalFracInvolutions", "fracinvolutions"),
         ("Playground.Geometry.SmallGroups.EvalCommutingFraction", "commutingfraction"),
         ("Playground.Geometry.SmallGroups.EvalNumSubgroups", "numsubgroups"),
+        ("Playground.Geometry.SmallGroups.EvalExponent", "exponent"),
     ]
 
     outputs = {}
@@ -112,6 +113,7 @@ def parse_output(outputs):
         'FracInvolutions': 'frac_involutions',
         'CommutingFraction': 'commuting_fraction',
         'NumSubgroups': 'num_subgroups',
+        'Exponent': 'exponent',
     }
 
     # Parse each property's output
@@ -419,6 +421,7 @@ def generate_html(groups, group_info, all_groups_tsv):
                     <th>GAP ID</th>
                     <th>Group Name</th>
                     <th>Abelian?</th>
+                    <th class="number">Exponent</th>
                     <th class="number">Frac. Involutions</th>
                     <th class="number">Commuting Fraction</th>
                     <th class="number"># Subgroups</th>
@@ -434,6 +437,7 @@ def generate_html(groups, group_info, all_groups_tsv):
             if implemented and data:
                 # Implemented group - show full stats
                 abelian = data.get('abelian', '?')
+                exponent_val = data.get('exponent', '?')
                 frac_inv = format_rational(data.get('frac_involutions', '?'))
                 comm_frac = format_rational(data.get('commuting_fraction', '?'))
                 num_subgroups = data.get('num_subgroups', '?')
@@ -454,6 +458,7 @@ def generate_html(groups, group_info, all_groups_tsv):
                 # Unimplemented group - show label, blank stats
                 abelian_class = ''
                 abelian_text = '-'
+                exponent_val = '-'
                 frac_inv = '-'
                 comm_frac = '-'
                 num_subgroups = '-'
@@ -467,6 +472,7 @@ def generate_html(groups, group_info, all_groups_tsv):
                         <div class="group-abbrev">{abbrev_line}</div>
                     </td>
                     <td class="{abelian_class}">{abelian_text}</td>
+                    <td class="number">{exponent_val}</td>
                     <td class="number">{frac_inv}</td>
                     <td class="number">{comm_frac}</td>
                     <td class="number">{num_subgroups}</td>

@@ -11,7 +11,7 @@ instance (n : ℕ) : Mul (AlternatingGroup n) := {
 
 theorem mul_eq (n : ℕ) (a b : AlternatingGroup n) : a * b = ⟨a.val * b.val, by
   rw [Equiv.Perm.sign_mul, a.prop, b.prop]
-  norm_num
+  decide
 ⟩ := rfl
 
 instance (n : ℕ) : Inv (AlternatingGroup n) := {
