@@ -1,14 +1,14 @@
 import Mathlib
 
-def Group.IsAbelian (G) [Group G] : Prop := ∀ x y : G, x * y = y * x
+def Group.IsAbelian (G) [Group G] [Fintype G] [DecidableEq G] : Bool := decide (∀ x y : G, x * y = y * x)
 
-theorem Group.IsAbelian_iff {G} [Group G] : Group.IsAbelian G ↔ ∀ x y : G, x * y = y * x := by
+theorem Group.IsAbelian_iff {G} [Group G] [Fintype G] [DecidableEq G] : Group.IsAbelian G ↔ ∀ x y : G, x * y = y * x := by
   simp [Group.IsAbelian]
 
-instance decidableGroupIsAbelian {G} [Group G]
-  [Decidable (∀ g z : G, g * z = z * g)]
-: Decidable (Group.IsAbelian G) :=
-  decidable_of_iff' _ Group.IsAbelian_iff
+-- instance decidableGroupIsAbelian {G} [Group G]
+--   [Decidable (∀ g z : G, g * z = z * g)]
+-- : Decidable (Group.IsAbelian G) :=
+--   decidable_of_iff' _ Group.IsAbelian_iff
 
 def Group.FracInvolutions (G) [Group G] [Fintype G] [DecidableEq G] : ℚ :=
   (Finset.card { g : G | g^2 = 1} : ℚ) / (Fintype.card G : ℚ)
@@ -30,7 +30,7 @@ instance decidableMyIsSubgroup {G} [Group G] [Fintype G] (H : Finset G)
   decidable_of_iff' _ (MyIsSubgroup_iff H)
 
 def Group.numSubgroups (G) [Group G] [Fintype G] [DecidableEq G] : ℕ :=
-  if (Fintype.card G > 12) then 0 else Fintype.card {s : Finset G | MyIsSubgroup G s}
+  if (Fintype.card G > 9) then 0 else Fintype.card {s : Finset G | MyIsSubgroup G s}
 
 
 def finOrderOf {G} [Group G] [Fintype G] [DecidableEq G] (a : G) : Fin ((Fintype.card G) + 1):=

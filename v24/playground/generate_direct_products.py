@@ -60,6 +60,7 @@ def main():
     created = []
     overwritten = []
     skipped = []
+    all_imports = []
 
     print("Loading groups from group_names.tsv...")
     groups_by_order = load_groups_from_tsv()
@@ -90,12 +91,21 @@ def main():
             )
             file_path.write_text(content)
 
+            # Track import for SmallGroups.lean
+            all_imports.append(f"import Playground.Geometry.SmallGroups.Gap_{order}.Gap_{order}_{gap_id}")
+
             if existed:
                 overwritten.append((order, gap_id, label))
                 print(f"↻ Overwrote {file_path.name}: {label} = {abbrev_name}")
             else:
                 created.append((order, gap_id, label))
                 print(f"✓ Created {file_path.name}: {label} = {abbrev_name}")
+
+    # Write SmallGroups.lean
+    smallgroups_path = base_dir / "SmallGroups.lean"
+    smallgroups_content = "\n".join(all_imports) + "\n"
+    smallgroups_path.write_text(smallgroups_content)
+    print(f"\n✓ Wrote {smallgroups_path} with {len(all_imports)} imports")
 
     # Report results
     print(f"\n{'='*60}")
@@ -111,8 +121,7 @@ def main():
 
     if created:
         print(f"\n⚠️  IMPORTANT: You need to:")
-        print(f"  1. Add imports to SmallGroups.lean: python3 update_smallgroups_imports.py")
-        print(f"  2. Regenerate evaluation files: python3 generate_eval_files.py")
+        print(f"  1. Regenerate evaluation files: python3 generate_eval_files.py")
 
 
 if __name__ == "__main__":

@@ -44,13 +44,17 @@ def generate_eval_file(property_name, eval_expr, group_names, output_file):
     """Generate a centralized evaluation file for a property."""
     lines = [
         "import Playground.Geometry.SmallGroups.SmallGroups",
+        "import Playground.Geometry.SmallGroups.GroupProps",
         "",
         f"-- Evaluate {property_name} for all groups",
+        "#eval [",
     ]
 
-    for group_name in group_names:
-        lines.append(f"#eval {eval_expr} {group_name}")
+    for i, group_name in enumerate(group_names):
+        comma = "," if i < len(group_names) - 1 else ""
+        lines.append(f"  {eval_expr} {group_name}{comma}")
 
+    lines.append("]")
     lines.append("")  # Empty line at end
 
     with open(output_file, 'w') as f:

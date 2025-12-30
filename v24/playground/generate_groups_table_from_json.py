@@ -7,6 +7,7 @@ Includes both implemented and unimplemented groups from TSV file.
 
 import json
 import csv
+import re
 from collections import defaultdict
 from pathlib import Path
 from parse_group_label import parse_group_label
@@ -141,7 +142,8 @@ def format_group_name_html(name):
 
 
 def format_rational(rat_str):
-    """Format rational number strings like 'mkRat 1 3' into fractions."""
+    """Format rational number strings like 'mkRat 1 3' or '(1 : Rat)/3' into fractions."""
+    # Handle old format: mkRat 1 3
     if rat_str.startswith('mkRat '):
         parts = rat_str.split()
         if len(parts) == 3:
@@ -149,6 +151,21 @@ def format_rational(rat_str):
             if denom == '1':
                 return num
             return f"{num}/{denom}"
+
+    # Handle new format: (1 : Rat)/3 or just an integer
+    if '/' in rat_str:
+        # Extract numerator and denominator from format like "(1 : Rat)/3"
+        match = re.match(r'\((\d+)\s*:\s*Rat\)/(\d+)', rat_str)
+        if match:
+            num, denom = match.group(1), match.group(2)
+            if denom == '1':
+                return num
+            return f"{num}/{denom}"
+
+    # Handle plain integers
+    if rat_str.isdigit():
+        return rat_str
+
     return rat_str
 
 

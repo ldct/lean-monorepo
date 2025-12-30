@@ -76,10 +76,6 @@ def parse_output(outputs):
     # Get ordered list of groups from SmallGroups.lean
     group_order = get_group_order_from_smallgroups()
 
-    # Pattern to match info lines from eval files
-    # Example: info: Playground/Geometry/SmallGroups/EvalCardinality.lean:4:0: 1
-    pattern = r'info: Playground/Geometry/SmallGroups/Eval(\w+)\.lean:(\d+):0: (.+)'
-
     # Property name mapping to dict keys
     property_map = {
         'Cardinality': 'card',
@@ -92,19 +88,25 @@ def parse_output(outputs):
 
     # Parse each property's output
     for property_name, output in outputs.items():
-        for line in output.split('\n'):
-            match = re.search(pattern, line)
-            if match:
-                eval_type = match.group(1)  # e.g., "Cardinality"
-                line_num = int(match.group(2))
-                value = match.group(3)
+        # Look for the info line with the array output
+        # Pattern: info: Playground/Geometry/SmallGroups/EvalCardinality.lean:5:0: [1, 2, 3, ...]
+        pattern = r'info: Playground/Geometry/SmallGroups/Eval(\w+)\.lean:\d+:\d+: \[(.+?)\]'
 
-                # Map line number to group index
-                # Line 1: import, Line 2: blank, Line 3: comment, Line 4+: #eval statements
-                group_index = line_num - 4
-                if 0 <= group_index < len(group_order):
-                    key = group_order[group_index]
-                    dict_key = property_map.get(eval_type, eval_type.lower())
+        # Try to match single-line array first
+        match = re.search(pattern, output, re.DOTALL)
+        if match:
+            eval_type = match.group(1)  # e.g., "Cardinality"
+            array_content = match.group(2).strip()
+
+            # Split by comma, but be careful with nested structures like "mkRat 1 3"
+            # Simple split works for most cases
+            values = [v.strip() for v in array_content.split(',')]
+
+            # Map each value to the corresponding group
+            dict_key = property_map.get(eval_type, eval_type.lower())
+            for i, value in enumerate(values):
+                if i < len(group_order):
+                    key = group_order[i]
                     groups[key][dict_key] = value
 
     return groups
