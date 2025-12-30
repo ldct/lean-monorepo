@@ -20,11 +20,11 @@ def get_group_order_from_smallgroups():
     with open(smallgroups_file, 'r') as f:
         for line in f:
             line = line.strip()
-            # Skip commented imports
-            if line.startswith('--'):
+            # Skip comments, imports, and options
+            if line.startswith('--') or line.startswith('import') or line.startswith('set_option') or not line:
                 continue
-            # Match import statements: import Playground.Geometry.SmallGroups.Gap_N.Gap_N_M
-            match = re.match(r'import Playground\.Geometry\.SmallGroups\.Gap_(\d+)\.Gap_\d+_(\d+)', line)
+            # Match abbrev statements: abbrev Gap_N_M := ...
+            match = re.match(r'abbrev\s+Gap_(\d+)_(\d+)\s+:=', line)
             if match:
                 order = int(match.group(1))
                 gap_id = int(match.group(2))
@@ -113,32 +113,27 @@ def parse_output(outputs):
 
 
 def parse_lean_files():
-    """Parse Lean files to extract group names and abbrev definitions."""
-    base_dir = Path("Playground/Geometry/SmallGroups")
+    """Parse SmallGroups.lean to extract group names and abbrev definitions."""
+    smallgroups_file = Path("Playground/Geometry/SmallGroups/SmallGroups.lean")
     group_info = {}
 
-    for gap_file in base_dir.glob("Gap_*/Gap_*.lean"):
-        try:
-            # Extract order and gap_id from filename
-            parts = gap_file.stem.split("_")
-            if len(parts) >= 3:
-                order = int(parts[1])
-                gap_id = int(parts[2])
-
-                # Read file and find abbrev line
-                content = gap_file.read_text()
-
-                # Match the full abbrev line
-                abbrev_match = re.search(r'abbrev\s+(\w+)\s*:=\s*(.+?)(?=\n|$)', content, re.MULTILINE)
-                if abbrev_match:
-                    abbrev_name = abbrev_match.group(1)
-                    abbrev_def = abbrev_match.group(2).strip()
-                    group_info[(order, gap_id)] = {
-                        'name': abbrev_name,
-                        'definition': abbrev_def
-                    }
-        except (ValueError, IndexError):
-            continue
+    with open(smallgroups_file, 'r') as f:
+        for line in f:
+            line = line.strip()
+            # Skip comments, imports, and options
+            if line.startswith('--') or line.startswith('import') or line.startswith('set_option') or not line:
+                continue
+            # Match abbrev statements: abbrev Gap_N_M := definition
+            match = re.match(r'abbrev\s+(Gap_(\d+)_(\d+))\s*:=\s*(.+?)(?=\n|$)', line)
+            if match:
+                abbrev_name = match.group(1)
+                order = int(match.group(2))
+                gap_id = int(match.group(3))
+                abbrev_def = match.group(4).strip()
+                group_info[(order, gap_id)] = {
+                    'name': abbrev_name,
+                    'definition': abbrev_def
+                }
 
     return group_info
 
@@ -176,7 +171,6 @@ def main():
     # Save to JSON
     output_file = save_stats(groups, group_info)
     print(f"Statistics saved to {output_file}")
-    print(f"\nNext step: Run 'python3 generate_groups_table.py' to generate HTML")
 
 
 if __name__ == "__main__":

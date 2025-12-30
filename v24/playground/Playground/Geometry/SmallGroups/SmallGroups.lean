@@ -1,185 +1,194 @@
-import Playground.Geometry.SmallGroups.Gap_1.Gap_1_1
-import Playground.Geometry.SmallGroups.Gap_2.Gap_2_1
-import Playground.Geometry.SmallGroups.Gap_3.Gap_3_1
-import Playground.Geometry.SmallGroups.Gap_4.Gap_4_1
-import Playground.Geometry.SmallGroups.Gap_4.Gap_4_2
-import Playground.Geometry.SmallGroups.Gap_5.Gap_5_1
-import Playground.Geometry.SmallGroups.Gap_6.Gap_6_2
-import Playground.Geometry.SmallGroups.Gap_6.Gap_6_1
-import Playground.Geometry.SmallGroups.Gap_7.Gap_7_1
-import Playground.Geometry.SmallGroups.Gap_8.Gap_8_1
-import Playground.Geometry.SmallGroups.Gap_8.Gap_8_3
-import Playground.Geometry.SmallGroups.Gap_8.Gap_8_4
-import Playground.Geometry.SmallGroups.Gap_8.Gap_8_5
-import Playground.Geometry.SmallGroups.Gap_8.Gap_8_2
-import Playground.Geometry.SmallGroups.Gap_9.Gap_9_1
-import Playground.Geometry.SmallGroups.Gap_9.Gap_9_2
-import Playground.Geometry.SmallGroups.Gap_10.Gap_10_2
-import Playground.Geometry.SmallGroups.Gap_10.Gap_10_1
-import Playground.Geometry.SmallGroups.Gap_11.Gap_11_1
-import Playground.Geometry.SmallGroups.Gap_12.Gap_12_2
-import Playground.Geometry.SmallGroups.Gap_12.Gap_12_3
-import Playground.Geometry.SmallGroups.Gap_12.Gap_12_4
-import Playground.Geometry.SmallGroups.Gap_12.Gap_12_5
-import Playground.Geometry.SmallGroups.Gap_13.Gap_13_1
-import Playground.Geometry.SmallGroups.Gap_14.Gap_14_2
-import Playground.Geometry.SmallGroups.Gap_14.Gap_14_1
-import Playground.Geometry.SmallGroups.Gap_15.Gap_15_1
-import Playground.Geometry.SmallGroups.Gap_16.Gap_16_1
-import Playground.Geometry.SmallGroups.Gap_16.Gap_16_7
-import Playground.Geometry.SmallGroups.Gap_16.Gap_16_9
-import Playground.Geometry.SmallGroups.Gap_16.Gap_16_2
-import Playground.Geometry.SmallGroups.Gap_16.Gap_16_14
-import Playground.Geometry.SmallGroups.Gap_16.Gap_16_5
-import Playground.Geometry.SmallGroups.Gap_16.Gap_16_10
-import Playground.Geometry.SmallGroups.Gap_16.Gap_16_11
-import Playground.Geometry.SmallGroups.Gap_16.Gap_16_12
-import Playground.Geometry.SmallGroups.Gap_17.Gap_17_1
-import Playground.Geometry.SmallGroups.Gap_18.Gap_18_2
-import Playground.Geometry.SmallGroups.Gap_18.Gap_18_1
-import Playground.Geometry.SmallGroups.Gap_18.Gap_18_5
-import Playground.Geometry.SmallGroups.Gap_18.Gap_18_3
-import Playground.Geometry.SmallGroups.Gap_19.Gap_19_1
-import Playground.Geometry.SmallGroups.Gap_20.Gap_20_2
-import Playground.Geometry.SmallGroups.Gap_20.Gap_20_4
-import Playground.Geometry.SmallGroups.Gap_20.Gap_20_5
-import Playground.Geometry.SmallGroups.Gap_21.Gap_21_2
-import Playground.Geometry.SmallGroups.Gap_22.Gap_22_2
-import Playground.Geometry.SmallGroups.Gap_22.Gap_22_1
-import Playground.Geometry.SmallGroups.Gap_23.Gap_23_1
-import Playground.Geometry.SmallGroups.Gap_24.Gap_24_2
-import Playground.Geometry.SmallGroups.Gap_24.Gap_24_12
-import Playground.Geometry.SmallGroups.Gap_24.Gap_24_6
-import Playground.Geometry.SmallGroups.Gap_24.Gap_24_9
-import Playground.Geometry.SmallGroups.Gap_24.Gap_24_15
-import Playground.Geometry.SmallGroups.Gap_24.Gap_24_13
-import Playground.Geometry.SmallGroups.Gap_24.Gap_24_5
-import Playground.Geometry.SmallGroups.Gap_24.Gap_24_10
-import Playground.Geometry.SmallGroups.Gap_24.Gap_24_14
-import Playground.Geometry.SmallGroups.Gap_24.Gap_24_11
-import Playground.Geometry.SmallGroups.Gap_25.Gap_25_1
-import Playground.Geometry.SmallGroups.Gap_25.Gap_25_2
-import Playground.Geometry.SmallGroups.Gap_26.Gap_26_2
-import Playground.Geometry.SmallGroups.Gap_26.Gap_26_1
-import Playground.Geometry.SmallGroups.Gap_27.Gap_27_1
-import Playground.Geometry.SmallGroups.Gap_27.Gap_27_5
-import Playground.Geometry.SmallGroups.Gap_27.Gap_27_2
-import Playground.Geometry.SmallGroups.Gap_28.Gap_28_2
-import Playground.Geometry.SmallGroups.Gap_28.Gap_28_3
-import Playground.Geometry.SmallGroups.Gap_28.Gap_28_4
-import Playground.Geometry.SmallGroups.Gap_29.Gap_29_1
-import Playground.Geometry.SmallGroups.Gap_30.Gap_30_4
-import Playground.Geometry.SmallGroups.Gap_30.Gap_30_3
-import Playground.Geometry.SmallGroups.Gap_30.Gap_30_1
-import Playground.Geometry.SmallGroups.Gap_30.Gap_30_2
-import Playground.Geometry.SmallGroups.Gap_31.Gap_31_1
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_1
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_18
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_20
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_51
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_3
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_16
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_21
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_36
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_45
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_25
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_39
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_46
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_26
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_41
-import Playground.Geometry.SmallGroups.Gap_32.Gap_32_47
-import Playground.Geometry.SmallGroups.Gap_33.Gap_33_1
-import Playground.Geometry.SmallGroups.Gap_34.Gap_34_2
-import Playground.Geometry.SmallGroups.Gap_34.Gap_34_1
-import Playground.Geometry.SmallGroups.Gap_35.Gap_35_1
-import Playground.Geometry.SmallGroups.Gap_36.Gap_36_2
-import Playground.Geometry.SmallGroups.Gap_36.Gap_36_4
-import Playground.Geometry.SmallGroups.Gap_36.Gap_36_14
-import Playground.Geometry.SmallGroups.Gap_36.Gap_36_5
-import Playground.Geometry.SmallGroups.Gap_36.Gap_36_8
-import Playground.Geometry.SmallGroups.Gap_36.Gap_36_12
-import Playground.Geometry.SmallGroups.Gap_36.Gap_36_11
-import Playground.Geometry.SmallGroups.Gap_37.Gap_37_1
-import Playground.Geometry.SmallGroups.Gap_38.Gap_38_2
-import Playground.Geometry.SmallGroups.Gap_38.Gap_38_1
-import Playground.Geometry.SmallGroups.Gap_39.Gap_39_2
-import Playground.Geometry.SmallGroups.Gap_40.Gap_40_2
-import Playground.Geometry.SmallGroups.Gap_40.Gap_40_6
-import Playground.Geometry.SmallGroups.Gap_40.Gap_40_9
-import Playground.Geometry.SmallGroups.Gap_40.Gap_40_14
-import Playground.Geometry.SmallGroups.Gap_40.Gap_40_5
-import Playground.Geometry.SmallGroups.Gap_40.Gap_40_10
-import Playground.Geometry.SmallGroups.Gap_40.Gap_40_13
-import Playground.Geometry.SmallGroups.Gap_40.Gap_40_11
-import Playground.Geometry.SmallGroups.Gap_41.Gap_41_1
-import Playground.Geometry.SmallGroups.Gap_42.Gap_42_6
-import Playground.Geometry.SmallGroups.Gap_42.Gap_42_5
-import Playground.Geometry.SmallGroups.Gap_42.Gap_42_3
-import Playground.Geometry.SmallGroups.Gap_42.Gap_42_4
-import Playground.Geometry.SmallGroups.Gap_43.Gap_43_1
-import Playground.Geometry.SmallGroups.Gap_44.Gap_44_2
-import Playground.Geometry.SmallGroups.Gap_44.Gap_44_3
-import Playground.Geometry.SmallGroups.Gap_44.Gap_44_4
-import Playground.Geometry.SmallGroups.Gap_45.Gap_45_1
-import Playground.Geometry.SmallGroups.Gap_45.Gap_45_2
-import Playground.Geometry.SmallGroups.Gap_46.Gap_46_2
-import Playground.Geometry.SmallGroups.Gap_46.Gap_46_1
-import Playground.Geometry.SmallGroups.Gap_47.Gap_47_1
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_2
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_7
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_20
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_23
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_52
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_44
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_48
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_31
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_38
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_49
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_4
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_25
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_45
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_40
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_36
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_51
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_46
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_27
-import Playground.Geometry.SmallGroups.Gap_48.Gap_48_35
-import Playground.Geometry.SmallGroups.Gap_49.Gap_49_1
-import Playground.Geometry.SmallGroups.Gap_49.Gap_49_2
-import Playground.Geometry.SmallGroups.Gap_50.Gap_50_2
-import Playground.Geometry.SmallGroups.Gap_50.Gap_50_1
-import Playground.Geometry.SmallGroups.Gap_50.Gap_50_5
-import Playground.Geometry.SmallGroups.Gap_50.Gap_50_3
-import Playground.Geometry.SmallGroups.Gap_51.Gap_51_1
-import Playground.Geometry.SmallGroups.Gap_52.Gap_52_2
-import Playground.Geometry.SmallGroups.Gap_52.Gap_52_4
-import Playground.Geometry.SmallGroups.Gap_52.Gap_52_5
-import Playground.Geometry.SmallGroups.Gap_53.Gap_53_1
-import Playground.Geometry.SmallGroups.Gap_54.Gap_54_2
-import Playground.Geometry.SmallGroups.Gap_54.Gap_54_1
-import Playground.Geometry.SmallGroups.Gap_54.Gap_54_9
-import Playground.Geometry.SmallGroups.Gap_54.Gap_54_15
-import Playground.Geometry.SmallGroups.Gap_54.Gap_54_4
-import Playground.Geometry.SmallGroups.Gap_54.Gap_54_3
-import Playground.Geometry.SmallGroups.Gap_54.Gap_54_12
-import Playground.Geometry.SmallGroups.Gap_55.Gap_55_1
-import Playground.Geometry.SmallGroups.Gap_56.Gap_56_2
-import Playground.Geometry.SmallGroups.Gap_56.Gap_56_5
-import Playground.Geometry.SmallGroups.Gap_56.Gap_56_8
-import Playground.Geometry.SmallGroups.Gap_56.Gap_56_13
-import Playground.Geometry.SmallGroups.Gap_56.Gap_56_4
-import Playground.Geometry.SmallGroups.Gap_56.Gap_56_9
-import Playground.Geometry.SmallGroups.Gap_56.Gap_56_12
-import Playground.Geometry.SmallGroups.Gap_56.Gap_56_10
-import Playground.Geometry.SmallGroups.Gap_57.Gap_57_2
-import Playground.Geometry.SmallGroups.Gap_58.Gap_58_2
-import Playground.Geometry.SmallGroups.Gap_58.Gap_58_1
-import Playground.Geometry.SmallGroups.Gap_59.Gap_59_1
-import Playground.Geometry.SmallGroups.Gap_60.Gap_60_4
-import Playground.Geometry.SmallGroups.Gap_60.Gap_60_5
-import Playground.Geometry.SmallGroups.Gap_60.Gap_60_12
-import Playground.Geometry.SmallGroups.Gap_60.Gap_60_13
-import Playground.Geometry.SmallGroups.Gap_60.Gap_60_8
-import Playground.Geometry.SmallGroups.Gap_60.Gap_60_9
-import Playground.Geometry.SmallGroups.Gap_60.Gap_60_10
-import Playground.Geometry.SmallGroups.Gap_60.Gap_60_11
+import Mathlib.Algebra.Group.TypeTags.Basic
+import Mathlib.Data.ZMod.Basic
+import Mathlib.GroupTheory.SpecificGroups.Dihedral
+import Mathlib.GroupTheory.SpecificGroups.Quaternion
+
+import Playground.Geometry.SmallGroups.AlternatingGroup
+
+set_option linter.style.longLine false
+
+abbrev Gap_1_1 := Multiplicative (ZMod 1)
+abbrev Gap_2_1 := Multiplicative (ZMod 2)
+abbrev Gap_3_1 := Multiplicative (ZMod 3)
+abbrev Gap_4_1 := Multiplicative (ZMod 4)
+abbrev Gap_4_2 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2)
+abbrev Gap_5_1 := Multiplicative (ZMod 5)
+abbrev Gap_6_2 := Multiplicative (ZMod 6)
+abbrev Gap_6_1 := Equiv.Perm (Fin 3)
+abbrev Gap_7_1 := Multiplicative (ZMod 7)
+abbrev Gap_8_1 := Multiplicative (ZMod 8)
+abbrev Gap_8_3 := DihedralGroup 4
+abbrev Gap_8_4 := QuaternionGroup 2
+abbrev Gap_8_5 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2)
+abbrev Gap_8_2 := Multiplicative (ZMod 2) × Multiplicative (ZMod 4)
+abbrev Gap_9_1 := Multiplicative (ZMod 9)
+abbrev Gap_9_2 := Multiplicative (ZMod 3) × Multiplicative (ZMod 3)
+abbrev Gap_10_2 := Multiplicative (ZMod 10)
+abbrev Gap_10_1 := DihedralGroup 5
+abbrev Gap_11_1 := Multiplicative (ZMod 11)
+abbrev Gap_12_2 := Multiplicative (ZMod 12)
+abbrev Gap_12_3 := AlternatingGroup 4
+abbrev Gap_12_4 := DihedralGroup 6
+abbrev Gap_12_5 := Multiplicative (ZMod 2) × Multiplicative (ZMod 6)
+abbrev Gap_13_1 := Multiplicative (ZMod 13)
+abbrev Gap_14_2 := Multiplicative (ZMod 14)
+abbrev Gap_14_1 := DihedralGroup 7
+abbrev Gap_15_1 := Multiplicative (ZMod 15)
+abbrev Gap_16_1 := Multiplicative (ZMod 16)
+abbrev Gap_16_7 := DihedralGroup 8
+abbrev Gap_16_9 := QuaternionGroup 4
+abbrev Gap_16_2 := Multiplicative (ZMod 4) × Multiplicative (ZMod 4)
+abbrev Gap_16_14 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2)
+abbrev Gap_16_5 := Multiplicative (ZMod 2) × Multiplicative (ZMod 8)
+abbrev Gap_16_10 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 4)
+abbrev Gap_16_11 := Multiplicative (ZMod 2) × DihedralGroup 4
+abbrev Gap_16_12 := Multiplicative (ZMod 2) × QuaternionGroup 2
+abbrev Gap_17_1 := Multiplicative (ZMod 17)
+abbrev Gap_18_2 := Multiplicative (ZMod 18)
+abbrev Gap_18_1 := DihedralGroup 9
+abbrev Gap_18_5 := Multiplicative (ZMod 3) × Multiplicative (ZMod 6)
+abbrev Gap_18_3 := Multiplicative (ZMod 3) × Equiv.Perm (Fin 3)
+abbrev Gap_19_1 := Multiplicative (ZMod 19)
+abbrev Gap_20_2 := Multiplicative (ZMod 20)
+abbrev Gap_20_4 := DihedralGroup 10
+abbrev Gap_20_5 := Multiplicative (ZMod 2) × Multiplicative (ZMod 10)
+abbrev Gap_21_2 := Multiplicative (ZMod 21)
+abbrev Gap_22_2 := Multiplicative (ZMod 22)
+abbrev Gap_22_1 := DihedralGroup 11
+abbrev Gap_23_1 := Multiplicative (ZMod 23)
+abbrev Gap_24_2 := Multiplicative (ZMod 24)
+abbrev Gap_24_12 := Equiv.Perm (Fin 4)
+abbrev Gap_24_6 := DihedralGroup 12
+abbrev Gap_24_9 := Multiplicative (ZMod 2) × Multiplicative (ZMod 12)
+abbrev Gap_24_15 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 6)
+abbrev Gap_24_13 := Multiplicative (ZMod 2) × AlternatingGroup 4
+abbrev Gap_24_5 := Multiplicative (ZMod 4) × Equiv.Perm (Fin 3)
+abbrev Gap_24_10 := Multiplicative (ZMod 3) × DihedralGroup 4
+abbrev Gap_24_14 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Equiv.Perm (Fin 3)
+abbrev Gap_24_11 := Multiplicative (ZMod 3) × QuaternionGroup 2
+abbrev Gap_25_1 := Multiplicative (ZMod 25)
+abbrev Gap_25_2 := Multiplicative (ZMod 5) × Multiplicative (ZMod 5)
+abbrev Gap_26_2 := Multiplicative (ZMod 26)
+abbrev Gap_26_1 := DihedralGroup 13
+abbrev Gap_27_1 := Multiplicative (ZMod 27)
+abbrev Gap_27_5 := Multiplicative (ZMod 3) × Multiplicative (ZMod 3) × Multiplicative (ZMod 3)
+abbrev Gap_27_2 := Multiplicative (ZMod 3) × Multiplicative (ZMod 9)
+abbrev Gap_28_2 := Multiplicative (ZMod 28)
+abbrev Gap_28_3 := DihedralGroup 14
+abbrev Gap_28_4 := Multiplicative (ZMod 2) × Multiplicative (ZMod 14)
+abbrev Gap_29_1 := Multiplicative (ZMod 29)
+abbrev Gap_30_4 := Multiplicative (ZMod 30)
+abbrev Gap_30_3 := DihedralGroup 15
+abbrev Gap_30_1 := Multiplicative (ZMod 5) × Equiv.Perm (Fin 3)
+abbrev Gap_30_2 := Multiplicative (ZMod 3) × DihedralGroup 5
+abbrev Gap_31_1 := Multiplicative (ZMod 31)
+abbrev Gap_32_1 := Multiplicative (ZMod 32)
+abbrev Gap_32_18 := DihedralGroup 16
+abbrev Gap_32_20 := QuaternionGroup 8
+abbrev Gap_32_51 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2)
+abbrev Gap_32_3 := Multiplicative (ZMod 4) × Multiplicative (ZMod 8)
+abbrev Gap_32_16 := Multiplicative (ZMod 2) × Multiplicative (ZMod 16)
+abbrev Gap_32_21 := Multiplicative (ZMod 2) × Multiplicative (ZMod 4) × Multiplicative (ZMod 4)
+abbrev Gap_32_36 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 8)
+abbrev Gap_32_45 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 4)
+abbrev Gap_32_25 := Multiplicative (ZMod 4) × DihedralGroup 4
+abbrev Gap_32_39 := Multiplicative (ZMod 2) × DihedralGroup 8
+abbrev Gap_32_46 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × DihedralGroup 4
+abbrev Gap_32_26 := Multiplicative (ZMod 4) × QuaternionGroup 2
+abbrev Gap_32_41 := Multiplicative (ZMod 2) × QuaternionGroup 4
+abbrev Gap_32_47 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × QuaternionGroup 2
+abbrev Gap_33_1 := Multiplicative (ZMod 33)
+abbrev Gap_34_2 := Multiplicative (ZMod 34)
+abbrev Gap_34_1 := DihedralGroup 17
+abbrev Gap_35_1 := Multiplicative (ZMod 35)
+abbrev Gap_36_2 := Multiplicative (ZMod 36)
+abbrev Gap_36_4 := DihedralGroup 18
+abbrev Gap_36_14 := Multiplicative (ZMod 6) × Multiplicative (ZMod 6)
+abbrev Gap_36_5 := Multiplicative (ZMod 2) × Multiplicative (ZMod 18)
+abbrev Gap_36_8 := Multiplicative (ZMod 3) × Multiplicative (ZMod 12)
+abbrev Gap_36_12 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 6)
+abbrev Gap_36_11 := Multiplicative (ZMod 3) × AlternatingGroup 4
+abbrev Gap_37_1 := Multiplicative (ZMod 37)
+abbrev Gap_38_2 := Multiplicative (ZMod 38)
+abbrev Gap_38_1 := DihedralGroup 19
+abbrev Gap_39_2 := Multiplicative (ZMod 39)
+abbrev Gap_40_2 := Multiplicative (ZMod 40)
+abbrev Gap_40_6 := DihedralGroup 20
+abbrev Gap_40_9 := Multiplicative (ZMod 2) × Multiplicative (ZMod 20)
+abbrev Gap_40_14 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 10)
+abbrev Gap_40_5 := Multiplicative (ZMod 4) × DihedralGroup 5
+abbrev Gap_40_10 := Multiplicative (ZMod 5) × DihedralGroup 4
+abbrev Gap_40_13 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × DihedralGroup 5
+abbrev Gap_40_11 := Multiplicative (ZMod 5) × QuaternionGroup 2
+abbrev Gap_41_1 := Multiplicative (ZMod 41)
+abbrev Gap_42_6 := Multiplicative (ZMod 42)
+abbrev Gap_42_5 := DihedralGroup 21
+abbrev Gap_42_3 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 7)
+abbrev Gap_42_4 := Multiplicative (ZMod 3) × DihedralGroup 7
+abbrev Gap_43_1 := Multiplicative (ZMod 43)
+abbrev Gap_44_2 := Multiplicative (ZMod 44)
+abbrev Gap_44_3 := DihedralGroup 22
+abbrev Gap_44_4 := Multiplicative (ZMod 2) × Multiplicative (ZMod 22)
+abbrev Gap_45_1 := Multiplicative (ZMod 45)
+abbrev Gap_45_2 := Multiplicative (ZMod 3) × Multiplicative (ZMod 15)
+abbrev Gap_46_2 := Multiplicative (ZMod 46)
+abbrev Gap_46_1 := DihedralGroup 23
+abbrev Gap_47_1 := Multiplicative (ZMod 47)
+abbrev Gap_48_2 := Multiplicative (ZMod 48)
+abbrev Gap_48_7 := DihedralGroup 24
+abbrev Gap_48_20 := Multiplicative (ZMod 4) × Multiplicative (ZMod 12)
+abbrev Gap_48_23 := Multiplicative (ZMod 2) × Multiplicative (ZMod 24)
+abbrev Gap_48_52 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 6)
+abbrev Gap_48_44 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 12)
+abbrev Gap_48_48 := Multiplicative (ZMod 2) × Equiv.Perm (Fin 4)
+abbrev Gap_48_31 := Multiplicative (ZMod 4) × AlternatingGroup 4
+abbrev Gap_48_38 := Equiv.Perm (Fin 3) × DihedralGroup 4
+abbrev Gap_48_49 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × AlternatingGroup 4
+abbrev Gap_48_4 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 8)
+abbrev Gap_48_25 := Multiplicative (ZMod 3) × DihedralGroup 8
+abbrev Gap_48_45 := Multiplicative (ZMod 6) × DihedralGroup 4
+abbrev Gap_48_40 := Equiv.Perm (Fin 3) × QuaternionGroup 2
+abbrev Gap_48_36 := Multiplicative (ZMod 2) × DihedralGroup 12
+abbrev Gap_48_51 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2)
+abbrev Gap_48_46 := Multiplicative (ZMod 6) × QuaternionGroup 2
+abbrev Gap_48_27 := Multiplicative (ZMod 3) × QuaternionGroup 4
+abbrev Gap_48_35 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 2) × Multiplicative (ZMod 4)
+abbrev Gap_49_1 := Multiplicative (ZMod 49)
+abbrev Gap_49_2 := Multiplicative (ZMod 7) × Multiplicative (ZMod 7)
+abbrev Gap_50_2 := Multiplicative (ZMod 50)
+abbrev Gap_50_1 := DihedralGroup 25
+abbrev Gap_50_5 := Multiplicative (ZMod 5) × Multiplicative (ZMod 10)
+abbrev Gap_50_3 := Multiplicative (ZMod 5) × DihedralGroup 5
+abbrev Gap_51_1 := Multiplicative (ZMod 51)
+abbrev Gap_52_2 := Multiplicative (ZMod 52)
+abbrev Gap_52_4 := DihedralGroup 26
+abbrev Gap_52_5 := Multiplicative (ZMod 2) × Multiplicative (ZMod 26)
+abbrev Gap_53_1 := Multiplicative (ZMod 53)
+abbrev Gap_54_2 := Multiplicative (ZMod 54)
+abbrev Gap_54_1 := DihedralGroup 27
+abbrev Gap_54_9 := Multiplicative (ZMod 3) × Multiplicative (ZMod 18)
+abbrev Gap_54_15 := Multiplicative (ZMod 3) × Multiplicative (ZMod 3) × Multiplicative (ZMod 6)
+abbrev Gap_54_4 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 9)
+abbrev Gap_54_3 := Multiplicative (ZMod 3) × DihedralGroup 9
+abbrev Gap_54_12 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 3) × Multiplicative (ZMod 3)
+abbrev Gap_55_1 := Multiplicative (ZMod 55)
+abbrev Gap_56_2 := Multiplicative (ZMod 56)
+abbrev Gap_56_5 := DihedralGroup 28
+abbrev Gap_56_8 := Multiplicative (ZMod 2) × Multiplicative (ZMod 28)
+abbrev Gap_56_13 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 14)
+abbrev Gap_56_4 := Multiplicative (ZMod 4) × DihedralGroup 7
+abbrev Gap_56_9 := Multiplicative (ZMod 7) × DihedralGroup 4
+abbrev Gap_56_12 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × DihedralGroup 7
+abbrev Gap_56_10 := Multiplicative (ZMod 7) × QuaternionGroup 2
+abbrev Gap_57_2 := Multiplicative (ZMod 57)
+abbrev Gap_58_2 := Multiplicative (ZMod 58)
+abbrev Gap_58_1 := DihedralGroup 29
+abbrev Gap_59_1 := Multiplicative (ZMod 59)
+abbrev Gap_60_4 := Multiplicative (ZMod 60)
+abbrev Gap_60_5 := AlternatingGroup 5
+abbrev Gap_60_12 := DihedralGroup 30
+abbrev Gap_60_13 := Multiplicative (ZMod 2) × Multiplicative (ZMod 30)
+abbrev Gap_60_8 := Equiv.Perm (Fin 3) × DihedralGroup 5
+abbrev Gap_60_9 := Multiplicative (ZMod 5) × AlternatingGroup 4
+abbrev Gap_60_10 := Multiplicative (ZMod 6) × DihedralGroup 5
+abbrev Gap_60_11 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 10)
