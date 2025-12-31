@@ -41,7 +41,7 @@ def run_build():
         ("Playground.Geometry.SmallGroups.EvalFracInvolutions", "fracinvolutions"),
         ("Playground.Geometry.SmallGroups.EvalCommutingFraction", "commutingfraction"),
         ("Playground.Geometry.SmallGroups.EvalNumSubgroups", "numsubgroups"),
-        ("Playground.Geometry.SmallGroups.EvalExponent", "exponent"),
+        # ("Playground.Geometry.SmallGroups.EvalExponent", "exponent"), -- some bug
     ]
 
     outputs = {}
@@ -147,7 +147,7 @@ def save_stats(groups, group_info, output_file="group_stats.json"):
     }
 
     with open(output_file, 'w') as f:
-        json.dump(stats, f, indent=2)
+        json.dump(stats, f, indent=2, sort_keys=True)
 
     return output_file
 
