@@ -754,14 +754,14 @@
       "card": "10",
       "commuting_fraction": "(2 : Rat)/5",
       "frac_involutions": "(3 : Rat)/5",
-      "num_subgroups": "0"
+      "num_subgroups": "8"
     },
     "10,2": {
       "abelian": "true",
       "card": "10",
       "commuting_fraction": "1",
       "frac_involutions": "(1 : Rat)/5",
-      "num_subgroups": "0"
+      "num_subgroups": "4"
     },
     "11,1": {
       "abelian": "true",

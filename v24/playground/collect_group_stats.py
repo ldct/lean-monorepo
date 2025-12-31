@@ -48,23 +48,28 @@ def run_build():
     for eval_file, property_name in eval_files:
         print(f"Running {eval_file}...")
 
-        # Use Popen to stream output while also capturing it
+        # Use Popen to capture stdout and stderr separately
         process = subprocess.Popen(
             ["lake", "exe", eval_file],
             stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
+            stderr=subprocess.PIPE,
             text=True,
             bufsize=1
         )
 
-        # Stream output line by line while collecting it
-        collected_output = []
-        for line in process.stdout:
-            print(line, end='')  # Print to stdout in real-time
-            collected_output.append(line)
+        # Wait for process to complete and get outputs
+        stdout, stderr = process.communicate()
 
-        process.wait()
-        outputs[property_name] = ''.join(collected_output)
+        # Print stderr (build progress) to console
+        if stderr:
+            print(stderr, end='')
+
+        # Print stdout (actual data) to console
+        if stdout:
+            print(stdout, end='')
+
+        # Store only stdout for parsing
+        outputs[property_name] = stdout
 
     return outputs
 
@@ -88,16 +93,12 @@ def parse_output(outputs):
 
     # Parse each property's output
     for property_name, output in outputs.items():
-        # Filter out build progress lines (lines starting with ✔)
-        lines = [line for line in output.split('\n') if not line.strip().startswith('✔')]
-        filtered_output = '\n'.join(lines)
-
         # Look for the array output directly (format: [1, 2, 3, ...])
         # Use a pattern that matches arrays with proper content (numbers, booleans, or Rat values)
         pattern = r'\[([\d\s,()true|false:Rat/]+)\]'
 
         # Try to match the array
-        match = re.search(pattern, filtered_output, re.DOTALL)
+        match = re.search(pattern, output, re.DOTALL)
         if match:
             array_content = match.group(1).strip()
 

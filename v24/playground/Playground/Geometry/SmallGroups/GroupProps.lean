@@ -39,7 +39,7 @@ instance decidableMyIsSubgroup {G} [Group G] [Fintype G] (H : Finset G)
   decidable_of_iff' _ (MyIsSubgroup_iff H)
 
 def Group.numSubgroups (G) [Group G] [Fintype G] [DecidableEq G] : ℕ :=
-  if (Fintype.card G > 9) then 0 else Fintype.card {s : Finset G | MyIsSubgroup G s}
+  if (Fintype.card G > 10) then 0 else Fintype.card {s : Finset G | MyIsSubgroup G s}
 
 
 def finOrderOf {G} [Group G] [Fintype G] [DecidableEq G] (a : G) : Fin ((Fintype.card G) + 1):=
