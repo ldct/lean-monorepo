@@ -768,7 +768,7 @@
       "card": "11",
       "commuting_fraction": "1",
       "frac_involutions": "(1 : Rat)/11",
-      "num_subgroups": "0"
+      "num_subgroups": "2"
     },
     "12,2": {
       "abelian": "true",
