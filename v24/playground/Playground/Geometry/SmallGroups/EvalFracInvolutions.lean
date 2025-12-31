@@ -1,8 +1,7 @@
 import Playground.Geometry.SmallGroups.SmallGroups
 import Playground.Geometry.SmallGroups.GroupProps
 
--- Evaluate FracInvolutions for all groups
-#eval show IO Unit from do
+def main : IO Unit := do
   let values := [
   Group.FracInvolutions Gap_1_1,
   Group.FracInvolutions Gap_2_1,

@@ -1,8 +1,7 @@
 import Playground.Geometry.SmallGroups.SmallGroups
 import Playground.Geometry.SmallGroups.GroupProps
 
--- Evaluate NumSubgroups for all groups
-#eval show IO Unit from do
+def main : IO Unit := do
   let values := [
   Group.numSubgroups Gap_1_1,
   Group.numSubgroups Gap_2_1,

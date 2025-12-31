@@ -30,8 +30,7 @@ def generate_eval_file(property_name, eval_expr, group_names, output_file, postf
         "import Playground.Geometry.SmallGroups.SmallGroups",
         "import Playground.Geometry.SmallGroups.GroupProps",
         "",
-        f"-- Evaluate {property_name} for all groups",
-        "#eval show IO Unit from do",
+        "def main : IO Unit := do",
         "  let values := [",
     ]
 

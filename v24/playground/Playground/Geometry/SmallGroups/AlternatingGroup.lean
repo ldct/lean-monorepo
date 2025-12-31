@@ -1,4 +1,5 @@
-import Mathlib
+import Mathlib.Logic.Equiv.Defs
+import Mathlib.GroupTheory.Perm.Sign
 
 abbrev AlternatingGroup (n : ℕ) := {σ : Equiv.Perm (Fin n) // Equiv.Perm.sign σ = 1}
 

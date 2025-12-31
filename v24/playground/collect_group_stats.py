@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Collect group statistics by running lake build on evaluation files.
+Collect group statistics by running lake exe on evaluation files.
 Saves results to group_stats.json for later HTML generation.
 """
 
@@ -34,7 +34,7 @@ def get_group_order_from_smallgroups():
 
 
 def run_build():
-    """Run lake build for all eval files and capture outputs."""
+    """Run lake exe for all eval files and capture outputs."""
     eval_files = [
         ("Playground.Geometry.SmallGroups.EvalCardinality", "cardinality"),
         ("Playground.Geometry.SmallGroups.EvalAbelian", "abelian"),
@@ -46,11 +46,11 @@ def run_build():
 
     outputs = {}
     for eval_file, property_name in eval_files:
-        print(f"Building {eval_file}...")
+        print(f"Running {eval_file}...")
 
         # Use Popen to stream output while also capturing it
         process = subprocess.Popen(
-            ["lake", "build", eval_file],
+            ["lake", "exe", eval_file],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
@@ -70,7 +70,7 @@ def run_build():
 
 
 def parse_output(outputs):
-    """Parse the build outputs from all eval files to extract group information."""
+    """Parse the exe outputs from all eval files to extract group information."""
     groups = defaultdict(dict)
 
     # Get ordered list of groups from SmallGroups.lean
@@ -78,32 +78,35 @@ def parse_output(outputs):
 
     # Property name mapping to dict keys
     property_map = {
-        'Cardinality': 'card',
-        'Abelian': 'abelian',
-        'FracInvolutions': 'frac_involutions',
-        'CommutingFraction': 'commuting_fraction',
-        'NumSubgroups': 'num_subgroups',
-        'Exponent': 'exponent',
+        'cardinality': 'card',
+        'abelian': 'abelian',
+        'fracinvolutions': 'frac_involutions',
+        'commutingfraction': 'commuting_fraction',
+        'numsubgroups': 'num_subgroups',
+        'exponent': 'exponent',
     }
 
     # Parse each property's output
     for property_name, output in outputs.items():
-        # Look for the info line with the array output
-        # Pattern: info: Playground/Geometry/SmallGroups/EvalCardinality.lean:5:0: [1, 2, 3, ...]
-        pattern = r'info: Playground/Geometry/SmallGroups/Eval(\w+)\.lean:\d+:\d+: \[(.+?)\]'
+        # Filter out build progress lines (lines starting with ✔)
+        lines = [line for line in output.split('\n') if not line.strip().startswith('✔')]
+        filtered_output = '\n'.join(lines)
 
-        # Try to match single-line array first
-        match = re.search(pattern, output, re.DOTALL)
+        # Look for the array output directly (format: [1, 2, 3, ...])
+        # Use a pattern that matches arrays with proper content (numbers, booleans, or Rat values)
+        pattern = r'\[([\d\s,()true|false:Rat/]+)\]'
+
+        # Try to match the array
+        match = re.search(pattern, filtered_output, re.DOTALL)
         if match:
-            eval_type = match.group(1)  # e.g., "Cardinality"
-            array_content = match.group(2).strip()
+            array_content = match.group(1).strip()
 
             # Split by comma, but be careful with nested structures like "mkRat 1 3"
             # Simple split works for most cases
             values = [v.strip() for v in array_content.split(',')]
 
             # Map each value to the corresponding group
-            dict_key = property_map.get(eval_type, eval_type.lower())
+            dict_key = property_map.get(property_name, property_name.lower())
             for i, value in enumerate(values):
                 if i < len(group_order):
                     key = group_order[i]
@@ -158,11 +161,11 @@ def main():
     group_info = parse_lean_files()
     print(f"Found {len(group_info)} group definitions from Lean files")
 
-    # Run build and capture outputs
+    # Run executables and capture outputs
     build_start = time.time()
     outputs = run_build()
     build_time = time.time() - build_start
-    print(f"Lake build completed in {build_time:.2f}s")
+    print(f"Lake exe completed in {build_time:.2f}s")
 
     # Parse the outputs
     groups = parse_output(outputs)

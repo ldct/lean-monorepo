@@ -1,8 +1,7 @@
 import Playground.Geometry.SmallGroups.SmallGroups
 import Playground.Geometry.SmallGroups.GroupProps
 
--- Evaluate IsAbelian for all groups
-#eval show IO Unit from do
+def main : IO Unit := do
   let values := [
   Group.IsAbelian Gap_1_1,
   Group.IsAbelian Gap_2_1,

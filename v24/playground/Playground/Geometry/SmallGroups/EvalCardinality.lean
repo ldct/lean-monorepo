@@ -1,8 +1,7 @@
 import Playground.Geometry.SmallGroups.SmallGroups
 import Playground.Geometry.SmallGroups.GroupProps
 
--- Evaluate Cardinality for all groups
-#eval show IO Unit from do
+def main : IO Unit := do
   let values := [
   Fintype.card Gap_1_1,
   Fintype.card Gap_2_1,

@@ -14,7 +14,7 @@ LEAN_FILE_HEADER = """import Mathlib.Algebra.Group.TypeTags.Basic
 import Mathlib.Data.ZMod.Basic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
 import Mathlib.GroupTheory.SpecificGroups.Quaternion
-{alternating_import}
+import Playground.Geometry.SmallGroups.AlternatingGroup
 
 set_option linter.style.longLine false
 
@@ -78,9 +78,7 @@ def main():
             abbrev_lines.append(f"abbrev {abbrev_name} := {lean_type}")
             print(f"✓ Added {abbrev_name}: {label}")
 
-    # Prepare the header with conditional import
-    alternating_import = "\nimport Playground.Geometry.SmallGroups.AlternatingGroup" if uses_alternating else ""
-    header = LEAN_FILE_HEADER.format(alternating_import=alternating_import)
+    header = LEAN_FILE_HEADER
 
     # Write SmallGroups.lean with header and all abbrev lines
     smallgroups_path = base_dir / "SmallGroups.lean"

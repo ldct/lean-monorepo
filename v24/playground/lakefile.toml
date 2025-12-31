@@ -17,3 +17,18 @@ rev = "v4.24.0"
 
 [[lean_lib]]
 name = "Playground"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalCardinality"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalAbelian"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalFracInvolutions"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalCommutingFraction"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalNumSubgroups"
