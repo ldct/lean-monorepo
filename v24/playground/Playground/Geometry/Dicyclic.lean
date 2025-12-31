@@ -86,10 +86,9 @@ instance [NeZero n] : Fintype (DicyclicGroup n) where
 
 
 theorem center_eq (n : ℕ) (hn : 2 < n) : (Subgroup.center (DicyclicGroup n)).carrier = { 1, a n } := by
-  -- To prove the equality of sets, we show each set is a subset of the other.
   apply Set.ext
   intro x
-  simp [Subgroup.mem_center_iff];
+  simp
   constructor;
   · rcases x with ( _ | _ ) <;> simp_all +decide [ Subsemigroup.mem_center_iff ];
     · rename_i k;
@@ -100,22 +99,26 @@ theorem center_eq (n : ℕ) (hn : 2 < n) : (Subgroup.center (DicyclicGroup n)).c
           grind;
         have hk_cases : ∃ m : ℕ, k = m ∧ m < 2 * n ∧ 2 * m ≡ 0 [MOD 2 * n] := by
           use k.val;
-          haveI := Fact.mk ( by linarith : 1 < 2 * n ) ; simp_all +decide [ ← ZMod.natCast_eq_natCast_iff ] ;
+          haveI := Fact.mk ( by linarith : 1 < 2 * n )
+          simp_all +decide [ ← ZMod.natCast_eq_natCast_iff ]
           exact ZMod.val_lt k;
-        rcases hk_cases with ⟨ m, rfl, hm₁, hm₂ ⟩ ; rcases Nat.dvd_of_mod_eq_zero hm₂ with ⟨ c, hc ⟩ ; rcases c with ( _ | _ | c ) <;> simp_all +decide [ Nat.mod_eq_of_lt ] ;
-        nlinarith;
-      aesop;
-    · intro h; have := h ( DicyclicGroup.a 1 ) ; simp_all +decide [ mul_eq, Subgroup.mem_center_iff ] ;
-      -- Simplifying $1 + a✝ = a✝ - 1$ gives $2 = 0$, which is a contradiction in $\mathbb{Z}/(2n)\mathbb{Z}$.
-      have h_contra : (2 : ZMod (2 * n)) = 0 := by
-        grind;
-      rcases n with ( _ | _ | n ) <;> cases h_contra ; contradiction;
+        rcases hk_cases with ⟨ m, rfl, hm₁, hm₂ ⟩
+        rcases Nat.dvd_of_mod_eq_zero hm₂ with ⟨ c, hc ⟩
+        rcases c with ( _ | _ | c ) <;> simp_all
+        nlinarith
+      aesop
+    · intro h; have := h ( DicyclicGroup.a 1 )
+      simp_all +decide [ mul_eq ]
+      have h_contra : (2 : ZMod (2 * n)) = 0 := by grind
+      rcases n with ( _ | _ | n ) <;> cases h_contra
+      contradiction
   · rintro ( rfl | rfl ) <;> simp +decide [ Subsemigroup.mem_center_iff ];
     rintro ( _ | _ ) <;> simp +decide [ mul_eq ];
     · exact add_comm _ _;
-    · rw [ sub_eq_add_neg ] ; ring;
-      rw [ sub_eq_add_neg ] ; norm_num [ ZMod.neg_eq_self_iff ] ; ring;
-      exact Or.inr ( Nat.mod_eq_of_lt ( by linarith ) )
-
+    · ring_nf
+      rw [ sub_eq_add_neg ]
+      norm_num [ ZMod.neg_eq_self_iff ]
+      right
+      exact Nat.mod_eq_of_lt ( by linarith )
 
 end DicyclicGroup

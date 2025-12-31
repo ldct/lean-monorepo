@@ -30,9 +30,17 @@ def generate_eval_file(property_name, eval_expr, group_names, output_file, postf
         "import Playground.Geometry.SmallGroups.SmallGroups",
         "import Playground.Geometry.SmallGroups.GroupProps",
         "",
+    ]
+
+    # Add maxHeartbeats for properties that need it
+    if property_name in ["Z1Size", "Z2Size"]:
+        lines.append("set_option maxHeartbeats 2000000")
+        lines.append("")
+
+    lines.extend([
         "def main : IO Unit := do",
         "  let values := [",
-    ]
+    ])
 
     for i, group_name in enumerate(group_names):
         comma = "," if i < len(group_names) - 1 else ""
@@ -68,6 +76,8 @@ def main():
         ("FracInvolutions", "Group.FracInvolutions", "EvalFracInvolutions.lean", ""),
         ("CommutingFraction", "Group.CommutingFraction", "EvalCommutingFraction.lean", ""),
         ("NumSubgroups", "Group.numSubgroups", "EvalNumSubgroups.lean", ""),
+        ("Z1Size", "Z1Size", "EvalZ1Size.lean", ""),
+        ("Z2Size", "Z2Size", "EvalZ2Size.lean", ""),
         # ("Exponent", "exponent", "EvalExponent.lean", ".val"), -- TODO some bugs
     ]
 
@@ -75,7 +85,7 @@ def main():
         output_file = base_path / filename
         generate_eval_file(prop_name, eval_expr, group_names, output_file, postfix)
 
-    print("\n✅ Successfully generated all 6 evaluation files")
+    print("\n✅ Successfully generated all evaluation files")
 
 if __name__ == "__main__":
     main()

@@ -42,14 +42,18 @@ def run_build():
         ("Playground.Geometry.SmallGroups.EvalFracInvolutions", "fracinvolutions"),
         ("Playground.Geometry.SmallGroups.EvalCommutingFraction", "commutingfraction"),
         ("Playground.Geometry.SmallGroups.EvalNumSubgroups", "numsubgroups"),
+        ("Playground.Geometry.SmallGroups.EvalZ1Size", "z1size"),
+        ("Playground.Geometry.SmallGroups.EvalZ2Size", "z2size"),
         # ("Playground.Geometry.SmallGroups.EvalExponent", "exponent"), -- some bug
     ]
 
     # First, build all targets
     print("Building all targets...")
     build_start = time.time()
-    for eval_file, _ in eval_files:
+    build_times = {}
+    for eval_file, property_name in eval_files:
         print(f"  Building {eval_file}...")
+        file_build_start = time.time()
         process = subprocess.Popen(
             ["lake", "build", eval_file],
             stdout=subprocess.PIPE,
@@ -65,6 +69,10 @@ def run_build():
         if stdout:
             print(stdout, end='')
 
+        file_build_time = time.time() - file_build_start
+        build_times[property_name] = file_build_time
+        print(f"  {property_name} build took {file_build_time:.2f}s")
+
     build_time = time.time() - build_start
     print(f"Build completed in {build_time:.2f}s\n")
 
@@ -72,8 +80,10 @@ def run_build():
     print("Running executables...")
     run_start = time.time()
     outputs = {}
+    run_times = {}
     for eval_file, property_name in eval_files:
         print(f"  Running {eval_file}...")
+        file_run_start = time.time()
 
         # Use Popen to capture stdout and stderr separately
         process = subprocess.Popen(
@@ -98,10 +108,14 @@ def run_build():
         # Store only stdout for parsing
         outputs[property_name] = stdout
 
+        file_run_time = time.time() - file_run_start
+        run_times[property_name] = file_run_time
+        print(f"  {property_name} execution took {file_run_time:.2f}s")
+
     run_time = time.time() - run_start
     print(f"Execution completed in {run_time:.2f}s")
 
-    return outputs, build_time, run_time
+    return outputs, build_time, run_time, build_times, run_times
 
 
 def parse_output(outputs):
@@ -193,12 +207,16 @@ def main():
     print(f"Found {len(group_info)} group definitions from Lean files")
 
     # Build and run executables, capture outputs
-    outputs, build_time, run_time = run_build()
+    outputs, build_time, run_time, build_times, run_times = run_build()
 
     print(f"\nTiming summary:")
     print(f"  Build time: {build_time:.2f}s")
     print(f"  Run time: {run_time:.2f}s")
     print(f"  Total time: {build_time + run_time:.2f}s")
+
+    print(f"\nPer-file timing:")
+    for name in sorted(build_times.keys()):
+        print(f"  {name}: build={build_times[name]:.2f}s, run={run_times[name]:.2f}s, total={build_times[name] + run_times[name]:.2f}s")
 
     # Parse the outputs
     groups = parse_output(outputs)

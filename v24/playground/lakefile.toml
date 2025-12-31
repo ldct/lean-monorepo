@@ -32,3 +32,9 @@ name = "Playground.Geometry.SmallGroups.EvalCommutingFraction"
 
 [[lean_exe]]
 name = "Playground.Geometry.SmallGroups.EvalNumSubgroups"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalZ1Size"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalZ2Size"

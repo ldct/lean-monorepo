@@ -400,6 +400,8 @@ def generate_html(groups, group_info, all_groups_tsv):
                     <th class="number">Frac. Involutions</th>
                     <th class="number">Commuting Fraction</th>
                     <th class="number"># Subgroups</th>
+                    <th class="number">Z1 Size</th>
+                    <th class="number">Z2 Size</th>
                 </tr>
             </thead>
             <tbody>
@@ -415,6 +417,8 @@ def generate_html(groups, group_info, all_groups_tsv):
                 frac_inv = format_rational(data.get('frac_involutions', '?'))
                 comm_frac = format_rational(data.get('commuting_fraction', '?'))
                 num_subgroups = data.get('num_subgroups', '?')
+                z1size = data.get('z1size', '?')
+                z2size = data.get('z2size', '?')
 
                 abelian_class = 'abelian-yes' if abelian == 'true' else 'abelian-no'
                 abelian_text = 'Yes' if abelian == 'true' else 'No'
@@ -435,6 +439,8 @@ def generate_html(groups, group_info, all_groups_tsv):
                 frac_inv = '-'
                 comm_frac = '-'
                 num_subgroups = '-'
+                z1size = '-'
+                z2size = '-'
                 group_name = label
                 abbrev_line = f'<span style="color: #999; font-style: italic;">Not implemented</span>'
 
@@ -449,6 +455,8 @@ def generate_html(groups, group_info, all_groups_tsv):
                     <td class="number">{frac_inv}</td>
                     <td class="number">{comm_frac}</td>
                     <td class="number">{num_subgroups}</td>
+                    <td class="number">{z1size}</td>
+                    <td class="number">{z2size}</td>
                 </tr>
 """
 

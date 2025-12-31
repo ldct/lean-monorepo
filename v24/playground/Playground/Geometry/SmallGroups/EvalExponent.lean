@@ -1,6 +1,28 @@
 import Playground.Geometry.SmallGroups.SmallGroups
 import Playground.Geometry.SmallGroups.GroupProps
 
+def myGroup := Subgroup.center (DihedralGroup 6)
+
+#synth Fintype (DihedralGroup 6)
+#synth DecidableEq (DihedralGroup 6)
+
+abbrev MyCenter (n : ℕ) := {
+  g : DihedralGroup n // g ∈ Subgroup.center (DihedralGroup n)
+}
+
+abbrev MyQ1 := (DihedralGroup 6) ⧸ (Subgroup.center (DihedralGroup 6))
+
+#synth Fintype (MyQ1)
+#synth DecidableEq (MyQ1)
+
+#eval Fintype.card (MyQ1)
+
+#synth Fintype (MyCenter 6)
+#eval Fintype.card (MyCenter 6)
+
+instance {G} [Group G] [Fintype G] [DecidableEq G] : Fintype (Subgroup.center G) := by
+
+
 -- Evaluate Exponent for all groups
 #eval show IO Unit from do
   let values := [

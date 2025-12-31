@@ -14,9 +14,8 @@ def MySetoid {G H} [Group G] [Group H] (φ : G →* H) : Setoid G := {
     }
 }
 
+abbrev MyFibres {G H} [Group G] [Group H] (φ : G →* H) : Type* := Quotient (MySetoid φ)
 
-
-example {G H : Type*} [Group G] [Group H] (φ : G →* H)
 
 
 def Group.IsAbelian (G) [Group G] : Prop := ∀ x y : G, x * y = y * x
