@@ -19,7 +19,7 @@ theorem Group.IsAbelian_iff {G} [Group G] [Fintype G] [DecidableEq G] : Group.Is
 -- : Decidable (Group.IsAbelian G) :=
 --   decidable_of_iff' _ Group.IsAbelian_iff
 
-abbrev Z1 (G) [Group G] [Fintype G] [DecidableEq G] : Finset G := { x : G | ∀ y : G, x * y * x⁻¹ * y⁻¹ = 1 }
+def Z1 (G) [Group G] [Fintype G] [DecidableEq G] : Finset G := { x : G | ∀ y : G, x * y * x⁻¹ * y⁻¹ = 1 }
 
 def Z1Size (G) [Group G] [Fintype G] [DecidableEq G] : ℕ := Fintype.card (Z1 G)
 

@@ -1,8 +1,6 @@
 import Playground.Geometry.SmallGroups.SmallGroups
 import Playground.Geometry.SmallGroups.GroupProps
 
-set_option maxHeartbeats 2000000
-
 def main : IO Unit := do
   let values := [
   Z1Size Gap_1_1,

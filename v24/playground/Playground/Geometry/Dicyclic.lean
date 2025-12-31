@@ -85,7 +85,8 @@ instance [NeZero n] : Fintype (DicyclicGroup n) where
     | ax k => right; exact ⟨k, rfl⟩
 
 
-theorem center_eq (n : ℕ) (hn : 2 < n) : (Subgroup.center (DicyclicGroup n)).carrier = { 1, a n } := by
+theorem center_eq (n : ℕ) (hn : 2 < n)
+: (Subgroup.center (DicyclicGroup n)).carrier = { 1, a n } := by
   apply Set.ext
   intro x
   simp
