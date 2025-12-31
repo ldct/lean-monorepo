@@ -71,10 +71,8 @@ instance {p : ℕ} [Fact p.Prime] : Group (FrobeniusGroup p) where
 
 -- A small group of order 20.
 
-
-abbrev T := @FrobeniusGroup 5 (Fact.mk (by decide : Nat.Prime 5))
-
-#eval Fintype.card T
-#eval Group.CommutingFraction T
-#eval _root_.Group.FracInvolutions T
-#eval ∀ (a : T), a^6 = 1
+-- abbrev T := @FrobeniusGroup 5 (Fact.mk (by decide : Nat.Prime 5))
+-- #eval Fintype.card T
+-- #eval Group.CommutingFraction T
+-- #eval _root_.Group.FracInvolutions T
+-- #eval ∀ (a : T), a^6 = 1

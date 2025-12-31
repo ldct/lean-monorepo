@@ -104,6 +104,10 @@
       "definition": "Multiplicative (ZMod 3) \u00d7 Equiv.Perm (Fin 3)",
       "name": "Gap_18_3"
     },
+    "18,4": {
+      "definition": "Dihedralization (Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3))",
+      "name": "Gap_18_4"
+    },
     "18,5": {
       "definition": "Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 6)",
       "name": "Gap_18_5"
@@ -359,6 +363,10 @@
     "36,12": {
       "definition": "Equiv.Perm (Fin 3) \u00d7 Multiplicative (ZMod 6)",
       "name": "Gap_36_12"
+    },
+    "36,13": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Dihedralization (Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3))",
+      "name": "Gap_36_13"
     },
     "36,14": {
       "definition": "Multiplicative (ZMod 6) \u00d7 Multiplicative (ZMod 6)",
@@ -667,6 +675,10 @@
     "54,12": {
       "definition": "Equiv.Perm (Fin 3) \u00d7 Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3)",
       "name": "Gap_54_12"
+    },
+    "54,13": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Dihedralization (Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3))",
+      "name": "Gap_54_13"
     },
     "54,15": {
       "definition": "Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 6)",
@@ -1018,6 +1030,13 @@
       "card": "18",
       "commuting_fraction": "(1 : Rat)/2",
       "frac_involutions": "(2 : Rat)/9",
+      "num_subgroups": "0"
+    },
+    "18,4": {
+      "abelian": "false",
+      "card": "18",
+      "commuting_fraction": "(1 : Rat)/3",
+      "frac_involutions": "(5 : Rat)/9",
       "num_subgroups": "0"
     },
     "18,5": {
@@ -1466,6 +1485,13 @@
       "card": "36",
       "commuting_fraction": "(1 : Rat)/2",
       "frac_involutions": "(2 : Rat)/9",
+      "num_subgroups": "0"
+    },
+    "36,13": {
+      "abelian": "false",
+      "card": "36",
+      "commuting_fraction": "(1 : Rat)/3",
+      "frac_involutions": "(5 : Rat)/9",
       "num_subgroups": "0"
     },
     "36,14": {
@@ -2005,6 +2031,13 @@
       "card": "54",
       "commuting_fraction": "(1 : Rat)/2",
       "frac_involutions": "(2 : Rat)/27",
+      "num_subgroups": "0"
+    },
+    "54,13": {
+      "abelian": "false",
+      "card": "54",
+      "commuting_fraction": "(1 : Rat)/3",
+      "frac_involutions": "(5 : Rat)/27",
       "num_subgroups": "0"
     },
     "54,15": {

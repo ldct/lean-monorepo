@@ -4,6 +4,7 @@ import Mathlib.GroupTheory.SpecificGroups.Dihedral
 import Mathlib.GroupTheory.SpecificGroups.Quaternion
 import Playground.Geometry.SmallGroups.AlternatingGroup
 import Playground.Geometry.Dicyclic
+import Playground.Geometry.Dihedralization
 import Playground.Geometry.FrobeniusGroup
 
 set_option linter.style.longLine false
@@ -48,6 +49,7 @@ abbrev Gap_16_12 := Multiplicative (ZMod 2) × QuaternionGroup 2
 abbrev Gap_17_1 := Multiplicative (ZMod 17)
 abbrev Gap_18_2 := Multiplicative (ZMod 18)
 abbrev Gap_18_1 := DihedralGroup 9
+abbrev Gap_18_4 := Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))
 abbrev Gap_18_5 := Multiplicative (ZMod 3) × Multiplicative (ZMod 6)
 abbrev Gap_18_3 := Multiplicative (ZMod 3) × Equiv.Perm (Fin 3)
 abbrev Gap_19_1 := Multiplicative (ZMod 19)
@@ -117,6 +119,7 @@ abbrev Gap_36_8 := Multiplicative (ZMod 3) × Multiplicative (ZMod 12)
 abbrev Gap_36_12 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 6)
 abbrev Gap_36_11 := Multiplicative (ZMod 3) × AlternatingGroup 4
 abbrev Gap_36_6 := Multiplicative (ZMod 3) × DicyclicGroup 3
+abbrev Gap_36_13 := Multiplicative (ZMod 2) × Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))
 abbrev Gap_37_1 := Multiplicative (ZMod 37)
 abbrev Gap_38_2 := Multiplicative (ZMod 38)
 abbrev Gap_38_1 := DihedralGroup 19
@@ -190,6 +193,7 @@ abbrev Gap_54_15 := Multiplicative (ZMod 3) × Multiplicative (ZMod 3) × Multip
 abbrev Gap_54_4 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 9)
 abbrev Gap_54_3 := Multiplicative (ZMod 3) × DihedralGroup 9
 abbrev Gap_54_12 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 3) × Multiplicative (ZMod 3)
+abbrev Gap_54_13 := Multiplicative (ZMod 3) × Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))
 abbrev Gap_55_1 := Multiplicative (ZMod 55)
 abbrev Gap_56_2 := Multiplicative (ZMod 56)
 abbrev Gap_56_5 := DihedralGroup 28

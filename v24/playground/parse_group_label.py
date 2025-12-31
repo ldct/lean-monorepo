@@ -84,6 +84,10 @@ def parse_group_label(label: str, order: int) -> Optional[str]:
             lean_parts.append(part_lean)
         return " × ".join(lean_parts)
 
+    # Special semidirect products
+    if label == 'C3:S3':
+        return "Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))"
+
     # Semidirect products: C<n>:C<m> - not implemented yet
     if ':' in label:
         return None
@@ -198,6 +202,8 @@ def test_against_existing():
         # Frobenius groups - now implemented
         ("F5", 20, 3, "@FrobeniusGroup 5 (Fact.mk (by decide : Nat.Prime 5))"),
         ("F7", 42, 1, "@FrobeniusGroup 7 (Fact.mk (by decide : Nat.Prime 7))"),
+        # Semidirect products - special cases
+        ("C3:S3", 18, 4, "Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))"),
         # Not implemented - should return None
         ("C4:C4", 16, 4, None),
         ("F8", 56, 11, None),

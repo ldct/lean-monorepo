@@ -11,6 +11,8 @@ This file defines the dihedralization of a commutative group G and proves that i
 
 References
 https://cas.umw.edu/math/files/2011/09/honors_brown.pdf
+
+The main purpose is to construct T3 = Dihedralization (ZMod 3 × ZMod 3), a group of order 18.
 -/
 
 structure Dihedralization (G) [CommGroup G] [Fintype G] : Type where
@@ -101,9 +103,8 @@ instance {G} [CommGroup G] [Fintype G] : Group (Dihedralization G) := {
 
 -- A small group of order 18.
 
-abbrev T := Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))
-
-#eval Fintype.card T
-#eval Group.CommutingFraction T
-#eval _root_.Group.FracInvolutions T
-#eval ∀ (a : T), a^6 = 1
+-- abbrev T := Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))
+-- #eval Fintype.card T
+-- #eval Group.CommutingFraction T
+-- #eval _root_.Group.FracInvolutions T
+-- #eval ∀ (a : T), a^6 = 1
