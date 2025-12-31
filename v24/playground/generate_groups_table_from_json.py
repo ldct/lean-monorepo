@@ -400,10 +400,7 @@ def generate_html(groups, group_info, all_groups_tsv):
                     <th class="number">Frac. Involutions</th>
                     <th class="number">Commuting Fraction</th>
                     <th class="number"># Subgroups</th>
-                    <th class="number">Z1 Size</th>
-                    <th class="number">Z2 Size</th>
-                    <th class="number">Z3 Size</th>
-                    <th class="number">Z4 Size</th>
+                    <th class="number">Upper Central Series</th>
                 </tr>
             </thead>
             <tbody>
@@ -424,6 +421,18 @@ def generate_html(groups, group_info, all_groups_tsv):
                 z3size = data.get('z3size', '?')
                 z4size = data.get('z4size', '?')
 
+                # Build upper central series list - stops when values stop changing
+                z_chain = []
+                if z1size != '?':
+                    z_chain.append(z1size)
+                    if z2size != '?' and z2size != z1size:
+                        z_chain.append(z2size)
+                        if z3size != '?' and z3size != z2size:
+                            z_chain.append(z3size)
+                            if z4size != '?' and z4size != z3size:
+                                z_chain.append(z4size)
+                z_series = '[' + ', '.join(z_chain) + ']' if z_chain else '?'
+
                 abelian_class = 'abelian-yes' if abelian == 'true' else 'abelian-no'
                 abelian_text = 'Yes' if abelian == 'true' else 'No'
 
@@ -443,10 +452,7 @@ def generate_html(groups, group_info, all_groups_tsv):
                 frac_inv = '-'
                 comm_frac = '-'
                 num_subgroups = '-'
-                z1size = '-'
-                z2size = '-'
-                z3size = '-'
-                z4size = '-'
+                z_series = '-'
                 group_name = label
                 abbrev_line = f'<span style="color: #999; font-style: italic;">Not implemented</span>'
 
@@ -461,10 +467,7 @@ def generate_html(groups, group_info, all_groups_tsv):
                     <td class="number">{frac_inv}</td>
                     <td class="number">{comm_frac}</td>
                     <td class="number">{num_subgroups}</td>
-                    <td class="number">{z1size}</td>
-                    <td class="number">{z2size}</td>
-                    <td class="number">{z3size}</td>
-                    <td class="number">{z4size}</td>
+                    <td class="number">{z_series}</td>
                 </tr>
 """
 
