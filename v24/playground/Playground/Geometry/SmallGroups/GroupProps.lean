@@ -89,5 +89,8 @@ def Group.maxOrder' (G) [Group G] [Fintype G] [DecidableEq G] : Fin ((Fintype.ca
     grind [Fintype.card_pos]
   )
 
+/-!
+TODO: this is pretty slow. Perhaps the exponent is faster to calculate.
+-/
 def Group.maxOrder (G) [Group G] [Fintype G] [DecidableEq G] : Nat :=
   (maxOrder' G).val

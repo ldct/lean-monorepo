@@ -2,6 +2,23 @@ import Mathlib
 
 example {G : Type*} [Group G] (H : Subgroup G) [H.Normal] : Group (G ⧸ H) := inferInstance
 
+-- If φ is a homomorphism the fibers of φ are sets of G projecting to the same element in H
+def MySetoid {G H} [Group G] [Group H] (φ : G →* H) : Setoid G := {
+  r a b := φ a = φ b
+  iseqv := {
+    refl := by grind
+    symm := by grind
+    trans := by
+      intro x y z hxy hyz
+      grind
+    }
+}
+
+
+
+example {G H : Type*} [Group G] [Group H] (φ : G →* H)
+
+
 def Group.IsAbelian (G) [Group G] : Prop := ∀ x y : G, x * y = y * x
 
 def Subgroup.IsAbelian {G} [Group G] (H : Subgroup G) : Prop := ∀ x ∈ H, ∀ y ∈ H, x * y = y * x
@@ -63,7 +80,16 @@ example : IsKleinFour (Q ⧸ (Subgroup.center Q)) := by
       exact h <| by haveI := Fact.mk ( show Nat.Prime 2 by decide ) ; exact
         Monoid.ExponentExists.of_finite;
 
+-- Exercise 4. Interestingly the proof is just `rfl`.
 set_option pp.coercions false in
-example {G} [Group G] (N : Subgroup G) [N.Normal] (g : G) (α : ℕ)
+theorem e4 {G} [Group G] (N : Subgroup G) [N.Normal] (g : G) (α : ℕ)
 : (g : (G ⧸ N))^α = QuotientGroup.mk (g^α) := by
   rfl
+
+example {G} [Group G] (N : Subgroup G) [N.Normal] (g : G) (h : IsOfFinOrder g)
+: IsOfFinOrder (g : (G ⧸ N)) := by
+  rw [isOfFinOrder_iff_pow_eq_one] at *
+  obtain ⟨ n, hn, hn' ⟩ := h
+  use n, hn
+  rw [e4, hn']
+  norm_cast
