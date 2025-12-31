@@ -181,6 +181,7 @@ def generate_html(groups, group_info, all_groups_tsv):
     # Calculate statistics - count implemented groups
     complete_orders = []
     partial_orders = []
+    incomplete_orders = []  # Orders with any unimplemented groups
     implemented_count_by_order = {}
 
     for order in sorted(by_order.keys()):
@@ -191,8 +192,16 @@ def generate_html(groups, group_info, all_groups_tsv):
 
         if implemented == total_in_order:
             complete_orders.append(order)
-        elif implemented > 0:
-            partial_orders.append((order, implemented, total_in_order))
+        else:
+            incomplete_orders.append(order)
+            if implemented > 0:
+                partial_orders.append((order, implemented, total_in_order))
+
+    # Build mapping of incomplete order -> next incomplete order
+    next_incomplete = {}
+    for i, order in enumerate(incomplete_orders):
+        if i + 1 < len(incomplete_orders):
+            next_incomplete[order] = incomplete_orders[i + 1]
 
     total_expected = sum(len(by_order[order]) for order in by_order.keys())
     total_actual = len(groups)
@@ -311,6 +320,35 @@ def generate_html(groups, group_info, all_groups_tsv):
             color: #888;
             line-height: 1.3;
         }
+        .jump-link {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 20px 0;
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            text-align: center;
+        }
+        .jump-link:hover {
+            background-color: #1976D2;
+        }
+        .next-incomplete {
+            font-size: 14px;
+            font-weight: normal;
+        }
+        .next-incomplete a {
+            color: white;
+            text-decoration: underline;
+        }
+        .next-incomplete a:hover {
+            text-decoration: none;
+        }
+        .top-nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -318,8 +356,18 @@ def generate_html(groups, group_info, all_groups_tsv):
     <div class="summary">
         <strong>""" + f"{total_actual}/{total_expected}</strong> groups ({percentage:.1f}%) | " + f"""
         <strong>{len(complete_orders)}/{total_orders}</strong> complete orders
+    </div>"""
+
+    # Add jump link to first incomplete order
+    if incomplete_orders:
+        first_incomplete = incomplete_orders[0]
+        html += f"""
+    <div class="top-nav">
+        <a href="#order-{first_incomplete}" class="jump-link">⚠ Jump to First Incomplete Order ({first_incomplete})</a>
     </div>
 """
+    else:
+        html += "\n"
 
     # Generate sections by order
     for order in sorted(by_order.keys()):
@@ -331,11 +379,17 @@ def generate_html(groups, group_info, all_groups_tsv):
         header_class = "complete" if is_complete else "partial"
         status_icon = "✓" if is_complete else "⚠"
 
+        # Build navigation for incomplete orders
+        next_link = ""
+        if not is_complete and order in next_incomplete:
+            next_order = next_incomplete[order]
+            next_link = f'<span class="next-incomplete"> | <a href="#order-{next_order}">Next incomplete: {next_order} →</a></span>'
+
         html += f"""
-    <div class="order-section">
+    <div class="order-section" id="order-{order}">
         <div class="order-header {header_class}">
             <span>{status_icon} Order {order}</span>
-            <span class="progress">{implemented_in_order}/{total_in_order} groups</span>
+            <span class="progress">{implemented_in_order}/{total_in_order} groups{next_link}</span>
         </div>
         <table>
             <thead>

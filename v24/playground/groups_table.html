@@ -109,6 +109,35 @@
             color: #888;
             line-height: 1.3;
         }
+        .jump-link {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 20px 0;
+            background-color: #2196F3;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            text-align: center;
+        }
+        .jump-link:hover {
+            background-color: #1976D2;
+        }
+        .next-incomplete {
+            font-size: 14px;
+            font-weight: normal;
+        }
+        .next-incomplete a {
+            color: white;
+            text-decoration: underline;
+        }
+        .next-incomplete a:hover {
+            text-decoration: none;
+        }
+        .top-nav {
+            text-align: center;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -117,8 +146,11 @@
         <strong>212/311</strong> groups (68.2%) | 
         <strong>43/60</strong> complete orders
     </div>
+    <div class="top-nav">
+        <a href="#order-16" class="jump-link">⚠ Jump to First Incomplete Order (16)</a>
+    </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-1">
         <div class="order-header complete">
             <span>✓ Order 1</span>
             <span class="progress">1/1 groups</span>
@@ -150,7 +182,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-2">
         <div class="order-header complete">
             <span>✓ Order 2</span>
             <span class="progress">1/1 groups</span>
@@ -182,7 +214,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-3">
         <div class="order-header complete">
             <span>✓ Order 3</span>
             <span class="progress">1/1 groups</span>
@@ -214,7 +246,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-4">
         <div class="order-header complete">
             <span>✓ Order 4</span>
             <span class="progress">2/2 groups</span>
@@ -257,7 +289,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-5">
         <div class="order-header complete">
             <span>✓ Order 5</span>
             <span class="progress">1/1 groups</span>
@@ -289,7 +321,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-6">
         <div class="order-header complete">
             <span>✓ Order 6</span>
             <span class="progress">2/2 groups</span>
@@ -332,7 +364,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-7">
         <div class="order-header complete">
             <span>✓ Order 7</span>
             <span class="progress">1/1 groups</span>
@@ -364,7 +396,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-8">
         <div class="order-header complete">
             <span>✓ Order 8</span>
             <span class="progress">5/5 groups</span>
@@ -440,7 +472,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-9">
         <div class="order-header complete">
             <span>✓ Order 9</span>
             <span class="progress">2/2 groups</span>
@@ -483,7 +515,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-10">
         <div class="order-header complete">
             <span>✓ Order 10</span>
             <span class="progress">2/2 groups</span>
@@ -526,7 +558,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-11">
         <div class="order-header complete">
             <span>✓ Order 11</span>
             <span class="progress">1/1 groups</span>
@@ -558,7 +590,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-12">
         <div class="order-header complete">
             <span>✓ Order 12</span>
             <span class="progress">5/5 groups</span>
@@ -634,7 +666,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-13">
         <div class="order-header complete">
             <span>✓ Order 13</span>
             <span class="progress">1/1 groups</span>
@@ -666,7 +698,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-14">
         <div class="order-header complete">
             <span>✓ Order 14</span>
             <span class="progress">2/2 groups</span>
@@ -709,7 +741,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-15">
         <div class="order-header complete">
             <span>✓ Order 15</span>
             <span class="progress">1/1 groups</span>
@@ -741,10 +773,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-16">
         <div class="order-header partial">
             <span>⚠ Order 16</span>
-            <span class="progress">9/14 groups</span>
+            <span class="progress">9/14 groups<span class="next-incomplete"> | <a href="#order-21">Next incomplete: 21 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -916,7 +948,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-17">
         <div class="order-header complete">
             <span>✓ Order 17</span>
             <span class="progress">1/1 groups</span>
@@ -948,7 +980,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-18">
         <div class="order-header complete">
             <span>✓ Order 18</span>
             <span class="progress">5/5 groups</span>
@@ -1024,7 +1056,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-19">
         <div class="order-header complete">
             <span>✓ Order 19</span>
             <span class="progress">1/1 groups</span>
@@ -1056,7 +1088,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-20">
         <div class="order-header complete">
             <span>✓ Order 20</span>
             <span class="progress">5/5 groups</span>
@@ -1132,10 +1164,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-21">
         <div class="order-header partial">
             <span>⚠ Order 21</span>
-            <span class="progress">1/2 groups</span>
+            <span class="progress">1/2 groups<span class="next-incomplete"> | <a href="#order-24">Next incomplete: 24 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -1175,7 +1207,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-22">
         <div class="order-header complete">
             <span>✓ Order 22</span>
             <span class="progress">2/2 groups</span>
@@ -1218,7 +1250,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-23">
         <div class="order-header complete">
             <span>✓ Order 23</span>
             <span class="progress">1/1 groups</span>
@@ -1250,10 +1282,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-24">
         <div class="order-header partial">
             <span>⚠ Order 24</span>
-            <span class="progress">12/15 groups</span>
+            <span class="progress">12/15 groups<span class="next-incomplete"> | <a href="#order-27">Next incomplete: 27 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -1436,7 +1468,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-25">
         <div class="order-header complete">
             <span>✓ Order 25</span>
             <span class="progress">2/2 groups</span>
@@ -1479,7 +1511,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-26">
         <div class="order-header complete">
             <span>✓ Order 26</span>
             <span class="progress">2/2 groups</span>
@@ -1522,10 +1554,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-27">
         <div class="order-header partial">
             <span>⚠ Order 27</span>
-            <span class="progress">3/5 groups</span>
+            <span class="progress">3/5 groups<span class="next-incomplete"> | <a href="#order-32">Next incomplete: 32 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -1598,7 +1630,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-28">
         <div class="order-header complete">
             <span>✓ Order 28</span>
             <span class="progress">4/4 groups</span>
@@ -1663,7 +1695,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-29">
         <div class="order-header complete">
             <span>✓ Order 29</span>
             <span class="progress">1/1 groups</span>
@@ -1695,7 +1727,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-30">
         <div class="order-header complete">
             <span>✓ Order 30</span>
             <span class="progress">4/4 groups</span>
@@ -1760,7 +1792,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-31">
         <div class="order-header complete">
             <span>✓ Order 31</span>
             <span class="progress">1/1 groups</span>
@@ -1792,10 +1824,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-32">
         <div class="order-header partial">
             <span>⚠ Order 32</span>
-            <span class="progress">15/51 groups</span>
+            <span class="progress">15/51 groups<span class="next-incomplete"> | <a href="#order-36">Next incomplete: 36 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -2374,7 +2406,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-33">
         <div class="order-header complete">
             <span>✓ Order 33</span>
             <span class="progress">1/1 groups</span>
@@ -2406,7 +2438,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-34">
         <div class="order-header complete">
             <span>✓ Order 34</span>
             <span class="progress">2/2 groups</span>
@@ -2449,7 +2481,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-35">
         <div class="order-header complete">
             <span>✓ Order 35</span>
             <span class="progress">1/1 groups</span>
@@ -2481,10 +2513,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-36">
         <div class="order-header partial">
             <span>⚠ Order 36</span>
-            <span class="progress">10/14 groups</span>
+            <span class="progress">10/14 groups<span class="next-incomplete"> | <a href="#order-39">Next incomplete: 39 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -2656,7 +2688,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-37">
         <div class="order-header complete">
             <span>✓ Order 37</span>
             <span class="progress">1/1 groups</span>
@@ -2688,7 +2720,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-38">
         <div class="order-header complete">
             <span>✓ Order 38</span>
             <span class="progress">2/2 groups</span>
@@ -2731,10 +2763,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-39">
         <div class="order-header partial">
             <span>⚠ Order 39</span>
-            <span class="progress">1/2 groups</span>
+            <span class="progress">1/2 groups<span class="next-incomplete"> | <a href="#order-40">Next incomplete: 40 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -2774,10 +2806,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-40">
         <div class="order-header partial">
             <span>⚠ Order 40</span>
-            <span class="progress">11/14 groups</span>
+            <span class="progress">11/14 groups<span class="next-incomplete"> | <a href="#order-42">Next incomplete: 42 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -2949,7 +2981,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-41">
         <div class="order-header complete">
             <span>✓ Order 41</span>
             <span class="progress">1/1 groups</span>
@@ -2981,10 +3013,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-42">
         <div class="order-header partial">
             <span>⚠ Order 42</span>
-            <span class="progress">5/6 groups</span>
+            <span class="progress">5/6 groups<span class="next-incomplete"> | <a href="#order-48">Next incomplete: 48 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -3068,7 +3100,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-43">
         <div class="order-header complete">
             <span>✓ Order 43</span>
             <span class="progress">1/1 groups</span>
@@ -3100,7 +3132,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-44">
         <div class="order-header complete">
             <span>✓ Order 44</span>
             <span class="progress">4/4 groups</span>
@@ -3165,7 +3197,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-45">
         <div class="order-header complete">
             <span>✓ Order 45</span>
             <span class="progress">2/2 groups</span>
@@ -3208,7 +3240,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-46">
         <div class="order-header complete">
             <span>✓ Order 46</span>
             <span class="progress">2/2 groups</span>
@@ -3251,7 +3283,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-47">
         <div class="order-header complete">
             <span>✓ Order 47</span>
             <span class="progress">1/1 groups</span>
@@ -3283,10 +3315,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-48">
         <div class="order-header partial">
             <span>⚠ Order 48</span>
-            <span class="progress">23/52 groups</span>
+            <span class="progress">23/52 groups<span class="next-incomplete"> | <a href="#order-50">Next incomplete: 50 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -3876,7 +3908,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-49">
         <div class="order-header complete">
             <span>✓ Order 49</span>
             <span class="progress">2/2 groups</span>
@@ -3919,10 +3951,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-50">
         <div class="order-header partial">
             <span>⚠ Order 50</span>
-            <span class="progress">4/5 groups</span>
+            <span class="progress">4/5 groups<span class="next-incomplete"> | <a href="#order-52">Next incomplete: 52 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -3995,7 +4027,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-51">
         <div class="order-header complete">
             <span>✓ Order 51</span>
             <span class="progress">1/1 groups</span>
@@ -4027,10 +4059,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-52">
         <div class="order-header partial">
             <span>⚠ Order 52</span>
-            <span class="progress">4/5 groups</span>
+            <span class="progress">4/5 groups<span class="next-incomplete"> | <a href="#order-54">Next incomplete: 54 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -4103,7 +4135,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-53">
         <div class="order-header complete">
             <span>✓ Order 53</span>
             <span class="progress">1/1 groups</span>
@@ -4135,10 +4167,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-54">
         <div class="order-header partial">
             <span>⚠ Order 54</span>
-            <span class="progress">8/15 groups</span>
+            <span class="progress">8/15 groups<span class="next-incomplete"> | <a href="#order-55">Next incomplete: 55 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -4321,10 +4353,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-55">
         <div class="order-header partial">
             <span>⚠ Order 55</span>
-            <span class="progress">0/1 groups</span>
+            <span class="progress">0/1 groups<span class="next-incomplete"> | <a href="#order-56">Next incomplete: 56 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -4353,10 +4385,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-56">
         <div class="order-header partial">
             <span>⚠ Order 56</span>
-            <span class="progress">10/13 groups</span>
+            <span class="progress">10/13 groups<span class="next-incomplete"> | <a href="#order-57">Next incomplete: 57 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -4517,10 +4549,10 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-57">
         <div class="order-header partial">
             <span>⚠ Order 57</span>
-            <span class="progress">1/2 groups</span>
+            <span class="progress">1/2 groups<span class="next-incomplete"> | <a href="#order-60">Next incomplete: 60 →</a></span></span>
         </div>
         <table>
             <thead>
@@ -4560,7 +4592,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-58">
         <div class="order-header complete">
             <span>✓ Order 58</span>
             <span class="progress">2/2 groups</span>
@@ -4603,7 +4635,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-59">
         <div class="order-header complete">
             <span>✓ Order 59</span>
             <span class="progress">1/1 groups</span>
@@ -4635,7 +4667,7 @@
         </table>
     </div>
 
-    <div class="order-section">
+    <div class="order-section" id="order-60">
         <div class="order-header partial">
             <span>⚠ Order 60</span>
             <span class="progress">12/13 groups</span>
