@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """
-Collect group statistics by running lake exe on evaluation files.
+Collect group statistics by building and running evaluation files.
+First runs lake build on all targets, then runs lake exe to collect data.
 Saves results to group_stats.json for later HTML generation.
 """
 
@@ -34,7 +35,7 @@ def get_group_order_from_smallgroups():
 
 
 def run_build():
-    """Run lake exe for all eval files and capture outputs."""
+    """Build all targets, then run lake exe for all eval files and capture outputs."""
     eval_files = [
         ("Playground.Geometry.SmallGroups.EvalCardinality", "cardinality"),
         ("Playground.Geometry.SmallGroups.EvalAbelian", "abelian"),
@@ -44,9 +45,35 @@ def run_build():
         # ("Playground.Geometry.SmallGroups.EvalExponent", "exponent"), -- some bug
     ]
 
+    # First, build all targets
+    print("Building all targets...")
+    build_start = time.time()
+    for eval_file, _ in eval_files:
+        print(f"  Building {eval_file}...")
+        process = subprocess.Popen(
+            ["lake", "build", eval_file],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            bufsize=1
+        )
+        stdout, stderr = process.communicate()
+
+        # Print build output
+        if stderr:
+            print(stderr, end='')
+        if stdout:
+            print(stdout, end='')
+
+    build_time = time.time() - build_start
+    print(f"Build completed in {build_time:.2f}s\n")
+
+    # Then, run all executables
+    print("Running executables...")
+    run_start = time.time()
     outputs = {}
     for eval_file, property_name in eval_files:
-        print(f"Running {eval_file}...")
+        print(f"  Running {eval_file}...")
 
         # Use Popen to capture stdout and stderr separately
         process = subprocess.Popen(
@@ -71,7 +98,10 @@ def run_build():
         # Store only stdout for parsing
         outputs[property_name] = stdout
 
-    return outputs
+    run_time = time.time() - run_start
+    print(f"Execution completed in {run_time:.2f}s")
+
+    return outputs, build_time, run_time
 
 
 def parse_output(outputs):
@@ -162,15 +192,17 @@ def main():
     group_info = parse_lean_files()
     print(f"Found {len(group_info)} group definitions from Lean files")
 
-    # Run executables and capture outputs
-    build_start = time.time()
-    outputs = run_build()
-    build_time = time.time() - build_start
-    print(f"Lake exe completed in {build_time:.2f}s")
+    # Build and run executables, capture outputs
+    outputs, build_time, run_time = run_build()
+
+    print(f"\nTiming summary:")
+    print(f"  Build time: {build_time:.2f}s")
+    print(f"  Run time: {run_time:.2f}s")
+    print(f"  Total time: {build_time + run_time:.2f}s")
 
     # Parse the outputs
     groups = parse_output(outputs)
-    print(f"Found {len(groups)} groups from build output")
+    print(f"\nFound {len(groups)} groups from execution output")
 
     # Save to JSON
     output_file = save_stats(groups, group_info)
