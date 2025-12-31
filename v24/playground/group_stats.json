@@ -857,7 +857,9 @@
       "frac_involutions": "1",
       "num_subgroups": "1",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "10,1": {
       "abelian": "false",
@@ -866,7 +868,9 @@
       "frac_involutions": "(3 : Rat)/5",
       "num_subgroups": "8",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "10,2": {
       "abelian": "true",
@@ -875,7 +879,9 @@
       "frac_involutions": "(1 : Rat)/5",
       "num_subgroups": "4",
       "z1size": "10",
-      "z2size": "10"
+      "z2size": "10",
+      "z3size": "10",
+      "z4size": "10"
     },
     "11,1": {
       "abelian": "true",
@@ -884,7 +890,9 @@
       "frac_involutions": "(1 : Rat)/11",
       "num_subgroups": "2",
       "z1size": "11",
-      "z2size": "11"
+      "z2size": "11",
+      "z3size": "11",
+      "z4size": "11"
     },
     "12,1": {
       "abelian": "false",
@@ -893,7 +901,9 @@
       "frac_involutions": "(1 : Rat)/6",
       "num_subgroups": "8",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "12,2": {
       "abelian": "true",
@@ -902,7 +912,9 @@
       "frac_involutions": "(1 : Rat)/6",
       "num_subgroups": "6",
       "z1size": "12",
-      "z2size": "12"
+      "z2size": "12",
+      "z3size": "12",
+      "z4size": "12"
     },
     "12,3": {
       "abelian": "false",
@@ -911,7 +923,9 @@
       "frac_involutions": "(1 : Rat)/3",
       "num_subgroups": "10",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "12,4": {
       "abelian": "false",
@@ -920,7 +934,9 @@
       "frac_involutions": "(2 : Rat)/3",
       "num_subgroups": "16",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "12,5": {
       "abelian": "true",
@@ -929,7 +945,9 @@
       "frac_involutions": "(1 : Rat)/3",
       "num_subgroups": "10",
       "z1size": "12",
-      "z2size": "12"
+      "z2size": "12",
+      "z3size": "12",
+      "z4size": "12"
     },
     "13,1": {
       "abelian": "true",
@@ -938,7 +956,9 @@
       "frac_involutions": "(1 : Rat)/13",
       "num_subgroups": "2",
       "z1size": "13",
-      "z2size": "13"
+      "z2size": "13",
+      "z3size": "13",
+      "z4size": "13"
     },
     "14,1": {
       "abelian": "false",
@@ -947,7 +967,9 @@
       "frac_involutions": "(4 : Rat)/7",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "14,2": {
       "abelian": "true",
@@ -956,7 +978,9 @@
       "frac_involutions": "(1 : Rat)/7",
       "num_subgroups": "0",
       "z1size": "14",
-      "z2size": "14"
+      "z2size": "14",
+      "z3size": "14",
+      "z4size": "14"
     },
     "15,1": {
       "abelian": "true",
@@ -965,7 +989,9 @@
       "frac_involutions": "(1 : Rat)/15",
       "num_subgroups": "0",
       "z1size": "15",
-      "z2size": "15"
+      "z2size": "15",
+      "z3size": "15",
+      "z4size": "15"
     },
     "16,1": {
       "abelian": "true",
@@ -974,7 +1000,9 @@
       "frac_involutions": "(1 : Rat)/8",
       "num_subgroups": "0",
       "z1size": "16",
-      "z2size": "16"
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
     },
     "16,10": {
       "abelian": "true",
@@ -983,7 +1011,9 @@
       "frac_involutions": "(1 : Rat)/2",
       "num_subgroups": "0",
       "z1size": "16",
-      "z2size": "16"
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
     },
     "16,11": {
       "abelian": "false",
@@ -992,7 +1022,9 @@
       "frac_involutions": "(3 : Rat)/4",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "16"
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
     },
     "16,12": {
       "abelian": "false",
@@ -1001,7 +1033,9 @@
       "frac_involutions": "(1 : Rat)/4",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "16"
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
     },
     "16,14": {
       "abelian": "true",
@@ -1010,7 +1044,9 @@
       "frac_involutions": "1",
       "num_subgroups": "0",
       "z1size": "16",
-      "z2size": "16"
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
     },
     "16,2": {
       "abelian": "true",
@@ -1019,7 +1055,9 @@
       "frac_involutions": "(1 : Rat)/4",
       "num_subgroups": "0",
       "z1size": "16",
-      "z2size": "16"
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
     },
     "16,5": {
       "abelian": "true",
@@ -1028,7 +1066,9 @@
       "frac_involutions": "(1 : Rat)/4",
       "num_subgroups": "0",
       "z1size": "16",
-      "z2size": "16"
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
     },
     "16,7": {
       "abelian": "false",
@@ -1037,7 +1077,9 @@
       "frac_involutions": "(5 : Rat)/8",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "16",
+      "z4size": "16"
     },
     "16,9": {
       "abelian": "false",
@@ -1046,7 +1088,9 @@
       "frac_involutions": "(1 : Rat)/8",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "16",
+      "z4size": "16"
     },
     "17,1": {
       "abelian": "true",
@@ -1055,7 +1099,9 @@
       "frac_involutions": "(1 : Rat)/17",
       "num_subgroups": "0",
       "z1size": "17",
-      "z2size": "17"
+      "z2size": "17",
+      "z3size": "17",
+      "z4size": "17"
     },
     "18,1": {
       "abelian": "false",
@@ -1064,7 +1110,9 @@
       "frac_involutions": "(5 : Rat)/9",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "18,2": {
       "abelian": "true",
@@ -1073,7 +1121,9 @@
       "frac_involutions": "(1 : Rat)/9",
       "num_subgroups": "0",
       "z1size": "18",
-      "z2size": "18"
+      "z2size": "18",
+      "z3size": "18",
+      "z4size": "18"
     },
     "18,3": {
       "abelian": "false",
@@ -1082,7 +1132,9 @@
       "frac_involutions": "(2 : Rat)/9",
       "num_subgroups": "0",
       "z1size": "3",
-      "z2size": "3"
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
     },
     "18,4": {
       "abelian": "false",
@@ -1091,7 +1143,9 @@
       "frac_involutions": "(5 : Rat)/9",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "18,5": {
       "abelian": "true",
@@ -1100,7 +1154,9 @@
       "frac_involutions": "(1 : Rat)/9",
       "num_subgroups": "0",
       "z1size": "18",
-      "z2size": "18"
+      "z2size": "18",
+      "z3size": "18",
+      "z4size": "18"
     },
     "19,1": {
       "abelian": "true",
@@ -1109,7 +1165,9 @@
       "frac_involutions": "(1 : Rat)/19",
       "num_subgroups": "0",
       "z1size": "19",
-      "z2size": "19"
+      "z2size": "19",
+      "z3size": "19",
+      "z4size": "19"
     },
     "2,1": {
       "abelian": "true",
@@ -1118,7 +1176,9 @@
       "frac_involutions": "1",
       "num_subgroups": "2",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "20,1": {
       "abelian": "false",
@@ -1127,7 +1187,9 @@
       "frac_involutions": "(1 : Rat)/10",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "20,2": {
       "abelian": "true",
@@ -1136,7 +1198,9 @@
       "frac_involutions": "(1 : Rat)/10",
       "num_subgroups": "0",
       "z1size": "20",
-      "z2size": "20"
+      "z2size": "20",
+      "z3size": "20",
+      "z4size": "20"
     },
     "20,3": {
       "abelian": "false",
@@ -1145,7 +1209,9 @@
       "frac_involutions": "(3 : Rat)/10",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "20,4": {
       "abelian": "false",
@@ -1154,7 +1220,9 @@
       "frac_involutions": "(3 : Rat)/5",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "20,5": {
       "abelian": "true",
@@ -1163,7 +1231,9 @@
       "frac_involutions": "(1 : Rat)/5",
       "num_subgroups": "0",
       "z1size": "20",
-      "z2size": "20"
+      "z2size": "20",
+      "z3size": "20",
+      "z4size": "20"
     },
     "21,2": {
       "abelian": "true",
@@ -1172,7 +1242,9 @@
       "frac_involutions": "(1 : Rat)/21",
       "num_subgroups": "0",
       "z1size": "21",
-      "z2size": "21"
+      "z2size": "21",
+      "z3size": "21",
+      "z4size": "21"
     },
     "22,1": {
       "abelian": "false",
@@ -1181,7 +1253,9 @@
       "frac_involutions": "(6 : Rat)/11",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "22,2": {
       "abelian": "true",
@@ -1190,7 +1264,9 @@
       "frac_involutions": "(1 : Rat)/11",
       "num_subgroups": "0",
       "z1size": "22",
-      "z2size": "22"
+      "z2size": "22",
+      "z3size": "22",
+      "z4size": "22"
     },
     "23,1": {
       "abelian": "true",
@@ -1199,7 +1275,9 @@
       "frac_involutions": "(1 : Rat)/23",
       "num_subgroups": "0",
       "z1size": "23",
-      "z2size": "23"
+      "z2size": "23",
+      "z3size": "23",
+      "z4size": "23"
     },
     "24,10": {
       "abelian": "false",
@@ -1208,7 +1286,9 @@
       "frac_involutions": "(1 : Rat)/4",
       "num_subgroups": "0",
       "z1size": "6",
-      "z2size": "24"
+      "z2size": "24",
+      "z3size": "24",
+      "z4size": "24"
     },
     "24,11": {
       "abelian": "false",
@@ -1217,7 +1297,9 @@
       "frac_involutions": "(1 : Rat)/12",
       "num_subgroups": "0",
       "z1size": "6",
-      "z2size": "24"
+      "z2size": "24",
+      "z3size": "24",
+      "z4size": "24"
     },
     "24,12": {
       "abelian": "false",
@@ -1226,7 +1308,9 @@
       "frac_involutions": "(5 : Rat)/12",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "24,13": {
       "abelian": "false",
@@ -1235,7 +1319,9 @@
       "frac_involutions": "(1 : Rat)/3",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "24,14": {
       "abelian": "false",
@@ -1244,7 +1330,9 @@
       "frac_involutions": "(2 : Rat)/3",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "24,15": {
       "abelian": "true",
@@ -1253,7 +1341,9 @@
       "frac_involutions": "(1 : Rat)/3",
       "num_subgroups": "0",
       "z1size": "24",
-      "z2size": "24"
+      "z2size": "24",
+      "z3size": "24",
+      "z4size": "24"
     },
     "24,2": {
       "abelian": "true",
@@ -1262,7 +1352,9 @@
       "frac_involutions": "(1 : Rat)/12",
       "num_subgroups": "0",
       "z1size": "24",
-      "z2size": "24"
+      "z2size": "24",
+      "z3size": "24",
+      "z4size": "24"
     },
     "24,4": {
       "abelian": "false",
@@ -1271,7 +1363,9 @@
       "frac_involutions": "(1 : Rat)/12",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "24,5": {
       "abelian": "false",
@@ -1280,7 +1374,9 @@
       "frac_involutions": "(1 : Rat)/3",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "24,6": {
       "abelian": "false",
@@ -1289,7 +1385,9 @@
       "frac_involutions": "(7 : Rat)/12",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "24,7": {
       "abelian": "false",
@@ -1298,7 +1396,9 @@
       "frac_involutions": "(1 : Rat)/6",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "24,9": {
       "abelian": "true",
@@ -1307,7 +1407,9 @@
       "frac_involutions": "(1 : Rat)/6",
       "num_subgroups": "0",
       "z1size": "24",
-      "z2size": "24"
+      "z2size": "24",
+      "z3size": "24",
+      "z4size": "24"
     },
     "25,1": {
       "abelian": "true",
@@ -1316,7 +1418,9 @@
       "frac_involutions": "(1 : Rat)/25",
       "num_subgroups": "0",
       "z1size": "25",
-      "z2size": "25"
+      "z2size": "25",
+      "z3size": "25",
+      "z4size": "25"
     },
     "25,2": {
       "abelian": "true",
@@ -1325,7 +1429,9 @@
       "frac_involutions": "(1 : Rat)/25",
       "num_subgroups": "0",
       "z1size": "25",
-      "z2size": "25"
+      "z2size": "25",
+      "z3size": "25",
+      "z4size": "25"
     },
     "26,1": {
       "abelian": "false",
@@ -1334,7 +1440,9 @@
       "frac_involutions": "(7 : Rat)/13",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "26,2": {
       "abelian": "true",
@@ -1343,7 +1451,9 @@
       "frac_involutions": "(1 : Rat)/13",
       "num_subgroups": "0",
       "z1size": "26",
-      "z2size": "26"
+      "z2size": "26",
+      "z3size": "26",
+      "z4size": "26"
     },
     "27,1": {
       "abelian": "true",
@@ -1352,7 +1462,9 @@
       "frac_involutions": "(1 : Rat)/27",
       "num_subgroups": "0",
       "z1size": "27",
-      "z2size": "27"
+      "z2size": "27",
+      "z3size": "27",
+      "z4size": "27"
     },
     "27,2": {
       "abelian": "true",
@@ -1361,7 +1473,9 @@
       "frac_involutions": "(1 : Rat)/27",
       "num_subgroups": "0",
       "z1size": "27",
-      "z2size": "27"
+      "z2size": "27",
+      "z3size": "27",
+      "z4size": "27"
     },
     "27,5": {
       "abelian": "true",
@@ -1370,7 +1484,9 @@
       "frac_involutions": "(1 : Rat)/27",
       "num_subgroups": "0",
       "z1size": "27",
-      "z2size": "27"
+      "z2size": "27",
+      "z3size": "27",
+      "z4size": "27"
     },
     "28,1": {
       "abelian": "false",
@@ -1379,7 +1495,9 @@
       "frac_involutions": "(1 : Rat)/14",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "28,2": {
       "abelian": "true",
@@ -1388,7 +1506,9 @@
       "frac_involutions": "(1 : Rat)/14",
       "num_subgroups": "0",
       "z1size": "28",
-      "z2size": "28"
+      "z2size": "28",
+      "z3size": "28",
+      "z4size": "28"
     },
     "28,3": {
       "abelian": "false",
@@ -1397,7 +1517,9 @@
       "frac_involutions": "(4 : Rat)/7",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "28,4": {
       "abelian": "true",
@@ -1406,7 +1528,9 @@
       "frac_involutions": "(1 : Rat)/7",
       "num_subgroups": "0",
       "z1size": "28",
-      "z2size": "28"
+      "z2size": "28",
+      "z3size": "28",
+      "z4size": "28"
     },
     "29,1": {
       "abelian": "true",
@@ -1415,7 +1539,9 @@
       "frac_involutions": "(1 : Rat)/29",
       "num_subgroups": "0",
       "z1size": "29",
-      "z2size": "29"
+      "z2size": "29",
+      "z3size": "29",
+      "z4size": "29"
     },
     "3,1": {
       "abelian": "true",
@@ -1424,7 +1550,9 @@
       "frac_involutions": "(1 : Rat)/3",
       "num_subgroups": "2",
       "z1size": "3",
-      "z2size": "3"
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
     },
     "30,1": {
       "abelian": "false",
@@ -1433,7 +1561,9 @@
       "frac_involutions": "(2 : Rat)/15",
       "num_subgroups": "0",
       "z1size": "5",
-      "z2size": "5"
+      "z2size": "5",
+      "z3size": "5",
+      "z4size": "5"
     },
     "30,2": {
       "abelian": "false",
@@ -1442,7 +1572,9 @@
       "frac_involutions": "(1 : Rat)/5",
       "num_subgroups": "0",
       "z1size": "3",
-      "z2size": "3"
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
     },
     "30,3": {
       "abelian": "false",
@@ -1451,7 +1583,9 @@
       "frac_involutions": "(8 : Rat)/15",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "30,4": {
       "abelian": "true",
@@ -1460,7 +1594,9 @@
       "frac_involutions": "(1 : Rat)/15",
       "num_subgroups": "0",
       "z1size": "30",
-      "z2size": "30"
+      "z2size": "30",
+      "z3size": "30",
+      "z4size": "30"
     },
     "31,1": {
       "abelian": "true",
@@ -1469,7 +1605,9 @@
       "frac_involutions": "(1 : Rat)/31",
       "num_subgroups": "0",
       "z1size": "31",
-      "z2size": "31"
+      "z2size": "31",
+      "z3size": "31",
+      "z4size": "31"
     },
     "32,1": {
       "abelian": "true",
@@ -1478,7 +1616,9 @@
       "frac_involutions": "(1 : Rat)/16",
       "num_subgroups": "0",
       "z1size": "32",
-      "z2size": "32"
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
     },
     "32,16": {
       "abelian": "true",
@@ -1487,7 +1627,9 @@
       "frac_involutions": "(1 : Rat)/8",
       "num_subgroups": "0",
       "z1size": "32",
-      "z2size": "32"
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
     },
     "32,18": {
       "abelian": "false",
@@ -1496,7 +1638,9 @@
       "frac_involutions": "(9 : Rat)/16",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "8",
+      "z4size": "32"
     },
     "32,20": {
       "abelian": "false",
@@ -1505,7 +1649,9 @@
       "frac_involutions": "(1 : Rat)/16",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "8",
+      "z4size": "32"
     },
     "32,21": {
       "abelian": "true",
@@ -1514,7 +1660,9 @@
       "frac_involutions": "(1 : Rat)/4",
       "num_subgroups": "0",
       "z1size": "32",
-      "z2size": "32"
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
     },
     "32,25": {
       "abelian": "false",
@@ -1523,7 +1671,9 @@
       "frac_involutions": "(3 : Rat)/8",
       "num_subgroups": "0",
       "z1size": "8",
-      "z2size": "32"
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
     },
     "32,26": {
       "abelian": "false",
@@ -1532,7 +1682,9 @@
       "frac_involutions": "(1 : Rat)/8",
       "num_subgroups": "0",
       "z1size": "8",
-      "z2size": "32"
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
     },
     "32,3": {
       "abelian": "true",
@@ -1541,7 +1693,9 @@
       "frac_involutions": "(1 : Rat)/8",
       "num_subgroups": "0",
       "z1size": "32",
-      "z2size": "32"
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
     },
     "32,36": {
       "abelian": "true",
@@ -1550,7 +1704,9 @@
       "frac_involutions": "(1 : Rat)/4",
       "num_subgroups": "0",
       "z1size": "32",
-      "z2size": "32"
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
     },
     "32,39": {
       "abelian": "false",
@@ -1559,7 +1715,9 @@
       "frac_involutions": "(5 : Rat)/8",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "32",
+      "z4size": "32"
     },
     "32,41": {
       "abelian": "false",
@@ -1568,7 +1726,9 @@
       "frac_involutions": "(1 : Rat)/8",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "32",
+      "z4size": "32"
     },
     "32,45": {
       "abelian": "true",
@@ -1577,7 +1737,9 @@
       "frac_involutions": "(1 : Rat)/2",
       "num_subgroups": "0",
       "z1size": "32",
-      "z2size": "32"
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
     },
     "32,46": {
       "abelian": "false",
@@ -1586,7 +1748,9 @@
       "frac_involutions": "(3 : Rat)/4",
       "num_subgroups": "0",
       "z1size": "8",
-      "z2size": "32"
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
     },
     "32,47": {
       "abelian": "false",
@@ -1595,7 +1759,9 @@
       "frac_involutions": "(1 : Rat)/4",
       "num_subgroups": "0",
       "z1size": "8",
-      "z2size": "32"
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
     },
     "32,51": {
       "abelian": "true",
@@ -1604,7 +1770,9 @@
       "frac_involutions": "1",
       "num_subgroups": "0",
       "z1size": "32",
-      "z2size": "32"
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
     },
     "33,1": {
       "abelian": "true",
@@ -1613,7 +1781,9 @@
       "frac_involutions": "(1 : Rat)/33",
       "num_subgroups": "0",
       "z1size": "33",
-      "z2size": "33"
+      "z2size": "33",
+      "z3size": "33",
+      "z4size": "33"
     },
     "34,1": {
       "abelian": "false",
@@ -1622,7 +1792,9 @@
       "frac_involutions": "(9 : Rat)/17",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "34,2": {
       "abelian": "true",
@@ -1631,7 +1803,9 @@
       "frac_involutions": "(1 : Rat)/17",
       "num_subgroups": "0",
       "z1size": "34",
-      "z2size": "34"
+      "z2size": "34",
+      "z3size": "34",
+      "z4size": "34"
     },
     "35,1": {
       "abelian": "true",
@@ -1640,7 +1814,9 @@
       "frac_involutions": "(1 : Rat)/35",
       "num_subgroups": "0",
       "z1size": "35",
-      "z2size": "35"
+      "z2size": "35",
+      "z3size": "35",
+      "z4size": "35"
     },
     "36,1": {
       "abelian": "false",
@@ -1649,7 +1825,9 @@
       "frac_involutions": "(1 : Rat)/18",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "36,11": {
       "abelian": "false",
@@ -1658,7 +1836,9 @@
       "frac_involutions": "(1 : Rat)/9",
       "num_subgroups": "0",
       "z1size": "3",
-      "z2size": "3"
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
     },
     "36,12": {
       "abelian": "false",
@@ -1667,7 +1847,9 @@
       "frac_involutions": "(2 : Rat)/9",
       "num_subgroups": "0",
       "z1size": "6",
-      "z2size": "6"
+      "z2size": "6",
+      "z3size": "6",
+      "z4size": "6"
     },
     "36,13": {
       "abelian": "false",
@@ -1676,7 +1858,9 @@
       "frac_involutions": "(5 : Rat)/9",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "36,14": {
       "abelian": "true",
@@ -1685,7 +1869,9 @@
       "frac_involutions": "(1 : Rat)/9",
       "num_subgroups": "0",
       "z1size": "36",
-      "z2size": "36"
+      "z2size": "36",
+      "z3size": "36",
+      "z4size": "36"
     },
     "36,2": {
       "abelian": "true",
@@ -1694,7 +1880,9 @@
       "frac_involutions": "(1 : Rat)/18",
       "num_subgroups": "0",
       "z1size": "36",
-      "z2size": "36"
+      "z2size": "36",
+      "z3size": "36",
+      "z4size": "36"
     },
     "36,4": {
       "abelian": "false",
@@ -1703,7 +1891,9 @@
       "frac_involutions": "(5 : Rat)/9",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "36,5": {
       "abelian": "true",
@@ -1712,7 +1902,9 @@
       "frac_involutions": "(1 : Rat)/9",
       "num_subgroups": "0",
       "z1size": "36",
-      "z2size": "36"
+      "z2size": "36",
+      "z3size": "36",
+      "z4size": "36"
     },
     "36,6": {
       "abelian": "false",
@@ -1721,7 +1913,9 @@
       "frac_involutions": "(1 : Rat)/18",
       "num_subgroups": "0",
       "z1size": "6",
-      "z2size": "6"
+      "z2size": "6",
+      "z3size": "6",
+      "z4size": "6"
     },
     "36,8": {
       "abelian": "true",
@@ -1730,7 +1924,9 @@
       "frac_involutions": "(1 : Rat)/18",
       "num_subgroups": "0",
       "z1size": "36",
-      "z2size": "36"
+      "z2size": "36",
+      "z3size": "36",
+      "z4size": "36"
     },
     "37,1": {
       "abelian": "true",
@@ -1739,7 +1935,9 @@
       "frac_involutions": "(1 : Rat)/37",
       "num_subgroups": "0",
       "z1size": "37",
-      "z2size": "37"
+      "z2size": "37",
+      "z3size": "37",
+      "z4size": "37"
     },
     "38,1": {
       "abelian": "false",
@@ -1748,7 +1946,9 @@
       "frac_involutions": "(10 : Rat)/19",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "38,2": {
       "abelian": "true",
@@ -1757,7 +1957,9 @@
       "frac_involutions": "(1 : Rat)/19",
       "num_subgroups": "0",
       "z1size": "38",
-      "z2size": "38"
+      "z2size": "38",
+      "z3size": "38",
+      "z4size": "38"
     },
     "39,2": {
       "abelian": "true",
@@ -1766,7 +1968,9 @@
       "frac_involutions": "(1 : Rat)/39",
       "num_subgroups": "0",
       "z1size": "39",
-      "z2size": "39"
+      "z2size": "39",
+      "z3size": "39",
+      "z4size": "39"
     },
     "4,1": {
       "abelian": "true",
@@ -1775,7 +1979,9 @@
       "frac_involutions": "(1 : Rat)/2",
       "num_subgroups": "3",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "4,2": {
       "abelian": "true",
@@ -1784,7 +1990,9 @@
       "frac_involutions": "1",
       "num_subgroups": "5",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "40,10": {
       "abelian": "false",
@@ -1793,7 +2001,9 @@
       "frac_involutions": "(3 : Rat)/20",
       "num_subgroups": "0",
       "z1size": "10",
-      "z2size": "40"
+      "z2size": "40",
+      "z3size": "40",
+      "z4size": "40"
     },
     "40,11": {
       "abelian": "false",
@@ -1802,7 +2012,9 @@
       "frac_involutions": "(1 : Rat)/20",
       "num_subgroups": "0",
       "z1size": "10",
-      "z2size": "40"
+      "z2size": "40",
+      "z3size": "40",
+      "z4size": "40"
     },
     "40,12": {
       "abelian": "false",
@@ -1811,7 +2023,9 @@
       "frac_involutions": "(3 : Rat)/10",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "40,13": {
       "abelian": "false",
@@ -1820,7 +2034,9 @@
       "frac_involutions": "(3 : Rat)/5",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "40,14": {
       "abelian": "true",
@@ -1829,7 +2045,9 @@
       "frac_involutions": "(1 : Rat)/5",
       "num_subgroups": "0",
       "z1size": "40",
-      "z2size": "40"
+      "z2size": "40",
+      "z3size": "40",
+      "z4size": "40"
     },
     "40,2": {
       "abelian": "true",
@@ -1838,7 +2056,9 @@
       "frac_involutions": "(1 : Rat)/20",
       "num_subgroups": "0",
       "z1size": "40",
-      "z2size": "40"
+      "z2size": "40",
+      "z3size": "40",
+      "z4size": "40"
     },
     "40,4": {
       "abelian": "false",
@@ -1847,7 +2067,9 @@
       "frac_involutions": "(1 : Rat)/20",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "40,5": {
       "abelian": "false",
@@ -1856,7 +2078,9 @@
       "frac_involutions": "(3 : Rat)/10",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "40,6": {
       "abelian": "false",
@@ -1865,7 +2089,9 @@
       "frac_involutions": "(11 : Rat)/20",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "40,7": {
       "abelian": "false",
@@ -1874,7 +2100,9 @@
       "frac_involutions": "(1 : Rat)/10",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "40,9": {
       "abelian": "true",
@@ -1883,7 +2111,9 @@
       "frac_involutions": "(1 : Rat)/10",
       "num_subgroups": "0",
       "z1size": "40",
-      "z2size": "40"
+      "z2size": "40",
+      "z3size": "40",
+      "z4size": "40"
     },
     "41,1": {
       "abelian": "true",
@@ -1892,7 +2122,9 @@
       "frac_involutions": "(1 : Rat)/41",
       "num_subgroups": "0",
       "z1size": "41",
-      "z2size": "41"
+      "z2size": "41",
+      "z3size": "41",
+      "z4size": "41"
     },
     "42,1": {
       "abelian": "false",
@@ -1901,7 +2133,9 @@
       "frac_involutions": "(4 : Rat)/21",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "42,3": {
       "abelian": "false",
@@ -1910,7 +2144,9 @@
       "frac_involutions": "(2 : Rat)/21",
       "num_subgroups": "0",
       "z1size": "7",
-      "z2size": "7"
+      "z2size": "7",
+      "z3size": "7",
+      "z4size": "7"
     },
     "42,4": {
       "abelian": "false",
@@ -1919,7 +2155,9 @@
       "frac_involutions": "(4 : Rat)/21",
       "num_subgroups": "0",
       "z1size": "3",
-      "z2size": "3"
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
     },
     "42,5": {
       "abelian": "false",
@@ -1928,7 +2166,9 @@
       "frac_involutions": "(11 : Rat)/21",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "42,6": {
       "abelian": "true",
@@ -1937,7 +2177,9 @@
       "frac_involutions": "(1 : Rat)/21",
       "num_subgroups": "0",
       "z1size": "42",
-      "z2size": "42"
+      "z2size": "42",
+      "z3size": "42",
+      "z4size": "42"
     },
     "43,1": {
       "abelian": "true",
@@ -1946,7 +2188,9 @@
       "frac_involutions": "(1 : Rat)/43",
       "num_subgroups": "0",
       "z1size": "43",
-      "z2size": "43"
+      "z2size": "43",
+      "z3size": "43",
+      "z4size": "43"
     },
     "44,1": {
       "abelian": "false",
@@ -1955,7 +2199,9 @@
       "frac_involutions": "(1 : Rat)/22",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "44,2": {
       "abelian": "true",
@@ -1964,7 +2210,9 @@
       "frac_involutions": "(1 : Rat)/22",
       "num_subgroups": "0",
       "z1size": "44",
-      "z2size": "44"
+      "z2size": "44",
+      "z3size": "44",
+      "z4size": "44"
     },
     "44,3": {
       "abelian": "false",
@@ -1973,7 +2221,9 @@
       "frac_involutions": "(6 : Rat)/11",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "44,4": {
       "abelian": "true",
@@ -1982,7 +2232,9 @@
       "frac_involutions": "(1 : Rat)/11",
       "num_subgroups": "0",
       "z1size": "44",
-      "z2size": "44"
+      "z2size": "44",
+      "z3size": "44",
+      "z4size": "44"
     },
     "45,1": {
       "abelian": "true",
@@ -1991,7 +2243,9 @@
       "frac_involutions": "(1 : Rat)/45",
       "num_subgroups": "0",
       "z1size": "45",
-      "z2size": "45"
+      "z2size": "45",
+      "z3size": "45",
+      "z4size": "45"
     },
     "45,2": {
       "abelian": "true",
@@ -2000,7 +2254,9 @@
       "frac_involutions": "(1 : Rat)/45",
       "num_subgroups": "0",
       "z1size": "45",
-      "z2size": "45"
+      "z2size": "45",
+      "z3size": "45",
+      "z4size": "45"
     },
     "46,1": {
       "abelian": "false",
@@ -2009,7 +2265,9 @@
       "frac_involutions": "(12 : Rat)/23",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "46,2": {
       "abelian": "true",
@@ -2018,7 +2276,9 @@
       "frac_involutions": "(1 : Rat)/23",
       "num_subgroups": "0",
       "z1size": "46",
-      "z2size": "46"
+      "z2size": "46",
+      "z3size": "46",
+      "z4size": "46"
     },
     "47,1": {
       "abelian": "true",
@@ -2027,7 +2287,9 @@
       "frac_involutions": "(1 : Rat)/47",
       "num_subgroups": "0",
       "z1size": "47",
-      "z2size": "47"
+      "z2size": "47",
+      "z3size": "47",
+      "z4size": "47"
     },
     "48,11": {
       "abelian": "false",
@@ -2036,7 +2298,9 @@
       "frac_involutions": "(1 : Rat)/12",
       "num_subgroups": "0",
       "z1size": "8",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "48,2": {
       "abelian": "true",
@@ -2045,7 +2309,9 @@
       "frac_involutions": "(1 : Rat)/24",
       "num_subgroups": "0",
       "z1size": "48",
-      "z2size": "48"
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
     },
     "48,20": {
       "abelian": "true",
@@ -2054,7 +2320,9 @@
       "frac_involutions": "(1 : Rat)/12",
       "num_subgroups": "0",
       "z1size": "48",
-      "z2size": "48"
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
     },
     "48,23": {
       "abelian": "true",
@@ -2063,7 +2331,9 @@
       "frac_involutions": "(1 : Rat)/12",
       "num_subgroups": "0",
       "z1size": "48",
-      "z2size": "48"
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
     },
     "48,25": {
       "abelian": "false",
@@ -2072,7 +2342,9 @@
       "frac_involutions": "(5 : Rat)/24",
       "num_subgroups": "0",
       "z1size": "6",
-      "z2size": "12"
+      "z2size": "12",
+      "z3size": "48",
+      "z4size": "48"
     },
     "48,27": {
       "abelian": "false",
@@ -2081,7 +2353,9 @@
       "frac_involutions": "(1 : Rat)/24",
       "num_subgroups": "0",
       "z1size": "6",
-      "z2size": "12"
+      "z2size": "12",
+      "z3size": "48",
+      "z4size": "48"
     },
     "48,31": {
       "abelian": "false",
@@ -2090,7 +2364,9 @@
       "frac_involutions": "(1 : Rat)/6",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "48,34": {
       "abelian": "false",
@@ -2099,7 +2375,9 @@
       "frac_involutions": "(1 : Rat)/12",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "48,35": {
       "abelian": "false",
@@ -2108,7 +2386,9 @@
       "frac_involutions": "(1 : Rat)/3",
       "num_subgroups": "0",
       "z1size": "8",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "48,36": {
       "abelian": "false",
@@ -2117,7 +2397,9 @@
       "frac_involutions": "(7 : Rat)/12",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "48,38": {
       "abelian": "false",
@@ -2126,7 +2408,9 @@
       "frac_involutions": "(1 : Rat)/2",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "48,4": {
       "abelian": "false",
@@ -2135,7 +2419,9 @@
       "frac_involutions": "(1 : Rat)/6",
       "num_subgroups": "0",
       "z1size": "8",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "48,40": {
       "abelian": "false",
@@ -2144,7 +2430,9 @@
       "frac_involutions": "(1 : Rat)/6",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "48,42": {
       "abelian": "false",
@@ -2153,7 +2441,9 @@
       "frac_involutions": "(1 : Rat)/6",
       "num_subgroups": "0",
       "z1size": "8",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "48,44": {
       "abelian": "true",
@@ -2162,7 +2452,9 @@
       "frac_involutions": "(1 : Rat)/6",
       "num_subgroups": "0",
       "z1size": "48",
-      "z2size": "48"
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
     },
     "48,45": {
       "abelian": "false",
@@ -2171,7 +2463,9 @@
       "frac_involutions": "(1 : Rat)/4",
       "num_subgroups": "0",
       "z1size": "12",
-      "z2size": "48"
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
     },
     "48,46": {
       "abelian": "false",
@@ -2180,7 +2474,9 @@
       "frac_involutions": "(1 : Rat)/12",
       "num_subgroups": "0",
       "z1size": "12",
-      "z2size": "48"
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
     },
     "48,48": {
       "abelian": "false",
@@ -2189,7 +2485,9 @@
       "frac_involutions": "(5 : Rat)/12",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "48,49": {
       "abelian": "false",
@@ -2198,7 +2496,9 @@
       "frac_involutions": "(1 : Rat)/3",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "48,51": {
       "abelian": "false",
@@ -2207,7 +2507,9 @@
       "frac_involutions": "(2 : Rat)/3",
       "num_subgroups": "0",
       "z1size": "8",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "48,52": {
       "abelian": "true",
@@ -2216,7 +2518,9 @@
       "frac_involutions": "(1 : Rat)/3",
       "num_subgroups": "0",
       "z1size": "48",
-      "z2size": "48"
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
     },
     "48,7": {
       "abelian": "false",
@@ -2225,7 +2529,9 @@
       "frac_involutions": "(13 : Rat)/24",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "8",
+      "z4size": "8"
     },
     "48,8": {
       "abelian": "false",
@@ -2234,7 +2540,9 @@
       "frac_involutions": "(1 : Rat)/24",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "8",
+      "z4size": "8"
     },
     "49,1": {
       "abelian": "true",
@@ -2243,7 +2551,9 @@
       "frac_involutions": "(1 : Rat)/49",
       "num_subgroups": "0",
       "z1size": "49",
-      "z2size": "49"
+      "z2size": "49",
+      "z3size": "49",
+      "z4size": "49"
     },
     "49,2": {
       "abelian": "true",
@@ -2252,7 +2562,9 @@
       "frac_involutions": "(1 : Rat)/49",
       "num_subgroups": "0",
       "z1size": "49",
-      "z2size": "49"
+      "z2size": "49",
+      "z3size": "49",
+      "z4size": "49"
     },
     "5,1": {
       "abelian": "true",
@@ -2261,7 +2573,9 @@
       "frac_involutions": "(1 : Rat)/5",
       "num_subgroups": "2",
       "z1size": "5",
-      "z2size": "5"
+      "z2size": "5",
+      "z3size": "5",
+      "z4size": "5"
     },
     "50,1": {
       "abelian": "false",
@@ -2270,7 +2584,9 @@
       "frac_involutions": "(13 : Rat)/25",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "50,2": {
       "abelian": "true",
@@ -2279,7 +2595,9 @@
       "frac_involutions": "(1 : Rat)/25",
       "num_subgroups": "0",
       "z1size": "50",
-      "z2size": "50"
+      "z2size": "50",
+      "z3size": "50",
+      "z4size": "50"
     },
     "50,3": {
       "abelian": "false",
@@ -2288,7 +2606,9 @@
       "frac_involutions": "(3 : Rat)/25",
       "num_subgroups": "0",
       "z1size": "5",
-      "z2size": "5"
+      "z2size": "5",
+      "z3size": "5",
+      "z4size": "5"
     },
     "50,5": {
       "abelian": "true",
@@ -2297,7 +2617,9 @@
       "frac_involutions": "(1 : Rat)/25",
       "num_subgroups": "0",
       "z1size": "50",
-      "z2size": "50"
+      "z2size": "50",
+      "z3size": "50",
+      "z4size": "50"
     },
     "51,1": {
       "abelian": "true",
@@ -2306,7 +2628,9 @@
       "frac_involutions": "(1 : Rat)/51",
       "num_subgroups": "0",
       "z1size": "51",
-      "z2size": "51"
+      "z2size": "51",
+      "z3size": "51",
+      "z4size": "51"
     },
     "52,1": {
       "abelian": "false",
@@ -2315,7 +2639,9 @@
       "frac_involutions": "(1 : Rat)/26",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "52,2": {
       "abelian": "true",
@@ -2324,7 +2650,9 @@
       "frac_involutions": "(1 : Rat)/26",
       "num_subgroups": "0",
       "z1size": "52",
-      "z2size": "52"
+      "z2size": "52",
+      "z3size": "52",
+      "z4size": "52"
     },
     "52,4": {
       "abelian": "false",
@@ -2333,7 +2661,9 @@
       "frac_involutions": "(7 : Rat)/13",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "52,5": {
       "abelian": "true",
@@ -2342,7 +2672,9 @@
       "frac_involutions": "(1 : Rat)/13",
       "num_subgroups": "0",
       "z1size": "52",
-      "z2size": "52"
+      "z2size": "52",
+      "z3size": "52",
+      "z4size": "52"
     },
     "53,1": {
       "abelian": "true",
@@ -2351,7 +2683,9 @@
       "frac_involutions": "(1 : Rat)/53",
       "num_subgroups": "0",
       "z1size": "53",
-      "z2size": "53"
+      "z2size": "53",
+      "z3size": "53",
+      "z4size": "53"
     },
     "54,1": {
       "abelian": "false",
@@ -2360,7 +2694,9 @@
       "frac_involutions": "(14 : Rat)/27",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "54,12": {
       "abelian": "false",
@@ -2369,7 +2705,9 @@
       "frac_involutions": "(2 : Rat)/27",
       "num_subgroups": "0",
       "z1size": "9",
-      "z2size": "9"
+      "z2size": "9",
+      "z3size": "9",
+      "z4size": "9"
     },
     "54,13": {
       "abelian": "false",
@@ -2378,7 +2716,9 @@
       "frac_involutions": "(5 : Rat)/27",
       "num_subgroups": "0",
       "z1size": "3",
-      "z2size": "3"
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
     },
     "54,15": {
       "abelian": "true",
@@ -2387,7 +2727,9 @@
       "frac_involutions": "(1 : Rat)/27",
       "num_subgroups": "0",
       "z1size": "54",
-      "z2size": "54"
+      "z2size": "54",
+      "z3size": "54",
+      "z4size": "54"
     },
     "54,2": {
       "abelian": "true",
@@ -2396,7 +2738,9 @@
       "frac_involutions": "(1 : Rat)/27",
       "num_subgroups": "0",
       "z1size": "54",
-      "z2size": "54"
+      "z2size": "54",
+      "z3size": "54",
+      "z4size": "54"
     },
     "54,3": {
       "abelian": "false",
@@ -2405,7 +2749,9 @@
       "frac_involutions": "(5 : Rat)/27",
       "num_subgroups": "0",
       "z1size": "3",
-      "z2size": "3"
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
     },
     "54,4": {
       "abelian": "false",
@@ -2414,7 +2760,9 @@
       "frac_involutions": "(2 : Rat)/27",
       "num_subgroups": "0",
       "z1size": "9",
-      "z2size": "9"
+      "z2size": "9",
+      "z3size": "9",
+      "z4size": "9"
     },
     "54,9": {
       "abelian": "true",
@@ -2423,7 +2771,9 @@
       "frac_involutions": "(1 : Rat)/27",
       "num_subgroups": "0",
       "z1size": "54",
-      "z2size": "54"
+      "z2size": "54",
+      "z3size": "54",
+      "z4size": "54"
     },
     "55,1": {
       "abelian": "true",
@@ -2432,7 +2782,9 @@
       "frac_involutions": "(1 : Rat)/55",
       "num_subgroups": "0",
       "z1size": "55",
-      "z2size": "55"
+      "z2size": "55",
+      "z3size": "55",
+      "z4size": "55"
     },
     "56,10": {
       "abelian": "false",
@@ -2441,7 +2793,9 @@
       "frac_involutions": "(1 : Rat)/28",
       "num_subgroups": "0",
       "z1size": "14",
-      "z2size": "56"
+      "z2size": "56",
+      "z3size": "56",
+      "z4size": "56"
     },
     "56,12": {
       "abelian": "false",
@@ -2450,7 +2804,9 @@
       "frac_involutions": "(4 : Rat)/7",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "56,13": {
       "abelian": "true",
@@ -2459,7 +2815,9 @@
       "frac_involutions": "(1 : Rat)/7",
       "num_subgroups": "0",
       "z1size": "56",
-      "z2size": "56"
+      "z2size": "56",
+      "z3size": "56",
+      "z4size": "56"
     },
     "56,2": {
       "abelian": "true",
@@ -2468,7 +2826,9 @@
       "frac_involutions": "(1 : Rat)/28",
       "num_subgroups": "0",
       "z1size": "56",
-      "z2size": "56"
+      "z2size": "56",
+      "z3size": "56",
+      "z4size": "56"
     },
     "56,3": {
       "abelian": "false",
@@ -2477,7 +2837,9 @@
       "frac_involutions": "(1 : Rat)/28",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "56,4": {
       "abelian": "false",
@@ -2486,7 +2848,9 @@
       "frac_involutions": "(2 : Rat)/7",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "56,5": {
       "abelian": "false",
@@ -2495,7 +2859,9 @@
       "frac_involutions": "(15 : Rat)/28",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "56,6": {
       "abelian": "false",
@@ -2504,7 +2870,9 @@
       "frac_involutions": "(1 : Rat)/14",
       "num_subgroups": "0",
       "z1size": "4",
-      "z2size": "4"
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
     },
     "56,8": {
       "abelian": "true",
@@ -2513,7 +2881,9 @@
       "frac_involutions": "(1 : Rat)/14",
       "num_subgroups": "0",
       "z1size": "56",
-      "z2size": "56"
+      "z2size": "56",
+      "z3size": "56",
+      "z4size": "56"
     },
     "56,9": {
       "abelian": "false",
@@ -2522,7 +2892,9 @@
       "frac_involutions": "(3 : Rat)/28",
       "num_subgroups": "0",
       "z1size": "14",
-      "z2size": "56"
+      "z2size": "56",
+      "z3size": "56",
+      "z4size": "56"
     },
     "57,2": {
       "abelian": "true",
@@ -2531,7 +2903,9 @@
       "frac_involutions": "(1 : Rat)/57",
       "num_subgroups": "0",
       "z1size": "57",
-      "z2size": "57"
+      "z2size": "57",
+      "z3size": "57",
+      "z4size": "57"
     },
     "58,1": {
       "abelian": "false",
@@ -2540,7 +2914,9 @@
       "frac_involutions": "(15 : Rat)/29",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "58,2": {
       "abelian": "true",
@@ -2549,7 +2925,9 @@
       "frac_involutions": "(1 : Rat)/29",
       "num_subgroups": "0",
       "z1size": "58",
-      "z2size": "58"
+      "z2size": "58",
+      "z3size": "58",
+      "z4size": "58"
     },
     "59,1": {
       "abelian": "true",
@@ -2558,7 +2936,9 @@
       "frac_involutions": "(1 : Rat)/59",
       "num_subgroups": "0",
       "z1size": "59",
-      "z2size": "59"
+      "z2size": "59",
+      "z3size": "59",
+      "z4size": "59"
     },
     "6,1": {
       "abelian": "false",
@@ -2567,7 +2947,9 @@
       "frac_involutions": "(2 : Rat)/3",
       "num_subgroups": "6",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "6,2": {
       "abelian": "true",
@@ -2576,7 +2958,9 @@
       "frac_involutions": "(1 : Rat)/3",
       "num_subgroups": "4",
       "z1size": "6",
-      "z2size": "6"
+      "z2size": "6",
+      "z3size": "6",
+      "z4size": "6"
     },
     "60,1": {
       "abelian": "false",
@@ -2585,7 +2969,9 @@
       "frac_involutions": "(1 : Rat)/30",
       "num_subgroups": "0",
       "z1size": "10",
-      "z2size": "10"
+      "z2size": "10",
+      "z3size": "10",
+      "z4size": "10"
     },
     "60,10": {
       "abelian": "false",
@@ -2594,7 +2980,9 @@
       "frac_involutions": "(1 : Rat)/5",
       "num_subgroups": "0",
       "z1size": "6",
-      "z2size": "6"
+      "z2size": "6",
+      "z3size": "6",
+      "z4size": "6"
     },
     "60,11": {
       "abelian": "false",
@@ -2603,7 +2991,9 @@
       "frac_involutions": "(2 : Rat)/15",
       "num_subgroups": "0",
       "z1size": "10",
-      "z2size": "10"
+      "z2size": "10",
+      "z3size": "10",
+      "z4size": "10"
     },
     "60,12": {
       "abelian": "false",
@@ -2612,7 +3002,9 @@
       "frac_involutions": "(8 : Rat)/15",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "60,13": {
       "abelian": "true",
@@ -2621,7 +3013,9 @@
       "frac_involutions": "(1 : Rat)/15",
       "num_subgroups": "0",
       "z1size": "60",
-      "z2size": "60"
+      "z2size": "60",
+      "z3size": "60",
+      "z4size": "60"
     },
     "60,2": {
       "abelian": "false",
@@ -2630,7 +3024,9 @@
       "frac_involutions": "(1 : Rat)/30",
       "num_subgroups": "0",
       "z1size": "6",
-      "z2size": "6"
+      "z2size": "6",
+      "z3size": "6",
+      "z4size": "6"
     },
     "60,3": {
       "abelian": "false",
@@ -2639,7 +3035,9 @@
       "frac_involutions": "(1 : Rat)/30",
       "num_subgroups": "0",
       "z1size": "2",
-      "z2size": "2"
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "60,4": {
       "abelian": "true",
@@ -2648,7 +3046,9 @@
       "frac_involutions": "(1 : Rat)/30",
       "num_subgroups": "0",
       "z1size": "60",
-      "z2size": "60"
+      "z2size": "60",
+      "z3size": "60",
+      "z4size": "60"
     },
     "60,5": {
       "abelian": "false",
@@ -2657,7 +3057,9 @@
       "frac_involutions": "(4 : Rat)/15",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "60,6": {
       "abelian": "false",
@@ -2666,7 +3068,9 @@
       "frac_involutions": "(1 : Rat)/10",
       "num_subgroups": "0",
       "z1size": "3",
-      "z2size": "3"
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
     },
     "60,8": {
       "abelian": "false",
@@ -2675,7 +3079,9 @@
       "frac_involutions": "(2 : Rat)/5",
       "num_subgroups": "0",
       "z1size": "1",
-      "z2size": "1"
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "60,9": {
       "abelian": "false",
@@ -2684,7 +3090,9 @@
       "frac_involutions": "(1 : Rat)/15",
       "num_subgroups": "0",
       "z1size": "5",
-      "z2size": "5"
+      "z2size": "5",
+      "z3size": "5",
+      "z4size": "5"
     },
     "7,1": {
       "abelian": "true",
@@ -2693,7 +3101,9 @@
       "frac_involutions": "(1 : Rat)/7",
       "num_subgroups": "2",
       "z1size": "7",
-      "z2size": "7"
+      "z2size": "7",
+      "z3size": "7",
+      "z4size": "7"
     },
     "8,1": {
       "abelian": "true",
@@ -2702,7 +3112,9 @@
       "frac_involutions": "(1 : Rat)/4",
       "num_subgroups": "4",
       "z1size": "8",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "8,2": {
       "abelian": "true",
@@ -2711,7 +3123,9 @@
       "frac_involutions": "(1 : Rat)/2",
       "num_subgroups": "8",
       "z1size": "8",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "8,3": {
       "abelian": "false",
@@ -2720,7 +3134,9 @@
       "frac_involutions": "(3 : Rat)/4",
       "num_subgroups": "10",
       "z1size": "2",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "8,4": {
       "abelian": "false",
@@ -2729,7 +3145,9 @@
       "frac_involutions": "(1 : Rat)/4",
       "num_subgroups": "6",
       "z1size": "2",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "8,5": {
       "abelian": "true",
@@ -2738,7 +3156,9 @@
       "frac_involutions": "1",
       "num_subgroups": "16",
       "z1size": "8",
-      "z2size": "8"
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
     },
     "9,1": {
       "abelian": "true",
@@ -2747,7 +3167,9 @@
       "frac_involutions": "(1 : Rat)/9",
       "num_subgroups": "3",
       "z1size": "9",
-      "z2size": "9"
+      "z2size": "9",
+      "z3size": "9",
+      "z4size": "9"
     },
     "9,2": {
       "abelian": "true",
@@ -2756,7 +3178,9 @@
       "frac_involutions": "(1 : Rat)/9",
       "num_subgroups": "6",
       "z1size": "9",
-      "z2size": "9"
+      "z2size": "9",
+      "z3size": "9",
+      "z4size": "9"
     }
   }
 }

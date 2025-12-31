@@ -38,3 +38,9 @@ name = "Playground.Geometry.SmallGroups.EvalZ1Size"
 
 [[lean_exe]]
 name = "Playground.Geometry.SmallGroups.EvalZ2Size"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalZ3Size"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalZ4Size"

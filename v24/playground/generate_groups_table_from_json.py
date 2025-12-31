@@ -402,6 +402,8 @@ def generate_html(groups, group_info, all_groups_tsv):
                     <th class="number"># Subgroups</th>
                     <th class="number">Z1 Size</th>
                     <th class="number">Z2 Size</th>
+                    <th class="number">Z3 Size</th>
+                    <th class="number">Z4 Size</th>
                 </tr>
             </thead>
             <tbody>
@@ -419,6 +421,8 @@ def generate_html(groups, group_info, all_groups_tsv):
                 num_subgroups = data.get('num_subgroups', '?')
                 z1size = data.get('z1size', '?')
                 z2size = data.get('z2size', '?')
+                z3size = data.get('z3size', '?')
+                z4size = data.get('z4size', '?')
 
                 abelian_class = 'abelian-yes' if abelian == 'true' else 'abelian-no'
                 abelian_text = 'Yes' if abelian == 'true' else 'No'
@@ -441,6 +445,8 @@ def generate_html(groups, group_info, all_groups_tsv):
                 num_subgroups = '-'
                 z1size = '-'
                 z2size = '-'
+                z3size = '-'
+                z4size = '-'
                 group_name = label
                 abbrev_line = f'<span style="color: #999; font-style: italic;">Not implemented</span>'
 
@@ -457,6 +463,8 @@ def generate_html(groups, group_info, all_groups_tsv):
                     <td class="number">{num_subgroups}</td>
                     <td class="number">{z1size}</td>
                     <td class="number">{z2size}</td>
+                    <td class="number">{z3size}</td>
+                    <td class="number">{z4size}</td>
                 </tr>
 """
 

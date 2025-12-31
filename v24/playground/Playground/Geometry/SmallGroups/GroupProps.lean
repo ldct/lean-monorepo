@@ -19,20 +19,17 @@ theorem Group.IsAbelian_iff {G} [Group G] [Fintype G] [DecidableEq G] : Group.Is
 -- : Decidable (Group.IsAbelian G) :=
 --   decidable_of_iff' _ Group.IsAbelian_iff
 
+def Zn (G) [Group G] [Fintype G] [DecidableEq G] (prev : Finset G) : Finset G := { x : G | ∀ y : G, x * y * x⁻¹ * y⁻¹ ∈ prev }
+
 def Z1 (G) [Group G] [Fintype G] [DecidableEq G] : Finset G := { x : G | ∀ y : G, x * y * x⁻¹ * y⁻¹ = 1 }
 
+def Z2 (G) [Group G] [Fintype G] [DecidableEq G] := Zn G (Z1 G)
+def Z3 (G) [Group G] [Fintype G] [DecidableEq G] := Zn G (Z2 G)
+def Z4 (G) [Group G] [Fintype G] [DecidableEq G] := Zn G (Z3 G)
+
 def Z1Size (G) [Group G] [Fintype G] [DecidableEq G] : ℕ := Fintype.card (Z1 G)
-
-def Z2 (G) [Group G] [Fintype G] [DecidableEq G] : Finset G := { x : G | ∀ y : G, x * y * x⁻¹ * y⁻¹ ∈ Z1 G }
-
 def Z2Size (G) [Group G] [Fintype G] [DecidableEq G] : ℕ := Fintype.card (Z2 G)
-
-def Z3 (G) [Group G] [Fintype G] [DecidableEq G] : Finset G := { x : G | ∀ y : G, x * y * x⁻¹ * y⁻¹ ∈ Z2 G }
-
 def Z3Size (G) [Group G] [Fintype G] [DecidableEq G] : ℕ := Fintype.card (Z3 G)
-
-def Z4 (G) [Group G] [Fintype G] [DecidableEq G] : Finset G := { x : G | ∀ y : G, x * y * x⁻¹ * y⁻¹ ∈ Z3 G }
-
 def Z4Size (G) [Group G] [Fintype G] [DecidableEq G] : ℕ := Fintype.card (Z4 G)
 
 def Group.FracInvolutions (G) [Group G] [Fintype G] [DecidableEq G] : ℚ :=

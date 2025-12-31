@@ -33,7 +33,7 @@ def generate_eval_file(property_name, eval_expr, group_names, output_file, postf
     ]
 
     # Add maxHeartbeats for properties that need it
-    if property_name in ["Z1Size", "Z2Size"]:
+    if property_name in ["Z1Size", "Z2Size", "Z3Size", "Z4Size"]:
         lines.append("set_option maxHeartbeats 2000000")
         lines.append("")
 
@@ -78,6 +78,8 @@ def main():
         ("NumSubgroups", "Group.numSubgroups", "EvalNumSubgroups.lean", ""),
         ("Z1Size", "Z1Size", "EvalZ1Size.lean", ""),
         ("Z2Size", "Z2Size", "EvalZ2Size.lean", ""),
+        ("Z3Size", "Z3Size", "EvalZ3Size.lean", ""),
+        ("Z4Size", "Z4Size", "EvalZ4Size.lean", ""),
         # ("Exponent", "exponent", "EvalExponent.lean", ".val"), -- TODO some bugs
     ]
 
