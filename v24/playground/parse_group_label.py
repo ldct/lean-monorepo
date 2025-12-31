@@ -92,9 +92,11 @@ def parse_group_label(label: str, order: int) -> Optional[str]:
     if '.' in label:
         return None
 
-    # Dicyclic groups: Dic<n> - not implemented yet
-    if label.startswith('Dic'):
-        return None
+    # Dicyclic groups: Dic<n>
+    # Dicyclic group Dicₙ has order 4n
+    if match := re.match(r'^Dic(\d+)$', label):
+        n = match.group(1)
+        return f"DicyclicGroup {n}"
 
     # Wreath products: C<n>wrC<m> - not implemented yet
     if 'wr' in label:
@@ -104,11 +106,16 @@ def parse_group_label(label: str, order: int) -> Optional[str]:
     if 'o' in label and 'o' != label[0]:
         return None
 
+    # Frobenius groups: F<p> where p is prime
+    if match := re.match(r'^F(\d+)$', label):
+        p = match.group(1)
+        if p in ['5', '7']:
+            return f"@FrobeniusGroup {p} (Fact.mk (by decide : Nat.Prime {p}))"
+        # F8 and other F groups not implemented
+        return None
+
     # Special groups with specific names
     special_groups = {
-        'F5': None,  # Frobenius group - not implemented
-        'F7': None,
-        'F8': None,
         'He3': None,  # Heisenberg group - not implemented
         'GL(2,3)': None,
         'CSU(2,3)': None,
@@ -186,10 +193,14 @@ def test_against_existing():
         ("C2xC30", 60, 13, "Multiplicative (ZMod 2) × Multiplicative (ZMod 30)"),
         ("C5xA4", 60, 9, "Multiplicative (ZMod 5) × AlternatingGroup 4"),
         ("D30", 60, 12, "DihedralGroup 30"),
+        # Dicyclic groups - now implemented
+        ("Dic3", 12, 1, "DicyclicGroup 3"),
+        # Frobenius groups - now implemented
+        ("F5", 20, 3, "@FrobeniusGroup 5 (Fact.mk (by decide : Nat.Prime 5))"),
+        ("F7", 42, 1, "@FrobeniusGroup 7 (Fact.mk (by decide : Nat.Prime 7))"),
         # Not implemented - should return None
         ("C4:C4", 16, 4, None),
-        ("Dic3", 12, 1, None),
-        ("F5", 20, 3, None),
+        ("F8", 56, 11, None),
         ("SL(2,3)", 24, 3, None),
     ]
 

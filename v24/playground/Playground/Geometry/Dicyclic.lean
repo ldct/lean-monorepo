@@ -1,5 +1,6 @@
 import Mathlib.Algebra.Lie.OfAssociative
 import Mathlib.Data.ZMod.Basic
+import Mathlib.Data.Fintype.Basic
 
 /-- Dicyclic group Dicₙ (order 4n) in normal form: a^k or x a^k. -/
 inductive DicyclicGroup (n : ℕ) : Type
@@ -69,9 +70,52 @@ instance : Group (DicyclicGroup n) := {
     exact this
 }
 
-#min_imports
+instance (n : ℕ) [NeZero n] : NeZero (2 * n) :=
+  ⟨Nat.mul_ne_zero (by decide) (NeZero.ne n)⟩
 
-theorem center_eq (n : ℕ) : (Subgroup.center (DicyclicGroup n)).carrier = { 1, a n } := by
-  sorry
+instance [NeZero n] : Fintype (DicyclicGroup n) where
+  elems := (Finset.univ.map ⟨a, by intro x y h; injection h⟩) ∪
+           (Finset.univ.map ⟨ax, by intro x y h; injection h⟩)
+  complete := by
+    intro x
+    simp only [Finset.mem_union, Finset.mem_map, Function.Embedding.coeFn_mk,
+      Finset.mem_univ, true_and]
+    cases x with
+    | a k => left; exact ⟨k, rfl⟩
+    | ax k => right; exact ⟨k, rfl⟩
+
+
+theorem center_eq (n : ℕ) (hn : 2 < n) : (Subgroup.center (DicyclicGroup n)).carrier = { 1, a n } := by
+  -- To prove the equality of sets, we show each set is a subset of the other.
+  apply Set.ext
+  intro x
+  simp [Subgroup.mem_center_iff];
+  constructor;
+  · rcases x with ( _ | _ ) <;> simp_all +decide [ Subsemigroup.mem_center_iff ];
+    · rename_i k;
+      intro hk; have := hk ( DicyclicGroup.ax 0 ) ; simp_all +decide [ DicyclicGroup.mul_eq ] ;
+      -- Since $-k = k$, we have $2k = 0$, which implies $k = 0$ or $k = n$.
+      have hk_cases : k = 0 ∨ k = n := by
+        have hk_cases : 2 * k = 0 := by
+          grind;
+        have hk_cases : ∃ m : ℕ, k = m ∧ m < 2 * n ∧ 2 * m ≡ 0 [MOD 2 * n] := by
+          use k.val;
+          haveI := Fact.mk ( by linarith : 1 < 2 * n ) ; simp_all +decide [ ← ZMod.natCast_eq_natCast_iff ] ;
+          exact ZMod.val_lt k;
+        rcases hk_cases with ⟨ m, rfl, hm₁, hm₂ ⟩ ; rcases Nat.dvd_of_mod_eq_zero hm₂ with ⟨ c, hc ⟩ ; rcases c with ( _ | _ | c ) <;> simp_all +decide [ Nat.mod_eq_of_lt ] ;
+        nlinarith;
+      aesop;
+    · intro h; have := h ( DicyclicGroup.a 1 ) ; simp_all +decide [ mul_eq, Subgroup.mem_center_iff ] ;
+      -- Simplifying $1 + a✝ = a✝ - 1$ gives $2 = 0$, which is a contradiction in $\mathbb{Z}/(2n)\mathbb{Z}$.
+      have h_contra : (2 : ZMod (2 * n)) = 0 := by
+        grind;
+      rcases n with ( _ | _ | n ) <;> cases h_contra ; contradiction;
+  · rintro ( rfl | rfl ) <;> simp +decide [ Subsemigroup.mem_center_iff ];
+    rintro ( _ | _ ) <;> simp +decide [ mul_eq ];
+    · exact add_comm _ _;
+    · rw [ sub_eq_add_neg ] ; ring;
+      rw [ sub_eq_add_neg ] ; norm_num [ ZMod.neg_eq_self_iff ] ; ring;
+      exact Or.inr ( Nat.mod_eq_of_lt ( by linarith ) )
+
 
 end DicyclicGroup

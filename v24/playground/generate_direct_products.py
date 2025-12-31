@@ -15,6 +15,8 @@ import Mathlib.Data.ZMod.Basic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
 import Mathlib.GroupTheory.SpecificGroups.Quaternion
 import Playground.Geometry.SmallGroups.AlternatingGroup
+import Playground.Geometry.Dicyclic
+import Playground.Geometry.FrobeniusGroup
 
 set_option linter.style.longLine false
 

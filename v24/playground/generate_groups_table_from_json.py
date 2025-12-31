@@ -275,6 +275,12 @@ def generate_html(groups, group_info, all_groups_tsv):
         tr:last-child td {
             border-bottom: none;
         }
+        tr.implemented {
+            background-color: #f0f9f0;
+        }
+        tr.implemented:hover {
+            background-color: #e8f5e8;
+        }
         .abelian-yes {
             color: #4CAF50;
             font-weight: 600;
@@ -378,7 +384,8 @@ def generate_html(groups, group_info, all_groups_tsv):
                 group_name = label
                 abbrev_line = f'<span style="color: #999; font-style: italic;">Not implemented</span>'
 
-            html += f"""                <tr>
+            row_class = "implemented" if implemented else ""
+            html += f"""                <tr class="{row_class}">
                     <td class="gap-id">({order}, {gap_id})</td>
                     <td class="group-name-cell">
                         <div class="group-name">{group_name}</div>
