@@ -4,11 +4,11 @@ import Mathlib
 This file defines a group parameterised by p, q, and r which is the semidirect product of ZMod p and ZMod q.
 -/
 
-
+#eval IsUnit (5 : ZMod 6)
 
 structure Cpq (p q prim : ℕ) [Fact p.Prime] [Fact q.Prime] : Type where
   r : ZMod q
-  g : ZMod p
+  g : Units (ZMod q)
 deriving Fintype, DecidableEq
 
 def act (p q prim : ℕ) (g : ZMod p) (r : ZMod q) : ZMod p :=

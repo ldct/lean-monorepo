@@ -88,6 +88,10 @@ def parse_group_label(label: str, order: int) -> Optional[str]:
     if label == 'C3:S3':
         return "Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))"
 
+    if label == 'C5:D5':
+        return "Dihedralization (Multiplicative (ZMod 5) × Multiplicative (ZMod 5))"
+
+
     # Semidirect products: C<n>:C<m> - not implemented yet
     if ':' in label:
         return None

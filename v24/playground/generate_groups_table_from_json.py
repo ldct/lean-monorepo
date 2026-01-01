@@ -397,6 +397,7 @@ def generate_html(groups, group_info, all_groups_tsv):
                     <th>GAP ID</th>
                     <th>Group Name</th>
                     <th>Abelian?</th>
+                    <th>Exponent</th>
                     <th class="number">Frac. Involutions</th>
                     <th class="number">Commuting Fraction</th>
                     <th class="number"># Subgroups</th>
@@ -413,6 +414,7 @@ def generate_html(groups, group_info, all_groups_tsv):
             if implemented and data:
                 # Implemented group - show full stats
                 abelian = data.get('abelian', '?')
+                exponent = data.get('exponent', '?')
                 frac_inv = format_rational(data.get('frac_involutions', '?'))
                 comm_frac = format_rational(data.get('commuting_fraction', '?'))
                 num_subgroups = data.get('num_subgroups', '?')
@@ -454,6 +456,7 @@ def generate_html(groups, group_info, all_groups_tsv):
                 num_subgroups = '-'
                 z_series = '-'
                 group_name = label
+                exponent = '-'
                 abbrev_line = f'<span style="color: #999; font-style: italic;">Not implemented</span>'
 
             row_class = "implemented" if implemented else ""
@@ -464,6 +467,7 @@ def generate_html(groups, group_info, all_groups_tsv):
                         <div class="group-abbrev">{abbrev_line}</div>
                     </td>
                     <td class="{abelian_class}">{abelian_text}</td>
+                    <td>{exponent}</td>
                     <td class="number">{frac_inv}</td>
                     <td class="number">{comm_frac}</td>
                     <td class="number">{num_subgroups}</td>

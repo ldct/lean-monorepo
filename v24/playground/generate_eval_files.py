@@ -30,12 +30,9 @@ def generate_eval_file(property_name, eval_expr, group_names, output_file, postf
         "import Playground.Geometry.SmallGroups.SmallGroups",
         "import Playground.Geometry.SmallGroups.GroupProps",
         "",
+        "set_option linter.style.setOption false",
+        "set_option maxHeartbeats 2000000"
     ]
-
-    # Add maxHeartbeats for properties that need it
-    if property_name in ["Z1Size", "Z2Size", "Z3Size", "Z4Size"]:
-        lines.append("set_option maxHeartbeats 2000000")
-        lines.append("")
 
     lines.extend([
         "def main : IO Unit := do",
@@ -80,7 +77,7 @@ def main():
         ("Z2Size", "Z2Size", "EvalZ2Size.lean", ""),
         ("Z3Size", "Z3Size", "EvalZ3Size.lean", ""),
         ("Z4Size", "Z4Size", "EvalZ4Size.lean", ""),
-        # ("Exponent", "exponent", "EvalExponent.lean", ".val"), -- TODO some bugs
+        ("Exponent", "Group.exponent", "EvalExponent.lean", ".val"),
     ]
 
     for prop_name, eval_expr, filename, postfix in properties:

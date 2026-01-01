@@ -54,7 +54,6 @@ instance decidableMyIsSubgroup {G} [Group G] [Fintype G] (H : Finset G)
 def Group.numSubgroups (G) [Group G] [Fintype G] [DecidableEq G] : ℕ :=
   if (Fintype.card G > 13) then 0 else Fintype.card {s : Finset G | MyIsSubgroup G s}
 
-
 def finOrderOf {G} [Group G] [Fintype G] [DecidableEq G] (a : G) : Fin ((Fintype.card G) + 1):=
   Finset.min' { n : Fin ((Fintype.card G) + 1) | n ≠ 0 ∧ a ^ (n.val) = 1 } (by
     use ⟨ Fintype.card G, by grind ⟩
@@ -107,3 +106,16 @@ TODO: this is pretty slow. Perhaps the exponent is faster to calculate.
 -/
 def Group.maxOrder (G) [Group G] [Fintype G] [DecidableEq G] : Nat :=
   (maxOrder' G).val
+
+
+abbrev Group.HasExponentAtMost (G) [Group G] [Fintype G] [DecidableEq G] (n : ℕ)
+: Prop := ∀ g : G, g^n = 1
+
+def Group.exponent (G) [Group G] [Fintype G] [DecidableEq G] : Fin ((Fintype.card G) + 1):=
+  Finset.min' { n : Fin ((Fintype.card G) + 1) |
+      n ≠ 0 ∧ n.val ∣ Fintype.card G ∧ Group.HasExponentAtMost G n} (by
+    use ⟨ Fintype.card G, by grind ⟩
+    simp
+    intro g
+    exact pow_card_eq_one
+  )

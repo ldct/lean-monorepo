@@ -44,3 +44,6 @@ name = "Playground.Geometry.SmallGroups.EvalZ3Size"
 
 [[lean_exe]]
 name = "Playground.Geometry.SmallGroups.EvalZ4Size"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalExponent"

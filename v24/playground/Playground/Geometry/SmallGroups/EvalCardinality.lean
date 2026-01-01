@@ -1,6 +1,8 @@
 import Playground.Geometry.SmallGroups.SmallGroups
 import Playground.Geometry.SmallGroups.GroupProps
 
+set_option linter.style.setOption false
+set_option maxHeartbeats 2000000
 def main : IO Unit := do
   let values := [
   Fintype.card Gap_1_1,

@@ -46,7 +46,7 @@ def run_build():
         ("Playground.Geometry.SmallGroups.EvalZ2Size", "z2size"),
         ("Playground.Geometry.SmallGroups.EvalZ3Size", "z3size"),
         ("Playground.Geometry.SmallGroups.EvalZ4Size", "z4size"),
-        # ("Playground.Geometry.SmallGroups.EvalExponent", "exponent"), -- some bug
+        ("Playground.Geometry.SmallGroups.EvalExponent", "exponent"),
     ]
 
     # First, build all targets
