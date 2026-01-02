@@ -152,6 +152,10 @@
       "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 10)",
       "name": "Gap_20_5"
     },
+    "21,1": {
+      "definition": "Cpqr 7 3 2",
+      "name": "Gap_21_1"
+    },
     "21,2": {
       "definition": "Multiplicative (ZMod 21)",
       "name": "Gap_21_2"
@@ -491,6 +495,10 @@
     "42,1": {
       "definition": "@FrobeniusGroup 7 (Fact.mk (by decide : Nat.Prime 7))",
       "name": "Gap_42_1"
+    },
+    "42,2": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Cpqr 7 3 2",
+      "name": "Gap_42_2"
     },
     "42,3": {
       "definition": "Equiv.Perm (Fin 3) \u00d7 Multiplicative (ZMod 7)",
@@ -1345,6 +1353,18 @@
       "z2size": "20",
       "z3size": "20",
       "z4size": "20"
+    },
+    "21,1": {
+      "abelian": "false",
+      "card": "21",
+      "commuting_fraction": "(5 : Rat)/21",
+      "exponent": "21",
+      "frac_involutions": "(1 : Rat)/21",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "21,2": {
       "abelian": "true",
@@ -2365,6 +2385,18 @@
       "z2size": "1",
       "z3size": "1",
       "z4size": "1"
+    },
+    "42,2": {
+      "abelian": "false",
+      "card": "42",
+      "commuting_fraction": "(5 : Rat)/21",
+      "exponent": "42",
+      "frac_involutions": "(1 : Rat)/21",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
     },
     "42,3": {
       "abelian": "false",

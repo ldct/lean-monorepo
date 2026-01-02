@@ -95,6 +95,7 @@ def parse_group_label(label: str, order: int) -> Optional[str]:
         'M4(2)': "Cpqr 8 2 5",  # Modular group M4(2) = Cpq(8,2,5)
         'M5(2)': None,
         'C4:C4': "Cpqr 4 4 3",  # C4:C4 = Cpq(4,4,3)
+        'C7:C3': "Cpqr 7 3 2",  # C7:C3 = Cpq(7,3,2)
         'C3:S3': "Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))",
         'C5:D5': "Dihedralization (Multiplicative (ZMod 5) × Multiplicative (ZMod 5))",
         'ES+(2,2)': None,  # Extraspecial - not implemented

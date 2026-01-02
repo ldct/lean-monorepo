@@ -66,6 +66,8 @@ abbrev Gap_20_3 := @FrobeniusGroup 5 (Fact.mk (by decide : Nat.Prime 5))
 abbrev Gap_20_1 := DicyclicGroup 5
 abbrev Gap_20_5 := Multiplicative (ZMod 2) × Multiplicative (ZMod 10)
 abbrev Gap_21_2 := Multiplicative (ZMod 21)
+instance : Fact ((2 : ZMod (7:PNat)) ^ (3:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_21_1 := Cpqr 7 3 2
 abbrev Gap_22_2 := Multiplicative (ZMod 22)
 abbrev Gap_22_1 := DihedralGroup 11
 abbrev Gap_23_1 := Multiplicative (ZMod 23)
@@ -151,6 +153,7 @@ abbrev Gap_42_5 := DihedralGroup 21
 abbrev Gap_42_1 := @FrobeniusGroup 7 (Fact.mk (by decide : Nat.Prime 7))
 abbrev Gap_42_3 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 7)
 abbrev Gap_42_4 := Multiplicative (ZMod 3) × DihedralGroup 7
+abbrev Gap_42_2 := Multiplicative (ZMod 2) × Cpqr 7 3 2
 abbrev Gap_43_1 := Multiplicative (ZMod 43)
 abbrev Gap_44_2 := Multiplicative (ZMod 44)
 abbrev Gap_44_3 := DihedralGroup 22

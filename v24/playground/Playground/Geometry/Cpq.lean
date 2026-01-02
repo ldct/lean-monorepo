@@ -129,5 +129,9 @@ instance (p q : PNat) (r : ZMod p) [h : Fact (r ^ (q.val) = 1)] : Group (Cpqr p 
 
 
 -- instance : Fact ((3 : ZMod (8:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
--- instance : Fact ((5 : ZMod (8:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
--- #eval Finset.card { x : Cpqr 8 2 5 | finOrderOf x = 2 }
+-- #synth Group (Cpqr 8 2 3)
+
+-- instance : Fact ((2 : ZMod (7:PNat)) ^ (3:PNat).val = 1) := ⟨(by decide)⟩
+-- #synth Group (Cpqr 7 3 2)
+-- #eval Group.exponent (Cpqr 7 3 2)
+-- #eval Group.IsAbelian (Cpqr 7 3 2)
