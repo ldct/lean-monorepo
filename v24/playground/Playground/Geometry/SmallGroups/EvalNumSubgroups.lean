@@ -37,6 +37,8 @@ def main : IO Unit := do
   Group.numSubgroups Gap_16_7,
   Group.numSubgroups Gap_16_9,
   Group.numSubgroups Gap_16_8,
+  Group.numSubgroups Gap_16_6,
+  Group.numSubgroups Gap_16_4,
   Group.numSubgroups Gap_16_2,
   Group.numSubgroups Gap_16_14,
   Group.numSubgroups Gap_16_5,

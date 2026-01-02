@@ -37,6 +37,8 @@ def main : IO Unit := do
   Group.CommutingFraction Gap_16_7,
   Group.CommutingFraction Gap_16_9,
   Group.CommutingFraction Gap_16_8,
+  Group.CommutingFraction Gap_16_6,
+  Group.CommutingFraction Gap_16_4,
   Group.CommutingFraction Gap_16_2,
   Group.CommutingFraction Gap_16_14,
   Group.CommutingFraction Gap_16_5,

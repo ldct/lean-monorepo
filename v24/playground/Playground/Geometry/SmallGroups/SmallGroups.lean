@@ -43,6 +43,10 @@ abbrev Gap_16_7 := DihedralGroup 8
 abbrev Gap_16_9 := QuaternionGroup 4
 instance : Fact ((3 : ZMod (8:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
 abbrev Gap_16_8 := Cpqr 8 2 3
+instance : Fact ((5 : ZMod (8:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_16_6 := Cpqr 8 2 5
+instance : Fact ((3 : ZMod (4:PNat)) ^ (4:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_16_4 := Cpqr 4 4 3
 abbrev Gap_16_2 := Multiplicative (ZMod 4) × Multiplicative (ZMod 4)
 abbrev Gap_16_14 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2)
 abbrev Gap_16_5 := Multiplicative (ZMod 2) × Multiplicative (ZMod 8)

@@ -37,6 +37,8 @@ def main : IO Unit := do
   Fintype.card Gap_16_7,
   Fintype.card Gap_16_9,
   Fintype.card Gap_16_8,
+  Fintype.card Gap_16_6,
+  Fintype.card Gap_16_4,
   Fintype.card Gap_16_2,
   Fintype.card Gap_16_14,
   Fintype.card Gap_16_5,

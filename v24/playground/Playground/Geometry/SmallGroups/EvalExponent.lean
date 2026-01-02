@@ -37,6 +37,8 @@ def main : IO Unit := do
   (Group.exponent Gap_16_7).val,
   (Group.exponent Gap_16_9).val,
   (Group.exponent Gap_16_8).val,
+  (Group.exponent Gap_16_6).val,
+  (Group.exponent Gap_16_4).val,
   (Group.exponent Gap_16_2).val,
   (Group.exponent Gap_16_14).val,
   (Group.exponent Gap_16_5).val,

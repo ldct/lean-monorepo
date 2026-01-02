@@ -37,6 +37,8 @@ def main : IO Unit := do
   Z3Size Gap_16_7,
   Z3Size Gap_16_9,
   Z3Size Gap_16_8,
+  Z3Size Gap_16_6,
+  Z3Size Gap_16_4,
   Z3Size Gap_16_2,
   Z3Size Gap_16_14,
   Z3Size Gap_16_5,

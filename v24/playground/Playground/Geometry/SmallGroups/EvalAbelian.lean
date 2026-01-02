@@ -37,6 +37,8 @@ def main : IO Unit := do
   Group.IsAbelian Gap_16_7,
   Group.IsAbelian Gap_16_9,
   Group.IsAbelian Gap_16_8,
+  Group.IsAbelian Gap_16_6,
+  Group.IsAbelian Gap_16_4,
   Group.IsAbelian Gap_16_2,
   Group.IsAbelian Gap_16_14,
   Group.IsAbelian Gap_16_5,

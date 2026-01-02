@@ -76,9 +76,17 @@
       "definition": "Multiplicative (ZMod 4) \u00d7 Multiplicative (ZMod 4)",
       "name": "Gap_16_2"
     },
+    "16,4": {
+      "definition": "Cpqr 4 4 3",
+      "name": "Gap_16_4"
+    },
     "16,5": {
       "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 8)",
       "name": "Gap_16_5"
+    },
+    "16,6": {
+      "definition": "Cpqr 8 2 5",
+      "name": "Gap_16_6"
     },
     "16,7": {
       "definition": "DihedralGroup 8",
@@ -1094,6 +1102,18 @@
       "z3size": "16",
       "z4size": "16"
     },
+    "16,4": {
+      "abelian": "false",
+      "card": "16",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
+    },
     "16,5": {
       "abelian": "true",
       "card": "16",
@@ -1102,6 +1122,18 @@
       "frac_involutions": "(1 : Rat)/4",
       "num_subgroups": "0",
       "z1size": "16",
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,6": {
+      "abelian": "false",
+      "card": "16",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "8",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "4",
       "z2size": "16",
       "z3size": "16",
       "z4size": "16"
