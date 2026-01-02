@@ -40,6 +40,7 @@ instance Cpqr.Arbitrary (p q : PNat) (r : ZMod p) : Plausible.Arbitrary (Cpqr p 
 instance Cpqr.shrinkable (p q : PNat) (r : ZMod p) : Plausible.Shrinkable (Cpqr p q r) where
   shrink a := [a]
 
+namespace Cpqr
 
 def act (p q : PNat) (r : ZMod p) (P : ZMod p) (Q : ZMod q) : ZMod p :=
   P * r^(Q.val)
@@ -89,7 +90,7 @@ instance (p q : PNat) (r : ZMod p) : Inv (Cpqr p q r) where
     { Q := -x.Q
       P := - act p q r x.P (-x.Q) }
 
-theorem inv_eq (p q : PNat) (r : ZMod p) (x : Cpqr p q r) : x⁻¹ = { Q := -x.Q, P := - act p q r x.P (-x.Q) } := rfl
+theorem Cpq.inv_eq (p q : PNat) (r : ZMod p) (x : Cpqr p q r) : x⁻¹ = { Q := -x.Q, P := - act p q r x.P (-x.Q) } := rfl
 
 instance (p q : PNat) (r : ZMod p) : One (Cpqr p q r) where
   one :=
@@ -117,7 +118,7 @@ instance (p q : PNat) (r : ZMod p) [h : Fact (r ^ (q.val) = 1)] : Group (Cpqr p 
   mul_one a := by
     simp [Cpqr.mul_eq, act, show (1 : Cpqr p q r) = ⟨ 0, 0 ⟩ by rfl]
   inv_mul_cancel a:= by
-    simp [Cpqr.mul_eq, act, show (1 : Cpqr p q r) = ⟨ 0, 0 ⟩ by rfl, inv_eq]
+    simp [Cpqr.mul_eq, act, show (1 : Cpqr p q r) = ⟨ 0, 0 ⟩ by rfl, Cpq.inv_eq]
     ring_nf
     rw [mul_assoc, ← pow_add]
     rw [ sub_eq_zero, ZMod.neg_val ];
@@ -127,6 +128,6 @@ instance (p q : PNat) (r : ZMod p) [h : Fact (r ^ (q.val) = 1)] : Group (Cpqr p 
 }
 
 
-instance : Fact ((3 : ZMod (8:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
-instance : Fact ((5 : ZMod (8:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
-#eval Finset.card { x : Cpqr 8 2 5 | finOrderOf x = 2 }
+-- instance : Fact ((3 : ZMod (8:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
+-- instance : Fact ((5 : ZMod (8:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
+-- #eval Finset.card { x : Cpqr 8 2 5 | finOrderOf x = 2 }

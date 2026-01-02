@@ -84,13 +84,26 @@ def parse_group_label(label: str, order: int) -> Optional[str]:
             lean_parts.append(part_lean)
         return " × ".join(lean_parts)
 
-    # Special semidirect products
-    if label == 'C3:S3':
-        return "Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))"
+    # Special groups with specific names (check before general patterns)
+    special_groups = {
+        'He3': None,  # Heisenberg group - not implemented
+        'GL(2,3)': None,
+        'CSU(2,3)': None,
+        'SL(2,3)': None,
+        'SD16': "Cpqr 8 2 3",  # Semidihedral group = Cpq(8,2,3)
+        'SD32': None,
+        'M4(2)': "Cpqr 8 2 5",  # Modular group M4(2) = Cpq(8,2,5)
+        'M5(2)': None,
+        'C4:C4': "Cpqr 4 4 3",  # C4:C4 = Cpq(4,4,3)
+        'C3:S3': "Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))",
+        'C5:D5': "Dihedralization (Multiplicative (ZMod 5) × Multiplicative (ZMod 5))",
+        'ES+(2,2)': None,  # Extraspecial - not implemented
+        'ES-(2,2)': None,
+        'ES-(3,1)': None,
+    }
 
-    if label == 'C5:D5':
-        return "Dihedralization (Multiplicative (ZMod 5) × Multiplicative (ZMod 5))"
-
+    if label in special_groups:
+        return special_groups[label]
 
     # Semidirect products: C<n>:C<m> - not implemented yet
     if ':' in label:
@@ -129,24 +142,6 @@ def parse_group_label(label: str, order: int) -> Optional[str]:
             return f"@FrobeniusGroup {p} (Fact.mk (by decide : Nat.Prime {p}))"
         # F8 and other F groups not implemented
         return None
-
-    # Special groups with specific names
-    special_groups = {
-        'He3': None,  # Heisenberg group - not implemented
-        'GL(2,3)': None,
-        'CSU(2,3)': None,
-        'SL(2,3)': None,
-        'SD16': "Cpqr 8 2 3",  # Semidihedral group = Cpq(8,2,3)
-        'SD32': None,
-        'M4(2)': None,  # Modular group - not implemented
-        'M5(2)': None,
-        'ES+(2,2)': None,  # Extraspecial - not implemented
-        'ES-(2,2)': None,
-        'ES-(3,1)': None,
-    }
-
-    if label in special_groups:
-        return special_groups[label]
 
     # Unknown/unimplemented
     return None
