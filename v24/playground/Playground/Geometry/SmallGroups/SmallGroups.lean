@@ -75,6 +75,8 @@ abbrev Gap_24_2 := Multiplicative (ZMod 24)
 abbrev Gap_24_12 := Equiv.Perm (Fin 4)
 abbrev Gap_24_6 := DihedralGroup 12
 abbrev Gap_24_4 := DicyclicGroup 6
+instance : Fact ((2 : ZMod (3:PNat)) ^ (8:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_24_1 := Cpqr 3 8 2
 abbrev Gap_24_9 := Multiplicative (ZMod 2) × Multiplicative (ZMod 12)
 abbrev Gap_24_15 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 6)
 abbrev Gap_24_13 := Multiplicative (ZMod 2) × AlternatingGroup 4
@@ -103,6 +105,10 @@ abbrev Gap_31_1 := Multiplicative (ZMod 31)
 abbrev Gap_32_1 := Multiplicative (ZMod 32)
 abbrev Gap_32_18 := DihedralGroup 16
 abbrev Gap_32_20 := QuaternionGroup 8
+instance : Fact ((3 : ZMod (4:PNat)) ^ (8:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_32_12 := Cpqr 4 8 3
+instance : Fact ((3 : ZMod (8:PNat)) ^ (4:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_32_4 := Cpqr 8 4 3
 abbrev Gap_32_51 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2)
 abbrev Gap_32_3 := Multiplicative (ZMod 4) × Multiplicative (ZMod 8)
 abbrev Gap_32_16 := Multiplicative (ZMod 2) × Multiplicative (ZMod 16)
@@ -141,6 +147,8 @@ abbrev Gap_39_1 := Cpqr 13 3 3
 abbrev Gap_40_2 := Multiplicative (ZMod 40)
 abbrev Gap_40_6 := DihedralGroup 20
 abbrev Gap_40_4 := DicyclicGroup 10
+instance : Fact ((4 : ZMod (5:PNat)) ^ (8:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_40_3 := Cpqr 5 8 4
 abbrev Gap_40_9 := Multiplicative (ZMod 2) × Multiplicative (ZMod 20)
 abbrev Gap_40_14 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 10)
 abbrev Gap_40_12 := Multiplicative (ZMod 2) × @FrobeniusGroup 5 (Fact.mk (by decide : Nat.Prime 5))
@@ -169,6 +177,10 @@ abbrev Gap_47_1 := Multiplicative (ZMod 47)
 abbrev Gap_48_2 := Multiplicative (ZMod 48)
 abbrev Gap_48_7 := DihedralGroup 24
 abbrev Gap_48_8 := DicyclicGroup 12
+instance : Fact ((23 : ZMod (24:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_48_6 := Cpqr 24 2 23
+instance : Fact ((2 : ZMod (3:PNat)) ^ (16:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_48_1 := Cpqr 3 16 2
 abbrev Gap_48_20 := Multiplicative (ZMod 4) × Multiplicative (ZMod 12)
 abbrev Gap_48_23 := Multiplicative (ZMod 2) × Multiplicative (ZMod 24)
 abbrev Gap_48_52 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 6)
@@ -191,6 +203,7 @@ abbrev Gap_48_11 := Multiplicative (ZMod 4) × DicyclicGroup 3
 abbrev Gap_48_34 := Multiplicative (ZMod 2) × DicyclicGroup 6
 abbrev Gap_48_42 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × DicyclicGroup 3
 abbrev Gap_48_35 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 2) × Multiplicative (ZMod 4)
+abbrev Gap_48_9 := Multiplicative (ZMod 2) × Cpqr 3 8 2
 abbrev Gap_48_22 := Multiplicative (ZMod 3) × Cpqr 4 4 3
 abbrev Gap_49_1 := Multiplicative (ZMod 49)
 abbrev Gap_49_2 := Multiplicative (ZMod 7) × Multiplicative (ZMod 7)
@@ -203,10 +216,14 @@ abbrev Gap_51_1 := Multiplicative (ZMod 51)
 abbrev Gap_52_2 := Multiplicative (ZMod 52)
 abbrev Gap_52_4 := DihedralGroup 26
 abbrev Gap_52_1 := DicyclicGroup 13
+instance : Fact ((5 : ZMod (13:PNat)) ^ (4:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_52_3 := Cpqr 13 4 5
 abbrev Gap_52_5 := Multiplicative (ZMod 2) × Multiplicative (ZMod 26)
 abbrev Gap_53_1 := Multiplicative (ZMod 53)
 abbrev Gap_54_2 := Multiplicative (ZMod 54)
 abbrev Gap_54_1 := DihedralGroup 27
+instance : Fact ((2 : ZMod (9:PNat)) ^ (6:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_54_6 := Cpqr 9 6 2
 abbrev Gap_54_9 := Multiplicative (ZMod 3) × Multiplicative (ZMod 18)
 abbrev Gap_54_15 := Multiplicative (ZMod 3) × Multiplicative (ZMod 3) × Multiplicative (ZMod 6)
 abbrev Gap_54_4 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 9)
@@ -214,9 +231,13 @@ abbrev Gap_54_3 := Multiplicative (ZMod 3) × DihedralGroup 9
 abbrev Gap_54_12 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 3) × Multiplicative (ZMod 3)
 abbrev Gap_54_13 := Multiplicative (ZMod 3) × Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))
 abbrev Gap_55_2 := Multiplicative (ZMod 55)
+instance : Fact ((3 : ZMod (11:PNat)) ^ (5:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_55_1 := Cpqr 11 5 3
 abbrev Gap_56_2 := Multiplicative (ZMod 56)
 abbrev Gap_56_5 := DihedralGroup 28
 abbrev Gap_56_3 := DicyclicGroup 14
+instance : Fact ((6 : ZMod (7:PNat)) ^ (8:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_56_1 := Cpqr 7 8 6
 abbrev Gap_56_8 := Multiplicative (ZMod 2) × Multiplicative (ZMod 28)
 abbrev Gap_56_13 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 14)
 abbrev Gap_56_4 := Multiplicative (ZMod 4) × DihedralGroup 7
@@ -225,6 +246,8 @@ abbrev Gap_56_12 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Dihedr
 abbrev Gap_56_10 := Multiplicative (ZMod 7) × QuaternionGroup 2
 abbrev Gap_56_6 := Multiplicative (ZMod 2) × DicyclicGroup 7
 abbrev Gap_57_2 := Multiplicative (ZMod 57)
+instance : Fact ((7 : ZMod (19:PNat)) ^ (3:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_57_1 := Cpqr 19 3 7
 abbrev Gap_58_2 := Multiplicative (ZMod 58)
 abbrev Gap_58_1 := DihedralGroup 29
 abbrev Gap_59_1 := Multiplicative (ZMod 59)

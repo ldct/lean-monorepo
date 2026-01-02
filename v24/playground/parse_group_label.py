@@ -97,6 +97,17 @@ def parse_group_label(label: str, order: int) -> Optional[str]:
         'C4:C4': "Cpqr 4 4 3",  # C4:C4 = Cpq(4,4,3)
         'C7:C3': "Cpqr 7 3 2",  # C7:C3 = Cpq(7,3,2)
         'C13:C3': "Cpqr 13 3 3",  # C13:C3 = Cpq(13,3,3)
+        'C19:C3': "Cpqr 19 3 7",  # C19:C3 = Cpq(19,3,7)
+        'C7:C8': "Cpqr 7 8 6",  # C7:C8 = Cpq(7,8,6)
+        'C11:C5': "Cpqr 11 5 3",  # C11:C5 = Cpq(11,5,3)
+        'C9:C6': "Cpqr 9 6 2",  # C9:C6 = Cpq(9,6,2)
+        'C13:C4': "Cpqr 13 4 5",  # C13:C4 = Cpq(13,4,5)
+        'C3:C8': "Cpqr 3 8 2",  # C3:C8 = Cpq(3,8,2)
+        'C24:C2': "Cpqr 24 2 23",  # C24:C2 = Cpq(24,2,23)
+        'C3:C16': "Cpqr 3 16 2",  # C3:C16 = Cpq(3,16,2)
+        'C5:C8': "Cpqr 5 8 4",  # C5:C8 = Cpq(5,8,4)
+        'C4:C8': "Cpqr 4 8 3",  # C4:C8 = Cpq(4,8,3)
+        'C8:C4': "Cpqr 8 4 3",  # C8:C4 = Cpq(8,4,3)
         'C3:S3': "Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))",
         'C5:D5': "Dihedralization (Multiplicative (ZMod 5) × Multiplicative (ZMod 5))",
         'ES+(2,2)': None,  # Extraspecial - not implemented
