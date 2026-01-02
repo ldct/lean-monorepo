@@ -174,6 +174,7 @@ def main : IO Unit := do
   Group.CommutingFraction Gap_49_2,
   Group.CommutingFraction Gap_50_2,
   Group.CommutingFraction Gap_50_1,
+  Group.CommutingFraction Gap_50_4,
   Group.CommutingFraction Gap_50_5,
   Group.CommutingFraction Gap_50_3,
   Group.CommutingFraction Gap_51_1,

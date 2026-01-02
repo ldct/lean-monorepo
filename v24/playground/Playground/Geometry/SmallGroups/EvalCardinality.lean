@@ -174,6 +174,7 @@ def main : IO Unit := do
   Fintype.card Gap_49_2,
   Fintype.card Gap_50_2,
   Fintype.card Gap_50_1,
+  Fintype.card Gap_50_4,
   Fintype.card Gap_50_5,
   Fintype.card Gap_50_3,
   Fintype.card Gap_51_1,

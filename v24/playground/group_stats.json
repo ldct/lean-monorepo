@@ -640,6 +640,10 @@
       "definition": "Multiplicative (ZMod 5) \u00d7 DihedralGroup 5",
       "name": "Gap_50_3"
     },
+    "50,4": {
+      "definition": "Dihedralization (Multiplicative (ZMod 5) \u00d7 Multiplicative (ZMod 5))",
+      "name": "Gap_50_4"
+    },
     "50,5": {
       "definition": "Multiplicative (ZMod 5) \u00d7 Multiplicative (ZMod 10)",
       "name": "Gap_50_5"
@@ -2769,6 +2773,18 @@
       "z2size": "5",
       "z3size": "5",
       "z4size": "5"
+    },
+    "50,4": {
+      "abelian": "false",
+      "card": "50",
+      "commuting_fraction": "(7 : Rat)/25",
+      "exponent": "10",
+      "frac_involutions": "(13 : Rat)/25",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
     },
     "50,5": {
       "abelian": "true",

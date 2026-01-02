@@ -178,6 +178,7 @@ abbrev Gap_49_1 := Multiplicative (ZMod 49)
 abbrev Gap_49_2 := Multiplicative (ZMod 7) × Multiplicative (ZMod 7)
 abbrev Gap_50_2 := Multiplicative (ZMod 50)
 abbrev Gap_50_1 := DihedralGroup 25
+abbrev Gap_50_4 := Dihedralization (Multiplicative (ZMod 5) × Multiplicative (ZMod 5))
 abbrev Gap_50_5 := Multiplicative (ZMod 5) × Multiplicative (ZMod 10)
 abbrev Gap_50_3 := Multiplicative (ZMod 5) × DihedralGroup 5
 abbrev Gap_51_1 := Multiplicative (ZMod 51)

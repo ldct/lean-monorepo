@@ -174,6 +174,7 @@ def main : IO Unit := do
   Group.FracInvolutions Gap_49_2,
   Group.FracInvolutions Gap_50_2,
   Group.FracInvolutions Gap_50_1,
+  Group.FracInvolutions Gap_50_4,
   Group.FracInvolutions Gap_50_5,
   Group.FracInvolutions Gap_50_3,
   Group.FracInvolutions Gap_51_1,

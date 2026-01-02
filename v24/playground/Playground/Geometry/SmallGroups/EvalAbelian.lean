@@ -174,6 +174,7 @@ def main : IO Unit := do
   Group.IsAbelian Gap_49_2,
   Group.IsAbelian Gap_50_2,
   Group.IsAbelian Gap_50_1,
+  Group.IsAbelian Gap_50_4,
   Group.IsAbelian Gap_50_5,
   Group.IsAbelian Gap_50_3,
   Group.IsAbelian Gap_51_1,

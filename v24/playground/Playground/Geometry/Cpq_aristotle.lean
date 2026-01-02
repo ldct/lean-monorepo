@@ -1,13 +1,18 @@
-import Mathlib.Algebra.Field.ZMod
-import Mathlib.Algebra.Group.TypeTags.Finite
-import Mathlib.Algebra.Lie.OfAssociative
-import Mathlib.Data.Fintype.Defs
-import Mathlib.Data.ZMod.Basic
-import Mathlib.Tactic.FinCases
-import Mathlib.Tactic.Group
-import Mathlib.Tactic.DeriveFintype
+/-
+This file was edited by Aristotle.
+
+Lean version: leanprover/lean4:v4.24.0
+Mathlib version: f897ebcf72cd16f89ab4577d0c826cd14afaafc7
+This project request had uuid: 616150e2-d673-4664-b448-3e1fddfff26a
+
+The following was proved by Aristotle:
+
+- instance (p q : PNat) (r : ZMod p) [h : Fact (r ^ (q.val) = 1)] : Group (Cpqr p q r)
+-/
+
+import Mathlib
 import Plausible.Random
-import Playground.Geometry.SmallGroups.GroupProps
+
 
 /-!
 This file defines a group parameterised by p, q, and r which is the semidirect product of ZMod p and ZMod q
@@ -24,6 +29,7 @@ instance ZMod.shrinkable {n : Nat} : Plausible.Shrinkable (ZMod (n.succ)) where
   shrink m := [m]
 
 #synth Plausible.SampleableExt (ZMod 3)
+
 #sample (ZMod 3)
 
 structure Cpqr (p q : PNat) (r : ZMod p) : Type where
@@ -39,7 +45,6 @@ instance Cpqr.Arbitrary (p q : PNat) (r : ZMod p) : Plausible.Arbitrary (Cpqr p 
 
 instance Cpqr.shrinkable (p q : PNat) (r : ZMod p) : Plausible.Shrinkable (Cpqr p q r) where
   shrink a := [a]
-
 
 def act (p q : PNat) (r : ZMod p) (P : ZMod p) (Q : ZMod q) : ZMod p :=
   P * r^(Q.val)
@@ -73,6 +78,24 @@ example (a b c : Cpqr 4 4 3)
 -- : (a * b) * c = a * (b * c) := by
 --   plausible
 
+example (r : ZMod 25) (a b c : Cpqr 25 15 r) (h : r ^ 15 = 1)
+: (a * b) * c = a * (b * c) := by
+  have h_expand : ∀ a b c : Cpqr 25 15 r,
+    (a * b) * c = { Q := (a.Q + b.Q) + c.Q, P :=
+    (act 25 15 r ((act 25 15 r a.P b.Q).val + b.P) c.Q).val + c.P } ∧
+    a * (b * c) = { Q := a.Q + (b.Q + c.Q), P := (act 25 15 r a.P (b.Q + c.Q)).val +
+    ((act 25 15 r b.P c.Q).val + c.P) } := by
+    bound
+  simp_all [← add_assoc]
+  unfold act
+  ring_nf
+  erw [ZMod.val_add]
+  erw [← Nat.mod_add_div (b.Q.val + c.Q.val) 15]
+  norm_num [pow_add, pow_mul, h]
+  rw [show r ^ ((b.Q.val + c.Q.val) % 15) = r ^ (b.Q.val + c.Q.val) by
+    rw [← Nat.mod_add_div (b.Q.val + c.Q.val) 15, pow_add, pow_mul];
+    aesop]
+  ring
 
 theorem mul_assoc_helper (p q : PNat) (r : ZMod p) (a b c : Cpqr p q r) (h : r ^ (q.val) = 1)
 : (a * b) * c = a * (b * c) := by
@@ -95,7 +118,6 @@ instance (p q : PNat) (r : ZMod p) : One (Cpqr p q r) where
   one :=
     { P := 0
       Q := 0 }
-
 
 example (a : Cpqr 25 15 6)
 : a * a⁻¹ = ⟨ 0, 0 ⟩ := by
@@ -121,12 +143,7 @@ instance (p q : PNat) (r : ZMod p) [h : Fact (r ^ (q.val) = 1)] : Group (Cpqr p 
     ring_nf
     rw [mul_assoc, ← pow_add]
     rw [ sub_eq_zero, ZMod.neg_val ];
-    split_ifs <;> simp_all +decide [ pow_add ]
+    split_ifs <;> simp_all +decide [ pow_add, pow_one, pow_mul ];
     rw [ ← pow_add, Nat.sub_add_cancel ( show a.Q.val ≤ q from _ ), h.1, mul_one ];
     exact Nat.le_of_lt ( ZMod.val_lt _ )
 }
-
-
-instance : Fact ((3 : ZMod (8:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
-instance : Fact ((5 : ZMod (8:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
-#eval Finset.card { x : Cpqr 8 2 5 | finOrderOf x = 2 }

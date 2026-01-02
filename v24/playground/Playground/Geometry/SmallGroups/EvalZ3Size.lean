@@ -174,6 +174,7 @@ def main : IO Unit := do
   Z3Size Gap_49_2,
   Z3Size Gap_50_2,
   Z3Size Gap_50_1,
+  Z3Size Gap_50_4,
   Z3Size Gap_50_5,
   Z3Size Gap_50_3,
   Z3Size Gap_51_1,

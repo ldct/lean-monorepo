@@ -174,6 +174,7 @@ def main : IO Unit := do
   Group.numSubgroups Gap_49_2,
   Group.numSubgroups Gap_50_2,
   Group.numSubgroups Gap_50_1,
+  Group.numSubgroups Gap_50_4,
   Group.numSubgroups Gap_50_5,
   Group.numSubgroups Gap_50_3,
   Group.numSubgroups Gap_51_1,
