@@ -432,6 +432,10 @@
       "definition": "Multiplicative (ZMod 38)",
       "name": "Gap_38_2"
     },
+    "39,1": {
+      "definition": "Cpqr 13 3 3",
+      "name": "Gap_39_1"
+    },
     "39,2": {
       "definition": "Multiplicative (ZMod 39)",
       "name": "Gap_39_2"
@@ -748,9 +752,9 @@
       "definition": "Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 18)",
       "name": "Gap_54_9"
     },
-    "55,1": {
+    "55,2": {
       "definition": "Multiplicative (ZMod 55)",
-      "name": "Gap_55_1"
+      "name": "Gap_55_2"
     },
     "56,10": {
       "definition": "Multiplicative (ZMod 7) \u00d7 QuaternionGroup 2",
@@ -2194,6 +2198,18 @@
       "z3size": "38",
       "z4size": "38"
     },
+    "39,1": {
+      "abelian": "false",
+      "card": "39",
+      "commuting_fraction": "(7 : Rat)/39",
+      "exponent": "39",
+      "frac_involutions": "(1 : Rat)/39",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
     "39,2": {
       "abelian": "true",
       "card": "39",
@@ -3142,7 +3158,7 @@
       "z3size": "54",
       "z4size": "54"
     },
-    "55,1": {
+    "55,2": {
       "abelian": "true",
       "card": "55",
       "commuting_fraction": "1",
