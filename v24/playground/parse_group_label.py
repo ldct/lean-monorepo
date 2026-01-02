@@ -106,6 +106,14 @@ def parse_group_label(label: str, order: int) -> Optional[str]:
         n = match.group(1)
         return f"DicyclicGroup {n}"
 
+    # Cpq groups: Cpq<p>,<q>,<r>
+    # Semidirect product parameterized by p, q, r
+    if match := re.match(r'^Cpq(\d+),(\d+),(\d+)$', label):
+        p = match.group(1)
+        q = match.group(2)
+        r = match.group(3)
+        return f"Cpqr {p} {q} {r}"
+
     # Wreath products: C<n>wrC<m> - not implemented yet
     if 'wr' in label:
         return None
@@ -128,7 +136,7 @@ def parse_group_label(label: str, order: int) -> Optional[str]:
         'GL(2,3)': None,
         'CSU(2,3)': None,
         'SL(2,3)': None,
-        'SD16': None,  # Semidihedral - not implemented
+        'SD16': "Cpqr 8 2 3",  # Semidihedral group = Cpq(8,2,3)
         'SD32': None,
         'M4(2)': None,  # Modular group - not implemented
         'M5(2)': None,

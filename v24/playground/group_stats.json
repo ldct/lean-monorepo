@@ -84,6 +84,10 @@
       "definition": "DihedralGroup 8",
       "name": "Gap_16_7"
     },
+    "16,8": {
+      "definition": "Cpqr 8 2 3",
+      "name": "Gap_16_8"
+    },
     "16,9": {
       "definition": "QuaternionGroup 4",
       "name": "Gap_16_9"
@@ -316,6 +320,10 @@
       "definition": "Multiplicative (ZMod 2) \u00d7 DihedralGroup 8",
       "name": "Gap_32_39"
     },
+    "32,40": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Cpqr 8 2 3",
+      "name": "Gap_32_40"
+    },
     "32,41": {
       "definition": "Multiplicative (ZMod 2) \u00d7 QuaternionGroup 4",
       "name": "Gap_32_41"
@@ -543,6 +551,10 @@
     "48,25": {
       "definition": "Multiplicative (ZMod 3) \u00d7 DihedralGroup 8",
       "name": "Gap_48_25"
+    },
+    "48,26": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Cpqr 8 2 3",
+      "name": "Gap_48_26"
     },
     "48,27": {
       "definition": "Multiplicative (ZMod 3) \u00d7 QuaternionGroup 4",
@@ -1100,6 +1112,18 @@
       "commuting_fraction": "(7 : Rat)/16",
       "exponent": "8",
       "frac_involutions": "(5 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,8": {
+      "abelian": "false",
+      "card": "16",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "8",
+      "frac_involutions": "(3 : Rat)/8",
       "num_subgroups": "0",
       "z1size": "2",
       "z2size": "4",
@@ -1802,6 +1826,18 @@
       "z3size": "32",
       "z4size": "32"
     },
+    "32,40": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "8",
+      "frac_involutions": "(3 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "8",
+      "z3size": "32",
+      "z4size": "32"
+    },
     "32,41": {
       "abelian": "false",
       "card": "32",
@@ -2480,6 +2516,18 @@
       "commuting_fraction": "(7 : Rat)/16",
       "exponent": "24",
       "frac_involutions": "(5 : Rat)/24",
+      "num_subgroups": "0",
+      "z1size": "6",
+      "z2size": "12",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,26": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "24",
+      "frac_involutions": "(1 : Rat)/8",
       "num_subgroups": "0",
       "z1size": "6",
       "z2size": "12",

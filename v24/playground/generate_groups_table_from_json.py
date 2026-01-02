@@ -42,17 +42,36 @@ def load_all_groups_from_tsv(tsv_file="group_names.tsv"):
     with open(tsv_file, 'r') as f:
         reader = csv.reader(f, delimiter='\t')
         for row in reader:
-            if len(row) != 2:
+            if len(row) < 2:
                 continue
 
             label = row[0]
-            gap_id_str = row[1]
+            gap_id_and_alts = row[1]
+
+            # Split the second column by whitespace to separate GAP ID from alternative names
+            parts = gap_id_and_alts.split()
+            gap_id_str = parts[0]
 
             # Parse gap_id as "order,id"
             order, gap_id = map(int, gap_id_str.split(','))
 
-            # Check if this group is implementable
+            # Collect alternative names
+            alt_labels = []
+            if len(parts) > 1:
+                alt_labels.extend(parts[1:])
+            if len(row) >= 3:
+                for alt_name in row[2:]:
+                    alt_name = alt_name.strip()
+                    if alt_name:
+                        alt_labels.append(alt_name)
+
+            # Check if this group is implementable (try primary, then alternatives)
             lean_type = parse_group_label(label, order)
+            if not lean_type:
+                for alt_label in alt_labels:
+                    lean_type = parse_group_label(alt_label, order)
+                    if lean_type:
+                        break
             implemented = lean_type is not None
 
             all_groups[(order, gap_id)] = {

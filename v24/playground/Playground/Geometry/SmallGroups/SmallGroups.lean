@@ -3,6 +3,7 @@ import Mathlib.Data.ZMod.Basic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
 import Mathlib.GroupTheory.SpecificGroups.Quaternion
 import Playground.Geometry.SmallGroups.AlternatingGroup
+import Playground.Geometry.Cpq
 import Playground.Geometry.Dicyclic
 import Playground.Geometry.Dihedralization
 import Playground.Geometry.FrobeniusGroup
@@ -40,6 +41,8 @@ abbrev Gap_15_1 := Multiplicative (ZMod 15)
 abbrev Gap_16_1 := Multiplicative (ZMod 16)
 abbrev Gap_16_7 := DihedralGroup 8
 abbrev Gap_16_9 := QuaternionGroup 4
+instance : Fact ((3 : ZMod (8:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
+abbrev Gap_16_8 := Cpqr 8 2 3
 abbrev Gap_16_2 := Multiplicative (ZMod 4) × Multiplicative (ZMod 4)
 abbrev Gap_16_14 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2)
 abbrev Gap_16_5 := Multiplicative (ZMod 2) × Multiplicative (ZMod 8)
@@ -102,6 +105,7 @@ abbrev Gap_32_36 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multip
 abbrev Gap_32_45 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 4)
 abbrev Gap_32_25 := Multiplicative (ZMod 4) × DihedralGroup 4
 abbrev Gap_32_39 := Multiplicative (ZMod 2) × DihedralGroup 8
+abbrev Gap_32_40 := Multiplicative (ZMod 2) × Cpqr 8 2 3
 abbrev Gap_32_46 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × DihedralGroup 4
 abbrev Gap_32_26 := Multiplicative (ZMod 4) × QuaternionGroup 2
 abbrev Gap_32_41 := Multiplicative (ZMod 2) × QuaternionGroup 4
@@ -168,6 +172,7 @@ abbrev Gap_48_45 := Multiplicative (ZMod 6) × DihedralGroup 4
 abbrev Gap_48_40 := Equiv.Perm (Fin 3) × QuaternionGroup 2
 abbrev Gap_48_36 := Multiplicative (ZMod 2) × DihedralGroup 12
 abbrev Gap_48_51 := Equiv.Perm (Fin 3) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2)
+abbrev Gap_48_26 := Multiplicative (ZMod 3) × Cpqr 8 2 3
 abbrev Gap_48_46 := Multiplicative (ZMod 6) × QuaternionGroup 2
 abbrev Gap_48_27 := Multiplicative (ZMod 3) × QuaternionGroup 4
 abbrev Gap_48_11 := Multiplicative (ZMod 4) × DicyclicGroup 3
