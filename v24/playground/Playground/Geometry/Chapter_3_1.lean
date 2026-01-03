@@ -1,5 +1,9 @@
 import Mathlib
 
+/-
+This file formalizes the definitions, theorems and exercises from Chapter 3.1 of Dummit and Foote.
+-/
+
 example {G : Type*} [Group G] (H : Subgroup G) [H.Normal] : Group (G ⧸ H) := inferInstance
 
 -- If φ is a homomorphism the fibers of φ are sets of G projecting to the same element in H
@@ -15,6 +19,54 @@ def MySetoid {G H} [Group G] [Group H] (φ : G →* H) : Setoid G := {
 }
 
 abbrev MyFibres {G H} [Group G] [Group H] (φ : G →* H) : Type* := Quotient (MySetoid φ)
+
+instance {G H} [Group G] [Group H] (φ : G →* H) : Mul (MyFibres φ) := ⟨
+  Quotient.lift₂
+    (fun x y => Quotient.mk (MySetoid φ) (x * y))
+    (by
+      intro a₁ b₁ a₂ b₂ h₁ h₂
+      simp [MySetoid]
+      change φ a₁ = φ a₂ at h₁
+      change φ b₁ = φ b₂ at h₂
+      congr
+    )
+⟩
+
+theorem mul_mk {G H} [Group G] [Group H] (φ : G →* H) (a b : G)
+: Quotient.mk (MySetoid φ) a * Quotient.mk (MySetoid φ) b = Quotient.mk (MySetoid φ) (a * b) := rfl
+
+instance {G H} [Group G] [Group H] (φ : G →* H) : One (MyFibres φ) := ⟨ Quotient.mk (MySetoid φ) 1 ⟩
+
+instance {G H} [Group G] [Group H] (φ : G →* H) : Group (MyFibres φ) := {
+  mul_assoc a b c := by
+    obtain ⟨ a, rfl ⟩ := Quotient.exists_rep a
+    obtain ⟨ b, rfl ⟩ := Quotient.exists_rep b
+    obtain ⟨ c, rfl ⟩ := Quotient.exists_rep c
+    simp only [mul_mk]
+    congr 1
+    group
+  one_mul a := by
+    obtain ⟨ a, rfl ⟩ := Quotient.exists_rep a
+    rw [show (1 : MyFibres φ) = Quotient.mk (MySetoid φ) 1 by exact rfl]
+    simp only [mul_mk]
+    congr 1
+    group
+  mul_one a := by
+    obtain ⟨ a, rfl ⟩ := Quotient.exists_rep a
+    rw [show (1 : MyFibres φ) = Quotient.mk (MySetoid φ) 1 by exact rfl]
+    simp only [mul_mk]
+    congr 1
+    group
+  inv := Quotient.lift (fun x => Quotient.mk (MySetoid φ) (x⁻¹)) (by
+    intro a b h
+    simp [MySetoid]
+    change φ a = φ b at h
+    rw [h]
+  )
+  inv_mul_cancel a := by
+    obtain ⟨ a, rfl ⟩ := Quotient.exists_rep a
+    simp [mul_mk, show (1 : MyFibres φ) = Quotient.mk (MySetoid φ) 1 by exact rfl]
+}
 
 
 
@@ -65,15 +117,15 @@ theorem nat_card_ne_zero_of_fintype_nonempty {T} [Fintype T] [Nonempty T] : Nat.
 
 
 
+
 example : IsKleinFour (Q ⧸ (Subgroup.center Q)) := by
   constructor
   · rw [card_quot _ nat_card_ne_zero_of_fintype_nonempty]
-    rw [ Nat.card_eq_fintype_card, Nat.card_eq_fintype_card]
-    rfl
+    simp [ Nat.card_eq_fintype_card ]
+    rw [show Fintype.card (Subgroup.center Q) = 2 by rfl, show Fintype.card Q = 8 by rfl]
   · simp +decide [ Monoid.exponent ];
     split_ifs;
     · simp +decide only [Nat.find_eq_iff]
-
       native_decide
     · rename_i h;
       exact h <| by haveI := Fact.mk ( show Nat.Prime 2 by decide ) ; exact

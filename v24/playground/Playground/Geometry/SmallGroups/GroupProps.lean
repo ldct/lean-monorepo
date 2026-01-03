@@ -35,7 +35,7 @@ def Z4Size (G) [Group G] [Fintype G] [DecidableEq G] : ℕ := Fintype.card (Z4 G
 def Group.FracInvolutions (G) [Group G] [Fintype G] [DecidableEq G] : ℚ :=
   (Finset.card { g : G | g^2 = 1} : ℚ) / (Fintype.card G : ℚ)
 
--- https://groupprops.subwiki.org/wiki/Commuting_fraction
+-- https://groupprops.subwiki.org/wiki/Commuting_fraction + the reference in the footnotes
 def Group.CommutingFraction (G) [Group G] [Fintype G] [DecidableEq G] : ℚ :=
   (Finset.card { (g, h) : G × G | g * h = h * g} : ℚ) / (Fintype.card G : ℚ)^2
 
