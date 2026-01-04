@@ -22,7 +22,11 @@ example
   simp
   ring
 
--- 1.7.1
+/-
+Exercises
+-/
+
+-- Exercise 1.7.1 - Fˣ acts on F via multiplication
 example {F : Type*} [Field F] : MulAction Fˣ F := {
   smul := fun x y ↦ x * y
   one_smul := by

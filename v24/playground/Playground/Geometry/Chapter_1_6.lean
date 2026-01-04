@@ -1,15 +1,58 @@
 import Mathlib
 
--- Chapter 1.6 from Dummit and Foote
+set_option linter.style.longLine false
 
--- 1.6.1a
-example {G H} [Group G] [Group H] (φ : G →* H) (n : ℕ) (x : G) : φ (x ^ n) = (φ x) ^ n := by
-  exact MonoidHom.map_pow φ x n
+/-
+This file formalizes the definitions, theorems and exercises from Chapter 1.6 of Dummit and Foote (page 36).
+-/
 
-example {G H} [Group G] [Group H] (φ : G →* H) (n : ℤ) (x : G) : φ (x ^ n) = (φ x) ^ n := by
-  exact MonoidHom.map_zpow φ x n
+-- Mathlib already has a notion of monoid homomorphism, with associated lemmas. For instance, here is exercise 1.6.1.
+#check MonoidHom.map_pow
 
--- 1.6.2
+-- We construct this from scratch instead
+structure GroupHomomorphism (G H : Type*) [Group G] [Group H] where
+  toFun : G → H
+  map_mul : ∀ x y : G, toFun (x * y) = toFun x * toFun y
+
+-- Example 1, the homomorphism from any group to itself
+example {G} [Group G] : GroupHomomorphism G G := {
+  toFun x := x
+  map_mul _ _ := rfl
+}
+
+-- We pull forward some lemmas from Chapter 3.1
+
+-- Proposition 3.1.1
+lemma GroupHomomorphism.map_one {G H} [Group G] [Group H] (φ : GroupHomomorphism G H)
+: φ.toFun 1 = 1 := by
+  have : φ.toFun (1 * 1) = φ.toFun 1 * φ.toFun 1 := φ.map_mul 1 1
+  rw [show (1 : G) * 1 = 1 by group] at this
+  rwa [left_eq_mul] at this
+
+-- Proposition 3.1.2
+lemma GroupHomomorphism.map_inv {G H} [Group G] [Group H] (φ : GroupHomomorphism G H) (g : G) : φ.toFun (g⁻¹) = (φ.toFun g)⁻¹ := by
+  have : φ.toFun (g⁻¹ * g) = φ.toFun 1 := by group
+  rw [φ.map_mul, φ.map_one] at this
+  exact eq_inv_of_mul_eq_one_left this
+
+-- Exercise 1 part 1
+lemma GroupHomomorphism.map_npow {G H} [Group G] [Group H] (φ : GroupHomomorphism G H) (n : ℕ) (g : G) : φ.toFun (g ^ n) = (φ.toFun g) ^ n := by
+  induction n with
+  | zero =>
+    simp [GroupHomomorphism.map_one]
+  | succ n IH =>
+    rw [pow_succ, φ.map_mul, IH, pow_succ]
+
+-- Exercise 1 part 2, also Proposition 3.1.3
+lemma GroupHomomorphism.map_zpow {G H} [Group G] [Group H] (φ : GroupHomomorphism G H) (n : ℤ) (g : G) : φ.toFun (g ^ n) = (φ.toFun g) ^ n := by
+  cases n with
+  | ofNat n =>
+    simp only [Int.ofNat_eq_coe, zpow_natCast, φ.map_npow]
+  | negSucc n =>
+    simp
+    sorry -- pow_inv
+
+-- Exercise 1.6.2
 example {G H} [Group G] [Group H] (φ : G ≃* H) (x : G) : orderOf x = orderOf (φ x) := by
   exact Eq.symm (MulEquiv.orderOf_eq φ x)
 

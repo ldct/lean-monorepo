@@ -20,7 +20,8 @@ example (g : ZMod 5) : (g*5 = 0) := by
   <;> decide
 
 example (g : DihedralGroup 3) : (g^6 = 1) := by
-  fin_cases g <;> simp
+  fin_cases g
+  <;> dsimp
   -- yuck, fintypeHelper is exposed
   all_goals decide
 
@@ -33,6 +34,8 @@ instance : Fintype (DihedralGroup 3) := {
   elems := ⟨ Multiset.ofList [r 0, r 1, r 2, sr 0, sr 1, sr 2], sorry ⟩
   complete := sorry
 }
+
+-- #check DihedralGroup.fintypeHelper
 
 example (g : DihedralGroup 3) : (g^6 = 1) := by
   fin_cases g

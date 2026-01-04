@@ -1,5 +1,11 @@
 import Mathlib
-import Mathlib.GroupTheory.SpecificGroups.Dihedral
+
+set_option linter.style.longLine false
+
+
+/-
+This file formalizes the definitions, theorems and exercises from Chapter 2.2 of Dummit and Foote (page 49).
+-/
 
 -- Definition, p49. Define C_G(A), the centralizer of A in G, as a subgroup of G.
 def MyCentralizer {G} [Group G] (A : Set G) : Subgroup G := {
@@ -44,6 +50,14 @@ def MyCenter (G) [Group G] : Subgroup G := {
 example {G} [Group G] : (MyCenter G) = (MyCentralizer ⊤) := by
   simp [MyCenter, MyCentralizer]
 
+/-
+The next few definitions and theorems work up to define the normalizer of a subset, `MyNormalizer A`
+
+- `MyMap` allows us to construct the set gAg⁻¹.
+- `Normalizes g A` is the property that g normalizes A, i.e. gAg⁻¹ = A.
+- `inv_normalizes` and `mul_normalizes` show that the set of elements that normalize A is a subgroup.
+-/
+
 -- Definition, p50. While the book defines gAg⁻¹, we generalize it a bit to hAg.
 def MyMap {G} [Group G] (h : G) (A : Set G) (g : G) : Set G :=
   { h * a * g | a ∈ A }
@@ -66,8 +80,7 @@ theorem inv_normalizes {G} [Group G]
   constructor
   · intro hx
     simp_all [ mul_assoc ]
-    cases' hx with w h
-    obtain ⟨left, right⟩ := h
+    obtain ⟨w, ⟨ left, right ⟩ ⟩ := hx
     subst right
     simpa only [ mul_assoc ] using h_inv _ left;
   · intro hx
@@ -428,8 +441,7 @@ def A : Subgroup S3 where
   inv_mem' := by decide
 
 theorem card_A : Nat.card A = 2 := by
-  simp [A]
-  decide
+  simp +decide [A]
 
 theorem A_le_centralizer : A ≤ Subgroup.centralizer A := by
   intro g hg
@@ -578,6 +590,16 @@ example : Subgroup.normalizer A = A := by
   · grw [← centralizer_le_normalizer, centralizer_eq_A]
     simp [A]
 
+/-
+Stabalizers and kernels of group actions - WIP
+-/
+
+
+
+/-
+Exercises
+-/
+
 -- Exercise 1
 example {G} [Group G] (A : Set G)
 : Subgroup.centralizer A = {g | ∀ a ∈ A, g⁻¹ * a * g = a}
@@ -615,7 +637,7 @@ example {G} [Group G] (A B : Set G) (h : A ≤ B)
   intro a ha
   exact hg a (h ha)
 
--- Exercise 6a part 1. This is available in Mathlib as Subgroup.le_normalizer.
+-- Exercise 2.2.6.a.(1). This is available in Mathlib as `Subgroup.le_normalizer`.
 example {G} [Group G] (H : Subgroup G)
 : H ≤ Subgroup.normalizer H := by
   intro g hg

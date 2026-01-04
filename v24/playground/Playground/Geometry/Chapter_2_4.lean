@@ -1,5 +1,12 @@
 import Mathlib
 
+set_option linter.style.longLine false
+
+/-
+This file formalizes the definitions, theorems and exercises from Chapter 2.4 of Dummit and Foote (page 61).
+-/
+
+-- A preliminary definition - the indexed intersection of a family of subgroups.
 def IndexedIntersection
 {G} [Group G] (𝒞 : Set (Subgroup G)) : Subgroup G := {
   carrier := ⋂ (H ∈ 𝒞), H.carrier
