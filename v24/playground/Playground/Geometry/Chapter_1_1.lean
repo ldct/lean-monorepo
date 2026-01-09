@@ -120,6 +120,7 @@ lemma MyGroup.AreInverse.iff {G} [MyGroup G] (a b : G) : AreInverse a b ↔ a⁻
   grind [right_unique]
 
 lemma MyGroup.AreInverse.symm {G} [MyGroup G] (a b : G) : AreInverse a b ↔ AreInverse b a := by grind [MyGroup.AreInverse]
+
 lemma MyGroup.AreInverse.left_unique {G} [MyGroup G] (a b c : G) (hb : AreInverse b a) (hc : AreInverse c a) : b = c := by
   grind [MyGroup.AreInverse.symm, MyGroup.AreInverse.right_unique]
 
@@ -179,7 +180,6 @@ lemma MyGroup.mul_right_cancel {G} [MyGroup G] (b u v : G) : u * b = v * b ↔ u
     rwa [MyGroup.mul_assoc, MyGroup.mul_inv_cancel, MyGroup.mul_one, MyGroup.mul_assoc, MyGroup.mul_inv_cancel, MyGroup.mul_one] at this
   · grind
 
-
 /-
 Exponentiation
 -/
@@ -193,14 +193,30 @@ instance {G} [MyGroup G] : Pow G ℕ := {
 }
 
 lemma MyGroup.npow_zero {G} [MyGroup G] (g : G) : g ^ 0 = 1 := rfl
+
 lemma MyGroup.npow_succ {G} [MyGroup G] (g : G) (n : ℕ) : g ^ (n + 1) = g * g ^ n := rfl
 
 lemma MyGroup.npow_add {G} [MyGroup G] (g : G) (m n : ℕ) : g ^ (m + n) = g ^ m * g ^ n := by
   induction n with
   | zero =>
-    sorry
+    simp [MyGroup.npow_zero];
+    -- By definition of exponentiation in the group, we know that $g^m * 1 = g^m$.
+    apply Eq.symm; exact (by
+      have := (‹MyGroup G›).mul_one g;
+      convert ( ‹MyGroup G›.mul_one _ ) using 1
+    )
   | succ n IH =>
-    sorry
+    simp_all [ ← add_assoc, MyGroup.npow_succ ]
+    induction' m with m IH generalizing n;
+    · simp [ ← mul_assoc, MyGroup.npow_zero ]
+      simp [ MyGroup.mul_one, MyGroup.one_mul ]
+    · simp_all [ ← mul_assoc ]
+      apply_assumption
+      ext; simp [ mul_assoc ]
+      induction' m + 1 with m IH <;> simp_all [ ← mul_assoc ];
+      · simp [MyGroup.npow_zero]
+        simp [ MyGroup.mul_one, MyGroup.one_mul ]
+      · simp_all [ MyGroup.npow_succ, mul_assoc ]
 
 def MyGroup.zpow {G} [MyGroup G] (g : G) (n : ℤ) : G :=
   match n with
@@ -212,39 +228,141 @@ instance {G} [MyGroup G] : Pow G ℤ := {
 }
 
 lemma MyGroup.zpow_cast {G} [MyGroup G] (g : G) (n : ℕ) : g ^ (n : ℤ) = g ^ (n : ℕ) := by
-  sorry
-
-lemma MyGroup.zpow_add {G} [MyGroup G] (g : G) (m n : ℤ) : g ^ (m + n) = g ^ m * g ^ n := by
-  sorry
-
-lemma MyGroup.zpow_mul {G} [MyGroup G] (g : G) (m n : ℤ) : g ^ (m * n) = (g ^ m) ^ n := by
-  sorry
-
-lemma MyGroup.zpow_inv {G} [MyGroup G] (g : G) (n : ℤ) : g ^ (-n) = (g ^ n)⁻¹ := by
-  sorry
-
-lemma MyGroup.zpow_pow {G} [MyGroup G] (g : G) (m n : ℤ) : g ^ (m * n) = (g ^ m) ^ n := by
-  sorry
-
-lemma MyGroup.inv_zpow {G} [MyGroup G] (g : G) (n : ℤ) : (g⁻¹) ^ n = g ^ (-n) := by
-  sorry
+  rfl
 
 /-
-Order
+https://proofwiki.org/wiki/Index_Laws_for_Monoids/Sum_of_Indices very long and requires monoid homomorphisms
+
+Dummit and Foote just assume it implicitly
 -/
+lemma MyGroup.zpow_add {G} [MyGroup G] (g : G) (m n : ℤ) : g ^ (m + n) = g ^ m * g ^ n := by
+  cases m with
+  | ofNat m =>
+    cases n with
+    | ofNat n =>
+      simp [zpow_cast]
+      norm_cast
+      rw [zpow_cast g (m + n)]
+      rw [npow_add]
+    | negSucc n =>
+      simp
 
+lemma MyGroup.zpow_zero {G} [MyGroup G] (g : G) : g ^ (0 : ℤ) = 1 := by
+  rfl
 
+lemma MyGroup.zpow_neg {G} [MyGroup G] (g : G) (n : ℤ) : g ^ (-n) = (g ^ n)⁻¹ := by
+  rcases n with ⟨ _ | n ⟩ <;> norm_cast;
+  · cases' ‹MyGroup G› with G hG;
+    rename_i h₁ h₂ h₃ h₄ h₅;
+    exact Eq.symm ( by have := h₄ 1; have := h₅ 1; aesop );
+  · erw [ eq_comm ];
+    cases' ‹MyGroup G› with G_mul G_one G_inv G_mul_assoc G_one_mul G_mul_one G_inv_mul_cancel G_mul_inv_cancel;
+    have h_inv : ∀ a : G, (a⁻¹)⁻¹ = a := by
+      intro a; exact (by
+      have := G_mul_assoc a⁻¹⁻¹ a⁻¹ a;
+      grind);
+    aesop
 
--- def MyGroup.orderOf {G} [MyGroup G] (g : G) : ℕ :=
---   Nat.find (Set.min { n : ℕ | g ^ n = 1 } (by
---     use 0
---     simp
---   )
+lemma MyGroup.zpow_mul_nat {G} [MyGroup G] (g : G) (m : ℤ) (n : ℕ) : g ^ (m * (n : ℤ)) = (g ^ m) ^ (n : ℤ) := by
+  induction' n with n ih generalizing m <;> simp_all +decide [ pow_add, pow_mul ];
+  · exact?;
+  · simp +decide [ zpow_add, zpow_mul, mul_add, add_comm, add_left_comm, ih ];
+    simp +decide [ ← mul_assoc, ← zpow_add, add_comm ];
+    exact?
 
--- lemma MyGroup.orderOf_pos {G} [MyGroup G] (g : G) : MyGroup.orderOf g > 0 := by
---   simp [MyGroup.orderOf]
---   exact Finset.min'_pos _
+lemma MyGroup.zpow_mul {G} [MyGroup G] (g : G) (m n : ℤ) : g ^ (m * n) = (g ^ m) ^ n := by
+  -- We proceed by cases on `n`. Since `n` can be either non-negative or negative, we split into these two cases.
+  by_cases hn : 0 ≤ n;
+  · cases n <;> simp_all +decide [ zpow_mul_nat ];
+  · -- Since `n` is negative, we can write `n = -k` for some `k : ℕ`.
+    obtain ⟨k, rfl⟩ : ∃ k : ℕ, n = -k := by
+      exact ⟨ Int.toNat ( -n ), by rw [ Int.toNat_of_nonneg ( neg_nonneg.mpr ( le_of_not_ge hn ) ) ] ; ring ⟩;
+    simp +decide [ *, zpow_neg, zpow_mul_nat ]
 
--- lemma MyGroup.orderOf_dvd_of_pow_eq_one {G} [MyGroup G] (g : G) (n : ℕ) (h : g ^ n = 1) : MyGroup.orderOf g ∣ n := by
---   simp [MyGroup.orderOf]
---   exact Finset.min'_mem _
+noncomputable section AristotleLemmas
+
+lemma MyGroup.zpow_mul_zpow_neg {G} [MyGroup G] (g : G) (n : ℤ) : g ^ n * g ^ (-n) = 1 := by
+  have := @MyGroup.zpow_add G ‹_› g n ( -n );
+  rw [ ← this, add_neg_cancel ];
+  exact?
+
+end AristotleLemmas
+
+lemma MyGroup.zpow_inv {G} [MyGroup G] (g : G) (n : ℤ) : g ^ (-n) = (g ^ n)⁻¹ := by
+  have := @MyGroup.zpow_mul_zpow_neg;
+  specialize @this G ‹_› g n;
+  have := @MyGroup.mul_inv_cancel;
+  specialize @this G ‹_›;
+  have := @MyGroup.mul_left_cancel G ‹_›;
+  grind
+
+lemma MyGroup.zpow_pow {G} [MyGroup G] (g : G) (m n : ℤ) : g ^ (m * n) = (g ^ m) ^ n := by
+  -- By commutativity of multiplication, we have $n * m = m * n$.
+  have h_comm : n * m = m * n := by
+    -- By commutativity of multiplication, we have $n * m = m * n$ for any integers $n$ and $m$.
+    apply mul_comm;
+  -- By the associativity of multiplication, we have $m * n = n * m$.
+  apply Eq.symm; exact (by
+  -- Apply the lemma MyGroup.zpow_mul which states that for any integers m and n, g^(m*n) = (g^m)^n. This follows directly from the properties of exponents in a group.
+  apply Eq.symm; exact (by
+    have := @MyGroup.zpow_mul G ‹_› g m n;
+    exact this))
+
+noncomputable section AristotleLemmas
+
+/-
+The inverse of a product is the product of the inverses in reverse order.
+-/
+lemma MyGroup.mul_inv_rev {G} [MyGroup G] (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹ := by
+  have := ‹MyGroup G›;
+  rename_i h;
+  revert this;
+  cases' h with h1 h2;
+  rename_i h3 h4 h5 h6 h7 h8;
+  exact fun h => by
+    -- By multiplying both sides of the equation $a * b * (a * b)⁻¹ = 1$ by $a⁻¹$ on the left, we get $b * (a * b)⁻¹ = a⁻¹$.
+    have h_mul_a_inv : b * (a * b)⁻¹ = a⁻¹ := by
+      have h_mul_a_inv : a⁻¹ * (a * b * (a * b)⁻¹) = a⁻¹ * 1 := by
+        exact?;
+      grind;
+    rw [ ← h_mul_a_inv, ← h4 ];
+    rw [ h7, h5 ]
+
+/-
+The inverse of the n-th power is the n-th power of the inverse.
+-/
+lemma MyGroup.inv_npow {G} [MyGroup G] (g : G) (n : ℕ) : (g⁻¹) ^ n = (g ^ n)⁻¹ := by
+  induction' n using Nat.strong_induction_on with n ih;
+  rcases n with ( _ | _ | n );
+  · cases' ‹MyGroup G› with _ _ _ _ _ h;
+    rename_i h₁ h₂ h₃;
+    have := h₂ ( g * g⁻¹ ) ; simp_all +decide [ mul_assoc ] ;
+    exact?;
+  · simp +decide [ MyGroup.npow_succ ];
+    simp +decide [ MyGroup.npow_zero ];
+    simp +decide [ MyGroup.mul_one ];
+  · simp_all +decide [ MyGroup.npow_succ, MyGroup.mul_assoc, MyGroup.mul_inv_rev ];
+    simp +decide [ ← mul_assoc, ← ih n ( Nat.lt_succ_of_lt ( Nat.lt_succ_self _ ) ) ];
+    induction' n with n ih;
+    · simp +decide [ MyGroup.npow_zero ];
+      simp +decide [ MyGroup.mul_one, MyGroup.one_mul ];
+    · simp_all +decide [ ← mul_assoc, ← ih ];
+      induction' n + 1 with n ih <;> simp_all +decide [ pow_succ', mul_assoc ];
+      · simp +decide [ MyGroup.npow_zero ];
+        simp +decide [ MyGroup.one_mul ];
+      · simp_all +decide [ ← mul_assoc, MyGroup.npow_succ ]
+
+end AristotleLemmas
+
+lemma MyGroup.inv_zpow {G} [MyGroup G] (g : G) (n : ℤ) : (g⁻¹) ^ n = g ^ (-n) := by
+  -- We can prove the `zpow` case in the same way since `zpow` is defined in terms of `npow`.
+  by_cases hn : 0 ≤ n;
+  · obtain ⟨ k, rfl ⟩ := Int.eq_ofNat_of_zero_le ‹_›;
+    simp +decide [ MyGroup.zpow_inv ];
+    -- Apply the lemma that states the inverse of the nth power is the nth power of the inverse.
+    have := @MyGroup.inv_npow G ‹_› g k;
+    aesop;
+  · induction' n using Int.negInduction with n ih;
+    · grind;
+    · simp +decide [ *, MyGroup.zpow_cast, MyGroup.zpow_inv ];
+      simp +decide [ *, MyGroup.inv_npow, MyGroup.inv_inv ]
