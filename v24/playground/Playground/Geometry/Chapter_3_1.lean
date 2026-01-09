@@ -36,7 +36,7 @@ example {G : Type*} [Group G] (H : Subgroup G) [H.Normal] : Group (G ⧸ H) := i
 ⟩
 
 @[to_additive] theorem mul_mk {G H} [Group G] [Group H] (φ : G →* H) (a b : G)
-: Quotient.mk (HomSetoid φ) a * Quotient.mk (HomSetoid φ) b = Quotient.mk (HomSetoid φ) (a * b) := rfl
+: Quotient.mk (HomSetoid φ) a * ⟦b⟧ = ⟦a * b⟧ := rfl
 
 @[to_additive] instance {G H} [Group G] [Group H] (φ : G →* H) : One (HomFibers φ) := ⟨ Quotient.mk (HomSetoid φ) 1 ⟩
 
