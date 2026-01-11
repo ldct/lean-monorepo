@@ -1,5 +1,9 @@
 import Mathlib
 
+/-
+Exceptional isometries of R^3
+-/
+
 set_option linter.style.longLine false
 
 attribute [grind =] abs_eq_abs
@@ -265,5 +269,10 @@ noncomputable instance RealIsometry.instGroup : Group RealIsometry := Group.ofLe
   )
 
 abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
-def IsCyclicOfOrder (n : ℕ) (G : Type*) [Group G] : Prop :=
-  IsCyclic G ∧ Nat.card G = n
+
+def IsExceptional (H : Subgroup RealIsometry) : Prop :=
+  ¬ IsCyclic H ∧ ¬ IsDihedral H ∧ Nat.card H ≠ 0
+
+theorem RealIsometry.existsExceptionalOfOrder24 (n : ℕ) [NeZero n]
+: ∃ f : Subgroup RealIsometry, IsExceptional f ∧ Nat.card f = 24 := by
+  sorry

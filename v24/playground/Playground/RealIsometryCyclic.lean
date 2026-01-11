@@ -264,6 +264,9 @@ noncomputable instance RealIsometry.instGroup : Group RealIsometry := Group.ofLe
     exact Function.invFun_comp a.injective
   )
 
-abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
 def IsCyclicOfOrder (n : ℕ) (G : Type*) [Group G] : Prop :=
   IsCyclic G ∧ Nat.card G = n
+
+theorem RealIsometry.isCyclicOfOrder (n : ℕ) [NeZero n]
+: ∃ f : Subgroup RealIsometry, IsCyclicOfOrder n f := by
+  sorry
