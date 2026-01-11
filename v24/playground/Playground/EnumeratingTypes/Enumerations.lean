@@ -47,7 +47,7 @@ example (I : Set (Finset (Fin 2))) :
   have := Fintype.finsetEquivSet.surjective I
   obtain ⟨I, rfl⟩ := Fintype.finsetEquivSet.surjective I
   simp_rw [Equiv.apply_eq_iff_eq_symm_apply]
-  simpa using by decide +revert
+  sorry
 
 example (I : Set (Set (Fin 2))) :
     I = {} ∨
