@@ -1,5 +1,16 @@
 import Mathlib
 
+set_option linter.style.longLine false
+
+/-
+# Key definitions
+
+- `GaussInt` is the type of Gaussian integers
+- `instance CommRing GaussInt`
+
+Every proof of the instance is done by `grind`; as of v24, this takes 20k heartbeats to verify, with `grind`.
+-/
+
 @[grind ext]
 structure GaussInt where
   re : ℤ
@@ -66,16 +77,16 @@ instance instCommRing : CommRing GaussInt where
   mul := (· * ·)
   nsmul := nsmulRec
   zsmul := zsmulRec
-  add_assoc := by #count_heartbeats! in grind
-  zero_add := by #count_heartbeats! in grind
-  add_zero := by #count_heartbeats! in grind
-  neg_add_cancel := by #count_heartbeats! in grind
-  add_comm := by #count_heartbeats! in grind
-  mul_assoc := by #count_heartbeats! in grind
-  one_mul := by #count_heartbeats! in grind
-  mul_one := by #count_heartbeats! in grind
-  left_distrib := by #count_heartbeats! in grind
-  right_distrib := by #count_heartbeats! in grind
-  mul_comm := by #count_heartbeats! in grind
-  zero_mul := by #count_heartbeats! in grind
-  mul_zero := by #count_heartbeats! in grind
+  add_assoc := by grind
+  zero_add := by grind
+  add_zero := by grind
+  neg_add_cancel := by grind
+  add_comm := by grind
+  mul_assoc := by grind
+  one_mul := by grind
+  mul_one := by grind
+  left_distrib := by grind
+  right_distrib := by grind
+  mul_comm := by grind
+  zero_mul := by grind
+  mul_zero := by grind

@@ -1,18 +1,14 @@
 import Mathlib
 
 /-
-Enumerations of finite sets
+Enumerations of finite sets.
+
+Let `T` be some finite type (e.g. `Fin 2`). If we can prove theorems of the form `∀ x : T, x = 0 ∨ x = 1` via the `decide` tactic, this means there is a decision procedure registered with the `Decidable` typeclass, which typically operates by enumerating all the elements of `T`. Thus, we can prove theorems of the form `∀ x : T, P x` as well, subject to certain restrictions on `P`.
+
+This file explores which types `T` have this property.
 -/
 
-/-
-## Finiteness
-
-If the set is structurally finite (built out of `Finset` and `Fin`), decide works
--/
-
-/-
-### Fin 1
--/
+/- Fin 1-/
 example (I : Finset (Fin 1)) : I = {} ∨ I = {0} := by
   decide +revert
 

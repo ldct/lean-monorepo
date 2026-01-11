@@ -1,5 +1,16 @@
 import Mathlib
 
+set_option linter.style.longLine false
+
+/-
+# Key definitions
+
+- `GaussInt` is the type of Gaussian integers
+- `instance CommRing GaussInt`
+
+The proof defers to `simp` and `ring` as much as possible; as of v24, this takes 9k heartbeats to verify.
+-/
+
 @[ext]
 structure GaussInt where
   re : ℤ
@@ -57,6 +68,7 @@ theorem mul_re (x y : GaussInt) : (x * y).re = x.re * y.re - x.im * y.im :=
 @[simp]
 theorem mul_im (x y : GaussInt) : (x * y).im = x.re * y.im + x.im * y.re :=
   rfl
+
 
 #count_heartbeats! in instance instCommRing : CommRing GaussInt where
   zero := 0
