@@ -144,15 +144,15 @@ instance R4.instNonUnitalRing : NonUnitalRing R4 where
 def MyIsUnit' {R} [Ring R] (a : R) : Prop := ∃ b : R, a * b = 1 ∧ b * a = 1
 
 noncomputable def extractInverse {R} [Ring R] (a : R) (h : MyIsUnit' a) : R := Exists.choose h
+theorem extractInverse_spec {R} [Ring R] (a : R) (h : MyIsUnit' a) : a * extractInverse a h = 1 ∧ extractInverse a h * a = 1 := Classical.choose_spec h
+theorem extractInverse_spec' {R} [Ring R] (a : R) (h : MyIsUnit' a) : MyIsUnit' (extractInverse a h) := by
+  use a
+  simp [extractInverse_spec]
 
+@[ext]
 structure MyUnits' (R) [Ring R] where
   val : R
   prop : MyIsUnit' val
-
-
-/-
-In fact, only one of `val_inv` and `inv_val` is necessary; the other can be derived from the other.
--/
 
 def Ring.AreInverse {G} [Ring G] (a b : G) : Prop := a * b = 1 ∧ b * a = 1
 
@@ -166,14 +166,68 @@ lemma Ring.AreInverse.right_unique {G} [Ring G] (a b c : G) (hb : AreInverse a b
     _ = 1 * b := by (congr 1; rw [hc.2])
     _ = b := by simp [one_mul]
 
-
 noncomputable instance {R} [Ring R] : Inv (MyUnits' R) where
   inv a := {
-    val := Classical.choose a.prop,
-    prop := by
-      have := Classical.choose_spec a.prop
-      grind [MyIsUnit']
+    val := extractInverse a.val a.prop,
+    prop := extractInverse_spec' a.val a.prop
   }
+
+lemma inv_val_eq {R} [Ring R] (a : MyUnits' R) : (a⁻¹).val = extractInverse a.val a.prop := rfl
+
+lemma MyUnits'.inv_mul {R} [Ring R] (a : MyUnits' R)
+: a⁻¹.val * a.val = 1 := by
+  have := extractInverse_spec a.val a.prop
+  rw [inv_val_eq]
+  grind
+
+lemma MyUnits'.mul_inv {R} [Ring R] (a : MyUnits' R)
+: a.val * a⁻¹.val = 1 := by
+  have := extractInverse_spec a.val a.prop
+  rw [inv_val_eq]
+  grind
+
+instance MyUnits'.instMul {R} [Ring R] : Mul (MyUnits' R) where
+  mul a b := {
+    val := a.val * b.val,
+    prop := by
+      use b⁻¹.val * a⁻¹.val
+      constructor
+      rw [show a.val * b.val * (b⁻¹.val * a⁻¹.val) = a.val * (b.val * b⁻¹.val) * a⁻¹.val by simp [mul_assoc]]
+      rw [mul_inv, mul_one, mul_inv]
+
+      rw [show b⁻¹.val * a⁻¹.val * (a.val * b.val) = b⁻¹.val * (a⁻¹.val * a.val) * b.val by simp [mul_assoc]]
+      rw [inv_mul, mul_one, inv_mul]
+  }
+
+lemma MyUnits'.mul_val {R} [Ring R] (a b : MyUnits' R) : (a * b).val = a.val * b.val := rfl
+
+instance MyUnits'.instOne {R} [Ring R] : One (MyUnits' R) where
+  one := {
+    val := 1,
+    prop := by
+      use 1
+      simp
+  }
+
+lemma MyUnits'.one_val {R} [Ring R] : (1 : MyUnits' R).val = 1 := rfl
+
+noncomputable instance MyUnits'.instGroup {R} [Ring R] : Group (MyUnits' R) where
+  mul_assoc := by
+    rintro a b c
+    ext
+    simp [mul_val, mul_assoc]
+  one_mul := by
+    rintro a
+    ext
+    simp [mul_val, one_val, one_mul]
+  mul_one := by
+    rintro a
+    ext
+    simp [mul_val, one_val, mul_one]
+  inv_mul_cancel := by
+    rintro a
+    ext
+    simp [mul_val, inv_mul]
 
 @[ext]
 structure MyUnits (R) [Ring R] where
@@ -182,6 +236,9 @@ structure MyUnits (R) [Ring R] where
   val_inv : val * inv = 1
   inv_val : inv * val = 1
 
+/-
+# A computable version of units where we store the inverse in the structure
+-/
 lemma MyUnits.eq_of_val_eq {R} [Ring R] (a b : MyUnits R) (h : a.val = b.val) : a = b := by
   ext
   · exact h
@@ -238,6 +295,11 @@ instance MyUnits.instGroup {R} [inst : Ring R] : Group (MyUnits R) where
     apply eq_of_val_eq
     simp only [mul_val, inv_val_eq_inv, a.inv_val, one_val]
 
+
+/-
+# Relation between units and zero divisors
+-/
+
 def MyIsZeroDivisor {R} [Ring R] (a : R) : Prop := a ≠ 0 ∧ ∃ b : R, b ≠ 0 ∧ (a * b = 0 ∨ b * a = 0)
 def MyIsUnit {R} [Ring R] (a : R) : Prop := ∃ b : MyUnits R, b.val = a
 
@@ -264,7 +326,6 @@ lemma Ring.not_isUnit_of_isZeroDivisor {R} [Ring R] (a : R) (h : MyIsZeroDivisor
 
 lemma MyUnits.mul_eq {R} [Ring R] (a b : MyUnits R) : (a * b).val = a.val * b.val := rfl
 
-example (a b : ℤ) (h1 : a ≠ 0) (h2 : b ≠ 0) : a * b ≠ 0 := by exact Int.mul_ne_zero h1 h2
 /-
 Example 1: The ring ℤ has no zero divisors
 -/
