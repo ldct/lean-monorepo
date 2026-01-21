@@ -26,7 +26,7 @@ The `Mul` typeclass defines how to evaluate `a * b` for elements `a` and `b`. Yo
 
 Lean's pattern matching syntax allows us to define the first two cases together
 -/
-instance : Mul C2 where
+instance C2.instMul : Mul C2 where
   mul a b :=
     match a, b with
     | .one, x => x
@@ -218,8 +218,7 @@ Just as the concept of "associative multiplication" is split between `Mul` (func
 The `One` typeclass carries a distinguished element `1 : G` (you can think of it as a function `(Unit) → G`) if you want) and allows the `1` notation to be used.
 -/
 
-namespace StrangeOneWorld
-
+section
 /-
 On its own, it's not required to satisfy any axioms; it's just a data carrier.
 -/
@@ -230,7 +229,11 @@ instance : One C2 where
 This is an unusual definition of `1` for `C2`.
 -/
 #eval (1 : C2) * C2.one
-end StrangeOneWorld
+end section
+
+-- TODO the scope is not working
+instance : One C2 where
+  one := C2.one
 
 /-
 Mathlib's `Monoid` typeclass extends `One` and requires `1` to be a neutral element.
