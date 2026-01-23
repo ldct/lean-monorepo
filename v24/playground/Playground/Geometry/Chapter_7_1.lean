@@ -154,6 +154,11 @@ structure MyUnits' (R) [Ring R] where
   val : R
   prop : MyIsUnit' val
 
+attribute [coe] MyUnits'.val
+
+instance {R} [Ring R] : Coe (MyUnits' R) R where
+  coe a := a.val
+
 def Ring.AreInverse {G} [Ring G] (a b : G) : Prop := a * b = 1 ∧ b * a = 1
 
 lemma Ring.AreInverse.symm {G} [Ring G] (a b : G) : AreInverse a b ↔ AreInverse b a := by grind [Ring.AreInverse]
@@ -188,11 +193,11 @@ lemma MyUnits'.mul_inv {R} [Ring R] (a : MyUnits' R)
 
 instance MyUnits'.instMul {R} [Ring R] : Mul (MyUnits' R) where
   mul a b := {
-    val := a.val * b.val,
+    val := a * b,
     prop := by
-      use b⁻¹.val * a⁻¹.val
+      use b⁻¹ * a⁻¹
       constructor
-      rw [show a.val * b.val * (b⁻¹.val * a⁻¹.val) = a.val * (b.val * b⁻¹.val) * a⁻¹.val by simp [mul_assoc]]
+      rw [show a * b * (b⁻¹ * a⁻¹) = a.val * (b * b⁻¹) * a⁻¹ by simp [mul_assoc]]
       rw [mul_inv, mul_one, mul_inv]
 
       rw [show b⁻¹.val * a⁻¹.val * (a.val * b.val) = b⁻¹.val * (a⁻¹.val * a.val) * b.val by simp [mul_assoc]]
@@ -227,121 +232,71 @@ noncomputable instance MyUnits'.instGroup {R} [Ring R] : Group (MyUnits' R) wher
   inv_mul_cancel := by
     rintro a
     ext
-    simp [mul_val, inv_mul]
-
-@[ext]
-structure MyUnits (R) [Ring R] where
-  val : R
-  inv : R
-  val_inv : val * inv = 1
-  inv_val : inv * val = 1
-
-/-
-# A computable version of units where we store the inverse in the structure
--/
-lemma MyUnits.eq_of_val_eq {R} [Ring R] (a b : MyUnits R) (h : a.val = b.val) : a = b := by
-  ext
-  · exact h
-  have h1 : Ring.AreInverse a.val a.inv := by simp [Ring.AreInverse, a.val_inv, a.inv_val]
-  have h2 : Ring.AreInverse a.val b.inv := by simp [h, Ring.AreInverse, b.val_inv, b.inv_val]
-  have h3 := Ring.AreInverse.right_unique _ _ _ h1 h2
-  simp [h3]
-
-instance MyUnits.instInv {R} [Ring R] : Inv (MyUnits R) where
-  inv a := {
-    val := a.inv,
-    inv := a.val,
-    val_inv := by simp [a.inv_val],
-    inv_val := by simp [a.val_inv]
-  }
-
-lemma MyUnits.inv_val_eq_inv {R} [Ring R] (a : MyUnits R) : (a⁻¹).val = a.inv := rfl
-
-instance MyUnits.instMul {R} [Ring R] : Mul (MyUnits R) where
-  mul a b := {
-    val := a.val * b.val,
-    inv := b.inv * a.inv,
-    val_inv := by
-      rw [show a.val * b.val * (b.inv * a.inv) = a.val * (b.val * b.inv) * a.inv by simp [mul_assoc]]
-      simp [a.val_inv, b.val_inv]
-    inv_val := by
-      rw [show b.inv * a.inv * (a.val * b.val) = b.inv * (a.inv * a.val) * b.val by simp [mul_assoc]]
-      simp [b.inv_val, a.inv_val]
-  }
-
-lemma MyUnits.mul_val {R} [Ring R] (a b : MyUnits R) : (a * b).val = a.val * b.val := rfl
-
-instance MyUnits.instOne {R} [inst : Ring R] : One (MyUnits R) where
-  one := {
-    val := 1,
-    inv := 1,
-    val_inv := by simp [inst.mul_one],
-    inv_val := by simp [inst.mul_one]
-  }
-
-lemma MyUnits.one_val {R} [Ring R] : (1 : MyUnits R).val = 1 := rfl
-
-instance MyUnits.instGroup {R} [inst : Ring R] : Group (MyUnits R) where
-  mul_assoc a b c := by
-    apply eq_of_val_eq
-    simp [mul_val, mul_assoc]
-  one_mul a := by
-    apply eq_of_val_eq
-    simp only [mul_val, one_val, one_mul]
-  mul_one a := by
-    apply eq_of_val_eq
-    simp only [mul_val, one_val, mul_one]
-  inv_mul_cancel a := by
-    apply eq_of_val_eq
-    simp only [mul_val, inv_val_eq_inv, a.inv_val, one_val]
-
+    simp [mul_val, inv_mul, one_val]
 
 /-
 # Relation between units and zero divisors
 -/
+def IsZeroDivisor {R} [Ring R] (a : R) : Prop := a ≠ 0 ∧ ∃ b : R, b ≠ 0 ∧ (a * b = 0 ∨ b * a = 0)
 
-def MyIsZeroDivisor {R} [Ring R] (a : R) : Prop := a ≠ 0 ∧ ∃ b : R, b ≠ 0 ∧ (a * b = 0 ∨ b * a = 0)
-def MyIsUnit {R} [Ring R] (a : R) : Prop := ∃ b : MyUnits R, b.val = a
-
-lemma Ring.not_isUnit_of_isZeroDivisor {R} [Ring R] (a : R) (h : MyIsZeroDivisor a) : ¬MyIsUnit a := by
+lemma Ring.not_isUnit_of_isZeroDivisor {R} [Ring R] (a : R) (h : IsZeroDivisor a) : ¬MyIsUnit' a := by
   by_contra h2
-  unfold MyIsZeroDivisor at h
-  obtain ⟨ h3, ⟨ b, hb1, h | h ⟩ ⟩ := h
-  · obtain ⟨ a, rfl ⟩ := h2
-    have := calc
-      b = 1 * b := by simp
-      _ = (a.inv * a.val) * b := by simp [a.inv_val]
-      _ = a.inv * (a.val * b) := by simp [mul_assoc]
-      _ = a.inv * 0 := by rw [h]
-      _ = 0 := by simp [mul_zero]
-    exact hb1 this
-  · obtain ⟨ a, rfl ⟩ := h2
-    have := calc
-      b = b * 1 := by simp
-      _ = b * (a.val * a.inv) := by simp [a.val_inv]
-      _ = (b * a.val) * a.inv := by simp [mul_assoc]
-      _ = 0 * a.inv := by rw [h]
-      _ = 0 := by simp [zero_mul]
-    exact hb1 this
+  unfold IsZeroDivisor at h
+  obtain ⟨ a_ne_0, ⟨ b, b_ne_0, h | h ⟩ ⟩ := h
 
-lemma MyUnits.mul_eq {R} [Ring R] (a b : MyUnits R) : (a * b).val = a.val * b.val := rfl
+  -- In this branch, suppose ab = 0 for some nonzero b
+
+  obtain ⟨ v, _, hv2 ⟩ := h2 -- Then, va = 1 for some v
+  have := calc
+    b = 1 * b := by simp
+    _ = (v * a) * b := by simp [hv2]
+    _ = v * (a * b) := by simp [mul_assoc]
+    _ = v * 0 := by rw [h]
+    _ = 0 := by simp [mul_zero]
+  exact b_ne_0 this
+
+  -- Similarly if ba = 0 for some nonzero b...
+  obtain ⟨ v, hv1, _ ⟩ := h2
+  have := calc
+    b = b * 1 := by simp
+    _ = b * (a * v) := by simp [hv1]
+    _ = (b * a) * v := by simp [mul_assoc]
+    _ = 0 * a := by simp [h]
+    _ = 0 := by simp [zero_mul]
+  exact b_ne_0 this
 
 /-
 Example 1: The ring ℤ has no zero divisors
 -/
-example : ¬∃ a : ℤ, MyIsZeroDivisor a := by
+example : ¬∃ a : ℤ, IsZeroDivisor a := by
   by_contra h
   obtain ⟨ a, ⟨ h2, ⟨ b, hb1, hb2 ⟩ ⟩ ⟩ := h
   grind [Int.mul_ne_zero]
 
 /-
-Example 1: The only units in ℤ are ±1
+Example 1, continued: and its only units in ℤ are ±1
 -/
-example (a : ℤ) : MyIsUnit a ↔ a = 1 ∨ a = -1 := by
-  sorry
+example (a : ℤ) : MyIsUnit' a ↔ a = 1 ∨ a = -1 := by
+  constructor
+  grind [MyIsUnit', Int.eq_one_or_neg_one_of_mul_eq_one]
+
+  rintro (rfl | rfl)
+  · use 1
+    norm_num
+  · use -1
+    norm_num
+
+#eval (8 : ZMod 12).inv
+/-
+Example 2
+-/
+example (n : ℕ) (u : ℕ) (h : Nat.Coprime u n) : MyIsUnit' (u : ZMod n) := by
+  unfold MyIsUnit'
+  -- use Nat.gcdA u n
+  grind [ZMod.coe_mul_inv_eq_one]
 
 /-
-# The quadratic field ℚ[√D]
+# Example 5: The quadratic field ℚ[√D]
 -/
 
 def QAdjoinSqrt (D : ℕ) : Subring ℝ where
@@ -459,20 +414,25 @@ noncomputable def smallUnit' : Units (QAdjoinSqrt 2) := ⟨smallUnit, smallUnitI
   ring
 ⟩
 
+example {R} [CommRing R]
+: (∀ (a b : R), a * b = 0 → a = 0 ∨ b = 0) ↔
+¬∃ (a b : R), a ≠ 0 ∧ b ≠ 0 ∧ a * b = 0 := by grind
 
-#check Zsqrtd 5
 
+def IsIntegralDomain (R : Type*) [CommRing R] : Prop :=
+  (1 ≠ 0) ∧ ∀ (a b : R), a * b = 0 → a = 0 ∨ b = 0
 
-#check Units (QAdjoinSqrt 5)
+/-
+Example 2
+-/
+example {R} [Ring R] (a b c : R) (ha : ¬ IsZeroDivisor a) (h : a * b = a * c)
+: a = 0 ∨ b = c := by
+  have : a * (b - c) = 0 := by grind [mul_sub]
+  grind [IsZeroDivisor]
 
--- Can I use QuadraticAlgebra to do this?
-#check QuadraticAlgebra
-
-abbrev F := QuadraticAlgebra ℚ 5 0
-
-def x : F := ⟨1/2, ⟩
-
-#eval x
+/-
+# Definition (page 228): subrings
+-/
 
 /-
 Example : ℤ is a subring of ℚ and ℚ is a subring of ℝ
@@ -562,4 +522,90 @@ example {G} [Ring G] : (-1 : G)^2 = 1 := by
   rw [sq]
   exact this
 
-#check Subring
+/-
+Exercise 21
+
+The `ext` attribute generates a lemma `PRSet.ext_iff` that can be used to rewrite `a = b` to `a.val = b.val`. Note that the `ext` tactic will apply this lemma and then rewrite `a.val = b.val` to `x ∈ a.val ↔ x ∈ b.val`, which is too much rewriting.
+-/
+@[ext]
+structure PRSet (G : Type*) where
+  val : Set G
+
+def ssd {G : Type*} (a b : Set G) : Set G := (a ∪ b) \ (a ∩ b)
+
+/-
+We can use `tauto` to grind through the proof of associativity, or `grind`
+A more conceputal proof is that `x ∈ ssd a b` iff `XOR [x ∈ a, x ∈ b]`, hence both sides reduce to `XOR [x ∈ ssd a, x ∈ ssd b, x ∈ ssd c]`
+-/
+lemma ssd_assoc {G : Type*} (a b c : Set G) : ssd (ssd a b) c = ssd a (ssd b c) := by
+  ext x
+  simp [ssd]
+  tauto
+
+instance PRSet.instAdd {G} : Add (PRSet G) where
+  add a b := {
+    val := ssd a.val b.val
+  }
+
+lemma PRSet.add_val {G} (a b : PRSet G)
+: (a + b).val = ssd a.val b.val := rfl
+
+instance PRSet.instZero {G} : Zero (PRSet G) where
+  zero := {
+    val := ∅
+  }
+
+lemma PRSet.zero_val {G} : (0 : PRSet G).val = ∅ := rfl
+
+instance PRSet.instNeg {G} : Neg (PRSet G) where
+  neg a := a
+
+lemma PRSet.neg_val {G} (a : PRSet G) : (-a).val = a.val := rfl
+
+instance PRSet.instAddCommGroup {G} : AddCommGroup (PRSet G) where
+  add_assoc a b c := by
+    rw [PRSet.ext_iff]
+    simp [add_val, ssd_assoc]
+  zero_add a := by
+    rw [PRSet.ext_iff]
+    simp [add_val, zero_val, ssd]
+  add_zero a := by
+    rw [PRSet.ext_iff]
+    simp [add_val, zero_val, ssd]
+  nsmul := nsmulRec
+  zsmul := zsmulRec
+  neg_add_cancel a := by
+    rw [PRSet.ext_iff]
+    simp [add_val, neg_val, ssd, zero_val]
+  add_comm a b := by
+    rw [PRSet.ext_iff]
+    simp [add_val, ssd]
+    grind
+
+instance PRSet.instMul {G} : Mul (PRSet G) where
+  mul a b := {
+    val := a.val ∩ b.val
+  }
+
+lemma PRSet.mul_val {G} (a b : PRSet G)
+: (a * b).val = a.val ∩ b.val := rfl
+
+instance PRSet.instOne {G} : One (PRSet G) where
+  one := {
+    val := ⊤
+  }
+
+lemma PRSet.one_val {G} : (1 : PRSet G).val = ⊤ := rfl
+
+
+instance PRSet.instRing {G} : Monoid (PRSet G) where
+  mul_assoc a b c := by
+    rw [PRSet.ext_iff]
+    simp [mul_val]
+    grind
+  one_mul a := by
+    rw [PRSet.ext_iff]
+    simp [mul_val, one_val]
+  mul_one a := by
+    ext
+    simp [mul_val, one_val]
