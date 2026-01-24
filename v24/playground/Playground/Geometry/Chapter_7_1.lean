@@ -542,25 +542,19 @@ lemma ssd_assoc {G : Type*} (a b c : Set G) : ssd (ssd a b) c = ssd a (ssd b c) 
   simp [ssd]
   tauto
 
-instance PRSet.instAdd {G} : Add (PRSet G) where
-  add a b := {
-    val := ssd a.val b.val
-  }
-
-lemma PRSet.add_val {G} (a b : PRSet G)
-: (a + b).val = ssd a.val b.val := rfl
-
-instance PRSet.instZero {G} : Zero (PRSet G) where
-  zero := {
-    val := ∅
-  }
-
+/-
+Definitions of `+`, `0`, `-`, `*`, `1` for `PRSet`
+-/
+instance PRSet.instAdd {G} : Add (PRSet G) where add a b := ⟨ ssd a.val b.val ⟩
+lemma PRSet.add_val {G} (a b : PRSet G) : (a + b).val = ssd a.val b.val := rfl
+instance PRSet.instZero {G} : Zero (PRSet G) where zero := ⟨ ∅ ⟩
 lemma PRSet.zero_val {G} : (0 : PRSet G).val = ∅ := rfl
-
-instance PRSet.instNeg {G} : Neg (PRSet G) where
-  neg a := a
-
+instance PRSet.instNeg {G} : Neg (PRSet G) where neg a := ⟨ a.val ⟩
 lemma PRSet.neg_val {G} (a : PRSet G) : (-a).val = a.val := rfl
+instance PRSet.instMul {G} : Mul (PRSet G) where mul a b := ⟨ a.val ∩ b.val ⟩
+lemma PRSet.mul_val {G} (a b : PRSet G) : (a * b).val = a.val ∩ b.val := rfl
+instance PRSet.instOne {G} : One (PRSet G) where one := ⟨ ⊤ ⟩
+lemma PRSet.one_val {G} : (1 : PRSet G).val = ⊤ := rfl
 
 instance PRSet.instAddCommGroup {G} : AddCommGroup (PRSet G) where
   add_assoc a b c := by
@@ -582,23 +576,7 @@ instance PRSet.instAddCommGroup {G} : AddCommGroup (PRSet G) where
     simp [add_val, ssd]
     grind
 
-instance PRSet.instMul {G} : Mul (PRSet G) where
-  mul a b := {
-    val := a.val ∩ b.val
-  }
-
-lemma PRSet.mul_val {G} (a b : PRSet G)
-: (a * b).val = a.val ∩ b.val := rfl
-
-instance PRSet.instOne {G} : One (PRSet G) where
-  one := {
-    val := ⊤
-  }
-
-lemma PRSet.one_val {G} : (1 : PRSet G).val = ⊤ := rfl
-
-
-instance PRSet.instRing {G} : Monoid (PRSet G) where
+instance PRSet.instRing {G} : Ring (PRSet G) where
   mul_assoc a b c := by
     rw [PRSet.ext_iff]
     simp [mul_val]
@@ -609,3 +587,19 @@ instance PRSet.instRing {G} : Monoid (PRSet G) where
   mul_one a := by
     ext
     simp [mul_val, one_val]
+  left_distrib a b c := by
+    rw [PRSet.ext_iff]
+    simp [add_val, mul_val, ssd]
+    ext x
+    grind
+  right_distrib a b c := by
+    rw [PRSet.ext_iff]
+    simp [add_val, mul_val, ssd]
+    ext x
+    grind
+  zero_mul a := by
+    rw [PRSet.ext_iff]
+    simp [mul_val, zero_val]
+  mul_zero a := by
+    rw [PRSet.ext_iff]
+    simp [mul_val, zero_val]
