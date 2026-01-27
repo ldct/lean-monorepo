@@ -196,12 +196,7 @@ instance MyUnits'.instMul {R} [Ring R] : Mul (MyUnits' R) where
     val := a * b,
     prop := by
       use b⁻¹ * a⁻¹
-      constructor
-      rw [show a * b * (b⁻¹ * a⁻¹) = a.val * (b * b⁻¹) * a⁻¹ by simp [mul_assoc]]
-      rw [mul_inv, mul_one, mul_inv]
-
-      rw [show b⁻¹.val * a⁻¹.val * (a.val * b.val) = b⁻¹.val * (a⁻¹.val * a.val) * b.val by simp [mul_assoc]]
-      rw [inv_mul, mul_one, inv_mul]
+      constructor <;> ac_nf <;> nth_rw 2 [← mul_assoc] <;> grind [mul_inv, inv_mul, one_mul]
   }
 
 lemma MyUnits'.mul_val {R} [Ring R] (a b : MyUnits' R) : (a * b).val = a.val * b.val := rfl
@@ -522,8 +517,87 @@ example {G} [Ring G] : (-1 : G)^2 = 1 := by
   rw [sq]
   exact this
 
+
 /-
-Exercise 21
+# Exercise 20 (ring of sequences with finite support)
+
+we show that this is a `NonUnitalRing`. Showing that an identity does not exist is more difficult.
+-/
+
+@[ext]
+structure FinSeq where
+  seq : ℕ → ℤ
+  vanish : ∃ n, ∀ i, i > n → seq i = 0
+
+instance FinSeq.instAdd : Add FinSeq where add a b := ⟨ a.seq + b.seq, by
+  obtain ⟨ n, hn ⟩ := a.vanish
+  obtain ⟨ m, hm ⟩ := b.vanish
+  use max n m
+  grind [sup_lt_iff, Pi.add_apply]
+⟩
+
+lemma FinSeq.add_seq (a b : FinSeq) (i : ℕ) : (a + b).seq i = a.seq i + b.seq i := rfl
+
+instance FinSeq.instZero : Zero FinSeq where zero := ⟨ fun _ => 0, by use 0; grind⟩
+lemma FinSeq.zero_seq (i : ℕ) : (0 : FinSeq).seq i = 0 := rfl
+
+instance FinSeq.instNeg : Neg FinSeq where neg a := ⟨ -a.seq, by
+  obtain ⟨ n, hn ⟩ := a.vanish
+  use n
+  grind [Pi.neg_apply, neg_eq_zero]
+⟩
+lemma FinSeq.neg_seq (a : FinSeq) (i : ℕ) : (-a).seq i = -a.seq i := rfl
+
+instance FinSeq.instMul : Mul FinSeq where mul a b := ⟨ a.seq * b.seq, by
+  obtain ⟨ n, hn ⟩ := a.vanish
+  obtain ⟨ m, hm ⟩ := b.vanish
+  use max n m
+  grind [Pi.mul_apply, mul_eq_zero]
+⟩
+lemma FinSeq.mul_seq (a b : FinSeq) (i : ℕ) : (a * b).seq i = a.seq i * b.seq i := rfl
+
+instance FinSeq.instAddCommGroup : AddCommGroup FinSeq where
+  add_assoc a b c := by
+    ext i
+    simp [add_seq]
+    grind
+  zero_add a := by
+    ext i
+    simp [add_seq, zero_seq]
+  add_zero a := by
+    ext i
+    simp [add_seq, zero_seq]
+  nsmul := nsmulRec
+  zsmul := zsmulRec
+  neg_add_cancel a := by
+    ext i
+    simp [add_seq, neg_seq, zero_seq]
+  add_comm a b := by
+    ext i
+    simp [add_seq, add_comm]
+
+instance FinSeq.instRing : NonUnitalRing FinSeq where
+  left_distrib a b c := by
+    ext i
+    simp [mul_seq, add_seq]
+    grind
+  right_distrib a b c := by
+    ext i
+    simp [mul_seq, add_seq]
+    grind
+  zero_mul a := by
+    ext i
+    simp [mul_seq, zero_seq]
+  mul_zero a := by
+    ext i
+    simp [mul_seq, zero_seq]
+  mul_assoc a b c := by
+    ext i
+    simp [mul_seq]
+    grind
+
+/-
+# Exercise 21 (ring structure on the power set of a set / type)
 
 The `ext` attribute generates a lemma `PRSet.ext_iff` that can be used to rewrite `a = b` to `a.val = b.val`. Note that the `ext` tactic will apply this lemma and then rewrite `a.val = b.val` to `x ∈ a.val ↔ x ∈ b.val`, which is too much rewriting.
 -/

@@ -3,14 +3,18 @@ import Mathlib
 set_option linter.style.longLine false
 
 /-
+# Chapter 3: Quotient Groups and Homomorphisms
+# 3.1: Definitions and Examples
+
 This file formalizes the definitions, theorems and exercises from Chapter 3.1 of Dummit and Foote (page 73).
+
+Given a group homomorphism φ : G → H, we define the **fibers** of φ and define how to multiply and invert elements in the fibers.
 -/
 
--- Mathlib already has a notion of quotient of a group by a normal subgroup. Much of Chapter 3.1 is devoted to constructing this quotient.
-example {G : Type*} [Group G] (H : Subgroup G) [H.Normal] : Group (G ⧸ H) := inferInstance
+variable {G H} [Group G] [Group H] (φ : G →* H)
 
--- If φ is a homomorphism G → H the fibers of φ are sets of G projecting to the same element in H; hence two elements in G are related (written as `a ≃ b`) if they are mapped to the same element in H (written as `φ a = φ b`). This is an equivalence relation, and hence G partitions into equivalence classes.
-@[to_additive AddHomSetoid] def HomSetoid {G H} [Group G] [Group H] (φ : G →* H) : Setoid G := {
+/- If φ is a homomorphism G → H the **fibers** of φ are sets of G projecting to the same element in H; hence two elements in G are related (written as `a ≃ b`) if they are mapped to the same element in H (written as `φ a = φ b`). This is an equivalence relation, and hence G partitions into equivalence classes. -/
+def HomSetoid : Setoid G := {
   r a b := φ a = φ b
   iseqv := {
     refl := by grind
@@ -19,62 +23,83 @@ example {G : Type*} [Group G] (H : Subgroup G) [H.Normal] : Group (G ⧸ H) := i
     }
 }
 
--- An element `g : HomFibers φ` is an equivalence class of elements in `G` under the equivalence relation `HomSetoid φ`.
-@[to_additive AddHomFibers] abbrev HomFibers {G H} [Group G] [Group H] (φ : G →* H) : Type* := Quotient (HomSetoid φ)
+/-
+An element `g : Fiber φ` is an equivalence class of elements in `G` under the equivalence relation `HomSetoid φ`.
+-/
+abbrev Fiber : Type* := Quotient (HomSetoid φ)
 
--- Multiplication of the fibers is well-defined
-@[to_additive] instance {G H} [Group G] [Group H] (φ : G →* H) : Mul (HomFibers φ) := ⟨
+def evalFiber : (Fiber φ → H) := Quotient.lift φ (fun _ _ h => h)
+
+def preimage : (H → Fiber φ) := sorry
+
+/-
+Define the multiplication of fibers directly in terms of representatives from the fibers
+-/
+instance instMul : Mul (Fiber φ) := ⟨
   Quotient.lift₂
     (fun x y => Quotient.mk (HomSetoid φ) (x * y))
     (by
       intro a₁ b₁ a₂ b₂ h₁ h₂
-      simp [HomSetoid]
+      simp [HomSetoid, φ.map_mul]
       change φ a₁ = φ a₂ at h₁
       change φ b₁ = φ b₂ at h₂
       congr
     )
 ⟩
 
-@[to_additive] theorem mul_mk {G H} [Group G] [Group H] (φ : G →* H) (a b : G)
+
+theorem mul_mk {G H} [Group G] [Group H] (φ : G →* H) (a b : G)
 : Quotient.mk (HomSetoid φ) a * ⟦b⟧ = ⟦a * b⟧ := rfl
 
-@[to_additive] instance {G H} [Group G] [Group H] (φ : G →* H) : One (HomFibers φ) := ⟨ Quotient.mk (HomSetoid φ) 1 ⟩
 
-@[to_additive] instance {G H} [Group G] [Group H] (φ : G →* H) : Inv (HomFibers φ) := ⟨ Quotient.lift (fun x => Quotient.mk (HomSetoid φ) (x⁻¹)) (by
+instance instOne {G H} [Group G] [Group H] (φ : G →* H) : One (Fiber φ) := ⟨ Quotient.mk (HomSetoid φ) 1 ⟩
+lemma one_eq {G H} [Group G] [Group H] (φ : G →* H) : 1 = Quotient.mk (HomSetoid φ) 1 := rfl
+
+instance instInvFibers {G H} [Group G] [Group H] (φ : G →* H) : Inv (Fiber φ) := ⟨ Quotient.lift (fun x => Quotient.mk (HomSetoid φ) (x⁻¹)) (by
   intro a b h
   simp [HomSetoid]
   change φ a = φ b at h
   rw [h]
 ) ⟩
 
-@[to_additive] theorem inv_mk {G H} [Group G] [Group H] (φ : G →* H) (a : G)
+
+theorem inv_mk {G H} [Group G] [Group H] (φ : G →* H) (a : G)
 : (Quotient.mk (HomSetoid φ) a)⁻¹ = Quotient.mk (HomSetoid φ) (a⁻¹) := rfl
 
+#check Group.ofLeftAxioms
+
 -- Group structure on the fibers
-@[to_additive] instance {G H} [Group G] [Group H] (φ : G →* H) : Group (HomFibers φ) := {
-  mul_assoc a b c := by
-    obtain ⟨ a, rfl ⟩ := Quotient.exists_rep a
-    obtain ⟨ b, rfl ⟩ := Quotient.exists_rep b
-    obtain ⟨ c, rfl ⟩ := Quotient.exists_rep c
-    simp only [mul_mk]
-    congr 1
-    group
-  one_mul a := by
-    obtain ⟨ a, rfl ⟩ := Quotient.exists_rep a
-    rw [show (1 : HomFibers φ) = Quotient.mk (HomSetoid φ) 1 by exact rfl]
-    simp only [mul_mk]
-    congr 1
-    group
-  mul_one a := by
-    obtain ⟨ a, rfl ⟩ := Quotient.exists_rep a
-    rw [show (1 : HomFibers φ) = Quotient.mk (HomSetoid φ) 1 by exact rfl]
-    simp only [mul_mk]
-    congr 1
-    group
-  inv_mul_cancel a := by
-    obtain ⟨ a, rfl ⟩ := Quotient.exists_rep a
-    simp [inv_mk, mul_mk, show (1 : HomFibers φ) = Quotient.mk (HomSetoid φ) 1 by exact rfl]
-}
+instance instGroupFibers {G H} [Group G] [Group H] (φ : G →* H) : Group (Fiber φ) := Group.ofLeftAxioms (by
+  intro a b c
+  obtain ⟨ a, rfl ⟩ := Quotient.exists_rep a
+  obtain ⟨ b, rfl ⟩ := Quotient.exists_rep b
+  obtain ⟨ c, rfl ⟩ := Quotient.exists_rep c
+  simp only [mul_mk]
+  group
+) (by
+  intro a
+  obtain ⟨ a, rfl ⟩ := Quotient.exists_rep a
+  simp only [one_eq, mul_mk]
+  group
+) (by
+  intro a
+  obtain ⟨ a, rfl ⟩ := Quotient.exists_rep a
+  simp only [inv_mk, mul_mk, one_eq]
+  group
+)
+
+/-
+Addive versions
+-/
+
+attribute [to_additive AddHomSetoid] HomSetoid
+attribute [to_additive AddFiber] Fiber
+attribute [to_additive] instMul
+attribute [to_additive] mul_mk
+attribute [to_additive] instOne
+attribute [to_additive] instInvFibers
+attribute [to_additive] inv_mk
+attribute [to_additive] instGroupFibers
 
 /-
 Example (page 74)
@@ -83,7 +108,7 @@ Example (page 74)
 def ClassOf {G H} [AddGroup G] [AddGroup H] (φ : G →+ H) (x : G) :=
   { y : G | φ y = φ x }
 
-abbrev φ : ℤ →+ ZMod 2 := {
+abbrev φ' : ℤ →+ ZMod 2 := {
   toFun := fun n => (n : ZMod 2)
   map_zero' := by
     norm_num
@@ -91,8 +116,8 @@ abbrev φ : ℤ →+ ZMod 2 := {
     norm_num
   }
 
-abbrev ZQuot2 := AddHomFibers φ
-abbrev ZQuot2.mk := Quotient.mk (AddHomSetoid φ)
+abbrev ZQuot2 := AddFiber φ'
+abbrev ZQuot2.mk := Quotient.mk (AddHomSetoid φ')
 
 example (n : ℕ) : (n : ZMod 2) = 0 ↔ 2 ∣ n := by
   exact ZMod.natCast_eq_zero_iff n 2
@@ -100,7 +125,7 @@ example (n : ℕ) : (n : ZMod 2) = 0 ↔ 2 ∣ n := by
 example (n : ℤ) : (n : ZMod 2) = 0 ↔ 2 ∣ n := by
   grind [ZMod.intCast_zmod_eq_zero_iff_dvd]
 
-example : ClassOf φ 0 = { n : ℤ | n % 2 = 0 } := by
+example : ClassOf φ' 0 = { n : ℤ | n % 2 = 0 } := by
   rw [Set.ext_iff]
   intro x
   simp [ClassOf]
@@ -137,13 +162,13 @@ def Subgroup.IsAbelian {G} [Group G] (H : Subgroup G) : Prop := ∀ x ∈ H, ∀
 
 
 -- Exercise 3; every quotient of an abelian group is abelian
-set_option pp.coercions false in
 example {A} [Group A] (B : Subgroup A) [B.Normal] (h1 : Group.IsAbelian A)
 : Group.IsAbelian (A ⧸ B) := by
   intro x y
-  obtain ⟨ a, rfl ⟩ := QuotientGroup.mk_surjective x;
-  obtain ⟨ b, rfl ⟩ := QuotientGroup.mk_surjective y;
-  exact congr_arg _ ( h1 a b )
+  obtain ⟨ a, rfl ⟩ := QuotientGroup.mk_surjective x
+  obtain ⟨ b, rfl ⟩ := QuotientGroup.mk_surjective y
+  specialize h1 a b
+  exact congr_arg _ h1
 
 -- example from Visual Algebra: the Quaternion Group quotient by its center is the Klein Four Group
 abbrev Q := QuaternionGroup 2
@@ -163,14 +188,31 @@ theorem nat_card_ne_zero_of_fintype_nonempty {T} [Fintype T] [Nonempty T] : Nat.
   rw [Nat.card_eq_fintype_card]
   exact Fintype.card_ne_zero
 
+example {G} [Group G] : Monoid.exponent G ∣ Nat.card G := Group.exponent_dvd_nat_card
+
+/-
+The exponent is 2, proof 1
+-/
+example : Monoid.exponent (Q ⧸ Subgroup.center Q) = 2 := by
+  simp +decide [ Monoid.exponent ];
+  split_ifs
+  · simp +decide only [Nat.find_eq_iff]
+    native_decide
+  · rename_i h;
+    exact h <| by haveI := Fact.mk ( show Nat.Prime 2 by decide ) ; exact
+      Monoid.ExponentExists.of_finite
+
+lemma card_quot_eq_four : Nat.card (Q ⧸ (Subgroup.center Q)) = 4 := by
+  rw [card_quot _ nat_card_ne_zero_of_fintype_nonempty]
+  simp [ Nat.card_eq_fintype_card ]
+  rw [show Fintype.card (Subgroup.center Q) = 2 by rfl, show Fintype.card Q = 8 by rfl]
+
 example : IsKleinFour (Q ⧸ (Subgroup.center Q)) := by
   constructor
-  · rw [card_quot _ nat_card_ne_zero_of_fintype_nonempty]
-    simp [ Nat.card_eq_fintype_card ]
-    rw [show Fintype.card (Subgroup.center Q) = 2 by rfl, show Fintype.card Q = 8 by rfl]
+  · exact card_quot_eq_four
   · simp +decide [ Monoid.exponent ];
-    split_ifs;
-    · simp +decide only [Nat.find_eq_iff]
+    split_ifs
+    · simp [Nat.find_eq_iff]
       native_decide
     · rename_i h;
       exact h <| by haveI := Fact.mk ( show Nat.Prime 2 by decide ) ; exact
@@ -189,3 +231,18 @@ example {G} [Group G] (N : Subgroup G) [N.Normal] (g : G) (h : IsOfFinOrder g)
   use n, hn
   rw [e4, hn']
   norm_cast
+
+
+/- Mathlib already has a notion of quotient of a group by a normal subgroup -/
+example {G : Type*} [Group G] (H : Subgroup G) [H.Normal] : Group (G ⧸ H) := inferInstance
+
+variable {N : Subgroup G} [N.Normal]
+
+def QuotSetoid : Setoid G := {
+  r a b := φ a = φ b
+  iseqv := {
+    refl := by grind
+    symm := by grind
+    trans := by grind
+    }
+}
