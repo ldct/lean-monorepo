@@ -6,9 +6,13 @@ set_option linter.style.longLine false
 # Chapter 1.1
 -/
 
+/-- info: Group.{u} (G : Type u) : Type u -/ #guard_msgs in
 #check Group
+/-- info: CommGroup.{u} (G : Type u) : Type u -/ #guard_msgs in
 #check CommGroup
+/-- info: AddGroup.{u} (A : Type u) : Type u -/ #guard_msgs in
 #check AddGroup
+/-- info: AddCommGroup.{u} (G : Type u) : Type u -/ #guard_msgs in
 #check AddCommGroup
 
 /-
@@ -27,11 +31,39 @@ instance : Group ℝˣ := inferInstance
 instance : Group ℂˣ := inferInstance
 
 /-
-ℚˣ is defined as the group of units (invertible elements), but D&F define it as ℚ - {0}.
+D&F defines ℚˣ as ℚ - {0}, but Mathlib defines it as the group of invertible elements (aka units). The following theorem shows that they are equivalent.
 -/
 example : ℚˣ = { q : ℚ | q ≠ 0 } := by sorry
 example : ℝˣ = { r : ℝ | r ≠ 0 } := by sorry
 example : ℂˣ = { c : ℂ | c ≠ 0 } := by sorry
+
+
+
+#eval Nat.divisors 2
+
+attribute [grind] Nat.mem_divisors
+
+example (n : ℕ) (hn : n ∣ 2) : n ∈ Nat.divisors 2 := by
+  grind
+
+example (z : ℤ) (hz : z ∣ 1) : z = 1 ∨ z = -1 := by
+  have : (Int.natAbs z) ∣ 1 := by
+    rw [← Int.ofNat_dvd_right]
+    norm_num
+    exact hz
+  have : (Int.natAbs z) ∈ Nat.divisors 1 := by grind [Nat.mem_divisors]
+  simp [show Nat.divisors 1 = {1} by rfl] at this
+  grind
+
+example (z : ℤ) (hz : z ∣ 2) : z = 1 ∨ z = -1 ∨ z = 2 ∨ z = -2 := by
+  have : (Int.natAbs z) ∣ 2 := by
+    rw [← Int.ofNat_dvd_right]
+    norm_num
+    exact hz
+  have : (Int.natAbs z) ∈ Nat.divisors 2 := by grind [Nat.mem_divisors]
+  simp [show Nat.divisors 2 = {1, 2} by rfl] at this
+  grind
+
 
 /-
 D&F define ℚ+ as the set of strictly positive rationals. This doesn't really exist in Mathlib (the closest thing is ℚ≥0, which includes 0).
@@ -48,7 +80,6 @@ lemma inv_val (q : PRat) : (q⁻¹).val = q.val⁻¹ := rfl
 instance : Group PRat := Group.ofLeftAxioms
   (by
     intro a b c
-    have : 1 = 1 := by sorry
     apply Subtype.eq
 
     simp [mul_val, Rat.mul_assoc]
@@ -95,7 +126,6 @@ example : orderOf (2 : ℚ) = 0 := by
   rcases n with ( _ | _ | n ) <;> simp_all
   norm_cast at hn'
   grind
-
 
 example : addOrderOf (6 : ZMod 9) = 3 := by simp +decide [addOrderOf_eq_iff]
 example : orderOf (2 : ZMod 7) = 3 := by simp +decide [orderOf_eq_iff]
@@ -164,6 +194,7 @@ variable {G H} [Group G] [Group H] in
 ≃* bundles up the bijection and the homomorphism.
 -/
 def equivOfIso {G H} [Group G] [Group H] (φ : G ≃* H) : G ≃ H := φ.toEquiv
+
 def homOfIso {G H} [Group G] [Group H] (φ : G ≃* H) : G →* H := φ.toMonoidHom
 
 example {G} [Group G] : G ≃* G := {
@@ -174,7 +205,7 @@ example {G} [Group G] : G ≃* G := {
   map_mul' := by grind
 }
 
-
+/- Aristotle took a wrong turn (reason code: 8). Please try again. -/
 -- exp : ℝ → ℝ+ homomorphism from + to *
 
 example {G H} [Group G] [Group H] (equiv : G ≃ H) : (Equiv.Perm G) ≃* (Equiv.Perm H) where
@@ -187,7 +218,10 @@ example {G H} [Group G] [Group H] (equiv : G ≃ H) : (Equiv.Perm G) ≃* (Equiv
 -- any non-abelian group of order 6 is isomorphic to s3
 
 lemma cardinal_eq_of_iso {G H} [Group G] [Group H] (φ : G ≃* H) : Cardinal.mk G = Cardinal.mk H := Cardinal.mk_congr φ.toEquiv
-lemma natcard_eq_of_iso {G H} [Group G] [Group H] (φ : G ≃* H) : Nat.card G = Nat.card H := by sorry
+
+lemma natcard_eq_of_iso {G H} [Group G] [Group H] (φ : G ≃* H) : Nat.card G = Nat.card H := by
+  -- Since an equivalence implies that the cardinalities are equal, we can use the fact that the cardinality of a set is preserved under equivalence.
+  apply Nat.card_congr; exact φ.toEquiv
 
 -- G is abelian iff H is abelian
 
@@ -271,6 +305,7 @@ example : IntSubgroupReal ≤ RatSubgroupReal := by
 -/
 
 #check IsCyclic
+
 #check IsAddCyclic
 
 def IsCyclicSubgroup {G : Type*} [Group G] (H : Subgroup G) : Prop :=
@@ -293,14 +328,28 @@ def rotations (n : ℕ) : Subgroup (DihedralGroup n) where
 -- Note that this casts `rotations` to a type
 example (n : ℕ) : IsCyclic (rotations n) := by
   use ⟨ DihedralGroup.r 1, by use 1 ⟩
-  sorry
+  intro x
+  obtain ⟨ k, hk ⟩ := x.2;
+  rcases n with ( _ | _ | n ) <;> norm_num at *;
+  · cases x ; aesop;
+  · exact ⟨ 0, Subtype.ext <| by fin_cases k ; aesop ⟩;
+  · use k.val;
+    aesop
 
 example (n : ℕ) : IsCyclicSubgroup (rotations n) := by
   use DihedralGroup.r 1
   constructor
   · use 1
   intro h hh
-  sorry
+  obtain ⟨k, hk⟩ : ∃ k : ZMod n, h = DihedralGroup.r k := by
+    cases hh ; aesop;
+  -- Since $k$ is an element of $ZMod n$, we can write it as $k = m \cdot 1$ for some integer $m$.
+  obtain ⟨m, hm⟩ : ∃ m : ℤ, k = m * 1 := by
+    rcases n with ( _ | _ | n ) <;> norm_num at *;
+    · exact Exists.intro k rfl
+    · exact ⟨ 0, by fin_cases k; rfl ⟩
+    · exact ⟨ k.val, by simp +decide ⟩
+  aesop
 
 /-
 # Chapter 2.4
@@ -328,18 +377,33 @@ def g2 : AddSubgroup ℤ4 where
 def g3 : AddSubgroup ℤ4 := ⊤
 example : g3.carrier = {0, 1, 2, 3} := by
   simp [g3]
-  sorry
+  -- The carrier of the top subgroup is the universal set, which in this case is {0, 1, 2, 3}.
+  simp [Set.ext_iff];
+  -- Since ℤ4 is a finite type with elements 0, 1, 2, and 3, we can check each element individually.
+  intro x
+  fin_cases x <;> simp +decide
 
 example : g1 < g2 := by
   apply lt_of_le_of_ne
   · simp [g1, g2]
-  · sorry
+  ·
+    -- To show that $g1 \neq g2$, we can use the fact that $2 \in g2$ but $2 \notin g1$.
+    have h_neq : 2 ∈ (g2 : Set ℤ4) ∧ 2 ∉ (g1 : Set ℤ4) := by
+      -- Since $2 \in \{0, 2\}$ and $2 \notin \{0\}$, we have $2 \in g2$ and $2 \notin g1$.
+      simp [g1, g2];
+      decide +revert
+    exact fun h => h_neq.2 (h.symm ▸ h_neq.1)
 
 example : g2 < g3 := by
   apply lt_of_le_of_ne
   · simp [g2, g3]
-  · sorry
-
+  ·
+    -- To show that $g2 \neq g3$, we can use the fact that $1 \in g3$ but $1 \notin g2$.
+    have h1 : (1 : ℤ4) ∈ g3.carrier ∧ (1 : ℤ4) ∉ g2.carrier := by
+      -- Show that 1 is in g3 but not in g2 by checking the carrier sets.
+      simp [g3, g2];
+      decide +revert;
+    exact fun h => h1.2 ( h ▸ h1.1 )
 
 instance {G} [Group G] : CompleteLattice (Subgroup G) := inferInstance
 
@@ -362,7 +426,14 @@ abbrev centerQ : Subgroup Q where
 
 abbrev quotientGroup := Q ⧸ centerQ
 
-example : (QuotientGroup.mk 1 : quotientGroup) = (QuotientGroup.mk (-1)) := by sorry
+example : (QuotientGroup.mk 1 : quotientGroup) = (QuotientGroup.mk (-1)) := by
+  -- Since $-1 \in \text{centerQ}$, we have $1 \sim -1$ in the quotient group.
+  have h_neg_one_in_center : (-1 : Q) ∈ centerQ := by
+    -- By definition of $centerQ$, we know that $-1 \in centerQ$.
+    apply Set.mem_insert_of_mem; simp;
+  -- Since $-1 \in \text{centerQ}$, we have $1 \sim -1$ in the quotient group by definition of the quotient group.
+  apply QuotientGroup.eq.mpr
+  simp [h_neg_one_in_center]
 
 /-
 # Chapter 3.3
@@ -374,20 +445,29 @@ example : (QuotientGroup.mk 1 : quotientGroup) = (QuotientGroup.mk (-1)) := by s
 # Chapter 7.1
 -/
 #check Ring
+
 #check NonUnitalRing
+
 #check CommRing
 
 instance : CommRing ℤ := inferInstance
+
 instance : CommRing ℚ := inferInstance
+
 instance : CommRing ℝ := inferInstance
+
 instance : CommRing ℂ := inferInstance
+
 instance {n : ℕ} : CommRing (ZMod n) := inferInstance
 
 instance : Ring (Quaternion ℝ) := inferInstance
+
 instance : Ring (Quaternion ℚ) := inferInstance
 
 instance {X R : Type*} [NonUnitalRing R] : NonUnitalRing (X → R) := inferInstance
+
 instance {X R : Type*} [Ring R] : Ring (X → R) := inferInstance
+
 instance {X R : Type*} [CommRing R] : CommRing (X → R) := inferInstance
 
 instance : Ring (ContinuousMap ℝ ℝ) := inferInstance
@@ -396,11 +476,21 @@ instance : Ring (ContinuousMap ℝ ℝ) := inferInstance
 It is more common to formalize 2ℤ as an ideal, but we can also define it as a nonunital ring.
 -/
 abbrev evenIntegers := {i : ℤ // Even i}
+
 instance : Add evenIntegers where
   add a b := ⟨a.1 + b.1, by grind⟩
+
 lemma add_val (a b : evenIntegers) : (a + b).val = a.val + b.val := rfl
+
 instance : Zero evenIntegers where zero := ⟨0, by simp⟩
-instance : Neg evenIntegers where neg a := ⟨-a.1, by sorry⟩
+
+instance : Neg evenIntegers where neg a := ⟨-a.1, by
+  -- Since $a$ is even, we can write $a.val = 2k$ for some integer $k$. Then $-a.val = -2k$, which is also even.
+  obtain ⟨k, hk⟩ := a.property
+  use -k
+  simp [hk]⟩
+
+/- Aristotle took a wrong turn (reason code: 8). Please try again. -/
 instance : NonUnitalRing evenIntegers where
   add_assoc := by
     intro a b c
@@ -420,10 +510,8 @@ instance : NonUnitalRing evenIntegers where
   zsmul := zsmulRec
   neg_add_cancel := by sorry
 
-
 variable {R} [Ring R] in
 #synth Ring (R × R)
-
 
 /-
 # Chapter 7.3 - Ring homomorphisms and quotient rings
@@ -450,13 +538,15 @@ def evalAtZero : ℚ[X] →+* ℚ where
     simp
   map_add' x y := by
     simp
+
 example (a : Ideal ℤ) : a ⊔ a = a := by order
+
 example (a : Ideal ℤ) : a + a = a := by
   rw [Submodule.add_eq_sup]
   order
 
 -- Image of a ring homomorphism
-example {R H} [Ring R] [Ring H] (φ : R →+* H) : Subring H := sorry
+example {R H} [Ring R] [Ring H] (φ : R →+* H) : Subring H := by sorry
 
 -- Kernel of a ring homomorphism
 example {R H} [Ring R] [Ring H] (φ : R →+* H) : Ideal R := RingHom.ker φ
@@ -470,8 +560,8 @@ The notation comes from the lattice structure on ideals, which will be defined l
 -/
 
 example {R} [Ring R] : (⊤ : Ideal R).carrier = Set.univ := rfl
-example {R} [Ring R] : (⊥ : Ideal R).carrier = {0} := rfl
 
+example {R} [Ring R] : (⊥ : Ideal R).carrier = {0} := rfl
 
 /-
 Reduction modulo n, the projection from ℤ to ℤ/nℤ. In mathlib ℤ/nℤ is represented as ZMod n.
@@ -501,7 +591,6 @@ example : polyMod 2 (X ^ 2 + 1) = X ^ 2 - 1 := by
   simp [polyMod]
   grind
 
-
 def nℤ (n : ℤ) : Ideal ℤ where
   carrier := { n * i | i : ℤ }
   add_mem' ha hb := by
@@ -519,7 +608,23 @@ def nℤ (n : ℤ) : Ideal ℤ where
     use c * n
     grind [Int.zsmul_eq_mul]
 
-example : Nonempty ((ℤ ⧸ nℤ 2) ≃+* (ZMod 2)) := by sorry
+
+
+example : ((ℤ ⧸ nℤ 2) ≃+* (ZMod 2)) := by
+  have h_iso : (ℤ ⧸ Ideal.span {(2 : ℤ)}) ≃+* ZMod 2 := by
+    have : ∀ (n : ℕ), (ℤ ⧸ Ideal.span {(n : ℤ)}) ≃+* ZMod n := by
+      exact fun n ↦ Int.quotientSpanNatEquivZMod n
+    exact this 2;
+  convert h_iso
+  · ext; simp [nℤ];
+    rw [ Ideal.mem_span_singleton ];
+    exact ⟨ fun ⟨ i, hi ⟩ => ⟨ i, hi ▸ by ring ⟩, fun ⟨ i, hi ⟩ => ⟨ i, hi ▸ by ring ⟩ ⟩;
+  · ext; simp [nℤ];
+    rw [ Ideal.mem_span_singleton ];
+    exact ⟨ fun ⟨ i, hi ⟩ => ⟨ i, hi.symm ⟩, fun ⟨ i, hi ⟩ => ⟨ i, hi.symm ⟩ ⟩;
+  · ext; simp [nℤ];
+    rw [ Ideal.mem_span_singleton ];
+    exact ⟨ fun ⟨ i, hi ⟩ => ⟨ i, hi.symm ⟩, fun ⟨ i, hi ⟩ => ⟨ i, hi.symm ⟩ ⟩
 
 example {n : ℤ} : nℤ n = Ideal.span {n} := by
   ext x
@@ -593,7 +698,6 @@ example {n m : ℤ} : (nℤ n) ⊓ (nℤ m) = (nℤ (n.lcm m)) := by
   · simp [ nℤ ]
     rw [ ← h_lcm_div, dvd_iff_exists_eq_mul_right ]
     simp [ eq_comm ]
-
 
 example {R} [Ring R] (I J : Ideal R)
 : (I + J).carrier = {i + j | (i ∈ I.carrier) (j ∈ J.carrier) } := by
