@@ -1,0 +1,15 @@
+name = "playground"
+version = "0.1.0"
+defaultTargets = ["Playground"]
+
+[leanOptions]
+autoImplicit = false
+relaxedAutoImplicit = false
+
+[[require]]
+name = "cslib"
+scope = "leanprover"
+rev = "v4.29.0-rc1"
+
+[[lean_lib]]
+name = "Playground"
