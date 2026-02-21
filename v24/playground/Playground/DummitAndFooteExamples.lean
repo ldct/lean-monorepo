@@ -37,16 +37,7 @@ example : ℚˣ = { q : ℚ | q ≠ 0 } := by sorry
 example : ℝˣ = { r : ℝ | r ≠ 0 } := by sorry
 example : ℂˣ = { c : ℂ | c ≠ 0 } := by sorry
 
-
-
-#eval Nat.divisors 2
-
-attribute [grind] Nat.mem_divisors
-
-example (n : ℕ) (hn : n ∣ 2) : n ∈ Nat.divisors 2 := by
-  grind
-
-example (z : ℤ) (hz : z ∣ 1) : z = 1 ∨ z = -1 := by
+lemma zdvd_one_then (z : ℤ) (hz : z ∣ 1) : z = 1 ∨ z = -1 := by
   have : (Int.natAbs z) ∣ 1 := by
     rw [← Int.ofNat_dvd_right]
     norm_num
@@ -55,7 +46,12 @@ example (z : ℤ) (hz : z ∣ 1) : z = 1 ∨ z = -1 := by
   simp [show Nat.divisors 1 = {1} by rfl] at this
   grind
 
-example (z : ℤ) (hz : z ∣ 2) : z = 1 ∨ z = -1 ∨ z = 2 ∨ z = -2 := by
+lemma ndvd_two_then (z : ℕ) (hz : z ∣ 2) : z = 1 ∨ z = 2 := by
+  have : z ∈ Nat.divisors 2 := by grind [Nat.mem_divisors]
+  rw [show Nat.divisors 2 = {1, 2} by rfl] at this
+  grind
+
+lemma zdvd_two_then (z : ℤ) (hz : z ∣ 2) : z = 1 ∨ z = -1 ∨ z = 2 ∨ z = -2 := by
   have : (Int.natAbs z) ∣ 2 := by
     rw [← Int.ofNat_dvd_right]
     norm_num
@@ -64,6 +60,27 @@ example (z : ℤ) (hz : z ∣ 2) : z = 1 ∨ z = -1 ∨ z = 2 ∨ z = -2 := by
   simp [show Nat.divisors 2 = {1, 2} by rfl] at this
   grind
 
+
+example : { (z : ℤ) | z : ℤˣ } = { 1, -1 } := by
+  ext x
+  constructor
+  · intro h
+    simp at h
+    obtain ⟨ z, rfl ⟩ := h
+    have : (z.val : ℤ) ∣ 1 := Units.coe_dvd
+    grind [zdvd_one_then]
+
+  · intro h
+    simp at h
+    obtain rfl | rfl := h <;> simp
+    use -1
+    norm_num
+
+attribute [grind] Nat.mem_divisors
+
+example {R} [Monoid R] (r : R) : r ∣ r := by simp
+example {R} [Monoid R] (r : R) : 1 ∣ r := by simp
+example {R} [Ring R] (r : R) : r ∣ 0 := by simp
 
 /-
 D&F define ℚ+ as the set of strictly positive rationals. This doesn't really exist in Mathlib (the closest thing is ℚ≥0, which includes 0).
@@ -497,7 +514,11 @@ instance : NonUnitalRing evenIntegers where
     ext
     simp [add_val]
     grind
-  add_comm := by sorry
+  add_comm := by
+    intro a b
+    ext
+    simp [add_val]
+    grind
   mul := by sorry
   mul_assoc := by sorry
   left_distrib := by sorry
@@ -564,7 +585,7 @@ example {R} [Ring R] : (⊤ : Ideal R).carrier = Set.univ := rfl
 example {R} [Ring R] : (⊥ : Ideal R).carrier = {0} := rfl
 
 /-
-Reduction modulo n, the projection from ℤ to ℤ/nℤ. In mathlib ℤ/nℤ is represented as ZMod n.
+Reduction modulo n, the projection from ℤ to ℤ/(nℤ). In mathlib ℤ/nℤ is represented as ZMod n.
 -/
 example {n : ℕ} : ℤ →+* (ZMod n) where
   toFun := fun n => n
@@ -591,7 +612,7 @@ example : polyMod 2 (X ^ 2 + 1) = X ^ 2 - 1 := by
   simp [polyMod]
   grind
 
-def nℤ (n : ℤ) : Ideal ℤ where
+def MultiplesOf (n : ℤ) : Ideal ℤ where
   carrier := { n * i | i : ℤ }
   add_mem' ha hb := by
     simp at ha hb
@@ -608,57 +629,56 @@ def nℤ (n : ℤ) : Ideal ℤ where
     use c * n
     grind [Int.zsmul_eq_mul]
 
+def h_iso' (n : ℕ) : (ℤ ⧸ Ideal.span {(n : ℤ)}) ≃+* ZMod n := Int.quotientSpanNatEquivZMod n
 
+def h_iso : (ℤ ⧸ Ideal.span {(2 : ℤ)}) ≃+* ZMod 2 := h_iso' 2
 
-example : ((ℤ ⧸ nℤ 2) ≃+* (ZMod 2)) := by
-  have h_iso : (ℤ ⧸ Ideal.span {(2 : ℤ)}) ≃+* ZMod 2 := by
-    have : ∀ (n : ℕ), (ℤ ⧸ Ideal.span {(n : ℤ)}) ≃+* ZMod n := by
-      exact fun n ↦ Int.quotientSpanNatEquivZMod n
-    exact this 2;
+example : ((ℤ ⧸ MultiplesOf 2) ≃+* (ZMod 2)) := by
   convert h_iso
-  · ext; simp [nℤ];
-    rw [ Ideal.mem_span_singleton ];
-    exact ⟨ fun ⟨ i, hi ⟩ => ⟨ i, hi ▸ by ring ⟩, fun ⟨ i, hi ⟩ => ⟨ i, hi ▸ by ring ⟩ ⟩;
-  · ext; simp [nℤ];
+  · ext x
+    simp_all [ MultiplesOf, Ideal.mem_span_singleton, dvd_iff_exists_eq_mul_left, eq_comm, mul_comm ]
+  · ext; simp [MultiplesOf];
     rw [ Ideal.mem_span_singleton ];
     exact ⟨ fun ⟨ i, hi ⟩ => ⟨ i, hi.symm ⟩, fun ⟨ i, hi ⟩ => ⟨ i, hi.symm ⟩ ⟩;
-  · ext; simp [nℤ];
+  · ext; simp [MultiplesOf];
     rw [ Ideal.mem_span_singleton ];
     exact ⟨ fun ⟨ i, hi ⟩ => ⟨ i, hi.symm ⟩, fun ⟨ i, hi ⟩ => ⟨ i, hi.symm ⟩ ⟩
 
-example {n : ℤ} : nℤ n = Ideal.span {n} := by
+example {n : ℤ} : MultiplesOf n = Ideal.span {n} := by
   ext x
-  simp [nℤ, Ideal.mem_span_singleton, dvd_iff_exists_eq_mul_right, eq_comm]
+  simp [MultiplesOf, Ideal.mem_span_singleton, dvd_iff_exists_eq_mul_right, eq_comm]
 
 abbrev ℤ2ℤ : Ideal ℤ := Ideal.span {2}
 abbrev ℤ3ℤ : Ideal ℤ := Ideal.span {3}
 
-example : (nℤ 2) + (nℤ 3) = (nℤ 1) := by
+example : (MultiplesOf 2) + (MultiplesOf 3) = (MultiplesOf 1) := by
   simp
   ext i
   obtain ⟨x, y, hxy⟩ : ∃ x y : ℤ, 2 * x + 3 * y = 1 := by
     exists 2, -1;
   have h_mul : 2 * (x * i) + 3 * (y * i) = i := by
     linear_combination' hxy * i
-  have h_mem : i ∈ nℤ 2 ⊔ nℤ 3 := by
+  have h_mem : i ∈ MultiplesOf 2 ⊔ MultiplesOf 3 := by
     exact h_mul ▸ Submodule.add_mem_sup ( ⟨ x * i, rfl ⟩ ) ( ⟨ y * i, rfl ⟩ )
   simp [h_mem]
   exact ⟨ i, by ring ⟩
 
-example {n m : ℤ} : (nℤ n) + (nℤ m) = (nℤ (n.gcd m)) := by
+example {n m : ℤ} : (MultiplesOf n) + (MultiplesOf m) = (MultiplesOf (n.gcd m)) := by
   refine le_antisymm ?_ ?_
   · intro x hx
-    obtain ⟨a, b, hx_eq⟩ : ∃ a b : ℤ, x = n * a + m * b := by
-      obtain ⟨ a, ha, b, hb, rfl ⟩ := Submodule.mem_sup.mp hx
-      obtain ⟨ c, rfl ⟩ := ha; obtain ⟨ d, rfl ⟩ := hb; exact ⟨ c, d, by ring ⟩;
-    exact ⟨ a * n / Int.gcd n m + b * m / Int.gcd n m, by nlinarith [ Int.ediv_mul_cancel ( show ( Int.gcd n m : ℤ ) ∣ a * n from dvd_mul_of_dvd_right ( Int.gcd_dvd_left _ _ ) _ ), Int.ediv_mul_cancel ( show ( Int.gcd n m : ℤ ) ∣ b * m from dvd_mul_of_dvd_right ( Int.gcd_dvd_right _ _ ) _ ) ] ⟩;
+    obtain ⟨ _, ⟨ a, rfl⟩ , _, ⟨ b, rfl ⟩, rfl ⟩ := Submodule.mem_sup.mp hx
+    clear hx
+    use a * n / n.gcd m + b * m / n.gcd m
+    have h1 : ( n.gcd m : ℤ ) ∣ a * n := by grind [ dvd_mul_of_dvd_right, Int.gcd_dvd_left ]
+    have h2 : ( Int.gcd n m : ℤ ) ∣ b * m := by grind [ dvd_mul_of_dvd_right, Int.gcd_dvd_right ]
+    grind [ Int.ediv_mul_cancel ]
   · intro x hx ae
     -- By Bezout's identity, there exist integers $a$ and $b$ such that $an + bm = \gcd(n, m)$.
     obtain ⟨a, b, hab⟩ : ∃ a b : ℤ, a * n + b * m = Int.gcd n m := by
       exact Int.gcd_eq_gcd_ab n m ▸ ⟨ Int.gcdA n m, Int.gcdB n m, by ring ⟩;
-    -- Since $x \in nℤ (Int.gcd n m)$, we can write $x = k \cdot \gcd(n, m)$ for some integer $k$.
+    -- Since $x \in MultiplesOf (Int.gcd n m)$, we can write $x = k \cdot \gcd(n, m)$ for some integer $k$.
     obtain ⟨k, hk⟩ : ∃ k : ℤ, x = k * Int.gcd n m := by
-      -- By definition of $nℤ$, if $x \in nℤ (Int.gcd n m)$, then there exists an integer $k$ such that $x = k * Int.gcd n m$.
+      -- By definition of $MultiplesOf$, if $x \in MultiplesOf (Int.gcd n m)$, then there exists an integer $k$ such that $x = k * Int.gcd n m$.
       obtain ⟨k, hk⟩ := hx;
       use k;
       exact hk.symm.trans ( mul_comm _ _ );
@@ -670,8 +690,8 @@ example {n m : ℤ} : (nℤ n) + (nℤ m) = (nℤ (n.gcd m)) := by
       rw [ ← hab ]
       ring
 
-example {n m : ℤ} : (nℤ n) * (nℤ m) = (nℤ (n * m)) := by
-  have h_def : nℤ n = Ideal.span {n} ∧ nℤ m = Ideal.span {m} := by
+example {n m : ℤ} : (MultiplesOf n) * (MultiplesOf m) = (MultiplesOf (n * m)) := by
+  have h_def : MultiplesOf n = Ideal.span {n} ∧ MultiplesOf m = Ideal.span {m} := by
     constructor <;> ext x <;> simp [ Ideal.mem_span_singleton ]
     · exact ⟨ fun ⟨ y, hy ⟩ => ⟨ y, by linarith ⟩, fun ⟨ y, hy ⟩ => ⟨ y, by linarith ⟩ ⟩
     · exact ⟨ fun ⟨ y, hy ⟩ => ⟨ y, by linarith ⟩, fun ⟨ y, hy ⟩ => ⟨ y, by linarith ⟩ ⟩
@@ -679,23 +699,23 @@ example {n m : ℤ} : (nℤ n) * (nℤ m) = (nℤ (n * m)) := by
   have h_prod : Ideal.span {n} * Ideal.span {m} = Ideal.span {n * m} := Ideal.span_singleton_mul_span_singleton n m
   convert h_prod using 1
   · rw [ h_def.1, h_def.2 ]
-  · have h_def : nℤ (n * m) = Ideal.span {n * m} := by
-      have h_gen : ∀ k : ℤ, nℤ k = Ideal.span {k} := by
-        intro k; ext; simp [nℤ];
+  · have h_def : MultiplesOf (n * m) = Ideal.span {n * m} := by
+      have h_gen : ∀ k : ℤ, MultiplesOf k = Ideal.span {k} := by
+        intro k; ext; simp [MultiplesOf];
         simp [ Ideal.mem_span_singleton ]
         exact ⟨ fun ⟨ i, hi ⟩ => ⟨ i, hi.symm ⟩, fun ⟨ i, hi ⟩ => ⟨ i, hi.symm ⟩ ⟩
       exact h_gen (n * m);
     exact h_def
 
-example {n m : ℤ} : (nℤ n) ⊓ (nℤ m) = (nℤ (n.lcm m)) := by
+example {n m : ℤ} : (MultiplesOf n) ⊓ (MultiplesOf m) = (MultiplesOf (n.lcm m)) := by
   ext x
-  have h_div : x ∈ nℤ n ⊓ nℤ m ↔ n ∣ x ∧ m ∣ x := by
+  have h_div : x ∈ MultiplesOf n ⊓ MultiplesOf m ↔ n ∣ x ∧ m ∣ x := by
     exact ⟨ fun h => ⟨ h.1.choose_spec.symm ▸ dvd_mul_right _ _, h.2.choose_spec.symm ▸ dvd_mul_right _ _ ⟩, fun h => ⟨ h.1.imp fun i hi => by linarith, h.2.imp fun i hi => by linarith ⟩ ⟩;
   have h_lcm_div : (n.lcm m : ℤ) ∣ x ↔ n ∣ x ∧ m ∣ x := by
     exact ⟨ fun h => ⟨ Int.dvd_trans ( Int.dvd_lcm_left _ _ ) h, Int.dvd_trans ( Int.dvd_lcm_right _ _ ) h ⟩, fun h => Int.coe_lcm_dvd h.1 h.2 ⟩;
   convert h_lcm_div using 1;
   · convert h_div using 1;
-  · simp [ nℤ ]
+  · simp [ MultiplesOf ]
     rw [ ← h_lcm_div, dvd_iff_exists_eq_mul_right ]
     simp [ eq_comm ]
 

@@ -10,33 +10,148 @@ import Playground.Geometry.FrobeniusGroup
 
 set_option linter.style.longLine false
 
+/-
+inv1: ab = ba (commutativity)
+inv3: a² = b² (same square)
+inv5: a³ = b³ (same cube)
+inv6: a⁴ = b⁴ (same fourth power)
+inv13: (ab)² = e (product is an involution or identity)
+invA: ab = ba AND a² = e (commuting pairs where a is an involution or identity)
+invB: (ab)⁵ = e (product has order dividing 5)
+invC: a⁷ = b⁷ (same seventh power)
+-/
+
+def inv1 (G) [Group G] [Fintype G] [DecidableEq G] : ℕ :=
+Finset.card { (a, b) : G × G | a * b = b * a }
+def inv3 (G) [Group G] [Fintype G] [DecidableEq G] : ℕ :=
+Finset.card { (a, b) : G × G | a^2 = b^2 }
+def inv5 (G) [Group G] [Fintype G] [DecidableEq G] : ℕ :=
+Finset.card { (a, b) : G × G | a^3 = b^3 }
+def inv6 (G) [Group G] [Fintype G] [DecidableEq G] : ℕ :=
+Finset.card { (a, b) : G × G | a^4 = b^4 }
+def inv13 (G) [Group G] [Fintype G] [DecidableEq G] : ℕ :=
+Finset.card { (a, b) : G × G | (a * b)^2 = 1 }
+def invA (G) [Group G] [Fintype G] [DecidableEq G] : ℕ :=
+Finset.card { (a, b) : G × G | a * b = b * a ∧ a^2 = 1 }
+def invB (G) [Group G] [Fintype G] [DecidableEq G] : ℕ :=
+Finset.card { (a, b) : G × G | (a * b)^5 = 1 }
+def invC (G) [Group G] [Fintype G] [DecidableEq G] : ℕ :=
+Finset.card { (a, b) : G × G | a^7 = b^7 }
+
+def Group.signature (G) [Group G] [Fintype G] [DecidableEq G] := ((inv1 G, inv3 G, inv5 G), (inv6 G, inv13 G, invA G), (invB G, invC G))
+
+/-
+# Groups of order 1
+-/
 abbrev Gap_1_1 := Multiplicative (ZMod 1)
+
+/-
+# Groups of order 2
+-/
 abbrev Gap_2_1 := Multiplicative (ZMod 2)
+
+/-
+# Groups of order 3
+-/
 abbrev Gap_3_1 := Multiplicative (ZMod 3)
+
+/-
+# Groups of order 4
+-/
 abbrev Gap_4_1 := Multiplicative (ZMod 4)
 abbrev Gap_4_2 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2)
+
+def sigs := [Group.signature Gap_4_1]
+
+
+#eval [Group.signature Gap_4_1, Group.signature Gap_4_2].Nodup
+
+/-
+# Groups of order 5
+-/
 abbrev Gap_5_1 := Multiplicative (ZMod 5)
+
+/-
+# Groups of order 6
+-/
 abbrev Gap_6_2 := Multiplicative (ZMod 6)
 abbrev Gap_6_1 := Equiv.Perm (Fin 3)
+
+#eval Group.signature Gap_6_2
+#eval Group.signature Gap_6_1
+
+/-
+# Groups of order 7
+-/
 abbrev Gap_7_1 := Multiplicative (ZMod 7)
+
+/-
+# Groups of order 8
+-/
 abbrev Gap_8_1 := Multiplicative (ZMod 8)
 abbrev Gap_8_3 := DihedralGroup 4
 abbrev Gap_8_4 := QuaternionGroup 2
 abbrev Gap_8_5 := Multiplicative (ZMod 2) × Multiplicative (ZMod 2) × Multiplicative (ZMod 2)
 abbrev Gap_8_2 := Multiplicative (ZMod 2) × Multiplicative (ZMod 4)
+
+#eval Group.signature Gap_8_1
+#eval Group.signature Gap_8_3
+#eval Group.signature Gap_8_4
+#eval Group.signature Gap_8_5
+#eval Group.signature Gap_8_2
+
+/-
+# Groups of order 9
+-/
+
 abbrev Gap_9_1 := Multiplicative (ZMod 9)
 abbrev Gap_9_2 := Multiplicative (ZMod 3) × Multiplicative (ZMod 3)
+
+#eval Group.signature Gap_9_1
+#eval Group.signature Gap_9_2
+
+/-
+# Groups of order 10
+-/
 abbrev Gap_10_2 := Multiplicative (ZMod 10)
 abbrev Gap_10_1 := DihedralGroup 5
+
+#eval Group.signature Gap_10_2
+#eval Group.signature Gap_10_1
+
+/-
+# Groups of order 11
+-/
 abbrev Gap_11_1 := Multiplicative (ZMod 11)
+
+/-
+# Groups of order 12
+-/
 abbrev Gap_12_2 := Multiplicative (ZMod 12)
 abbrev Gap_12_3 := AlternatingGroup 4
 abbrev Gap_12_4 := DihedralGroup 6
 abbrev Gap_12_1 := DicyclicGroup 3
 abbrev Gap_12_5 := Multiplicative (ZMod 2) × Multiplicative (ZMod 6)
+
+#eval Group.signature Gap_12_1
+#eval Group.signature Gap_12_2
+#eval Group.signature Gap_12_3
+#eval Group.signature Gap_12_4
+#eval Group.signature Gap_12_5
+
+/-
+# Groups of order 13
+-/
 abbrev Gap_13_1 := Multiplicative (ZMod 13)
+
+/-
+# Groups of order 14
+-/
 abbrev Gap_14_2 := Multiplicative (ZMod 14)
 abbrev Gap_14_1 := DihedralGroup 7
+
+
+
 abbrev Gap_15_1 := Multiplicative (ZMod 15)
 abbrev Gap_16_1 := Multiplicative (ZMod 16)
 abbrev Gap_16_7 := DihedralGroup 8

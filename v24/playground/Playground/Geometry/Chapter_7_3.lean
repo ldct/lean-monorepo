@@ -186,6 +186,10 @@ instance : Ring (Fibre φ) := Ring.ofMinimalAxioms
     exact add_mul a b c
   )
 
+/-
+# Ideals
+-/
+
 #check Ideal
 #check Ideal.IsTwoSided
 
@@ -222,7 +226,6 @@ The notation comes from the lattice structure on ideals, which will be defined l
 example {R} [Ring R] : (⊤ : Ideal R).carrier = Set.univ := rfl
 example {R} [Ring R] : (⊥ : Ideal R).carrier = {0} := rfl
 
-
 example {R} [Ring R] : Ideal R where
   carrier := ⊤
   add_mem' ha hb := by simp
@@ -238,7 +241,7 @@ example {R} [Ring R] : Ideal R where
 /-
 # Example 2, the ideal nℤ ⊆ ℤ
 -/
-def nℤ (n : ℤ) : Ideal ℤ where
+def Multiples (n : ℤ) : Ideal ℤ where
   carrier := { n * i | i : ℤ }
   add_mem' ha hb := by
     simp at ha hb
@@ -255,17 +258,17 @@ def nℤ (n : ℤ) : Ideal ℤ where
     use c * n
     grind [Int.zsmul_eq_mul]
 
-lemma nℤ_1_eq_top : nℤ 1 = ⊤ := by
+lemma multiples_1_eq_top : Multiples 1 = ⊤ := by
   ext i
-  simp [nℤ]
+  simp [Multiples]
 
-example : nℤ 0 = ⊥ := by
+example : Multiples 0 = ⊥ := by
   ext i
-  simp [nℤ]
+  simp [Multiples]
 
-example : nℤ 2 = nℤ (-2) := by
+example : Multiples 2 = Multiples (-2) := by
   ext i
-  simp [nℤ]
+  simp [Multiples]
   constructor
   · rintro ⟨ j, rfl ⟩
     use -j
@@ -277,11 +280,11 @@ example : nℤ 2 = nℤ (-2) := by
 #synth CompleteLattice (Ideal ℤ)
 #synth SemilatticeSup (Submodule (Ideal ℤ) (Ideal ℤ))
 
-example : (nℤ 2) + (nℤ 3) = (nℤ 2) ⊔ (nℤ 3) := by rw [Submodule.add_eq_sup]
+example : (Multiples 2) + (Multiples 3) = (Multiples 2) ⊔ (Multiples 3) := by rw [Submodule.add_eq_sup]
 /-
 Sum of ideals, via Mathlib's definition
 -/
-example : (nℤ 2) + (nℤ 3) = (nℤ 1) := by
+example : (Multiples 2) + (Multiples 3) = (Multiples 1) := by
   simp
   ext i
   -- By Bezout's identity, since gcd(2, 3) = 1, there exist integers x and y such that 2x + 3y = 1.
@@ -290,7 +293,7 @@ example : (nℤ 2) + (nℤ 3) = (nℤ 1) := by
   have h_mul : 2 * (x * i) + 3 * (y * i) = i := by
     linear_combination' hxy * i
   -- Since $2 * (x * i) + 3 * (y * i) = i$, we have $i \in nℤ 2 ⊔ nℤ 3$.
-  have h_mem : i ∈ nℤ 2 ⊔ nℤ 3 := by
+  have h_mem : i ∈ Multiples 2 ⊔ Multiples 3 := by
     exact h_mul ▸ Submodule.add_mem_sup ( ⟨ x * i, rfl ⟩ ) ( ⟨ y * i, rfl ⟩ )
   exact iff_of_true h_mem ( by exact ⟨ i, by ring ⟩ )
 
@@ -334,31 +337,50 @@ instance : Add (Ideal ℤ) where
       grind
   }
 
-lemma add_mem_iff (I J : Ideal ℤ)
-: (I + J).carrier = { i + j | (i ∈ I.carrier) (j ∈ J.carrier) } := rfl
+lemma mem_ideal (I : Ideal ℤ) (x : ℤ)
+: x ∈ I ↔ x ∈ I.carrier := by rfl
 
 lemma ideal_carrier_ext (I J : Ideal ℤ)
 : I.carrier = J.carrier ↔ I = J := by simp
 
-example : (nℤ 2) + (nℤ 3) = (nℤ 1) := by
-  rw [← ideal_carrier_ext, add_mem_iff]
+lemma add_carrier_eq (I J : Ideal ℤ)
+: (I + J).carrier = { i + j | (i ∈ I.carrier) (j ∈ J.carrier) } := rfl
+
+lemma add_mem_iff' (I J : Ideal ℤ) (x : ℤ) (hx : x ∈ (I + J))
+: ∃ i j, i ∈ I.carrier ∧ j ∈ J.carrier ∧ i + j = x := by
   simp
+  rw [mem_ideal, add_carrier_eq] at hx
+  simp at hx
+  grind
+
+lemma add_mem_iff (I J : Ideal ℤ) (x : ℤ)
+: x ∈ (I + J) ↔ ∃ i j, i ∈ I.carrier ∧ j ∈ J.carrier ∧ i + j = x := by
+  constructor
+  · intro h
+    obtain ⟨ i, j, hi, hj, rfl ⟩ := add_mem_iff' I J x h
+    grind
+  intro h
+  obtain ⟨ i, j, hi, hj, _ ⟩ := h
+  use i, hi, j, hj
+
+
+example : (Multiples 2) + (Multiples 3) = (Multiples 1) := by
+  simp [multiples_1_eq_top]
   ext x
   constructor
-  · simp [nℤ_1_eq_top]
+  · intro h
+    exact trivial
   intro h1
-  simp
-  clear h1
-
   have := Int.gcd_eq_gcd_ab 2 3
   norm_num at this
   have := congr(x * $this)
   norm_num at this
   symm at this
   rw [mul_add] at this
+  rw [add_mem_iff]
 
   use 2 * x * Int.gcdA 2 3
-  simp [nℤ]
+  simp [Multiples]
   have l : ∃ i, 2 * i = 2 * x * Int.gcdA 2 3 := by
     use x * Int.gcdA 2 3
     grind
@@ -374,7 +396,7 @@ example : (nℤ 2) + (nℤ 3) = (nℤ 1) := by
 
 #synth SupSet (Ideal ℤ)
 
-#check (nℤ 2) + (nℤ 2)
+#check (Multiples 2) + (Multiples 2)
 
 -- example : (ℤ ⧸ nℤ 2) ≃+* (ZMod 2) where
 --   toFun := sorry
@@ -385,7 +407,7 @@ example : (nℤ 2) + (nℤ 3) = (nℤ 1) := by
 --   map_mul' := sorry
 
 #synth Mul (Ideal ℤ)
-#synth Ring (ℤ ⧸ nℤ 2)
+#synth Ring (ℤ ⧸ Multiples 2)
 
 #synth Ring (ℤ × ℤ )
 
