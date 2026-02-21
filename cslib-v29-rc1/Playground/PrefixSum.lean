@@ -33,23 +33,44 @@ lemma prefixSum_length (xs : List ℕ) : (prefixSum xs).length = xs.length + 1 :
       (ys.foldl (fun acc x => acc ++ [acc.getLast! + x]) init).length = init.length + ys.length := by
     intro ys
     induction ys with
-    | nil => intro init; simp
+    | nil => grind
     | cons y ys ih =>
-      intro init
-      simp only [List.foldl_cons]
-      rw [ih]
-      simp [List.length_append]
-      omega
+      grind
   show (xs.foldl (fun acc x => acc ++ [acc.getLast! + x]) [0]).length = xs.length + 1
-  rw [h]; simp; omega
+  grind
+
+lemma prefixSum_eq_scanl (xs : List ℕ) :
+    prefixSum xs = List.scanl (· + ·) 0 xs := by
+  simp only [prefixSum]
+  have key : ∀ (ys : List ℕ) (s : ℕ) (pre : List ℕ),
+      ys.foldl (fun acc x => acc ++ [acc.getLast! + x]) (pre ++ [s]) =
+      pre ++ List.scanl (· + ·) s ys := by
+    intro ys
+    induction ys with
+    | nil => intro s pre; simp
+    | cons y ys ih =>
+      intro s pre
+      simp only [List.foldl_cons, List.scanl_cons]
+      have hlast : (pre ++ [s]).getLast! = s := by simp
+      rw [hlast, ih (s + y) (pre ++ [s])]
+      simp [List.append_assoc]
+  have := key xs 0 []
+  simpa using this
 
 lemma prefixSum_getElem (xs : List ℕ) (i : ℕ) (hi : i ≤ xs.length) :
     (prefixSum xs)[i]! = (xs.take i).sum := by
-  sorry
+  rw [prefixSum_eq_scanl, getElem!_pos _ _ (by rw [List.length_scanl]; omega),
+      List.getElem_scanl, ← List.sum_eq_foldl]
 
 lemma list_sum_take_sub (l : List ℕ) (a b : ℕ) (hab : a ≤ b) :
     (l.take b).sum - (l.take a).sum = (l.drop a |>.take (b - a)).sum := by
-  sorry
+  have split : l.take b = l.take a ++ (l.drop a).take (b - a) := by
+    conv_lhs => rw [← List.take_append_drop a (l.take b)]
+    congr 1
+    · rw [List.take_take, min_eq_left hab]
+    · rw [List.drop_take]
+  rw [split, List.sum_append]
+  omega
 
 theorem rangeSum_correct (xs : List ℕ) (a b : ℕ) (hab : a ≤ b) (hb : b ≤ xs.length) :
     ⟪rangeSum a b (prefixSum xs)⟫ = rangeSumNaive a b xs := by
