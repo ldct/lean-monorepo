@@ -84,18 +84,13 @@ lemma rangeMin_overlap (xs : List ℕ) (l len k : ℕ)
     (hk : 2 ^ k ≤ len) (hlen : len < 2 ^ (k + 1)) :
     min (rangeMin xs l (2 ^ k)) (rangeMin xs (l + len - 2 ^ k) (2 ^ k))
     = rangeMin xs l len := by
-  set s := len - 2 ^ k with hs_def
-  have hlen_eq : s + 2 ^ k = len := by omega
-  -- Decompose the left range: 2^k = s + (2^k - s)
-  have hleft : rangeMin xs l (2 ^ k) = min (rangeMin xs l s) (rangeMin xs (l + s) (2 ^ k - s)) := by
-    rw [show 2 ^ k = s + (2 ^ k - s) by omega]
-    grind [rangeMin_split]
-  -- Decompose the right range: 2^k = (2^k - s) + s
-  have hright : rangeMin xs (l + s) (2 ^ k) =
+  set s := len - 2 ^ k
+  have : s + 2 ^ k = len := by omega
+  have : rangeMin xs l (2 ^ k) = min (rangeMin xs l s) (rangeMin xs (l + s) (2 ^ k - s)) := by
+    rw [show 2 ^ k = s + (2 ^ k - s) by omega]; grind [rangeMin_split]
+  have : rangeMin xs (l + s) (2 ^ k) =
       min (rangeMin xs (l + s) (2 ^ k - s)) (rangeMin xs (l + 2 ^ k) s) := by
-    rw [show 2 ^ k = (2 ^ k - s) + s by omega]
-    rw [rangeMin_split]
-    grind
+    rw [show 2 ^ k = (2 ^ k - s) + s by omega]; rw [rangeMin_split]; grind
   grind [rangeMin_split]
 
 @[grind =] private lemma rangeMin_one (xs : List ℕ) (j : ℕ) (hj : j < _) :
@@ -104,24 +99,21 @@ lemma rangeMin_overlap (xs : List ℕ) (l len k : ℕ)
 
 @[grind =] private lemma buildTable_eq_make (a : Array ℕ) (ha : 0 < a.size) :
     (SparseTable.make a).table = buildTable a (Nat.log 2 a.size) := by
-  simp only [SparseTable.make, beq_iff_eq]; split <;> grind
+  simp [SparseTable.make, Nat.ne_of_gt ha]
 
 @[grind =] private lemma buildTable_row_size (a : Array ℕ) (m : ℕ) (hm : 2 ^ m ≤ a.size)
     (i : ℕ) (hi : i ≤ m) :
     ((buildTable a m)[i]'(by grind)).size = a.size - 2 ^ i + 1 := by
   induction m with
   | zero =>
-    have hi0 : i = 0 := by omega
-    subst hi0
+    obtain rfl : i = 0 := by omega
     simp [buildTable]; omega
   | succ m ih =>
     by_cases him : i ≤ m
     · have hlt : i < (buildTable a m).size := by grind
-      simp only [buildTable]
-      rw [Array.getElem_push_lt hlt]
+      simp only [buildTable]; rw [Array.getElem_push_lt hlt]
       exact ih (le_trans (Nat.pow_le_pow_right (by omega) (Nat.le_succ m)) hm) him
-    · have him_eq : i = m + 1 := by omega
-      subst him_eq
+    · obtain rfl : i = m + 1 := by omega
       grind [buildTable, Array.size_range]
 
 private theorem buildTable_invariant (a : Array ℕ) (m : ℕ)
@@ -131,20 +123,14 @@ private theorem buildTable_invariant (a : Array ℕ) (m : ℕ)
       rangeMin a.toList j (2 ^ i) := by
   induction m generalizing i j with
   | zero =>
-    have hi0 : i = 0 := by omega
-    subst hi0
+    obtain rfl : i = 0 := by omega
     grind [buildTable]
   | succ m ih =>
-    have hm' : 2 ^ m ≤ a.size :=
-      le_trans (Nat.pow_le_pow_right (by omega) (Nat.le_succ m)) hm
+    have : 2 ^ m ≤ a.size := le_trans (Nat.pow_le_pow_right (by omega) (Nat.le_succ m)) hm
     by_cases him : i ≤ m
     · grind [buildTable, Array.getElem_push_lt]
-    · -- New row (i = m + 1)
-      have him_eq : i = m + 1 := by omega
-      subst him_eq
-      -- Prepare bounds
-      have pow_eq : 2 ^ (m + 1) = 2 ^ m + 2 ^ m := by grind
-      conv_rhs => rw [pow_eq]
+    · obtain rfl : i = m + 1 := by omega
+      conv_rhs => rw [show 2 ^ (m + 1) = 2 ^ m + 2 ^ m by grind]
       rw [rangeMin_split]
       simp [buildTable, Array.getElem_push, buildTable_size,
             Array.getElem_map, Array.getElem_range]
@@ -152,13 +138,11 @@ private theorem buildTable_invariant (a : Array ℕ) (m : ℕ)
 
 /-- Each table entry stores the range minimum for a power-of-2 length -/
 theorem table_invariant (a : Array ℕ) (ha : 0 < a.size) (i j : ℕ)
-    (hi : i < _)
-    (hj : j < _)
-: (((SparseTable.make a).table[i])[j]) = rangeMin a.toList j (2 ^ i) := by
+    (hi : i < _) (hj : j < _) :
+    (((SparseTable.make a).table[i])[j]) = rangeMin a.toList j (2 ^ i) := by
   have hm : 2 ^ Nat.log 2 a.size ≤ a.size := by grind [Nat.pow_log_le_self]
   have : 2 ^ i ≤ a.size := by
-    grw [← hm]
-    apply Nat.pow_le_pow_right <;> grind [buildTable_size]
+    grw [← hm]; apply Nat.pow_le_pow_right <;> grind
   grind [buildTable_row_size, buildTable_size, buildTable_invariant]
 
 private lemma rmqNaive_eq_rangeMin (vals : Array ℕ) (l r : ℕ) :
@@ -169,26 +153,17 @@ theorem correct (vals : Array ℕ) (l r : ℕ) (h : l ≤ r) (hr : r < vals.size
 : (SparseTable.make vals).query l r = rmqNaive vals l r := by
   rw [rmqNaive_eq_rangeMin]
   have ha : 0 < vals.size := by omega
-  set len := r - l + 1 with hlen_def
-  set k := Nat.log 2 len with hk_def
-  have hlen_pos : 0 < len := by omega
-  have hlen_le : len ≤ vals.size := by omega
+  set len := r - l + 1; set k := Nat.log 2 len
   have hpow_le : 2 ^ k ≤ len := by grind [Nat.pow_log_le_self]
   have hpow_lt : len < 2 ^ (k + 1) := by grind [Nat.lt_pow_succ_log_self]
-  have hk_le : k ≤ Nat.log 2 vals.size := Nat.log_mono_right hlen_le
-  have htable_sz : (SparseTable.make vals).table.size = Nat.log 2 vals.size + 1 := by
-    rw [buildTable_eq_make vals ha, buildTable_size]
-  have hk_lt : k < (SparseTable.make vals).table.size := by omega
-  have hrow_sz : ((SparseTable.make vals).table[k]'hk_lt).size = vals.size - 2 ^ k + 1 := by
+  have hk_le : k ≤ Nat.log 2 vals.size := Nat.log_mono_right (by omega)
+  have hk_lt : k < (SparseTable.make vals).table.size := by
+    rw [buildTable_eq_make vals ha, buildTable_size]; omega
+  have : ((SparseTable.make vals).table[k]'hk_lt).size = vals.size - 2 ^ k + 1 := by
     simp only [buildTable_eq_make vals ha]
     exact buildTable_row_size vals _ (by grind [Nat.pow_log_le_self]) k hk_le
-  have hl_lt : l < ((SparseTable.make vals).table[k]'hk_lt).size := by rw [hrow_sz]; omega
-  have hr1_lt : r + 1 - 2 ^ k < ((SparseTable.make vals).table[k]'hk_lt).size := by
-    grind
-  have inv1 :=table_invariant vals ha k l hk_lt hl_lt
-  have inv2 := table_invariant vals ha k (r + 1 - 2 ^ k) hk_lt hr1_lt
   rw [← rangeMin_overlap vals.toList l len k hpow_le hpow_lt]
-  grind [SparseTable.query, WithTop.coe_min]
+  grind [SparseTable.query, WithTop.coe_min, table_invariant]
 
 /-
 # Quickcheck of SparseTable.query
