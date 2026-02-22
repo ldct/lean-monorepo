@@ -1,3 +1,4 @@
+import Cslib.Algorithms.Lean.TimeM
 import Mathlib.Data.List.MinMax
 import Mathlib.Data.Nat.Log
 import Mathlib.Order.WithBot
@@ -23,22 +24,27 @@ structure SparseTable where
   table : Array (Array ℕ)
 
 /-- Recursive version of table construction -/
-private def buildTable (a : Array ℕ) : ℕ → Array (Array ℕ)
-  | 0 => #[a]
-  | m + 1 =>
-    let st := buildTable a m
-    st.push ((Array.range (a.size - 2 ^ (m + 1) + 1)).map fun j =>
-      min st[m]![j]! st[m]![j + 2 ^ m]!)
+private def buildTable (a : Array ℕ) : ℕ → TimeM (Array (Array ℕ))
+  | 0 => do return #[a]
+  | m + 1 => do
+    let st ← buildTable a m
+    let baseArray := ((Array.range (a.size - 2 ^ (m + 1) + 1)))
+    ✓[baseArray.size] let newRow := baseArray.map fun j =>
+      min st[m]![j]! st[m]![j + 2 ^ m]!
+    return st.push newRow
 
-@[grind =] private lemma buildTable_size (a : Array ℕ) : ∀ m, (buildTable a m).size = m + 1
+@[grind =] private lemma buildTable_size (a : Array ℕ) : ∀ m, ⟪buildTable a m⟫.size = m + 1
   | 0 => by simp [buildTable]
   | m + 1 => by simp [buildTable, buildTable_size a m]
 
-def SparseTable.make (a : Array ℕ) : SparseTable := {
-  table :=
-    if a.size == 0 then #[]
-    else buildTable a (Nat.log 2 a.size)
-}
+def SparseTable.make (a : Array ℕ) : TimeM SparseTable := do
+  if a.size == 0 then
+    return { table := #[] }
+  else
+    let t ← buildTable a (Nat.log 2 a.size)
+    return { table := t }
+
+#eval (SparseTable.make #[3, 1, 4, 1, 5, 9, 2, 6]).time
 
 def SparseTable.query (st : SparseTable) (l r : ℕ) : ℕ :=
   let len := r - l + 1
@@ -53,16 +59,16 @@ Expected values obtained via: echo "3 1 4 1 5 9 2 6" | python3 sparsetable.py
 -/
 
 /--info: true-/ #guard_msgs in
-#eval (SparseTable.make #[3, 1, 4, 1, 5, 9, 2, 6]).table == #[#[3, 1, 4, 1, 5, 9, 2, 6], #[1, 1, 1, 1, 5, 2, 2], #[1, 1, 1, 1, 2], #[1]]
+#eval ⟪SparseTable.make #[3, 1, 4, 1, 5, 9, 2, 6]⟫.table == #[#[3, 1, 4, 1, 5, 9, 2, 6], #[1, 1, 1, 1, 5, 2, 2], #[1, 1, 1, 1, 2], #[1]]
 
 /--info: true-/ #guard_msgs in
-#eval (SparseTable.make #[5]).table == #[#[5]]
+#eval ⟪SparseTable.make #[5]⟫.table == #[#[5]]
 
 /--info: true-/ #guard_msgs in
-#eval (SparseTable.make #[10, 20]).table == #[#[10, 20], #[10]]
+#eval ⟪SparseTable.make #[10, 20]⟫.table == #[#[10, 20], #[10]]
 
 /--info: true-/ #guard_msgs in
-#eval (SparseTable.make #[7, 2, 9, 4, 3, 1, 8]).table == #[#[7, 2, 9, 4, 3, 1, 8], #[2, 2, 4, 3, 1, 1], #[2, 2, 1, 1]]
+#eval ⟪SparseTable.make #[7, 2, 9, 4, 3, 1, 8]⟫.table == #[#[7, 2, 9, 4, 3, 1, 8], #[2, 2, 4, 3, 1, 1], #[2, 2, 1, 1]]
 
 /-
 # Verification of SparseTable.query
@@ -98,27 +104,27 @@ lemma rangeMin_overlap (xs : List ℕ) (l len k : ℕ)
   grind [List.drop_eq_getElem_cons, List.take_add_one, List.minimum_singleton, rangeMin]
 
 @[grind =] private lemma buildTable_eq_make (a : Array ℕ) (ha : 0 < a.size) :
-    (SparseTable.make a).table = buildTable a (Nat.log 2 a.size) := by
+    ⟪SparseTable.make a⟫.table = ⟪buildTable a (Nat.log 2 a.size)⟫ := by
   simp [SparseTable.make, Nat.ne_of_gt ha]
 
 @[grind =] private lemma buildTable_row_size (a : Array ℕ) (m : ℕ) (hm : 2 ^ m ≤ a.size)
     (i : ℕ) (hi : i ≤ m) :
-    ((buildTable a m)[i]'(by grind)).size = a.size - 2 ^ i + 1 := by
+    (⟪buildTable a m⟫[i]'(by grind)).size = a.size - 2 ^ i + 1 := by
   induction m with
   | zero =>
     obtain rfl : i = 0 := by omega
     simp [buildTable]; omega
   | succ m ih =>
     by_cases him : i ≤ m
-    · have hlt : i < (buildTable a m).size := by grind
-      simp only [buildTable]; rw [Array.getElem_push_lt hlt]
+    · have hlt : i < ⟪buildTable a m⟫.size := by grind
+      simp only [buildTable, ret_bind, ret_pure]; rw [Array.getElem_push_lt hlt]
       exact ih (le_trans (Nat.pow_le_pow_right (by omega) (Nat.le_succ m)) hm) him
     · obtain rfl : i = m + 1 := by omega
       grind [buildTable, Array.size_range]
 
 private theorem buildTable_invariant (a : Array ℕ) (m : ℕ)
     (hm : 2 ^ m ≤ a.size) (i j : ℕ) (hi : i ≤ m) (hj : j + 2 ^ i ≤ a.size) :
-    (((buildTable a m)[i]'(by rw [buildTable_size]; omega))[j]'(by
+    ((⟪buildTable a m⟫[i]'(by rw [buildTable_size]; omega))[j]'(by
       rw [buildTable_row_size a m hm i hi]; omega)) =
       rangeMin a.toList j (2 ^ i) := by
   induction m generalizing i j with
@@ -139,7 +145,7 @@ private theorem buildTable_invariant (a : Array ℕ) (m : ℕ)
 /-- Each table entry stores the range minimum for a power-of-2 length -/
 theorem table_invariant (a : Array ℕ) (ha : 0 < a.size) (i j : ℕ)
     (hi : i < _) (hj : j < _) :
-    (((SparseTable.make a).table[i])[j]) = rangeMin a.toList j (2 ^ i) := by
+    ((⟪SparseTable.make a⟫.table[i])[j]) = rangeMin a.toList j (2 ^ i) := by
   have hm : 2 ^ Nat.log 2 a.size ≤ a.size := by grind [Nat.pow_log_le_self]
   have : 2 ^ i ≤ a.size := by
     grw [← hm]; apply Nat.pow_le_pow_right <;> grind
@@ -150,16 +156,16 @@ private lemma rmqNaive_eq_rangeMin (vals : Array ℕ) (l r : ℕ) :
   grind [rmqNaive, rangeMin, Array.toList_extract]
 
 theorem correct (vals : Array ℕ) (l r : ℕ) (h : l ≤ r) (hr : r < vals.size)
-: (SparseTable.make vals).query l r = rmqNaive vals l r := by
+: ⟪SparseTable.make vals⟫.query l r = rmqNaive vals l r := by
   rw [rmqNaive_eq_rangeMin]
   have ha : 0 < vals.size := by omega
   set len := r - l + 1; set k := Nat.log 2 len
   have hpow_le : 2 ^ k ≤ len := by grind [Nat.pow_log_le_self]
   have hpow_lt : len < 2 ^ (k + 1) := by grind [Nat.lt_pow_succ_log_self]
   have hk_le : k ≤ Nat.log 2 vals.size := Nat.log_mono_right (by omega)
-  have hk_lt : k < (SparseTable.make vals).table.size := by
+  have hk_lt : k < ⟪SparseTable.make vals⟫.table.size := by
     rw [buildTable_eq_make vals ha, buildTable_size]; omega
-  have : ((SparseTable.make vals).table[k]'hk_lt).size = vals.size - 2 ^ k + 1 := by
+  have : (⟪SparseTable.make vals⟫.table[k]'hk_lt).size = vals.size - 2 ^ k + 1 := by
     simp only [buildTable_eq_make vals ha]
     exact buildTable_row_size vals _ (by grind [Nat.pow_log_le_self]) k hk_le
   rw [← rangeMin_overlap vals.toList l len k hpow_le hpow_lt]
@@ -177,7 +183,7 @@ def randArray (size : ℕ) : IO (Array ℕ) := do
   return arr
 
 def SparseTable.verifyOne (vals : Array ℕ) : Bool :=
-  let st := SparseTable.make vals
+  let st := ⟪SparseTable.make vals⟫
   Id.run do
     let mut ok := true
     for l in [:vals.size] do
