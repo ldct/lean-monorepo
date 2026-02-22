@@ -22,18 +22,22 @@ Define a structure SparseTable which preprocesses an array of integers for fast 
 structure SparseTable where
   table : Array (Array ℕ)
 
+/-- Recursive version of table construction -/
+private def buildTable (a : Array ℕ) : ℕ → Array (Array ℕ)
+  | 0 => #[a]
+  | m + 1 =>
+    let st := buildTable a m
+    st.push ((Array.range (a.size - 2 ^ (m + 1) + 1)).map fun j =>
+      min st[m]![j]! st[m]![j + 2 ^ m]!)
+
+@[grind =] private lemma buildTable_size (a : Array ℕ) : ∀ m, (buildTable a m).size = m + 1
+  | 0 => by simp [buildTable]
+  | m + 1 => by simp [buildTable, buildTable_size a m]
+
 def SparseTable.make (a : Array ℕ) : SparseTable := {
   table :=
     if a.size == 0 then #[]
-    else
-      let n := a.size
-      let k := Nat.log 2 n + 1
-      (List.range (k - 1)).foldl (fun st i =>
-        let half := 2 ^ i
-        let rowLen := n - 2 ^ (i+1) + 1
-        let prev := st[i]!
-        st.push ((Array.range rowLen).map fun j => min prev[j]! prev[j + half]!)
-      ) #[a]
+    else buildTable a (Nat.log 2 a.size)
 }
 
 def SparseTable.query (st : SparseTable) (l r : ℕ) : ℕ :=
@@ -94,40 +98,13 @@ lemma rangeMin_overlap (xs : List ℕ) (l len k : ℕ)
     grind
   grind [rangeMin_split]
 
-/-- Recursive version of table construction, equivalent to foldl -/
-private def buildTable (a : Array ℕ) : ℕ → Array (Array ℕ)
-  | 0 => #[a]
-  | m + 1 =>
-    let st := buildTable a m
-    st.push ((Array.range (a.size - 2 ^ (m + 1) + 1)).map fun j =>
-      min st[m]![j]! st[m]![j + 2 ^ m]!)
-
-@[grind =] private lemma buildTable_size (a : Array ℕ) : ∀ m, (buildTable a m).size = m + 1
-  | 0 => by simp [buildTable]
-  | m + 1 => by simp [buildTable, buildTable_size a m]
-
 @[grind =] private lemma rangeMin_one (xs : List ℕ) (j : ℕ) (hj : j < _) :
     rangeMin xs j 1 = xs[j] := by
   grind [List.drop_eq_getElem_cons, List.take_add_one, List.minimum_singleton, rangeMin]
 
-private lemma foldl_eq_buildTable (a : Array ℕ) (f : Array (Array ℕ) → ℕ → Array (Array ℕ))
-    (hf : ∀ st idx, f st idx = st.push ((Array.range (a.size - 2 ^ (idx + 1) + 1)).map fun j =>
-      min st[idx]![j]! st[idx]![j + 2 ^ idx]!)) :
-    ∀ m, (List.range m).foldl f #[a] = buildTable a m
-  | 0 => by simp [buildTable]
-  | m + 1 => by
-    rw [List.range_succ, List.foldl_append, List.foldl_cons, List.foldl_nil,
-      foldl_eq_buildTable a f hf m, hf, buildTable]
-
 @[grind =] private lemma buildTable_eq_make (a : Array ℕ) (ha : 0 < a.size) :
     (SparseTable.make a).table = buildTable a (Nat.log 2 a.size) := by
-  simp only [SparseTable.make, beq_iff_eq]
-  split
-  · omega
-  · next hne =>
-    show (List.range (Nat.log 2 a.size + 1 - 1)).foldl _ #[a] = _
-    rw [show Nat.log 2 a.size + 1 - 1 = Nat.log 2 a.size from by omega]
-    exact foldl_eq_buildTable a _ (fun st idx => rfl) _
+  simp only [SparseTable.make, beq_iff_eq]; split <;> grind
 
 @[grind =] private lemma buildTable_row_size (a : Array ℕ) (m : ℕ) (hm : 2 ^ m ≤ a.size)
     (i : ℕ) (hi : i ≤ m) :
@@ -181,8 +158,8 @@ theorem table_invariant (a : Array ℕ) (ha : 0 < a.size) (i j : ℕ)
   have hm : 2 ^ Nat.log 2 a.size ≤ a.size := by grind [Nat.pow_log_le_self]
   have : 2 ^ i ≤ a.size := by
     grw [← hm]
-    apply Nat.pow_le_pow_right <;> grind [buildTable_eq_make, buildTable_size]
-  grind [buildTable_eq_make, buildTable_row_size, buildTable_size, buildTable_invariant]
+    apply Nat.pow_le_pow_right <;> grind [buildTable_size]
+  grind [buildTable_row_size, buildTable_size, buildTable_invariant]
 
 private lemma rmqNaive_eq_rangeMin (vals : Array ℕ) (l r : ℕ) :
     rmqNaive vals l r = rangeMin vals.toList l (r - l + 1) := by
@@ -244,7 +221,5 @@ def SparseTable.verify : IO Bool := do
   return ok
 
 /--info: true-/ #guard_msgs in #eval SparseTable.verify
-
-
 
 end Cslib.Algorithms.Lean.TimeM
