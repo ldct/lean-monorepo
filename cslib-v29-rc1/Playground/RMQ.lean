@@ -46,6 +46,25 @@ def SparseTable.query (st : SparseTable) (l r : ℕ) : ℕ :=
   min st.table[k]![l]! st.table[k]![r + 1 - 2 ^ k]!
 
 /-
+# Internal verification
+
+Verify that SparseTable generates the correct table as the python code (verification by eval'ing examples).
+Expected values obtained via: echo "3 1 4 1 5 9 2 6" | python3 sparsetable.py
+-/
+
+/--info: true-/ #guard_msgs in
+#eval (SparseTable.make #[3, 1, 4, 1, 5, 9, 2, 6]).table == #[#[3, 1, 4, 1, 5, 9, 2, 6], #[1, 1, 1, 1, 5, 2, 2], #[1, 1, 1, 1, 2], #[1]]
+
+/--info: true-/ #guard_msgs in
+#eval (SparseTable.make #[5]).table == #[#[5]]
+
+/--info: true-/ #guard_msgs in
+#eval (SparseTable.make #[10, 20]).table == #[#[10, 20], #[10]]
+
+/--info: true-/ #guard_msgs in
+#eval (SparseTable.make #[7, 2, 9, 4, 3, 1, 8]).table == #[#[7, 2, 9, 4, 3, 1, 8], #[2, 2, 4, 3, 1, 1], #[2, 2, 1, 1]]
+
+/-
 # Verification
 -/
 theorem correct (vals : Array ℕ) (l r : ℕ) (h : l ≤ r) (hr : r < vals.size)
@@ -78,5 +97,7 @@ def SparseTable.verify : IO Bool := do
   return ok
 
 #eval SparseTable.verify
+
+
 
 end Cslib.Algorithms.Lean.TimeM
