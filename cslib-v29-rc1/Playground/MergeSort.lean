@@ -41,7 +41,7 @@ def merge :  List α → List α → TimeM (List α)
 
 /-- Sorts a list using the merge sort algorithm, counting comparisons as time cost.
 Returns a `TimeM (List α)` where the time represents the total number of comparisons. -/
-def mergeSort (xs : List α) : TimeM (List α) :=  do
+def mergeSort (xs : List α) : TimeM (List α) := do
   if xs.length < 2 then return xs
   else
     let half  := xs.length / 2
