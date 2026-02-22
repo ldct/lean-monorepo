@@ -224,7 +224,9 @@ theorem table_invariant (a : Array ℕ) (ha : 0 < a.size) (i j : ℕ)
 private lemma rmqNaive_eq_rangeMin (vals : Array ℕ) (l r : ℕ) :
     rmqNaive vals l r = rangeMin vals.toList l (r - l + 1) := by
   unfold rmqNaive rangeMin
-  sorry
+  congr 1
+  simp only [Array.drop_eq_extract, ← Array.shrink_eq_take, Array.toList_shrink,
+    Array.toList_extract, List.drop_eq_extract, Array.size_eq_length_toList]
 
 theorem correct (vals : Array ℕ) (l r : ℕ) (h : l ≤ r) (hr : r < vals.size)
 : (SparseTable.make vals).query l r = rmqNaive vals l r := by
@@ -234,8 +236,8 @@ theorem correct (vals : Array ℕ) (l r : ℕ) (h : l ≤ r) (hr : r < vals.size
   have hlen_pos : 0 < len := by omega
   have hlen_le : len ≤ vals.size := by grind
   have hpow_le : 2 ^ k ≤ len := Nat.pow_log_le_self 2 (by grind)
-  have hpow_lt : len < 2 ^ (k + 1) := (by sorry)
-  have hk_le : k ≤ Nat.log 2 vals.size := (by sorry)
+  have hpow_lt : len < 2 ^ (k + 1) := Nat.lt_pow_succ_log_self (by omega) len
+  have hk_le : k ≤ Nat.log 2 vals.size := Nat.log_mono_right hlen_le
   have htable_sz : (SparseTable.make vals).table.size = Nat.log 2 vals.size + 1 := by
     rw [buildTable_eq_make vals ha, buildTable_size]
   have hk_lt : k < (SparseTable.make vals).table.size := by omega
