@@ -253,9 +253,9 @@ instance : LawfulRMQ where
   make := SparseTable.make
   query := SparseTable.query
   correct := correct
-  make_time := sorry
+  make_time n := n * Nat.log 2 n
   make_time_bound := sorry
-  query_time := sorry
+  query_time _ := 1
   query_time_bound := sorry
 
 end Cslib.Algorithms.Lean.TimeM
