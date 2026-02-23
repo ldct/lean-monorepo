@@ -46,10 +46,10 @@ def SparseTable.make (a : Array ℕ) : TimeM SparseTable := do
 
 #eval (SparseTable.make #[3, 1, 4, 1, 5, 9, 2, 6]).time
 
-def SparseTable.query (st : SparseTable) (l r : ℕ) : ℕ :=
+def SparseTable.query (st : SparseTable) (l r : ℕ) : TimeM ℕ := do
   let len := r - l + 1
   let k := Nat.log 2 len
-  min st.table[k]![l]! st.table[k]![r + 1 - 2 ^ k]!
+  ✓ return min st.table[k]![l]! st.table[k]![r + 1 - 2 ^ k]!
 
 /-
 # Quickcheck of SparseTable.make
@@ -156,7 +156,7 @@ private lemma rmqNaive_eq_rangeMin (vals : Array ℕ) (l r : ℕ) :
   grind [rmqNaive, rangeMin, Array.toList_extract]
 
 theorem correct (vals : Array ℕ) (l r : ℕ) (h : l ≤ r) (hr : r < vals.size)
-: ⟪SparseTable.make vals⟫.query l r = rmqNaive vals l r := by
+: ⟪⟪SparseTable.make vals⟫.query l r⟫ = rmqNaive vals l r := by
   rw [rmqNaive_eq_rangeMin]
   have ha : 0 < vals.size := by omega
   set len := r - l + 1; set k := Nat.log 2 len
@@ -188,7 +188,7 @@ def SparseTable.verifyOne (vals : Array ℕ) : Bool :=
     let mut ok := true
     for l in [:vals.size] do
       for r in [l:vals.size] do
-        if rmqNaive vals l r != ↑(st.query l r) then
+        if rmqNaive vals l r != ↑(⟪st.query l r⟫) then
           ok := false
     return ok
 
@@ -202,5 +202,60 @@ def SparseTable.verify : IO Bool := do
   return ok
 
 /--info: true-/ #guard_msgs in #eval SparseTable.verify
+
+/-
+# Time complexity of SparseTable.make
+
+The cost model counts array element operations (min comparisons) for building the table.
+At each level k (1 ≤ k ≤ ⌊log₂ n⌋), we build a row of size n - 2^k + 1 ≤ n.
+Total cost is therefore at most n * ⌊log₂ n⌋.
+-/
+
+private lemma buildTable_time (a : Array ℕ) (ha : 0 < a.size) :
+    ∀ m, (buildTable a m).time ≤ a.size * m
+  | 0 => by simp [buildTable]
+  | m + 1 => by
+    simp [buildTable, Array.size_range]
+    have ih := buildTable_time a ha m
+    grind
+
+/-- The construction time of a sparse table is at most n * ⌊log₂ n⌋. -/
+theorem SparseTable.make_time (a : Array ℕ) :
+    (SparseTable.make a).time ≤ a.size * Nat.log 2 a.size := by
+  by_cases ha : 0 < a.size
+  · simp [SparseTable.make, Nat.ne_of_gt ha]
+    exact buildTable_time a ha (Nat.log 2 a.size)
+  · have h0 : a.size = 0 := by omega
+    simp [SparseTable.make, h0]
+
+/-
+# Time complexity of SparseTable.query
+
+A single query costs O(1).
+-/
+
+/-- A single query costs O(1). -/
+theorem SparseTable.query_time (st : SparseTable) (l r : ℕ) :
+    (st.query l r).time = 1 := by
+  simp [SparseTable.query]
+
+class LawfulRMQ where
+  make : Array ℕ → TimeM SparseTable
+  query : SparseTable → ℕ → ℕ → TimeM ℕ
+  correct (vals : Array ℕ) (l r : ℕ) (h : l ≤ r) (hr : r < vals.size) :
+    (⟪⟪make vals⟫.query l r⟫) = rmqNaive vals l r
+  make_time : ℕ → ℕ
+  make_time_bound : ∀ a : Array ℕ, (make a).time ≤ make_time a.size
+  query_time : ℕ → ℕ
+  query_time_bound : ∀ a : Array ℕ, ∀ l r : ℕ, (⟪make a⟫.query l r).time ≤ query_time a.size
+
+instance : LawfulRMQ where
+  make := SparseTable.make
+  query := SparseTable.query
+  correct := correct
+  make_time := sorry
+  make_time_bound := sorry
+  query_time := sorry
+  query_time_bound := sorry
 
 end Cslib.Algorithms.Lean.TimeM
