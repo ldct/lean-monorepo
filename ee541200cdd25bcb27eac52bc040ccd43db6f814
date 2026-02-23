@@ -1,0 +1,37 @@
+cslib-v29-rc1/Playground/RMQ.lean
+  1a3f4cf0fc9736b4 49,52,159,191,231-233,235-240,260
+  9d1b271825c814b8 206-219,221-230
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "ee541200cdd25bcb27eac52bc040ccd43db6f814",
+  "prompts": {
+    "1a3f4cf0fc9736b4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e5d4dbc5-c76a-48b5-abc0-33fccb9dfaec",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 15,
+      "total_deletions": 4,
+      "accepted_lines": 14,
+      "overriden_lines": 1
+    },
+    "9d1b271825c814b8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "df2f4d85-3dd2-4a6c-9cf5-86392940da43",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 31,
+      "total_deletions": 4,
+      "accepted_lines": 24,
+      "overriden_lines": 0
+    }
+  }
+}
