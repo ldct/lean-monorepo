@@ -1,0 +1,38 @@
+cslib-v29-rc1/Playground/RMQ.lean
+  e52b364af076588d 257,259
+cslib-v29-rc1/sqrttree.py
+  534923dd37702ea3 1-222
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "549b2a35f0e307ea376e922219cfcf6c6e8277b7",
+  "prompts": {
+    "534923dd37702ea3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b5919ad8-635d-4f54-a395-fbfa8a4fd36f",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 222,
+      "total_deletions": 0,
+      "accepted_lines": 222,
+      "overriden_lines": 0
+    },
+    "e52b364af076588d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2aa11ac2-2071-418d-93eb-f806163a54e7",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 2,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}
