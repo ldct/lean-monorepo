@@ -230,8 +230,6 @@ theorem SparseTable.make_time (a : Array ℕ) :
 
 /-
 # Time complexity of SparseTable.query
-
-A single query costs O(1).
 -/
 
 /-- A single query costs O(1). -/
@@ -239,17 +237,26 @@ theorem SparseTable.query_time (st : SparseTable) (l r : ℕ) :
     (st.query l r).time = 1 := by
   simp [SparseTable.query]
 
-class LawfulRMQ where
-  make : Array ℕ → TimeM SparseTable
-  query : SparseTable → ℕ → ℕ → TimeM ℕ
-  correct (vals : Array ℕ) (l r : ℕ) (h : l ≤ r) (hr : r < vals.size) :
-    (⟪⟪make vals⟫.query l r⟫) = rmqNaive vals l r
+/-
+A type class for stating that `α` is a solution to the RMQ problem.
+
+- `make` : preprocess an array of values, returning an `α`
+- `query` : query `α` for the minimum value in a range
+- `correct` : the result is the same as the naive implementation
+- `make_time`, `query_time` : the time complexity of `make` and `query`
+- `make_time_bound`, `query_time_bound` : proofs of the time complexity bounds
+-/
+class RMQSolution (α : Type) where
+  make : Array ℕ → TimeM α
+  query : α → ℕ → ℕ → TimeM ℕ
+  correct (a : Array ℕ) (l r : ℕ) (h : l ≤ r) (hr : r < a.size) :
+    (⟪query ⟪make a⟫ l r⟫) = rmqNaive a l r
   make_time : ℕ → ℕ
   make_time_bound : ∀ a : Array ℕ, (make a).time ≤ make_time a.size
   query_time : ℕ → ℕ
-  query_time_bound : ∀ a : Array ℕ, ∀ l r : ℕ, (⟪make a⟫.query l r).time ≤ query_time a.size
+  query_time_bound : ∀ a : Array ℕ, ∀ l r : ℕ, (query ⟪make a⟫ l r).time ≤ query_time a.size
 
-instance : LawfulRMQ where
+instance : RMQSolution SparseTable where
   make := SparseTable.make
   query := SparseTable.query
   correct := correct
