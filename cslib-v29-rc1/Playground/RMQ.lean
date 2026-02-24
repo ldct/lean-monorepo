@@ -23,12 +23,7 @@ Define a structure SparseTable which preprocesses an array of integers for fast 
 structure SparseTable where
   table : Array (Array ℕ)
 
-private def tickMapImpl (f : ℕ → TimeM ℕ) (n : ℕ) : TimeM (Array ℕ) :=
-  let pairs := (Array.range n).map f
-  ⟨pairs.map (·.ret), pairs.foldl (· + ·.time) 0⟩
-
 /-- Map `f` over `[0, ..., n-1]`, sequencing the `TimeM` effects. -/
-@[implemented_by tickMapImpl]
 private def tickMap (f : ℕ → TimeM ℕ) : ℕ → TimeM (Array ℕ)
   | 0 => return #[]
   | n + 1 => do
@@ -296,25 +291,11 @@ instance : RMQSolution SparseTable where
 
 /-
 # Wall-clock benchmark of SparseTable
-Build on n = 10^6, then 10^6 random queries.
-
-eval benchmark
-```
-  - Build: ~11.5s (n = 10^6, 20 log levels)
-  - Query: ~3.6s (10^6 random queries)
-  - Checksum: 22699956
-
-compiled benchmark
-    Build time: 1719 ms  (n = 1000000)
-    Query time: 364 ms  (1000000 queries)
-```
-
-
 -/
 
 def SparseTable.benchmark : IO Unit := do
-  let n := 1000000
-  let numQueries := 1000000
+  let n := 100
+  let numQueries := 100
   IO.setRandSeed 12345
 
   -- Build random array
