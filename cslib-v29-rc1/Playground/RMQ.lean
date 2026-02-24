@@ -23,27 +23,30 @@ Define a structure SparseTable which preprocesses an array of integers for fast 
 structure SparseTable where
   table : Array (Array ℕ)
 
-private def tickMapImpl (f : ℕ → ℕ) (n : ℕ) : TimeM (Array ℕ) :=
-  ⟨(Array.range n).map f, n⟩
+private def tickMapImpl (f : ℕ → TimeM ℕ) (n : ℕ) : TimeM (Array ℕ) :=
+  let pairs := (Array.range n).map f
+  ⟨pairs.map (·.ret), pairs.foldl (· + ·.time) 0⟩
 
-/-- Map `f` over `[0, ..., n-1]`, charging 1 tick per element. -/
+/-- Map `f` over `[0, ..., n-1]`, sequencing the `TimeM` effects. -/
 @[implemented_by tickMapImpl]
-private def tickMap (f : ℕ → ℕ) : ℕ → TimeM (Array ℕ)
+private def tickMap (f : ℕ → TimeM ℕ) : ℕ → TimeM (Array ℕ)
   | 0 => return #[]
   | n + 1 => do
     let arr ← tickMap f n
-    ✓ return arr.push (f n)
+    let v ← f n
+    return arr.push v
 
-@[simp] private lemma tickMap_size (f : ℕ → ℕ) : ∀ n, ⟪tickMap f n⟫.size = n
+@[simp] private lemma tickMap_size (f : ℕ → TimeM ℕ) : ∀ n, ⟪tickMap f n⟫.size = n
   | 0 => by simp [tickMap]
   | n + 1 => by simp [tickMap, tickMap_size f n]
 
-@[simp] private lemma tickMap_time (f : ℕ → ℕ) : ∀ n, (tickMap f n).time = n
+private lemma tickMap_time_eq (f : ℕ → TimeM ℕ) (c : ℕ) (hf : ∀ i, (f i).time = c) :
+    ∀ n, (tickMap f n).time = n * c
   | 0 => by simp [tickMap]
-  | n + 1 => by simp [tickMap, tickMap_time f n]
+  | n + 1 => by simp [tickMap, tickMap_time_eq f c hf n, hf n, Nat.add_mul]
 
-private lemma tickMap_getElem (f : ℕ → ℕ) : ∀ (n : ℕ) (i : ℕ) (hi : i < n),
-    (⟪tickMap f n⟫[i]'(by simp; omega)) = f i
+private lemma tickMap_getElem (f : ℕ → TimeM ℕ) : ∀ (n : ℕ) (i : ℕ) (hi : i < n),
+    (⟪tickMap f n⟫[i]'(by simp; omega)) = ⟪f i⟫
   | 0, _, hi => by omega
   | n + 1, i, hi => by
     grind [tickMap, tickMap_size, tickMap_getElem f n]
@@ -53,7 +56,7 @@ private def buildTable (a : Array ℕ) : ℕ → TimeM (Array (Array ℕ))
   | 0 => do return #[a]
   | m + 1 => do
     let st ← buildTable a m
-    let newRow ← tickMap (fun j => min st[m]![j]! st[m]![j + 2 ^ m]!) (a.size - 2 ^ (m + 1) + 1)
+    let newRow ← tickMap (fun j => do ✓ return min st[m]![j]! st[m]![j + 2 ^ m]!) (a.size - 2 ^ (m + 1) + 1)
     return st.push newRow
 
 @[grind =] private lemma buildTable_size (a : Array ℕ) : ∀ m, ⟪buildTable a m⟫.size = m + 1
@@ -237,7 +240,11 @@ private lemma buildTable_time (a : Array ℕ) (ha : 0 < a.size) :
     ∀ m, (buildTable a m).time ≤ a.size * m
   | 0 => by simp [buildTable]
   | m + 1 => by
-    simp [buildTable, tickMap_time]
+    let f : ℕ → TimeM ℕ := fun j => do
+      ✓ return min (⟪buildTable a m⟫)[m]![j]! (⟪buildTable a m⟫)[m]![j + 2 ^ m]!
+    have hft : (tickMap f (a.size - 2 ^ (m + 1) + 1)).time = a.size - 2 ^ (m + 1) + 1 := by
+      rw [tickMap_time_eq f 1 (by intro; simp [f])]; simp
+    simp only [buildTable, time_bind, time_pure]
     have ih := buildTable_time a ha m
     grind
 
