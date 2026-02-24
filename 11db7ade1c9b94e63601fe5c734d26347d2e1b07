@@ -1,0 +1,25 @@
+cslib-v29-rc1/lakefile.toml
+  f384d599b433c396 16-19
+cslib-v29-rc1/Playground/RMQ.lean
+  f384d599b433c396 268-270,284-319
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.4",
+  "base_commit_sha": "11db7ade1c9b94e63601fe5c734d26347d2e1b07",
+  "prompts": {
+    "f384d599b433c396": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b6c9c62d-1d58-4865-8695-0ccca2ce4152",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 53,
+      "total_deletions": 5,
+      "accepted_lines": 48,
+      "overriden_lines": 0
+    }
+  }
+}
