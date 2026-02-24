@@ -23,14 +23,37 @@ Define a structure SparseTable which preprocesses an array of integers for fast 
 structure SparseTable where
   table : Array (Array ℕ)
 
-/-- Compute the first `m` levels of the sparse table, where the ith level stores all minimums of contiguous subarrays of length 2^i. The tick cost is how many `min` calls are made. TODO: annotate the cost more directly. -/
+private def tickMapImpl (f : ℕ → ℕ) (n : ℕ) : TimeM (Array ℕ) :=
+  ⟨(Array.range n).map f, n⟩
+
+/-- Map `f` over `[0, ..., n-1]`, charging 1 tick per element. -/
+@[implemented_by tickMapImpl]
+private def tickMap (f : ℕ → ℕ) : ℕ → TimeM (Array ℕ)
+  | 0 => return #[]
+  | n + 1 => do
+    let arr ← tickMap f n
+    ✓ return arr.push (f n)
+
+@[simp] private lemma tickMap_size (f : ℕ → ℕ) : ∀ n, ⟪tickMap f n⟫.size = n
+  | 0 => by simp [tickMap]
+  | n + 1 => by simp [tickMap, tickMap_size f n]
+
+@[simp] private lemma tickMap_time (f : ℕ → ℕ) : ∀ n, (tickMap f n).time = n
+  | 0 => by simp [tickMap]
+  | n + 1 => by simp [tickMap, tickMap_time f n]
+
+private lemma tickMap_getElem (f : ℕ → ℕ) : ∀ (n : ℕ) (i : ℕ) (hi : i < n),
+    (⟪tickMap f n⟫[i]'(by simp; omega)) = f i
+  | 0, _, hi => by omega
+  | n + 1, i, hi => by
+    grind [tickMap, tickMap_size, tickMap_getElem f n]
+
+/-- Compute the first `m` levels of the sparse table, where the ith level stores all minimums of contiguous subarrays of length 2^i. The tick cost is how many `min` calls are made. -/
 private def buildTable (a : Array ℕ) : ℕ → TimeM (Array (Array ℕ))
   | 0 => do return #[a]
   | m + 1 => do
     let st ← buildTable a m
-    let baseArray := ((Array.range (a.size - 2 ^ (m + 1) + 1)))
-    ✓[baseArray.size] let newRow := baseArray.map fun j =>
-      min st[m]![j]! st[m]![j + 2 ^ m]!
+    let newRow ← tickMap (fun j => min st[m]![j]! st[m]![j + 2 ^ m]!) (a.size - 2 ^ (m + 1) + 1)
     return st.push newRow
 
 @[grind =] private lemma buildTable_size (a : Array ℕ) : ∀ m, ⟪buildTable a m⟫.size = m + 1
@@ -120,7 +143,7 @@ lemma rangeMin_overlap (xs : List ℕ) (l len k : ℕ)
       simp only [buildTable, ret_bind, ret_pure]; rw [Array.getElem_push_lt hlt]
       exact ih (le_trans (Nat.pow_le_pow_right (by omega) (Nat.le_succ m)) hm) him
     · obtain rfl : i = m + 1 := by omega
-      grind [buildTable, Array.size_range]
+      grind [buildTable, tickMap_size]
 
 private theorem buildTable_invariant (a : Array ℕ) (m : ℕ)
     (hm : 2 ^ m ≤ a.size) (i j : ℕ) (hi : i ≤ m) (hj : j + 2 ^ i ≤ a.size) :
@@ -138,9 +161,8 @@ private theorem buildTable_invariant (a : Array ℕ) (m : ℕ)
     · obtain rfl : i = m + 1 := by omega
       conv_rhs => rw [show 2 ^ (m + 1) = 2 ^ m + 2 ^ m by grind]
       rw [rangeMin_split]
-      simp [buildTable, Array.getElem_push, buildTable_size,
-            Array.getElem_map, Array.getElem_range]
-      grind
+      simp [buildTable, Array.getElem_push, buildTable_size]
+      grind [tickMap_getElem, tickMap_size, WithTop.coe_min]
 
 /-- Each table entry stores the range minimum for a power-of-2 length -/
 theorem table_invariant (a : Array ℕ) (ha : 0 < a.size) (i j : ℕ)
@@ -215,7 +237,7 @@ private lemma buildTable_time (a : Array ℕ) (ha : 0 < a.size) :
     ∀ m, (buildTable a m).time ≤ a.size * m
   | 0 => by simp [buildTable]
   | m + 1 => by
-    simp [buildTable, Array.size_range]
+    simp [buildTable, tickMap_time]
     have ih := buildTable_time a ha m
     grind
 
