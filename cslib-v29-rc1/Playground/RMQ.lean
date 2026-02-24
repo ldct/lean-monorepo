@@ -23,7 +23,7 @@ Define a structure SparseTable which preprocesses an array of integers for fast 
 structure SparseTable where
   table : Array (Array ℕ)
 
-/-- Recursive version of table construction -/
+/-- Compute the first `m` levels of the sparse table, where the ith level stores all minimums of contiguous subarrays of length 2^i. The tick cost is how many `min` calls are made. TODO: annotate the cost more directly. -/
 private def buildTable (a : Array ℕ) : ℕ → TimeM (Array (Array ℕ))
   | 0 => do return #[a]
   | m + 1 => do
@@ -240,13 +240,13 @@ theorem SparseTable.query_time (st : SparseTable) (l r : ℕ) :
 /-
 A type class for stating that `α` is a solution to the RMQ problem.
 
-- `make` : preprocess an array of values, returning an `α`
-- `query` : query `α` for the minimum value in a range
+- `make` : preprocess an array of values `a`, returning an `α`
+- `query` : query `α` for the minimum value in a subarray of `a`
 - `correct` : the result is the same as the naive implementation
-- `make_time`, `query_time` : the time complexity of `make` and `query`
+- `make_time`, `query_time` : the time complexity of `make` and `query`, as a function of `|a|`
 - `make_time_bound`, `query_time_bound` : proofs of the time complexity bounds
 -/
-class RMQSolution (α : Type) where
+structure RMQSolution (α : Type) where
   make : Array ℕ → TimeM α
   query : α → ℕ → ℕ → TimeM ℕ
   correct (a : Array ℕ) (l r : ℕ) (h : l ≤ r) (hr : r < a.size) :
@@ -263,6 +263,59 @@ instance : RMQSolution SparseTable where
   make_time n := n * Nat.log 2 n
   make_time_bound := SparseTable.make_time
   query_time _ := 1
-  query_time_bound := fun _ l r => by simp [SparseTable.query_time]
+  query_time_bound := by simp [SparseTable.query_time]
+
+/-
+# Wall-clock benchmark of SparseTable
+Build on n = 10^6, then 10^6 random queries.
+
+eval benchmark
+```
+  - Build: ~11.5s (n = 10^6, 20 log levels)
+  - Query: ~3.6s (10^6 random queries)
+  - Checksum: 22699956
+
+compiled benchmark
+    Build time: 1719 ms  (n = 1000000)
+    Query time: 364 ms  (1000000 queries)
+```
+
+
+-/
+
+def SparseTable.benchmark : IO Unit := do
+  let n := 1000000
+  let numQueries := 1000000
+  IO.setRandSeed 12345
+
+  -- Build random array
+  let mut arr : Array ℕ := Array.mkEmpty n
+  for _ in [:n] do
+    arr := arr.push (← IO.rand 0 1000000)
+
+  -- Build sparse table (print table size to force evaluation)
+  let t0 ← IO.monoMsNow
+  let st := ⟪SparseTable.make arr⟫
+  IO.println s!"Table levels: {st.table.size}"
+  let t1 ← IO.monoMsNow
+  IO.println s!"Build time: {t1 - t0} ms  (n = {n})"
+
+  -- Generate random queries
+  let mut queries : Array (ℕ × ℕ) := Array.mkEmpty numQueries
+  for _ in [:numQueries] do
+    let a ← IO.rand 0 (n - 1)
+    let b ← IO.rand 0 (n - 1)
+    queries := queries.push (min a b, max a b)
+
+  -- Run queries
+  let t2 ← IO.monoMsNow
+  let mut checksum := 0
+  for (l, r) in queries do
+    checksum := checksum + ⟪st.query l r⟫
+  let t3 ← IO.monoMsNow
+  IO.println s!"Query time: {t3 - t2} ms  ({numQueries} queries)"
+  IO.println s!"Checksum: {checksum}"
+
+#eval SparseTable.benchmark
 
 end Cslib.Algorithms.Lean.TimeM
