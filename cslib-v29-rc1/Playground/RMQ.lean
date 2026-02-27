@@ -293,9 +293,7 @@ instance : RMQSolution SparseTable where
 # Wall-clock benchmark of SparseTable
 -/
 
-def SparseTable.benchmark : IO Unit := do
-  let n := 100
-  let numQueries := 100
+def SparseTable.benchmark (n : ℕ := 100) (numQueries : ℕ := n) : IO Unit := do
   IO.setRandSeed 12345
 
   -- Build random array
