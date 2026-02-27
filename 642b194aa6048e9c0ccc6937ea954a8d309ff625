@@ -1,0 +1,49 @@
+cslib-v29-rc1/Playground/RMQ.lean
+  9d8044cc52dc829d 296
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.5",
+  "base_commit_sha": "642b194aa6048e9c0ccc6937ea954a8d309ff625",
+  "prompts": {
+    "9d8044cc52dc829d": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2abbee6c-04f5-4bb5-a9ee-8b19ae5d540c",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 4,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    },
+    "cd01211b8e7cb5f1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9fb48a16-2372-4921-a28a-38dbf179c497",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 3,
+      "total_deletions": 3,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    },
+    "f384d599b433c396": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b6c9c62d-1d58-4865-8695-0ccca2ce4152",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    }
+  }
+}
