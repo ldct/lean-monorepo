@@ -2,7 +2,7 @@
 //
 // Usage:
 //
-//	go run bench/runner.go bench/rmq .lake/build/bin/rmq-bench "python3 sparsetable.py" "python3 sqrttree.py"
+//	go run bench/runner.go bench/rmq .lake/build/bin/rmq-bench "python3 bench/sparsetable.py" "python3 bench/sqrttree.py"
 //
 // Flags: -n 1000000 -q 1000000 -runs 3 -seed 42
 //
@@ -12,7 +12,7 @@
 //	  n=$((10**exp))
 //	  echo ">>> N=$n Q=$n <<<"
 //	  go run bench/runner.go -n $n -q $n -runs 3 \
-//	    bench/rmq .lake/build/bin/rmq-bench "python3 sparsetable.py" "python3 sqrttree.py"
+//	    bench/rmq .lake/build/bin/rmq-bench "python3 bench/sparsetable.py" "python3 bench/sqrttree.py"
 //	  echo
 //	done
 //
