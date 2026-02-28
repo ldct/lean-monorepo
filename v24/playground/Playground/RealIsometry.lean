@@ -157,7 +157,7 @@ def RealIsometry.comp (a : RealIsometry) (b : RealIsometry) : RealIsometry where
     -- Since $a$ and $b$ are both surjective, their composition $a \circ b$ is also surjective.
     apply Function.Surjective.comp a.surjective b.surjective
 
-noncomputable def standardForm (A : O3) (b : R3): RealIsometry where
+noncomputable def standardForm (A : O3) (b : R3) : RealIsometry where
   f x := A • x + b
   is_isometry x y := by
     -- Since $A$ is orthogonal, we have $\|A \cdot (x - y)\| = \|x - y\|$.
@@ -183,7 +183,7 @@ theorem exists_mul (a : RealIsometry)
     set T := a.f 0
     set S : RealIsometry := ⟨fun x => a.f x - T, by
       exact fun x y => by rw [ ← a.is_isometry x y ] ; simp +decide [ sub_sub_sub_cancel_right ] ;, by
-      exact fun x => by cases' a.surjective ( x + T ) with y hy; use y; aesop;⟩
+      exact fun x => by obtain ⟨y, hy⟩ := a.surjective ( x + T ); use y; aesop;⟩
     generalize_proofs at *;
     -- Since $S$ is an isometry, it preserves the inner product.
     have h_inner : ∀ x y : R3, inner ℝ (S.f x) (S.f y) = inner ℝ x y := by
@@ -200,7 +200,7 @@ theorem exists_mul (a : RealIsometry)
         rw [ @norm_sub_sq ℝ ];
         simp_all +decide [ norm_add_sq_real, inner_add_right, inner_add_left ];
         simp_all +decide [ ← real_inner_self_eq_norm_sq ];
-        rw [ inner_add_add_self ] ; ring;
+        rw [ inner_add_add_self ] ; ring_nf;
         rw [ real_inner_comm, sub_self ];
       exact sub_eq_zero.mp ( norm_eq_zero.mp ( sq_eq_zero_iff.mp h_eq ) );
     -- Since $S$ is linear, it is represented by a matrix $A$.
@@ -214,14 +214,14 @@ theorem exists_mul (a : RealIsometry)
         exact ⟨ { toFun := S.f, map_add' := by aesop, map_smul' := by aesop }, fun x => rfl ⟩;
       obtain ⟨ A, hA ⟩ := h_linear;
       use LinearMap.toMatrix' A;
-      simp +decide [ hA, Matrix.mulVec, dotProduct ];
+      simp +decide [ hA ];
     -- Since $S$ is an isometry, $A$ must be orthogonal.
     have h_orthogonal : A ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
-      simp_all +decide [ Matrix.mulVec, dotProduct ];
+      simp_all +decide;
       have h_orthogonal : A.transpose * A = 1 := by
-        ext i j; specialize h_inner ( Pi.single i 1 ) ( Pi.single j 1 ) ; simp_all +decide [ Matrix.mul_apply, dotProduct ] ;
+        ext i j; specialize h_inner ( Pi.single i 1 ) ( Pi.single j 1 ) ; simp_all +decide [ Matrix.mul_apply ] ;
         simp_all +decide [ Fin.sum_univ_three, Matrix.one_apply, inner ];
-        fin_cases i <;> fin_cases j <;> simp +decide [ Pi.single_apply ] at h_inner ⊢ <;> linarith!;
+        fin_cases i <;> fin_cases j <;> simp +decide at h_inner ⊢ <;> linarith!;
       exact ⟨ h_orthogonal, Matrix.mul_eq_one_comm.mp h_orthogonal ⟩;
     use ⟨ A, h_orthogonal ⟩, T;
     intro x; specialize hA x; rw [ sub_eq_iff_eq_add ] at hA; aesop;
