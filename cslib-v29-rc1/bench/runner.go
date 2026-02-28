@@ -2,7 +2,7 @@
 //
 // Usage:
 //
-//	go run bench/runner.go .lake/build/bin/rmq-bench "python3 sparsetable.py" "python3 sqrttree.py"
+//	go run bench/runner.go bench/rmq .lake/build/bin/rmq-bench "python3 sparsetable.py" "python3 sqrttree.py"
 //
 // Flags: -n 1000000 -q 1000000 -runs 3 -seed 42
 //
@@ -12,9 +12,18 @@
 //	  n=$((10**exp))
 //	  echo ">>> N=$n Q=$n <<<"
 //	  go run bench/runner.go -n $n -q $n -runs 3 \
-//	    .lake/build/bin/rmq-bench "python3 sparsetable.py" "python3 sqrttree.py"
+//	    bench/rmq .lake/build/bin/rmq-bench "python3 sparsetable.py" "python3 sqrttree.py"
 //	  echo
 //	done
+//
+// Results (median of 3 runs, seed=42, Apple M1):
+//
+//	N=Q     | C++ (rmq) | Lean      | Py SparseTable | Py SqrtTree
+//	--------+-----------+-----------+----------------+------------
+//	1e3     |       3ms |      34ms |           27ms |        29ms
+//	1e4     |       3ms |      39ms |           46ms |        58ms
+//	1e5     |       6ms |      86ms |          282ms |       379ms
+//	1e6     |      33ms |     763ms |         3021ms |      3999ms
 package main
 
 import (
