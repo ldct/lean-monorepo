@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace orthogonal
+
 theorem norm_orthogonal (n : ℕ)
   (A : Matrix.orthogonalGroup (Fin n) ℝ)
   (v : EuclideanSpace ℝ (Fin n))
@@ -18,3 +21,6 @@ theorem norm_orthogonal (n : ℕ)
 
   simp_all [ Matrix.mulVec, dotProduct ]
   exact congrArg Real.sqrt h_norm_sq
+
+
+end orthogonal

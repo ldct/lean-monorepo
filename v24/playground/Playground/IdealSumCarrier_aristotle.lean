@@ -1,3 +1,6 @@
+
+namespace IdealSumCarrier_aristotle
+
 /-
 This file was edited by Aristotle.
 
@@ -22,3 +25,5 @@ example {R} [Ring R] (I J : Ideal R)
   -- By definition of sum of ideals, we have $(I + J).carrier = \{x \in R \mid \exists i \in I, \exists j \in J, i + j = x\}$.
   ext x
   simp [Submodule.mem_sup]
+
+end IdealSumCarrier_aristotle

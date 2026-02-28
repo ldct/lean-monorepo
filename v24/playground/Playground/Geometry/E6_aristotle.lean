@@ -1,3 +1,6 @@
+
+namespace E6_aristotle
+
 /-
 This file was edited by Aristotle.
 
@@ -119,3 +122,5 @@ def E₈ : Matrix (Fin 8) (Fin 8) ℤ :=
       0,  0,  0,  0, -1,  2, -1,  0;
       0,  0,  0,  0,  0, -1,  2, -1;
       0,  0,  0,  0,  0,  0, -1,  2]
+
+end E6_aristotle

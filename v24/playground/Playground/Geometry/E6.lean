@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace E6
+
 def E₆ : Matrix (Fin 6) (Fin 6) ℤ :=
   !![ 2,  0, -1,  0,  0,  0;
       0,  2,  0, -1,  0,  0;
@@ -214,3 +217,6 @@ theorem E₈_det : E₈.det = 1 := by
   exact (test₁ (E₈.det)).1 h
 
 #check Matrix (Fin n) (Fin n) ℚ
+
+
+end E6

@@ -67,7 +67,7 @@ theorem mem_z4_iff (i : ZMod 4) : i = 0 ∨ i = 1 ∨ i = 2 ∨ i = 3 := by
 
 theorem mem_A_iff' (g : DihedralGroup 4) : g ∈ A ↔ g ∈ { r i | i : ZMod 4 } := Iff.rfl
 
-theorem mem_A_iff (g : DihedralGroup 4) : g ∈ A ↔ g = r 0 ∨ g = r 1 ∨ g = r 2 ∨ g = r 3:= by {
+theorem mem_A_iff_4 (g : DihedralGroup 4) : g ∈ A ↔ g = r 0 ∨ g = r 1 ∨ g = r 2 ∨ g = r 3:= by {
   rw [mem_A_iff']
   fin_cases g <;> decide
 }

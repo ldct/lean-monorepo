@@ -46,7 +46,11 @@ abbrev R3 := EuclideanSpace ℝ (Fin 3)
 abbrev O3 := Matrix.orthogonalGroup (Fin 3) ℝ
 
 /-
-Definition 1 (page 2)
+This file formalizes the definitions and theorems from Norbert Peyerimhoﬀ
+-/
+
+/-
+Definition 1.1 (page 2). A function f : ℝⁿ → ℝⁿ is called an isometry if f is surjective and it preserves distances.
 -/
 @[ext, grind ext]
 structure RealIsometry where

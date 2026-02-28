@@ -1,3 +1,6 @@
+
+namespace Cpq_aristotle
+
 /-
 This file was edited by Aristotle.
 
@@ -147,3 +150,5 @@ instance (p q : PNat) (r : ZMod p) [h : Fact (r ^ (q.val) = 1)] : Group (Cpqr p 
     rw [ ← pow_add, Nat.sub_add_cancel ( show a.Q.val ≤ q from _ ), h.1, mul_one ];
     exact Nat.le_of_lt ( ZMod.val_lt _ )
 }
+
+end Cpq_aristotle

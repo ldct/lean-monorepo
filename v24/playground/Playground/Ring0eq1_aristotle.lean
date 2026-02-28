@@ -1,3 +1,6 @@
+
+namespace Ring0eq1_aristotle
+
 /-
 This file was edited by Aristotle.
 
@@ -54,3 +57,5 @@ example {R} [Ring R] : ((0 : R) ≠ 1) := by
 -/
 example {R} [Ring R] : ((0 : R) ≠ 1) := by
   sorry
+
+end Ring0eq1_aristotle

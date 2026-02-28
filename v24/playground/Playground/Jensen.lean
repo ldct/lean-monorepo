@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace Jensen
+
 /-- Jensen's inequality for 2 points
 For a function f : ℝ → ℝ that is convex on a set D,
 f (1/2 * a + 1/2 * b) ≤ 1/2 * f a + 1/2 * f b
@@ -88,3 +91,6 @@ theorem tpu
   rw [show p 0 = a by rfl, show p 1 = b by rfl] at jensens
 
   exact jensens
+
+
+end Jensen

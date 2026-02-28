@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace Chapter_1_7
+
 lemma either_r_or_sr
   (n : ℕ)
   (x : DihedralGroup n)
@@ -403,3 +406,6 @@ example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G)
     rw [ Finset.sum_congr rfl this, Finset.sum_const, nsmul_eq_mul ];
     simp [Nat.cast_id];
   exact ⟨ _, h_sum.symm.trans h_card_parts ⟩
+
+
+end Chapter_1_7

@@ -2,6 +2,9 @@ import Mathlib
 
 set_option linter.style.longLine false
 
+
+namespace RealIsometryCyclic
+
 attribute [grind =] abs_eq_abs
 attribute [grind =] lt_abs
 attribute [grind =] abs_lt
@@ -270,3 +273,6 @@ def IsCyclicOfOrder (n : ℕ) (G : Type*) [Group G] : Prop :=
 theorem RealIsometry.isCyclicOfOrder (n : ℕ) [NeZero n]
 : ∃ f : Subgroup RealIsometry, IsCyclicOfOrder n f := by
   sorry
+
+
+end RealIsometryCyclic

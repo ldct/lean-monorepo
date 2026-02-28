@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace ZModnZ
+
 def nℤ (n : ℤ) : Ideal ℤ where
   carrier := { n * i | i : ℤ }
   add_mem' ha hb := by
@@ -18,3 +21,6 @@ def nℤ (n : ℤ) : Ideal ℤ where
     grind [Int.zsmul_eq_mul]
 
 example : Nonempty ((ℤ ⧸ nℤ 2) ≃+* (ZMod 2)) := by sorry
+
+
+end ZModnZ

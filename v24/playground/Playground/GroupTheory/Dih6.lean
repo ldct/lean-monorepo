@@ -3,7 +3,7 @@ import Mathlib.GroupTheory.SpecificGroups.Dihedral
 
 namespace DihedralGroup
 
-def v1 : Subgroup (DihedralGroup 6) where
+def v1_6 : Subgroup (DihedralGroup 6) where
   carrier := { r 0, r 3, sr 0, sr 3 }
   mul_mem' := by decide
   one_mem' := by decide
@@ -16,17 +16,17 @@ def f : (DihedralGroup 6) →* (DihedralGroup 6) where
 
 #check f.ker
 
-def v2 : Subgroup (DihedralGroup 6) where
+def v2_6 : Subgroup (DihedralGroup 6) where
   carrier := { r 0, r 3, sr 1, sr 4 }
   mul_mem' := by decide
   one_mem' := by decide
   inv_mem' := by decide
 
-def g : ConjAct (DihedralGroup 6) := r 1
-#eval g • (r (0 : ZMod 6))
-#eval g • (r (3 : ZMod 6))
-#eval g • (sr (0 : ZMod 6))
-#eval g • (sr (3 : ZMod 6))
+def g_6 : ConjAct (DihedralGroup 6) := r 1
+#eval g_6 • (r (0 : ZMod 6))
+#eval g_6 • (r (3 : ZMod 6))
+#eval g_6 • (sr (0 : ZMod 6))
+#eval g_6 • (sr (3 : ZMod 6))
 
 -- actions of Dih6
 instance : MulAction (DihedralGroup 6) (ZMod 2) where

@@ -1,6 +1,9 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.Defs
 
+
+namespace CentralizersAndNormalizers
+
 variable {G : Type*} [Group G]
 
 theorem centralizer_le_normalizer [Group G] (H : Subgroup G) : Subgroup.centralizer H ≤ Subgroup.normalizer H := by {
@@ -78,3 +81,6 @@ example (H : Subgroup G) (A : Set G) (g h : G) : g ∈ (asSubgroup H A) ↔ g �
 -- 10 informal proof: if g fixes H then it sends 1 to 1 and g to g so it centralizes H
 
 -- 14
+
+
+end CentralizersAndNormalizers

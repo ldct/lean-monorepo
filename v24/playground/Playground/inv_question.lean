@@ -1,6 +1,9 @@
 
 import Mathlib
 
+
+namespace inv_question
+
 example (A B : Type) [Nonempty A] (f : A → B) (h : f.Bijective)
 :  (fun x ↦ Function.invFun f (f x)) = fun x ↦ x := by
   funext x; exact Function.leftInverse_invFun h.injective x
@@ -36,3 +39,6 @@ example (A B : Type) [Nonempty A] (f : A → B)
   · intro h y
     use Function.invFun f y
     apply congr_fun h y
+
+
+end inv_question

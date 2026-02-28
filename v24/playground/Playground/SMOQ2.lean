@@ -4,6 +4,9 @@ import Plausible
 
 open Real
 
+
+namespace SMOQ2
+
 theorem t1 : (sqrt 10 + sqrt 2)^2 = 12 + 4 * sqrt 5 := by
   calc
     (sqrt 10 + sqrt 2) ^ 2 = (sqrt 10) ^ 2 + (sqrt 2) ^ 2 + 2 * (sqrt 10 * sqrt 2) := by ring
@@ -77,3 +80,6 @@ theorem t2 : (sqrt 10 - sqrt 2)^(1 / 3 : ℝ) * (sqrt 10 + sqrt 2)^(7 / 3 : ℝ)
     ring
   rw [h5]
   ring
+
+
+end SMOQ2

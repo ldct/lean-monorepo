@@ -1,6 +1,9 @@
 import Mathlib.Tactic
 
 -- Definition 2.3.1: Bounded sequence
+
+namespace Bounded
+
 def Bounded (a : ℕ → ℝ) : Prop :=
   ∃ M : ℝ, 0 < M ∧ (∀ n, |a n| < M)
 
@@ -16,3 +19,6 @@ example : Bounded (fun n ↦ 1/(n+1)) := by
   simp
   rw [inv_lt_iff_one_lt_mul₀ (by linarith)]
   linarith
+
+
+end Bounded

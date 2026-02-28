@@ -11,6 +11,9 @@ open scoped Pointwise
 set_option relaxedAutoImplicit false
 set_option autoImplicit false
 
+
+namespace BaerNorm
+
 /-
 The norm of a group G is the intersection of all normalizers of subgroups of G.
 -/
@@ -80,3 +83,6 @@ theorem q8_norm_ne_center : baerNorm (QuaternionGroup 2) ≠ Subgroup.center (Qu
     simp +decide [ baerNorm, Subgroup.normalizer_eq_top ];
   simp_all [ Subgroup.eq_top_iff' ]
   simp_all (config := { decide := Bool.true }) only [Subgroup.ext_iff, true_iff, not_false_eq_true]
+
+
+end BaerNorm

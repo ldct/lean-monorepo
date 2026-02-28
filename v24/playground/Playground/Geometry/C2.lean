@@ -2,6 +2,9 @@ import Mathlib.Algebra.Group.Defs
 import Mathlib.Data.Fintype.Defs
 import Mathlib.Tactic.DeriveFintype
 
+
+namespace C2
+
 inductive C2 : Type
   | one
   | neg
@@ -35,3 +38,6 @@ instance : Group C2 := {
   inv_mul_cancel a := by
     decide +revert
 }
+
+
+end C2

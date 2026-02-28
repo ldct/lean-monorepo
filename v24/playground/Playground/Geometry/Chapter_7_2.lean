@@ -2,6 +2,9 @@ import Mathlib
 
 open Polynomial
 
+
+namespace Chapter_7_2
+
 #check Polynomial.ring
 
 noncomputable def r : ℤ[X] := X
@@ -25,3 +28,6 @@ example : IsSquare (X ^ 2 + 1 : (ZMod 2)[X]) := by
   grind
 
 example : ¬IsSquare (X ^ 2 + 1 : ℤ[X]) := by sorry
+
+
+end Chapter_7_2

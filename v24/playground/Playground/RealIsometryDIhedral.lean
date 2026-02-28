@@ -2,6 +2,9 @@ import Mathlib
 
 set_option linter.style.longLine false
 
+
+namespace RealIsometryDIhedral
+
 attribute [grind =] abs_eq_abs
 attribute [grind =] lt_abs
 attribute [grind =] abs_lt
@@ -269,3 +272,6 @@ abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (Dihedra
 theorem RealIsometry.isDihedral (n : ℕ) [NeZero n]
 : ∃ f : Subgroup RealIsometry, IsDihedral f := by
   sorry
+
+
+end RealIsometryDIhedral

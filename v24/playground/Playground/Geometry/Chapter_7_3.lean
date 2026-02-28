@@ -4,6 +4,9 @@ set_option linter.style.longLine false
 
 open Polynomial
 
+
+namespace Chapter_7_3
+
 /-
 The ring homomorphism from ℤ to (ZMod 2) that sends an integer to 0 if it is even and 1 if it is odd.
 -/
@@ -492,3 +495,6 @@ example : (ℤ × ℤ) →+* (ℤ × ℤ) := {
 example : (ℤ × ℤ) →+* (ℤ × ℤ) := {
   toFun := fun (a, b) => (b, b), map_one' := by simp, map_mul' x y := by simp, map_zero' := by simp, map_add' x y := by simp
 }
+
+
+end Chapter_7_3

@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace abc436_a
+
 @[reducible]
 def padWithO (n : Nat) (s : String) : String :=
   if s.length ≥ n then
@@ -46,3 +49,6 @@ theorem padWithO_length (n : Nat) (s : String) : (padWithO n s).length = max n s
 
 example (n : Nat) (s : String) (h : n ≥ s.length): (padWithO n s).length = n := by
   rw [ padWithO_length, max_eq_left h ]
+
+
+end abc436_a

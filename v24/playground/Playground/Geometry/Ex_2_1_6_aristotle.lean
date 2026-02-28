@@ -19,7 +19,8 @@ import Playground.Geometry.Chapter_2_1
 
 import Mathlib.Tactic.GeneralizeProofs
 
-namespace Harmonic.GeneralizeProofs
+namespace Harmonic
+open Chapter_2_1.GeneralizeProofs
 -- Harmonic `generalize_proofs` tactic
 
 open Lean Meta Elab Parser.Tactic Elab.Tactic Mathlib.Tactic.GeneralizeProofs

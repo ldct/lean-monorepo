@@ -5,6 +5,10 @@ set_option linter.style.longLine false
 set_option linter.style.multiGoal false
 set_option linter.style.cases false
 
+
+namespace Chapter_1_1
+open StrangeMultiplicationWorld
+
 /-
 This file formalizes the definitions, theorems and exercises from Chapter 1.1 of Dummit and Foote (page 16).
 -/
@@ -643,3 +647,6 @@ lemma MyGroup.ex32 {G} [MyGroup G] [Fintype G] (g : G) (n : ℕ) (hn : n = order
 lemma MyGroup.ex32_2 {G} [MyGroup G] [Fintype G] (g : G) (n : ℕ) (hn : n = orderOf g)
 : n ≤ Fintype.card G := by
   sorry
+
+
+end Chapter_1_1

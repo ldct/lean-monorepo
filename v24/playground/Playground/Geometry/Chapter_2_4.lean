@@ -2,6 +2,9 @@ import Mathlib
 
 set_option linter.style.longLine false
 
+
+namespace Chapter_2_4
+
 /-
 This file formalizes the definitions, theorems and exercises from Chapter 2.4 of Dummit and Foote (page 61).
 -/
@@ -122,3 +125,6 @@ example {G} [Group G] (H : Subgroup G) (h1 : Group.IsAbelian H) : Group.IsAbelia
     have := h ( ⟨ h1, hh1 ⟩ : H ) ( ⟨ h2, hh2 ⟩ : H ) ; aesop;
   simp +decide only [hc2, mul_assoc, h_comm, hc1];
   simp +decide only [← mul_assoc, ← hc2]
+
+
+end Chapter_2_4

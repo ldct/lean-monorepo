@@ -1,6 +1,10 @@
 import Playground.Analysis.TendsTo
 
 -- Exercise 2.2.7: Define convergence to infinity
+
+namespace abbott
+open TendsTo
+
 def TendsToInf (a : ℕ → ℝ) : Prop :=
   ∀ M > 0, ∃ B : ℕ, ∀ n, B ≤ n → M < a n
 
@@ -32,3 +36,6 @@ example : TendsToInf (fun n ↦ Real.sqrt n) := by
       exact Nat.le_ceil (M * M)
     }
     _ < Real.sqrt n := hB_sqrt
+
+
+end abbott

@@ -5,6 +5,9 @@ import Lean.Data.Json.Printer
 
 open Lean Json ToJson FromJson
 
+
+namespace test_json
+
 structure Wrapper: Type where
   data: Array Int
 deriving ToJson, FromJson, Inhabited, Repr
@@ -19,3 +22,6 @@ def test_str := "{
 }
 "
 #eval (get_ledger_from_json_string test_str)
+
+
+end test_json

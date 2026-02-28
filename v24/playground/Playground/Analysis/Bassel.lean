@@ -5,6 +5,10 @@ import Mathlib
 -- This file proves that the series ∑ 1/n^2 converges to some limit
 -- The bulk of this is a series of inequalities that show that the partial sums are bounded above by 2
 
+
+namespace Bassel
+open MonotoneConvergence InfiniteSums
+
 noncomputable def invSquares (i : ℕ) : ℝ := (1 / ((i+1)^2))
 noncomputable def bassel := partialSums invSquares
 
@@ -94,3 +98,6 @@ theorem c1 : Summable' invSquares := by
     use 2
     intro n
     exact final n
+
+
+end Bassel

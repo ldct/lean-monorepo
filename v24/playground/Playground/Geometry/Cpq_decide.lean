@@ -2,6 +2,9 @@ import Mathlib
 import Plausible.Random
 import Playground.Geometry.SmallGroups.GroupProps
 
+
+namespace Cpq_decide
+
 structure Cpqr (p q : PNat) (r : ZMod p) (h : (r ^ (q.val) = 1)) : Type where
   P : ZMod p
   Q : ZMod q
@@ -69,3 +72,6 @@ instance (p q : PNat) (r : ZMod p) (h : (r ^ (q.val) = 1)) : Group (Cpqr p q r h
 }
 
 #synth Group (Cpqr 8 2 3 (by decide))
+
+
+end Cpq_decide

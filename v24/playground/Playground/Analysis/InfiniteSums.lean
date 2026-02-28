@@ -4,6 +4,10 @@ import Mathlib
 -- Infinite sums
 
 -- The sequence 0 → 0, 1 → b₀, 2 → b₀ + b₁, …
+
+namespace InfiniteSums
+open TendsTo
+
 def partialSums (b : ℕ → ℝ) : (ℕ → ℝ) :=
   fun n ↦ ∑ i ∈ Finset.range n, b i
 
@@ -30,3 +34,6 @@ theorem monotone_psum_of_pos
 
   -- Simp cancels common terms, leaving just 0 ≤ a x
   simp [a_pos x]
+
+
+end InfiniteSums

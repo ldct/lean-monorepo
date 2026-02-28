@@ -2,6 +2,10 @@ import Playground.Analysis.AlgebraicLimit
 import Mathlib
 
 -- Theorem 2.3.4.i (Order Limit Theorem)
+
+namespace OrderLimit
+open AlgebraicLimit TendsTo
+
 theorem tendsTo_pos
   {a : ℕ → ℝ}
   {A : ℝ}
@@ -64,3 +68,6 @@ theorem tendsTo_const_le
   apply tendsTo_le a_le_C
   exact a_tendsTo_A
   exact tendsTo_const C
+
+
+end OrderLimit

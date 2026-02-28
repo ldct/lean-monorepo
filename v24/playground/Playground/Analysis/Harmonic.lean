@@ -3,6 +3,9 @@ import Playground.Analysis.InfiniteSums
 import Playground.Analysis.Bounded
 import Mathlib
 
+namespace Harmonic
+open AlgebraicLimit InfiniteSums Bounded
+
 -- The terms 1/i
 def invNats (i : ℕ) : ℝ := (1 / (i+1):ℚ)
 -- The nth harmonic number
@@ -27,7 +30,7 @@ theorem e2 (k : ℕ) : (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats (2^(
   simp
   rw [this]
   field_simp
-  ring
+  norm_cast
 
 -- Divergence of the harmonic series
 
@@ -95,3 +98,5 @@ theorem s_diverges : ¬ (Summable' invNats) := by
   unfold Summable' at h
   rw [show partialSums invNats = s by rfl] at h
   exact s_unbounded (ConvergesThenBounded h)
+
+end Harmonic

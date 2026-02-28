@@ -1,6 +1,8 @@
 import Std
 import Playground.AoC.day2_data
 
+namespace Day2
+open Day2Data
 open Day2Data
 
 #eval lst2.length
@@ -61,3 +63,5 @@ example : newIsSafe [1,3,2,4,5] = true := by decide
 example : newIsSafe [1,2,7,8,9] = false := by decide
 
 #eval (lst2.filter newIsSafe).length
+
+end Day2

@@ -4,6 +4,9 @@ set_option linter.style.longLine false
 set_option linter.style.multiGoal false
 set_option linter.style.cases false
 
+
+namespace Chapter_7_1
+
 /-
 This file formalizes the definitions, theorems and examples from Chapter 7.1 of Dummit and Foote (page 226).
 
@@ -677,3 +680,6 @@ instance PRSet.instRing {G} : Ring (PRSet G) where
   mul_zero a := by
     rw [PRSet.ext_iff]
     simp [mul_val, zero_val]
+
+
+end Chapter_7_1

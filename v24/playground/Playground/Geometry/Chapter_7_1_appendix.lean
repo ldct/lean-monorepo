@@ -1,6 +1,9 @@
 import Mathlib
 
 
+
+namespace Chapter_7_1_appendix
+
 def Ring.AreInverse {G} [Ring G] (a b : G) : Prop := a * b = 1 ∧ b * a = 1
 
 lemma Ring.AreInverse.symm {G} [Ring G] (a b : G) : AreInverse a b ↔ AreInverse b a := by grind [Ring.AreInverse]
@@ -104,3 +107,6 @@ lemma Ring.not_isUnit_of_isZeroDivisor {R} [Ring R] (a : R) (h : MyIsZeroDivisor
       _ = 0 * a.inv := by rw [h]
       _ = 0 := by simp [zero_mul]
     exact hb1 this
+
+
+end Chapter_7_1_appendix

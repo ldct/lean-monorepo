@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace MyK4
+
 inductive MyC3 : Type
   | e
   | r
@@ -185,3 +188,6 @@ theorem xa_pow_four (i : ZMod (2 * n)) : xa i ^ 4 = 1 := by
 
 
 end QuaternionGroup
+
+
+end MyK4

@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace NZisSpan
+
 def nℤ (n : ℤ) : Ideal ℤ where
   carrier := { n * i | i : ℤ }
   add_mem' ha hb := by
@@ -22,3 +25,6 @@ abbrev ℤ3ℤ : Ideal ℤ := Ideal.span {3}
 
 example {n : ℤ} : nℤ n = Ideal.span {n} := by
   sorry
+
+
+end NZisSpan

@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
+import Playground.GroupTheory.Dih6
 
 namespace DihedralGroup
 
@@ -7,13 +8,13 @@ namespace DihedralGroup
 
 -- ⊥
 
-def bot : Subgroup (DihedralGroup 6) where
+def bot_6 : Subgroup (DihedralGroup 6) where
   carrier := {r 0}
   mul_mem' := by decide
   one_mem' := by decide
   inv_mem' := by decide
 
-example : bot = ⊥ := by ext x; rfl
+example : bot_6 = ⊥ := by ext x; rfl
 
 -- Subgroups isomorphic to D3
 
@@ -24,7 +25,7 @@ def d3_1 : Subgroup (DihedralGroup 6) where
   one_mem' := by decide
   inv_mem' := by decide
 
-theorem mem_d31_iff : g ∈ d3_1 ↔ g = r 0 ∨ g = r 2 ∨ g = r 4 ∨ g = sr 0 ∨ g = sr 2 ∨ g = sr 4 := by rfl
+theorem mem_d31_iff (g : DihedralGroup 6) : g ∈ d3_1 ↔ g = r 0 ∨ g = r 2 ∨ g = r 4 ∨ g = sr 0 ∨ g = sr 2 ∨ g = sr 4 := by rfl
 
 def e : DihedralGroup 6 := r 0
 
@@ -76,49 +77,7 @@ example : d3_1 ≃* DihedralGroup 3 where
   left_inv := by
     rintro ⟨g, hg⟩
     cases' g with i j
-
-    fin_cases i
-
-    simp [toFun]
-
-    have : r 1 ∉ d3_1 := by decide
-    exfalso
-    exact this hg
-
-    simp [toFun]
-
-    have : r 3 ∉ d3_1 := by
-      decide
-    exfalso
-    exact this hg
-
-    simp [toFun]
-
-    have : r 5 ∉ d3_1 := by decide
-    exfalso
-    exact this hg
-
-    fin_cases j
-    simp [toFun]
-    simp [toFun] at hg
-
-    have : sr 1 ∉ d3_1 := by decide
-    exfalso
-    exact this hg
-
-    simp [toFun]
-    simp [toFun] at hg
-
-    have : sr 3 ∉ d3_1 := by decide
-    exfalso
-    exact this hg
-
-    simp [toFun]
-    simp [toFun] at hg
-
-    have : sr 5 ∉ d3_1 := by decide
-    exfalso
-    exact this hg
+    all_goals sorry
 
   right_inv := by
     intro g
@@ -132,56 +91,9 @@ example : d3_1 ≃* DihedralGroup 3 where
 
     repeat sorry
 
-instance : MulAction (DihedralGroup 6) (ZMod 2) where
-  smul := by
-    intro g p
-    cases' g with i j
-    exact p
-    exact -p
-  one_smul := by decide
-  mul_smul := by decide
-
-
-instance : MulAction (DihedralGroup 6) (ZMod 6) where
-  smul := by
-    intro g p
-    cases' g with i j
-
-    -- ri ⬝ p
-    exact i + p
-
-    -- sr j ⬝ p
-    exact - j - p
-  one_smul := by decide
-  mul_smul := by decide
-
 open Polynomial Real Complex
 
-instance : MulAction (DihedralGroup 6) ℂ where
-  smul := by
-    intro g z
-    cases' g with i j
-
-    -- ri ⬝ p
-    exact z
-
-    -- sr j ⬝ p
-    exact -z
-  one_smul := by
-    intro b
-    rfl
-  mul_smul := by
-    intro g1 g2 z
-    cases' g1 with i j
-    cases' g2 with i' j'
-    rfl
-    rfl
-    cases' g2 with i' j'
-    rfl
-    simp
-    sorry
-
-instance : MulAction (DihedralGroup 6) ℂ where
+noncomputable instance : MulAction (DihedralGroup 6) ℂ where
   smul := by
     intro g p
     cases' g with i j

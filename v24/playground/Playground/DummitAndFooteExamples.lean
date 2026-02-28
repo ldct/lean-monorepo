@@ -2,6 +2,9 @@ import Mathlib
 
 set_option linter.style.longLine false
 
+
+namespace DummitAndFooteExamples
+
 /-
 # Chapter 1.1
 -/
@@ -727,3 +730,6 @@ example {R} [Ring R] (I J : Ideal R)
 #check DualNumber ℤ
 
 #check IsPrincipalIdealRing
+
+
+end DummitAndFooteExamples

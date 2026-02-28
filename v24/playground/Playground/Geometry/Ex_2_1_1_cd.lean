@@ -1,6 +1,10 @@
 import Playground.Geometry.Chapter_2_1
 
 -- Exercise 2.1.1.c
+
+namespace Ex_2_1_1_cd
+open Chapter_2_1
+
 example (n : PNat): AddSubgroup ℚ := AddSubgroup.ofAddSubgroupCriterion
 { a | a.den ∣ n }
 (by
@@ -25,3 +29,6 @@ example (n : PNat) : AddSubgroup ℚ := AddSubgroup.ofAddSubgroupCriterion
   simp at *
   sorry
 )
+
+
+end Ex_2_1_1_cd

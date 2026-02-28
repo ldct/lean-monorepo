@@ -7,13 +7,13 @@ namespace DihedralGroup
 
 -- ⊥
 
-def bot : Subgroup (DihedralGroup 4) where
+def bot_4 : Subgroup (DihedralGroup 4) where
   carrier := {r 0}
   mul_mem' := by decide
   one_mem' := by decide
   inv_mem' := by decide
 
-example : bot = ⊥ := by ext x; rfl
+example : bot_4 = ⊥ := by ext x; rfl
 
 -- Subgroups isomorphic to C2
 
@@ -53,13 +53,13 @@ def c : Subgroup (DihedralGroup 4) where
 
 -- V4
 
-def v1 : Subgroup (DihedralGroup 4) where
+def v1_4 : Subgroup (DihedralGroup 4) where
   carrier := { r 0, r 2, sr 0, sr 2 }
   mul_mem' := by decide
   one_mem' := by decide
   inv_mem' := by decide
 
-def v2 : Subgroup (DihedralGroup 4) where
+def v2_4 : Subgroup (DihedralGroup 4) where
   carrier := { r 0, r 2, sr 1, sr 3 }
   mul_mem' := by decide
   one_mem' := by decide
@@ -67,11 +67,11 @@ def v2 : Subgroup (DihedralGroup 4) where
 
 open Pointwise
 
-def g : ConjAct (DihedralGroup 4) := r 1
-#eval g • (r (0 : ZMod 4))
-#eval g • (r (2 : ZMod 4))
-#eval g • (sr (1 : ZMod 4))
-#eval g • (sr (3 : ZMod 4))
+def g_4 : ConjAct (DihedralGroup 4) := r 1
+#eval g_4 • (r (0 : ZMod 4))
+#eval g_4 • (r (2 : ZMod 4))
+#eval g_4 • (sr (1 : ZMod 4))
+#eval g_4 • (sr (3 : ZMod 4))
 
 #eval Set.toFinset {1, 2}
 

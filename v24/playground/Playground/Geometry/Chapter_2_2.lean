@@ -3,6 +3,9 @@ import Mathlib
 set_option linter.style.longLine false
 
 
+
+namespace Chapter_2_2
+
 /-
 This file formalizes the definitions, theorems and exercises from Chapter 2.2 of Dummit and Foote (page 49).
 -/
@@ -763,3 +766,6 @@ example {G} [Group G] (A : Set G)
     rw [← hg] at ha
     group at ha
     exact ha
+
+
+end Chapter_2_2

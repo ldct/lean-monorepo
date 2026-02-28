@@ -6,6 +6,8 @@ Authors: Walter Moreira, Joe Stubbs
 import Mathlib
 -- import LeanTeXMathlib  -- not available in v24
 
+namespace Stern
+
 def D : ℕ → ℕ
   | 0 => 2
   | n + 1 => (D n)^2
@@ -22,3 +24,6 @@ theorem D_recurrence (n : ℕ) : D n = 2 ^ (2 ^ n) := by
     rw [D]
     rw [IH]
     group
+
+
+end Stern

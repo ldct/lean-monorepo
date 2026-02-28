@@ -1,6 +1,9 @@
 import Mathlib
 import Plausible
 
+
+namespace FibZ
+
 /-!
 # Fibonacci sequence
 
@@ -152,3 +155,6 @@ theorem four_mul_fib_n
   (n : ℕ)
 : 4 * fib n = fib (n + 2) + fib n + fib (n - 2) := by
   grind
+
+
+end FibZ

@@ -4,6 +4,10 @@ import Playground.Geometry.ZMul
 
 open Subgroup
 
+
+namespace Closure
+open ZMul
+
 variable {G : Type*} [Group G]
 
 -- closure of S is the intersection of all subgroups
@@ -40,3 +44,6 @@ example [Group G] (A B : Set G) (A_le_B : A ≤ B) : Subgroup.closure A ≤ Subg
 example [Group G] (H : Subgroup G) (H_comm : IsMulCommutative H) : IsMulCommutative (Subgroup.closure (H.carrier ∪ ↑(Subgroup.center G))) where
   is_comm := ⟨fun a b => by
     sorry⟩
+
+
+end Closure

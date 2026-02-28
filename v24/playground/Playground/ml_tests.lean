@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace ml_tests
+
 example (a b k : ℝ) (k_pos : k ≠ 0) (eq : k*a = k*b)
 : a = b := by
   sorry
@@ -67,3 +70,6 @@ theorem binom_inv_telescope (n k : ℕ) (hk : 0 < k) :
       (k + 1 : ℚ) / k *
         (1 / (Nat.choose (n + k) n : ℚ) - 1 / (Nat.choose (n + k + 1) (n + 1) : ℚ)) := by
   sorry
+
+
+end ml_tests

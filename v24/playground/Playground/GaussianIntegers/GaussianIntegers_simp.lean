@@ -2,6 +2,9 @@ import Mathlib
 
 set_option linter.style.longLine false
 
+
+namespace GaussianIntegers_simp
+
 /-
 # Key definitions
 
@@ -117,3 +120,6 @@ theorem mul_im (x y : GaussInt) : (x * y).im = x.re * y.im + x.im * y.re :=
   mul_zero := by
     intros
     ext <;> simp
+
+
+end GaussianIntegers_simp

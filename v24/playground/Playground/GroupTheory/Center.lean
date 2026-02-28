@@ -24,31 +24,4 @@ theorem target : B = Subgroup.center (DihedralGroup 4) := by
   cases' a with i i
   fin_cases i
 
-  simp
-  constructor
-  rw [←Subgroup.mem_carrier]
-  intro h
-  decide
-  intro h
-  rw [mem_B_iff]
-  simp
-
-  simp
-  constructor
-
-  intro h
-  rw [mem_B_iff] at h
-  simp at h
-  exfalso
-
-  revert h
-
-
-  decide
-
-
-  have e : ¬((1 : Fin 4) = 0 ∨ (1 : Fin 4) = 2) := by decide
-  apply e
-  exact h
-
-  repeat sorry
+  all_goals sorry

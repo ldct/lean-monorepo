@@ -7,6 +7,10 @@ import Mathlib.Tactic.DeriveFintype
 import Playground.Geometry.C2
 import Playground.Geometry.SmallGroups.GroupProps
 
+
+namespace Dihedralization
+open C2
+
 /-!
 This file defines the dihedralization of a commutative group G and proves that it is a group.
 
@@ -92,3 +96,6 @@ instance {G} [CommGroup G] [Fintype G] : Group (Dihedralization G) := {
     <;> simp [h1, act_g_one, act_g_neg]
     <;> rfl
 }
+
+
+end Dihedralization

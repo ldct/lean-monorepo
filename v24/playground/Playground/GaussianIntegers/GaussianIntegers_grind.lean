@@ -2,6 +2,9 @@ import Mathlib
 
 set_option linter.style.longLine false
 
+
+namespace GaussianIntegers_grind
+
 /-
 # Key definitions
 
@@ -90,3 +93,6 @@ instance instCommRing : CommRing GaussInt where
   mul_comm := by grind
   zero_mul := by grind
   mul_zero := by grind
+
+
+end GaussianIntegers_grind

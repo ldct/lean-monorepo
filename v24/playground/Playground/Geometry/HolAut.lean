@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace HolAut
+
 structure Hol (G) [Group G] [Fintype G] [DecidableEq G] : Type where
   g : G
   aut : MulAut G
@@ -87,3 +90,6 @@ abbrev T := Dihedralization (Multiplicative (ZMod 3) × Multiplicative (ZMod 3))
 #eval Group.CommutingFraction T
 #eval _root_.Group.FracInvolutions T
 #eval ∀ (a : T), a^6 = 1
+
+
+end HolAut

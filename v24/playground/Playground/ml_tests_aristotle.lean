@@ -1,3 +1,6 @@
+
+namespace ml_tests_aristotle
+
 /-
 This file was edited by Aristotle.
 
@@ -146,3 +149,5 @@ theorem binom_inv_telescope (n k : ℕ) (hk : 0 < k) :
   -- Combine and simplify the fractions on the right-hand side.
   field_simp
   ring
+
+end ml_tests_aristotle

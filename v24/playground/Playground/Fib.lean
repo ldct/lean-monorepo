@@ -1,6 +1,9 @@
 import Mathlib
 import Plausible
 
+
+namespace Fib
+
 /-!
 # Fibonacci sequence
 --/
@@ -128,3 +131,6 @@ example
     rw [fib_add_one (show 2*n+2 ≠ 0 by omega)]
     simp
     ring_nf
+
+
+end Fib

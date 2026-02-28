@@ -12,9 +12,9 @@ def smul_n (g : DihedralGroup n) (p : ZMod n): (ZMod n) :=
   | r i => i + p
   | sr j => -j -p
 
-def g : DihedralGroup 6 := r 2
-def f := smul_n g
-#eval [0, 1, 2, 3, 4, 5].map f
+def g_act : DihedralGroup 6 := r 2
+def f_act := smul_n g_act
+#eval [0, 1, 2, 3, 4, 5].map f_act
 
 theorem r0_mul_p (p : ZMod n) : (smul_n (r 0) p) = p := by
   rw [smul_n]

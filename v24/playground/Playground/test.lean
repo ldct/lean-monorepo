@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace test
+
 example (h : (1 : ZMod 4) = (2 : Fin (1 + 3)) ∨ 1 = (3 : Fin (2 + 2))) : False := by
   revert h
   decide
@@ -17,3 +20,6 @@ example (h : one' = two' ∨ one' = three') : False := by
 -- example (h : one = two ∨ one = three) : False := by
 --   revert h
 --   decide
+
+
+end test

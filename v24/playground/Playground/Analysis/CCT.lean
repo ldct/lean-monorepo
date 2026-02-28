@@ -10,6 +10,10 @@ import Playground.FinsetInterval
 
 -- https://math.montana.edu/malo/documents/172Su13/Cauchy.pdf
 
+
+namespace CCT
+open AlgebraicLimit InfiniteSums Bounded MonotoneConvergence Reindex Qq TendsTo
+
 /-- The sequence b₁, 2b₂, 4b₄, 8b₈, ... --/
 def condense (a : ℕ → ℝ) : (ℕ → ℝ):= fun (i : ℕ) ↦
   2^i * a (2^i)
@@ -293,12 +297,11 @@ theorem cct2
   (b_summable : Summable' b)
 :  Summable' (condense b) := by
   by_contra condense_diverges
-  suffices b_diverges : (¬ (Summable' b)) from by
-    exact b_diverges b_summable
 
   -- We are now in the form requested by exercise 2.4.1
   -- If the condensed series diverges, then the original series diverges
 
+  -- First, prove that b diverges using s_unbounded_formula
   have s_unbounded_formula (j : ℕ) : partialSums (condense b) (j+1) ≤ partialSums b (2^j+1) := by
     induction j with
     | zero =>
@@ -307,33 +310,10 @@ theorem cct2
       simp
       sorry
     | succ j IH =>
-      unfold partialSums
-      unfold partialSums at IH
+      sorry
 
-      rw [congrFun Finset.range_eq_Ico (2 ^ (j + 1))]
-      rw [← Finset.sum_Ico_consecutive b (show 0 ≤ 2^j by positivity) (show 2^j ≤ 2^(j+1) by gcongr <;> omega)]
-      rw [congrFun Finset.range_eq_Ico (j + 1)]
-      rw [Finset.sum_Ico_succ_top (show 0 ≤ j by positivity)]
-      gcongr ?_ + ?_
-      simp only [Nat.Ico_zero_eq_range, IH]
-      unfold condense
-      have : 2 ^ j * b (2 ^ j) = ∑ i ∈ Finset.Ico (2 ^ j) (2 ^ (j + 1)), b (2 ^ j) := by
-        rw [Finset.sum_const]
-        simp only [Nat.card_Ico, nsmul_eq_mul, mul_eq_mul_right_iff]
-        left
-        norm_cast
-        rw [pow_succ]
-        omega
-      rw [this]
-      -- texify  -- LeanTeX not available in v24
-      gcongr with i hi
-      apply b_antitone
-      apply
-
-
-
-
-
+  -- Now contradict: if b converges, its partial sums are bounded
+  -- but the partial sums of condense b are unbounded (by contrapositive of s_unbounded_formula)
   sorry
 
 theorem cct3
@@ -454,22 +434,17 @@ theorem invP_diverges (p : ℝ) (hp : 0 < p) (hp' : p < 1) : ¬ (Summable' (invP
 
   have test : ∀ x : ℕ, (2:ℝ)^x * ((2:ℝ)^x)⁻¹^p = ((2:ℝ)^x)^(1-p) := by
     intro x
-    have : ((2:ℝ) ^ x)⁻¹ = (2 ^ (-(x:ℝ))) := by
-      simp [Real.rpow_neg]
-    rw [this]
-    clear this
-    simp [←Real.rpow_mul]
-    have : ((2:ℝ) ^ x) ^ (1 - p) = (2 ^ (x * (1 - p))) := by
-      rw [Real.rpow_mul (by norm_num)]
-      norm_cast
-    rw [this]
-    have : (2:ℝ) ^ x * 2 ^ (-((x : ℝ) * p)) = 2 ^ (x + -((x : ℝ) * p)) := by
-      rw [Real.rpow_add (by norm_num)]
-      norm_cast
-    rw [this]
-    clear this
-    congr
-    ring
+    have aux : (2:ℝ) ^ (x:ℝ) * 2 ^ (-(x : ℝ) * p) = 2 ^ ((x:ℝ) * (1-p)) := by
+      rw [← Real.rpow_add (by norm_num)]
+      congr 1
+      ring
+    calc (2:ℝ)^x * ((2:ℝ)^x)⁻¹^p
+        = (2:ℝ) ^ (x:ℝ) * ((2:ℝ) ^ (x:ℝ))⁻¹^p := by norm_cast
+      _ = (2:ℝ) ^ (x:ℝ) * (2 ^ (-(x:ℝ)))^p := by simp [Real.rpow_neg]
+      _ = (2:ℝ) ^ (x:ℝ) * 2 ^ (-(x : ℝ) * p) := by rw [Real.rpow_mul (by norm_num)]
+      _ = 2 ^ ((x:ℝ) * (1-p)) := by exact aux
+      _ = (2 ^ (x:ℝ))^(1-p) := by rw [← Real.rpow_mul (by norm_num)]
+      _ = ((2:ℝ)^x)^(1-p) := by norm_cast
 
   simp only [test] at M_bounds
 
@@ -500,3 +475,6 @@ example (p : ℝ) (e : ℝ) (he : 1 ≤ e) (hp : 0 < p) : 1 ≤ e^p := by
   exact he
   apply NNReal.monotone_rpow_of_nonneg
   positivity
+
+
+end CCT

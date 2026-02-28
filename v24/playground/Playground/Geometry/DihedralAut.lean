@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace DihedralAut
+
 /-
 Definition of a map on the dihedral group determined by parameters k and m.
 -/
@@ -183,3 +186,6 @@ example {n : ℕ} (hn : 6 ≤ n)
     exact Equiv.symm <| Equiv.ofBijective _ ⟨ dihedralAut_injective <| by linarith, dihedralAut_surjective <| by linarith ⟩;
   cases n <;> simp_all +decide [ Nat.totient ];
   ring
+
+
+end DihedralAut

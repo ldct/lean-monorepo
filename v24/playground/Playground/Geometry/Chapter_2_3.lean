@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace Chapter_2_3
+
 def IsGeneratedBy {G} [Group G] (g : G) : Prop :=
   ∀ h : G, ∃ n : ℤ, g ^ n = h
 
@@ -114,3 +117,6 @@ example : Nat.card { g : ZMod 48 | GeneratesAdditvely g } = 16 := by
   any_goals exact Finset.filter ( fun x => IsUnit x ) ( Finset.univ : Finset ( ZMod 48 ) );
   · rw [ Set.ext_iff ] at h_set ; aesop;
   · decide +kernel
+
+
+end Chapter_2_3

@@ -1,3 +1,6 @@
+
+namespace bt_2025
+
 /-
 Sorry, Aristotle was unable to complete the task in time.
 -/
@@ -774,3 +777,6 @@ The difference between (b+n)^3 and b^3 is greater than n^3.
 -/
 lemma cubes_span_gt (b n : ℕ) (hb : b > 0) (hn : n > 0) : (b + n)^3 - b^3 > n^3 := by
   exact lt_tsub_iff_left.mpr ( by nlinarith [ mul_pos hb hn ] )
+
+
+end bt_2025

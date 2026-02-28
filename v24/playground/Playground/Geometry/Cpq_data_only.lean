@@ -2,6 +2,9 @@ import Mathlib
 import Plausible.Random
 import Playground.Geometry.SmallGroups.GroupProps
 
+
+namespace Cpq_data_only
+
 /-!
 This file defines a group parameterised by p, q, and r which is the semidirect product of ZMod p and ZMod q
 -/
@@ -145,3 +148,6 @@ instance : Fact ((3 : ZMod (8:PNat)) ^ (2:PNat).val = 1) := ⟨(by decide)⟩
 #synth Group (Cpqr 8 2 3)
 
 #eval Group.exponent (Cpqr 8 2 3)
+
+
+end Cpq_data_only

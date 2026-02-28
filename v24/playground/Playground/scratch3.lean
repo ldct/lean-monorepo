@@ -11,3 +11,9 @@ open BigOperators
 -- def esymm (n : ℕ) (k : ℕ) (x : ℕ → ℝ): ℝ := ∑ A in set_binom n k, (∏ i in A, x i)
 -- lemma newton_two ...
 -- lemma esymm_one_eq_binom ...
+
+
+namespace scratch3
+
+
+end scratch3

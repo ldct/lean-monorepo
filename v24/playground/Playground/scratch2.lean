@@ -1,6 +1,9 @@
 import Mathlib
 -- import LeanTeXMathlib  -- not available in v24
 
+
+namespace scratch2
+
 example (n : ℕ) (s : Finset ℕ)
 : (∑ x ∈ s, 1) * n = (∑ x ∈ s, n) := by
   rw [Finset.sum_const]
@@ -36,3 +39,6 @@ example (x y : ℝ)
 : abs (x^2 + y^2) = x^2 + y^2 := by
   apply abs_of_nonneg
   positivity
+
+
+end scratch2

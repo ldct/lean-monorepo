@@ -4,6 +4,10 @@ import Mathlib
 
 -- Define `drop` and `pad`, reindexing sequences from different points.
 
+
+namespace Reindex
+open AlgebraicLimit InfiniteSums TendsTo
+
 def drop (a : ℕ → ℝ) : ℕ → ℝ := fun i ↦ a (i + 1)
 
 def pad (a : ℕ → ℝ) : ℕ → ℝ := fun i ↦ a (i - 1)
@@ -120,3 +124,6 @@ theorem conv_drop (a : ℕ → ℝ) : Summable' a ↔ Summable' (drop a) := by
 
 theorem conv_pad (a : ℕ → ℝ) : Summable' a ↔ Summable' (pad a) := by
   sorry
+
+
+end Reindex

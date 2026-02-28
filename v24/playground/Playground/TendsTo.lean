@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace TendsTo
+
 def TendsTo (a : ℕ → ℝ) (t : ℝ) : Prop :=
   ∀ ε > 0, ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε
 
@@ -216,3 +219,6 @@ example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ if n%2 = 0 then 1 else 0) t) := by
 
   simp only [abs_lt] at h1 h2
   linarith
+
+
+end TendsTo

@@ -4,6 +4,9 @@ import Mathlib.GroupTheory.SpecificGroups.Cyclic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
 
 -- the function x ↦ mx + c
+
+namespace AffineQ
+
 structure AffineQ : Type where
   m : ℚ
   c : ℚ
@@ -82,6 +85,7 @@ instance : Group AffineQ where
     simp [r.3]
     rw [inv, mul_times]
     field_simp
+    ring
 
 theorem inv_eq (g : AffineQ) : g⁻¹ = AffineQ.mk g.m⁻¹ (-g.c/g.m) (inv_ne_zero g.m_ne_0) := by rfl
 
@@ -119,8 +123,7 @@ def Translates2Z : Subgroup AffineQ where
     use i1 + i2
     rw [←a_def, ←b_def]
     rw [mul_eq]
-    field_simp
-    ring
+    simp only [one_mul]; congr 1; push_cast; ring
   one_mem' := by
     use 0
     simp
@@ -141,7 +144,7 @@ def t := AffineQ.mk 1 1 (by decide)
 
 open Pointwise
 
-#eval (ConjAct.toConjAct g) • t
+#eval! (ConjAct.toConjAct g) • t
 
 def C := (ConjAct.toConjAct g) • TranslatesZ
 
@@ -166,3 +169,6 @@ example : t ∉ C := by
   simp at g_act_w_is_t
   norm_cast at g_act_w_is_t
   omega
+
+
+end AffineQ

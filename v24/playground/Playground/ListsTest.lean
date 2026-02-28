@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace ListsTest
+
 abbrev MyTypes : List (Sigma Fintype) := [
   ⟨Fin 2, inferInstance⟩,
   ⟨Fin 3, inferInstance⟩,
@@ -17,3 +20,6 @@ abbrev MyTypes' : List FintypeCat := [
 
 -- [2, 3, 5]
 #eval MyTypes'.map (fun x ↦ Fintype.card x.carrier)
+
+
+end ListsTest

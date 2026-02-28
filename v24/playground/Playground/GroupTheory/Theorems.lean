@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace Theorems
+
 variable {n : ℕ}
 
 theorem neg_1_eq_n_minus_1 : ((-1 : ZMod n) = n-1) := by
@@ -7,3 +10,6 @@ theorem neg_1_eq_n_minus_1 : ((-1 : ZMod n) = n-1) := by
 
 example (a : ZMod n) (b : ZMod n) (h : a = b) : a.val = b.val := by
   exact congrArg ZMod.val h
+
+
+end Theorems

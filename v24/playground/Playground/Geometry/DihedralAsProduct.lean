@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace DihedralAsProduct
+
 abbrev DihedralProduct (n : ℕ) : Type :=
   Multiplicative (ZMod 2) × DihedralGroup n
 
@@ -62,3 +65,6 @@ example {n : ℕ} (hn1 : 6 ≤ n) (hn2 : ∃ k, n = 4 * k + 2): Nonempty
     omega;
   convert h_iso using 1 ; rw [ Nat.mul_div_cancel' ] ; omega;
   grind
+
+
+end DihedralAsProduct

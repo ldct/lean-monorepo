@@ -2,6 +2,9 @@ import Mathlib
 
 set_option linter.style.longLine false
 
+
+namespace Chapter_1_6
+
 /-
 This file formalizes the definitions, theorems and exercises from Chapter 1.6 of Dummit and Foote (page 36).
 -/
@@ -375,3 +378,6 @@ example {G} [Group G] : MulAction G G := {
     rintro x y z
     simp [mul_assoc]
 }
+
+
+end Chapter_1_6

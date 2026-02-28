@@ -1,6 +1,10 @@
 import Playground.Analysis.TendsTo
 
 -- def Monotone: we use the Mathlib defn
+
+namespace MonotoneConvergence
+open TendsTo
+
 def BoundedAbove (a : ℕ → ℝ) : Prop := ∃ B, ∀ n, a n ≤ B
 
 -- Monotone Convergence Theorem: an increasing bounded sequence converges
@@ -63,3 +67,6 @@ theorem MCT
 : Converges a := by
   use (sSup { a n | n : ℕ})
   exact MCT_formula a_inc a_bdd
+
+
+end MonotoneConvergence

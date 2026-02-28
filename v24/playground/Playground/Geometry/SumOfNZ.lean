@@ -1,3 +1,6 @@
+
+namespace SumOfNZ
+
 /-
 This file was edited by Aristotle.
 
@@ -67,3 +70,6 @@ example : (nℤ 2) + (nℤ 3) = (nℤ 1) := by
   have h_mem : i ∈ nℤ 2 ⊔ nℤ 3 := by
     exact h_mul ▸ Submodule.add_mem_sup ( ⟨ x * i, rfl ⟩ ) ( ⟨ y * i, rfl ⟩ );
   exact iff_of_true h_mem ( by exact ⟨ i, by ring ⟩ )
+
+
+end SumOfNZ

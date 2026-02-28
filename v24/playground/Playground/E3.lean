@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace E3
+
 /-
 Exceptional isometries of R^3
 -/
@@ -276,3 +279,6 @@ def IsExceptional (H : Subgroup RealIsometry) : Prop :=
 theorem RealIsometry.existsExceptionalOfOrder24 (n : ℕ) [NeZero n]
 : ∃ f : Subgroup RealIsometry, IsExceptional f ∧ Nat.card f = 24 := by
   sorry
+
+
+end E3

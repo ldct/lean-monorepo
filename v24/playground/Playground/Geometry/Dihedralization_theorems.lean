@@ -2,6 +2,10 @@ import Playground.Geometry.Dihedralization
 
 
 -- 4.12
+
+namespace Dihedralization_theorems
+open Dihedralization
+
 example (G) [CommGroup G] [Fintype G] (g : G)
 : Dihedralization.mk .one g ∈ Subgroup.center (Dihedralization G) ↔ g^2 = 1 := by
   rw [ Subgroup.mem_center_iff ]
@@ -13,3 +17,6 @@ example (G) [CommGroup G] [Fintype G] (g : G)
     rintro ⟨ c, h ⟩
     simp +decide [ Dihedralization.mul_eq ]
     fin_cases c <;> simp [mul_comm, hg]
+
+
+end Dihedralization_theorems

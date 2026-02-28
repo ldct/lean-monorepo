@@ -2,6 +2,9 @@ import Mathlib
 
 set_option linter.style.longLine false
 
+
+namespace Chapter_3_1
+
 /-
 # Chapter 3: Quotient Groups and Homomorphisms
 # 3.1: Definitions and Examples
@@ -246,3 +249,6 @@ def QuotSetoid : Setoid G := {
     trans := by grind
     }
 }
+
+
+end Chapter_3_1

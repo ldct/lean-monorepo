@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace MinimalAxioms
+
 #check AddGroup.ofLeftAxioms
 
 instance : AddGroup ℤ := AddGroup.ofLeftAxioms (by
@@ -12,3 +15,6 @@ instance : AddGroup ℤ := AddGroup.ofLeftAxioms (by
   intro a
   grind
 )
+
+
+end MinimalAxioms

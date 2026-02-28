@@ -1,3 +1,6 @@
+
+namespace IsSquare_refutation_aristotle
+
 /-
 This file was edited by Aristotle.
 
@@ -25,3 +28,5 @@ example : ¬IsSquare (X ^ 2 + 1 : ℤ[X]) := by
     have := congr_arg Polynomial.natDegree hp; norm_num [ Polynomial.natDegree_add_eq_left_of_natDegree_lt ] at this;
     exact ⟨ p.coeff 1, p.coeff 0, Polynomial.eq_X_add_C_of_natDegree_le_one <| by rw [ Polynomial.natDegree_mul ( by aesop_cat ) ( by aesop_cat ) ] at this; linarith ⟩;
   rcases h_linear with ⟨ a, b, rfl ⟩ ; have h₁ := congr_arg ( Polynomial.eval 0 ) hp ; have h₂ := congr_arg ( Polynomial.eval ( -1 ) ) hp ; have h₃ := congr_arg ( Polynomial.eval 1 ) hp ; norm_num at * ; nlinarith [ show a > -2 by nlinarith, show a < 2 by nlinarith ] ;
+
+end IsSquare_refutation_aristotle

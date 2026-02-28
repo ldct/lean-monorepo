@@ -2,6 +2,9 @@ import Mathlib
 
 set_option linter.style.longLine false
 
+
+namespace Chapter_2_1
+
 /-
 This file formalizes the definitions, theorems and exercises from Chapter 2.1 of Dummit and Foote (page 47).
 -/
@@ -365,3 +368,6 @@ example {G : Type} [Group G] (hG : IsAbelian G) (n : ℤ) : Subgroup G := {
     intro x a
     simp_all only [Set.mem_setOf_eq, inv_zpow', zpow_neg, inv_one]
 }
+
+
+end Chapter_2_1

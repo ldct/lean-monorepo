@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace Enumerations
+
 /-
 Enumerations of finite sets.
 
@@ -67,3 +70,6 @@ abbrev b : Set (Fin 2) := {1, 0}
 
 example : a = b := by
   grind
+
+
+end Enumerations

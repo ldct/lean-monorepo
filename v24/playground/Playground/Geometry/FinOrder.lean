@@ -1,3 +1,6 @@
+
+namespace FinOrder
+
 /-
 This file was edited by Aristotle.
 
@@ -17,3 +20,6 @@ import Mathlib
 
 
 #eval exponent (Multiplicative (ZMod 3))
+
+
+end FinOrder

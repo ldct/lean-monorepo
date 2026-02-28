@@ -1,6 +1,9 @@
 import Mathlib.Tactic.Positivity
 open Lean
 
+
+namespace Cancel
+
 syntax (name := cancelDischarger) "cancel_discharger " : tactic
 syntax (name := cancelAux) "cancel_aux " term " at " term : tactic
 syntax (name := cancel) "cancel " term " at " term : tactic
@@ -77,3 +80,6 @@ elab_rules : tactic
 
 -- TODO build in a `try change 1 ≤ _ at h` to upgrade the `0 < _` result in the case of Nat
 macro_rules | `(tactic| cancel $a at $h) => `(tactic| cancel_aux $a at $h; try apply $h)
+
+
+end Cancel

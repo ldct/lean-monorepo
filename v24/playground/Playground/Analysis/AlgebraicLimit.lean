@@ -2,6 +2,10 @@
 import Playground.Analysis.Bounded
 import Playground.Analysis.TendsTo
 
+
+namespace AlgebraicLimit
+open Bounded TendsTo
+
 noncomputable def max_prefix : ((ℕ → ℝ)) → ℕ → ℝ
 | _, 0   => 0
 | f, x+1 => max (f x) (max_prefix f x)
@@ -152,7 +156,7 @@ theorem tendsTo_mul
 
   calc
     |a n * b n - (A * B)| = |a n * b n - A * b n + (A * b n - A * B)| := by ring_nf
-    _ ≤ |a n * b n - A * b n| + |A * b n - A * B| := abs_add (a n * b n - A * b n) (A * b n - A * B)
+    _ ≤ |a n * b n - A * b n| + |A * b n - A * B| := abs_add_le (a n * b n - A * b n) (A * b n - A * B)
     _ = |b n * (a n - A)| + |A * (b n - B)| := by ring_nf
     _ = |b n| * |a n - A| + |A * (b n - B)| := by congr; exact abs_mul (b n) (a n - A)
     _ = |b n| * |a n - A| + |A| * |b n - B| := by congr; exact abs_mul A (b n - B)
@@ -225,8 +229,10 @@ theorem tendsTo_inv
     exact this
 
   have : 1 / |b n| < 2 / |B| := by
-    field_simp at this
-    exact this
+    have hbn_pos : (0 : ℝ) < |b n| := by positivity
+    have hB_pos : (0 : ℝ) < |B| := by positivity
+    rw [div_lt_div_iff₀ hbn_pos hB_pos]
+    linarith
 
   calc
     |1 / b n - 1 / B| = |(B - b n) / (B * b n)| := by
@@ -245,8 +251,6 @@ theorem tendsTo_inv
       exact hN₂
     _ = ε * (|B| / 2 * (1 / |b n|)) := by
       field_simp
-      rw [show B^2 = |B|^2 by exact Eq.symm (sq_abs B)]
-      ring
     _ < ε * (|B| / 2 * (2 / |B|)) := by
       apply (mul_lt_mul_left hε).mpr _
       have haux : 0 < |B| / 2 := by positivity
@@ -254,3 +258,6 @@ theorem tendsTo_inv
       exact this
     _ = ε := by
       field_simp
+
+
+end AlgebraicLimit

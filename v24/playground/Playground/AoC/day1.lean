@@ -1,5 +1,7 @@
 import Std
 
+namespace Day1
+
 def lst: List Int := [87501,76559,
 70867,16862,
 12959,38527,
@@ -1046,3 +1048,5 @@ def score (p: Int × Int) : Int :=
   Int.natAbs (p.1 * p.2)
 
 #eval (l5.map score).sum
+
+end Day1

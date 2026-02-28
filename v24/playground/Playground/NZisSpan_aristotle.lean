@@ -1,3 +1,6 @@
+
+namespace NZisSpan_aristotle
+
 /-
 This file was edited by Aristotle.
 
@@ -46,3 +49,5 @@ example {n : ℤ} : nℤ n = Ideal.span {n} := by
   simp [dvd_iff_exists_eq_mul_right];
   -- The equivalence follows directly from the symmetry of equality.
   simp [eq_comm]
+
+end NZisSpan_aristotle

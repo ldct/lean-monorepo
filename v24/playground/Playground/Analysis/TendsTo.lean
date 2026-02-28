@@ -1,6 +1,9 @@
 import Mathlib.Tactic
 -- import LeanTeXMathlib  -- not available in v24
 
+
+namespace TendsTo
+
 def TendsTo (a : ℕ → ℝ) (t : ℝ) : Prop :=
   ∀ ε > 0, ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε
 
@@ -86,6 +89,7 @@ example : TendsTo (fun n ↦ 1/(Real.sqrt n)) 0 := by
     have := (mul_lt_mul_right pos).mpr hn
     field_simp at this
     rw [mul_assoc]
+    rw [show ε ^ 2 * ↑n = ↑n * (ε * ε) by ring] at this
     exact this
   }
 
@@ -133,7 +137,7 @@ example : TendsTo (fun n ↦ (n+1)/n) 1 := by
 
   simp
 
-  have : ((n + 1) / (n: ℝ)) - 1 = 1/n := by field_simp
+  have : ((n + 1) / (n: ℝ)) - 1 = 1/n := by field_simp; ring
 
   rw [this, abs_of_nonneg]
 
@@ -141,10 +145,9 @@ example : TendsTo (fun n ↦ (n+1)/n) 1 := by
     rify at hn
     linarith
 
-  have pos : 0 < (ε / n) := by positivity
-  have N_cond := (mul_lt_mul_right pos).mpr N_cond
-  field_simp at N_cond
-  exact N_cond
+  have pos : 0 < (n : ℝ) := by positivity
+  have : 1 / ↑n < ε := by field_simp at N_cond ⊢; linarith
+  exact this
 
   simp only [one_div, inv_nonneg, Nat.cast_nonneg]
 
@@ -219,3 +222,6 @@ example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ if n%2 = 0 then 1 else 0) t) := by
 
   simp only [abs_lt] at h1 h2
   linarith
+
+
+end TendsTo

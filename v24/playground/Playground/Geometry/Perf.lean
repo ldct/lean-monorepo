@@ -3,6 +3,10 @@ import Playground.Geometry.SmallGroups.GroupProps
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
 
 
+
+namespace Perf
+open DicyclicGroup
+
 deriving instance Repr for DihedralGroup
 
 
@@ -13,3 +17,6 @@ deriving instance Repr for DihedralGroup
 #reduce Z3 (DihedralGroup 16)
 
 #reduce Z4 (DihedralGroup 16)
+
+
+end Perf

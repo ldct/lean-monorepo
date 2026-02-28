@@ -8,6 +8,9 @@ import Mathlib.Tactic.FinCases
 import Mathlib.Tactic.Group
 import Playground.Geometry.SmallGroups.GroupProps
 
+
+namespace FrobeniusGroup
+
 @[ext]
 structure FrobeniusGroup (p : ℕ) [Fact p.Prime] : Type where
   b : (ZMod p)ˣ
@@ -76,3 +79,6 @@ instance {p : ℕ} [Fact p.Prime] : Group (FrobeniusGroup p) where
 -- #eval Group.CommutingFraction T
 -- #eval _root_.Group.FracInvolutions T
 -- #eval ∀ (a : T), a^6 = 1
+
+
+end FrobeniusGroup

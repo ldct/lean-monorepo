@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace ZModIntersect
+
 def nℤ (n : ℤ) : Ideal ℤ where
   carrier := { n * i | i : ℤ }
   add_mem' ha hb := by
@@ -18,3 +21,6 @@ def nℤ (n : ℤ) : Ideal ℤ where
     grind [Int.zsmul_eq_mul]
 
 example {n m : ℤ} : (nℤ n) ⊓ (nℤ m) = (nℤ (n.lcm m)) := by sorry
+
+
+end ZModIntersect

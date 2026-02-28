@@ -1,5 +1,8 @@
 import Mathlib
 
+
+namespace DedekindFinite
+
 /-
 IsDedekindFiniteMonoid exists in recent Mathlib, but not v24
 -/
@@ -14,3 +17,6 @@ example : IsDedekindFinite (Matrix (Fin 2) (Fin 2) ℤ) := by
 example {R} [CommRing R] : IsDedekindFinite R := by
   intro a b h
   exact mul_comm a b ▸ h
+
+
+end DedekindFinite

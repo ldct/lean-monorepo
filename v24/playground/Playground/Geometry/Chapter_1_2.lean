@@ -13,6 +13,7 @@ inductive MyDihedralGroup (n : ℕ) : Type
   deriving DecidableEq
 
 namespace MyDihedralGroup
+open Chapter_1_1
 
 def mul {n : ℕ} : MyDihedralGroup n → MyDihedralGroup n → MyDihedralGroup n
   | .r i, .r j => .r (i + j)
