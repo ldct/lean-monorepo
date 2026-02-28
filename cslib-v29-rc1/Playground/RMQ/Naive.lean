@@ -1,7 +1,7 @@
 import Cslib.Algorithms.Lean.TimeM
 import Mathlib.Data.List.MinMax
 import Mathlib.Order.WithBot
-import Playground.RMQ.Basic
+import Playground.RMQ.SparseTable
 
 set_option autoImplicit false
 

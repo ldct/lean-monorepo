@@ -1,4 +1,4 @@
-import Playground.RMQ.Basic
+import Playground.RMQ.SparseTable
 
 /-- Parse the next natural number from `bytes` starting at position `pos`,
     skipping leading whitespace. Returns (value, newPos). -/
