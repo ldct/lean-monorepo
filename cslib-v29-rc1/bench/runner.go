@@ -5,6 +5,16 @@
 //	go run bench/runner.go .lake/build/bin/rmq-bench "python3 sparsetable.py" "python3 sqrttree.py"
 //
 // Flags: -n 1000000 -q 1000000 -runs 3 -seed 42
+//
+// Full sweep (1e3 through 1e6):
+//
+//	for exp in 3 4 5 6; do
+//	  n=$((10**exp))
+//	  echo ">>> N=$n Q=$n <<<"
+//	  go run bench/runner.go -n $n -q $n -runs 3 \
+//	    .lake/build/bin/rmq-bench "python3 sparsetable.py" "python3 sqrttree.py"
+//	  echo
+//	done
 package main
 
 import (
@@ -19,6 +29,16 @@ import (
 	"strings"
 	"time"
 )
+
+type checksumKey struct{ n, q int; seed int64 }
+
+// Known checksums for (n, q, seed=42) — deterministic from the Go RNG.
+var knownChecksums = map[checksumKey]string{
+	{1_000, 1_000, 42}:         "12062723026",
+	{10_000, 10_000, 42}:       "13256664439",
+	{100_000, 100_000, 42}:     "17077952648",
+	{1_000_000, 1_000_000, 42}: "26760216643",
+}
 
 func main() {
 	n := flag.Int("n", 1_000_000, "array size")
@@ -36,6 +56,8 @@ func main() {
 	fmt.Printf("Generating input: N=%d, Q=%d, seed=%d\n", *n, *q, *seed)
 	input := generateInput(*n, *q, *seed)
 	fmt.Printf("Input size: %.1f MB\n\n", float64(len(input))/(1024*1024))
+
+	expected, hasExpected := knownChecksums[checksumKey{*n, *q, *seed}]
 
 	for _, sut := range suts {
 		fmt.Printf("=== %s ===\n", sut)
@@ -55,8 +77,16 @@ func main() {
 			sort.Slice(times, func(i, j int) bool { return times[i] < times[j] })
 			median := times[len(times)/2]
 			fmt.Printf("  min=%dms  median=%dms  checksum=%s\n", times[0].Milliseconds(), median.Milliseconds(), lastOutput)
+			if hasExpected && lastOutput != expected {
+				fmt.Printf("CHECKSUM WRONG: got %s, expected %s\n", lastOutput, expected)
+				os.Exit(1)
+			}
 		}
 		fmt.Println()
+	}
+
+	if hasExpected {
+		fmt.Printf("Checksum verified: %s\n", expected)
 	}
 }
 
