@@ -216,7 +216,18 @@ def bench() -> None:
 if __name__ == "__main__":
     import sys
 
-    if len(sys.argv) > 1 and sys.argv[1] == "bench":
-        bench()
-    else:
+    if len(sys.argv) > 1 and sys.argv[1] == "verify":
         verify()
+    else:
+        data = sys.stdin.buffer.read().split()
+        it = iter(data)
+        n = int(next(it))
+        q = int(next(it))
+        arr = [int(next(it)) for _ in range(n)]
+        st = SqrtTree(arr)
+        checksum = 0
+        for _ in range(q):
+            l = int(next(it))
+            r = int(next(it))
+            checksum += st.query(l, r)
+        print(checksum)

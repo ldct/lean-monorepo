@@ -1,0 +1,116 @@
+// runner.go — Uniform RMQ benchmark runner.
+//
+// Usage:
+//
+//	go run bench/runner.go .lake/build/bin/rmq-bench "python3 sparsetable.py" "python3 sqrttree.py"
+//
+// Flags: -n 1000000 -q 1000000 -runs 3 -seed 42
+package main
+
+import (
+	"bytes"
+	"flag"
+	"fmt"
+	"math/rand"
+	"os"
+	"os/exec"
+	"sort"
+	"strconv"
+	"strings"
+	"time"
+)
+
+func main() {
+	n := flag.Int("n", 1_000_000, "array size")
+	q := flag.Int("q", 1_000_000, "number of queries")
+	runs := flag.Int("runs", 3, "number of runs per SUT")
+	seed := flag.Int64("seed", 42, "RNG seed")
+	flag.Parse()
+
+	suts := flag.Args()
+	if len(suts) == 0 {
+		fmt.Fprintln(os.Stderr, "usage: go run bench/runner.go [flags] <sut-command>...")
+		os.Exit(1)
+	}
+
+	fmt.Printf("Generating input: N=%d, Q=%d, seed=%d\n", *n, *q, *seed)
+	input := generateInput(*n, *q, *seed)
+	fmt.Printf("Input size: %.1f MB\n\n", float64(len(input))/(1024*1024))
+
+	for _, sut := range suts {
+		fmt.Printf("=== %s ===\n", sut)
+		times := make([]time.Duration, 0, *runs)
+		var lastOutput string
+		for i := 0; i < *runs; i++ {
+			d, output, err := runSUT(sut, input)
+			if err != nil {
+				fmt.Printf("  run %d: ERROR: %v\n", i+1, err)
+				continue
+			}
+			times = append(times, d)
+			lastOutput = strings.TrimSpace(output)
+			fmt.Printf("  run %d: %dms\n", i+1, d.Milliseconds())
+		}
+		if len(times) > 0 {
+			sort.Slice(times, func(i, j int) bool { return times[i] < times[j] })
+			median := times[len(times)/2]
+			fmt.Printf("  min=%dms  median=%dms  checksum=%s\n", times[0].Milliseconds(), median.Milliseconds(), lastOutput)
+		}
+		fmt.Println()
+	}
+}
+
+func generateInput(n, q int, seed int64) []byte {
+	rng := rand.New(rand.NewSource(seed))
+	var buf bytes.Buffer
+	// Pre-size the buffer: rough estimate
+	buf.Grow(n*6 + q*14 + 64)
+
+	buf.WriteString(strconv.Itoa(n))
+	buf.WriteByte(' ')
+	buf.WriteString(strconv.Itoa(q))
+	buf.WriteByte('\n')
+
+	for i := 0; i < n; i++ {
+		if i > 0 {
+			buf.WriteByte(' ')
+		}
+		buf.WriteString(strconv.Itoa(rng.Intn(1_000_000_000)))
+	}
+	buf.WriteByte('\n')
+
+	for i := 0; i < q; i++ {
+		a := rng.Intn(n)
+		b := rng.Intn(n)
+		if a > b {
+			a, b = b, a
+		}
+		buf.WriteString(strconv.Itoa(a))
+		buf.WriteByte(' ')
+		buf.WriteString(strconv.Itoa(b))
+		buf.WriteByte('\n')
+	}
+
+	return buf.Bytes()
+}
+
+func runSUT(command string, input []byte) (time.Duration, string, error) {
+	parts := strings.Fields(command)
+	cmd := exec.Command(parts[0], parts[1:]...)
+	cmd.Stdin = bytes.NewReader(input)
+	cmd.Env = append(os.Environ(), "LEAN_STACK_SIZE=536870912") // 512 MB
+
+	var stdout, stderr bytes.Buffer
+	cmd.Stdout = &stdout
+	cmd.Stderr = &stderr
+
+	start := time.Now()
+	err := cmd.Run()
+	elapsed := time.Since(start)
+
+	if err != nil {
+		return 0, "", fmt.Errorf("%v\nstderr: %s", err, stderr.String())
+	}
+
+	return elapsed, stdout.String(), nil
+}
