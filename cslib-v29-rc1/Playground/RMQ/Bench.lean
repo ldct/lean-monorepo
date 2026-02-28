@@ -1,4 +1,4 @@
-import Playground.RMQ
+import Playground.RMQ.Basic
 
 /-- Parse the next natural number from `bytes` starting at position `pos`,
     skipping leading whitespace. Returns (value, newPos). -/

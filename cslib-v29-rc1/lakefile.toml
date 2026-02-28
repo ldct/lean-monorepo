@@ -16,4 +16,4 @@ name = "Playground"
 
 [[lean_exe]]
 name = "rmq-bench"
-root = "Playground.RMQBench"
+root = "Playground.RMQ.Bench"
