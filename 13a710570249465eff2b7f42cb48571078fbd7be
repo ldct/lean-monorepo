@@ -1,0 +1,23 @@
+cslib-v29-rc1/verify.sh
+  980b6c1f2941922e 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.6",
+  "base_commit_sha": "13a710570249465eff2b7f42cb48571078fbd7be",
+  "prompts": {
+    "980b6c1f2941922e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6246b312-2688-44cc-a462-63c03dc10460",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 1,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}
