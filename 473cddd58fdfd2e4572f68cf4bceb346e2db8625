@@ -1,0 +1,23 @@
+v24/playground/Playground/RealIsometry.lean
+  0e50fc30cf220a07 58-59,103,108,140,205,224-228,233,235,240,243,251-253,255,258
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.6",
+  "base_commit_sha": "473cddd58fdfd2e4572f68cf4bceb346e2db8625",
+  "prompts": {
+    "0e50fc30cf220a07": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "887f3da6-e041-4650-970b-41a56ca0765a",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 29,
+      "total_deletions": 29,
+      "accepted_lines": 21,
+      "overriden_lines": 3
+    }
+  }
+}
