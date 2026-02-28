@@ -1,0 +1,25 @@
+cslib-v29-rc1/bench/rmq.cpp
+  980b6c1f2941922e 1-169
+cslib-v29-rc1/bench/runner.go
+  980b6c1f2941922e 5,15,18-26
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.6",
+  "base_commit_sha": "0a0dede983ea2e7df0b335fe64dbf4218b0f6871",
+  "prompts": {
+    "980b6c1f2941922e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6246b312-2688-44cc-a462-63c03dc10460",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 197,
+      "total_deletions": 19,
+      "accepted_lines": 180,
+      "overriden_lines": 0
+    }
+  }
+}
