@@ -1,0 +1,23 @@
+cslib-v29-rc1/bench/runner.go
+  980b6c1f2941922e 5,15
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.6",
+  "base_commit_sha": "a7685b4cbd8b5ee528bedf0805140cdc1c06f137",
+  "prompts": {
+    "980b6c1f2941922e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6246b312-2688-44cc-a462-63c03dc10460",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 2,
+      "total_deletions": 2,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}
