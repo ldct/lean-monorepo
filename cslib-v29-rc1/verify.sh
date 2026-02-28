@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-cd "$(dirname "$0")/.."
+cd "$(dirname "$0")"
 
 echo "Building C++ RMQ..."
 c++ -O2 -std=c++20 -o bench/rmq bench/rmq.cpp
