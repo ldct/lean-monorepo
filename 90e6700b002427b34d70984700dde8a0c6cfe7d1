@@ -1,0 +1,57 @@
+v24/playground/Playground/Analysis/Reindex.lean
+  393e5b3a869d4e7a 9
+v24/playground/Playground/Analysis/CCT.lean
+  393e5b3a869d4e7a 15,304,313,315-316,437-447
+v24/playground/Playground/GroupTheory/AffineQ.lean
+  393e5b3a869d4e7a 88,126,147
+v24/playground/Playground/Analysis/TendsTo.lean
+  393e5b3a869d4e7a 92,140,148-150
+v24/playground/Playground/Analysis/OrderLimit.lean
+  393e5b3a869d4e7a 7
+v24/playground/Playground/AoC/day1.lean
+  393e5b3a869d4e7a 3-4,1051-1052
+v24/playground/Playground/GroupTheory/Basic.lean
+  393e5b3a869d4e7a 70
+v24/playground/Playground/GroupTheory/Center.lean
+  393e5b3a869d4e7a 27
+v24/playground/Playground/AoC/day4.lean
+  393e5b3a869d4e7a 3-4,234-235
+v24/playground/Playground/GroupTheory/Dih4.lean
+  393e5b3a869d4e7a 16,62,71-74
+v24/playground/Playground/AoC/day2.lean
+  393e5b3a869d4e7a 4,66-67
+v24/playground/Playground/GroupTheory/Dih6Subgroups.lean
+  393e5b3a869d4e7a 3,28,80,96
+v24/playground/Playground/Analysis/AlgebraicLimit.lean
+  393e5b3a869d4e7a 159,232-235
+v24/playground/Playground/GroupTheory/Dih6.lean
+  393e5b3a869d4e7a 19,26-29
+v24/playground/Playground/AoC/day4_p2.lean
+  393e5b3a869d4e7a 2,4-5,61-62
+v24/playground/Playground/Stern.lean
+  393e5b3a869d4e7a 9
+v24/playground/Playground/Analysis/Harmonic.lean
+  393e5b3a869d4e7a 6,8,33,101-102
+v24/playground/Playground/GroupTheory/DihActions.lean
+  393e5b3a869d4e7a 17
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.6",
+  "base_commit_sha": "90e6700b002427b34d70984700dde8a0c6cfe7d1",
+  "prompts": {
+    "393e5b3a869d4e7a": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d5e8af33-74ff-4a18-a527-35052c87cb9a",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 369,
+      "total_deletions": 673,
+      "accepted_lines": 74,
+      "overriden_lines": 0
+    }
+  }
+}
