@@ -205,42 +205,60 @@ Theorem 1.5 Every real isometry is of the form x ↦ Ax + b
 -/
 theorem exists_mul (a : RealIsometry)
 : ∃ O : O3, ∃ b : R3, a.toFun = (standardForm O b).toFun := by
-  set T := a.toFun 0
-  set S : RealIsometry := ⟨fun x => a.toFun x - T, by
-    exact fun x y => by rw [← a.is_isometry x y]; simp +decide [sub_sub_sub_cancel_right], by
-    exact fun x => by obtain ⟨y, hy⟩ := a.surjective (x + T); use y; aesop⟩
+  -- Step 1: Define b = a(0) and the origin-fixing isometry S(x) = a(x) - b
+  set b := a.toFun 0
+  set S : RealIsometry := ⟨fun x => a.toFun x - b, by
+    intro x y; change ‖(a.toFun x - b) - (a.toFun y - b)‖ = ‖x - y‖
+    rw [sub_sub_sub_cancel_right]; exact a.is_isometry x y, by
+    intro x; obtain ⟨y, hy⟩ := a.surjective (x + b)
+    exact ⟨y, by change a.toFun y - b = x; simp [hy]⟩⟩
   generalize_proofs at *
-  have h_inner : ∀ x y : R3, inner ℝ (S.toFun x) (S.toFun y) = inner ℝ x y := by
+  -- Step 2: S preserves inner products (via polarization)
+  have hSinner : ∀ x y : R3, inner ℝ (S.toFun x) (S.toFun y) = inner ℝ x y := by
     intro x y
-    have : ‖S.toFun x‖^2 = ‖x‖^2 ∧ ‖S.toFun y‖^2 = ‖y‖^2 ∧ ‖S.toFun x - S.toFun y‖^2 = ‖x - y‖^2 := by
-      have := S.is_isometry x 0; have := S.is_isometry y 0; have := S.is_isometry x y; aesop
+    -- First establish that S preserves norms (using S(0) = 0)
+    have hSx : ‖S.toFun x‖^2 = ‖x‖^2 := by
+      have := S.is_isometry x 0; aesop
+    have hSy : ‖S.toFun y‖^2 = ‖y‖^2 := by
+      have := S.is_isometry y 0; aesop
+    have hSxy : ‖S.toFun x - S.toFun y‖^2 = ‖x - y‖^2 := by
+      have := S.is_isometry x y; aesop
+    -- Apply the polarization identity: 2⟨u,v⟩ = ‖u‖² + ‖v‖² - ‖u-v‖²
     norm_num [@norm_sub_sq ℝ] at *; grind
-  have h_linear : ∀ x y : R3, S.toFun (x + y) = S.toFun x + S.toFun y := by
-    intros x y
-    have h_eq : ‖S.toFun (x + y) - (S.toFun x + S.toFun y)‖^2 = 0 := by
-      rw [@norm_sub_sq ℝ]
-      simp_all +decide [norm_add_sq_real, inner_add_right, inner_add_left]
-      simp_all +decide [← real_inner_self_eq_norm_sq]
-      rw [inner_add_add_self]; ring_nf; rw [real_inner_comm, sub_self]
-    exact sub_eq_zero.mp (norm_eq_zero.mp (sq_eq_zero_iff.mp h_eq))
-  have h_smul : ∀ x : R3, ∀ c : ℝ, S.toFun (c • x) = c • S.toFun x := by
-    intro x c; have := h_inner (c • x) (c • x); simp_all +decide [inner_self_eq_norm_sq_to_K]
-    have : ∀ x y : R3, inner ℝ (S.toFun (c • x) - c • S.toFun x) (S.toFun (c • x) - c • S.toFun x) = 0 := by
-      simp_all +decide [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right]
-    exact sub_eq_zero.mp (by simpa [inner_self_eq_norm_sq_to_K] using this x x)
-  obtain ⟨A, hA⟩ : ∃ A : Matrix (Fin 3) (Fin 3) ℝ, ∀ x : R3, S.toFun x = A.mulVec x := by
-    have ⟨A, hA⟩ : ∃ A : (Fin 3 → ℝ) →ₗ[ℝ] (Fin 3 → ℝ), ∀ x : R3, S.toFun x = A x :=
+  -- Step 3: S is additive
+  have hSadd : ∀ x y : R3, S.toFun (x + y) = S.toFun x + S.toFun y := by
+    intro x y
+    -- Show ‖S(x+y) - (S(x) + S(y))‖² = 0
+    suffices h : ‖S.toFun (x + y) - (S.toFun x + S.toFun y)‖^2 = 0 by
+      exact sub_eq_zero.mp (norm_eq_zero.mp (sq_eq_zero_iff.mp h))
+    rw [@norm_sub_sq ℝ]
+    simp_all [norm_add_sq_real, inner_add_right, inner_add_left]
+    simp_all [← real_inner_self_eq_norm_sq]
+    rw [inner_add_add_self]; ring_nf; rw [real_inner_comm, sub_self]
+  -- Step 4: S is scalar-homogeneous
+  have hSsmul : ∀ (c : ℝ) (x : R3), S.toFun (c • x) = c • S.toFun x := by
+    intro c x
+    -- Show ⟨S(cx) - cS(x), S(cx) - cS(x)⟩ = 0
+    have := hSinner (c • x) (c • x); simp_all [inner_self_eq_norm_sq_to_K]
+    have hzero : ∀ u v : R3, inner ℝ (S.toFun (c • x) - c • S.toFun x) (S.toFun (c • x) - c • S.toFun x) = 0 := by
+      simp_all [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right]
+    exact sub_eq_zero.mp (by simpa [inner_self_eq_norm_sq_to_K] using hzero x x)
+  -- Step 5: Extract the matrix representation
+  obtain ⟨M, hM⟩ : ∃ M : Matrix (Fin 3) (Fin 3) ℝ, ∀ x : R3, S.toFun x = M.mulVec x := by
+    have ⟨L, hL⟩ : ∃ L : (Fin 3 → ℝ) →ₗ[ℝ] (Fin 3 → ℝ), ∀ x : R3, S.toFun x = L x :=
       ⟨{ toFun := S.toFun, map_add' := by aesop, map_smul' := by aesop }, fun _ => rfl⟩
-    exact ⟨LinearMap.toMatrix' A, by simp +decide [hA]⟩
-  have h_orthogonal : A ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
-    simp_all +decide
-    have h_ort : A.transpose * A = 1 := by
-      ext i j; specialize h_inner (Pi.single i 1) (Pi.single j 1); simp_all +decide [Matrix.mul_apply]
-      simp_all +decide [Fin.sum_univ_three, Matrix.one_apply, inner]
-      fin_cases i <;> fin_cases j <;> simp +decide at h_inner ⊢ <;> linarith!
-    exact ⟨h_ort, Matrix.mul_eq_one_comm.mp h_ort⟩
-  exact ⟨⟨A, h_orthogonal⟩, T, funext fun x => by
-    have := hA x; rw [sub_eq_iff_eq_add] at this; aesop⟩
+    exact ⟨LinearMap.toMatrix' L, by simp [hL]⟩
+  -- Step 6: M is orthogonal (MᵀM = I)
+  have hMorth : M ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
+    simp_all
+    have hort : M.transpose * M = 1 := by
+      ext i j; specialize hSinner (Pi.single i 1) (Pi.single j 1); simp_all [Matrix.mul_apply]
+      simp_all [Fin.sum_univ_three, Matrix.one_apply, inner]
+      fin_cases i <;> fin_cases j <;> simp at hSinner ⊢ <;> linarith!
+    exact ⟨hort, Matrix.mul_eq_one_comm.mp hort⟩
+  -- Step 7: Combine: a(x) = M•x + b
+  exact ⟨⟨M, hMorth⟩, b, funext fun x => by
+    have := hM x; rw [sub_eq_iff_eq_add] at this; aesop⟩
 
 abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
 def IsCyclicOfOrder (n : ℕ) (G : Type*) [Group G] : Prop :=
