@@ -1,0 +1,29 @@
+cslib-v29-rc1/Playground/RMQ/Bench.lean
+  980b6c1f2941922e 1
+cslib-v29-rc1/Playground/RMQ/Precomputed.lean
+  980b6c1f2941922e 4
+cslib-v29-rc1/Playground.lean
+  980b6c1f2941922e 4
+cslib-v29-rc1/Playground/RMQ/Naive.lean
+  980b6c1f2941922e 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.6",
+  "base_commit_sha": "e49afd6b76030cfbed679f565ea598e6fcca1b2d",
+  "prompts": {
+    "980b6c1f2941922e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6246b312-2688-44cc-a462-63c03dc10460",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 4,
+      "total_deletions": 4,
+      "accepted_lines": 4,
+      "overriden_lines": 0
+    }
+  }
+}
