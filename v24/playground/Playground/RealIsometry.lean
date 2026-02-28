@@ -54,18 +54,58 @@ Definition 1.1 (page 2). A function f : ℝⁿ → ℝⁿ is called an isometry 
 -/
 @[ext, grind ext]
 structure RealIsometry where
-  f : R3  → R3
-  is_isometry : ∀ x y, ‖f x - f y‖ = ‖x - y‖
-  surjective : Function.Surjective f
+  toFun : R3  → R3
+  is_isometry : ∀ x y, ‖toFun x - toFun y‖ = ‖x - y‖
+  surjective : Function.Surjective toFun
+
+
+/-
+Lemma 1.2. Every isometry is injective.
+-/
+@[grind] theorem RealIsometry.injective (f : RealIsometry) : Function.Injective f.toFun := by
+  intro x y hxy
+  have := calc
+    0 = ‖f.toFun x - f.toFun y‖ := by grind [norm_eq_zero]
+    _ = ‖x - y‖ := by rw [f.is_isometry]
+  grind [norm_eq_zero]
+
+/-
+Prerequisite for lemma 1.3 If f is an isometry, then f⁻¹ exists.
+-/
+theorem RealIsometry.bijective (f : RealIsometry) : Function.Bijective f.toFun := by grind [Function.Bijective]
+
+example (A B : Type) [Nonempty A] (f : A → B) (h : Function.Bijective f) : Function.Surjective f.invFun := by
+  grind [Function.invFun_surjective, Function.Bijective]
+
+theorem invFun_surjective (T : Type) [Nonempty T] (f : T → T) (hf : Function.Injective f) : Function.Surjective (Function.invFun f) := by
+  have h1 := Function.leftInverse_invFun hf
+  grind [Function.leftInverse_invFun, Function.LeftInverse.surjective, Function.leftInverse_invFun]
+
+theorem invFun_injective (T : Type) [Nonempty T] (f : T → T) (hf : Function.Surjective f) : Function.Injective (Function.invFun f) := by
+  exact (Function.rightInverse_invFun hf).injective
+
+/-
+Lemma 1.3 If f is an isometry, so is f⁻¹.
+-/
+noncomputable def RealIsometry.inverse (f : RealIsometry) : RealIsometry where
+  toFun := f.toFun.invFun
+  is_isometry x y := by
+    rw [← f.is_isometry]
+    have := Function.rightInverse_invFun f.surjective
+    unfold Function.RightInverse at this
+    unfold Function.LeftInverse at this
+    simp [this]
+  surjective := by
+    grind [Function.invFun_surjective]
 
 
 def RealIsometry.identity : RealIsometry where
-  f := id
+  toFun := id
   is_isometry := by grind
   surjective := Function.surjective_id
 
 noncomputable def translation (d : R3) : RealIsometry where
-  f x := x + d
+  toFun x := x + d
   is_isometry x y := by
     abel_nf
   surjective := fun x => by
@@ -97,7 +137,7 @@ theorem norm_orthogonal (n : ℕ)
   exact congrArg Real.sqrt h_norm_sq
 
 noncomputable def multiplication (A : O3) : RealIsometry where
-  f x := A • x
+  toFun x := A • x
   is_isometry x y := by
     rw [← smul_sub]
     apply norm_orthogonal
@@ -106,141 +146,33 @@ noncomputable def multiplication (A : O3) : RealIsometry where
     use A⁻¹ • y
     simp
 
-theorem RealIsometry.injective (f : RealIsometry) : Function.Injective f.f := by
-  intro x y hxy
-  have h1 : ‖x - y‖ = ‖f.f x - f.f y‖ := by
-    rw [f.is_isometry]
-  have h2 : f.f x - f.f y = 0 := sub_eq_zero_of_eq hxy
-  rw [h2] at h1
-  simp at h1
-  grind
 
-#check Function.invFun
-
-theorem RealIsometry.bijective (f : RealIsometry) : Function.Bijective f.f := by
-  constructor
-  · exact injective f
-  · exact f.surjective
-
-example (A B : Type) [Nonempty A] (f : A → B) (h : Function.Bijective f) : Function.Surjective f.invFun := by
-  exact Function.invFun_surjective h.injective
-
-theorem invFun_surjective (T : Type) [Nonempty T] (f : T → T) (hf : Function.Injective f) : Function.Surjective (Function.invFun f) := by
-  exact (Function.leftInverse_invFun hf).surjective
-
-theorem invFun_injective (T : Type) [Nonempty T] (f : T → T) (hf : Function.Surjective f) : Function.Injective (Function.invFun f) := by
-  exact (Function.rightInverse_invFun hf).injective
-
-noncomputable def RealIsometry.inverse (f : RealIsometry) : RealIsometry where
-  f :=  f.f.invFun
+/-
+Lemma 1.4 If f and g are isometries, so is f ∘ g.
+-/
+def RealIsometry.comp (f : RealIsometry) (g : RealIsometry) : RealIsometry where
+  toFun := f.toFun ∘ g.toFun
   is_isometry x y := by
-    rw [← f.is_isometry]
-    have := @Function.rightInverse_invFun _ _ _ f.f f.surjective
-    unfold Function.RightInverse at this
-    unfold Function.LeftInverse at this
-    simp [this]
+    have := calc
+      ‖x - y‖ = ‖g.toFun x - g.toFun y‖ := by rw [g.is_isometry]
+      _ = ‖f.toFun (g.toFun x) - f.toFun (g.toFun y)‖ := by rw [f.is_isometry]
+      _ = ‖(f.toFun ∘ g.toFun) x - (f.toFun ∘ g.toFun) y‖ := by congr
+    exact Eq.symm this
   surjective := by
-    apply Function.invFun_surjective
-    exact injective f
+    grind [Function.Surjective.comp]
 
-
-def RealIsometry.comp (a : RealIsometry) (b : RealIsometry) : RealIsometry where
-  f := a.f ∘ b.f
-  is_isometry x y := by
-    -- Apply the isometry property of $b$ first, then apply the isometry property of $a$.
-    have h_comp : ‖a.f (b.f x) - a.f (b.f y)‖ = ‖b.f x - b.f y‖ := by
-      -- Apply the isometry property of $a$ to the points $b.f x$ and $b.f y$.
-      apply a.is_isometry;
-    -- Apply the isometry property of $b$ to conclude the proof.
-    have := b.is_isometry x y; aesop
-  surjective := by
-    -- Since $a$ and $b$ are both surjective, their composition $a \circ b$ is also surjective.
-    apply Function.Surjective.comp a.surjective b.surjective
-
-noncomputable def standardForm (A : O3) (b : R3) : RealIsometry where
-  f x := A • x + b
-  is_isometry x y := by
-    -- Since $A$ is orthogonal, we have $\|A \cdot (x - y)\| = \|x - y\|$.
-    have h_norm : ‖A.val • (x - y)‖ = ‖x - y‖ := by
-      -- Since $A$ is orthogonal, we have $\|A \cdot (x - y)\| = \|x - y\|$ by the properties of orthogonal matrices.
-      apply norm_orthogonal;
-    -- Since $A$ is orthogonal, we have $\|A \cdot (x - y)\| = \|x - y\|$. Therefore, the norm of $(A • x + b) - (A • y + b)$ is equal to the norm of $x - y$.
-    have h_norm : ‖(A.val • x + b) - (A.val • y + b)‖ = ‖A.val • (x - y)‖ := by
-      rw [ smul_sub ] ; abel_nf;
-    exact h_norm.trans ‹_›
-  surjective := by
-    -- To prove surjectivity, take any y in R3. We need to find an x such that A • x + b = y.
-    intro y
-    use A⁻¹ • (y - b);
-    -- By definition of matrix multiplication and vector addition, we can simplify the expression.
-    simp
-
--- Every real isometry is of the form x ↦ Ax + b
-theorem exists_mul (a : RealIsometry)
-: ∃ O : O3, ∃ b : R3, a.f = (standardForm O b).f := by
-  -- By definition of $a$, we know that $a$ is an isometry, so $a.f$ is an affine transformation.
-  have h_affine : ∃ (A : O3) (b : R3), ∀ x, a.f x = A • x + b := by
-    set T := a.f 0
-    set S : RealIsometry := ⟨fun x => a.f x - T, by
-      exact fun x y => by rw [ ← a.is_isometry x y ] ; simp +decide [ sub_sub_sub_cancel_right ] ;, by
-      exact fun x => by obtain ⟨y, hy⟩ := a.surjective ( x + T ); use y; aesop;⟩
-    generalize_proofs at *;
-    -- Since $S$ is an isometry, it preserves the inner product.
-    have h_inner : ∀ x y : R3, inner ℝ (S.f x) (S.f y) = inner ℝ x y := by
-      intro x y
-      have h_norm_sq : ‖S.f x‖^2 = ‖x‖^2 ∧ ‖S.f y‖^2 = ‖y‖^2 ∧ ‖S.f x - S.f y‖^2 = ‖x - y‖^2 := by
-        have := S.is_isometry x 0; have := S.is_isometry y 0; have := S.is_isometry x y; aesop;
-      norm_num [ @norm_sub_sq ℝ ] at *;
-      grind;
-    -- Since $S$ is an isometry, it is linear.
-    have h_linear : ∀ x y : R3, S.f (x + y) = S.f x + S.f y := by
-      -- By definition of $S$, we know that $S(x + y) = S(x) + S(y)$ for all $x, y \in \mathbb{R}^3$.
-      intros x y
-      have h_eq : ‖S.f (x + y) - (S.f x + S.f y)‖^2 = 0 := by
-        rw [ @norm_sub_sq ℝ ];
-        simp_all +decide [ norm_add_sq_real, inner_add_right, inner_add_left ];
-        simp_all +decide [ ← real_inner_self_eq_norm_sq ];
-        rw [ inner_add_add_self ] ; ring_nf;
-        rw [ real_inner_comm, sub_self ];
-      exact sub_eq_zero.mp ( norm_eq_zero.mp ( sq_eq_zero_iff.mp h_eq ) );
-    -- Since $S$ is linear, it is represented by a matrix $A$.
-    obtain ⟨A, hA⟩ : ∃ A : Matrix (Fin 3) (Fin 3) ℝ, ∀ x : R3, S.f x = A.mulVec x := by
-      have h_linear : ∃ A : (Fin 3 → ℝ) →ₗ[ℝ] (Fin 3 → ℝ), ∀ x : R3, S.f x = A x := by
-        have h_linear : ∀ x : R3, ∀ c : ℝ, S.f (c • x) = c • S.f x := by
-          intro x c; have := h_inner ( c • x ) ( c • x ) ; simp_all +decide [ inner_self_eq_norm_sq_to_K ] ;
-          have h_inner : ∀ x y : R3, inner ℝ (S.f (c • x) - c • S.f x) (S.f (c • x) - c • S.f x) = 0 := by
-            simp_all +decide [ inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right ];
-          exact sub_eq_zero.mp ( by simpa [ inner_self_eq_norm_sq_to_K ] using h_inner x x );
-        exact ⟨ { toFun := S.f, map_add' := by aesop, map_smul' := by aesop }, fun x => rfl ⟩;
-      obtain ⟨ A, hA ⟩ := h_linear;
-      use LinearMap.toMatrix' A;
-      simp +decide [ hA ];
-    -- Since $S$ is an isometry, $A$ must be orthogonal.
-    have h_orthogonal : A ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
-      simp_all +decide;
-      have h_orthogonal : A.transpose * A = 1 := by
-        ext i j; specialize h_inner ( Pi.single i 1 ) ( Pi.single j 1 ) ; simp_all +decide [ Matrix.mul_apply ] ;
-        simp_all +decide [ Fin.sum_univ_three, Matrix.one_apply, inner ];
-        fin_cases i <;> fin_cases j <;> simp +decide at h_inner ⊢ <;> linarith!;
-      exact ⟨ h_orthogonal, Matrix.mul_eq_one_comm.mp h_orthogonal ⟩;
-    use ⟨ A, h_orthogonal ⟩, T;
-    intro x; specialize hA x; rw [ sub_eq_iff_eq_add ] at hA; aesop;
-  exact ⟨ h_affine.choose, h_affine.choose_spec.choose, funext h_affine.choose_spec.choose_spec ⟩
-
-instance RealIsometry.instOne : One RealIsometry where
-  one := RealIsometry.identity
-
-instance RealIsometry.instMul : Mul RealIsometry where
-  mul a b := RealIsometry.comp a b
-
+/-
+Important consequence
+-/
+instance RealIsometry.instOne : One RealIsometry where one := RealIsometry.identity
+instance RealIsometry.instMul : Mul RealIsometry where mul a b := RealIsometry.comp a b
 instance RealIsometry.instMonoid : Monoid RealIsometry where
   mul a b := RealIsometry.comp a b
   mul_assoc a b c := by rfl
   one_mul a := by rfl
   mul_one a := by rfl
 
-noncomputable instance : Inv RealIsometry where
-  inv := RealIsometry.inverse
+noncomputable instance : Inv RealIsometry where inv := RealIsometry.inverse
 
 noncomputable instance RealIsometry.instGroup : Group RealIsometry := Group.ofLeftAxioms
   (by
@@ -263,10 +195,81 @@ noncomputable instance RealIsometry.instGroup : Group RealIsometry := Group.ofLe
     rw [← funext_iff]
     revert x
     rw [← funext_iff]
-    have : (fun x ↦ Function.invFun a.f (a.f x)) = (a.f.invFun) ∘ a.f := by grind
+    have : (fun x ↦ Function.invFun a.toFun (a.toFun x)) = (a.toFun.invFun) ∘ a.toFun := by grind
     nth_rw 1 [this]
     exact Function.invFun_comp a.injective
   )
+
+
+noncomputable def standardForm (A : O3) (b : R3) : RealIsometry where
+  toFun x := A • x + b
+  is_isometry x y := by
+    -- Since $A$ is orthogonal, we have $\|A \cdot (x - y)\| = \|x - y\|$.
+    have h_norm : ‖A.val • (x - y)‖ = ‖x - y‖ := by
+      -- Since $A$ is orthogonal, we have $\|A \cdot (x - y)\| = \|x - y\|$ by the properties of orthogonal matrices.
+      apply norm_orthogonal;
+    -- Since $A$ is orthogonal, we have $\|A \cdot (x - y)\| = \|x - y\|$. Therefore, the norm of $(A • x + b) - (A • y + b)$ is equal to the norm of $x - y$.
+    have h_norm : ‖(A.val • x + b) - (A.val • y + b)‖ = ‖A.val • (x - y)‖ := by
+      rw [ smul_sub ] ; abel_nf;
+    exact h_norm.trans ‹_›
+  surjective := by
+    -- To prove surjectivity, take any y in R3. We need to find an x such that A • x + b = y.
+    intro y
+    use A⁻¹ • (y - b);
+    -- By definition of matrix multiplication and vector addition, we can simplify the expression.
+    simp
+
+-- Every real isometry is of the form x ↦ Ax + b
+theorem exists_mul (a : RealIsometry)
+: ∃ O : O3, ∃ b : R3, a.toFun = (standardForm O b).toFun := by
+  -- By definition of $a$, we know that $a$ is an isometry, so $a.toFun$ is an affine transformation.
+  have h_affine : ∃ (A : O3) (b : R3), ∀ x, a.toFun x = A • x + b := by
+    set T := a.toFun 0
+    set S : RealIsometry := ⟨fun x => a.toFun x - T, by
+      exact fun x y => by rw [ ← a.is_isometry x y ] ; simp +decide [ sub_sub_sub_cancel_right ] ;, by
+      exact fun x => by obtain ⟨y, hy⟩ := a.surjective ( x + T ); use y; aesop;⟩
+    generalize_proofs at *;
+    -- Since $S$ is an isometry, it preserves the inner product.
+    have h_inner : ∀ x y : R3, inner ℝ (S.toFun x) (S.toFun y) = inner ℝ x y := by
+      intro x y
+      have h_norm_sq : ‖S.toFun x‖^2 = ‖x‖^2 ∧ ‖S.toFun y‖^2 = ‖y‖^2 ∧ ‖S.toFun x - S.toFun y‖^2 = ‖x - y‖^2 := by
+        have := S.is_isometry x 0; have := S.is_isometry y 0; have := S.is_isometry x y; aesop;
+      norm_num [ @norm_sub_sq ℝ ] at *;
+      grind;
+    -- Since $S$ is an isometry, it is linear.
+    have h_linear : ∀ x y : R3, S.toFun (x + y) = S.toFun x + S.toFun y := by
+      -- By definition of $S$, we know that $S(x + y) = S(x) + S(y)$ for all $x, y \in \mathbb{R}^3$.
+      intros x y
+      have h_eq : ‖S.toFun (x + y) - (S.toFun x + S.toFun y)‖^2 = 0 := by
+        rw [ @norm_sub_sq ℝ ];
+        simp_all +decide [ norm_add_sq_real, inner_add_right, inner_add_left ];
+        simp_all +decide [ ← real_inner_self_eq_norm_sq ];
+        rw [ inner_add_add_self ] ; ring_nf;
+        rw [ real_inner_comm, sub_self ];
+      exact sub_eq_zero.mp ( norm_eq_zero.mp ( sq_eq_zero_iff.mp h_eq ) );
+    -- Since $S$ is linear, it is represented by a matrix $A$.
+    obtain ⟨A, hA⟩ : ∃ A : Matrix (Fin 3) (Fin 3) ℝ, ∀ x : R3, S.toFun x = A.mulVec x := by
+      have h_linear : ∃ A : (Fin 3 → ℝ) →ₗ[ℝ] (Fin 3 → ℝ), ∀ x : R3, S.toFun x = A x := by
+        have h_linear : ∀ x : R3, ∀ c : ℝ, S.toFun (c • x) = c • S.toFun x := by
+          intro x c; have := h_inner ( c • x ) ( c • x ) ; simp_all +decide [ inner_self_eq_norm_sq_to_K ] ;
+          have h_inner : ∀ x y : R3, inner ℝ (S.toFun (c • x) - c • S.toFun x) (S.toFun (c • x) - c • S.toFun x) = 0 := by
+            simp_all +decide [ inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right ];
+          exact sub_eq_zero.mp ( by simpa [ inner_self_eq_norm_sq_to_K ] using h_inner x x );
+        exact ⟨ { toFun := S.toFun, map_add' := by aesop, map_smul' := by aesop }, fun x => rfl ⟩;
+      obtain ⟨ A, hA ⟩ := h_linear;
+      use LinearMap.toMatrix' A;
+      simp +decide [ hA ];
+    -- Since $S$ is an isometry, $A$ must be orthogonal.
+    have h_orthogonal : A ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
+      simp_all +decide;
+      have h_orthogonal : A.transpose * A = 1 := by
+        ext i j; specialize h_inner ( Pi.single i 1 ) ( Pi.single j 1 ) ; simp_all +decide [ Matrix.mul_apply ] ;
+        simp_all +decide [ Fin.sum_univ_three, Matrix.one_apply, inner ];
+        fin_cases i <;> fin_cases j <;> simp +decide at h_inner ⊢ <;> linarith!;
+      exact ⟨ h_orthogonal, Matrix.mul_eq_one_comm.mp h_orthogonal ⟩;
+    use ⟨ A, h_orthogonal ⟩, T;
+    intro x; specialize hA x; rw [ sub_eq_iff_eq_add ] at hA; aesop;
+  exact ⟨ h_affine.choose, h_affine.choose_spec.choose, funext h_affine.choose_spec.choose_spec ⟩
 
 abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
 def IsCyclicOfOrder (n : ℕ) (G : Type*) [Group G] : Prop :=
