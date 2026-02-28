@@ -1,0 +1,23 @@
+CLAUDE.md
+  080f9ef1dc5fbdbe 1-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.6",
+  "base_commit_sha": "6d2b3021c6f1816fa4840edc4c3819b2fdb2c910",
+  "prompts": {
+    "080f9ef1dc5fbdbe": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "778df569-c7b2-4049-b761-4a23adb4f848",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 21,
+      "total_deletions": 0,
+      "accepted_lines": 21,
+      "overriden_lines": 0
+    }
+  }
+}
