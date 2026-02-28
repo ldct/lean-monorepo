@@ -1,0 +1,29 @@
+cslib-v29-rc1/Playground/RMQBench.lean
+  980b6c1f2941922e 3-38,40-65
+cslib-v29-rc1/sparsetable.py
+  980b6c1f2941922e 41-52
+cslib-v29-rc1/bench/runner.go
+  980b6c1f2941922e 1-116
+cslib-v29-rc1/sqrttree.py
+  980b6c1f2941922e 219,221-233
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.6",
+  "base_commit_sha": "f1298697ee062b1cca469558986fd5c26299f1ae",
+  "prompts": {
+    "980b6c1f2941922e": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6246b312-2688-44cc-a462-63c03dc10460",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 231,
+      "total_deletions": 34,
+      "accepted_lines": 204,
+      "overriden_lines": 0
+    }
+  }
+}
