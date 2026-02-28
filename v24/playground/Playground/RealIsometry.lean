@@ -162,7 +162,7 @@ def RealIsometry.comp (f : RealIsometry) (g : RealIsometry) : RealIsometry where
     grind [Function.Surjective.comp]
 
 /-
-Important consequence
+Prerequisites for the "important consequence"
 -/
 instance RealIsometry.instOne : One RealIsometry where one := RealIsometry.identity
 instance RealIsometry.instMul : Mul RealIsometry where mul a b := RealIsometry.comp a b
@@ -174,32 +174,14 @@ instance RealIsometry.instMonoid : Monoid RealIsometry where
 
 noncomputable instance : Inv RealIsometry where inv := RealIsometry.inverse
 
+/-
+Important consequence: The set of all isometries of Rⁿ, denoted by I(Rⁿ),
+forms a group.
+-/
 noncomputable instance RealIsometry.instGroup : Group RealIsometry := Group.ofLeftAxioms
-  (by
-    intro a b c
-    rfl
-  )
-  (by
-    intro a
-    rfl
-  )
-  (by
-    intro a
-    have : a⁻¹ * a = comp (inverse a) a := by rfl
-    rw [this]
-    have : 1 = identity := by rfl
-    rw [this]
-    ext x i
-    simp [comp, inverse, identity ]
-    revert i
-    rw [← funext_iff]
-    revert x
-    rw [← funext_iff]
-    have : (fun x ↦ Function.invFun a.toFun (a.toFun x)) = (a.toFun.invFun) ∘ a.toFun := by grind
-    nth_rw 1 [this]
-    exact Function.invFun_comp a.injective
-  )
-
+  (fun _ _ _ => rfl) (fun _ => rfl) (fun a => by
+    ext x : 2
+    exact congr_fun (Function.invFun_comp a.injective) x)
 
 noncomputable def standardForm (A : O3) (b : R3) : RealIsometry where
   toFun x := A • x + b
@@ -216,60 +198,49 @@ noncomputable def standardForm (A : O3) (b : R3) : RealIsometry where
     -- To prove surjectivity, take any y in R3. We need to find an x such that A • x + b = y.
     intro y
     use A⁻¹ • (y - b);
-    -- By definition of matrix multiplication and vector addition, we can simplify the expression.
     simp
 
--- Every real isometry is of the form x ↦ Ax + b
+/-
+Theorem 1.5 Every real isometry is of the form x ↦ Ax + b
+-/
 theorem exists_mul (a : RealIsometry)
 : ∃ O : O3, ∃ b : R3, a.toFun = (standardForm O b).toFun := by
-  -- By definition of $a$, we know that $a$ is an isometry, so $a.toFun$ is an affine transformation.
-  have h_affine : ∃ (A : O3) (b : R3), ∀ x, a.toFun x = A • x + b := by
-    set T := a.toFun 0
-    set S : RealIsometry := ⟨fun x => a.toFun x - T, by
-      exact fun x y => by rw [ ← a.is_isometry x y ] ; simp +decide [ sub_sub_sub_cancel_right ] ;, by
-      exact fun x => by obtain ⟨y, hy⟩ := a.surjective ( x + T ); use y; aesop;⟩
-    generalize_proofs at *;
-    -- Since $S$ is an isometry, it preserves the inner product.
-    have h_inner : ∀ x y : R3, inner ℝ (S.toFun x) (S.toFun y) = inner ℝ x y := by
-      intro x y
-      have h_norm_sq : ‖S.toFun x‖^2 = ‖x‖^2 ∧ ‖S.toFun y‖^2 = ‖y‖^2 ∧ ‖S.toFun x - S.toFun y‖^2 = ‖x - y‖^2 := by
-        have := S.is_isometry x 0; have := S.is_isometry y 0; have := S.is_isometry x y; aesop;
-      norm_num [ @norm_sub_sq ℝ ] at *;
-      grind;
-    -- Since $S$ is an isometry, it is linear.
-    have h_linear : ∀ x y : R3, S.toFun (x + y) = S.toFun x + S.toFun y := by
-      -- By definition of $S$, we know that $S(x + y) = S(x) + S(y)$ for all $x, y \in \mathbb{R}^3$.
-      intros x y
-      have h_eq : ‖S.toFun (x + y) - (S.toFun x + S.toFun y)‖^2 = 0 := by
-        rw [ @norm_sub_sq ℝ ];
-        simp_all +decide [ norm_add_sq_real, inner_add_right, inner_add_left ];
-        simp_all +decide [ ← real_inner_self_eq_norm_sq ];
-        rw [ inner_add_add_self ] ; ring_nf;
-        rw [ real_inner_comm, sub_self ];
-      exact sub_eq_zero.mp ( norm_eq_zero.mp ( sq_eq_zero_iff.mp h_eq ) );
-    -- Since $S$ is linear, it is represented by a matrix $A$.
-    obtain ⟨A, hA⟩ : ∃ A : Matrix (Fin 3) (Fin 3) ℝ, ∀ x : R3, S.toFun x = A.mulVec x := by
-      have h_linear : ∃ A : (Fin 3 → ℝ) →ₗ[ℝ] (Fin 3 → ℝ), ∀ x : R3, S.toFun x = A x := by
-        have h_linear : ∀ x : R3, ∀ c : ℝ, S.toFun (c • x) = c • S.toFun x := by
-          intro x c; have := h_inner ( c • x ) ( c • x ) ; simp_all +decide [ inner_self_eq_norm_sq_to_K ] ;
-          have h_inner : ∀ x y : R3, inner ℝ (S.toFun (c • x) - c • S.toFun x) (S.toFun (c • x) - c • S.toFun x) = 0 := by
-            simp_all +decide [ inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right ];
-          exact sub_eq_zero.mp ( by simpa [ inner_self_eq_norm_sq_to_K ] using h_inner x x );
-        exact ⟨ { toFun := S.toFun, map_add' := by aesop, map_smul' := by aesop }, fun x => rfl ⟩;
-      obtain ⟨ A, hA ⟩ := h_linear;
-      use LinearMap.toMatrix' A;
-      simp +decide [ hA ];
-    -- Since $S$ is an isometry, $A$ must be orthogonal.
-    have h_orthogonal : A ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
-      simp_all +decide;
-      have h_orthogonal : A.transpose * A = 1 := by
-        ext i j; specialize h_inner ( Pi.single i 1 ) ( Pi.single j 1 ) ; simp_all +decide [ Matrix.mul_apply ] ;
-        simp_all +decide [ Fin.sum_univ_three, Matrix.one_apply, inner ];
-        fin_cases i <;> fin_cases j <;> simp +decide at h_inner ⊢ <;> linarith!;
-      exact ⟨ h_orthogonal, Matrix.mul_eq_one_comm.mp h_orthogonal ⟩;
-    use ⟨ A, h_orthogonal ⟩, T;
-    intro x; specialize hA x; rw [ sub_eq_iff_eq_add ] at hA; aesop;
-  exact ⟨ h_affine.choose, h_affine.choose_spec.choose, funext h_affine.choose_spec.choose_spec ⟩
+  set T := a.toFun 0
+  set S : RealIsometry := ⟨fun x => a.toFun x - T, by
+    exact fun x y => by rw [← a.is_isometry x y]; simp +decide [sub_sub_sub_cancel_right], by
+    exact fun x => by obtain ⟨y, hy⟩ := a.surjective (x + T); use y; aesop⟩
+  generalize_proofs at *
+  have h_inner : ∀ x y : R3, inner ℝ (S.toFun x) (S.toFun y) = inner ℝ x y := by
+    intro x y
+    have : ‖S.toFun x‖^2 = ‖x‖^2 ∧ ‖S.toFun y‖^2 = ‖y‖^2 ∧ ‖S.toFun x - S.toFun y‖^2 = ‖x - y‖^2 := by
+      have := S.is_isometry x 0; have := S.is_isometry y 0; have := S.is_isometry x y; aesop
+    norm_num [@norm_sub_sq ℝ] at *; grind
+  have h_linear : ∀ x y : R3, S.toFun (x + y) = S.toFun x + S.toFun y := by
+    intros x y
+    have h_eq : ‖S.toFun (x + y) - (S.toFun x + S.toFun y)‖^2 = 0 := by
+      rw [@norm_sub_sq ℝ]
+      simp_all +decide [norm_add_sq_real, inner_add_right, inner_add_left]
+      simp_all +decide [← real_inner_self_eq_norm_sq]
+      rw [inner_add_add_self]; ring_nf; rw [real_inner_comm, sub_self]
+    exact sub_eq_zero.mp (norm_eq_zero.mp (sq_eq_zero_iff.mp h_eq))
+  have h_smul : ∀ x : R3, ∀ c : ℝ, S.toFun (c • x) = c • S.toFun x := by
+    intro x c; have := h_inner (c • x) (c • x); simp_all +decide [inner_self_eq_norm_sq_to_K]
+    have : ∀ x y : R3, inner ℝ (S.toFun (c • x) - c • S.toFun x) (S.toFun (c • x) - c • S.toFun x) = 0 := by
+      simp_all +decide [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right]
+    exact sub_eq_zero.mp (by simpa [inner_self_eq_norm_sq_to_K] using this x x)
+  obtain ⟨A, hA⟩ : ∃ A : Matrix (Fin 3) (Fin 3) ℝ, ∀ x : R3, S.toFun x = A.mulVec x := by
+    have ⟨A, hA⟩ : ∃ A : (Fin 3 → ℝ) →ₗ[ℝ] (Fin 3 → ℝ), ∀ x : R3, S.toFun x = A x :=
+      ⟨{ toFun := S.toFun, map_add' := by aesop, map_smul' := by aesop }, fun _ => rfl⟩
+    exact ⟨LinearMap.toMatrix' A, by simp +decide [hA]⟩
+  have h_orthogonal : A ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
+    simp_all +decide
+    have h_ort : A.transpose * A = 1 := by
+      ext i j; specialize h_inner (Pi.single i 1) (Pi.single j 1); simp_all +decide [Matrix.mul_apply]
+      simp_all +decide [Fin.sum_univ_three, Matrix.one_apply, inner]
+      fin_cases i <;> fin_cases j <;> simp +decide at h_inner ⊢ <;> linarith!
+    exact ⟨h_ort, Matrix.mul_eq_one_comm.mp h_ort⟩
+  exact ⟨⟨A, h_orthogonal⟩, T, funext fun x => by
+    have := hA x; rw [sub_eq_iff_eq_add] at this; aesop⟩
 
 abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
 def IsCyclicOfOrder (n : ℕ) (G : Type*) [Group G] : Prop :=
