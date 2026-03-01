@@ -6,6 +6,3 @@ def IsCyclicOfOrder (n : ℕ) (G : Type*) [Group G] : Prop :=
 theorem RealIsometry.isCyclicOfOrder (n : ℕ) [NeZero n]
 : ∃ f : Subgroup RealIsometry, IsCyclicOfOrder n f := by
   sorry
-
-
-end RealIsometryCyclic
