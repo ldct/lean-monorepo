@@ -1,43 +1,7 @@
 import Mathlib
 
 set_option linter.style.longLine false
-
-attribute [grind =] abs_eq_abs
-attribute [grind =] lt_abs
-attribute [grind =] abs_lt
-
-attribute [grind] max_comm
-attribute [grind] max_self
-attribute [grind] max_assoc
-
-@[grind =]
-theorem abs_eq_max (a : ℝ) : |a| = max a (-a) := by rfl
-
-example (a b : ℝ) : max a b = max b a := by grind
-example (a : ℝ) : max a a = a := by grind
-example (a b c : ℝ) : max a (max b c) = max (max c a) b := by grind
-example (a : ℝ) : |a| = max a (-a) := by grind
-example (a : ℝ) : max a (-a) = max (-a) a := by grind
-example (a : ℝ) : a = - (-a) := by grind
-example (a : ℝ) : |a| = |-a| := by grind
-
-example (a b c : ℝ) : |a + b - c| = |c - a - b| := by grind
-example (a b c : ℝ) (h1 : |a - b| < 1) (h2 : |a - c| < 1) (h3 : 100 < |b - c|) : False := by grind
-
-
-theorem abs_lt' (a b : ℝ) : |a| < b ↔ a < b ∧ -a < b := by
-  grind
-
-macro "absarith" : tactic => `(tactic|
-  (try repeat rw [abs_lt'] at *;
-   try repeat rw [lt_div_iff₀ (by assumption)] at *;
-   constructor <;>
-   nlinarith (config := {splitHypotheses := true})))
-
-variable (f : ℝ → ℝ) (t c ε y : ℝ) (hc : 0 < c) (hε : 0 < ε) in
-example (h : |f y - f t| < ε / c) :
-    |c * f y - c * f t| < ε := by
-  absarith
+open scoped Pointwise
 
 #check EuclideanSpace
 
@@ -73,16 +37,6 @@ Lemma 1.2. Every isometry is injective.
 Prerequisite for lemma 1.3 If f is an isometry, then f⁻¹ exists.
 -/
 theorem RealIsometry.bijective (f : RealIsometry) : Function.Bijective f.toFun := by grind [Function.Bijective]
-
-example (A B : Type) [Nonempty A] (f : A → B) (h : Function.Bijective f) : Function.Surjective f.invFun := by
-  grind [Function.invFun_surjective, Function.Bijective]
-
-theorem invFun_surjective (T : Type) [Nonempty T] (f : T → T) (hf : Function.Injective f) : Function.Surjective (Function.invFun f) := by
-  have h1 := Function.leftInverse_invFun hf
-  grind [Function.leftInverse_invFun, Function.LeftInverse.surjective, Function.leftInverse_invFun]
-
-theorem invFun_injective (T : Type) [Nonempty T] (f : T → T) (hf : Function.Surjective f) : Function.Injective (Function.invFun f) := by
-  exact (Function.rightInverse_invFun hf).injective
 
 /-
 Lemma 1.3 If f is an isometry, so is f⁻¹.
@@ -137,7 +91,6 @@ noncomputable def multiplication (A : O3) : RealIsometry where
     intro y
     use A⁻¹ • y
     simp
-
 
 /-
 Lemma 1.4 If f and g are isometries, so is f ∘ g.
@@ -242,6 +195,27 @@ theorem exists_mul (a : RealIsometry)
   exact ⟨⟨M, hMorth⟩, b, funext fun x => by
     have := hM x; rw [sub_eq_iff_eq_add] at this; aesop⟩
 
+theorem exists_mul_unique (a : RealIsometry)
+: ∃! (p : O3 × R3), a.toFun = (standardForm p.1 p.2).toFun := by
+  obtain ⟨O, b, h⟩ := exists_mul a
+  refine ⟨⟨O, b⟩, h, ?_⟩
+  rintro ⟨O', b'⟩ h'
+  have heq : ∀ x, (standardForm O' b').toFun x = (standardForm O b).toFun x :=
+    congr_fun (h'.symm.trans h)
+  simp only [standardForm] at heq
+  have hb : b' = b := by have := heq 0; grind [smul_zero, zero_add]
+  subst hb
+  have hsmul : ∀ x : R3, (O' : MAT) • x = (O : MAT) • x :=
+    fun x => add_right_cancel (heq x)
+  refine Prod.ext ?_ rfl
+  -- Goal: O' = O
+  have hmat : (O' : MAT) = (O : MAT) := by
+    apply Matrix.ext_of_mulVec_single
+    intro j
+    have := hsmul (Pi.single j 1)
+    exact this
+  grind
+
 /-
 Example 1.2a: translations
 -/
@@ -288,7 +262,7 @@ def RealIsometry.translationSubgroup : Subgroup RealIsometry where
     ext v : 2
     simp [translation, mul_eq, RealIsometry.comp, one_eq, RealIsometry.identity]
 
-example : RealIsometry.translationSubgroup.Normal := by
+instance : RealIsometry.translationSubgroup.Normal := by
   constructor
   intro n hn g
   simp only [RealIsometry.translationSubgroup, Subgroup.mem_mk] at *
@@ -342,7 +316,69 @@ def RealIsometry.rotationSubgroup : Subgroup RealIsometry where
     exact a.injective (by rw [h1, ha])
 
 
-abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
 
-def IsCyclicOfOrder (n : ℕ) (G : Type*) [Group G] : Prop :=
-  IsCyclic G ∧ Nat.card G = n
+
+
+-- standardForm is the product of a translation and a multiplication
+lemma standardForm_eq_mul (A : O3) (b : R3) :
+    standardForm A b = translation b * multiplication A := by
+  ext x : 2
+  simp [standardForm, translation, multiplication, mul_eq, RealIsometry.comp, Function.comp]
+
+-- multiplication is in the rotation subgroup (fixes the origin)
+lemma multiplication_mem_rotationSubgroup (O : O3) :
+    multiplication O ∈ RealIsometry.rotationSubgroup := by
+  change (multiplication O).toFun 0 = 0
+  simp [multiplication, smul_zero]
+
+-- Every element of rotationSubgroup is a multiplication
+lemma mem_rotationSubgroup_exists_multiplication {r : RealIsometry}
+    (hr : r ∈ RealIsometry.rotationSubgroup) :
+    ∃ O : O3, r = multiplication O := by
+  obtain ⟨O, b, h⟩ := exists_mul r
+  have h0 : r.toFun 0 = 0 := hr
+  have hb : b = 0 := by
+    have : (standardForm O b).toFun 0 = 0 := by rw [← congr_fun h]; exact h0
+    simp [standardForm, smul_zero] at this
+    exact this
+  subst hb
+  refine ⟨O, ?_⟩
+  ext x : 2
+  have : r.toFun x = (standardForm O 0).toFun x := congr_fun h x
+  simp [standardForm, multiplication] at this ⊢
+  exact this
+
+-- translationSubgroup and rotationSubgroup are disjoint
+lemma disjoint_translation_rotation :
+    Disjoint RealIsometry.translationSubgroup RealIsometry.rotationSubgroup := by
+  rw [Subgroup.disjoint_def]
+  intro g hg hr
+  simp only [RealIsometry.translationSubgroup, Subgroup.mem_mk] at hg
+  obtain ⟨d, rfl⟩ := hg
+  simp only [RealIsometry.rotationSubgroup, Subgroup.mem_mk] at hr
+  have : d = 0 := by simpa [translation] using hr
+  subst this
+  ext x : 2
+  simp [translation, one_eq, RealIsometry.identity]
+
+-- translationSubgroup * rotationSubgroup = univ
+lemma mul_eq_univ_translation_rotation :
+    (RealIsometry.translationSubgroup : Set RealIsometry) * RealIsometry.rotationSubgroup = (Set.univ : Set RealIsometry) := by
+  ext g
+  simp only [Set.mem_univ, iff_true]
+  obtain ⟨O, b, h⟩ := exists_mul g
+  refine ⟨translation b, ⟨b, rfl⟩, multiplication O, multiplication_mem_rotationSubgroup O, ?_⟩
+  change translation b * multiplication O = g
+  rw [← standardForm_eq_mul]
+  ext x : 2
+  exact (congr_fun h x).symm
+
+-- translationSubgroup and rotationSubgroup are complementary
+lemma isComplement'_translation_rotation :
+    RealIsometry.translationSubgroup.IsComplement' RealIsometry.rotationSubgroup :=
+  Subgroup.isComplement'_of_disjoint_and_mul_eq_univ
+    disjoint_translation_rotation mul_eq_univ_translation_rotation
+
+-- RealIsometry is isomorphic to the semidirect product of translations and rotations
+noncomputable def realIsometry_semidirectProduct :=
+  SemidirectProduct.mulEquivSubgroup isComplement'_translation_rotation

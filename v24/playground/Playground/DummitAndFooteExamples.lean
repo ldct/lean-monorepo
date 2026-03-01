@@ -317,8 +317,22 @@ example : IntSubgroupReal ≤ RatSubgroupReal := by
   norm_cast
 
 /-
-# Chapter 2.2 - Centralizers and normalizers, stabalizers and kernels
+# Chapter 2.2 - Centralizers and normalizers, stabilizers and kernels
 -/
+
+-- The centralizer C_G(A)
+#check Subgroup.centralizer
+
+-- The center Z(G)
+#check Subgroup.center
+
+-- The normalizer N_G(A)
+#check Subgroup.setNormalizer
+
+-- Examples (omitted)
+
+-- The stabalizer of s in G, G_s
+#check MulAction.stabilizer
 
 /-
 # Chapter 2.3 - Cyclic groups and cyclic subgroups
@@ -447,13 +461,17 @@ abbrev centerQ : Subgroup Q where
 abbrev quotientGroup := Q ⧸ centerQ
 
 example : (QuotientGroup.mk 1 : quotientGroup) = (QuotientGroup.mk (-1)) := by
-  -- Since $-1 \in \text{centerQ}$, we have $1 \sim -1$ in the quotient group.
   have h_neg_one_in_center : (-1 : Q) ∈ centerQ := by
-    -- By definition of $centerQ$, we know that $-1 \in centerQ$.
     apply Set.mem_insert_of_mem; simp;
-  -- Since $-1 \in \text{centerQ}$, we have $1 \sim -1$ in the quotient group by definition of the quotient group.
   apply QuotientGroup.eq.mpr
   simp [h_neg_one_in_center]
+
+/-
+A normal subgroup is a subgroup that is invariant under conjugation.
+-/
+#check Subgroup.Normal
+
+
 
 /-
 # Chapter 3.3
