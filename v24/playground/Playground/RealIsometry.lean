@@ -104,14 +104,6 @@ def RealIsometry.identity : RealIsometry where
   is_isometry := by grind
   surjective := Function.surjective_id
 
-noncomputable def translation (d : R3) : RealIsometry where
-  toFun x := x + d
-  is_isometry x y := by
-    abel_nf
-  surjective := fun x => by
-    use x - d
-    simp
-
 example (v : R3) : ‖v‖^2 = v ⬝ᵥ v := by
   simp [EuclideanSpace.norm_sq_eq];
   simp [dotProduct];
@@ -185,20 +177,10 @@ noncomputable instance RealIsometry.instGroup : Group RealIsometry := Group.ofLe
 
 noncomputable def standardForm (A : O3) (b : R3) : RealIsometry where
   toFun x := A • x + b
-  is_isometry x y := by
-    -- Since $A$ is orthogonal, we have $\|A \cdot (x - y)\| = \|x - y\|$.
-    have h_norm : ‖A.val • (x - y)‖ = ‖x - y‖ := by
-      -- Since $A$ is orthogonal, we have $\|A \cdot (x - y)\| = \|x - y\|$ by the properties of orthogonal matrices.
-      apply norm_orthogonal;
-    -- Since $A$ is orthogonal, we have $\|A \cdot (x - y)\| = \|x - y\|$. Therefore, the norm of $(A • x + b) - (A • y + b)$ is equal to the norm of $x - y$.
-    have h_norm : ‖(A.val • x + b) - (A.val • y + b)‖ = ‖A.val • (x - y)‖ := by
-      rw [ smul_sub ] ; abel_nf;
-    exact h_norm.trans ‹_›
-  surjective := by
-    -- To prove surjectivity, take any y in R3. We need to find an x such that A • x + b = y.
-    intro y
-    use A⁻¹ • (y - b);
-    simp
+  is_isometry x y := calc
+    ‖A • x + b - (A • y + b)‖ = ‖A • (x - y)‖ := by congr 1 ; grind [smul_sub]
+    _ = ‖x - y‖ := by apply norm_orthogonal
+  surjective := fun y => ⟨ A⁻¹ • (y - b), by simp ⟩
 
 /-
 Theorem 1.5 Every real isometry is of the form x ↦ Ax + b
@@ -212,7 +194,6 @@ theorem exists_mul (a : RealIsometry)
     rw [sub_sub_sub_cancel_right]; exact a.is_isometry x y, by
     intro x; obtain ⟨y, hy⟩ := a.surjective (x + b)
     exact ⟨y, by change a.toFun y - b = x; simp [hy]⟩⟩
-  generalize_proofs at *
   -- Step 2: S preserves inner products (via polarization)
   have hSinner : ∀ x y : R3, inner ℝ (S.toFun x) (S.toFun y) = inner ℝ x y := by
     intro x y
@@ -224,7 +205,8 @@ theorem exists_mul (a : RealIsometry)
     have hSxy : ‖S.toFun x - S.toFun y‖^2 = ‖x - y‖^2 := by
       have := S.is_isometry x y; aesop
     -- Apply the polarization identity: 2⟨u,v⟩ = ‖u‖² + ‖v‖² - ‖u-v‖²
-    norm_num [@norm_sub_sq ℝ] at *; grind
+    norm_num [@norm_sub_sq ℝ] at *
+    grind
   -- Step 3: S is additive
   have hSadd : ∀ x y : R3, S.toFun (x + y) = S.toFun x + S.toFun y := by
     intro x y
@@ -260,6 +242,37 @@ theorem exists_mul (a : RealIsometry)
   exact ⟨⟨M, hMorth⟩, b, funext fun x => by
     have := hM x; rw [sub_eq_iff_eq_add] at this; aesop⟩
 
+/-
+Example 1.2a: translations
+-/
+
+noncomputable def translation (d : R3) : RealIsometry where
+  toFun x := x + d
+  is_isometry x y := by
+    abel_nf
+  surjective := fun x => by
+    use x - d
+    simp
+
+example : Subgroup RealIsometry where
+  carrier := { translation d | d : R3 }
+  mul_mem' := by
+    intro a b ha hb
+    simp_all
+    obtain ⟨a', rfl⟩ := ha
+    obtain ⟨b', rfl⟩ := hb
+    use a' + b'
+    sorry
+  one_mem' := by
+    use 0
+    sorry
+  inv_mem' := by
+    intro a ha
+    obtain ⟨a', rfl⟩ := ha
+    use -a'
+    sorry
+
 abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
+
 def IsCyclicOfOrder (n : ℕ) (G : Type*) [Group G] : Prop :=
   IsCyclic G ∧ Nat.card G = n
