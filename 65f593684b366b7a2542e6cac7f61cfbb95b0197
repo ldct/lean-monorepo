@@ -1,0 +1,29 @@
+v24/playground/Playground/RealIsometry/Dihedral.lean
+  74afe611c1cfa3c5 1
+v24/playground/Playground/RealIsometry/Cyclic.lean
+  74afe611c1cfa3c5 1
+v24/playground/Playground/RealIsometry/Action.lean
+  74afe611c1cfa3c5 1
+v24/playground/Playground/RealIsometry/Exceptional.lean
+  74afe611c1cfa3c5 1-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "65f593684b366b7a2542e6cac7f61cfbb95b0197",
+  "prompts": {
+    "74afe611c1cfa3c5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "169d49e3-9597-4fb4-8421-76f3a93cd1bb",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 6,
+      "total_deletions": 4,
+      "accepted_lines": 6,
+      "overriden_lines": 0
+    }
+  }
+}
