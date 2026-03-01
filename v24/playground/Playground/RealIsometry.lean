@@ -254,7 +254,18 @@ noncomputable def translation (d : R3) : RealIsometry where
     use x - d
     simp
 
-example : Subgroup RealIsometry where
+lemma one_eq : (1 : RealIsometry) = RealIsometry.identity := rfl
+
+lemma mul_eq (a b : RealIsometry) : (a * b) = RealIsometry.comp a b := rfl
+
+lemma inv_eq (a : RealIsometry) : a⁻¹ = RealIsometry.inverse a := rfl
+
+lemma my_lemma (G : Type*) [Group G] (a b : G) : a = b⁻¹ ↔ a * b = 1 := eq_inv_iff_mul_eq_one
+
+/-
+The translation subgroup. Auslander and Cook, An Algebraic Classification of the Three-Dimensional Crystallographic Groups.
+-/
+def RealIsometry.translationSubgroup : Subgroup RealIsometry where
   carrier := { translation d | d : R3 }
   mul_mem' := by
     intro a b ha hb
@@ -262,15 +273,36 @@ example : Subgroup RealIsometry where
     obtain ⟨a', rfl⟩ := ha
     obtain ⟨b', rfl⟩ := hb
     use a' + b'
-    sorry
+    ext v : 2
+    simp [translation, mul_eq, RealIsometry.comp]
+    grind
   one_mem' := by
     use 0
-    sorry
+    simp [translation, one_eq, RealIsometry.identity]
+    grind
   inv_mem' := by
     intro a ha
     obtain ⟨a', rfl⟩ := ha
     use -a'
+    rw [eq_inv_iff_mul_eq_one]
+    ext v : 2
+    simp [translation, mul_eq, RealIsometry.comp, one_eq, RealIsometry.identity]
+
+example : RealIsometry.translationSubgroup.Normal := by
+  sorry
+
+/-
+The subgroup that fixes the origin.
+-/
+def RealIsometry.rotationSubgroup : Subgroup RealIsometry where
+  carrier := { r | r.toFun 0 = 0 }
+  mul_mem' := by
     sorry
+  one_mem' := by
+    sorry
+  inv_mem' := by
+    sorry
+
 
 abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
 
