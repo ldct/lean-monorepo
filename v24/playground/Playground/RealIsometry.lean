@@ -289,7 +289,34 @@ def RealIsometry.translationSubgroup : Subgroup RealIsometry where
     simp [translation, mul_eq, RealIsometry.comp, one_eq, RealIsometry.identity]
 
 example : RealIsometry.translationSubgroup.Normal := by
-  sorry
+  constructor
+  intro n hn g
+  simp only [RealIsometry.translationSubgroup, Subgroup.mem_mk] at *
+  obtain ⟨d, rfl⟩ := hn
+  obtain ⟨O, b, hg⟩ := exists_mul g
+  use g.toFun d - g.toFun 0
+  -- g(y) = O • y + b for all y
+  have hgf : ∀ y, g.toFun y = (standardForm O b).toFun y := congr_fun hg
+  simp only [standardForm] at hgf
+  -- g(g⁻¹(x)) = x for all x
+  have hcancel : ∀ x, g.toFun (g⁻¹.toFun x) = x := fun x =>
+    congr_fun (congr_arg RealIsometry.toFun (mul_inv_cancel g)) x
+  ext x : 2
+  simp only [mul_eq, RealIsometry.comp, Function.comp, translation]
+  -- Goal: g.toFun (g⁻¹.toFun x + d) = x + (g.toFun d - g.toFun 0)
+  -- Simplify RHS: g(d) - g(0) = (O•d + b) - (O•0 + b) = O•d
+  have hRHS : g.toFun d - g.toFun 0 = O • d := by
+    rw [hgf d, hgf 0]; simp [smul_zero]
+  rw [hRHS]
+  -- Goal: g.toFun (g⁻¹.toFun x + d) = x + O • d
+  -- Expand LHS using standard form
+  rw [hgf, smul_add]
+  -- Goal: O • g⁻¹.toFun x + O • d + b = x + O • d
+  -- Use hcancel: g(g⁻¹(x)) = O • g⁻¹(x) + b = x
+  have hc : O • g⁻¹.toFun x + b = x := by rw [← hgf]; exact hcancel x
+  -- Rearrange and substitute
+  have : O • g⁻¹.toFun x + O • d + b = (O • g⁻¹.toFun x + b) + O • d := by abel
+  rw [this, hc]
 
 /-
 The subgroup that fixes the origin.
@@ -297,11 +324,22 @@ The subgroup that fixes the origin.
 def RealIsometry.rotationSubgroup : Subgroup RealIsometry where
   carrier := { r | r.toFun 0 = 0 }
   mul_mem' := by
-    sorry
+    intro a b ha hb
+    simp only [Set.mem_setOf_eq] at *
+    change (a * b).toFun 0 = 0
+    simp only [mul_eq, RealIsometry.comp, Function.comp]
+    rw [hb, ha]
   one_mem' := by
-    sorry
+    simp [one_eq, RealIsometry.identity]
   inv_mem' := by
-    sorry
+    intro a ha
+    simp only [Set.mem_setOf_eq] at *
+    have h1 : a.toFun (a⁻¹.toFun 0) = 0 := by
+      have : (a * a⁻¹).toFun 0 = (1 : RealIsometry).toFun 0 := by
+        rw [mul_inv_cancel]
+      simp only [mul_eq, RealIsometry.comp, Function.comp, one_eq, RealIsometry.identity] at this
+      simpa using this
+    exact a.injective (by rw [h1, ha])
 
 
 abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
