@@ -1,4 +1,4 @@
-import Playground.RealIsometry
+import Playground.RealIsometry.Basic
 
 #check RealIsometry
 
