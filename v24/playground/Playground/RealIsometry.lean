@@ -3,7 +3,7 @@ import Mathlib
 set_option linter.style.longLine false
 open scoped Pointwise
 
-#check EuclideanSpace
+-- #check EuclideanSpace
 
 abbrev MAT := Matrix (Fin 3) (Fin 3) ℝ
 abbrev R3 := EuclideanSpace ℝ (Fin 3)
