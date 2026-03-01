@@ -2,7 +2,6 @@ import Playground.RealIsometry
 
 set_option linter.style.longLine false
 set_option linter.unusedSimpArgs false
-set_option maxHeartbeats 800000
 
 open Real in
 noncomputable def rotZ (θ : ℝ) : MAT := ![
@@ -36,7 +35,7 @@ lemma rotZ_zero : rotZ 0 = 1 := by
 
 lemma star_rotZ (θ : ℝ) : star (rotZ θ) = rotZ (-θ) := by
   -- star for matrices is conjTranspose, which equals transpose for real matrices
-  show (rotZ θ).conjTranspose = rotZ (-θ)
+  change (rotZ θ).conjTranspose = rotZ (-θ)
   rw [Matrix.conjTranspose_eq_transpose_of_trivial, rotZ_transpose]
 
 lemma rotZ_mem_orthogonal (θ : ℝ) : rotZ θ ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
@@ -57,7 +56,7 @@ lemma rotIsometry_mul (a b : ℝ) : rotIsometry a * rotIsometry b = rotIsometry 
 lemma rotIsometry_zero : rotIsometry 0 = 1 := by
   ext x : 2
   simp only [rotIsometry, multiplication, one_eq, RealIsometry.identity]
-  show (rotZ 0).mulVec x = x
+  change (rotZ 0).mulVec x = x
   rw [rotZ_zero]
   exact Matrix.one_mulVec x
 
@@ -108,7 +107,7 @@ lemma rotIsometry_eq_one_iff (θ : ℝ) : rotIsometry θ = 1 ↔ ∃ k : ℤ, θ
     have : rotZ θ = 1 := (rotZ_eq_one_iff θ).mpr ⟨k, hk⟩
     ext x : 2
     simp only [rotIsometry, multiplication, one_eq, RealIsometry.identity]
-    show (rotZ θ).mulVec x = x
+    change (rotZ θ).mulVec x = x
     rw [this]; exact Matrix.one_mulVec x
 
 open Real in

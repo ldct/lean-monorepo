@@ -9,6 +9,8 @@ abbrev MAT := Matrix (Fin 3) (Fin 3) ℝ
 abbrev R3 := EuclideanSpace ℝ (Fin 3)
 abbrev O3 := Matrix.orthogonalGroup (Fin 3) ℝ
 
+example : Group O3 := by infer_instance
+
 /-
 This file formalizes the definitions and theorems from Norbert Peyerimhoﬀ
 -/
@@ -314,10 +316,6 @@ def RealIsometry.rotationSubgroup : Subgroup RealIsometry where
       simp only [mul_eq, RealIsometry.comp, Function.comp, one_eq, RealIsometry.identity] at this
       simpa using this
     exact a.injective (by rw [h1, ha])
-
-
-
-
 
 -- standardForm is the product of a translation and a multiplication
 lemma standardForm_eq_mul (A : O3) (b : R3) :

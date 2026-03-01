@@ -1,7 +1,6 @@
 import Playground.RealIsometry
 
 set_option linter.style.longLine false
-set_option maxHeartbeats 1600000
 set_option linter.unusedSimpArgs false
 set_option maxRecDepth 1000
 
@@ -261,7 +260,7 @@ noncomputable def multiplicationHom : O3 →* RealIsometry where
   map_mul' A B := by
     ext x : 2
     simp only [multiplication, mul_eq, RealIsometry.comp, Function.comp]
-    show (A * B).1 • x = A.1 • (B.1 • x)
+    change (A * B).1 • x = A.1 • (B.1 • x)
     rw [← MulAction.mul_smul]; rfl
 
 lemma multiplicationHom_injective : Function.Injective multiplicationHom := by
