@@ -43,7 +43,7 @@ lemma rotZ_mem_orthogonal (θ : ℝ) : rotZ θ ∈ Matrix.orthogonalGroup (Fin 3
   change rotZ θ * star (rotZ θ) = 1
   rw [star_rotZ, rotZ_mul, add_neg_cancel, rotZ_zero]
 
-noncomputable def rotIsometry (θ : ℝ) : RealIsometry :=
+noncomputable def rotIsometry (θ : ℝ) : SpaceIsometry :=
   multiplication ⟨rotZ θ, rotZ_mem_orthogonal θ⟩
 
 lemma rotIsometry_mul (a b : ℝ) : rotIsometry a * rotIsometry b = rotIsometry (a + b) := by
@@ -155,7 +155,7 @@ def IsCyclicOfOrder (n : ℕ) (G : Type*) [Group G] : Prop :=
 
 open Real in
 theorem RealIsometry.isCyclicOfOrder (n : ℕ) [NeZero n]
-: ∃ f : Subgroup RealIsometry, IsCyclicOfOrder n f := by
+: ∃ f : Subgroup SpaceIsometry, IsCyclicOfOrder n f := by
   set g := rotIsometry (2 * π / n)
   refine ⟨Subgroup.zpowers g, ?_, ?_⟩
   · -- IsCyclic (zpowers g)

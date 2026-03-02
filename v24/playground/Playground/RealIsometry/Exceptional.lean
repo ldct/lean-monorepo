@@ -10,7 +10,7 @@ open Matrix
 
 abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
 
-def IsExceptional (H : Subgroup RealIsometry) : Prop :=
+def IsExceptional (H : Subgroup SpaceIsometry) : Prop :=
   ¬ IsCyclic H ∧ ¬ IsDihedral H ∧ Nat.card H ≠ 0
 
 /-! ## Tetrahedral rotation group (A₄) as a subgroup of RealIsometry
@@ -25,32 +25,50 @@ The 12 rotations are:
 
 Element orders: 1 appears 1×, 2 appears 3×, 3 appears 8×.
 Every element satisfies g² = 1 or g³ = 1, so the exponent divides 6.
-
-Strategy: we define integer matrices and verify all group-theoretic properties
-via `native_decide`, then cast to ℝ and lift to RealIsometry.
 -/
 
 /-! ### Integer matrices and casting infrastructure -/
 
 abbrev IMAT := Matrix (Fin 3) (Fin 3) ℤ
 
-def toReal (M : IMAT) : MAT := M.map (Int.cast : ℤ → ℝ)
+#check Matrix.zpow_add
+#check Matrix.map_mul
 
-lemma toReal_mul (A B : IMAT) : toReal (A * B) = toReal A * toReal B :=
-  @Matrix.map_mul _ _ _ _ _ _ _ A B _ (Int.castRingHom ℝ)
+#synth HPow IMAT ℕ IMAT
 
-lemma toReal_one : toReal 1 = (1 : MAT) := by
-  ext i j; simp [toReal, map_apply, one_apply, Int.cast_ite]
+abbrev Matrix.toReal (M : IMAT) : MAT := M.map (Int.castRingHom ℝ)
+
+lemma toReal_mul (A B : IMAT) : (A * B).toReal = A.toReal * B.toReal := by
+  grind [Matrix.map_mul]
+
+lemma toReal_one : toReal 1 = (1 : MAT) := by simp
 
 lemma toReal_pow (A : IMAT) (n : ℕ) : toReal (A ^ n) = (toReal A) ^ n := by
   induction n with
   | zero => simp [pow_zero, toReal_one]
   | succ n ih => rw [pow_succ, toReal_mul, ih, pow_succ]
 
+#check Matrix.map_mul
+
+example
+  (α : Type*)
+  [Ring α]
+  (A : Matrix (Fin 3) (Fin 3) α)
+  (B : Matrix (Fin 3) (Fin 3) α)
+  (f : α →+* α)
+: (A * B).map f = (A.map f) * (B.map f) := Matrix.map_mul
+
+example
+  (α : Type*) (k : Nat)
+  [Ring α]
+  (A : Matrix (Fin 3) (Fin 3) α)
+  (B : Matrix (Fin 3) (Fin 3) α)
+  (f : α →+* α)
+: (A.map f)^k = (A^k).map f := by sorry
+
 lemma toReal_injective : Function.Injective toReal := by
-  intro A B h
-  ext i j; have := congr_fun₂ h i j
-  simp [toReal, map_apply] at this; exact_mod_cast this
+  apply Matrix.map_injective
+  exact RingHom.injective_int _
 
 lemma toReal_transpose (A : IMAT) : toReal A.transpose = (toReal A).transpose := by
   ext i j; simp [toReal, map_apply, transpose_apply]
@@ -74,7 +92,7 @@ def a4MatZ : Fin 12 → IMAT
 /-- The real matrix corresponding to the k-th A₄ element -/
 def a4Mat (k : Fin 12) : MAT := toReal (a4MatZ k)
 
-/-! ### Multiplication table (fully explicit for native_decide) -/
+/-! ### Multiplication table (fully explicit for decide) -/
 
 def a4MulTable : Fin 12 → Fin 12 → Fin 12 := fun i j =>
   match i, j with
@@ -96,30 +114,30 @@ def a4InvTable : Fin 12 → Fin 12 := fun i =>
   | 0 => 0 | 1 => 2 | 2 => 1 | 3 => 3 | 4 => 6 | 5 => 9
   | 6 => 4 | 7 => 10 | 8 => 8 | 9 => 5 | 10 => 7 | 11 => 11
 
-/-! ### Integer matrix verifications via native_decide -/
+/-! ### Integer matrix verifications via decide -/
 
 lemma a4MatZ_mul (i j : Fin 12) : a4MatZ i * a4MatZ j = a4MatZ (a4MulTable i j) := by
-  fin_cases i <;> fin_cases j <;> native_decide
+  fin_cases i <;> fin_cases j <;> decide
 
 lemma a4MatZ_orth (k : Fin 12) : (a4MatZ k).transpose * a4MatZ k = 1 := by
-  fin_cases k <;> native_decide
+  fin_cases k <;> decide
 
 lemma a4MatZ_pow_six (i : Fin 12) : a4MatZ i ^ 6 = 1 := by
-  fin_cases i <;> native_decide
+  fin_cases i <;> decide
 
 lemma a4MatZ_order_le3 (i : Fin 12) : a4MatZ i ^ 2 = 1 ∨ a4MatZ i ^ 3 = 1 := by
-  fin_cases i <;> simp <;> native_decide
+  fin_cases i <;> simp <;> decide
 
 lemma a4MatZ_injective : Function.Injective a4MatZ := by
   intro a b hab
-  fin_cases a <;> fin_cases b <;> first | rfl | (exfalso; revert hab; native_decide)
+  fin_cases a <;> fin_cases b <;> first | rfl | (exfalso; revert hab; decide)
 
 lemma a4InvTable_mul (i : Fin 12) : a4MulTable (a4InvTable i) i = 0 := by
-  fin_cases i <;> native_decide
+  fin_cases i <;> decide
 
 /-! ### Transfer to real matrices -/
 
-lemma a4MatZ_zero : a4MatZ 0 = 1 := by native_decide
+lemma a4MatZ_zero : a4MatZ 0 = 1 := by decide
 
 lemma a4Mat_mul (i j : Fin 12) : a4Mat i * a4Mat j = a4Mat (a4MulTable i j) := by
   unfold a4Mat; rw [← toReal_mul, a4MatZ_mul]
@@ -144,11 +162,11 @@ lemma a4Mat_order_le3 (i : Fin 12) : a4Mat i ^ 2 = 1 ∨ a4Mat i ^ 3 = 1 := by
 lemma a4Mat_injective : Function.Injective a4Mat := by
   exact toReal_injective.comp a4MatZ_injective
 
-/-! ### Constructing the RealIsometry subgroup -/
+/-! ### Constructing the SpaceIsometry subgroup -/
 
 lemma multiplication_eq_hom' (A : O3) : multiplication A = multiplicationHom A := rfl
 
-noncomputable def a4Elem (k : Fin 12) : RealIsometry :=
+noncomputable def a4Elem (k : Fin 12) : SpaceIsometry :=
   multiplication ⟨a4Mat k, a4Mat_mem_O3 k⟩
 
 lemma a4Elem_injective : Function.Injective a4Elem := by
@@ -165,7 +183,7 @@ lemma a4Elem_one : a4Elem 0 = 1 := by
   have h : (⟨a4Mat 0, a4Mat_mem_O3 0⟩ : O3) = 1 := Subtype.ext a4Mat_one
   rw [h]; exact map_one multiplicationHom
 
-def tetrahedralSubgroup : Subgroup RealIsometry where
+def tetrahedralSubgroup : Subgroup SpaceIsometry where
   carrier := Set.range a4Elem
   mul_mem' := by
     rintro _ _ ⟨i, rfl⟩ ⟨j, rfl⟩
@@ -262,18 +280,18 @@ lemma tetrahedralSubgroup_isExceptional : IsExceptional tetrahedralSubgroup :=
   ⟨tetrahedralSubgroup_not_cyclic, tetrahedralSubgroup_not_dihedral,
    by rw [card_tetrahedralSubgroup]; omega⟩
 
-theorem RealIsometry.existsExceptionalOfOrder12 (n : ℕ) [NeZero n]
-    : ∃ f : Subgroup RealIsometry, IsExceptional f ∧ Nat.card f = 12 :=
+theorem SpaceIsometry.existsExceptionalOfOrder12 (n : ℕ) [NeZero n]
+    : ∃ f : Subgroup SpaceIsometry, IsExceptional f ∧ Nat.card f = 12 :=
   ⟨tetrahedralSubgroup, tetrahedralSubgroup_isExceptional, card_tetrahedralSubgroup⟩
 
-theorem RealIsometry.existsExceptional (n : ℕ) [NeZero n]
-    : ∃ f : Subgroup RealIsometry, IsExceptional f :=
+theorem SpaceIsometry.existsExceptional (n : ℕ) [NeZero n]
+    : ∃ f : Subgroup SpaceIsometry, IsExceptional f :=
   ⟨tetrahedralSubgroup, tetrahedralSubgroup_isExceptional⟩
 
-theorem RealIsometry.existsExceptionalOfOrder24 (n : ℕ) [NeZero n]
-    : ∃ f : Subgroup RealIsometry, IsExceptional f ∧ Nat.card f = 24 := by
+theorem SpaceIsometry.existsExceptionalOfOrder24 (n : ℕ) [NeZero n]
+    : ∃ f : Subgroup SpaceIsometry, IsExceptional f ∧ Nat.card f = 24 := by
   sorry
 
-theorem RealIsometry.existsExceptionalOfOrder60 (n : ℕ) [NeZero n]
-    : ∃ f : Subgroup RealIsometry, IsExceptional f ∧ Nat.card f = 60 := by
+theorem SpaceIsometry.existsExceptionalOfOrder60 (n : ℕ) [NeZero n]
+    : ∃ f : Subgroup SpaceIsometry, IsExceptional f ∧ Nat.card f = 60 := by
   sorry

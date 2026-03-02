@@ -23,7 +23,8 @@ noncomputable def rotMatZMod (n : ℕ) [NeZero n] (k : ZMod n) : MAT :=
 
 lemma rotMat_mul (θ₁ θ₂ : ℝ) : rotMat θ₁ * rotMat θ₂ = rotMat (θ₁ + θ₂) := by
   ext i j
-  simp only [rotMat, mul_apply, Fin.sum_univ_three,
+  simp only [rotMat]
+  simp only [mul_apply, Fin.sum_univ_three,
     of_apply, cons_val', cons_val_zero, cons_val_one, head_cons, head_fin_const, cos_add, sin_add]
   fin_cases i <;> fin_cases j <;> simp <;> ring
 
@@ -254,7 +255,7 @@ lemma dihedralToMat_injective (n : ℕ) [NeZero n] : Function.Injective (dihedra
 
 /-! ## Lifting to RealIsometry -/
 
-noncomputable def multiplicationHom : O3 →* RealIsometry where
+noncomputable def multiplicationHom : O3 →* SpaceIsometry where
   toFun A := multiplication A
   map_one' := by ext x : 2; simp [multiplication]; rfl
   map_mul' A B := by
@@ -272,7 +273,7 @@ lemma multiplicationHom_injective : Function.Injective multiplicationHom := by
     simp only [multiplication] at this; exact this
   exact Subtype.ext (Matrix.ext_of_mulVec_single fun j => key _)
 
-noncomputable def dihedralToIsometry (n : ℕ) [NeZero n] : DihedralGroup n →* RealIsometry where
+noncomputable def dihedralToIsometry (n : ℕ) [NeZero n] : DihedralGroup n →* SpaceIsometry where
   toFun g := multiplicationHom ⟨dihedralToMat n g, dihedralToMat_mem_O3 n g⟩
   map_one' := by
     change multiplicationHom ⟨dihedralToMat n 1, _⟩ = 1
@@ -296,5 +297,5 @@ lemma dihedralToIsometry_injective (n : ℕ) [NeZero n] :
 /-! ## Main theorem -/
 
 theorem RealIsometry.hasDihedralSubgroup (n : ℕ) [NeZero n]
-    : ∃ f : Subgroup RealIsometry, Nonempty (DihedralGroup n ≃* f) :=
+    : ∃ f : Subgroup SpaceIsometry, Nonempty (DihedralGroup n ≃* f) :=
   ⟨(dihedralToIsometry n).range, ⟨MonoidHom.ofInjective (dihedralToIsometry_injective n)⟩⟩
