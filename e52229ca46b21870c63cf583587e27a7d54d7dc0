@@ -1,0 +1,29 @@
+v24/playground/Playground/RealIsometry/Exceptional.lean
+  6565da55ea2b54c9 13
+v24/playground/Playground/RealIsometry/Basic.lean
+  6565da55ea2b54c9 22-23,27-28,33,60,72,101,114,128-130,136,142,147,157-158,161,167,180,190,194,198-199,203,205-217,223-224,233,237,248,256,258,260,267-268,290,292,294,323,337,344,350,356,358,373-374,386-387,398-399,404-405
+v24/playground/Playground/RealIsometry/Cyclic.lean
+  6565da55ea2b54c9 46,158
+v24/playground/Playground/RealIsometry/Dihedral.lean
+  6565da55ea2b54c9 258,276,300
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "e52229ca46b21870c63cf583587e27a7d54d7dc0",
+  "prompts": {
+    "6565da55ea2b54c9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "238f7224-dfd7-4b51-8a7e-a22236aacbcc",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 253,
+      "total_deletions": 243,
+      "accepted_lines": 75,
+      "overriden_lines": 1
+    }
+  }
+}
