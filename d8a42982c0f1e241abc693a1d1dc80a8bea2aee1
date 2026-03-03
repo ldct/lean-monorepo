@@ -1,0 +1,23 @@
+v24/playground/Playground/RealIsometry/Chapter_1_2.lean
+  c4a3fcc0054bfe5c 23-34,38-41,49-57,59-68,70-72,74,76,79-99,101-108
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "d8a42982c0f1e241abc693a1d1dc80a8bea2aee1",
+  "prompts": {
+    "c4a3fcc0054bfe5c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b8cfd7c6-ca23-493d-b014-25b09db137bf",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 109,
+      "total_deletions": 49,
+      "accepted_lines": 69,
+      "overriden_lines": 0
+    }
+  }
+}
