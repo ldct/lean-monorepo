@@ -1,4 +1,5 @@
 import Mathlib
+set_option linter.style.longLine false
 
 /-- A topology on `X`. -/
 class TopSpace (X : Type) where
@@ -9,7 +10,6 @@ class TopSpace (X : Type) where
 
 theorem TopSpace.isOpen_empty (X : Type) [T : TopSpace X] : TopSpace.IsOpen (∅ : Set X) := by
   let ι : Set (Set X) := ∅
-
   have := T.isOpen_sUnion ∅ (by
     intro t ht
     exfalso
@@ -25,7 +25,7 @@ instance Indiscrete (X : Type) : TopSpace X where
   isOpen_inter u v hu hv := by grind
   isOpen_sUnion I h := by grind
 
-example (X : Type): (Indiscrete X).IsOpen ∅ := TopSpace.isOpen_empty X
+example (X : Type) : (Indiscrete X).IsOpen ∅ := TopSpace.isOpen_empty X
 
 class MyFilter (X : Type*) where
   sets : Set (Set X)
@@ -86,11 +86,11 @@ def atTopFilter (X : Type) [LinearOrder X] [Inhabited X] : MyFilter X where
 def tendsto (X Y : Type) (f : X → Y) (Nhdx : MyFilter X) (Nhdy : MyFilter Y) :
     Prop := ∀ V ∈ Nhdy.sets, f ⁻¹' V ∈ Nhdx.sets
 
-theorem test1 (X : Type) (S₁ S₂ S: Set X) (h1 : S₁ ⊆ S) :
+theorem test1 (X : Type) (S₁ S₂ S : Set X) (h1 : S₁ ⊆ S) :
     S₁ ∩ S₂ ⊆ S := by
   grind
 
-theorem test2 (X : Type) (S₁ S₂ S: Set X) (h1 : S₂ ⊆ S) :
+theorem test2 (X : Type) (S₁ S₂ S : Set X) (h1 : S₂ ⊆ S) :
     S₁ ∩ S₂ ⊆ S := by
   grind
 
@@ -219,7 +219,7 @@ instance sierpinsky_1 : TopSpace (Fin 2) where
     <;> simp_all
     <;> { grind }
 
-def TopSpace.IsCoarser {X : Type} (T₁ T₂: TopSpace X) : Prop := ∀ x, (T₁.IsOpen x → T₂.IsOpen x)
+def TopSpace.IsCoarser {X : Type} (T₁ T₂ : TopSpace X) : Prop := ∀ x, (T₁.IsOpen x → T₂.IsOpen x)
 
 example : S4.IsCoarser S1 := by
   intro x hx

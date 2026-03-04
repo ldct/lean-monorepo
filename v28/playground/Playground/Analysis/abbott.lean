@@ -18,16 +18,11 @@ theorem tendsToInf_def {a : ℕ → ℝ} :
 example : TendsToInf (fun n ↦ Real.sqrt n) := by
   rw [tendsToInf_def] at *
   intro M M_pos
-
   use ⌈M * M⌉₊ + 1
-
   intro n n_large
-
   have n_large : ⌈M * M⌉₊ < n := by linarith
-
   rify at n_large
   have hB_sqrt := (Real.sqrt_lt_sqrt_iff (by norm_num)).mpr n_large
-
   calc
     M = Real.sqrt (M^2) := by rw [Real.sqrt_sq (by positivity)]
     _ = Real.sqrt (M*M) := by ring_nf

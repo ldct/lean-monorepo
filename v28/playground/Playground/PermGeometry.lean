@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Heather Macbeth
 -/
 import Mathlib
+set_option linter.style.longLine false
 
 /-!
 *Groups: A Path to Geometry*, by R. P. Burn
@@ -63,7 +64,6 @@ theorem mem_translationSubgroup_iff_exists_addRight {α : Perm ℝ} : α ∈ T �
   simp
   specialize hα x 0
   linarith
-
   intro h
   obtain ⟨a, hα⟩ := h
   intro x y
@@ -215,7 +215,7 @@ theorem IsIsometry.eval_of_eval_zero {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} 
 
 /- If, for given `α`, `α x = x + a` and `α y = - y + a`, prove that `|x - y| = |x + y|` and
 deduce that `x` or `y` is zero. -/
-theorem IsIsometry.aux {α : Perm ℝ} (hα : α ∈ M) {a x y: ℝ} (hx : α x = x + a) (hy : α y = -y + a) :
+theorem IsIsometry.aux {α : Perm ℝ} (hα : α ∈ M) {a x y : ℝ} (hx : α x = x + a) (hy : α y = -y + a) :
     x = 0 ∨ y = 0 := by
   specialize hα x y
   rw [hx, hy] at hα
@@ -232,7 +232,6 @@ theorem IsIsometry.eq_addRight_or_eq_halfTurn {α : Perm ℝ} (hα : α ∈ M) {
   α = addRight a ∨ α = halfTurn a := by
   have hα0 := hα 0
   simp [h, abs_eq_abs] at hα0
-
   obtain h1 | h2 := hα0 1
   right
   ext x
@@ -241,27 +240,23 @@ theorem IsIsometry.eq_addRight_or_eq_halfTurn {α : Perm ℝ} (hα : α ∈ M) {
     · exact h3
     have h1' : α 1 = -1 + a := by linarith
     have h4' : α x = x + a := by linarith
-
     obtain h' | h' := aux hα h4' h1'
     simp_all
     exfalso
     norm_num at h'
   dsimp [halfTurn]
   linarith
-
   left
   ext x
   have : a - α x = -x := by
     obtain h3 | h4 := hα0 x
     have h2' : α 1 = 1 + a := by linarith
     have h3' : α x = -x + a := by linarith
-
     obtain h' | h' := aux hα h2' h3'
     exfalso
     norm_num at h'
     simp_all
     exact h4
-
   dsimp [addRight]
   linarith
 
@@ -284,24 +279,19 @@ example :
 example (a b : ℝ) (ha' : a ≠ 1) :
     let α := fun x ↦ a * x + b
     { x | α x = x } = {- b / (a - 1)} := by
-
   have h1 : a - 1 ≠ 0 := by
     intro h
     apply ha'
     linarith
-
   ext x
   simp
   constructor <;> intro h
   have : x * (a - 1) = -b := by linarith
-
-
   apply_fun (fun x ↦ x * (a - 1))
   dsimp
   rw [this]
   field_simp [h1]
   exact mul_left_injective₀ h1
-
   rw [h]
   apply_fun (fun x ↦ x * (a - 1))
   dsimp
@@ -313,7 +303,7 @@ example (a b : ℝ) (ha' : a ≠ 1) :
 /-- If `α` is the element `x ↦ a * x + b` of `Perm ℝ` and `a ≠ 0`, compare the ratio
 `(x - y) / (x - z)` with the ratio `(α x - α y) / (α x - α z)` for any three distinct real numbers
 `x`, `y` and `z`. -/
-example (a b : ℝ) (ha : a ≠ 0) {x y z : ℝ} (hxz : x ≠ z):
+example (a b : ℝ) (ha : a ≠ 0) {x y z : ℝ} (hxz : x ≠ z) :
     let α := fun x ↦ a * x + b
     (x - y) / (x - z) = (α x - α y) / (α x - α z) := by
   intro α
@@ -323,7 +313,6 @@ example (a b : ℝ) (ha : a ≠ 0) {x y z : ℝ} (hxz : x ≠ z):
   simp only [add_sub_add_right_eq_sub]
   rw [show a * x - a * y = a * (x - y) by ring]
   rw [show a * x - a * z = a * (x - z) by ring]
-
   have : x - z ≠ 0 := by
     intro h
     have : x = z := by linarith

@@ -2,6 +2,7 @@ import Mathlib.Tactic
 import Mathlib.Algebra.Group.Defs
 import Mathlib.GroupTheory.SpecificGroups.Cyclic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
+set_option linter.style.longLine false
 
 -- the function x ↦ mx + c
 
@@ -15,7 +16,7 @@ structure AffineQ : Type where
 
 example : (1 : ℝ) ≠ 0 := by norm_num
 
-def mul (a b : AffineQ): AffineQ :=
+def mul (a b : AffineQ) : AffineQ :=
   .mk (a.m*b.m) (a.m*b.c + a.c) (mul_ne_zero a.m_ne_0 b.m_ne_0)
 
 private def one : AffineQ :=
@@ -29,7 +30,7 @@ instance : One AffineQ :=
 def inv (g : AffineQ) : AffineQ :=
   .mk g.m⁻¹ (-g.c/g.m) (inv_ne_zero g.m_ne_0)
 
-example (r : ℚ): 1 * r = r := by
+example (r : ℚ) : 1 * r = r := by
   exact Rat.one_mul r
 
 instance : Group AffineQ where

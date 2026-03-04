@@ -6,7 +6,7 @@ namespace DihedralGroup
 variable {n : ℕ}
 
 -- The subgroup of rotations
-def Rot (n : ℕ): Subgroup (DihedralGroup n) where
+def Rot (n : ℕ) : Subgroup (DihedralGroup n) where
   carrier := { r i | i : ZMod n }
   mul_mem' := by
     intro a b ⟨i1, r_i1_is_a⟩ ⟨i2, r_i1_is_b⟩
@@ -48,7 +48,7 @@ theorem ri_in_CA (i : ZMod n) : r i ∈ (C_A n) := by
   rw [mem_A_iff]
   simp
 
-theorem s_not_in_CA (hn : 2 < n): (sr 0) ∉ (C_A n) := by
+theorem s_not_in_CA (hn : 2 < n) : (sr 0) ∉ (C_A n) := by
   intro hs
   specialize hs (r 1)
   simp at hs
@@ -61,7 +61,7 @@ theorem s_not_in_CA (hn : 2 < n): (sr 0) ∉ (C_A n) := by
   rw [mem_A_iff]
   simp
 
-example (i : ZMod n) (hn : 2 < n): (sr i ∉ (C_A n)) := by
+example (i : ZMod n) (hn : 2 < n) : (sr i ∉ (C_A n)) := by
   by_contra rs_i_in_CA
   have r_i_inv_in_CA := ri_in_CA (-i)
   have mul := Subgroup.mul_mem (C_A n) rs_i_in_CA r_i_inv_in_CA
@@ -78,7 +78,7 @@ theorem A_complement_is_sr (x : DihedralGroup n) (hx : x ∉ (Rot n)) : ∃ i, x
   use i
 
 -- C(A) ≤ A
-theorem CA_le_A (hn : 2 < n): (C_A n) ≤ (Rot n) := by
+theorem CA_le_A (hn : 2 < n) : (C_A n) ≤ (Rot n) := by
   intro x x_in_CA
   by_contra x_not_in_A
   have spec := A_complement_is_sr x x_not_in_A
@@ -91,6 +91,6 @@ theorem CA_le_A (hn : 2 < n): (C_A n) ≤ (Rot n) := by
   exact hn
   exact prod_in_CA
 
-theorem A_eq_CA (hn : 2 < n): (Rot n) = (C_A n) := by {
+theorem A_eq_CA (hn : 2 < n) : (Rot n) = (C_A n) := by {
   exact le_antisymm A_le_CA (CA_le_A hn)
 }

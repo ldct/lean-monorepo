@@ -1,9 +1,10 @@
 import Mathlib
+set_option linter.style.longLine false
 
 
 namespace ml_tests
 
-example (a b k : ℝ) (k_pos : k ≠ 0) (eq : k*a = k*b)
+example (a b k : ℝ) (k_pos : k ≠ 0) (eq : k * a = k * b)
 : a = b := by
   sorry
 
@@ -43,10 +44,10 @@ example (m : ℕ)
   sorry
 
 -- 1/1
-example (x y : ℝ )
-  (hp : (x+y)^2 > 0)
+example (x y : ℝ)
+  (hp : (x + y) ^ 2 > 0)
   (h' : 4 * x * y ≤ (x + y) ^ 2) :
-    x*y/(x+y)^2 ≤ 1 / 4 := by sorry
+    x * y/(x+y)^2 ≤ 1 / 4 := by sorry
 
 -- 1/1
 example

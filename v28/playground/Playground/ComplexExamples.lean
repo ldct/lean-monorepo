@@ -1,6 +1,7 @@
 import Mathlib
 import Playground.NormNumI
 import Qq
+set_option linter.style.longLine false
 open Lean Meta Qq
 
 open Complex
@@ -96,7 +97,7 @@ def pi := 3
 
 #eval q(3)
 
-lemma Ipow_mod_4 (n r: ℕ) : Ipow (4 * n + r) = I^r := by
+lemma Ipow_mod_4 (n r : ℕ) : Ipow (4 * n + r) = I^r := by
   rw [Ipow, show I^(4 * n + r) = (I^4)^n * I^r by ring, I_pow_four, one_pow, one_mul]
 
 lemma Ipow_4_times (n : ℕ) : Ipow (4 * n + 0) = 1 := by
@@ -142,13 +143,10 @@ example : IsComplexNthRootOfUnity 3 ((-1/2 + 1/2 * √3 * I) : ℂ) := by
     -(1 / 8) + √3 * I * (3 / 8) + 9 / 8 + -(√3 ^ 3 * I * (1 / 8))
      = 8 / 8 + (3 * √3 / 8 + -(√3 ^ 3 / 8)) * I := by ring
   rw [this]
-
   norm_cast
   rw [show (8 : ℂ) / 8 = ((8 / 8) : ℝ) * 1 by norm_num]
-
   rw [← mul_I]
   rw [← mul_1]
-
   match_scalars
   · norm_num
   · have : (0 : ℝ) ≤ 3 := by norm_num

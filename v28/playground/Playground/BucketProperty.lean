@@ -24,32 +24,26 @@ example : bucket_property x 8 := by
   intro n hn1 hn2 k hk1 hk2
   interval_cases n <;> interval_cases k
   · use 1; simp [x]; norm_num
-
   · use 1; simp [x]; norm_num
   · use 2; simp [x]; norm_num
-
   · use 1; simp [x]; norm_num
   · use 3; simp [x]; norm_num
   · use 2; simp [x]; norm_num
-
   · use 1; simp [x]; norm_num
   · use 3; simp [x]; norm_num
   · use 4; simp [x]; norm_num
   · use 2; simp [x]; norm_num
-
   · use 1; simp [x]; norm_num
   · use 5; simp [x]; norm_num
   · use 3; simp [x]; norm_num
   · use 4; simp [x]; norm_num
   · use 2; simp [x]; norm_num
-
   · use 1; simp [x]; norm_num
   · use 5; simp [x]; norm_num
   · use 3; simp [x]; norm_num
   · use 6; simp [x]; norm_num
   · use 4; simp [x]; norm_num
   · use 2; simp [x]; norm_num
-
   · use 1; simp [x]; norm_num
   · use 5; simp [x]; norm_num
   · use 3; simp [x]; norm_num
@@ -57,7 +51,6 @@ example : bucket_property x 8 := by
   · use 4; simp [x]; norm_num
   · use 7; simp [x]; norm_num
   · use 2; simp [x]; norm_num
-
   · use 1; simp [x]; norm_num
   · use 8; simp [x]; norm_num
   · use 5; simp [x]; norm_num
@@ -66,5 +59,4 @@ example : bucket_property x 8 := by
   · use 4; simp [x]; norm_num
   · use 7; simp [x]; norm_num
   · use 2; simp [x]; norm_num
-
   repeat sorry

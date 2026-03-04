@@ -41,7 +41,6 @@ example : ¬ IsCyclic ((ZMul) × (ZMul)) := by
   rw [rz_zpow] at hg01
   simp at hg01
   have fst_nz : g.2.1 ≠ 0 := by exact left_ne_zero_of_mul_eq_one hg01
-
   obtain ⟨ e, he ⟩ := g_surj (r 1, r 0)
   simp at he
   have : g^e = ((r g.1.1)^e, _) := rfl
@@ -51,32 +50,24 @@ example : ¬ IsCyclic ((ZMul) × (ZMul)) := by
   rw [rz_zpow] at hg01
   simp at hg01
   have snd_nz : g.1.1 ≠ 0 := by exact left_ne_zero_of_mul_eq_one hg01
-
   obtain ⟨ k, hk ⟩ := g_surj (r g.1.1, r (- g.2.1))
   simp at hk
-
   have : g^k = ((r g.1.1)^k, (r g.2.1)^k) := rfl
   rw [this] at hk
   simp only [Prod.mk.injEq] at hk
-
   have := hk.left
   rw [rz_zpow] at this
   simp at this
   have k_eq_1 : k = 1 := by exact Int.eq_one_of_mul_eq_self_right snd_nz this
-
   have := hk.right
   rw [rz_zpow] at this
   simp at this
   have t : k = -g.2.1/g.2.1 := by exact Int.eq_ediv_of_mul_eq_right fst_nz this
-
   have : -g.2.1 = -1 * g.2.1 := by exact Int.neg_eq_neg_one_mul g.2.1
-
   rw [this] at t
-
   simp only [my_mul_div_cancel (-1) _ fst_nz] at t
   have : g.2.1 / g.2.1 = 1 := by exact Int.ediv_self fst_nz
   rw [this] at t
   simp at t
-
   rw [k_eq_1] at t
   norm_num at t

@@ -7,7 +7,7 @@ variable {n : ℕ}
 
 -- The action of Dih_n on the vertexes of the regular n-polygon (represented as ZMod n)
 
-def smul_n (g : DihedralGroup n) (p : ZMod n): (ZMod n) :=
+def smul_n (g : DihedralGroup n) (p : ZMod n) : (ZMod n) :=
   match g with
   | r i => i + p
   | sr j => -j -p
@@ -20,7 +20,7 @@ theorem r0_mul_p (p : ZMod n) : (smul_n (r 0) p) = p := by
   rw [smul_n]
   ring
 
-instance (n : ℕ): MulAction (DihedralGroup n) (ZMod n) where
+instance (n : ℕ) : MulAction (DihedralGroup n) (ZMod n) where
   smul := smul_n
   one_smul := by
     intro b
@@ -32,7 +32,7 @@ instance (n : ℕ): MulAction (DihedralGroup n) (ZMod n) where
 
 -- The action of Dih_n on the faces of the regular n-polygon (represented as ZMod 2)
 
-def smul_2 (g : DihedralGroup n) (p : ZMod 2): (ZMod 2) :=
+def smul_2 (g : DihedralGroup n) (p : ZMod 2) : (ZMod 2) :=
   match g with
   | r _ => p
   | sr _ => p+1
@@ -40,12 +40,11 @@ def smul_2 (g : DihedralGroup n) (p : ZMod 2): (ZMod 2) :=
 theorem r0_mul_p' (p : ZMod 2) : (smul_2 (r (0: ZMod n)) p) = p := by
   rw [smul_2]
 
-instance (n : ℕ): MulAction (DihedralGroup n) (ZMod 2) where
+instance (n : ℕ) : MulAction (DihedralGroup n) (ZMod 2) where
   smul := smul_2
   one_smul := by
     intro b
     simp [HSMul.hSMul]
-
     apply r0_mul_p'
 
   mul_smul := by

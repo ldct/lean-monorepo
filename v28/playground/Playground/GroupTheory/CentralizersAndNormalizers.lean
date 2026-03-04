@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.Defs
+set_option linter.style.longLine false
 
 
 namespace CentralizersAndNormalizers
@@ -73,7 +74,7 @@ this has type `Set H`. It's probably better to define it as
 N_H(A) := { h ∈ G | h ∈ H, hAh⁻¹ = A }
 now it has type `Set H` and the statement is obvious
 -/
-def asSubgroup [Group G]  (H : Subgroup G) (A : Set G) := H ⊓ Subgroup.setNormalizer A
+def asSubgroup [Group G] (H : Subgroup G) (A : Set G) := H ⊓ Subgroup.setNormalizer A
 
 example (H : Subgroup G) (A : Set G) (g h : G) : g ∈ (asSubgroup H A) ↔ g ∈ H ∧ ∀ a, a ∈ A ↔ h * a * h⁻¹ ∈ A := by
   sorry

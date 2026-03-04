@@ -1,4 +1,5 @@
 import Mathlib.Tactic
+set_option linter.style.longLine false
 -- import LeanTeXMathlib  -- not available in v24
 
 
@@ -46,7 +47,7 @@ example {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n => -a n)
   ring_nf
   exact hB
 
-example (ε : ℝ) (ε_pos : 0 < ε) (hn : 1 < ε*ε) : 1 < ε := by
+example (ε : ℝ) (ε_pos : 0 < ε) (hn : 1 < ε * ε) : 1 < ε := by
   have := (Real.sqrt_lt_sqrt_iff (by norm_num)).mpr hn
   simp at this
   let t := (Real.sqrt_eq_iff_mul_self_eq_of_pos ε_pos).mpr rfl
@@ -156,18 +157,15 @@ example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ n) t) := by
   -- Assume the sequence converges to L
   intro L
   by_contra h_converges
-
   -- Then n is "near L" eventually
   -- i.e. there is a fixed B such that for all n ≥ B, n is "near L", i.e. |n - L| < 1/2
   rcases (h_converges (1/2) (by norm_num)) with ⟨B, hB⟩
-
   -- Take bad_n greater than L+1 and B.
   -- The first condition implies bad_n is "large"
   -- The second condition implies bad_n is "near L"
   have exists_bad_n : ∃ bad_n : ℕ, L + 1 < bad_n ∧ B ≤ bad_n := by
     use Nat.max (1 + Nat.ceil (L+1)) (1+B)
     refine And.intro ?left ?right
-
     case left =>
       rw [add_comm]
       simp only [Nat.add_max_add_left, Nat.cast_add, Nat.cast_one, Nat.cast_max, add_lt_add_iff_left,
@@ -176,18 +174,14 @@ example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ n) t) := by
       calc
         L < 1 + L := by linarith
         _ ≤ Nat.ceil (1 + L) := by exact Nat.le_ceil (1 + L)
-
     case right =>
       simp only [Nat.add_max_add_left]
       linarith [Nat.le_max_right (Nat.ceil (L + 1)) B]
-
   rcases exists_bad_n with ⟨bad_n, ⟨h1, h2⟩⟩
-
   -- bad_n is "near L"
   specialize hB bad_n h2
   dsimp at hB
   rw [abs_lt] at hB
-
   -- bad_n is "large"
   linarith
 
@@ -196,10 +190,8 @@ example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ if n%2 = 0 then 1 else 0) t) := by
   -- Assume the sequence converges to L
   intro L
   by_contra h_converges
-
   -- Then |a_n - L| < 1/2 eventually (i.e. for all n ≥ B)
   rcases (h_converges (1/2) (by norm_num)) with ⟨B, hB⟩
-
   -- There exists a natural number n such that B ≤ n and n is even
   have : ∃ n, B ≤ n ∧ n % 2 = 0 := by
     have : B % 2 = 0 ∨ B % 2 = 1 := Nat.mod_two_eq_zero_or_one B
@@ -207,19 +199,13 @@ example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ if n%2 = 0 then 1 else 0) t) := by
     use B
     use B+1
     constructor; repeat omega
-
   rcases this with ⟨n, ⟨l, n_even⟩⟩
-
   have n_plus_1_odd : (n + 1) % 2 = 1 := by omega
-
   have h1 := hB n l
   have h2 := hB (n+1) (by omega)
-
   dsimp at h1 h2
-
   rw [if_pos n_even] at h1
   rw [if_neg (Nat.mod_two_ne_zero.mpr n_plus_1_odd)] at h2
-
   simp only [abs_lt] at h1 h2
   linarith
 

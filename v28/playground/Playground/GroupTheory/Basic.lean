@@ -4,12 +4,12 @@ import Mathlib.GroupTheory.SpecificGroups.Dihedral
 namespace DihedralGroup
 
 -- s*s = 1
-example (n: ℕ) : (sr 0: DihedralGroup n) * (sr 0) = (r 0) := by simp
+example (n : ℕ) : (sr 0 : DihedralGroup n) * (sr 0) = (r 0) := by simp
 
 -- sr r = r^-1 sr
-example (n: ℕ) : (sr 1: DihedralGroup n) * (r 1) = r (-1) * (sr 1) := by simp
+example (n : ℕ) : (sr 1 : DihedralGroup n) * (r 1) = r (-1) * (sr 1) := by simp
 
-example (n: ℕ) : (sr 2: DihedralGroup n) * (r 1) = r (-1) * (sr 2) := by simp
+example (n : ℕ) : (sr 2 : DihedralGroup n) * (r 1) = r (-1) * (sr 2) := by simp
 
 def _s := sr (0 : ZMod 6)
 def _r := r (1 : ZMod 6)
@@ -21,10 +21,10 @@ def _r := r (1 : ZMod 6)
 
 -- Let x be a reflection (i.e. x = sr k), then x acts on r by inversion.
 -- x r x = r^-1
-example (n k: ℕ) : (sr k: DihedralGroup n) * (r 1) * (sr k) = r (-1) := by simp
+example (n k : ℕ) : (sr k : DihedralGroup n) * (r 1) * (sr k) = r (-1) := by simp
 
 -- The subgroup of even powers of r. (Note: this could be equal to all powers of r if n is odd)
-example (n : ℕ): Subgroup (DihedralGroup n) where
+example (n : ℕ) : Subgroup (DihedralGroup n) where
   carrier := { r (2*i) | i : ZMod n }
   mul_mem' := by
     rintro a b ⟨i, ha⟩ ⟨j, hb⟩
@@ -74,7 +74,7 @@ theorem mem_A_iff_4 (g : DihedralGroup 4) : g ∈ A ↔ g = r 0 ∨ g = r 1 ∨ 
 
 -- The image of a homomorphism is a subgroup
 
-example (G H: Type) [Group G] [Group H] (φ : G →* H): Subgroup H where
+example (G H : Type) [Group G] [Group H] (φ : G →* H) : Subgroup H where
   carrier := { φ g | g : G }
   mul_mem' := by
     intros a b a_in_G b_in_G

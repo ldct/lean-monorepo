@@ -1,6 +1,7 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.Defs
 import Playground.Geometry.ZMul
+set_option linter.style.longLine false
 
 open Subgroup
 

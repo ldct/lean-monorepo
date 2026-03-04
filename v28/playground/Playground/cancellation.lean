@@ -5,14 +5,14 @@ import Playground.Analysis.Cancel
 namespace cancellation
 open Cancel
 
-example (a b k : ℕ) (k_pos : k ≠ 0) (eq : k*a = k*b) : a = b := by
+example (a b k : ℕ) (k_pos : k ≠ 0) (eq : k * a = k * b) : a = b := by
   exact (Nat.mul_right_inj k_pos).mp eq
 
 
-example {a b c : ℝ} {cpos : 0 < c} (h1 : c*a ≤ c*b) : a ≤ b := by
+example {a b c : ℝ} {cpos : 0 < c} (h1 : c * a ≤ c * b) : a ≤ b := by
   cancel c at h1
 
-example {a b c : ℝ} {cpos : 3 < c} (h1 : c*a ≤ c*b) : a ≤ b := by
+example {a b c : ℝ} {cpos : 3 < c} (h1 : c * a ≤ c * b) : a ≤ b := by
   cancel c at h1
 
 example (a b : ℕ) (h1 : a < b) : (2^a < 2^b) := by

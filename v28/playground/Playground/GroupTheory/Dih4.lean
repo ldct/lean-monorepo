@@ -125,7 +125,6 @@ example : Subgroup.closure {r (1 : ZMod 4)} = rot := by
   simp at hx
   subst hx
   exact (by decide : r 1 ∈ rot)
-
   intro x hx
   rw [rot] at hx
   have r_1_in_closure := Subgroup.mem_closure_singleton_self (r (1: ZMod 4))
@@ -134,12 +133,9 @@ example : Subgroup.closure {r (1 : ZMod 4)} = rot := by
   rw [h0]
   exact Subgroup.one_mem _
   rw [h1]
-
   have r_1_in_closure := Subgroup.mem_closure_singleton_self (r (1: ZMod 4))
-
   -- r 1 case
   exact r_1_in_closure
-
   -- r 2 case
   have r_1_sq : (r (1 : ZMod 4))^2 ∈ Subgroup.closure {r 1} := by
     exact
@@ -147,7 +143,6 @@ example : Subgroup.closure {r (1 : ZMod 4)} = rot := by
   simp at r_1_sq
   rw [h2]
   exact r_1_sq
-
   -- r 3 case
   have r_1_cube : (r (1 : ZMod 4))^3 ∈ Subgroup.closure {r 1} := by
     exact

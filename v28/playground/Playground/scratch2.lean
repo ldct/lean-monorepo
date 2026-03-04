@@ -23,7 +23,7 @@ example (a b : ℝ) (ha : 0 ≤ a) : (a^b)⁻¹ = (a^(-b)) := by
   rw [Real.rpow_neg ha]
 
 -- TODO: fix for v4.24 (rpow rewrite mismatch)
-theorem test (p : ℝ) (x : ℕ): (2:ℝ)^x * ((2:ℝ)^x)⁻¹^p = ((2:ℝ)^x)^(1-p) := by
+theorem test (p : ℝ) (x : ℕ) : (2:ℝ)^x * ((2:ℝ)^x)⁻¹^p = ((2:ℝ)^x)^(1-p) := by
   sorry
 
 example (p : ℝ) (n : ℕ) : (n < n + 1) := by

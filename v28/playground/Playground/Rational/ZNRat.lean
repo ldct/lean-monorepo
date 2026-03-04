@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.MinimalAxioms
+set_option linter.style.longLine false
 
 /-
 ℚ implemented as a quotient of ℤ × ℕ with nonzero denominator.
@@ -28,8 +29,8 @@ instance PreRat.instSetoid : Setoid PreRat where
     }
 
 @[simp]
-theorem PreRat.eq (a c:ℤ) (b d : ℕ) (hb: b ≠ 0) (hd: d ≠ 0) :
-    (⟨ a,b,hb ⟩: PreRat) ≈ ⟨ c,d,hd ⟩ ↔ a * d = c * b := by rfl
+theorem PreRat.eq (a c : ℤ) (b d : ℕ) (hb : b ≠ 0) (hd : d ≠ 0) :
+    (⟨ a,b,hb ⟩ : PreRat) ≈ ⟨ c,d,hd ⟩ ↔ a * d = c * b := by rfl
 
 def PreRatZero : PreRat := ⟨ 0, 1, by decide ⟩
 
@@ -40,21 +41,21 @@ theorem PreRatZero.equiv (a : PreRat) : a ≈ PreRatZero ↔ a.numerator = 0 := 
 abbrev Rat := Quotient PreRat.instSetoid
 
 /-- We give division a "junk" value of 0//1 if the denominator is zero -/
-abbrev Rat.formalDiv (a : ℤ) (b: ℕ)  : Rat :=
+abbrev Rat.formalDiv (a : ℤ) (b : ℕ) : Rat :=
   Quotient.mk PreRat.instSetoid (if h:b ≠ 0 then ⟨ a,b,h ⟩ else ⟨ 0, 1, by decide ⟩)
 
 infix:100 " // " => Rat.formalDiv
 
 /-- Definition 4.2.1 (Rationals) -/
 @[grind]
-theorem Rat.eq (a c:ℤ) {b d:ℕ} (hb: b ≠ 0) (hd: d ≠ 0): a // b = c // d ↔ a * d = c * b := by
+theorem Rat.eq (a c : ℤ) {b d : ℕ} (hb : b ≠ 0) (hd : d ≠ 0) : a // b = c // d ↔ a * d = c * b := by
   change ⟦(if h : b ≠ 0 then ⟨ a, b, h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧ =
          ⟦(if h : d ≠ 0 then ⟨ c, d, h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧ ↔ _
   rw [Quotient.eq]
   simp only [Setoid.r, dif_pos hb, dif_pos hd]
 
 /-- Definition 4.2.1 (Rationals) -/
-theorem Rat.eq_diff (n:Rat) : ∃ a b, b ≠ 0 ∧ n = a // b := by
+theorem Rat.eq_diff (n : Rat) : ∃ a b, b ≠ 0 ∧ n = a // b := by
   apply Quot.ind _ n; intro ⟨ a, b, h ⟩
   use a, b; refine ⟨ h, ?_ ⟩
   simp [formalDiv, h]; rfl
@@ -76,7 +77,7 @@ instance Rat.add_inst : Add Rat where
   )
 
 /-- Definition 4.2.2 (Addition of rationals) -/
-theorem Rat.add_eq (a c:ℤ) {b d:ℕ} (hb: b ≠ 0) (hd: d ≠ 0) :
+theorem Rat.add_eq (a c : ℤ) {b d : ℕ} (hb : b ≠ 0) (hd : d ≠ 0) :
     (a // b) + (c // d) = (a*d + b*c) // (b*d) := by
   convert Quotient.lift₂_mk _ _ _ _ <;> simp [hb, hd]
 
@@ -97,7 +98,7 @@ instance Rat.mul_inst : Mul Rat where
   )
 
 /-- Definition 4.2.2 (Multiplication of rationals) -/
-theorem Rat.mul_eq (a c:ℤ) {b d:ℕ} (hb: b ≠ 0) (hd: d ≠ 0) :
+theorem Rat.mul_eq (a c : ℤ) {b d : ℕ} (hb : b ≠ 0) (hd : d ≠ 0) :
     (a // b) * (c // d) = (a*c) // (b*d) := by
   convert Quotient.lift₂_mk _ _ _ _ <;> simp [hb, hd]
 
@@ -114,7 +115,7 @@ instance Rat.neg_inst : Neg Rat where
   )
 
 /-- Definition 4.2.2 (Negation of rationals) -/
-theorem Rat.neg_eq (a:ℤ) {b:ℕ} (hb: b ≠ 0) : - (a // b) = (-a) // b := by
+theorem Rat.neg_eq (a : ℤ) {b : ℕ} (hb : b ≠ 0) : - (a // b) = (-a) // b := by
   convert Quotient.lift_mk _ _ _ <;> simp [hb]
 
 /-- Embedding the integers in the rationals -/
@@ -122,31 +123,31 @@ instance Rat.instIntCast : IntCast Rat where
   intCast a := a // 1
 
 instance Rat.instNatCast : NatCast Rat where
-  natCast n := (n:ℤ) // 1
+  natCast n := (n : ℤ) // 1
 
-instance Rat.instOfNat {n:ℕ} : OfNat Rat n where
-  ofNat := (n:ℤ) // 1
+instance Rat.instOfNat {n : ℕ} : OfNat Rat n where
+  ofNat := (n : ℤ) // 1
 
-theorem Rat.coe_Int_eq (a:ℤ) : (a:Rat) = a // 1 := rfl
+theorem Rat.coe_Int_eq (a : ℤ) : (a : Rat) = a // 1 := rfl
 
-theorem Rat.coe_Nat_eq (n:ℕ) : (n:Rat) = n // 1 := rfl
+theorem Rat.coe_Nat_eq (n : ℕ) : (n : Rat) = n // 1 := rfl
 
-theorem Rat.of_Nat_eq (n:ℕ) : (ofNat(n):Rat) = (ofNat(n):Nat) // 1 := rfl
+theorem Rat.of_Nat_eq (n : ℕ) : (ofNat(n) : Rat) = (ofNat(n) : Nat) // 1 := rfl
 
 /-- intCast distributes over addition -/
-lemma Rat.intCast_add (a b:ℤ) : (a:Rat) + (b:Rat) = (a+b:ℤ) := by
+lemma Rat.intCast_add (a b : ℤ) : (a : Rat) + (b : Rat) = (a+b : ℤ) := by
   rw [coe_Int_eq, coe_Int_eq, coe_Int_eq, add_eq _ _ (by positivity) (by positivity), eq _ _ (by norm_num) (by norm_num)]
   omega
 
-lemma Rat.intCast_mul (a b:ℤ) : (a:Rat) * (b:Rat) = (a*b:ℤ) := by
+lemma Rat.intCast_mul (a b : ℤ) : (a : Rat) * (b : Rat) = (a*b : ℤ) := by
   rw [coe_Int_eq, coe_Int_eq, coe_Int_eq, mul_eq, eq]
   ring_nf
   all_goals positivity
 
 /-- intCast commutes with negation -/
-lemma Rat.intCast_neg (a:ℤ) : - (a:Rat) = (-a:ℤ) := rfl
+lemma Rat.intCast_neg (a : ℤ) : - (a : Rat) = (-a : ℤ) := rfl
 
-theorem Rat.coe_Int_inj : Function.Injective (fun n:ℤ ↦ (n:Rat)) := by
+theorem Rat.coe_Int_inj : Function.Injective (fun n : ℤ ↦ (n : Rat)) := by
   intro a b h
   dsimp at h
   rw [coe_Int_eq, coe_Int_eq, eq] at h
@@ -154,7 +155,7 @@ theorem Rat.coe_Int_inj : Function.Injective (fun n:ℤ ↦ (n:Rat)) := by
   exact h
   all_goals positivity
 
-lemma formalDiv_zero (a:ℤ) : a // 0 = 0 := by rfl
+lemma formalDiv_zero (a : ℤ) : a // 0 = 0 := by rfl
 
 lemma mul_nz {a b : ℕ} (ha : a ≠ 0) (hb : b ≠ 0) :
   (a * b ≠ 0) := by
@@ -225,7 +226,7 @@ def my_inv (a : PreRat) : Rat :=
   if a.numerator < 0 then -a.denominator // a.numerator.natAbs
   else a.denominator // a.numerator.natAbs
 
-lemma my_inv_num_neg (a : PreRat) (ha : a.numerator < 0): my_inv a = -a.denominator // a.numerator.natAbs := by
+lemma my_inv_num_neg (a : PreRat) (ha : a.numerator < 0) : my_inv a = -a.denominator // a.numerator.natAbs := by
   unfold my_inv
   simp [ha]
 
@@ -252,7 +253,7 @@ instance Rat.instInv : Inv Rat where
       repeat sorry
 )
 
-lemma Rat.inv_eq (a:ℤ) {b:ℕ} (hb: b ≠ 0) : (a // b)⁻¹ = b // a.natAbs := by sorry
+lemma Rat.inv_eq (a : ℤ) {b : ℕ} (hb : b ≠ 0) : (a // b)⁻¹ = b // a.natAbs := by sorry
   -- convert Quotient.lift_mk _ _ _ <;> simp [hb]
 
 @[simp]
@@ -271,12 +272,12 @@ instance Rat.instCommRing : CommRing Rat where
 instance Rat.instRatCast : RatCast Rat where
   ratCast q := q.num // q.den
 
-theorem Rat.coe_Rat_eq (a:ℤ) {b:ℕ} (hb: b ≠ 0) : (a/b:ℚ) = a // b := by sorry
+theorem Rat.coe_Rat_eq (a : ℤ) {b : ℕ} (hb : b ≠ 0) : (a/b : ℚ) = a // b := by sorry
 
 /-- Default definition of division -/
 instance Rat.instDivInvMonoid : DivInvMonoid Rat where
 
-theorem Rat.div_eq (q r:Rat) : q/r = q * r⁻¹ := by rfl
+theorem Rat.div_eq (q r : Rat) : q/r = q * r⁻¹ := by rfl
 
 /-- Proposition 4.2.4 (laws of algebra) / Exercise 4.2.3 -/
 instance Rat.instField : Field Rat where
@@ -290,7 +291,7 @@ instance Rat.instField : Field Rat where
 example : (3//4) / (5//6) = 9 // 10 := by sorry
 
 def Rat.coe_int_hom : ℤ →+* Rat where
-  toFun n := (n:Rat)
+  toFun n := (n : Rat)
   map_zero' := rfl
   map_one' := rfl
   map_add' := by sorry
@@ -300,7 +301,7 @@ def Rat.coe_int_hom : ℤ →+* Rat where
   (Not from textbook) The textbook rationals are isomorphic (as a field) to the Mathlib rationals.
 -/
 def Rat.equiv_rat : ℚ ≃+* Rat where
-  toFun n := (n:Rat)
+  toFun n := (n : Rat)
   invFun := by sorry
   map_add' := by sorry
   map_mul' := by sorry
@@ -309,22 +310,22 @@ def Rat.equiv_rat : ℚ ≃+* Rat where
 
 
 /-- Definition 4.2.6 (positivity) -/
-def Rat.isPos (q:Rat) : Prop := ∃ a b:ℤ, a > 0 ∧ b > 0 ∧ q = a/b
+def Rat.isPos (q : Rat) : Prop := ∃ a b : ℤ, a > 0 ∧ b > 0 ∧ q = a/b
 
 /-- Definition 4.2.6 (negativity) -/
-def Rat.isNeg (q:Rat) : Prop := ∃ r:Rat, r.isPos ∧ q = -r
+def Rat.isNeg (q : Rat) : Prop := ∃ r : Rat, r.isPos ∧ q = -r
 
 /-- Lemma 4.2.7 (trichotomy of rationals) / Exercise 4.2.4 -/
-theorem Rat.trichotomous (x:Rat) : x = 0 ∨ x.isPos ∨ x.isNeg := by sorry
+theorem Rat.trichotomous (x : Rat) : x = 0 ∨ x.isPos ∨ x.isNeg := by sorry
 
 /-- Lemma 4.2.7 (trichotomy of rationals) / Exercise 4.2.4 -/
-theorem Rat.not_zero_and_pos (x:Rat) : ¬(x = 0 ∧ x.isPos) := by sorry
+theorem Rat.not_zero_and_pos (x : Rat) : ¬(x = 0 ∧ x.isPos) := by sorry
 
 /-- Lemma 4.2.7 (trichotomy of rationals) / Exercise 4.2.4 -/
-theorem Rat.not_zero_and_neg (x:Rat) : ¬(x = 0 ∧ x.isNeg) := by sorry
+theorem Rat.not_zero_and_neg (x : Rat) : ¬(x = 0 ∧ x.isNeg) := by sorry
 
 /-- Lemma 4.2.7 (trichotomy of rationals) / Exercise 4.2.4 -/
-theorem Rat.not_pos_and_neg (x:Rat) : ¬(x.isPos ∧ x.isNeg) := by sorry
+theorem Rat.not_pos_and_neg (x : Rat) : ¬(x.isPos ∧ x.isNeg) := by sorry
 
 /-- Definition 4.2.8 (Ordering of the rationals) -/
 instance Rat.instLT : LT Rat where
@@ -334,35 +335,35 @@ instance Rat.instLT : LT Rat where
 instance Rat.instLE : LE Rat where
   le x y := (x < y) ∨ (x = y)
 
-theorem Rat.lt_iff (x y:Rat) : x < y ↔ (x-y).isNeg := by rfl
-theorem Rat.le_iff (x y:Rat) : x ≤ y ↔ (x < y) ∨ (x = y) := by rfl
+theorem Rat.lt_iff (x y : Rat) : x < y ↔ (x-y).isNeg := by rfl
+theorem Rat.le_iff (x y : Rat) : x ≤ y ↔ (x < y) ∨ (x = y) := by rfl
 
-theorem Rat.gt_iff (x y:Rat) : x > y ↔ (x-y).isPos := by sorry
-theorem Rat.ge_iff (x y:Rat) : x ≥ y ↔ (x > y) ∨ (x = y) := by sorry
-
-/-- Proposition 4.2.9(a) (order trichotomy) / Exercise 4.2.5 -/
-theorem Rat.trichotomous' (x y z:Rat) : x > y ∨ x < y ∨ x = y := by sorry
+theorem Rat.gt_iff (x y : Rat) : x > y ↔ (x-y).isPos := by sorry
+theorem Rat.ge_iff (x y : Rat) : x ≥ y ↔ (x > y) ∨ (x = y) := by sorry
 
 /-- Proposition 4.2.9(a) (order trichotomy) / Exercise 4.2.5 -/
-theorem Rat.not_gt_and_lt (x y:Rat) : ¬ (x > y ∧ x < y):= by sorry
+theorem Rat.trichotomous' (x y z : Rat) : x > y ∨ x < y ∨ x = y := by sorry
 
 /-- Proposition 4.2.9(a) (order trichotomy) / Exercise 4.2.5 -/
-theorem Rat.not_gt_and_eq (x y:Rat) : ¬ (x > y ∧ x = y):= by sorry
+theorem Rat.not_gt_and_lt (x y : Rat) : ¬ (x > y ∧ x < y) := by sorry
 
 /-- Proposition 4.2.9(a) (order trichotomy) / Exercise 4.2.5 -/
-theorem Rat.not_lt_and_eq (x y:Rat) : ¬ (x < y ∧ x = y):= by sorry
+theorem Rat.not_gt_and_eq (x y : Rat) : ¬ (x > y ∧ x = y) := by sorry
+
+/-- Proposition 4.2.9(a) (order trichotomy) / Exercise 4.2.5 -/
+theorem Rat.not_lt_and_eq (x y : Rat) : ¬ (x < y ∧ x = y) := by sorry
 
 /-- Proposition 4.2.9(b) (order is anti-symmetric) / Exercise 4.2.5 -/
-theorem Rat.antisymm (x y:Rat) : x < y ↔ (y - x).isPos := by sorry
+theorem Rat.antisymm (x y : Rat) : x < y ↔ (y - x).isPos := by sorry
 
 /-- Proposition 4.2.9(c) (order is transitive) / Exercise 4.2.5 -/
-theorem Rat.lt_trans {x y z:Rat} (hxy: x < y) (hyz: y < z) : x < z := by sorry
+theorem Rat.lt_trans {x y z : Rat} (hxy : x < y) (hyz : y < z) : x < z := by sorry
 
 /-- Proposition 4.2.9(d) (addition preserves order) / Exercise 4.2.5 -/
-theorem Rat.add_lt_add_right {x y:Rat} (z:Rat) (hxy: x < y) : x + z < y + z := by sorry
+theorem Rat.add_lt_add_right {x y : Rat} (z : Rat) (hxy : x < y) : x + z < y + z := by sorry
 
 /-- Proposition 4.2.9(e) (positive multiplication preserves order) / Exercise 4.2.5 -/
-theorem Rat.mul_lt_mul_right {x y z:Rat} (hxy: x < y) (hz: z.isPos) : x * z < y * z := by sorry
+theorem Rat.mul_lt_mul_right {x y z : Rat} (hxy : x < y) (hz : z.isPos) : x * z < y * z := by sorry
 
 /-- (Not from textbook) Establish the decidability of this order. -/
 instance Rat.decidableRel : DecidableRel (· ≤ · : Rat → Rat → Prop) := by
@@ -411,7 +412,7 @@ instance Rat.instIsStrictOrderedRing : IsStrictOrderedRing Rat where
   zero_le_one := by sorry
 
 /-- Exercise 4.2.6 -/
-theorem Rat.mul_lt_mul_right_of_neg (x y z:Rat) (hxy: x < y) (hz: z.isNeg) : x * z > y * z := by
+theorem Rat.mul_lt_mul_right_of_neg (x y z : Rat) (hxy : x < y) (hz : z.isNeg) : x * z > y * z := by
   sorry
 
 
