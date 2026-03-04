@@ -1,0 +1,25 @@
+v28/playground/Playground/Rational/ZNRat.lean
+  ea98f94a6eed6ef1 345
+v28/playground/Playground/Rational/ZZRat.lean
+  ea98f94a6eed6ef1 337
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.8",
+  "base_commit_sha": "fbebeb6e0228e4ba6eb8b02599cbd132d2111d62",
+  "prompts": {
+    "ea98f94a6eed6ef1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9f30dd7d-1772-49c2-8a9b-b74c95798cb4",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 148,
+      "total_deletions": 253,
+      "accepted_lines": 2,
+      "overriden_lines": 0
+    }
+  }
+}
