@@ -1,0 +1,35 @@
+v24/playground/Playground/abs.lean
+  548bb29c374c4070 1-28
+v24/playground/Playground/Rational/DyadicRat.lean
+  548bb29c374c4070 21-23
+v24/playground/Playground/Topology/TopSpace.lean
+  548bb29c374c4070 68,76-79
+v24/playground/Playground.lean
+  548bb29c374c4070 47-58
+v24/playground/Playground/MyPolynomial.lean
+  548bb29c374c4070 56,60,62,66-68
+v24/playground/Playground/Rational/ZZRat.lean
+  548bb29c374c4070 25-27,374,415
+v24/playground/Playground/Rational/ZNRat.lean
+  548bb29c374c4070 8,25-27,251,263,376,417
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "1652ad981a18881568052f83d725cdc486caa04d",
+  "prompts": {
+    "548bb29c374c4070": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e0cf1d52-e5bb-4a53-ada5-45f5f59da9f0",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 80,
+      "total_deletions": 54,
+      "accepted_lines": 67,
+      "overriden_lines": 0
+    }
+  }
+}
