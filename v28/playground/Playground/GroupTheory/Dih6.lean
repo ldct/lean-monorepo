@@ -32,9 +32,9 @@ def g_6 : ConjAct (DihedralGroup 6) := r 1
 instance : MulAction (DihedralGroup 6) (ZMod 2) where
   smul := by
     intro g p
-    cases' g with i j
-    exact p
-    exact -p
+    rcases g with i | j
+    · exact p
+    · exact -p
   one_smul := by decide
   mul_smul := by decide
 
@@ -42,13 +42,13 @@ instance : MulAction (DihedralGroup 6) (ZMod 2) where
 instance : MulAction (DihedralGroup 6) (ZMod 6) where
   smul := by
     intro g p
-    cases' g with i j
+    rcases g with i | j
 
     -- ri ⬝ p
-    exact i + p
+    · exact i + p
 
     -- sr j ⬝ p
-    exact - j - p
+    · exact - j - p
   one_smul := by decide
   mul_smul := by decide
 
@@ -58,37 +58,37 @@ open Polynomial Real Complex
 instance : MulAction (DihedralGroup 6) ℂ where
   smul := by
     intro g z
-    cases' g with i j
+    rcases g with i | j
 
     -- ri ⬝ p
-    exact z
+    · exact z
 
     -- sr j ⬝ p
-    exact -z
+    · exact -z
   one_smul := by
     intro b
     rfl
   mul_smul := by
     intro g1 g2 z
-    cases' g1 with i j
-    cases' g2 with i' j'
-    rfl
-    rfl
-    cases' g2 with i' j'
-    rfl
-    simp
-    sorry
+    rcases g1 with i | j
+    · rcases g2 with i' | j'
+      · rfl
+      · rfl
+    · rcases g2 with i' | j'
+      · rfl
+      · simp
+        sorry
 
 noncomputable instance : MulAction (DihedralGroup 6) ℂ where
   smul := by
     intro g p
-    cases' g with i j
+    rcases g with i | j
 
     -- ri ⬝ p
-    exact (exp (2 * π * I * (i.val / 6)))
+    · exact (exp (2 * π * I * (i.val / 6)))
 
     -- sr j ⬝ p
-    exact -(exp (2 * π * I * (j.val / 6)))
+    · exact -(exp (2 * π * I * (j.val / 6)))
   one_smul := by sorry
   mul_smul := by sorry
 
@@ -96,3 +96,5 @@ noncomputable instance : MulAction (DihedralGroup 6) ℂ where
 
 -- https://kconrad.math.uconn.edu/blurbs/grouptheory/dihedral2.pdf
 -- https://math.stackexchange.com/questions/1099579/why-are-automorphisms-of-d-2n-n-geq-5-odd-not-always-inner
+
+end DihedralGroup

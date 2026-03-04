@@ -154,3 +154,5 @@ example : Subgroup.closure {r (1 : ZMod 4)} = rot := by
 example : IsMulCommutative rot where
   is_comm := ⟨fun a b => by
     fin_cases a <;> fin_cases b <;> decide⟩
+
+end DihedralGroup

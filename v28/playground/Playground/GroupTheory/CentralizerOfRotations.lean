@@ -36,8 +36,8 @@ theorem A_le_CA : (Rot n) ≤ (C_A n) := by
   have hb : b ∈ (Rot n) := hb
   rw [mem_A_iff] at ha
   rw [mem_A_iff] at hb
-  cases' ha with i ri_is_a
-  cases' hb with j rj_is_b
+  obtain ⟨i, ri_is_a⟩ := ha
+  obtain ⟨j, rj_is_b⟩ := hb
   rw [← rj_is_b]
   rw [← ri_is_a]
   simp
@@ -70,19 +70,19 @@ example (i : ZMod n) (hn : 2 < n) : (sr i ∉ (C_A n)) := by
 
 -- The complement of A are terms of the form s r
 theorem A_complement_is_sr (x : DihedralGroup n) (hx : x ∉ (Rot n)) : ∃ i, x = sr i := by
-  cases' x with i i
-  exfalso
-  have spec := mem_A_iff (r i)
-  rw [spec] at hx
-  simp at hx
-  use i
+  rcases x with i | i
+  · exfalso
+    have spec := mem_A_iff (r i)
+    rw [spec] at hx
+    simp at hx
+  · use i
 
 -- C(A) ≤ A
 theorem CA_le_A (hn : 2 < n) : (C_A n) ≤ (Rot n) := by
   intro x x_in_CA
   by_contra x_not_in_A
   have spec := A_complement_is_sr x x_not_in_A
-  cases' spec with i x_eq_sr_i
+  obtain ⟨i, x_eq_sr_i⟩ := spec
   have r_neg_i_in_CA := ri_in_CA (-i)
   have prod_in_CA := Subgroup.mul_mem (C_A n) x_in_CA r_neg_i_in_CA
   rw [x_eq_sr_i] at prod_in_CA
@@ -94,3 +94,5 @@ theorem CA_le_A (hn : 2 < n) : (C_A n) ≤ (Rot n) := by
 theorem A_eq_CA (hn : 2 < n) : (Rot n) = (C_A n) := by {
   exact le_antisymm A_le_CA (CA_le_A hn)
 }
+
+end DihedralGroup

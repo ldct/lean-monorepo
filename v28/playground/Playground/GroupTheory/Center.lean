@@ -21,7 +21,9 @@ example (h : (1 = 0 ∨ 1 = 2)) : False := by
 theorem target : B = Subgroup.center (DihedralGroup 4) := by
   ext a
   rw [←Subgroup.mem_carrier]
-  cases' a with i i
+  rcases a with i | i
   fin_cases i
 
   all_goals sorry
+
+end DihedralGroup

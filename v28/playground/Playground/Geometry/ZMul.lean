@@ -76,7 +76,7 @@ theorem r_one_pow' (k : ℤ) : (r 1 : ZMul) ^ k = r k := by
   have l_pos : l ≥ 0 := by linarith
   rw [k_eq_nl]
   have : ∃ l' : ℤ, l' = l := by use l
-  cases' this with l' lp_eq_l
+  obtain ⟨l', lp_eq_l⟩ := this
   have : l' ≥ 0 := by
     exact le_of_le_of_eq l_pos (id (Eq.symm lp_eq_l))
   lift l' to ℕ using this
@@ -130,3 +130,5 @@ example : AddCommGroup ℤ where
   add_comm := by
     intro a b
     exact AddCommMagma.add_comm a b
+
+end ZMul

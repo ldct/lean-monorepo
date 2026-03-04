@@ -210,3 +210,5 @@ AddGroup.ofLeftAxioms (by
   positivity
   norm_num
  )
+
+end DyadicRat

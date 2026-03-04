@@ -71,3 +71,5 @@ example : ¬ IsCyclic ((ZMul) × (ZMul)) := by
   simp at t
   rw [k_eq_1] at t
   norm_num at t
+
+end ZMul

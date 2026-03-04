@@ -39,7 +39,7 @@ example {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n => -a n)
   -- texify  -- LeanTeX not available in v24
   intro ε hε
   specialize ha ε hε
-  cases' ha with B hB
+  obtain ⟨B, hB⟩ := ha
   use B
   intro n hn
   specialize hB n hn
@@ -67,7 +67,7 @@ example : TendsTo (fun n ↦ 1/(Real.sqrt n)) 0 := by
       _ < 1 + ↑⌈ε⁻¹ * ε⁻¹⌉₊ := by simp
   }
 
-  cases' exists_N with N N_cond
+  obtain ⟨N, N_cond⟩ := exists_N
 
   have N_ge_0 : 0 < N := by
     rify
@@ -125,7 +125,7 @@ example : TendsTo (fun n ↦ (n+1)/n) 1 := by
     push_cast
     linarith
 
-  cases' exists_N with N N_cond
+  obtain ⟨N, N_cond⟩ := exists_N
 
   use N
   intro n hn

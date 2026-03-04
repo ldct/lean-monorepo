@@ -52,3 +52,5 @@ instance (n : ℕ) : MulAction (DihedralGroup n) (ZMod 2) where
     <;> simp [HSMul.hSMul, smul_2] <;> ring_nf
     norm_num
     rfl
+
+end DihedralGroup

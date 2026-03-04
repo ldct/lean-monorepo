@@ -16,7 +16,7 @@ theorem MCT_formula
   let as := { a n | n : ℕ}
   let s := sSup as
 
-  cases' a_bdd with B a_bdd
+  obtain ⟨B, a_bdd⟩ := a_bdd
 
   have as_Bdd : BddAbove as := by
     use B
@@ -45,9 +45,9 @@ theorem MCT_formula
 
   unfold upperBounds at this
   simp at this
-  cases' this with aN haN
-  cases' haN with aN_in_s haN
-  cases' aN_in_s with N hN
+  obtain ⟨aN, haN⟩ := this
+  obtain ⟨aN_in_s, haN⟩ := haN
+  obtain ⟨N, hN⟩ := aN_in_s
   rw [← hN] at haN
   use N
   intro n hn

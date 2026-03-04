@@ -38,7 +38,7 @@ example (n : ℕ) : Subgroup (DihedralGroup n) where
   inv_mem' := by
     intros x hx
     simp at hx
-    cases' hx with i hi
+    obtain ⟨i, hi⟩ := hx
     use -i
     rw [← hi]
     have rr : (r (2 * i))⁻¹ = r (- (2 * i)) := by
@@ -80,8 +80,8 @@ example (G H : Type) [Group G] [Group H] (φ : G →* H) : Subgroup H where
     intros a b a_in_G b_in_G
     simp at a_in_G
     simp at b_in_G
-    cases' a_in_G with a' phi_a'_is_a
-    cases' b_in_G with b' phi_b'_is_b
+    obtain ⟨a', phi_a'_is_a⟩ := a_in_G
+    obtain ⟨b', phi_b'_is_b⟩ := b_in_G
     simp
     use a' * b'
     have h : φ (a' * b') = (φ a') * φ b' := by
@@ -94,10 +94,12 @@ example (G H : Type) [Group G] [Group H] (φ : G →* H) : Subgroup H where
   inv_mem' := by
     intros g hg
     simp at hg
-    cases' hg with g' phi_g'_is_g
+    obtain ⟨g', phi_g'_is_g⟩ := hg
     simp
     use g'⁻¹
     simp
     exact phi_g'_is_g
 
 example : (1 : ZMod 4) ≠ -1 := by decide
+
+end DihedralGroup

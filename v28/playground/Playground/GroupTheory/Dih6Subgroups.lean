@@ -77,7 +77,7 @@ example : d3_1 ≃* DihedralGroup 3 where
 
   left_inv := by
     rintro ⟨g, hg⟩
-    cases' g with i j
+    rcases g with i | j
     all_goals sorry
 
   right_inv := by
@@ -97,13 +97,13 @@ open Polynomial Real Complex
 noncomputable instance : MulAction (DihedralGroup 6) ℂ where
   smul := by
     intro g p
-    cases' g with i j
+    rcases g with i | j
 
     -- ri ⬝ p
-    exact (exp (2 * π * I * (i.val / 6)))
+    · exact (exp (2 * π * I * (i.val / 6)))
 
     -- sr j ⬝ p
-    exact -(exp (2 * π * I * (j.val / 6)))
+    · exact -(exp (2 * π * I * (j.val / 6)))
   one_smul := by sorry
   mul_smul := by sorry
 
@@ -111,3 +111,5 @@ noncomputable instance : MulAction (DihedralGroup 6) ℂ where
 
 -- https://kconrad.math.uconn.edu/blurbs/grouptheory/dihedral2.pdf
 -- https://math.stackexchange.com/questions/1099579/why-are-automorphisms-of-d-2n-n-geq-5-odd-not-always-inner
+
+end DihedralGroup

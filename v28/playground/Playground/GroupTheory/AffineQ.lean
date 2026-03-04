@@ -48,7 +48,7 @@ instance : Group AffineQ where
   one_mul := by
     intro a
     simp [(· * ·), mul]
-    cases' a with m c
+    obtain ⟨m, c, _⟩ := a
     simp
     constructor
     apply Rat.one_mul
@@ -64,7 +64,7 @@ instance : Group AffineQ where
   mul_one := by
     intro a
     simp [(· * ·), mul]
-    cases' a with m c
+    obtain ⟨m, c, _⟩ := a
     simp
     constructor
     rw [one]
@@ -107,7 +107,7 @@ def TranslatesZ : Subgroup AffineQ where
     rfl
   inv_mem' := by
     intros x x_in_A
-    cases' x_in_A with i hx
+    obtain ⟨i, hx⟩ := x_in_A
     use -i
     rw [inv_eq]
     simp
@@ -131,7 +131,7 @@ def Translates2Z : Subgroup AffineQ where
     rfl
   inv_mem' := by
     intros x x_in_A
-    cases' x_in_A with i hx
+    obtain ⟨i, hx⟩ := x_in_A
     use -i
     rw [inv_eq]
     simp
@@ -155,12 +155,10 @@ example : t ∈ TranslatesZ := by
 
 example : t ∉ C := by
   intro t_in_C
-  cases' t_in_C with w h
-  simp at h
-  cases' h with w_in_tz g_act_w_is_t
+  obtain ⟨w, w_in_tz, g_act_w_is_t⟩ := t_in_C
   simp at g_act_w_is_t
   rw [ConjAct.toConjAct_smul] at g_act_w_is_t
-  cases' w_in_tz with i hi
+  obtain ⟨i, hi⟩ := w_in_tz
   have : g = AffineQ.mk 2 0 (by decide) := by decide
   rw [this] at g_act_w_is_t
   rw [← hi] at g_act_w_is_t

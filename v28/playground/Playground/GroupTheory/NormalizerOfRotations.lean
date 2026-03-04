@@ -7,3 +7,5 @@ namespace DihedralGroup
 
 
 -- theorem mem_center_iff_commutes_r_rs (g : DihedralGroup n) : g ∈ Subgroup.center (DihedralGroup n) ↔
+
+end DihedralGroup
