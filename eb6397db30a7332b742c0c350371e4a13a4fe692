@@ -1,0 +1,49 @@
+v28/playground/Playground/GroupTheory/AffineQ.lean
+  ea98f94a6eed6ef1 51,67,110,158,161
+v28/playground/Playground/GroupTheory/DihActions.lean
+  ea98f94a6eed6ef1 55-56
+v28/playground/Playground/GroupTheory/Basic.lean
+  ea98f94a6eed6ef1 41,83-84,97,104-105
+v28/playground/Playground/GroupTheory/CentralizerOfRotations.lean
+  ea98f94a6eed6ef1 39-40,73-74,78,97-98
+v28/playground/Playground/GroupTheory/Cyclic.lean
+  ea98f94a6eed6ef1 74-75
+v28/playground/Playground/Analysis/TendsTo.lean
+  ea98f94a6eed6ef1 42,70,128
+v28/playground/Playground/GroupTheory/NormalizerOfRotations.lean
+  ea98f94a6eed6ef1 10-11
+v28/playground/Playground/GroupTheory/Center.lean
+  ea98f94a6eed6ef1 24,28-29
+v28/playground/Playground/Rational/DyadicRat.lean
+  ea98f94a6eed6ef1 213-214
+v28/playground/Playground/GroupTheory/Dih4.lean
+  ea98f94a6eed6ef1 157-158
+v28/playground/Playground/Geometry/ZMul.lean
+  ea98f94a6eed6ef1 79,133-134
+v28/playground/Playground/GroupTheory/Dih6.lean
+  ea98f94a6eed6ef1 35-37,45,48,51,61,64,67,73-79,85,88,91,99-100
+v28/playground/Playground/GroupTheory/Dih6Subgroups.lean
+  ea98f94a6eed6ef1 80,100,103,106,114-115
+v28/playground/Playground/Analysis/MonotoneConvergence.lean
+  ea98f94a6eed6ef1 19,48-50
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.8",
+  "base_commit_sha": "eb6397db30a7332b742c0c350371e4a13a4fe692",
+  "prompts": {
+    "ea98f94a6eed6ef1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9f30dd7d-1772-49c2-8a9b-b74c95798cb4",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 81,
+      "total_deletions": 59,
+      "accepted_lines": 69,
+      "overriden_lines": 0
+    }
+  }
+}
