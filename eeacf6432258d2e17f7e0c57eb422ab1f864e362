@@ -1,0 +1,49 @@
+v24/playground/Playground/RealIsometry/Chapter_1_2.lean
+  c4a3fcc0054bfe5c 115-187
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "eeacf6432258d2e17f7e0c57eb422ab1f864e362",
+  "prompts": {
+    "6565da55ea2b54c9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "238f7224-dfd7-4b51-8a7e-a22236aacbcc",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 253,
+      "total_deletions": 243,
+      "accepted_lines": 75,
+      "overriden_lines": 1
+    },
+    "74afe611c1cfa3c5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "169d49e3-9597-4fb4-8421-76f3a93cd1bb",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 6,
+      "total_deletions": 4,
+      "accepted_lines": 6,
+      "overriden_lines": 0
+    },
+    "c4a3fcc0054bfe5c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b8cfd7c6-ca23-493d-b014-25b09db137bf",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 89,
+      "total_deletions": 16,
+      "accepted_lines": 73,
+      "overriden_lines": 0
+    }
+  }
+}
