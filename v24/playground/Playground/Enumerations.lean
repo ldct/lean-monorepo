@@ -48,10 +48,9 @@ example (I : Set (Finset (Fin 2))) :
     I = {{}, {0}, {1}} ∨ I = {{}, {0}, {0, 1}} ∨ I = {{}, {1}, {0, 1}} ∨
     I = {{0}, {1}, {0, 1}} ∨
     I = {{}, {0}, {1}, {0, 1}} := by
-  have := Fintype.finsetEquivSet.surjective I
   obtain ⟨I, rfl⟩ := Fintype.finsetEquivSet.surjective I
-  simp_rw [Equiv.apply_eq_iff_eq_symm_apply]
-  simpa using by decide +revert
+  simp_rw [Equiv.apply_eq_iff_eq_symm_apply, Fintype.finsetEquivSet_symm_apply]
+  decide +revert
 
 example (I : Set (Set (Fin 2))) :
     I = {} ∨

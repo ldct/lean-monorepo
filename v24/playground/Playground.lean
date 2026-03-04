@@ -56,3 +56,9 @@ import Playground.Topology.TopSpace
 import Playground.Rational.DyadicRat
 import Playground.Rational.ZNRat
 import Playground.Rational.ZZRat
+
+import Playground.Enumerations
+import Playground.PermGeometry
+import Playground.BucketProperty
+import Playground.AristotleTest_aristotle
+import Playground.a1_aristotle

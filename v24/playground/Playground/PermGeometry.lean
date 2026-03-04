@@ -329,7 +329,6 @@ example (a b : ℝ) (ha : a ≠ 0) {x y z : ℝ} (hxz : x ≠ z):
     have : x = z := by linarith
     exact hxz this
   field_simp
-  ring
 
 /-- A transformation which preserves ratios of lengths on the real line is called a *similarity* of
 the real line. -/
