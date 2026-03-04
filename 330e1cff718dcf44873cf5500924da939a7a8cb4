@@ -1,0 +1,53 @@
+v28/playground/Playground/GroupTheory/CentralizerOfRotations.lean
+  ea98f94a6eed6ef1 91-92
+v28/playground/Playground/Analysis/TendsTo.lean
+  ea98f94a6eed6ef1 127,129
+v28/playground/Playground/GroupTheory/AffineQ.lean
+  ea98f94a6eed6ef1 44,54,56,59,71,73,86
+v28/playground/Playground/Rational/ZNRat.lean
+  ea98f94a6eed6ef1 4-5,197-199,253-255
+v28/playground/Playground/Analysis/Bounded.lean
+  ea98f94a6eed6ef1 15-16
+v28/playground/Playground/Jensen.lean
+  ea98f94a6eed6ef1 36,39
+v28/playground/Playground/Rational/ZZRat.lean
+  ea98f94a6eed6ef1 4-5,215-217
+v28/playground/Playground/Rational/DyadicRat.lean
+  ea98f94a6eed6ef1 4-5,208-210,214
+v28/playground/Playground/GroupTheory/CentralizersAndNormalizers.lean
+  ea98f94a6eed6ef1 4
+v28/playground/Playground/PermGeometry.lean
+  ea98f94a6eed6ef1 8
+v28/playground/Playground/GroupTheory/Dih4.lean
+  ea98f94a6eed6ef1 3
+v28/playground/Playground/SMOQ2.lean
+  ea98f94a6eed6ef1 45-46,60-61
+v28/playground/Playground/GroupTheory/Center.lean
+  ea98f94a6eed6ef1 25-27
+v28/playground/Playground/GroupTheory/Cyclic.lean
+  ea98f94a6eed6ef1 21-23
+v28/playground/Playground/Topology/TopSpace.lean
+  ea98f94a6eed6ef1 107-109,117,122-123,129-131
+v28/playground/Playground/MyPolynomial.lean
+  ea98f94a6eed6ef1 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.8",
+  "base_commit_sha": "330e1cff718dcf44873cf5500924da939a7a8cb4",
+  "prompts": {
+    "ea98f94a6eed6ef1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9f30dd7d-1772-49c2-8a9b-b74c95798cb4",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 511,
+      "total_deletions": 575,
+      "accepted_lines": 120,
+      "overriden_lines": 0
+    }
+  }
+}
