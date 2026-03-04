@@ -1,0 +1,23 @@
+v24/playground/Playground/RealIsometry/Chapter_1_2.lean
+  c4a3fcc0054bfe5c 115-187
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.7",
+  "base_commit_sha": "e6e1e540f3159c2eb77f6a943837295c385098b1",
+  "prompts": {
+    "c4a3fcc0054bfe5c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b8cfd7c6-ca23-493d-b014-25b09db137bf",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 89,
+      "total_deletions": 16,
+      "accepted_lines": 73,
+      "overriden_lines": 0
+    }
+  }
+}
