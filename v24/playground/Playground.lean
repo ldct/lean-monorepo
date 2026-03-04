@@ -44,3 +44,15 @@ import Playground.scratch
 import Playground.scratch2
 import Playground.scratch3
 import Playground.test
+import Playground.abs
+import Playground.Combi1
+import Playground.ComplexExamples
+import Playground.LinearAlgebra.LinearAlgebra
+import Playground.MyPolynomial
+import Playground.NormNumI
+import Playground.NormNumI_test
+import Playground.Simproc
+import Playground.Topology.TopSpace
+import Playground.Rational.DyadicRat
+import Playground.Rational.ZNRat
+import Playground.Rational.ZZRat
