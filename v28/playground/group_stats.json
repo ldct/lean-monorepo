@@ -1,0 +1,3798 @@
+{
+  "group_info": {
+    "1,1": {
+      "definition": "Multiplicative (ZMod 1)",
+      "name": "Gap_1_1"
+    },
+    "10,1": {
+      "definition": "DihedralGroup 5",
+      "name": "Gap_10_1"
+    },
+    "10,2": {
+      "definition": "Multiplicative (ZMod 10)",
+      "name": "Gap_10_2"
+    },
+    "11,1": {
+      "definition": "Multiplicative (ZMod 11)",
+      "name": "Gap_11_1"
+    },
+    "12,1": {
+      "definition": "DicyclicGroup 3",
+      "name": "Gap_12_1"
+    },
+    "12,2": {
+      "definition": "Multiplicative (ZMod 12)",
+      "name": "Gap_12_2"
+    },
+    "12,3": {
+      "definition": "AlternatingGroup 4",
+      "name": "Gap_12_3"
+    },
+    "12,4": {
+      "definition": "DihedralGroup 6",
+      "name": "Gap_12_4"
+    },
+    "12,5": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 6)",
+      "name": "Gap_12_5"
+    },
+    "13,1": {
+      "definition": "Multiplicative (ZMod 13)",
+      "name": "Gap_13_1"
+    },
+    "14,1": {
+      "definition": "DihedralGroup 7",
+      "name": "Gap_14_1"
+    },
+    "14,2": {
+      "definition": "Multiplicative (ZMod 14)",
+      "name": "Gap_14_2"
+    },
+    "15,1": {
+      "definition": "Multiplicative (ZMod 15)",
+      "name": "Gap_15_1"
+    },
+    "16,1": {
+      "definition": "Multiplicative (ZMod 16)",
+      "name": "Gap_16_1"
+    },
+    "16,10": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 4)",
+      "name": "Gap_16_10"
+    },
+    "16,11": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 DihedralGroup 4",
+      "name": "Gap_16_11"
+    },
+    "16,12": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 QuaternionGroup 2",
+      "name": "Gap_16_12"
+    },
+    "16,14": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2)",
+      "name": "Gap_16_14"
+    },
+    "16,2": {
+      "definition": "Multiplicative (ZMod 4) \u00d7 Multiplicative (ZMod 4)",
+      "name": "Gap_16_2"
+    },
+    "16,4": {
+      "definition": "Cpqr 4 4 3",
+      "name": "Gap_16_4"
+    },
+    "16,5": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 8)",
+      "name": "Gap_16_5"
+    },
+    "16,6": {
+      "definition": "Cpqr 8 2 5",
+      "name": "Gap_16_6"
+    },
+    "16,7": {
+      "definition": "DihedralGroup 8",
+      "name": "Gap_16_7"
+    },
+    "16,8": {
+      "definition": "Cpqr 8 2 3",
+      "name": "Gap_16_8"
+    },
+    "16,9": {
+      "definition": "QuaternionGroup 4",
+      "name": "Gap_16_9"
+    },
+    "17,1": {
+      "definition": "Multiplicative (ZMod 17)",
+      "name": "Gap_17_1"
+    },
+    "18,1": {
+      "definition": "DihedralGroup 9",
+      "name": "Gap_18_1"
+    },
+    "18,2": {
+      "definition": "Multiplicative (ZMod 18)",
+      "name": "Gap_18_2"
+    },
+    "18,3": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Equiv.Perm (Fin 3)",
+      "name": "Gap_18_3"
+    },
+    "18,4": {
+      "definition": "Dihedralization (Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3))",
+      "name": "Gap_18_4"
+    },
+    "18,5": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 6)",
+      "name": "Gap_18_5"
+    },
+    "19,1": {
+      "definition": "Multiplicative (ZMod 19)",
+      "name": "Gap_19_1"
+    },
+    "2,1": {
+      "definition": "Multiplicative (ZMod 2)",
+      "name": "Gap_2_1"
+    },
+    "20,1": {
+      "definition": "DicyclicGroup 5",
+      "name": "Gap_20_1"
+    },
+    "20,2": {
+      "definition": "Multiplicative (ZMod 20)",
+      "name": "Gap_20_2"
+    },
+    "20,3": {
+      "definition": "@FrobeniusGroup 5 (Fact.mk (by decide : Nat.Prime 5))",
+      "name": "Gap_20_3"
+    },
+    "20,4": {
+      "definition": "DihedralGroup 10",
+      "name": "Gap_20_4"
+    },
+    "20,5": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 10)",
+      "name": "Gap_20_5"
+    },
+    "21,1": {
+      "definition": "Cpqr 7 3 2",
+      "name": "Gap_21_1"
+    },
+    "21,2": {
+      "definition": "Multiplicative (ZMod 21)",
+      "name": "Gap_21_2"
+    },
+    "22,1": {
+      "definition": "DihedralGroup 11",
+      "name": "Gap_22_1"
+    },
+    "22,2": {
+      "definition": "Multiplicative (ZMod 22)",
+      "name": "Gap_22_2"
+    },
+    "23,1": {
+      "definition": "Multiplicative (ZMod 23)",
+      "name": "Gap_23_1"
+    },
+    "24,1": {
+      "definition": "Cpqr 3 8 2",
+      "name": "Gap_24_1"
+    },
+    "24,10": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 DihedralGroup 4",
+      "name": "Gap_24_10"
+    },
+    "24,11": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 QuaternionGroup 2",
+      "name": "Gap_24_11"
+    },
+    "24,12": {
+      "definition": "Equiv.Perm (Fin 4)",
+      "name": "Gap_24_12"
+    },
+    "24,13": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 AlternatingGroup 4",
+      "name": "Gap_24_13"
+    },
+    "24,14": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Equiv.Perm (Fin 3)",
+      "name": "Gap_24_14"
+    },
+    "24,15": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 6)",
+      "name": "Gap_24_15"
+    },
+    "24,2": {
+      "definition": "Multiplicative (ZMod 24)",
+      "name": "Gap_24_2"
+    },
+    "24,4": {
+      "definition": "DicyclicGroup 6",
+      "name": "Gap_24_4"
+    },
+    "24,5": {
+      "definition": "Multiplicative (ZMod 4) \u00d7 Equiv.Perm (Fin 3)",
+      "name": "Gap_24_5"
+    },
+    "24,6": {
+      "definition": "DihedralGroup 12",
+      "name": "Gap_24_6"
+    },
+    "24,7": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 DicyclicGroup 3",
+      "name": "Gap_24_7"
+    },
+    "24,9": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 12)",
+      "name": "Gap_24_9"
+    },
+    "25,1": {
+      "definition": "Multiplicative (ZMod 25)",
+      "name": "Gap_25_1"
+    },
+    "25,2": {
+      "definition": "Multiplicative (ZMod 5) \u00d7 Multiplicative (ZMod 5)",
+      "name": "Gap_25_2"
+    },
+    "26,1": {
+      "definition": "DihedralGroup 13",
+      "name": "Gap_26_1"
+    },
+    "26,2": {
+      "definition": "Multiplicative (ZMod 26)",
+      "name": "Gap_26_2"
+    },
+    "27,1": {
+      "definition": "Multiplicative (ZMod 27)",
+      "name": "Gap_27_1"
+    },
+    "27,2": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 9)",
+      "name": "Gap_27_2"
+    },
+    "27,5": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3)",
+      "name": "Gap_27_5"
+    },
+    "28,1": {
+      "definition": "DicyclicGroup 7",
+      "name": "Gap_28_1"
+    },
+    "28,2": {
+      "definition": "Multiplicative (ZMod 28)",
+      "name": "Gap_28_2"
+    },
+    "28,3": {
+      "definition": "DihedralGroup 14",
+      "name": "Gap_28_3"
+    },
+    "28,4": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 14)",
+      "name": "Gap_28_4"
+    },
+    "29,1": {
+      "definition": "Multiplicative (ZMod 29)",
+      "name": "Gap_29_1"
+    },
+    "3,1": {
+      "definition": "Multiplicative (ZMod 3)",
+      "name": "Gap_3_1"
+    },
+    "30,1": {
+      "definition": "Multiplicative (ZMod 5) \u00d7 Equiv.Perm (Fin 3)",
+      "name": "Gap_30_1"
+    },
+    "30,2": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 DihedralGroup 5",
+      "name": "Gap_30_2"
+    },
+    "30,3": {
+      "definition": "DihedralGroup 15",
+      "name": "Gap_30_3"
+    },
+    "30,4": {
+      "definition": "Multiplicative (ZMod 30)",
+      "name": "Gap_30_4"
+    },
+    "31,1": {
+      "definition": "Multiplicative (ZMod 31)",
+      "name": "Gap_31_1"
+    },
+    "32,1": {
+      "definition": "Multiplicative (ZMod 32)",
+      "name": "Gap_32_1"
+    },
+    "32,12": {
+      "definition": "Cpqr 4 8 3",
+      "name": "Gap_32_12"
+    },
+    "32,16": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 16)",
+      "name": "Gap_32_16"
+    },
+    "32,18": {
+      "definition": "DihedralGroup 16",
+      "name": "Gap_32_18"
+    },
+    "32,20": {
+      "definition": "QuaternionGroup 8",
+      "name": "Gap_32_20"
+    },
+    "32,21": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 4) \u00d7 Multiplicative (ZMod 4)",
+      "name": "Gap_32_21"
+    },
+    "32,23": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Cpqr 4 4 3",
+      "name": "Gap_32_23"
+    },
+    "32,25": {
+      "definition": "Multiplicative (ZMod 4) \u00d7 DihedralGroup 4",
+      "name": "Gap_32_25"
+    },
+    "32,26": {
+      "definition": "Multiplicative (ZMod 4) \u00d7 QuaternionGroup 2",
+      "name": "Gap_32_26"
+    },
+    "32,3": {
+      "definition": "Multiplicative (ZMod 4) \u00d7 Multiplicative (ZMod 8)",
+      "name": "Gap_32_3"
+    },
+    "32,36": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 8)",
+      "name": "Gap_32_36"
+    },
+    "32,37": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Cpqr 8 2 5",
+      "name": "Gap_32_37"
+    },
+    "32,39": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 DihedralGroup 8",
+      "name": "Gap_32_39"
+    },
+    "32,4": {
+      "definition": "Cpqr 8 4 3",
+      "name": "Gap_32_4"
+    },
+    "32,40": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Cpqr 8 2 3",
+      "name": "Gap_32_40"
+    },
+    "32,41": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 QuaternionGroup 4",
+      "name": "Gap_32_41"
+    },
+    "32,45": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 4)",
+      "name": "Gap_32_45"
+    },
+    "32,46": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 DihedralGroup 4",
+      "name": "Gap_32_46"
+    },
+    "32,47": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 QuaternionGroup 2",
+      "name": "Gap_32_47"
+    },
+    "32,51": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2)",
+      "name": "Gap_32_51"
+    },
+    "33,1": {
+      "definition": "Multiplicative (ZMod 33)",
+      "name": "Gap_33_1"
+    },
+    "34,1": {
+      "definition": "DihedralGroup 17",
+      "name": "Gap_34_1"
+    },
+    "34,2": {
+      "definition": "Multiplicative (ZMod 34)",
+      "name": "Gap_34_2"
+    },
+    "35,1": {
+      "definition": "Multiplicative (ZMod 35)",
+      "name": "Gap_35_1"
+    },
+    "36,1": {
+      "definition": "DicyclicGroup 9",
+      "name": "Gap_36_1"
+    },
+    "36,11": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 AlternatingGroup 4",
+      "name": "Gap_36_11"
+    },
+    "36,12": {
+      "definition": "Equiv.Perm (Fin 3) \u00d7 Multiplicative (ZMod 6)",
+      "name": "Gap_36_12"
+    },
+    "36,13": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Dihedralization (Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3))",
+      "name": "Gap_36_13"
+    },
+    "36,14": {
+      "definition": "Multiplicative (ZMod 6) \u00d7 Multiplicative (ZMod 6)",
+      "name": "Gap_36_14"
+    },
+    "36,2": {
+      "definition": "Multiplicative (ZMod 36)",
+      "name": "Gap_36_2"
+    },
+    "36,4": {
+      "definition": "DihedralGroup 18",
+      "name": "Gap_36_4"
+    },
+    "36,5": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 18)",
+      "name": "Gap_36_5"
+    },
+    "36,6": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 DicyclicGroup 3",
+      "name": "Gap_36_6"
+    },
+    "36,8": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 12)",
+      "name": "Gap_36_8"
+    },
+    "37,1": {
+      "definition": "Multiplicative (ZMod 37)",
+      "name": "Gap_37_1"
+    },
+    "38,1": {
+      "definition": "DihedralGroup 19",
+      "name": "Gap_38_1"
+    },
+    "38,2": {
+      "definition": "Multiplicative (ZMod 38)",
+      "name": "Gap_38_2"
+    },
+    "39,1": {
+      "definition": "Cpqr 13 3 3",
+      "name": "Gap_39_1"
+    },
+    "39,2": {
+      "definition": "Multiplicative (ZMod 39)",
+      "name": "Gap_39_2"
+    },
+    "4,1": {
+      "definition": "Multiplicative (ZMod 4)",
+      "name": "Gap_4_1"
+    },
+    "4,2": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2)",
+      "name": "Gap_4_2"
+    },
+    "40,10": {
+      "definition": "Multiplicative (ZMod 5) \u00d7 DihedralGroup 4",
+      "name": "Gap_40_10"
+    },
+    "40,11": {
+      "definition": "Multiplicative (ZMod 5) \u00d7 QuaternionGroup 2",
+      "name": "Gap_40_11"
+    },
+    "40,12": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 @FrobeniusGroup 5 (Fact.mk (by decide : Nat.Prime 5))",
+      "name": "Gap_40_12"
+    },
+    "40,13": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 DihedralGroup 5",
+      "name": "Gap_40_13"
+    },
+    "40,14": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 10)",
+      "name": "Gap_40_14"
+    },
+    "40,2": {
+      "definition": "Multiplicative (ZMod 40)",
+      "name": "Gap_40_2"
+    },
+    "40,3": {
+      "definition": "Cpqr 5 8 4",
+      "name": "Gap_40_3"
+    },
+    "40,4": {
+      "definition": "DicyclicGroup 10",
+      "name": "Gap_40_4"
+    },
+    "40,5": {
+      "definition": "Multiplicative (ZMod 4) \u00d7 DihedralGroup 5",
+      "name": "Gap_40_5"
+    },
+    "40,6": {
+      "definition": "DihedralGroup 20",
+      "name": "Gap_40_6"
+    },
+    "40,7": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 DicyclicGroup 5",
+      "name": "Gap_40_7"
+    },
+    "40,9": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 20)",
+      "name": "Gap_40_9"
+    },
+    "41,1": {
+      "definition": "Multiplicative (ZMod 41)",
+      "name": "Gap_41_1"
+    },
+    "42,1": {
+      "definition": "@FrobeniusGroup 7 (Fact.mk (by decide : Nat.Prime 7))",
+      "name": "Gap_42_1"
+    },
+    "42,2": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Cpqr 7 3 2",
+      "name": "Gap_42_2"
+    },
+    "42,3": {
+      "definition": "Equiv.Perm (Fin 3) \u00d7 Multiplicative (ZMod 7)",
+      "name": "Gap_42_3"
+    },
+    "42,4": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 DihedralGroup 7",
+      "name": "Gap_42_4"
+    },
+    "42,5": {
+      "definition": "DihedralGroup 21",
+      "name": "Gap_42_5"
+    },
+    "42,6": {
+      "definition": "Multiplicative (ZMod 42)",
+      "name": "Gap_42_6"
+    },
+    "43,1": {
+      "definition": "Multiplicative (ZMod 43)",
+      "name": "Gap_43_1"
+    },
+    "44,1": {
+      "definition": "DicyclicGroup 11",
+      "name": "Gap_44_1"
+    },
+    "44,2": {
+      "definition": "Multiplicative (ZMod 44)",
+      "name": "Gap_44_2"
+    },
+    "44,3": {
+      "definition": "DihedralGroup 22",
+      "name": "Gap_44_3"
+    },
+    "44,4": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 22)",
+      "name": "Gap_44_4"
+    },
+    "45,1": {
+      "definition": "Multiplicative (ZMod 45)",
+      "name": "Gap_45_1"
+    },
+    "45,2": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 15)",
+      "name": "Gap_45_2"
+    },
+    "46,1": {
+      "definition": "DihedralGroup 23",
+      "name": "Gap_46_1"
+    },
+    "46,2": {
+      "definition": "Multiplicative (ZMod 46)",
+      "name": "Gap_46_2"
+    },
+    "47,1": {
+      "definition": "Multiplicative (ZMod 47)",
+      "name": "Gap_47_1"
+    },
+    "48,1": {
+      "definition": "Cpqr 3 16 2",
+      "name": "Gap_48_1"
+    },
+    "48,11": {
+      "definition": "Multiplicative (ZMod 4) \u00d7 DicyclicGroup 3",
+      "name": "Gap_48_11"
+    },
+    "48,2": {
+      "definition": "Multiplicative (ZMod 48)",
+      "name": "Gap_48_2"
+    },
+    "48,20": {
+      "definition": "Multiplicative (ZMod 4) \u00d7 Multiplicative (ZMod 12)",
+      "name": "Gap_48_20"
+    },
+    "48,22": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Cpqr 4 4 3",
+      "name": "Gap_48_22"
+    },
+    "48,23": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 24)",
+      "name": "Gap_48_23"
+    },
+    "48,24": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Cpqr 8 2 5",
+      "name": "Gap_48_24"
+    },
+    "48,25": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 DihedralGroup 8",
+      "name": "Gap_48_25"
+    },
+    "48,26": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Cpqr 8 2 3",
+      "name": "Gap_48_26"
+    },
+    "48,27": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 QuaternionGroup 4",
+      "name": "Gap_48_27"
+    },
+    "48,31": {
+      "definition": "Multiplicative (ZMod 4) \u00d7 AlternatingGroup 4",
+      "name": "Gap_48_31"
+    },
+    "48,34": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 DicyclicGroup 6",
+      "name": "Gap_48_34"
+    },
+    "48,35": {
+      "definition": "Equiv.Perm (Fin 3) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 4)",
+      "name": "Gap_48_35"
+    },
+    "48,36": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 DihedralGroup 12",
+      "name": "Gap_48_36"
+    },
+    "48,38": {
+      "definition": "Equiv.Perm (Fin 3) \u00d7 DihedralGroup 4",
+      "name": "Gap_48_38"
+    },
+    "48,4": {
+      "definition": "Equiv.Perm (Fin 3) \u00d7 Multiplicative (ZMod 8)",
+      "name": "Gap_48_4"
+    },
+    "48,40": {
+      "definition": "Equiv.Perm (Fin 3) \u00d7 QuaternionGroup 2",
+      "name": "Gap_48_40"
+    },
+    "48,42": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 DicyclicGroup 3",
+      "name": "Gap_48_42"
+    },
+    "48,44": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 12)",
+      "name": "Gap_48_44"
+    },
+    "48,45": {
+      "definition": "Multiplicative (ZMod 6) \u00d7 DihedralGroup 4",
+      "name": "Gap_48_45"
+    },
+    "48,46": {
+      "definition": "Multiplicative (ZMod 6) \u00d7 QuaternionGroup 2",
+      "name": "Gap_48_46"
+    },
+    "48,48": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Equiv.Perm (Fin 4)",
+      "name": "Gap_48_48"
+    },
+    "48,49": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 AlternatingGroup 4",
+      "name": "Gap_48_49"
+    },
+    "48,51": {
+      "definition": "Equiv.Perm (Fin 3) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2)",
+      "name": "Gap_48_51"
+    },
+    "48,52": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 6)",
+      "name": "Gap_48_52"
+    },
+    "48,6": {
+      "definition": "Cpqr 24 2 23",
+      "name": "Gap_48_6"
+    },
+    "48,7": {
+      "definition": "DihedralGroup 24",
+      "name": "Gap_48_7"
+    },
+    "48,8": {
+      "definition": "DicyclicGroup 12",
+      "name": "Gap_48_8"
+    },
+    "48,9": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Cpqr 3 8 2",
+      "name": "Gap_48_9"
+    },
+    "49,1": {
+      "definition": "Multiplicative (ZMod 49)",
+      "name": "Gap_49_1"
+    },
+    "49,2": {
+      "definition": "Multiplicative (ZMod 7) \u00d7 Multiplicative (ZMod 7)",
+      "name": "Gap_49_2"
+    },
+    "5,1": {
+      "definition": "Multiplicative (ZMod 5)",
+      "name": "Gap_5_1"
+    },
+    "50,1": {
+      "definition": "DihedralGroup 25",
+      "name": "Gap_50_1"
+    },
+    "50,2": {
+      "definition": "Multiplicative (ZMod 50)",
+      "name": "Gap_50_2"
+    },
+    "50,3": {
+      "definition": "Multiplicative (ZMod 5) \u00d7 DihedralGroup 5",
+      "name": "Gap_50_3"
+    },
+    "50,4": {
+      "definition": "Dihedralization (Multiplicative (ZMod 5) \u00d7 Multiplicative (ZMod 5))",
+      "name": "Gap_50_4"
+    },
+    "50,5": {
+      "definition": "Multiplicative (ZMod 5) \u00d7 Multiplicative (ZMod 10)",
+      "name": "Gap_50_5"
+    },
+    "51,1": {
+      "definition": "Multiplicative (ZMod 51)",
+      "name": "Gap_51_1"
+    },
+    "52,1": {
+      "definition": "DicyclicGroup 13",
+      "name": "Gap_52_1"
+    },
+    "52,2": {
+      "definition": "Multiplicative (ZMod 52)",
+      "name": "Gap_52_2"
+    },
+    "52,3": {
+      "definition": "Cpqr 13 4 5",
+      "name": "Gap_52_3"
+    },
+    "52,4": {
+      "definition": "DihedralGroup 26",
+      "name": "Gap_52_4"
+    },
+    "52,5": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 26)",
+      "name": "Gap_52_5"
+    },
+    "53,1": {
+      "definition": "Multiplicative (ZMod 53)",
+      "name": "Gap_53_1"
+    },
+    "54,1": {
+      "definition": "DihedralGroup 27",
+      "name": "Gap_54_1"
+    },
+    "54,12": {
+      "definition": "Equiv.Perm (Fin 3) \u00d7 Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3)",
+      "name": "Gap_54_12"
+    },
+    "54,13": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Dihedralization (Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3))",
+      "name": "Gap_54_13"
+    },
+    "54,15": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 6)",
+      "name": "Gap_54_15"
+    },
+    "54,2": {
+      "definition": "Multiplicative (ZMod 54)",
+      "name": "Gap_54_2"
+    },
+    "54,3": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 DihedralGroup 9",
+      "name": "Gap_54_3"
+    },
+    "54,4": {
+      "definition": "Equiv.Perm (Fin 3) \u00d7 Multiplicative (ZMod 9)",
+      "name": "Gap_54_4"
+    },
+    "54,6": {
+      "definition": "Cpqr 9 6 2",
+      "name": "Gap_54_6"
+    },
+    "54,9": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 18)",
+      "name": "Gap_54_9"
+    },
+    "55,1": {
+      "definition": "Cpqr 11 5 3",
+      "name": "Gap_55_1"
+    },
+    "55,2": {
+      "definition": "Multiplicative (ZMod 55)",
+      "name": "Gap_55_2"
+    },
+    "56,1": {
+      "definition": "Cpqr 7 8 6",
+      "name": "Gap_56_1"
+    },
+    "56,10": {
+      "definition": "Multiplicative (ZMod 7) \u00d7 QuaternionGroup 2",
+      "name": "Gap_56_10"
+    },
+    "56,12": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 DihedralGroup 7",
+      "name": "Gap_56_12"
+    },
+    "56,13": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 14)",
+      "name": "Gap_56_13"
+    },
+    "56,2": {
+      "definition": "Multiplicative (ZMod 56)",
+      "name": "Gap_56_2"
+    },
+    "56,3": {
+      "definition": "DicyclicGroup 14",
+      "name": "Gap_56_3"
+    },
+    "56,4": {
+      "definition": "Multiplicative (ZMod 4) \u00d7 DihedralGroup 7",
+      "name": "Gap_56_4"
+    },
+    "56,5": {
+      "definition": "DihedralGroup 28",
+      "name": "Gap_56_5"
+    },
+    "56,6": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 DicyclicGroup 7",
+      "name": "Gap_56_6"
+    },
+    "56,8": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 28)",
+      "name": "Gap_56_8"
+    },
+    "56,9": {
+      "definition": "Multiplicative (ZMod 7) \u00d7 DihedralGroup 4",
+      "name": "Gap_56_9"
+    },
+    "57,1": {
+      "definition": "Cpqr 19 3 7",
+      "name": "Gap_57_1"
+    },
+    "57,2": {
+      "definition": "Multiplicative (ZMod 57)",
+      "name": "Gap_57_2"
+    },
+    "58,1": {
+      "definition": "DihedralGroup 29",
+      "name": "Gap_58_1"
+    },
+    "58,2": {
+      "definition": "Multiplicative (ZMod 58)",
+      "name": "Gap_58_2"
+    },
+    "59,1": {
+      "definition": "Multiplicative (ZMod 59)",
+      "name": "Gap_59_1"
+    },
+    "6,1": {
+      "definition": "Equiv.Perm (Fin 3)",
+      "name": "Gap_6_1"
+    },
+    "6,2": {
+      "definition": "Multiplicative (ZMod 6)",
+      "name": "Gap_6_2"
+    },
+    "60,1": {
+      "definition": "Multiplicative (ZMod 5) \u00d7 DicyclicGroup 3",
+      "name": "Gap_60_1"
+    },
+    "60,10": {
+      "definition": "Multiplicative (ZMod 6) \u00d7 DihedralGroup 5",
+      "name": "Gap_60_10"
+    },
+    "60,11": {
+      "definition": "Equiv.Perm (Fin 3) \u00d7 Multiplicative (ZMod 10)",
+      "name": "Gap_60_11"
+    },
+    "60,12": {
+      "definition": "DihedralGroup 30",
+      "name": "Gap_60_12"
+    },
+    "60,13": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 30)",
+      "name": "Gap_60_13"
+    },
+    "60,2": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 DicyclicGroup 5",
+      "name": "Gap_60_2"
+    },
+    "60,3": {
+      "definition": "DicyclicGroup 15",
+      "name": "Gap_60_3"
+    },
+    "60,4": {
+      "definition": "Multiplicative (ZMod 60)",
+      "name": "Gap_60_4"
+    },
+    "60,5": {
+      "definition": "AlternatingGroup 5",
+      "name": "Gap_60_5"
+    },
+    "60,6": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 @FrobeniusGroup 5 (Fact.mk (by decide : Nat.Prime 5))",
+      "name": "Gap_60_6"
+    },
+    "60,8": {
+      "definition": "Equiv.Perm (Fin 3) \u00d7 DihedralGroup 5",
+      "name": "Gap_60_8"
+    },
+    "60,9": {
+      "definition": "Multiplicative (ZMod 5) \u00d7 AlternatingGroup 4",
+      "name": "Gap_60_9"
+    },
+    "7,1": {
+      "definition": "Multiplicative (ZMod 7)",
+      "name": "Gap_7_1"
+    },
+    "8,1": {
+      "definition": "Multiplicative (ZMod 8)",
+      "name": "Gap_8_1"
+    },
+    "8,2": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 4)",
+      "name": "Gap_8_2"
+    },
+    "8,3": {
+      "definition": "DihedralGroup 4",
+      "name": "Gap_8_3"
+    },
+    "8,4": {
+      "definition": "QuaternionGroup 2",
+      "name": "Gap_8_4"
+    },
+    "8,5": {
+      "definition": "Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2) \u00d7 Multiplicative (ZMod 2)",
+      "name": "Gap_8_5"
+    },
+    "9,1": {
+      "definition": "Multiplicative (ZMod 9)",
+      "name": "Gap_9_1"
+    },
+    "9,2": {
+      "definition": "Multiplicative (ZMod 3) \u00d7 Multiplicative (ZMod 3)",
+      "name": "Gap_9_2"
+    }
+  },
+  "groups": {
+    "1,1": {
+      "abelian": "true",
+      "card": "1",
+      "commuting_fraction": "1",
+      "exponent": "1",
+      "frac_involutions": "1",
+      "num_subgroups": "1",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "10,1": {
+      "abelian": "false",
+      "card": "10",
+      "commuting_fraction": "(2 : Rat)/5",
+      "exponent": "10",
+      "frac_involutions": "(3 : Rat)/5",
+      "num_subgroups": "8",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "10,2": {
+      "abelian": "true",
+      "card": "10",
+      "commuting_fraction": "1",
+      "exponent": "10",
+      "frac_involutions": "(1 : Rat)/5",
+      "num_subgroups": "4",
+      "z1size": "10",
+      "z2size": "10",
+      "z3size": "10",
+      "z4size": "10"
+    },
+    "11,1": {
+      "abelian": "true",
+      "card": "11",
+      "commuting_fraction": "1",
+      "exponent": "11",
+      "frac_involutions": "(1 : Rat)/11",
+      "num_subgroups": "2",
+      "z1size": "11",
+      "z2size": "11",
+      "z3size": "11",
+      "z4size": "11"
+    },
+    "12,1": {
+      "abelian": "false",
+      "card": "12",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/6",
+      "num_subgroups": "8",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "12,2": {
+      "abelian": "true",
+      "card": "12",
+      "commuting_fraction": "1",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/6",
+      "num_subgroups": "6",
+      "z1size": "12",
+      "z2size": "12",
+      "z3size": "12",
+      "z4size": "12"
+    },
+    "12,3": {
+      "abelian": "false",
+      "card": "12",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "6",
+      "frac_involutions": "(1 : Rat)/3",
+      "num_subgroups": "10",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "12,4": {
+      "abelian": "false",
+      "card": "12",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "6",
+      "frac_involutions": "(2 : Rat)/3",
+      "num_subgroups": "16",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "12,5": {
+      "abelian": "true",
+      "card": "12",
+      "commuting_fraction": "1",
+      "exponent": "6",
+      "frac_involutions": "(1 : Rat)/3",
+      "num_subgroups": "10",
+      "z1size": "12",
+      "z2size": "12",
+      "z3size": "12",
+      "z4size": "12"
+    },
+    "13,1": {
+      "abelian": "true",
+      "card": "13",
+      "commuting_fraction": "1",
+      "exponent": "13",
+      "frac_involutions": "(1 : Rat)/13",
+      "num_subgroups": "2",
+      "z1size": "13",
+      "z2size": "13",
+      "z3size": "13",
+      "z4size": "13"
+    },
+    "14,1": {
+      "abelian": "false",
+      "card": "14",
+      "commuting_fraction": "(5 : Rat)/14",
+      "exponent": "14",
+      "frac_involutions": "(4 : Rat)/7",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "14,2": {
+      "abelian": "true",
+      "card": "14",
+      "commuting_fraction": "1",
+      "exponent": "14",
+      "frac_involutions": "(1 : Rat)/7",
+      "num_subgroups": "0",
+      "z1size": "14",
+      "z2size": "14",
+      "z3size": "14",
+      "z4size": "14"
+    },
+    "15,1": {
+      "abelian": "true",
+      "card": "15",
+      "commuting_fraction": "1",
+      "exponent": "15",
+      "frac_involutions": "(1 : Rat)/15",
+      "num_subgroups": "0",
+      "z1size": "15",
+      "z2size": "15",
+      "z3size": "15",
+      "z4size": "15"
+    },
+    "16,1": {
+      "abelian": "true",
+      "card": "16",
+      "commuting_fraction": "1",
+      "exponent": "16",
+      "frac_involutions": "(1 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "16",
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,10": {
+      "abelian": "true",
+      "card": "16",
+      "commuting_fraction": "1",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/2",
+      "num_subgroups": "0",
+      "z1size": "16",
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,11": {
+      "abelian": "false",
+      "card": "16",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "4",
+      "frac_involutions": "(3 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,12": {
+      "abelian": "false",
+      "card": "16",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,14": {
+      "abelian": "true",
+      "card": "16",
+      "commuting_fraction": "1",
+      "exponent": "2",
+      "frac_involutions": "1",
+      "num_subgroups": "0",
+      "z1size": "16",
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,2": {
+      "abelian": "true",
+      "card": "16",
+      "commuting_fraction": "1",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "16",
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,4": {
+      "abelian": "false",
+      "card": "16",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,5": {
+      "abelian": "true",
+      "card": "16",
+      "commuting_fraction": "1",
+      "exponent": "8",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "16",
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,6": {
+      "abelian": "false",
+      "card": "16",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "8",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "16",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,7": {
+      "abelian": "false",
+      "card": "16",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "8",
+      "frac_involutions": "(5 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,8": {
+      "abelian": "false",
+      "card": "16",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "8",
+      "frac_involutions": "(3 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "16,9": {
+      "abelian": "false",
+      "card": "16",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "8",
+      "frac_involutions": "(1 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "16",
+      "z4size": "16"
+    },
+    "17,1": {
+      "abelian": "true",
+      "card": "17",
+      "commuting_fraction": "1",
+      "exponent": "17",
+      "frac_involutions": "(1 : Rat)/17",
+      "num_subgroups": "0",
+      "z1size": "17",
+      "z2size": "17",
+      "z3size": "17",
+      "z4size": "17"
+    },
+    "18,1": {
+      "abelian": "false",
+      "card": "18",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "18",
+      "frac_involutions": "(5 : Rat)/9",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "18,2": {
+      "abelian": "true",
+      "card": "18",
+      "commuting_fraction": "1",
+      "exponent": "18",
+      "frac_involutions": "(1 : Rat)/9",
+      "num_subgroups": "0",
+      "z1size": "18",
+      "z2size": "18",
+      "z3size": "18",
+      "z4size": "18"
+    },
+    "18,3": {
+      "abelian": "false",
+      "card": "18",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "6",
+      "frac_involutions": "(2 : Rat)/9",
+      "num_subgroups": "0",
+      "z1size": "3",
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
+    },
+    "18,4": {
+      "abelian": "false",
+      "card": "18",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "6",
+      "frac_involutions": "(5 : Rat)/9",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "18,5": {
+      "abelian": "true",
+      "card": "18",
+      "commuting_fraction": "1",
+      "exponent": "6",
+      "frac_involutions": "(1 : Rat)/9",
+      "num_subgroups": "0",
+      "z1size": "18",
+      "z2size": "18",
+      "z3size": "18",
+      "z4size": "18"
+    },
+    "19,1": {
+      "abelian": "true",
+      "card": "19",
+      "commuting_fraction": "1",
+      "exponent": "19",
+      "frac_involutions": "(1 : Rat)/19",
+      "num_subgroups": "0",
+      "z1size": "19",
+      "z2size": "19",
+      "z3size": "19",
+      "z4size": "19"
+    },
+    "2,1": {
+      "abelian": "true",
+      "card": "2",
+      "commuting_fraction": "1",
+      "exponent": "2",
+      "frac_involutions": "1",
+      "num_subgroups": "2",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "20,1": {
+      "abelian": "false",
+      "card": "20",
+      "commuting_fraction": "(2 : Rat)/5",
+      "exponent": "20",
+      "frac_involutions": "(1 : Rat)/10",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "20,2": {
+      "abelian": "true",
+      "card": "20",
+      "commuting_fraction": "1",
+      "exponent": "20",
+      "frac_involutions": "(1 : Rat)/10",
+      "num_subgroups": "0",
+      "z1size": "20",
+      "z2size": "20",
+      "z3size": "20",
+      "z4size": "20"
+    },
+    "20,3": {
+      "abelian": "false",
+      "card": "20",
+      "commuting_fraction": "(1 : Rat)/4",
+      "exponent": "20",
+      "frac_involutions": "(3 : Rat)/10",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "20,4": {
+      "abelian": "false",
+      "card": "20",
+      "commuting_fraction": "(2 : Rat)/5",
+      "exponent": "10",
+      "frac_involutions": "(3 : Rat)/5",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "20,5": {
+      "abelian": "true",
+      "card": "20",
+      "commuting_fraction": "1",
+      "exponent": "10",
+      "frac_involutions": "(1 : Rat)/5",
+      "num_subgroups": "0",
+      "z1size": "20",
+      "z2size": "20",
+      "z3size": "20",
+      "z4size": "20"
+    },
+    "21,1": {
+      "abelian": "false",
+      "card": "21",
+      "commuting_fraction": "(5 : Rat)/21",
+      "exponent": "21",
+      "frac_involutions": "(1 : Rat)/21",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "21,2": {
+      "abelian": "true",
+      "card": "21",
+      "commuting_fraction": "1",
+      "exponent": "21",
+      "frac_involutions": "(1 : Rat)/21",
+      "num_subgroups": "0",
+      "z1size": "21",
+      "z2size": "21",
+      "z3size": "21",
+      "z4size": "21"
+    },
+    "22,1": {
+      "abelian": "false",
+      "card": "22",
+      "commuting_fraction": "(7 : Rat)/22",
+      "exponent": "22",
+      "frac_involutions": "(6 : Rat)/11",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "22,2": {
+      "abelian": "true",
+      "card": "22",
+      "commuting_fraction": "1",
+      "exponent": "22",
+      "frac_involutions": "(1 : Rat)/11",
+      "num_subgroups": "0",
+      "z1size": "22",
+      "z2size": "22",
+      "z3size": "22",
+      "z4size": "22"
+    },
+    "23,1": {
+      "abelian": "true",
+      "card": "23",
+      "commuting_fraction": "1",
+      "exponent": "23",
+      "frac_involutions": "(1 : Rat)/23",
+      "num_subgroups": "0",
+      "z1size": "23",
+      "z2size": "23",
+      "z3size": "23",
+      "z4size": "23"
+    },
+    "24,1": {
+      "abelian": "false",
+      "card": "24",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "24",
+      "frac_involutions": "(1 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "24,10": {
+      "abelian": "false",
+      "card": "24",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "6",
+      "z2size": "24",
+      "z3size": "24",
+      "z4size": "24"
+    },
+    "24,11": {
+      "abelian": "false",
+      "card": "24",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "6",
+      "z2size": "24",
+      "z3size": "24",
+      "z4size": "24"
+    },
+    "24,12": {
+      "abelian": "false",
+      "card": "24",
+      "commuting_fraction": "(5 : Rat)/24",
+      "exponent": "12",
+      "frac_involutions": "(5 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "24,13": {
+      "abelian": "false",
+      "card": "24",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "6",
+      "frac_involutions": "(1 : Rat)/3",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "24,14": {
+      "abelian": "false",
+      "card": "24",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "6",
+      "frac_involutions": "(2 : Rat)/3",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "24,15": {
+      "abelian": "true",
+      "card": "24",
+      "commuting_fraction": "1",
+      "exponent": "6",
+      "frac_involutions": "(1 : Rat)/3",
+      "num_subgroups": "0",
+      "z1size": "24",
+      "z2size": "24",
+      "z3size": "24",
+      "z4size": "24"
+    },
+    "24,2": {
+      "abelian": "true",
+      "card": "24",
+      "commuting_fraction": "1",
+      "exponent": "24",
+      "frac_involutions": "(1 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "24",
+      "z2size": "24",
+      "z3size": "24",
+      "z4size": "24"
+    },
+    "24,4": {
+      "abelian": "false",
+      "card": "24",
+      "commuting_fraction": "(3 : Rat)/8",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "24,5": {
+      "abelian": "false",
+      "card": "24",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/3",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "24,6": {
+      "abelian": "false",
+      "card": "24",
+      "commuting_fraction": "(3 : Rat)/8",
+      "exponent": "12",
+      "frac_involutions": "(7 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "24,7": {
+      "abelian": "false",
+      "card": "24",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/6",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "24,9": {
+      "abelian": "true",
+      "card": "24",
+      "commuting_fraction": "1",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/6",
+      "num_subgroups": "0",
+      "z1size": "24",
+      "z2size": "24",
+      "z3size": "24",
+      "z4size": "24"
+    },
+    "25,1": {
+      "abelian": "true",
+      "card": "25",
+      "commuting_fraction": "1",
+      "exponent": "25",
+      "frac_involutions": "(1 : Rat)/25",
+      "num_subgroups": "0",
+      "z1size": "25",
+      "z2size": "25",
+      "z3size": "25",
+      "z4size": "25"
+    },
+    "25,2": {
+      "abelian": "true",
+      "card": "25",
+      "commuting_fraction": "1",
+      "exponent": "5",
+      "frac_involutions": "(1 : Rat)/25",
+      "num_subgroups": "0",
+      "z1size": "25",
+      "z2size": "25",
+      "z3size": "25",
+      "z4size": "25"
+    },
+    "26,1": {
+      "abelian": "false",
+      "card": "26",
+      "commuting_fraction": "(4 : Rat)/13",
+      "exponent": "26",
+      "frac_involutions": "(7 : Rat)/13",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "26,2": {
+      "abelian": "true",
+      "card": "26",
+      "commuting_fraction": "1",
+      "exponent": "26",
+      "frac_involutions": "(1 : Rat)/13",
+      "num_subgroups": "0",
+      "z1size": "26",
+      "z2size": "26",
+      "z3size": "26",
+      "z4size": "26"
+    },
+    "27,1": {
+      "abelian": "true",
+      "card": "27",
+      "commuting_fraction": "1",
+      "exponent": "27",
+      "frac_involutions": "(1 : Rat)/27",
+      "num_subgroups": "0",
+      "z1size": "27",
+      "z2size": "27",
+      "z3size": "27",
+      "z4size": "27"
+    },
+    "27,2": {
+      "abelian": "true",
+      "card": "27",
+      "commuting_fraction": "1",
+      "exponent": "9",
+      "frac_involutions": "(1 : Rat)/27",
+      "num_subgroups": "0",
+      "z1size": "27",
+      "z2size": "27",
+      "z3size": "27",
+      "z4size": "27"
+    },
+    "27,5": {
+      "abelian": "true",
+      "card": "27",
+      "commuting_fraction": "1",
+      "exponent": "3",
+      "frac_involutions": "(1 : Rat)/27",
+      "num_subgroups": "0",
+      "z1size": "27",
+      "z2size": "27",
+      "z3size": "27",
+      "z4size": "27"
+    },
+    "28,1": {
+      "abelian": "false",
+      "card": "28",
+      "commuting_fraction": "(5 : Rat)/14",
+      "exponent": "28",
+      "frac_involutions": "(1 : Rat)/14",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "28,2": {
+      "abelian": "true",
+      "card": "28",
+      "commuting_fraction": "1",
+      "exponent": "28",
+      "frac_involutions": "(1 : Rat)/14",
+      "num_subgroups": "0",
+      "z1size": "28",
+      "z2size": "28",
+      "z3size": "28",
+      "z4size": "28"
+    },
+    "28,3": {
+      "abelian": "false",
+      "card": "28",
+      "commuting_fraction": "(5 : Rat)/14",
+      "exponent": "14",
+      "frac_involutions": "(4 : Rat)/7",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "28,4": {
+      "abelian": "true",
+      "card": "28",
+      "commuting_fraction": "1",
+      "exponent": "14",
+      "frac_involutions": "(1 : Rat)/7",
+      "num_subgroups": "0",
+      "z1size": "28",
+      "z2size": "28",
+      "z3size": "28",
+      "z4size": "28"
+    },
+    "29,1": {
+      "abelian": "true",
+      "card": "29",
+      "commuting_fraction": "1",
+      "exponent": "29",
+      "frac_involutions": "(1 : Rat)/29",
+      "num_subgroups": "0",
+      "z1size": "29",
+      "z2size": "29",
+      "z3size": "29",
+      "z4size": "29"
+    },
+    "3,1": {
+      "abelian": "true",
+      "card": "3",
+      "commuting_fraction": "1",
+      "exponent": "3",
+      "frac_involutions": "(1 : Rat)/3",
+      "num_subgroups": "2",
+      "z1size": "3",
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
+    },
+    "30,1": {
+      "abelian": "false",
+      "card": "30",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "30",
+      "frac_involutions": "(2 : Rat)/15",
+      "num_subgroups": "0",
+      "z1size": "5",
+      "z2size": "5",
+      "z3size": "5",
+      "z4size": "5"
+    },
+    "30,2": {
+      "abelian": "false",
+      "card": "30",
+      "commuting_fraction": "(2 : Rat)/5",
+      "exponent": "30",
+      "frac_involutions": "(1 : Rat)/5",
+      "num_subgroups": "0",
+      "z1size": "3",
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
+    },
+    "30,3": {
+      "abelian": "false",
+      "card": "30",
+      "commuting_fraction": "(3 : Rat)/10",
+      "exponent": "30",
+      "frac_involutions": "(8 : Rat)/15",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "30,4": {
+      "abelian": "true",
+      "card": "30",
+      "commuting_fraction": "1",
+      "exponent": "30",
+      "frac_involutions": "(1 : Rat)/15",
+      "num_subgroups": "0",
+      "z1size": "30",
+      "z2size": "30",
+      "z3size": "30",
+      "z4size": "30"
+    },
+    "31,1": {
+      "abelian": "true",
+      "card": "31",
+      "commuting_fraction": "1",
+      "exponent": "31",
+      "frac_involutions": "(1 : Rat)/31",
+      "num_subgroups": "0",
+      "z1size": "31",
+      "z2size": "31",
+      "z3size": "31",
+      "z4size": "31"
+    },
+    "32,1": {
+      "abelian": "true",
+      "card": "32",
+      "commuting_fraction": "1",
+      "exponent": "32",
+      "frac_involutions": "(1 : Rat)/16",
+      "num_subgroups": "0",
+      "z1size": "32",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,12": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "8",
+      "frac_involutions": "(1 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,16": {
+      "abelian": "true",
+      "card": "32",
+      "commuting_fraction": "1",
+      "exponent": "16",
+      "frac_involutions": "(1 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "32",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,18": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(11 : Rat)/32",
+      "exponent": "16",
+      "frac_involutions": "(9 : Rat)/16",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "8",
+      "z4size": "32"
+    },
+    "32,20": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(11 : Rat)/32",
+      "exponent": "16",
+      "frac_involutions": "(1 : Rat)/16",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "8",
+      "z4size": "32"
+    },
+    "32,21": {
+      "abelian": "true",
+      "card": "32",
+      "commuting_fraction": "1",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "32",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,23": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,25": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "4",
+      "frac_involutions": "(3 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,26": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,3": {
+      "abelian": "true",
+      "card": "32",
+      "commuting_fraction": "1",
+      "exponent": "8",
+      "frac_involutions": "(1 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "32",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,36": {
+      "abelian": "true",
+      "card": "32",
+      "commuting_fraction": "1",
+      "exponent": "8",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "32",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,37": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "8",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,39": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "8",
+      "frac_involutions": "(5 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "8",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,4": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "8",
+      "frac_involutions": "(1 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "8",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,40": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "8",
+      "frac_involutions": "(3 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "8",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,41": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "8",
+      "frac_involutions": "(1 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "8",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,45": {
+      "abelian": "true",
+      "card": "32",
+      "commuting_fraction": "1",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/2",
+      "num_subgroups": "0",
+      "z1size": "32",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,46": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "4",
+      "frac_involutions": "(3 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,47": {
+      "abelian": "false",
+      "card": "32",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "32,51": {
+      "abelian": "true",
+      "card": "32",
+      "commuting_fraction": "1",
+      "exponent": "2",
+      "frac_involutions": "1",
+      "num_subgroups": "0",
+      "z1size": "32",
+      "z2size": "32",
+      "z3size": "32",
+      "z4size": "32"
+    },
+    "33,1": {
+      "abelian": "true",
+      "card": "33",
+      "commuting_fraction": "1",
+      "exponent": "33",
+      "frac_involutions": "(1 : Rat)/33",
+      "num_subgroups": "0",
+      "z1size": "33",
+      "z2size": "33",
+      "z3size": "33",
+      "z4size": "33"
+    },
+    "34,1": {
+      "abelian": "false",
+      "card": "34",
+      "commuting_fraction": "(5 : Rat)/17",
+      "exponent": "34",
+      "frac_involutions": "(9 : Rat)/17",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "34,2": {
+      "abelian": "true",
+      "card": "34",
+      "commuting_fraction": "1",
+      "exponent": "34",
+      "frac_involutions": "(1 : Rat)/17",
+      "num_subgroups": "0",
+      "z1size": "34",
+      "z2size": "34",
+      "z3size": "34",
+      "z4size": "34"
+    },
+    "35,1": {
+      "abelian": "true",
+      "card": "35",
+      "commuting_fraction": "1",
+      "exponent": "35",
+      "frac_involutions": "(1 : Rat)/35",
+      "num_subgroups": "0",
+      "z1size": "35",
+      "z2size": "35",
+      "z3size": "35",
+      "z4size": "35"
+    },
+    "36,1": {
+      "abelian": "false",
+      "card": "36",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "36",
+      "frac_involutions": "(1 : Rat)/18",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "36,11": {
+      "abelian": "false",
+      "card": "36",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "6",
+      "frac_involutions": "(1 : Rat)/9",
+      "num_subgroups": "0",
+      "z1size": "3",
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
+    },
+    "36,12": {
+      "abelian": "false",
+      "card": "36",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "6",
+      "frac_involutions": "(2 : Rat)/9",
+      "num_subgroups": "0",
+      "z1size": "6",
+      "z2size": "6",
+      "z3size": "6",
+      "z4size": "6"
+    },
+    "36,13": {
+      "abelian": "false",
+      "card": "36",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "6",
+      "frac_involutions": "(5 : Rat)/9",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "36,14": {
+      "abelian": "true",
+      "card": "36",
+      "commuting_fraction": "1",
+      "exponent": "6",
+      "frac_involutions": "(1 : Rat)/9",
+      "num_subgroups": "0",
+      "z1size": "36",
+      "z2size": "36",
+      "z3size": "36",
+      "z4size": "36"
+    },
+    "36,2": {
+      "abelian": "true",
+      "card": "36",
+      "commuting_fraction": "1",
+      "exponent": "36",
+      "frac_involutions": "(1 : Rat)/18",
+      "num_subgroups": "0",
+      "z1size": "36",
+      "z2size": "36",
+      "z3size": "36",
+      "z4size": "36"
+    },
+    "36,4": {
+      "abelian": "false",
+      "card": "36",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "18",
+      "frac_involutions": "(5 : Rat)/9",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "36,5": {
+      "abelian": "true",
+      "card": "36",
+      "commuting_fraction": "1",
+      "exponent": "18",
+      "frac_involutions": "(1 : Rat)/9",
+      "num_subgroups": "0",
+      "z1size": "36",
+      "z2size": "36",
+      "z3size": "36",
+      "z4size": "36"
+    },
+    "36,6": {
+      "abelian": "false",
+      "card": "36",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/18",
+      "num_subgroups": "0",
+      "z1size": "6",
+      "z2size": "6",
+      "z3size": "6",
+      "z4size": "6"
+    },
+    "36,8": {
+      "abelian": "true",
+      "card": "36",
+      "commuting_fraction": "1",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/18",
+      "num_subgroups": "0",
+      "z1size": "36",
+      "z2size": "36",
+      "z3size": "36",
+      "z4size": "36"
+    },
+    "37,1": {
+      "abelian": "true",
+      "card": "37",
+      "commuting_fraction": "1",
+      "exponent": "37",
+      "frac_involutions": "(1 : Rat)/37",
+      "num_subgroups": "0",
+      "z1size": "37",
+      "z2size": "37",
+      "z3size": "37",
+      "z4size": "37"
+    },
+    "38,1": {
+      "abelian": "false",
+      "card": "38",
+      "commuting_fraction": "(11 : Rat)/38",
+      "exponent": "38",
+      "frac_involutions": "(10 : Rat)/19",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "38,2": {
+      "abelian": "true",
+      "card": "38",
+      "commuting_fraction": "1",
+      "exponent": "38",
+      "frac_involutions": "(1 : Rat)/19",
+      "num_subgroups": "0",
+      "z1size": "38",
+      "z2size": "38",
+      "z3size": "38",
+      "z4size": "38"
+    },
+    "39,1": {
+      "abelian": "false",
+      "card": "39",
+      "commuting_fraction": "(7 : Rat)/39",
+      "exponent": "39",
+      "frac_involutions": "(1 : Rat)/39",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "39,2": {
+      "abelian": "true",
+      "card": "39",
+      "commuting_fraction": "1",
+      "exponent": "39",
+      "frac_involutions": "(1 : Rat)/39",
+      "num_subgroups": "0",
+      "z1size": "39",
+      "z2size": "39",
+      "z3size": "39",
+      "z4size": "39"
+    },
+    "4,1": {
+      "abelian": "true",
+      "card": "4",
+      "commuting_fraction": "1",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/2",
+      "num_subgroups": "3",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "4,2": {
+      "abelian": "true",
+      "card": "4",
+      "commuting_fraction": "1",
+      "exponent": "2",
+      "frac_involutions": "1",
+      "num_subgroups": "5",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "40,10": {
+      "abelian": "false",
+      "card": "40",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "20",
+      "frac_involutions": "(3 : Rat)/20",
+      "num_subgroups": "0",
+      "z1size": "10",
+      "z2size": "40",
+      "z3size": "40",
+      "z4size": "40"
+    },
+    "40,11": {
+      "abelian": "false",
+      "card": "40",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "20",
+      "frac_involutions": "(1 : Rat)/20",
+      "num_subgroups": "0",
+      "z1size": "10",
+      "z2size": "40",
+      "z3size": "40",
+      "z4size": "40"
+    },
+    "40,12": {
+      "abelian": "false",
+      "card": "40",
+      "commuting_fraction": "(1 : Rat)/4",
+      "exponent": "20",
+      "frac_involutions": "(3 : Rat)/10",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "40,13": {
+      "abelian": "false",
+      "card": "40",
+      "commuting_fraction": "(2 : Rat)/5",
+      "exponent": "10",
+      "frac_involutions": "(3 : Rat)/5",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "40,14": {
+      "abelian": "true",
+      "card": "40",
+      "commuting_fraction": "1",
+      "exponent": "10",
+      "frac_involutions": "(1 : Rat)/5",
+      "num_subgroups": "0",
+      "z1size": "40",
+      "z2size": "40",
+      "z3size": "40",
+      "z4size": "40"
+    },
+    "40,2": {
+      "abelian": "true",
+      "card": "40",
+      "commuting_fraction": "1",
+      "exponent": "40",
+      "frac_involutions": "(1 : Rat)/20",
+      "num_subgroups": "0",
+      "z1size": "40",
+      "z2size": "40",
+      "z3size": "40",
+      "z4size": "40"
+    },
+    "40,3": {
+      "abelian": "false",
+      "card": "40",
+      "commuting_fraction": "(2 : Rat)/5",
+      "exponent": "40",
+      "frac_involutions": "(1 : Rat)/20",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "40,4": {
+      "abelian": "false",
+      "card": "40",
+      "commuting_fraction": "(13 : Rat)/40",
+      "exponent": "20",
+      "frac_involutions": "(1 : Rat)/20",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "40,5": {
+      "abelian": "false",
+      "card": "40",
+      "commuting_fraction": "(2 : Rat)/5",
+      "exponent": "20",
+      "frac_involutions": "(3 : Rat)/10",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "40,6": {
+      "abelian": "false",
+      "card": "40",
+      "commuting_fraction": "(13 : Rat)/40",
+      "exponent": "20",
+      "frac_involutions": "(11 : Rat)/20",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "40,7": {
+      "abelian": "false",
+      "card": "40",
+      "commuting_fraction": "(2 : Rat)/5",
+      "exponent": "20",
+      "frac_involutions": "(1 : Rat)/10",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "40,9": {
+      "abelian": "true",
+      "card": "40",
+      "commuting_fraction": "1",
+      "exponent": "20",
+      "frac_involutions": "(1 : Rat)/10",
+      "num_subgroups": "0",
+      "z1size": "40",
+      "z2size": "40",
+      "z3size": "40",
+      "z4size": "40"
+    },
+    "41,1": {
+      "abelian": "true",
+      "card": "41",
+      "commuting_fraction": "1",
+      "exponent": "41",
+      "frac_involutions": "(1 : Rat)/41",
+      "num_subgroups": "0",
+      "z1size": "41",
+      "z2size": "41",
+      "z3size": "41",
+      "z4size": "41"
+    },
+    "42,1": {
+      "abelian": "false",
+      "card": "42",
+      "commuting_fraction": "(1 : Rat)/6",
+      "exponent": "42",
+      "frac_involutions": "(4 : Rat)/21",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "42,2": {
+      "abelian": "false",
+      "card": "42",
+      "commuting_fraction": "(5 : Rat)/21",
+      "exponent": "42",
+      "frac_involutions": "(1 : Rat)/21",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "42,3": {
+      "abelian": "false",
+      "card": "42",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "42",
+      "frac_involutions": "(2 : Rat)/21",
+      "num_subgroups": "0",
+      "z1size": "7",
+      "z2size": "7",
+      "z3size": "7",
+      "z4size": "7"
+    },
+    "42,4": {
+      "abelian": "false",
+      "card": "42",
+      "commuting_fraction": "(5 : Rat)/14",
+      "exponent": "42",
+      "frac_involutions": "(4 : Rat)/21",
+      "num_subgroups": "0",
+      "z1size": "3",
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
+    },
+    "42,5": {
+      "abelian": "false",
+      "card": "42",
+      "commuting_fraction": "(2 : Rat)/7",
+      "exponent": "42",
+      "frac_involutions": "(11 : Rat)/21",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "42,6": {
+      "abelian": "true",
+      "card": "42",
+      "commuting_fraction": "1",
+      "exponent": "42",
+      "frac_involutions": "(1 : Rat)/21",
+      "num_subgroups": "0",
+      "z1size": "42",
+      "z2size": "42",
+      "z3size": "42",
+      "z4size": "42"
+    },
+    "43,1": {
+      "abelian": "true",
+      "card": "43",
+      "commuting_fraction": "1",
+      "exponent": "43",
+      "frac_involutions": "(1 : Rat)/43",
+      "num_subgroups": "0",
+      "z1size": "43",
+      "z2size": "43",
+      "z3size": "43",
+      "z4size": "43"
+    },
+    "44,1": {
+      "abelian": "false",
+      "card": "44",
+      "commuting_fraction": "(7 : Rat)/22",
+      "exponent": "44",
+      "frac_involutions": "(1 : Rat)/22",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "44,2": {
+      "abelian": "true",
+      "card": "44",
+      "commuting_fraction": "1",
+      "exponent": "44",
+      "frac_involutions": "(1 : Rat)/22",
+      "num_subgroups": "0",
+      "z1size": "44",
+      "z2size": "44",
+      "z3size": "44",
+      "z4size": "44"
+    },
+    "44,3": {
+      "abelian": "false",
+      "card": "44",
+      "commuting_fraction": "(7 : Rat)/22",
+      "exponent": "22",
+      "frac_involutions": "(6 : Rat)/11",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "44,4": {
+      "abelian": "true",
+      "card": "44",
+      "commuting_fraction": "1",
+      "exponent": "22",
+      "frac_involutions": "(1 : Rat)/11",
+      "num_subgroups": "0",
+      "z1size": "44",
+      "z2size": "44",
+      "z3size": "44",
+      "z4size": "44"
+    },
+    "45,1": {
+      "abelian": "true",
+      "card": "45",
+      "commuting_fraction": "1",
+      "exponent": "45",
+      "frac_involutions": "(1 : Rat)/45",
+      "num_subgroups": "0",
+      "z1size": "45",
+      "z2size": "45",
+      "z3size": "45",
+      "z4size": "45"
+    },
+    "45,2": {
+      "abelian": "true",
+      "card": "45",
+      "commuting_fraction": "1",
+      "exponent": "15",
+      "frac_involutions": "(1 : Rat)/45",
+      "num_subgroups": "0",
+      "z1size": "45",
+      "z2size": "45",
+      "z3size": "45",
+      "z4size": "45"
+    },
+    "46,1": {
+      "abelian": "false",
+      "card": "46",
+      "commuting_fraction": "(13 : Rat)/46",
+      "exponent": "46",
+      "frac_involutions": "(12 : Rat)/23",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "46,2": {
+      "abelian": "true",
+      "card": "46",
+      "commuting_fraction": "1",
+      "exponent": "46",
+      "frac_involutions": "(1 : Rat)/23",
+      "num_subgroups": "0",
+      "z1size": "46",
+      "z2size": "46",
+      "z3size": "46",
+      "z4size": "46"
+    },
+    "47,1": {
+      "abelian": "true",
+      "card": "47",
+      "commuting_fraction": "1",
+      "exponent": "47",
+      "frac_involutions": "(1 : Rat)/47",
+      "num_subgroups": "0",
+      "z1size": "47",
+      "z2size": "47",
+      "z3size": "47",
+      "z4size": "47"
+    },
+    "48,1": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "48",
+      "frac_involutions": "(1 : Rat)/24",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,11": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,2": {
+      "abelian": "true",
+      "card": "48",
+      "commuting_fraction": "1",
+      "exponent": "48",
+      "frac_involutions": "(1 : Rat)/24",
+      "num_subgroups": "0",
+      "z1size": "48",
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,20": {
+      "abelian": "true",
+      "card": "48",
+      "commuting_fraction": "1",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "48",
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,22": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "12",
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,23": {
+      "abelian": "true",
+      "card": "48",
+      "commuting_fraction": "1",
+      "exponent": "24",
+      "frac_involutions": "(1 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "48",
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,24": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "24",
+      "frac_involutions": "(1 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "12",
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,25": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "24",
+      "frac_involutions": "(5 : Rat)/24",
+      "num_subgroups": "0",
+      "z1size": "6",
+      "z2size": "12",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,26": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "24",
+      "frac_involutions": "(1 : Rat)/8",
+      "num_subgroups": "0",
+      "z1size": "6",
+      "z2size": "12",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,27": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(7 : Rat)/16",
+      "exponent": "24",
+      "frac_involutions": "(1 : Rat)/24",
+      "num_subgroups": "0",
+      "z1size": "6",
+      "z2size": "12",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,31": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/6",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "48,34": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(3 : Rat)/8",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,35": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/3",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,36": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(3 : Rat)/8",
+      "exponent": "12",
+      "frac_involutions": "(7 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,38": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(5 : Rat)/16",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/2",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,4": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "24",
+      "frac_involutions": "(1 : Rat)/6",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,40": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(5 : Rat)/16",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/6",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,42": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/6",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,44": {
+      "abelian": "true",
+      "card": "48",
+      "commuting_fraction": "1",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/6",
+      "num_subgroups": "0",
+      "z1size": "48",
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,45": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "0",
+      "z1size": "12",
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,46": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "12",
+      "frac_involutions": "(1 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "12",
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,48": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(5 : Rat)/24",
+      "exponent": "12",
+      "frac_involutions": "(5 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "48,49": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "6",
+      "frac_involutions": "(1 : Rat)/3",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "48,51": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "6",
+      "frac_involutions": "(2 : Rat)/3",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,52": {
+      "abelian": "true",
+      "card": "48",
+      "commuting_fraction": "1",
+      "exponent": "6",
+      "frac_involutions": "(1 : Rat)/3",
+      "num_subgroups": "0",
+      "z1size": "48",
+      "z2size": "48",
+      "z3size": "48",
+      "z4size": "48"
+    },
+    "48,6": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(5 : Rat)/16",
+      "exponent": "24",
+      "frac_involutions": "(13 : Rat)/24",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,7": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(5 : Rat)/16",
+      "exponent": "24",
+      "frac_involutions": "(13 : Rat)/24",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,8": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(5 : Rat)/16",
+      "exponent": "24",
+      "frac_involutions": "(1 : Rat)/24",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "48,9": {
+      "abelian": "false",
+      "card": "48",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "24",
+      "frac_involutions": "(1 : Rat)/12",
+      "num_subgroups": "0",
+      "z1size": "8",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "49,1": {
+      "abelian": "true",
+      "card": "49",
+      "commuting_fraction": "1",
+      "exponent": "49",
+      "frac_involutions": "(1 : Rat)/49",
+      "num_subgroups": "0",
+      "z1size": "49",
+      "z2size": "49",
+      "z3size": "49",
+      "z4size": "49"
+    },
+    "49,2": {
+      "abelian": "true",
+      "card": "49",
+      "commuting_fraction": "1",
+      "exponent": "7",
+      "frac_involutions": "(1 : Rat)/49",
+      "num_subgroups": "0",
+      "z1size": "49",
+      "z2size": "49",
+      "z3size": "49",
+      "z4size": "49"
+    },
+    "5,1": {
+      "abelian": "true",
+      "card": "5",
+      "commuting_fraction": "1",
+      "exponent": "5",
+      "frac_involutions": "(1 : Rat)/5",
+      "num_subgroups": "2",
+      "z1size": "5",
+      "z2size": "5",
+      "z3size": "5",
+      "z4size": "5"
+    },
+    "50,1": {
+      "abelian": "false",
+      "card": "50",
+      "commuting_fraction": "(7 : Rat)/25",
+      "exponent": "50",
+      "frac_involutions": "(13 : Rat)/25",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "50,2": {
+      "abelian": "true",
+      "card": "50",
+      "commuting_fraction": "1",
+      "exponent": "50",
+      "frac_involutions": "(1 : Rat)/25",
+      "num_subgroups": "0",
+      "z1size": "50",
+      "z2size": "50",
+      "z3size": "50",
+      "z4size": "50"
+    },
+    "50,3": {
+      "abelian": "false",
+      "card": "50",
+      "commuting_fraction": "(2 : Rat)/5",
+      "exponent": "10",
+      "frac_involutions": "(3 : Rat)/25",
+      "num_subgroups": "0",
+      "z1size": "5",
+      "z2size": "5",
+      "z3size": "5",
+      "z4size": "5"
+    },
+    "50,4": {
+      "abelian": "false",
+      "card": "50",
+      "commuting_fraction": "(7 : Rat)/25",
+      "exponent": "10",
+      "frac_involutions": "(13 : Rat)/25",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "50,5": {
+      "abelian": "true",
+      "card": "50",
+      "commuting_fraction": "1",
+      "exponent": "10",
+      "frac_involutions": "(1 : Rat)/25",
+      "num_subgroups": "0",
+      "z1size": "50",
+      "z2size": "50",
+      "z3size": "50",
+      "z4size": "50"
+    },
+    "51,1": {
+      "abelian": "true",
+      "card": "51",
+      "commuting_fraction": "1",
+      "exponent": "51",
+      "frac_involutions": "(1 : Rat)/51",
+      "num_subgroups": "0",
+      "z1size": "51",
+      "z2size": "51",
+      "z3size": "51",
+      "z4size": "51"
+    },
+    "52,1": {
+      "abelian": "false",
+      "card": "52",
+      "commuting_fraction": "(4 : Rat)/13",
+      "exponent": "52",
+      "frac_involutions": "(1 : Rat)/26",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "52,2": {
+      "abelian": "true",
+      "card": "52",
+      "commuting_fraction": "1",
+      "exponent": "52",
+      "frac_involutions": "(1 : Rat)/26",
+      "num_subgroups": "0",
+      "z1size": "52",
+      "z2size": "52",
+      "z3size": "52",
+      "z4size": "52"
+    },
+    "52,3": {
+      "abelian": "false",
+      "card": "52",
+      "commuting_fraction": "(7 : Rat)/52",
+      "exponent": "52",
+      "frac_involutions": "(7 : Rat)/26",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "52,4": {
+      "abelian": "false",
+      "card": "52",
+      "commuting_fraction": "(4 : Rat)/13",
+      "exponent": "26",
+      "frac_involutions": "(7 : Rat)/13",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "52,5": {
+      "abelian": "true",
+      "card": "52",
+      "commuting_fraction": "1",
+      "exponent": "26",
+      "frac_involutions": "(1 : Rat)/13",
+      "num_subgroups": "0",
+      "z1size": "52",
+      "z2size": "52",
+      "z3size": "52",
+      "z4size": "52"
+    },
+    "53,1": {
+      "abelian": "true",
+      "card": "53",
+      "commuting_fraction": "1",
+      "exponent": "53",
+      "frac_involutions": "(1 : Rat)/53",
+      "num_subgroups": "0",
+      "z1size": "53",
+      "z2size": "53",
+      "z3size": "53",
+      "z4size": "53"
+    },
+    "54,1": {
+      "abelian": "false",
+      "card": "54",
+      "commuting_fraction": "(5 : Rat)/18",
+      "exponent": "54",
+      "frac_involutions": "(14 : Rat)/27",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "54,12": {
+      "abelian": "false",
+      "card": "54",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "6",
+      "frac_involutions": "(2 : Rat)/27",
+      "num_subgroups": "0",
+      "z1size": "9",
+      "z2size": "9",
+      "z3size": "9",
+      "z4size": "9"
+    },
+    "54,13": {
+      "abelian": "false",
+      "card": "54",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "6",
+      "frac_involutions": "(5 : Rat)/27",
+      "num_subgroups": "0",
+      "z1size": "3",
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
+    },
+    "54,15": {
+      "abelian": "true",
+      "card": "54",
+      "commuting_fraction": "1",
+      "exponent": "6",
+      "frac_involutions": "(1 : Rat)/27",
+      "num_subgroups": "0",
+      "z1size": "54",
+      "z2size": "54",
+      "z3size": "54",
+      "z4size": "54"
+    },
+    "54,2": {
+      "abelian": "true",
+      "card": "54",
+      "commuting_fraction": "1",
+      "exponent": "54",
+      "frac_involutions": "(1 : Rat)/27",
+      "num_subgroups": "0",
+      "z1size": "54",
+      "z2size": "54",
+      "z3size": "54",
+      "z4size": "54"
+    },
+    "54,3": {
+      "abelian": "false",
+      "card": "54",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "18",
+      "frac_involutions": "(5 : Rat)/27",
+      "num_subgroups": "0",
+      "z1size": "3",
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
+    },
+    "54,4": {
+      "abelian": "false",
+      "card": "54",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "18",
+      "frac_involutions": "(2 : Rat)/27",
+      "num_subgroups": "0",
+      "z1size": "9",
+      "z2size": "9",
+      "z3size": "9",
+      "z4size": "9"
+    },
+    "54,6": {
+      "abelian": "false",
+      "card": "54",
+      "commuting_fraction": "(5 : Rat)/27",
+      "exponent": "18",
+      "frac_involutions": "(5 : Rat)/27",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "54,9": {
+      "abelian": "true",
+      "card": "54",
+      "commuting_fraction": "1",
+      "exponent": "18",
+      "frac_involutions": "(1 : Rat)/27",
+      "num_subgroups": "0",
+      "z1size": "54",
+      "z2size": "54",
+      "z3size": "54",
+      "z4size": "54"
+    },
+    "55,1": {
+      "abelian": "false",
+      "card": "55",
+      "commuting_fraction": "(7 : Rat)/55",
+      "exponent": "55",
+      "frac_involutions": "(1 : Rat)/55",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "55,2": {
+      "abelian": "true",
+      "card": "55",
+      "commuting_fraction": "1",
+      "exponent": "55",
+      "frac_involutions": "(1 : Rat)/55",
+      "num_subgroups": "0",
+      "z1size": "55",
+      "z2size": "55",
+      "z3size": "55",
+      "z4size": "55"
+    },
+    "56,1": {
+      "abelian": "false",
+      "card": "56",
+      "commuting_fraction": "(5 : Rat)/14",
+      "exponent": "56",
+      "frac_involutions": "(1 : Rat)/28",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "56,10": {
+      "abelian": "false",
+      "card": "56",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "28",
+      "frac_involutions": "(1 : Rat)/28",
+      "num_subgroups": "0",
+      "z1size": "14",
+      "z2size": "56",
+      "z3size": "56",
+      "z4size": "56"
+    },
+    "56,12": {
+      "abelian": "false",
+      "card": "56",
+      "commuting_fraction": "(5 : Rat)/14",
+      "exponent": "14",
+      "frac_involutions": "(4 : Rat)/7",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "56,13": {
+      "abelian": "true",
+      "card": "56",
+      "commuting_fraction": "1",
+      "exponent": "14",
+      "frac_involutions": "(1 : Rat)/7",
+      "num_subgroups": "0",
+      "z1size": "56",
+      "z2size": "56",
+      "z3size": "56",
+      "z4size": "56"
+    },
+    "56,2": {
+      "abelian": "true",
+      "card": "56",
+      "commuting_fraction": "1",
+      "exponent": "56",
+      "frac_involutions": "(1 : Rat)/28",
+      "num_subgroups": "0",
+      "z1size": "56",
+      "z2size": "56",
+      "z3size": "56",
+      "z4size": "56"
+    },
+    "56,3": {
+      "abelian": "false",
+      "card": "56",
+      "commuting_fraction": "(17 : Rat)/56",
+      "exponent": "28",
+      "frac_involutions": "(1 : Rat)/28",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "56,4": {
+      "abelian": "false",
+      "card": "56",
+      "commuting_fraction": "(5 : Rat)/14",
+      "exponent": "28",
+      "frac_involutions": "(2 : Rat)/7",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "56,5": {
+      "abelian": "false",
+      "card": "56",
+      "commuting_fraction": "(17 : Rat)/56",
+      "exponent": "28",
+      "frac_involutions": "(15 : Rat)/28",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "56,6": {
+      "abelian": "false",
+      "card": "56",
+      "commuting_fraction": "(5 : Rat)/14",
+      "exponent": "28",
+      "frac_involutions": "(1 : Rat)/14",
+      "num_subgroups": "0",
+      "z1size": "4",
+      "z2size": "4",
+      "z3size": "4",
+      "z4size": "4"
+    },
+    "56,8": {
+      "abelian": "true",
+      "card": "56",
+      "commuting_fraction": "1",
+      "exponent": "28",
+      "frac_involutions": "(1 : Rat)/14",
+      "num_subgroups": "0",
+      "z1size": "56",
+      "z2size": "56",
+      "z3size": "56",
+      "z4size": "56"
+    },
+    "56,9": {
+      "abelian": "false",
+      "card": "56",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "28",
+      "frac_involutions": "(3 : Rat)/28",
+      "num_subgroups": "0",
+      "z1size": "14",
+      "z2size": "56",
+      "z3size": "56",
+      "z4size": "56"
+    },
+    "57,1": {
+      "abelian": "false",
+      "card": "57",
+      "commuting_fraction": "(3 : Rat)/19",
+      "exponent": "57",
+      "frac_involutions": "(1 : Rat)/57",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "57,2": {
+      "abelian": "true",
+      "card": "57",
+      "commuting_fraction": "1",
+      "exponent": "57",
+      "frac_involutions": "(1 : Rat)/57",
+      "num_subgroups": "0",
+      "z1size": "57",
+      "z2size": "57",
+      "z3size": "57",
+      "z4size": "57"
+    },
+    "58,1": {
+      "abelian": "false",
+      "card": "58",
+      "commuting_fraction": "(8 : Rat)/29",
+      "exponent": "58",
+      "frac_involutions": "(15 : Rat)/29",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "58,2": {
+      "abelian": "true",
+      "card": "58",
+      "commuting_fraction": "1",
+      "exponent": "58",
+      "frac_involutions": "(1 : Rat)/29",
+      "num_subgroups": "0",
+      "z1size": "58",
+      "z2size": "58",
+      "z3size": "58",
+      "z4size": "58"
+    },
+    "59,1": {
+      "abelian": "true",
+      "card": "59",
+      "commuting_fraction": "1",
+      "exponent": "59",
+      "frac_involutions": "(1 : Rat)/59",
+      "num_subgroups": "0",
+      "z1size": "59",
+      "z2size": "59",
+      "z3size": "59",
+      "z4size": "59"
+    },
+    "6,1": {
+      "abelian": "false",
+      "card": "6",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "6",
+      "frac_involutions": "(2 : Rat)/3",
+      "num_subgroups": "6",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "6,2": {
+      "abelian": "true",
+      "card": "6",
+      "commuting_fraction": "1",
+      "exponent": "6",
+      "frac_involutions": "(1 : Rat)/3",
+      "num_subgroups": "4",
+      "z1size": "6",
+      "z2size": "6",
+      "z3size": "6",
+      "z4size": "6"
+    },
+    "60,1": {
+      "abelian": "false",
+      "card": "60",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "60",
+      "frac_involutions": "(1 : Rat)/30",
+      "num_subgroups": "0",
+      "z1size": "10",
+      "z2size": "10",
+      "z3size": "10",
+      "z4size": "10"
+    },
+    "60,10": {
+      "abelian": "false",
+      "card": "60",
+      "commuting_fraction": "(2 : Rat)/5",
+      "exponent": "30",
+      "frac_involutions": "(1 : Rat)/5",
+      "num_subgroups": "0",
+      "z1size": "6",
+      "z2size": "6",
+      "z3size": "6",
+      "z4size": "6"
+    },
+    "60,11": {
+      "abelian": "false",
+      "card": "60",
+      "commuting_fraction": "(1 : Rat)/2",
+      "exponent": "30",
+      "frac_involutions": "(2 : Rat)/15",
+      "num_subgroups": "0",
+      "z1size": "10",
+      "z2size": "10",
+      "z3size": "10",
+      "z4size": "10"
+    },
+    "60,12": {
+      "abelian": "false",
+      "card": "60",
+      "commuting_fraction": "(3 : Rat)/10",
+      "exponent": "30",
+      "frac_involutions": "(8 : Rat)/15",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "60,13": {
+      "abelian": "true",
+      "card": "60",
+      "commuting_fraction": "1",
+      "exponent": "30",
+      "frac_involutions": "(1 : Rat)/15",
+      "num_subgroups": "0",
+      "z1size": "60",
+      "z2size": "60",
+      "z3size": "60",
+      "z4size": "60"
+    },
+    "60,2": {
+      "abelian": "false",
+      "card": "60",
+      "commuting_fraction": "(2 : Rat)/5",
+      "exponent": "60",
+      "frac_involutions": "(1 : Rat)/30",
+      "num_subgroups": "0",
+      "z1size": "6",
+      "z2size": "6",
+      "z3size": "6",
+      "z4size": "6"
+    },
+    "60,3": {
+      "abelian": "false",
+      "card": "60",
+      "commuting_fraction": "(3 : Rat)/10",
+      "exponent": "60",
+      "frac_involutions": "(1 : Rat)/30",
+      "num_subgroups": "0",
+      "z1size": "2",
+      "z2size": "2",
+      "z3size": "2",
+      "z4size": "2"
+    },
+    "60,4": {
+      "abelian": "true",
+      "card": "60",
+      "commuting_fraction": "1",
+      "exponent": "60",
+      "frac_involutions": "(1 : Rat)/30",
+      "num_subgroups": "0",
+      "z1size": "60",
+      "z2size": "60",
+      "z3size": "60",
+      "z4size": "60"
+    },
+    "60,5": {
+      "abelian": "false",
+      "card": "60",
+      "commuting_fraction": "(1 : Rat)/12",
+      "exponent": "30",
+      "frac_involutions": "(4 : Rat)/15",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "60,6": {
+      "abelian": "false",
+      "card": "60",
+      "commuting_fraction": "(1 : Rat)/4",
+      "exponent": "60",
+      "frac_involutions": "(1 : Rat)/10",
+      "num_subgroups": "0",
+      "z1size": "3",
+      "z2size": "3",
+      "z3size": "3",
+      "z4size": "3"
+    },
+    "60,8": {
+      "abelian": "false",
+      "card": "60",
+      "commuting_fraction": "(1 : Rat)/5",
+      "exponent": "30",
+      "frac_involutions": "(2 : Rat)/5",
+      "num_subgroups": "0",
+      "z1size": "1",
+      "z2size": "1",
+      "z3size": "1",
+      "z4size": "1"
+    },
+    "60,9": {
+      "abelian": "false",
+      "card": "60",
+      "commuting_fraction": "(1 : Rat)/3",
+      "exponent": "30",
+      "frac_involutions": "(1 : Rat)/15",
+      "num_subgroups": "0",
+      "z1size": "5",
+      "z2size": "5",
+      "z3size": "5",
+      "z4size": "5"
+    },
+    "7,1": {
+      "abelian": "true",
+      "card": "7",
+      "commuting_fraction": "1",
+      "exponent": "7",
+      "frac_involutions": "(1 : Rat)/7",
+      "num_subgroups": "2",
+      "z1size": "7",
+      "z2size": "7",
+      "z3size": "7",
+      "z4size": "7"
+    },
+    "8,1": {
+      "abelian": "true",
+      "card": "8",
+      "commuting_fraction": "1",
+      "exponent": "8",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "4",
+      "z1size": "8",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "8,2": {
+      "abelian": "true",
+      "card": "8",
+      "commuting_fraction": "1",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/2",
+      "num_subgroups": "8",
+      "z1size": "8",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "8,3": {
+      "abelian": "false",
+      "card": "8",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "4",
+      "frac_involutions": "(3 : Rat)/4",
+      "num_subgroups": "10",
+      "z1size": "2",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "8,4": {
+      "abelian": "false",
+      "card": "8",
+      "commuting_fraction": "(5 : Rat)/8",
+      "exponent": "4",
+      "frac_involutions": "(1 : Rat)/4",
+      "num_subgroups": "6",
+      "z1size": "2",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "8,5": {
+      "abelian": "true",
+      "card": "8",
+      "commuting_fraction": "1",
+      "exponent": "2",
+      "frac_involutions": "1",
+      "num_subgroups": "16",
+      "z1size": "8",
+      "z2size": "8",
+      "z3size": "8",
+      "z4size": "8"
+    },
+    "9,1": {
+      "abelian": "true",
+      "card": "9",
+      "commuting_fraction": "1",
+      "exponent": "9",
+      "frac_involutions": "(1 : Rat)/9",
+      "num_subgroups": "3",
+      "z1size": "9",
+      "z2size": "9",
+      "z3size": "9",
+      "z4size": "9"
+    },
+    "9,2": {
+      "abelian": "true",
+      "card": "9",
+      "commuting_fraction": "1",
+      "exponent": "3",
+      "frac_involutions": "(1 : Rat)/9",
+      "num_subgroups": "6",
+      "z1size": "9",
+      "z2size": "9",
+      "z3size": "9",
+      "z4size": "9"
+    }
+  }
+}

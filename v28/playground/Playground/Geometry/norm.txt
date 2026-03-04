@@ -1,0 +1,1 @@
+Given a group G, the norm of G is defined as the intersection of all normalizers of subgroups of G.

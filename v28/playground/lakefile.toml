@@ -7,6 +7,8 @@ defaultTargets = ["Playground"]
 pp.unicode.fun = true # pretty-prints `fun a ↦ b`
 autoImplicit = false
 relaxedAutoImplicit = false
+weak.linter.mathlibStandardSet = true
+maxSynthPendingDepth = 3
 
 [[require]]
 name = "mathlib"
@@ -15,3 +17,33 @@ rev = "v4.28.0"
 
 [[lean_lib]]
 name = "Playground"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalCardinality"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalAbelian"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalFracInvolutions"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalCommutingFraction"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalNumSubgroups"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalZ1Size"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalZ2Size"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalZ3Size"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalZ4Size"
+
+[[lean_exe]]
+name = "Playground.Geometry.SmallGroups.EvalExponent"
