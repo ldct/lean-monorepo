@@ -66,7 +66,6 @@ theorem r_one_pow' (k : ℤ) : (r 1 : ZMul) ^ k = r k := by
   · lift k to ℕ using pos
     simp
     exact r_one_pow k
-
   suffices : ((r (1: ℤ)) ^ k)⁻¹ = (r k)⁻¹
   · have := congrArg Inv.inv this
     simp at this

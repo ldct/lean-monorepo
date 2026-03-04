@@ -1,5 +1,6 @@
 import Mathlib
 set_option linter.style.longLine false
+set_option linter.style.show false
 
 
 -- ℤ[x], the set of polynomials with integer coefficients, implemented as a function from ℕ to ℤ.

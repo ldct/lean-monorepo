@@ -22,8 +22,8 @@ theorem target : B = Subgroup.center (DihedralGroup 4) := by
   ext a
   rw [←Subgroup.mem_carrier]
   rcases a with i | i
-  fin_cases i
-
-  all_goals sorry
+  · fin_cases i
+    all_goals sorry
+  · sorry
 
 end DihedralGroup

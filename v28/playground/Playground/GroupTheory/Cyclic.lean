@@ -18,13 +18,13 @@ example : (IsAddCyclic ℤ) := ⟨ -1, by
 
 theorem my_mul_div_cancel (a b : ℤ) (b_ne_0 : b ≠ 0) : (a * b) / b = a * (b / b) := by
   refine (Int.ediv_eq_iff_eq_mul_left ?_ ?_).mpr ?_
-  exact b_ne_0
-  exact Int.dvd_mul_left a b
-  simp
-  left
-  have : b / b = 1 := by exact Int.ediv_self b_ne_0
-  rw [this]
-  simp
+  · exact b_ne_0
+  · exact Int.dvd_mul_left a b
+  · simp
+    left
+    have : b / b = 1 := by exact Int.ediv_self b_ne_0
+    rw [this]
+    simp
 
 namespace ZMul
 

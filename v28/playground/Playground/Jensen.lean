@@ -33,11 +33,11 @@ theorem two_point_jensen
   have hmem : ∀ i ∈ s, p i ∈ D := by
     intro i hi
     fin_cases i
-    simp
-    rw [show p 0 = a by rfl]
-    exact ha
-    rw [show p 1 = b by rfl]
-    exact hb
+    · simp
+      rw [show p 0 = a by rfl]
+      exact ha
+    · rw [show p 1 = b by rfl]
+      exact hb
   have jensens := f_convex.map_sum_le hw hw' hmem
   unfold s at jensens
   simp at jensens

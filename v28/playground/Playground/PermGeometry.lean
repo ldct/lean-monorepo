@@ -5,6 +5,7 @@ Authors: Heather Macbeth
 -/
 import Mathlib
 set_option linter.style.longLine false
+set_option linter.style.multiGoal false
 
 /-!
 *Groups: A Path to Geometry*, by R. P. Burn

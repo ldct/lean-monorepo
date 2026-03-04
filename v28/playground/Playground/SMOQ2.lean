@@ -42,8 +42,8 @@ theorem t2 : (sqrt 10 - sqrt 2)^(1 / 3 : ℝ) * (sqrt 10 + sqrt 2)^(7 / 3 : ℝ)
     rw [h2]
     have h5 : (sqrt 10 - sqrt 2)^(1 / 3 : ℝ) * (sqrt 10 + sqrt 2)^(1 / 3 : ℝ) = ((sqrt 10 - sqrt 2) * (sqrt 10 + sqrt 2))^(1 / 3 : ℝ) := by
       rw [← mul_rpow]
-      norm_num
-      positivity
+      · norm_num
+      · positivity
     rw [h5]
   rw [h1]
   have h2 := by
@@ -57,8 +57,8 @@ theorem t2 : (sqrt 10 - sqrt 2)^(1 / 3 : ℝ) * (sqrt 10 + sqrt 2)^(7 / 3 : ℝ)
       have h5 : 8 ^ (1 / 3 : ℝ) = ((2 : ℝ) ^ (3 : ℝ)) ^ (1 / 3 : ℝ) := by norm_num
       rw [h5]
       rw [← rpow_mul]
-      norm_num
-      norm_num
+      · norm_num
+      · norm_num
     rw [h4]
   rw [h3]
   have h5 : (sqrt 10 + sqrt 2) ^ (2 : ℝ) = (12 + 4 * sqrt 5 : ℝ) := by

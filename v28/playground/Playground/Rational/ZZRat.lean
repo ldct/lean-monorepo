@@ -1,6 +1,8 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.MinimalAxioms
 set_option linter.style.longLine false
+set_option linter.style.show false
+set_option linter.style.multiGoal false
 
 /-
 ℚ implemented as a quotient of ℤ × ℤ with nonzero denominator.
@@ -156,8 +158,7 @@ lemma formalDiv_zero (a : ℤ) : a // 0 = 0 := by rfl
 
 abbrev my_inv : PreRat → Rat := fun ⟨ a, b, _ ⟩ ↦ b // a
 
-/--
-  Whereas the book leaves the inverse of 0 undefined, it is more convenient in Lean to assign a
+/-- Whereas the book leaves the inverse of 0 undefined, it is more convenient in Lean to assign a
   "junk" value to this inverse; we arbitrarily choose this junk value to be 0.
 -/
 instance Rat.instInv : Inv Rat where
@@ -167,12 +168,10 @@ instance Rat.instInv : Inv Rat where
     · have h3 : (b ≈ PreRatZero) := Setoid.trans (Setoid.symm h) h1
       rw [PreRatZero.equiv] at h1 h3
       simp_all [my_inv, formalDiv_zero]
-
     · have h3 : ¬(b ≈ PreRatZero) := by
         by_contra h4
         have : a ≈ PreRatZero := Setoid.symm (Setoid.trans h4.symm h.symm)
         exact h2 this
-
       unfold my_inv
       rw [PreRatZero.equiv] at h2 h3
       rw [eq _ _ h2 h3, mul_comm, ← h, mul_comm]
@@ -213,9 +212,9 @@ AddGroup.ofLeftAxioms (by
   rw [add_eq _ _ hb hb]
   rw [show (0:Rat) = 0 // 1 by rfl]
   rw [eq]
-  ring
-  positivity
-  norm_num
+  · ring
+  · positivity
+  · norm_num
  )
 
 /-- Proposition 4.2.4 (laws of algebra) / Exercise 4.2.3 -/
@@ -289,8 +288,7 @@ def Rat.coe_int_hom : ℤ →+* Rat where
   map_add' := by sorry
   map_mul' := by sorry
 
-/--
-  (Not from textbook) The textbook rationals are isomorphic (as a field) to the Mathlib rationals.
+/-- (Not from textbook) The textbook rationals are isomorphic (as a field) to the Mathlib rationals.
 -/
 def Rat.equiv_rat : ℚ ≃+* Rat where
   toFun n := (n : Rat)
@@ -408,8 +406,7 @@ theorem Rat.mul_lt_mul_right_of_neg (x y z : Rat) (hxy : x < y) (hz : z.isNeg) :
   sorry
 
 
-/--
-  Not in textbook: create an equivalence between Rat and ℚ. This requires some familiarity with
+/-- Not in textbook: create an equivalence between Rat and ℚ. This requires some familiarity with
   the API for Mathlib's version of the rationals.
 -/
 abbrev Rat.equivRat : Rat ≃ ℚ where

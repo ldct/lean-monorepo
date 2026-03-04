@@ -88,8 +88,8 @@ theorem CA_le_A (hn : 2 < n) : (C_A n) ≤ (Rot n) := by
   rw [x_eq_sr_i] at prod_in_CA
   simp at prod_in_CA
   apply s_not_in_CA
-  exact hn
-  exact prod_in_CA
+  · exact hn
+  · exact prod_in_CA
 
 theorem A_eq_CA (hn : 2 < n) : (Rot n) = (C_A n) := by {
   exact le_antisymm A_le_CA (CA_le_A hn)

@@ -1,6 +1,8 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.MinimalAxioms
 set_option linter.style.longLine false
+set_option linter.style.show false
+set_option linter.style.multiGoal false
 
 /-
 ℚ implemented as a quotient of ℤ × ℕ with nonzero denominator.
@@ -192,9 +194,9 @@ AddGroup.ofLeftAxioms (by
   rw [add_eq _ _ hb hb]
   rw [show (0:Rat) = 0 // 1 by rfl]
   rw [eq]
-  ring
-  positivity
-  norm_num
+  · ring
+  · positivity
+  · norm_num
  )
 
 /-- Proposition 4.2.4 (laws of algebra) / Exercise 4.2.3 -/
@@ -230,8 +232,7 @@ lemma my_inv_num_neg (a : PreRat) (ha : a.numerator < 0) : my_inv a = -a.denomin
   unfold my_inv
   simp [ha]
 
-/--
-  Whereas the book leaves the inverse of 0 undefined, it is more convenient in Lean to assign a
+/-- Whereas the book leaves the inverse of 0 undefined, it is more convenient in Lean to assign a
   "junk" value to this inverse; we arbitrarily choose this junk value to be 0.
 -/
 instance Rat.instInv : Inv Rat where
@@ -249,8 +250,9 @@ instance Rat.instInv : Inv Rat where
         exact h2 this
       -- rw [PreRatZero.equiv] at h2 h3
       by_cases h : a.numerator < 0
-      rw [my_inv_num_neg]
-      repeat sorry
+      · rw [my_inv_num_neg]
+        repeat sorry
+      · repeat sorry
 )
 
 lemma Rat.inv_eq (a : ℤ) {b : ℕ} (hb : b ≠ 0) : (a // b)⁻¹ = b // a.natAbs := by sorry
@@ -297,8 +299,7 @@ def Rat.coe_int_hom : ℤ →+* Rat where
   map_add' := by sorry
   map_mul' := by sorry
 
-/--
-  (Not from textbook) The textbook rationals are isomorphic (as a field) to the Mathlib rationals.
+/-- (Not from textbook) The textbook rationals are isomorphic (as a field) to the Mathlib rationals.
 -/
 def Rat.equiv_rat : ℚ ≃+* Rat where
   toFun n := (n : Rat)
@@ -416,8 +417,7 @@ theorem Rat.mul_lt_mul_right_of_neg (x y z : Rat) (hxy : x < y) (hz : z.isNeg) :
   sorry
 
 
-/--
-  Not in textbook: create an equivalence between Rat and ℚ. This requires some familiarity with
+/-- Not in textbook: create an equivalence between Rat and ℚ. This requires some familiarity with
   the API for Mathlib's version of the rationals.
 -/
 abbrev Rat.equivRat : Rat ≃ ℚ where

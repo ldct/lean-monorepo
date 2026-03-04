@@ -43,10 +43,8 @@ instance : MulAction (DihedralGroup 6) (ZMod 6) where
   smul := by
     intro g p
     rcases g with i | j
-
     -- ri ⬝ p
     · exact i + p
-
     -- sr j ⬝ p
     · exact - j - p
   one_smul := by decide
@@ -59,10 +57,8 @@ instance : MulAction (DihedralGroup 6) ℂ where
   smul := by
     intro g z
     rcases g with i | j
-
     -- ri ⬝ p
     · exact z
-
     -- sr j ⬝ p
     · exact -z
   one_smul := by
@@ -83,10 +79,8 @@ noncomputable instance : MulAction (DihedralGroup 6) ℂ where
   smul := by
     intro g p
     rcases g with i | j
-
     -- ri ⬝ p
     · exact (exp (2 * π * I * (i.val / 6)))
-
     -- sr j ⬝ p
     · exact -(exp (2 * π * I * (j.val / 6)))
   one_smul := by sorry

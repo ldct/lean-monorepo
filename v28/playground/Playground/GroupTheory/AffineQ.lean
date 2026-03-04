@@ -40,10 +40,10 @@ instance : Group AffineQ where
     simp [(· * ·), mul]
     ring_nf
     constructor
-    repeat rw [mul_times]
-    exact Rat.mul_assoc a.m b.m c.m
-    repeat rw [mul_times]
-    ring_nf
+    · repeat rw [mul_times]
+      exact Rat.mul_assoc a.m b.m c.m
+    · repeat rw [mul_times]
+      ring_nf
   one := one
   one_mul := by
     intro a
@@ -51,29 +51,26 @@ instance : Group AffineQ where
     obtain ⟨m, c, _⟩ := a
     simp
     constructor
-    apply Rat.one_mul
-    have : AffineQ.c (1 : AffineQ) = 0 := by rfl
-
-    rw [this]
-    simp
-
-    have : AffineQ.m (1 : AffineQ) = 1 := by rfl
-    rw [this]
-    rw [mul_times]
-    simp
+    · apply Rat.one_mul
+    · have : AffineQ.c (1 : AffineQ) = 0 := by rfl
+      rw [this]
+      simp
+      have : AffineQ.m (1 : AffineQ) = 1 := by rfl
+      rw [this]
+      rw [mul_times]
+      simp
   mul_one := by
     intro a
     simp [(· * ·), mul]
     obtain ⟨m, c, _⟩ := a
     simp
     constructor
-    rw [one]
-    apply Rat.mul_one
-    have : AffineQ.c (1 : AffineQ) = 0 := by rfl
-
-    rw [this]
-    rw [mul_times]
-    simp
+    · rw [one]
+      apply Rat.mul_one
+    · have : AffineQ.c (1 : AffineQ) = 0 := by rfl
+      rw [this]
+      rw [mul_times]
+      simp
   inv := inv
   inv_mul_cancel := by
     intro r
@@ -82,11 +79,11 @@ instance : Group AffineQ where
     rw [this]
     simp
     constructor
-    rw [inv, mul_times]
-    simp [r.3]
-    rw [inv, mul_times]
-    field_simp
-    ring
+    · rw [inv, mul_times]
+      simp [r.3]
+    · rw [inv, mul_times]
+      field_simp
+      ring
 
 theorem inv_eq (g : AffineQ) : g⁻¹ = AffineQ.mk g.m⁻¹ (-g.c/g.m) (inv_ne_zero g.m_ne_0) := by rfl
 
@@ -112,9 +109,9 @@ def TranslatesZ : Subgroup AffineQ where
     rw [inv_eq]
     simp
     constructor
-    rw [← hx]
-    rw [← hx]
-    simp
+    · rw [← hx]
+    · rw [← hx]
+      simp
 
 
 def Translates2Z : Subgroup AffineQ where
@@ -136,9 +133,9 @@ def Translates2Z : Subgroup AffineQ where
     rw [inv_eq]
     simp
     constructor
-    rw [← hx]
-    rw [← hx]
-    simp
+    · rw [← hx]
+    · rw [← hx]
+      simp
 
 def g := AffineQ.mk 2 0 (by decide)
 def t := AffineQ.mk 1 1 (by decide)

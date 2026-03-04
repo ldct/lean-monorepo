@@ -1,6 +1,8 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.MinimalAxioms
 set_option linter.style.longLine false
+set_option linter.style.show false
+set_option linter.style.multiGoal false
 
 namespace DyadicRat
 
@@ -150,8 +152,7 @@ theorem Rat.coe_Int_inj : Function.Injective (fun n : ℤ ↦ (n : Rat)) := by
 
 lemma formalDiv_zero (a : ℤ) : a // 0 = 0 := by rfl
 
-/--
-  Whereas the book leaves the inverse of 0 undefined, it is more convenient in Lean to assign a
+/-- Whereas the book leaves the inverse of 0 undefined, it is more convenient in Lean to assign a
   "junk" value to this inverse; we arbitrarily choose this junk value to be 0.
 -/
 instance Rat.instInv : Inv Rat where
@@ -161,12 +162,10 @@ instance Rat.instInv : Inv Rat where
     · have h3 : (b ≈ PreRatZero) := Setoid.trans (Setoid.symm h) h1
       rw [PreRatZero.equiv] at h1 h3
       simp_all [formalDiv_zero]
-
     · have h3 : ¬(b ≈ PreRatZero) := by
         by_contra h4
         have : a ≈ PreRatZero := Setoid.symm (Setoid.trans h4.symm h.symm)
         exact h2 this
-
       rw [PreRatZero.equiv] at h2 h3
       rw [eq _ _ h2 h3, mul_comm, ← h, mul_comm]
 )
@@ -206,9 +205,10 @@ AddGroup.ofLeftAxioms (by
   rw [add_eq _ _ hb hb]
   rw [show (0:Rat) = 0 // 1 by rfl]
   rw [eq]
-  ring
-  positivity
-  norm_num
+  · ring
+  · positivity
+  · norm_num
  )
 
 end DyadicRat
+

@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
+set_option linter.style.multiGoal false
 
 namespace DihedralGroup
 

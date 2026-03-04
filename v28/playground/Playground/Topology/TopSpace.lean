@@ -104,9 +104,9 @@ def nhdsFilter (X : Type) [T : TopSpace X] (x : X) : MyFilter X where
   univ_is := by
     use Set.univ
     and_intros
-    exact T.isOpen_univ
-    rfl
-    trivial
+    · exact T.isOpen_univ
+    · rfl
+    · trivial
   finiteInter := by
     intro s t hs ht
     obtain ⟨ S₁, hS₁, S₁_in_s, x_in_S₁ ⟩ := hs
@@ -114,21 +114,21 @@ def nhdsFilter (X : Type) [T : TopSpace X] (x : X) : MyFilter X where
     use S₁ ∩ S₂
     rw [Set.subset_inter_iff]
     and_intros
-    exact TopSpace.isOpen_inter S₁ S₂ hS₁ hS₂
+    · exact TopSpace.isOpen_inter S₁ S₂ hS₁ hS₂
     · apply test1
       exact S₁_in_s
     · apply test2
       exact S₂_in_t
-    exact x_in_S₁
-    exact x_in_S₂
+    · exact x_in_S₁
+    · exact x_in_S₂
   inclusion := by
     intro s t hs hst
     obtain ⟨ S, hS, S_in_s, x_in_S ⟩ := hs
     use S
     and_intros
-    exact hS
-    exact fun _ a_1 ↦ hst (S_in_s a_1)
-    exact x_in_S
+    · exact hS
+    · exact fun _ a_1 ↦ hst (S_in_s a_1)
+    · exact x_in_S
 
 -- The discrete topology on a type `X` is the topology where every subset is open.
 instance Discrete (X : Type) : TopSpace X where

@@ -1,6 +1,7 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.Defs
 set_option linter.style.longLine false
+set_option linter.style.multiGoal false
 
 
 namespace CentralizersAndNormalizers

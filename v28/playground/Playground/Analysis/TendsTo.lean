@@ -34,7 +34,7 @@ theorem tendsTo_add_const {a : ℕ → ℝ} {t : ℝ} (c : ℝ) (h : TendsTo a t
   ring_nf
   exact h
 
-/-- If `a(n)` tends to `t` then `-a(n)` tends to `-t`.  -/
+/-- If `a(n)` tends to `t` then `-a(n)` tends to `-t`. -/
 example {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n => -a n) (-t) := by
   -- texify  -- LeanTeX not available in v24
   intro ε hε
@@ -57,7 +57,6 @@ example (ε : ℝ) (ε_pos : 0 < ε) (hn : 1 < ε * ε) : 1 < ε := by
 -- Example 2.2.5: The sequence given by a_n = 1/sqrt(n) converges to 0
 example : TendsTo (fun n ↦ 1/(Real.sqrt n)) 0 := by
   intro ε ε_pos
-
   -- Choose a natural number N satisfying N > 1/ε^2
   have exists_N : ∃ N : ℕ, (1/(ε*ε) < N) := by {
     use (1 + Nat.ceil (1/(ε*ε)))
@@ -66,25 +65,19 @@ example : TendsTo (fun n ↦ 1/(Real.sqrt n)) 0 := by
       ε⁻¹ * ε⁻¹ ≤ ⌈ε⁻¹ * ε⁻¹⌉₊ := by exact Nat.le_ceil (ε⁻¹ * ε⁻¹)
       _ < 1 + ↑⌈ε⁻¹ * ε⁻¹⌉₊ := by simp
   }
-
   obtain ⟨N, N_cond⟩ := exists_N
-
   have N_ge_0 : 0 < N := by
     rify
     have : 0 ≤ 1/(ε*ε) := by positivity
     linarith
-
   use N
   intro n hn
-
   rw [sub_zero, abs_of_nonneg (one_div_nonneg.mpr (Real.sqrt_nonneg n))]
-
   have hn : 1/(ε*ε) < n := by {
     rify at N_ge_0
     rify at hn
     linarith
   }
-
   have hn_canonical : 1 < n*ε*ε := by {
     have pos : 0 < ε*ε := by positivity
     have := (mul_lt_mul_iff_of_pos_right pos).mpr hn
@@ -93,64 +86,49 @@ example : TendsTo (fun n ↦ 1/(Real.sqrt n)) 0 := by
     rw [show ε ^ 2 * ↑n = ↑n * (ε * ε) by ring] at this
     exact this
   }
-
   have hn_canonical_sqrt := (Real.sqrt_lt_sqrt_iff (by norm_num)).mpr hn_canonical
   simp at hn_canonical_sqrt
-
   simp
   -- rw?
   rw [inv_lt_iff_one_lt_mul₀']
-
-  calc
-    1 < Real.sqrt (n * ε * ε) := hn_canonical_sqrt
-    _ = Real.sqrt (n * (ε * ε)) := by ring_nf
-    _ = Real.sqrt n * Real.sqrt (ε*ε) := by simp
-    _ = Real.sqrt n * ε := by {
-      simp
-      left
-      exact (Real.sqrt_eq_iff_mul_self_eq_of_pos ε_pos).mpr rfl
-    }
-
-  simp
-  linarith
+  · calc
+      1 < Real.sqrt (n * ε * ε) := hn_canonical_sqrt
+      _ = Real.sqrt (n * (ε * ε)) := by ring_nf
+      _ = Real.sqrt n * Real.sqrt (ε*ε) := by simp
+      _ = Real.sqrt n * ε := by {
+        simp
+        left
+        exact (Real.sqrt_eq_iff_mul_self_eq_of_pos ε_pos).mpr rfl
+      }
+  · simp
+    linarith
 
 -- Example 2.2.6: The sequence given by a_n = n+1/n converges to 1
 example : TendsTo (fun n ↦ (n+1)/n) 1 := by
   intro ε ε_pos
-
   -- Choose a natural number N satisfying N > 1/ε^2
   have exists_N : ∃ N : ℕ, (1/ε < N) := by
     use (1 + Nat.ceil (1/ε))
     have : 1/ε ≤ ⌈1/ε⌉₊ := Nat.le_ceil (1/ε)
     push_cast
     linarith
-
   obtain ⟨N, N_cond⟩ := exists_N
-
   use N
   intro n hn
-
   have n_pos : 0 < (n:ℝ) := by
     have : 0 < 1/ε := by positivity
     rify at hn
     linarith
-
-
   simp
-
   have : ((n + 1) / (n: ℝ)) - 1 = 1/n := by field_simp; ring
-
   rw [this, abs_of_nonneg]
-
-  have N_cond : 1 / ε < n := by
-    rify at hn
-    linarith
-
-  have pos : 0 < (n : ℝ) := by positivity
-  have : 1 / ↑n < ε := by field_simp at N_cond ⊢; linarith
-  exact this
-
-  simp only [one_div, inv_nonneg, Nat.cast_nonneg]
+  · have N_cond : 1 / ε < n := by
+      rify at hn
+      linarith
+    have pos : 0 < (n : ℝ) := by positivity
+    have : 1 / ↑n < ε := by field_simp at N_cond ⊢; linarith
+    exact this
+  · simp only [one_div, inv_nonneg, Nat.cast_nonneg]
 
 -- The sequence (1,2,3...) not converge to any real number
 example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ n) t) := by
@@ -196,9 +174,9 @@ example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ if n%2 = 0 then 1 else 0) t) := by
   have : ∃ n, B ≤ n ∧ n % 2 = 0 := by
     have : B % 2 = 0 ∨ B % 2 = 1 := Nat.mod_two_eq_zero_or_one B
     rcases this with (l | r)
-    use B
-    use B+1
-    constructor; repeat omega
+    · use B
+    · use B+1
+      constructor; repeat omega
   rcases this with ⟨n, ⟨l, n_even⟩⟩
   have n_plus_1_odd : (n + 1) % 2 = 1 := by omega
   have h1 := hB n l
