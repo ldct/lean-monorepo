@@ -13,7 +13,7 @@ abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (Dihedra
 def IsExceptional (H : Subgroup SpaceIsometry) : Prop :=
   ¬ IsCyclic H ∧ ¬ IsDihedral H ∧ Nat.card H ≠ 0
 
-/-! ## Tetrahedral rotation group (A₄) as a subgroup of RealIsometry
+/- ## Tetrahedral rotation group (A₄) as a subgroup of RealIsometry
 
 We realize A₄ as the rotation group of a regular tetrahedron inscribed in a cube
 with vertices at (1,1,1), (1,-1,-1), (-1,1,-1), (-1,-1,1).
@@ -29,53 +29,35 @@ Every element satisfies g² = 1 or g³ = 1, so the exponent divides 6.
 
 /-! ### Integer matrices and casting infrastructure -/
 
-abbrev IMAT := Matrix (Fin 3) (Fin 3) ℤ
+abbrev IMAT3 := Matrix (Fin 3) (Fin 3) ℤ
 
 #check Matrix.zpow_add
 #check Matrix.map_mul
 
-#synth HPow IMAT ℕ IMAT
+#synth HPow IMAT3 ℕ IMAT3
 
-abbrev Matrix.toReal (M : IMAT) : MAT := M.map (Int.castRingHom ℝ)
+abbrev Matrix.toReal (M : IMAT3) : MAT3 := M.map (Int.castRingHom ℝ)
 
-lemma toReal_mul (A B : IMAT) : (A * B).toReal = A.toReal * B.toReal := by
+lemma toReal_mul (A B : IMAT3) : (A * B).toReal = A.toReal * B.toReal := by
   grind [Matrix.map_mul]
 
-lemma toReal_one : toReal 1 = (1 : MAT) := by simp
+lemma toReal_one : toReal 1 = (1 : MAT3) := by simp
 
-lemma toReal_pow (A : IMAT) (n : ℕ) : toReal (A ^ n) = (toReal A) ^ n := by
+lemma toReal_pow (A : IMAT3) (n : ℕ) : toReal (A ^ n) = (toReal A) ^ n := by
   induction n with
   | zero => simp [pow_zero, toReal_one]
-  | succ n ih => rw [pow_succ, toReal_mul, ih, pow_succ]
-
-#check Matrix.map_mul
-
-example
-  (α : Type*)
-  [Ring α]
-  (A : Matrix (Fin 3) (Fin 3) α)
-  (B : Matrix (Fin 3) (Fin 3) α)
-  (f : α →+* α)
-: (A * B).map f = (A.map f) * (B.map f) := Matrix.map_mul
-
-example
-  (α : Type*) (k : Nat)
-  [Ring α]
-  (A : Matrix (Fin 3) (Fin 3) α)
-  (B : Matrix (Fin 3) (Fin 3) α)
-  (f : α →+* α)
-: (A.map f)^k = (A^k).map f := by sorry
+  | succ n IH => rw [pow_succ, toReal_mul, IH, pow_succ]
 
 lemma toReal_injective : Function.Injective toReal := by
   apply Matrix.map_injective
   exact RingHom.injective_int _
 
-lemma toReal_transpose (A : IMAT) : toReal A.transpose = (toReal A).transpose := by
+lemma toReal_transpose (A : IMAT3) : toReal A.transpose = (toReal A).transpose := by
   ext i j; simp [toReal, map_apply, transpose_apply]
 
 /-! ### The 12 integer matrices of the tetrahedral rotation group -/
 
-def a4MatZ : Fin 12 → IMAT
+def a4MatZ : Fin 12 → IMAT3
   | 0  => !![1, 0, 0; 0, 1, 0; 0, 0, 1]
   | 1  => !![0, 0, 1; 1, 0, 0; 0, 1, 0]
   | 2  => !![0, 1, 0; 0, 0, 1; 1, 0, 0]
@@ -90,7 +72,7 @@ def a4MatZ : Fin 12 → IMAT
   | 11 => !![-1, 0, 0; 0, -1, 0; 0, 0, 1]
 
 /-- The real matrix corresponding to the k-th A₄ element -/
-def a4Mat (k : Fin 12) : MAT := toReal (a4MatZ k)
+def a4Mat (k : Fin 12) : MAT3 := toReal (a4MatZ k)
 
 /-! ### Multiplication table (fully explicit for decide) -/
 
@@ -202,8 +184,7 @@ def tetrahedralSubgroup : Subgroup SpaceIsometry where
 
 lemma card_tetrahedralSubgroup : Nat.card tetrahedralSubgroup = 12 := by
   change Nat.card (Set.range a4Elem) = 12
-  rw [Nat.card_congr (Equiv.ofInjective a4Elem a4Elem_injective).symm]
-  simp
+  simp [Nat.card_congr (Equiv.ofInjective a4Elem a4Elem_injective).symm]
 
 /-! ### Exponent and element orders in the subgroup -/
 

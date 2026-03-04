@@ -5,7 +5,7 @@ open scoped Pointwise
 
 -- #check EuclideanSpace
 
-abbrev MAT := Matrix (Fin 3) (Fin 3) ℝ
+abbrev MAT3 := Matrix (Fin 3) (Fin 3) ℝ
 abbrev R3 := EuclideanSpace ℝ (Fin 3)
 abbrev O3 := Matrix.orthogonalGroup (Fin 3) ℝ
 
@@ -245,7 +245,7 @@ theorem exists_mul_unique {n : ℕ} (a : RealIsometry n)
 Example 1.2a: translations
 -/
 
-noncomputable def translation {n : ℕ} (d : EuclideanSpace ℝ (Fin n)) : RealIsometry n where
+noncomputable def RealIsometry.translation {n : ℕ} (d : EuclideanSpace ℝ (Fin n)) : RealIsometry n where
   toFun x := x + d
   is_isometry x y := by
     abel_nf
@@ -265,7 +265,7 @@ lemma my_lemma (G : Type*) [Group G] (a b : G) : a = b⁻¹ ↔ a * b = 1 := eq_
 The translation subgroup. Auslander and Cook, An Algebraic Classification of the Three-Dimensional Crystallographic Groups.
 -/
 def RealIsometry.translationSubgroup {n : ℕ} : Subgroup (RealIsometry n) where
-  carrier := { translation d | d : EuclideanSpace ℝ (Fin n) }
+  carrier := { RealIsometry.translation d | d : EuclideanSpace ℝ (Fin n) }
   mul_mem' := by
     intro a b ha hb
     simp_all
@@ -273,11 +273,11 @@ def RealIsometry.translationSubgroup {n : ℕ} : Subgroup (RealIsometry n) where
     obtain ⟨b', rfl⟩ := hb
     use a' + b'
     ext v : 2
-    simp [translation, mul_eq, RealIsometry.comp]
+    simp [RealIsometry.translation, mul_eq, RealIsometry.comp]
     grind
   one_mem' := by
     use 0
-    simp [translation, one_eq, RealIsometry.identity]
+    simp [RealIsometry.translation, one_eq, RealIsometry.identity]
     grind
   inv_mem' := by
     intro a ha
@@ -285,7 +285,7 @@ def RealIsometry.translationSubgroup {n : ℕ} : Subgroup (RealIsometry n) where
     use -a'
     rw [eq_inv_iff_mul_eq_one]
     ext v : 2
-    simp [translation, mul_eq, RealIsometry.comp, one_eq, RealIsometry.identity]
+    simp [RealIsometry.translation, mul_eq, RealIsometry.comp, one_eq, RealIsometry.identity]
 
 instance {n : ℕ} : (RealIsometry.translationSubgroup (n := n)).Normal := by
   constructor
@@ -301,7 +301,7 @@ instance {n : ℕ} : (RealIsometry.translationSubgroup (n := n)).Normal := by
   have hcancel : ∀ x, g.toFun (g⁻¹.toFun x) = x := fun x =>
     congr_fun (congr_arg RealIsometry.toFun (mul_inv_cancel g)) x
   ext x : 2
-  simp only [mul_eq, RealIsometry.comp, Function.comp, translation]
+  simp only [mul_eq, RealIsometry.comp, Function.comp, RealIsometry.translation]
   -- Goal: g.toFun (g⁻¹.toFun x + d) = x + (g.toFun d - g.toFun 0)
   -- Simplify RHS: g(d) - g(0) = (O•d + b) - (O•0 + b) = O•d
   have hRHS : g.toFun d - g.toFun 0 = O • d := by
@@ -342,9 +342,9 @@ def RealIsometry.rotationSubgroup {n : ℕ} : Subgroup (RealIsometry n) where
 
 -- standardForm is the product of a translation and a multiplication
 lemma standardForm_eq_mul {n : ℕ} (A : Matrix.orthogonalGroup (Fin n) ℝ) (b : EuclideanSpace ℝ (Fin n)) :
-    standardForm A b = translation b * multiplication A := by
+    standardForm A b = RealIsometry.translation b * multiplication A := by
   ext x : 2
-  simp [standardForm, translation, multiplication, mul_eq, RealIsometry.comp, Function.comp]
+  simp [standardForm, RealIsometry.translation, multiplication, mul_eq, RealIsometry.comp, Function.comp]
 
 -- multiplication is in the rotation subgroup (fixes the origin)
 lemma multiplication_mem_rotationSubgroup {n : ℕ} (O : Matrix.orthogonalGroup (Fin n) ℝ) :
@@ -377,10 +377,10 @@ lemma disjoint_translation_rotation {n : ℕ} :
   simp only [RealIsometry.translationSubgroup, Subgroup.mem_mk] at hg
   obtain ⟨d, rfl⟩ := hg
   simp only [RealIsometry.rotationSubgroup, Subgroup.mem_mk] at hr
-  have : d = 0 := by simpa [translation] using hr
+  have : d = 0 := by simpa [RealIsometry.translation] using hr
   subst this
   ext x : 2
-  simp [translation, one_eq, RealIsometry.identity]
+  simp [RealIsometry.translation, one_eq, RealIsometry.identity]
 
 -- translationSubgroup * rotationSubgroup = univ
 lemma mul_eq_univ_translation_rotation {n : ℕ} :
@@ -388,8 +388,8 @@ lemma mul_eq_univ_translation_rotation {n : ℕ} :
   ext g
   simp only [Set.mem_univ, iff_true]
   obtain ⟨O, b, h⟩ := exists_mul g
-  refine ⟨translation b, ⟨b, rfl⟩, multiplication O, multiplication_mem_rotationSubgroup O, ?_⟩
-  change translation b * multiplication O = g
+  refine ⟨RealIsometry.translation b, ⟨b, rfl⟩, multiplication O, multiplication_mem_rotationSubgroup O, ?_⟩
+  change RealIsometry.translation b * multiplication O = g
   rw [← standardForm_eq_mul]
   ext x : 2
   exact (congr_fun h x).symm

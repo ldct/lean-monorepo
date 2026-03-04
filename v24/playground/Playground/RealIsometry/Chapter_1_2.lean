@@ -25,19 +25,25 @@ private noncomputable def rotMat (α : ℝ) : MAT2 :=
 
 private lemma rotMat_orthogonal (α : ℝ) : rotMat α ∈ Matrix.orthogonalGroup (Fin 2) ℝ := by
   have hRT : Matrix.transpose (rotMat α) * rotMat α = 1 := by
-    ext i j; fin_cases i <;> fin_cases j <;>
-      simp [rotMat, Matrix.mul_apply, Matrix.transpose_apply, Fin.sum_univ_two] <;>
-      ring_nf <;> simp [Real.sin_sq_add_cos_sq, Real.cos_sq_add_sin_sq]
-  exact ⟨hRT, Matrix.mul_eq_one_comm.mp hRT⟩
+    ext i j; fin_cases i <;> fin_cases j
+    <;> simp [rotMat, Matrix.mul_apply]
+    <;> grind [Real.sin_sq_add_cos_sq, Real.cos_sq_add_sin_sq]
+  constructor
+  · exact hRT
+  · grind [
+    Matrix.mul_eq_one_comm,
+    Matrix.star_eq_conjTranspose,
+    Matrix.conjTranspose_eq_transpose_of_trivial
+  ]
 
 private noncomputable def rotO2 (α : ℝ) : O2 := ⟨rotMat α, rotMat_orthogonal α⟩
 
 noncomputable def PlaneIsometry.r0 (α : ℝ) : PlaneIsometry where
   toFun x := !![Real.cos α, -Real.sin α; Real.sin α, Real.cos α]  • x
-  is_isometry x y := by
-    show ‖(rotMat α) • x - (rotMat α) • y‖ = ‖x - y‖
-    rw [← smul_sub]
-    exact norm_orthogonal 2 (rotO2 α) (x - y)
+  is_isometry x y := calc
+      _ = ‖(rotMat α) • x - (rotMat α) • y‖ := by rfl
+      _ = ‖rotMat α • (x - y)‖ := by rw [← smul_sub]
+      _ = ‖x - y‖ := norm_orthogonal _ (rotO2 α) _
   surjective := (multiplication (rotO2 α)).surjective
 
 /-
@@ -106,3 +112,76 @@ noncomputable def PlaneIsometry.reflection (w : R2) (hw : w ⬝ᵥ w = 1) : Plan
       rw [dotProduct_sub, dotProduct_smul, hw, smul_eq_mul]; ring
     show y - (2 * (w ⬝ᵥ y)) • w - (2 * (w ⬝ᵥ (y - (2 * (w ⬝ᵥ y)) • w))) • w = y
     rw [hfy]; push_cast; module
+
+/-
+Example 1.2e: glide reflection in a line through the origin perpendicular to a unit vector w,
+with translation d along the line (w ⬝ᵥ d = 0)
+-/
+noncomputable def PlaneIsometry.glideReflection0 (w : R2) (hw : w ⬝ᵥ w = 1)
+    (d : R2) (hd : w ⬝ᵥ d = 0) : PlaneIsometry where
+  toFun x := x - (2 * (w ⬝ᵥ x)) • w + d
+  is_isometry x y := by
+    -- The +d terms cancel: f(x) - f(y) = (x-y) - 2(w⬝(x-y))w
+    have h1 : (x - (2 * (w ⬝ᵥ x)) • w + d) - (y - (2 * (w ⬝ᵥ y)) • w + d)
+      = (x - y) - (2 * (w ⬝ᵥ (x - y))) • w := by
+      rw [dotProduct_sub]; push_cast; module
+    rw [h1]
+    set u := x - y
+    set c := w ⬝ᵥ u
+    suffices hsq : ‖u - (2 * c) • w‖ ^ 2 = ‖u‖ ^ 2 by
+      nlinarith [norm_nonneg u, norm_nonneg (u - (2 * c) • w),
+        sq_nonneg (‖u - (2 * c) • w‖ - ‖u‖)]
+    rw [norm_sub_sq_real, real_inner_smul_right, norm_smul, mul_pow]
+    simp only [Real.norm_eq_abs, sq_abs]
+    have h_inner : @inner ℝ R2 _ u w = c := by
+      rw [inner_eq_dotProduct]; exact dotProduct_comm u w
+    have h_norm_w : ‖w‖ ^ 2 = 1 := by
+      rw [← real_inner_self_eq_norm_sq, inner_eq_dotProduct]; exact hw
+    rw [h_inner, h_norm_w]; ring
+  surjective := by
+    intro y
+    use y - d - (2 * (w ⬝ᵥ (y - d))) • w
+    -- Key: reflection is involution, so w⬝f⁻¹(y) = -(w⬝(y-d))
+    have hinv : w ⬝ᵥ (y - d - (2 * (w ⬝ᵥ (y - d))) • w) = -(w ⬝ᵥ (y - d)) := by
+      rw [dotProduct_sub, dotProduct_smul, hw, smul_eq_mul]; ring
+    show y - d - (2 * (w ⬝ᵥ (y - d))) • w -
+      (2 * (w ⬝ᵥ (y - d - (2 * (w ⬝ᵥ (y - d))) • w))) • w + d = y
+    rw [hinv]; push_cast; module
+
+/-
+Example 1.2f: general glide reflection in a line through p perpendicular to a unit vector w,
+with translation d along the line (w ⬝ᵥ d = 0)
+-/
+noncomputable def PlaneIsometry.glideReflection (w : R2) (hw : w ⬝ᵥ w = 1)
+    (p d : R2) (hd : w ⬝ᵥ d = 0) : PlaneIsometry where
+  toFun x := x - (2 * (w ⬝ᵥ (x - p))) • w + d
+  is_isometry x y := by
+    -- The +d and p terms cancel: f(x) - f(y) = (x-y) - 2(w⬝(x-y))w
+    have h1 : (x - (2 * (w ⬝ᵥ (x - p))) • w + d) - (y - (2 * (w ⬝ᵥ (y - p))) • w + d)
+      = (x - y) - (2 * (w ⬝ᵥ (x - y))) • w := by
+      have hdot : w ⬝ᵥ (x - y) = w ⬝ᵥ (x - p) - w ⬝ᵥ (y - p) := by
+        rw [dotProduct_sub, dotProduct_sub, dotProduct_sub]; ring
+      rw [hdot]; module
+    rw [h1]
+    set u := x - y
+    set c := w ⬝ᵥ u
+    suffices hsq : ‖u - (2 * c) • w‖ ^ 2 = ‖u‖ ^ 2 by
+      nlinarith [norm_nonneg u, norm_nonneg (u - (2 * c) • w),
+        sq_nonneg (‖u - (2 * c) • w‖ - ‖u‖)]
+    rw [norm_sub_sq_real, real_inner_smul_right, norm_smul, mul_pow]
+    simp only [Real.norm_eq_abs, sq_abs]
+    have h_inner : @inner ℝ R2 _ u w = c := by
+      rw [inner_eq_dotProduct]; exact dotProduct_comm u w
+    have h_norm_w : ‖w‖ ^ 2 = 1 := by
+      rw [← real_inner_self_eq_norm_sq, inner_eq_dotProduct]; exact hw
+    rw [h_inner, h_norm_w]; ring
+  surjective := by
+    intro y
+    use y - (2 * (w ⬝ᵥ (y - p))) • w - d
+    -- Key: w⬝((y - 2c·w - d) - p) = -(w⬝(y-p))
+    have hinv : w ⬝ᵥ ((y - (2 * (w ⬝ᵥ (y - p))) • w - d) - p) = -(w ⬝ᵥ (y - p)) := by
+      rw [dotProduct_sub, dotProduct_sub, dotProduct_sub, dotProduct_smul, smul_eq_mul,
+        hw, hd, dotProduct_sub]; ring
+    show (y - (2 * (w ⬝ᵥ (y - p))) • w - d) -
+      (2 * (w ⬝ᵥ ((y - (2 * (w ⬝ᵥ (y - p))) • w - d) - p))) • w + d = y
+    rw [hinv]; push_cast; module

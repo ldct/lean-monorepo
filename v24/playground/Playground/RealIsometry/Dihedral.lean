@@ -8,15 +8,15 @@ open Real Matrix
 
 /-! ## Rotation and reflection matrices in ℝ³ -/
 
-noncomputable def rotMat (θ : ℝ) : MAT :=
+noncomputable def rotMat (θ : ℝ) : MAT3 :=
   !![cos θ, -(sin θ), 0; sin θ, cos θ, 0; 0, 0, 1]
 
-def reflMat : MAT :=
+def reflMat : MAT3 :=
   !![1, 0, 0; 0, -1, 0; 0, 0, 1]
 
 noncomputable def dihedralAngle (n : ℕ) : ℝ := 2 * π / n
 
-noncomputable def rotMatZMod (n : ℕ) [NeZero n] (k : ZMod n) : MAT :=
+noncomputable def rotMatZMod (n : ℕ) [NeZero n] (k : ZMod n) : MAT3 :=
   rotMat (ZMod.val k * dihedralAngle n)
 
 /-! ## Basic matrix identities -/
@@ -30,9 +30,8 @@ lemma rotMat_mul (θ₁ θ₂ : ℝ) : rotMat θ₁ * rotMat θ₂ = rotMat (θ�
 
 lemma rotMat_zero : rotMat 0 = 1 := by
   ext i j
-  simp only [rotMat, cos_zero, sin_zero, neg_zero,
-    of_apply, cons_val', cons_val_zero, cons_val_one, head_cons, head_fin_const]
-  fin_cases i <;> fin_cases j <;> simp [one_apply]
+  simp [one_apply, rotMat]
+  fin_cases i <;> dsimp <;> fin_cases j <;> dsimp
 
 lemma rotMat_periodic (θ : ℝ) (k : ℤ) : rotMat (θ + k * (2 * π)) = rotMat θ := by
   simp [rotMat, cos_add_int_mul_two_pi, sin_add_int_mul_two_pi]
@@ -40,8 +39,7 @@ lemma rotMat_periodic (θ : ℝ) (k : ℤ) : rotMat (θ + k * (2 * π)) = rotMat
 lemma reflMat_mul_self : reflMat * reflMat = 1 := by
   ext i j
   fin_cases i <;> fin_cases j <;>
-    simp [reflMat, mul_apply, one_apply, of_apply, cons_val', cons_val_zero,
-      cons_val_one, head_cons, head_fin_const, Fin.sum_univ_three]
+    simp [reflMat, mul_apply, Fin.sum_univ_three]
 
 lemma rotMat_reflMat_eq (θ : ℝ) : rotMat θ * reflMat = reflMat * rotMat (-θ) := by
   ext i j
@@ -66,7 +64,7 @@ lemma reflMat_mem_O3 : reflMat ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
       of_apply, cons_val', cons_val_zero, cons_val_one,
       head_cons, head_fin_const, Fin.sum_univ_three]
 
-lemma mul_mem_O3 {A B : MAT}
+lemma mul_mem_O3 {A B : MAT3}
     (hA : A ∈ Matrix.orthogonalGroup (Fin 3) ℝ)
     (hB : B ∈ Matrix.orthogonalGroup (Fin 3) ℝ)
     : A * B ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
@@ -176,7 +174,7 @@ lemma rotMatZMod_injective (n : ℕ) [NeZero n] : Function.Injective (rotMatZMod
 
 /-! ## The dihedral homomorphism -/
 
-noncomputable def dihedralToMat (n : ℕ) [NeZero n] : DihedralGroup n → MAT
+noncomputable def dihedralToMat (n : ℕ) [NeZero n] : DihedralGroup n → MAT3
   | .r k => rotMatZMod n k
   | .sr k => reflMat * rotMatZMod n k
 
@@ -266,7 +264,7 @@ noncomputable def multiplicationHom : O3 →* SpaceIsometry where
 
 lemma multiplicationHom_injective : Function.Injective multiplicationHom := by
   intro A B h
-  have key : ∀ x : R3, (A : MAT).mulVec x = (B : MAT).mulVec x := by
+  have key : ∀ x : R3, (A : MAT3).mulVec x = (B : MAT3).mulVec x := by
     intro x
     have := congr_fun (congr_arg RealIsometry.toFun h) x
     change (multiplication A).toFun x = (multiplication B).toFun x at this

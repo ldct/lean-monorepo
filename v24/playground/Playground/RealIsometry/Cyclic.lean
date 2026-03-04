@@ -4,7 +4,7 @@ set_option linter.style.longLine false
 set_option linter.unusedSimpArgs false
 
 open Real in
-noncomputable def rotZ (θ : ℝ) : MAT := ![
+noncomputable def rotZ (θ : ℝ) : MAT3 := ![
   ![cos θ, -sin θ, 0],
   ![sin θ,  cos θ, 0],
   ![0,     0,      1]]
