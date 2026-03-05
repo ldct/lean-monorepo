@@ -3,11 +3,9 @@ import Mathlib.Algebra.Group.Defs
 import Mathlib.GroupTheory.SpecificGroups.Cyclic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
 set_option linter.style.longLine false
-set_option linter.dupNamespace false
 
 -- the function x ↦ mx + c
 
-namespace AffineQ
 
 structure AffineQ : Type where
   m : ℚ
@@ -167,5 +165,3 @@ example : t ∉ C := by
   norm_cast at g_act_w_is_t
   omega
 
-
-end AffineQ

@@ -7,7 +7,6 @@ set_option linter.style.longLine false
 -- The sequence 0 → 0, 1 → b₀, 2 → b₀ + b₁, …
 
 namespace InfiniteSums
-open TendsTo
 
 def partialSums (b : ℕ → ℝ) : (ℕ → ℝ) :=
   fun n ↦ ∑ i ∈ Finset.range n, b i

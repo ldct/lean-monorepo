@@ -1,10 +1,7 @@
 import Mathlib
 
 set_option linter.unusedTactic false
-set_option linter.dupNamespace false
 
-
-namespace motzkin
 
 theorem motzkin (x y : ℝ) : 0 ≤ x^4 * y^2 + x^2 * y^4  - 3 * x^2 * y^2 + 1 := by
   let w : Fin 3 → ℝ := fun _ => (1:ℝ)/3
@@ -38,5 +35,3 @@ theorem motzkin (x y : ℝ) : 0 ≤ x^4 * y^2 + x^2 * y^4  - 3 * x^2 * y^2 + 1 :
   ] at amgm
   linarith
 
-
-end motzkin

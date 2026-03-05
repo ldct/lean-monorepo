@@ -3,7 +3,6 @@ import Playground.Analysis.TendsTo
 -- def Monotone: we use the Mathlib defn
 
 namespace MonotoneConvergence
-open TendsTo
 
 def BoundedAbove (a : ℕ → ℝ) : Prop := ∃ B, ∀ n, a n ≤ B
 

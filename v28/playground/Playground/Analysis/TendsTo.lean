@@ -1,10 +1,7 @@
 import Mathlib.Tactic
 set_option linter.style.longLine false
-set_option linter.dupNamespace false
 -- import LeanTeXMathlib  -- not available in v24
 
-
-namespace TendsTo
 
 def TendsTo (a : ℕ → ℝ) (t : ℝ) : Prop :=
   ∀ ε > 0, ∃ B : ℕ, ∀ n, B ≤ n → |a n - t| < ε
@@ -189,4 +186,3 @@ example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ if n%2 = 0 then 1 else 0) t) := by
   linarith
 
 
-end TendsTo
