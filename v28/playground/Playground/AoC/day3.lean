@@ -18,8 +18,8 @@ def intify (m: Token) : Int :=
   | .mul a b => a*b
   | _ => 0
 
-def tokens := (matchMul text.mkIterator).acc
-#eval ((((matchMul text.mkIterator).acc).take 555555).map intify).toList.sum
+def tokens := (matchMul (String.Legacy.mkIterator text)).acc
+#eval ((((matchMul (String.Legacy.mkIterator text)).acc).take 555555).map intify).toList.sum
 
 
 def fold (lst: List Token) (f: Int) (acc: Int) : Int :=

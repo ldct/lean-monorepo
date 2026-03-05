@@ -210,7 +210,7 @@ def lookup_ (p : Point') :=
   let z := y.toList.getD p.y '_'
   z
 
-def lookup (p : List Point') := (p.map lookup_).asString
+def lookup (p : List Point') := String.ofList (p.map lookup_)
 
 def idxsFrom (base : Point) :=
   (offsets.map fun y ↦ (y.map fun x ↦ (base + x).toPoint').reduceOption).filter fun x ↦ x.length == 4
