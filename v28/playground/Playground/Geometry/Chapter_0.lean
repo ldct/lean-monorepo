@@ -4,7 +4,6 @@ import Mathlib
 An introduction to inductive types, notation typeclasses, data typeclasses
 -/
 
-set_option linter.style.longLine false
 
 /-
 An inductive type is a type that is defined by a set of constructors, similar to algebraic data types in other programming languages.

@@ -1,7 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
 import Playground.GroupTheory.Dih6
-set_option linter.style.longLine false
 
 namespace DihedralGroup
 

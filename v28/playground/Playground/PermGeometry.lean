@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Heather Macbeth
 -/
 import Mathlib
-set_option linter.style.longLine false
 set_option linter.style.multiGoal false
 
 /-!
@@ -232,7 +231,7 @@ theorem IsIsometry.aux {α : Perm ℝ} (hα : α ∈ M) {a x y : ℝ} (hx : α x
 theorem IsIsometry.eq_addRight_or_eq_halfTurn {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) :
   α = addRight a ∨ α = halfTurn a := by
   have hα0 := hα 0
-  simp only [h, abs_eq_abs] at hα0
+  simp [h, abs_eq_abs] at hα0
   obtain h1 | h2 := hα0 1
   right
   ext x

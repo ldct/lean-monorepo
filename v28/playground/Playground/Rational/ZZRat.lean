@@ -1,6 +1,5 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.MinimalAxioms
-set_option linter.style.longLine false
 set_option linter.style.show false
 set_option linter.style.multiGoal false
 
@@ -150,7 +149,7 @@ theorem Rat.coe_Int_inj : Function.Injective (fun n : ℤ ↦ (n : Rat)) := by
   intro a b h
   dsimp at h
   rw [coe_Int_eq, coe_Int_eq, eq] at h
-  simp only at h
+  simp at h
   exact h
   all_goals positivity
 

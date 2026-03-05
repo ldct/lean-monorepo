@@ -1,6 +1,5 @@
 import Playground.Analysis.TendsTo
 import Mathlib
-set_option linter.style.longLine false
 
 -- Infinite sums
 

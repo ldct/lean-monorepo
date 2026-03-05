@@ -1,7 +1,6 @@
 import Playground.RealIsometry.Basic
 import Playground.RealIsometry.Dihedral
 
-set_option linter.style.longLine false
 set_option linter.unusedSimpArgs false
 set_option linter.style.nativeDecide false
 set_option linter.style.show false

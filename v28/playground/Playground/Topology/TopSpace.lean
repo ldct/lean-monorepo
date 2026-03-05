@@ -1,5 +1,4 @@
 import Mathlib
-set_option linter.style.longLine false
 
 /-- A topology on `X`. -/
 class TopSpace (X : Type) where
@@ -15,7 +14,7 @@ theorem TopSpace.isOpen_empty (X : Type) [T : TopSpace X] : TopSpace.IsOpen (∅
     exfalso
     exact ht
   )
-  simp only at this
+  simp at this
   exact this
 
 -- The indiscrete topology on a type `X` is the topology where the only open sets are the empty set and the whole space.
@@ -196,14 +195,14 @@ instance S7 : TopSpace (Fin 3) where
     by_cases h' : ((∀ s ∈ I, s = ∅))
     · left
       exact h'
-    simp only at h'
+    simp at h'
     obtain ⟨ x, hx ⟩ := h'
     right
     use x
     constructor
     · exact hx.1
     specialize h x hx.1
-    simp only [hx] at h
+    simp [hx] at h
     exact h
 
 instance sierpinsky_1 : TopSpace (Fin 2) where
@@ -216,7 +215,7 @@ instance sierpinsky_1 : TopSpace (Fin 2) where
   isOpen_sUnion I h := by
     have := enumerate I
     obtain rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl | rfl := this
-    <;> simp_all only [Fin.isValue, Set.sUnion_insert, Set.sUnion_singleton, Set.union_insert, Set.union_singleton, Set.mem_insert_iff, zero_ne_one, Set.mem_singleton_iff, or_true, Set.insert_eq_of_mem, Set.insert_eq_self, one_ne_zero, or_false]
+    <;> simp_all
     <;> { grind }
 
 def TopSpace.IsCoarser {X : Type} (T₁ T₂ : TopSpace X) : Prop := ∀ x, (T₁.IsOpen x → T₂.IsOpen x)

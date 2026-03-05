@@ -1,6 +1,5 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.Defs
-set_option linter.style.longLine false
 set_option linter.style.multiGoal false
 
 
@@ -8,7 +7,7 @@ namespace CentralizersAndNormalizers
 
 variable {G : Type*} [Group G]
 
-theorem centralizer_le_normalizer [Group G] (H : Subgroup G) : Subgroup.centralizer H ≤ Subgroup.normalizer H := by {
+theorem centralizer_le_normalizer (H : Subgroup G) : Subgroup.centralizer H ≤ Subgroup.normalizer H := by {
   rintro g g_centralizes_H
   have ginv_centralizes_h : g⁻¹ ∈ Subgroup.centralizer H := by {
     simp only [Subgroup.inv_mem_iff, g_centralizes_H]
@@ -35,7 +34,7 @@ example [Group G] : Subgroup.centralizer (Subgroup.center G).carrier = ⊤ := by
   exact fun ⦃a⦄ a ↦ a
 
 -- D&F pg 52, q2.1, manual proof
-theorem x [Group G] : Subgroup.centralizer (Subgroup.center G) = (⊤ : Subgroup G) := by
+theorem x : Subgroup.centralizer (Subgroup.center G) = (⊤ : Subgroup G) := by
   rw [eq_top_iff] -- rewrite as ⊤ ≤ ...
   intro g _ h h_in_center
   exact h_in_center.comm g

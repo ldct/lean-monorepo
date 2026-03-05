@@ -1,6 +1,5 @@
 import Mathlib
 
-set_option linter.style.longLine false
 
 
 namespace GaussianIntegers_grind

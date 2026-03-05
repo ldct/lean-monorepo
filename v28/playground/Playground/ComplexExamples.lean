@@ -1,7 +1,6 @@
 import Mathlib
 import Playground.NormNumI
 import Qq
-set_option linter.style.longLine false
 open Lean Meta Qq
 
 open Complex

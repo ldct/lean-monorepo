@@ -8,7 +8,6 @@ import Playground.Geometry.Dicyclic
 import Playground.Geometry.Dihedralization
 import Playground.Geometry.FrobeniusGroup
 
-set_option linter.style.longLine false
 
 /-
 inv1: ab = ba (commutativity)

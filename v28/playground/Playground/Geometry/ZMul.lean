@@ -68,7 +68,7 @@ theorem r_one_pow' (k : ℤ) : (r 1 : ZMul) ^ k = r k := by
     exact r_one_pow k
   suffices : ((r (1: ℤ)) ^ k)⁻¹ = (r k)⁻¹
   · have := congrArg Inv.inv this
-    simp only [inv_inv] at this
+    simp at this
     exact this
   let l := -k
   have k_eq_nl : k = -l := by exact Int.eq_neg_comm.mp rfl
@@ -81,7 +81,7 @@ theorem r_one_pow' (k : ℤ) : (r 1 : ZMul) ^ k = r k := by
   lift l' to ℕ using this
   simp only [zpow_neg, inv_inv]
   rw [←lp_eq_l]
-  simp only [inv_r_simp]
+  simp [inv_r_simp]
   exact r_one_pow l'
 
 example {G} [CommGroup G] (a b : G) (k : ℤ)

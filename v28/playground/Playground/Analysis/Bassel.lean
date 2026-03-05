@@ -1,7 +1,6 @@
 import Playground.Analysis.MonotoneConvergence
 import Playground.Analysis.InfiniteSums
 import Mathlib
-set_option linter.style.longLine false
 
 -- This file proves that the series ∑ 1/n^2 converges to some limit
 -- The bulk of this is a series of inequalities that show that the partial sums are bounded above by 2

@@ -123,7 +123,7 @@ example : Subgroup.closure {r (1 : ZMod 4)} = rot := by
   -- current goal is `⊢ Subgroup.closure {r 1} = rot`
   apply Subgroup.closure_eq_of_le
   intro x hx
-  simp only [SetLike.mem_coe] at hx
+  simp at hx
   subst hx
   exact (by decide : r 1 ∈ rot)
   intro x hx

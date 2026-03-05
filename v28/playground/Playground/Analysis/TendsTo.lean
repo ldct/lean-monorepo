@@ -1,5 +1,4 @@
 import Mathlib.Tactic
-set_option linter.style.longLine false
 -- import LeanTeXMathlib  -- not available in v24
 
 
@@ -47,7 +46,7 @@ example {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n => -a n)
 
 example (ε : ℝ) (ε_pos : 0 < ε) (hn : 1 < ε * ε) : 1 < ε := by
   have := (Real.sqrt_lt_sqrt_iff (by norm_num)).mpr hn
-  simp only [gt_iff_lt] at this
+  simp at this
   let t := (Real.sqrt_eq_iff_mul_self_eq_of_pos ε_pos).mpr rfl
   rw [t] at this
   exact this
@@ -85,7 +84,7 @@ example : TendsTo (fun n ↦ 1/(Real.sqrt n)) 0 := by
     exact this
   }
   have hn_canonical_sqrt := (Real.sqrt_lt_sqrt_iff (by norm_num)).mpr hn_canonical
-  simp only [one_div, gt_iff_lt] at hn_canonical_sqrt
+  simp at hn_canonical_sqrt
   simp only [one_div, gt_iff_lt]
   -- rw?
   rw [inv_lt_iff_one_lt_mul₀']

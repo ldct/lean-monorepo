@@ -1,6 +1,5 @@
 import Playground.RealIsometry.Basic
 
-set_option linter.style.longLine false
 set_option linter.unusedSimpArgs false
 set_option maxRecDepth 1000
 

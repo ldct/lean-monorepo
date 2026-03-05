@@ -1,5 +1,4 @@
 import Mathlib.Tactic.Positivity
-set_option linter.style.longLine false
 open Lean
 
 

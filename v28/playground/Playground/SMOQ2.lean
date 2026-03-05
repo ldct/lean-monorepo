@@ -1,7 +1,6 @@
 import Mathlib
 -- import LeanTeXMathlib  -- not available in v24
 import Plausible
-set_option linter.style.longLine false
 
 open Real
 

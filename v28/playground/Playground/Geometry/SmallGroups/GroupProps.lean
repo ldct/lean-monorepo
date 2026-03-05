@@ -7,7 +7,6 @@ import Mathlib.Data.Fintype.Prod
 import Mathlib.GroupTheory.OrderOfElement
 import Init.Data.List.Nat.Pairwise
 
-set_option linter.style.longLine false
 
 def Group.IsAbelian (G) [Group G] [Fintype G] [DecidableEq G] : Bool := decide (∀ x y : G, x * y = y * x)
 

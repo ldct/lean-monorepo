@@ -1,5 +1,4 @@
 import Mathlib
-set_option linter.style.longLine false
 set_option linter.style.show false
 
 

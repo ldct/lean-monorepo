@@ -1,7 +1,6 @@
 import Mathlib
 import Mathlib.Tactic.GeneralizeProofs
 
-set_option linter.style.longLine false
 
 namespace Harmonic.GeneralizeProofs
 -- Harmonic `generalize_proofs` tactic

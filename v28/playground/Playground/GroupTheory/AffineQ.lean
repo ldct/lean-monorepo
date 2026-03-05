@@ -2,7 +2,6 @@ import Mathlib.Tactic
 import Mathlib.Algebra.Group.Defs
 import Mathlib.GroupTheory.SpecificGroups.Cyclic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
-set_option linter.style.longLine false
 
 -- the function x ↦ mx + c
 
@@ -46,7 +45,7 @@ instance : Group AffineQ where
   one := one
   one_mul := by
     intro a
-    simp only [one_mul]
+    simp [(· * ·), mul]
     obtain ⟨m, c, _⟩ := a
     simp
     constructor
@@ -60,7 +59,7 @@ instance : Group AffineQ where
       simp
   mul_one := by
     intro a
-    simp only [mul_one]
+    simp [(· * ·), mul]
     obtain ⟨m, c, _⟩ := a
     simp
     constructor
@@ -152,7 +151,7 @@ example : t ∈ TranslatesZ := by
 example : t ∉ C := by
   intro t_in_C
   obtain ⟨w, w_in_tz, g_act_w_is_t⟩ := t_in_C
-  simp only at g_act_w_is_t
+  simp at g_act_w_is_t
   rw [ConjAct.toConjAct_smul] at g_act_w_is_t
   obtain ⟨i, hi⟩ := w_in_tz
   have : g = AffineQ.mk 2 0 (by decide) := by decide

@@ -1,7 +1,6 @@
 import Mathlib
 import Playground.Geometry.Chapter_1_1
 
-set_option linter.style.longLine false
 set_option linter.style.multiGoal false
 
 /-
