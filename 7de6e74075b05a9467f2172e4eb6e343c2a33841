@@ -1,0 +1,43 @@
+v28/playground/Playground/GroupTheory/CentralizerOfRotations.lean
+  1fb23ab043e43929 68
+v28/playground/Playground/Analysis/motzkin.lean
+  1fb23ab043e43929 23
+v28/playground/Playground/GroupTheory/Cyclic.lean
+  1fb23ab043e43929 51
+v28/playground/Playground/GroupTheory/DihActions.lean
+  1fb23ab043e43929 47
+v28/playground/Playground/GroupTheory/AffineQ.lean
+  1fb23ab043e43929 48,62
+v28/playground/Playground/Geometry/ZMul.lean
+  1fb23ab043e43929 84
+v28/playground/Playground/GroupTheory/Basic.lean
+  1fb23ab043e43929 100
+v28/playground/Playground/GroupTheory/Dih4.lean
+  1fb23ab043e43929 126
+v28/playground/Playground/Jensen.lean
+  1fb23ab043e43929 72
+v28/playground/Playground/Analysis/MonotoneConvergence.lean
+  1fb23ab043e43929 38
+v28/playground/lakefile.toml
+  1fb23ab043e43929 12-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.8",
+  "base_commit_sha": "7de6e74075b05a9467f2172e4eb6e343c2a33841",
+  "prompts": {
+    "1fb23ab043e43929": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2be1eafc-323f-43aa-832c-f94ec191eff2",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 41,
+      "total_deletions": 39,
+      "accepted_lines": 21,
+      "overriden_lines": 0
+    }
+  }
+}
