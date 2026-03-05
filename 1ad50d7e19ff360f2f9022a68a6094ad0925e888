@@ -1,0 +1,57 @@
+v28/playground/Playground/GroupTheory/Cyclic.lean
+  1fb23ab043e43929 23,36,42,45,51,54,60,64,71
+v28/playground/Playground/Analysis/motzkin.lean
+  1fb23ab043e43929 23
+v28/playground/Playground/test.lean
+  1fb23ab043e43929 15
+v28/playground/Playground/GroupTheory/AffineQ.lean
+  1fb23ab043e43929 49,63,76,99,109
+v28/playground/Playground/GroupTheory/CentralizerOfRotations.lean
+  1fb23ab043e43929 43,54,68
+v28/playground/Playground/Analysis/Bounded.lean
+  1fb23ab043e43929 18
+v28/playground/Playground/Rational/ZZRat.lean
+  1fb23ab043e43929 153
+v28/playground/Playground/PermGeometry.lean
+  1fb23ab043e43929 63,140,173,183,196,210,235,276,288
+v28/playground/Playground/GroupTheory/Dih4.lean
+  1fb23ab043e43929 91-94,144,151
+v28/playground/Playground/GroupTheory/Basic.lean
+  1fb23ab043e43929 40,81-82,85,91,96,98,100
+v28/playground/Playground/Geometry/ZMul.lean
+  1fb23ab043e43929 67,71,82,84,104
+v28/playground/Playground/Rational/DyadicRat.lean
+  1fb23ab043e43929 149
+v28/playground/Playground/GroupTheory/DihActions.lean
+  1fb23ab043e43929 47
+v28/playground/Playground/Topology/TopSpace.lean
+  1fb23ab043e43929 18,199,206,219
+v28/playground/Playground/Analysis/TendsTo.lean
+  1fb23ab043e43929 50,61,88-89,97,120
+v28/playground/Playground/Analysis/MonotoneConvergence.lean
+  1fb23ab043e43929 33,38
+v28/playground/Playground/Jensen.lean
+  1fb23ab043e43929 36,43
+v28/playground/Playground/Rational/ZNRat.lean
+  1fb23ab043e43929 156
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.8",
+  "base_commit_sha": "1ad50d7e19ff360f2f9022a68a6094ad0925e888",
+  "prompts": {
+    "1fb23ab043e43929": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "2be1eafc-323f-43aa-832c-f94ec191eff2",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 70,
+      "total_deletions": 70,
+      "accepted_lines": 66,
+      "overriden_lines": 0
+    }
+  }
+}
