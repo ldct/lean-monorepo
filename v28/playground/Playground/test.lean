@@ -12,7 +12,7 @@ def two' : ZMod 4 := 2
 def three' : ZMod 4 := 3
 
 example (h : one' = two' ∨ one' = three') : False := by
-  simp_all [one', two', three']
+  simp_all only [one', two', three']
   revert h
   decide
 

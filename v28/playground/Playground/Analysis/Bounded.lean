@@ -15,7 +15,7 @@ example : Bounded (fun n ↦ 1/(n+1)) := by
   · intro n
     have : |1 / ((n : ℝ) + 1)| = 1 / ((n : ℝ) + 1) := by exact abs_eq_self.mpr (by positivity)
     rw [this]
-    simp
+    simp only [one_div, gt_iff_lt]
     rw [inv_lt_iff_one_lt_mul₀ (by linarith)]
     linarith
 

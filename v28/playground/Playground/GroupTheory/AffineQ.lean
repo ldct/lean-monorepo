@@ -46,7 +46,7 @@ instance : Group AffineQ where
   one := one
   one_mul := by
     intro a
-    simp [(· * ·), mul]
+    simp only [one_mul]
     obtain ⟨m, c, _⟩ := a
     simp
     constructor
@@ -60,7 +60,7 @@ instance : Group AffineQ where
       simp
   mul_one := by
     intro a
-    simp [(· * ·), mul]
+    simp only [mul_one]
     obtain ⟨m, c, _⟩ := a
     simp
     constructor
@@ -73,7 +73,7 @@ instance : Group AffineQ where
   inv := inv
   inv_mul_cancel := by
     intro r
-    simp [(· * ·), mul]
+    simp only [(· * ·), mul]
     have : (1 : AffineQ) = AffineQ.mk 1 0 (by norm_num):= by rfl
     rw [this]
     simp
@@ -96,7 +96,7 @@ def TranslatesZ : Subgroup AffineQ where
     use i1 + i2
     rw [←a_def, ←b_def]
     rw [mul_eq]
-    simp
+    simp only [Int.cast_add, mul_one, one_mul, AffineQ.mk.injEq, true_and]
     exact Rat.add_comm ↑i1 ↑i2
   one_mem' := by
     use 0
@@ -106,7 +106,7 @@ def TranslatesZ : Subgroup AffineQ where
     obtain ⟨i, hx⟩ := x_in_A
     use -i
     rw [inv_eq]
-    simp
+    simp only [Int.cast_neg, AffineQ.mk.injEq, one_eq_inv]
     constructor
     · rw [← hx]
     · rw [← hx]
@@ -130,7 +130,7 @@ def Translates2Z : Subgroup AffineQ where
     obtain ⟨i, hx⟩ := x_in_A
     use -i
     rw [inv_eq]
-    simp
+    simp only [Int.cast_neg, mul_neg, AffineQ.mk.injEq, one_eq_inv]
     constructor
     · rw [← hx]
     · rw [← hx]
@@ -152,7 +152,7 @@ example : t ∈ TranslatesZ := by
 example : t ∉ C := by
   intro t_in_C
   obtain ⟨w, w_in_tz, g_act_w_is_t⟩ := t_in_C
-  simp at g_act_w_is_t
+  simp only at g_act_w_is_t
   rw [ConjAct.toConjAct_smul] at g_act_w_is_t
   obtain ⟨i, hi⟩ := w_in_tz
   have : g = AffineQ.mk 2 0 (by decide) := by decide

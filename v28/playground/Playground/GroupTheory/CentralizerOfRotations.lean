@@ -40,7 +40,7 @@ theorem A_le_CA : (Rot n) ≤ (C_A n) := by
   obtain ⟨j, rj_is_b⟩ := hb
   rw [← rj_is_b]
   rw [← ri_is_a]
-  simp
+  simp only [r_mul_r, r.injEq]
   exact AddCommMagma.add_comm j i
 
 theorem ri_in_CA (i : ZMod n) : r i ∈ (C_A n) := by
@@ -51,7 +51,7 @@ theorem ri_in_CA (i : ZMod n) : r i ∈ (C_A n) := by
 theorem s_not_in_CA (hn : 2 < n) : (sr 0) ∉ (C_A n) := by
   intro hs
   specialize hs (r 1)
-  simp at hs
+  simp only at hs
   have t : ((-1 : ZMod n) = 1) -> False := by {
     have : Fact (2 < n) := .mk hn
     apply ZMod.neg_one_ne_one
@@ -65,7 +65,7 @@ example (i : ZMod n) (hn : 2 < n) : (sr i ∉ (C_A n)) := by
   by_contra rs_i_in_CA
   have r_i_inv_in_CA := ri_in_CA (-i)
   have mul := Subgroup.mul_mem (C_A n) rs_i_in_CA r_i_inv_in_CA
-  simp at mul
+  simp only at mul
   exact s_not_in_CA hn mul
 
 -- The complement of A are terms of the form s r
@@ -86,7 +86,7 @@ theorem CA_le_A (hn : 2 < n) : (C_A n) ≤ (Rot n) := by
   have r_neg_i_in_CA := ri_in_CA (-i)
   have prod_in_CA := Subgroup.mul_mem (C_A n) x_in_CA r_neg_i_in_CA
   rw [x_eq_sr_i] at prod_in_CA
-  simp at prod_in_CA
+  simp only at prod_in_CA
   apply s_not_in_CA
   · exact hn
   · exact prod_in_CA

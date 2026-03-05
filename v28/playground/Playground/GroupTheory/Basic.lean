@@ -37,7 +37,7 @@ example (n : ℕ) : Subgroup (DihedralGroup n) where
     simp
   inv_mem' := by
     intros x hx
-    simp at hx
+    simp only [Set.mem_setOf_eq] at hx
     obtain ⟨i, hi⟩ := hx
     use -i
     rw [← hi]
@@ -78,26 +78,26 @@ example (G H : Type) [Group G] [Group H] (φ : G →* H) : Subgroup H where
   carrier := { φ g | g : G }
   mul_mem' := by
     intros a b a_in_G b_in_G
-    simp at a_in_G
-    simp at b_in_G
+    simp only [Set.mem_setOf_eq] at a_in_G
+    simp only [Set.mem_setOf_eq] at b_in_G
     obtain ⟨a', phi_a'_is_a⟩ := a_in_G
     obtain ⟨b', phi_b'_is_b⟩ := b_in_G
-    simp
+    simp only [Set.mem_setOf_eq]
     use a' * b'
     have h : φ (a' * b') = (φ a') * φ b' := by
       exact MonoidHom.map_mul φ a' b'
     rw [h, phi_a'_is_a, phi_b'_is_b]
   one_mem' := by
-    simp
+    simp only [Set.mem_setOf_eq]
     use 1
     exact MonoidHom.map_one φ
   inv_mem' := by
     intros g hg
-    simp at hg
+    simp only [Set.mem_setOf_eq] at hg
     obtain ⟨g', phi_g'_is_g⟩ := hg
-    simp
+    simp only [Set.mem_setOf_eq]
     use g'⁻¹
-    simp
+    simp only [map_inv]
     exact phi_g'_is_g
 
 example : (1 : ZMod 4) ≠ -1 := by decide

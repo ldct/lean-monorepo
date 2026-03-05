@@ -60,7 +60,7 @@ theorem mem_translationSubgroup_iff_exists_addRight {α : Perm ℝ} : α ∈ T �
   constructor
   intro hα
   use α 0
-  simp at hα
+  simp only [Set.mem_setOf_eq] at hα
   ext x
   simp
   specialize hα x 0
@@ -137,7 +137,7 @@ example (a : ℝ) :
     let α := halfTurn a
     { x | α x = x } = {a / 2} := by
   ext x
-  simp
+  simp only [coe_fn_mk, Set.mem_setOf_eq, Set.mem_singleton_iff]
   constructor <;> intro h <;> linarith
 
 /-- An element `α` of `Perm ℝ` which preserves absolute values of lengths is an *isometry* of `ℝ`.
@@ -170,7 +170,7 @@ example : T ≤ M := by
 /-- Does `M` contain the half-turns of `ℝ`? -/
 example (a : ℝ) : halfTurn a ∈ M := by
   intro x y
-  simp
+  simp only [coe_fn_mk, add_sub_add_right_eq_sub, sub_neg_eq_add]
   rw [abs_sub_comm]
   ring_nf
 
@@ -180,7 +180,7 @@ example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) : (α 2) ∈ ({3, 7} : S
   norm_num at hα
   rw [h] at hα
   rw [abs_eq (by norm_num)] at hα
-  simp
+  simp only [Set.mem_insert_iff, Set.mem_singleton_iff]
   obtain h1 | h2 := hα
   · left
     linarith
@@ -193,7 +193,7 @@ example {α : Perm ℝ} (hα : α ∈ M) (h : α 0 = 5) (x : ℝ) : α x ∈ ({5
   norm_num at hα
   rw [h] at hα
   rw [abs_eq_abs] at hα
-  simp
+  simp only [Set.mem_insert_iff, Set.mem_singleton_iff]
   obtain h1 | h2 := hα
   · left
     linarith
@@ -207,7 +207,7 @@ theorem IsIsometry.eval_of_eval_zero {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} 
   norm_num at hα
   rw [h] at hα
   rw [abs_eq_abs] at hα
-  simp
+  simp only [Set.mem_insert_iff, Set.mem_singleton_iff]
   obtain h1 | h2 := hα
   · left
     linarith
@@ -232,7 +232,7 @@ theorem IsIsometry.aux {α : Perm ℝ} (hα : α ∈ M) {a x y : ℝ} (hx : α x
 theorem IsIsometry.eq_addRight_or_eq_halfTurn {α : Perm ℝ} (hα : α ∈ M) {a : ℝ} (h : α 0 = a) :
   α = addRight a ∨ α = halfTurn a := by
   have hα0 := hα 0
-  simp [h, abs_eq_abs] at hα0
+  simp only [h, abs_eq_abs] at hα0
   obtain h1 | h2 := hα0 1
   right
   ext x
@@ -273,7 +273,7 @@ example :
     let α := fun (x:ℝ) ↦ 2 * x - 1
     { x | α x = x } = {1} := by
   ext x
-  simp
+  simp only [Set.mem_setOf_eq, Set.mem_singleton_iff]
   constructor <;> intro h <;> linarith
 
 /-- If `α` is `x ↦ a * x + b` and `a ≠ 0, 1`, find the fixed point of `α`. -/
@@ -285,7 +285,7 @@ example (a b : ℝ) (ha' : a ≠ 1) :
     apply ha'
     linarith
   ext x
-  simp
+  simp only [Set.mem_setOf_eq, Set.mem_singleton_iff]
   constructor <;> intro h
   have : x * (a - 1) = -b := by linarith
   apply_fun (fun x ↦ x * (a - 1))

@@ -64,11 +64,11 @@ theorem r_one_pow' (k : ℤ) : (r 1 : ZMul) ^ k = r k := by
   have d := le_or_gt 0 k
   obtain pos | neg := d
   · lift k to ℕ using pos
-    simp
+    simp only [zpow_natCast]
     exact r_one_pow k
   suffices : ((r (1: ℤ)) ^ k)⁻¹ = (r k)⁻¹
   · have := congrArg Inv.inv this
-    simp at this
+    simp only [inv_inv] at this
     exact this
   let l := -k
   have k_eq_nl : k = -l := by exact Int.eq_neg_comm.mp rfl
@@ -79,9 +79,9 @@ theorem r_one_pow' (k : ℤ) : (r 1 : ZMul) ^ k = r k := by
   have : l' ≥ 0 := by
     exact le_of_le_of_eq l_pos (id (Eq.symm lp_eq_l))
   lift l' to ℕ using this
-  simp
+  simp only [zpow_neg, inv_inv]
   rw [←lp_eq_l]
-  simp [inv_r_simp]
+  simp only [inv_r_simp]
   exact r_one_pow l'
 
 example {G} [CommGroup G] (a b : G) (k : ℤ)
@@ -101,7 +101,7 @@ theorem r_npow (t : ℕ) (k : ℕ) : (r t) ^ k = r (t * k) := by
     norm_cast
     have : r 0 = 1 := by rfl
     rw [this]
-    simp
+    simp only [one_pow, zero_mul, CharP.cast_eq_zero]
     exact this
   case succ t IH =>
     have : r (t + 1) = (r t) * (r 1) := by

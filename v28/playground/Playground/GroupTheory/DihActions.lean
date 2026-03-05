@@ -44,7 +44,7 @@ instance (n : ℕ) : MulAction (DihedralGroup n) (ZMod 2) where
   smul := smul_2
   one_smul := by
     intro b
-    simp [HSMul.hSMul]
+    simp only [one_smul]
     apply r0_mul_p'
 
   mul_smul := by

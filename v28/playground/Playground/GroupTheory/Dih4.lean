@@ -88,10 +88,10 @@ instance (g : DihedralGroup 4) : Decidable (g ∈ rot) :=
   | r 1 => isTrue (by rw [rot]; simp)
   | r 2 => isTrue (by rw [rot]; simp)
   | r 3 => isTrue (by rw [rot]; simp)
-  | sr 0 => isFalse (by rw [rot]; simp; decide)
-  | sr 1 => isFalse (by rw [rot]; simp; decide)
-  | sr 2 => isFalse (by rw [rot]; simp; decide)
-  | sr 3 => isFalse (by rw [rot]; simp; decide)
+  | sr 0 => isFalse (by rw [rot]; simp only [r_zero, Subgroup.mem_mk, Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_insert_iff, reduceCtorEq, Set.mem_singleton_iff, or_self, or_false]; decide)
+  | sr 1 => isFalse (by rw [rot]; simp only [r_zero, Subgroup.mem_mk, Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_insert_iff, reduceCtorEq, Set.mem_singleton_iff, or_self, or_false]; decide)
+  | sr 2 => isFalse (by rw [rot]; simp only [r_zero, Subgroup.mem_mk, Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_insert_iff, reduceCtorEq, Set.mem_singleton_iff, or_self, or_false]; decide)
+  | sr 3 => isFalse (by rw [rot]; simp only [r_zero, Subgroup.mem_mk, Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_insert_iff, reduceCtorEq, Set.mem_singleton_iff, or_self, or_false]; decide)
 
 -- TODO: fix for v4.24 (DihedralGroup.r_injective removed)
 example {n : ℕ} {i : ZMod n} (h : (r i) = 1) : i = 0 := by
@@ -123,7 +123,7 @@ example : Subgroup.closure {r (1 : ZMod 4)} = rot := by
   -- current goal is `⊢ Subgroup.closure {r 1} = rot`
   apply Subgroup.closure_eq_of_le
   intro x hx
-  simp at hx
+  simp only [SetLike.mem_coe] at hx
   subst hx
   exact (by decide : r 1 ∈ rot)
   intro x hx
@@ -141,14 +141,14 @@ example : Subgroup.closure {r (1 : ZMod 4)} = rot := by
   have r_1_sq : (r (1 : ZMod 4))^2 ∈ Subgroup.closure {r 1} := by
     exact
     Subgroup.pow_mem (Subgroup.closure {r 1}) r_1_in_closure 2
-  simp at r_1_sq
+  simp only at r_1_sq
   rw [h2]
   exact r_1_sq
   -- r 3 case
   have r_1_cube : (r (1 : ZMod 4))^3 ∈ Subgroup.closure {r 1} := by
     exact
     Subgroup.pow_mem (Subgroup.closure {r 1}) r_1_in_closure 3
-  simp at r_1_cube
+  simp only at r_1_cube
   rw [h3]
   exact r_1_cube
 

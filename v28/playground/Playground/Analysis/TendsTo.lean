@@ -47,7 +47,7 @@ example {a : ℕ → ℝ} {t : ℝ} (ha : TendsTo a t) : TendsTo (fun n => -a n)
 
 example (ε : ℝ) (ε_pos : 0 < ε) (hn : 1 < ε * ε) : 1 < ε := by
   have := (Real.sqrt_lt_sqrt_iff (by norm_num)).mpr hn
-  simp at this
+  simp only [gt_iff_lt] at this
   let t := (Real.sqrt_eq_iff_mul_self_eq_of_pos ε_pos).mpr rfl
   rw [t] at this
   exact this
@@ -58,7 +58,7 @@ example : TendsTo (fun n ↦ 1/(Real.sqrt n)) 0 := by
   -- Choose a natural number N satisfying N > 1/ε^2
   have exists_N : ∃ N : ℕ, (1/(ε*ε) < N) := by {
     use (1 + Nat.ceil (1/(ε*ε)))
-    simp
+    simp only [one_div, mul_inv_rev, Nat.cast_add, Nat.cast_one]
     calc
       ε⁻¹ * ε⁻¹ ≤ ⌈ε⁻¹ * ε⁻¹⌉₊ := by exact Nat.le_ceil (ε⁻¹ * ε⁻¹)
       _ < 1 + ↑⌈ε⁻¹ * ε⁻¹⌉₊ := by simp
@@ -85,8 +85,8 @@ example : TendsTo (fun n ↦ 1/(Real.sqrt n)) 0 := by
     exact this
   }
   have hn_canonical_sqrt := (Real.sqrt_lt_sqrt_iff (by norm_num)).mpr hn_canonical
-  simp at hn_canonical_sqrt
-  simp
+  simp only [one_div, gt_iff_lt] at hn_canonical_sqrt
+  simp only [one_div, gt_iff_lt]
   -- rw?
   rw [inv_lt_iff_one_lt_mul₀']
   · calc
@@ -94,7 +94,7 @@ example : TendsTo (fun n ↦ 1/(Real.sqrt n)) 0 := by
       _ = Real.sqrt (n * (ε * ε)) := by ring_nf
       _ = Real.sqrt n * Real.sqrt (ε*ε) := by simp
       _ = Real.sqrt n * ε := by {
-        simp
+        simp only [mul_eq_mul_left_iff, Nat.cast_nonneg, Real.sqrt_eq_zero, Nat.cast_eq_zero]
         left
         exact (Real.sqrt_eq_iff_mul_self_eq_of_pos ε_pos).mpr rfl
       }
@@ -117,7 +117,7 @@ example : TendsTo (fun n ↦ (n+1)/n) 1 := by
     have : 0 < 1/ε := by positivity
     rify at hn
     linarith
-  simp
+  simp only [gt_iff_lt]
   have : ((n + 1) / (n: ℝ)) - 1 = 1/n := by field_simp; ring
   rw [this, abs_of_nonneg]
   · have N_cond : 1 / ε < n := by

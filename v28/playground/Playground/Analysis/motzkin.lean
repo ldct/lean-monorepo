@@ -20,7 +20,7 @@ theorem motzkin (x y : ℝ) : 0 ≤ x^4 * y^2 + x^2 * y^4  - 3 * x^2 * y^2 + 1 :
     intro i _
     fin_cases i <;> positivity
   )
-  simp at amgm
+  simp only [ge_iff_le] at amgm
   unfold w at amgm
   unfold f at amgm
   dsimp at amgm

@@ -30,12 +30,12 @@ theorem MCT_formula
     rw [IsLUB, IsLeast] at s_IsLUB
     have t := s_IsLUB.right
     unfold lowerBounds at t
-    simp at t
+    simp only at t
     by_contra l_ε_ub
     specialize t l_ε_ub
     linarith
   unfold upperBounds at this
-  simp at this
+  simp only at this
   obtain ⟨aN, haN⟩ := this
   obtain ⟨aN_in_s, haN⟩ := haN
   obtain ⟨N, hN⟩ := aN_in_s
