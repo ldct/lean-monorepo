@@ -3,7 +3,6 @@ import Playground.RealIsometry.Dihedral
 
 set_option linter.unusedSimpArgs false
 set_option linter.style.nativeDecide false
-set_option linter.style.show false
 
 open Matrix
 
@@ -128,11 +127,11 @@ lemma a4Mat_one : a4Mat 0 = 1 := by
 
 lemma a4Mat_mem_O3 (k : Fin 12) : a4Mat k ∈ orthogonalGroup (Fin 3) ℝ := by
   rw [mem_orthogonalGroup_iff']
-  show (toReal (a4MatZ k)).transpose * toReal (a4MatZ k) = 1
+  change (toReal (a4MatZ k)).transpose * toReal (a4MatZ k) = 1
   rw [← toReal_transpose, ← toReal_mul, a4MatZ_orth, toReal_one]
 
 lemma a4Mat_pow_six (i : Fin 12) : a4Mat i ^ 6 = 1 := by
-  show toReal (a4MatZ i) ^ 6 = 1
+  change toReal (a4MatZ i) ^ 6 = 1
   rw [← toReal_pow, a4MatZ_pow_six, toReal_one]
 
 lemma a4Mat_order_le3 (i : Fin 12) : a4Mat i ^ 2 = 1 ∨ a4Mat i ^ 3 = 1 := by
@@ -208,7 +207,7 @@ private lemma forall_a4Elem (P : tetrahedralSubgroup → Prop)
 private lemma a4Elem_subgroup_pow_eq_one {i : Fin 12} {n : ℕ} (h : a4Mat i ^ n = 1) :
     (⟨a4Elem i, ⟨i, rfl⟩⟩ : tetrahedralSubgroup) ^ n = 1 := by
   apply Subtype.ext
-  show (a4Elem i) ^ n = (1 : tetrahedralSubgroup).val
+  change (a4Elem i) ^ n = (1 : tetrahedralSubgroup).val
   simp only [OneMemClass.coe_one]
   exact a4Elem_pow_n_eq_one h
 

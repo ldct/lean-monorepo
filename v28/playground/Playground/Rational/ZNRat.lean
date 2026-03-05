@@ -1,6 +1,5 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.MinimalAxioms
-set_option linter.style.show false
 set_option linter.style.multiGoal false
 
 /-
@@ -72,7 +71,7 @@ instance Rat.add_inst : Add Rat where
            ⟦(if h : (b'*d') ≠ 0 then ⟨ a'*↑d'+↑b'*c', b'*d', h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧
     rw [dif_pos hbd, dif_pos hbd']
     apply Quotient.sound
-    show (a * ↑d + ↑b * c) * ↑(b' * d') = (a' * ↑d' + ↑b' * c') * ↑(b * d)
+    change (a * ↑d + ↑b * c) * ↑(b' * d') = (a' * ↑d' + ↑b' * c') * ↑(b * d)
     push_cast
     linear_combination (↑d : ℤ) * ↑d' * h3 + (↑b : ℤ) * ↑b' * h4
   )
@@ -93,7 +92,7 @@ instance Rat.mul_inst : Mul Rat where
            ⟦(if h : (b'*d') ≠ 0 then ⟨ a'*c', b'*d', h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧
     rw [dif_pos hbd, dif_pos hbd']
     apply Quotient.sound
-    show a * c * ↑(b' * d') = a' * c' * ↑(b * d)
+    change a * c * ↑(b' * d') = a' * c' * ↑(b * d)
     push_cast
     linear_combination c * (↑d' : ℤ) * h3 + a' * (↑b : ℤ) * h4
   )
@@ -111,7 +110,7 @@ instance Rat.neg_inst : Neg Rat where
            ⟦(if h : b' ≠ 0 then ⟨ -a', b', h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧
     rw [dif_pos h1, dif_pos h2]
     apply Quotient.sound
-    show (-a) * ↑b' = (-a') * ↑b
+    change (-a) * ↑b' = (-a') * ↑b
     linarith
   )
 
