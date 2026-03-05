@@ -194,14 +194,14 @@ instance S7 : TopSpace (Fin 3) where
   isOpen_sUnion I h := by
     simp [h]
     by_cases h' : ((∀ s ∈ I, s = ∅))
-    . left
+    · left
       exact h'
     simp at h'
     obtain ⟨ x, hx ⟩ := h'
     right
     use x
     constructor
-    . exact hx.1
+    · exact hx.1
     specialize h x hx.1
     simp [hx] at h
     exact h

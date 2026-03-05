@@ -1,6 +1,7 @@
 import Mathlib.Tactic
 
 -- Definition 2.3.1: Bounded sequence
+set_option linter.dupNamespace false
 
 namespace Bounded
 

@@ -1,6 +1,7 @@
 import Mathlib
 
 set_option linter.unusedTactic false
+set_option linter.dupNamespace false
 
 
 namespace motzkin

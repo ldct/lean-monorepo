@@ -3,6 +3,7 @@ import Mathlib.Algebra.Group.Defs
 import Mathlib.GroupTheory.SpecificGroups.Cyclic
 import Mathlib.GroupTheory.SpecificGroups.Dihedral
 set_option linter.style.longLine false
+set_option linter.dupNamespace false
 
 -- the function x ↦ mx + c
 
