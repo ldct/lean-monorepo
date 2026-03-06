@@ -1,5 +1,4 @@
 import Mathlib
-set_option linter.style.show false
 
 
 -- ℤ[x], the set of polynomials with integer coefficients, implemented as a function from ℕ to ℤ.
@@ -60,11 +59,11 @@ instance MyPolynomial.instAddGroup : AddGroup MyPolynomial :=
     ext i
     · simp [MyPolynomial.coeffs_add, coeffs_zero]
     · rw [MyPolynomial.support_deg_add, support_deg_zero]
-      simp [MyPolynomial.instNeg]
+      simp
   ) (by
     intro a
     ext i
-    · show (-a).coeffs i + a.coeffs i = 0
+    · change (-a).coeffs i + a.coeffs i = 0
       simp [MyPolynomial.instNeg]
     · sorry -- support_deg is an upper bound, not canonical; -a + a has support_deg = a.support_deg ≠ 0
   )
