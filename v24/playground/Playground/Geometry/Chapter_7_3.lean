@@ -284,6 +284,7 @@ example : Multiples 2 = Multiples (-2) := by
 #synth SemilatticeSup (Submodule (Ideal ℤ) (Ideal ℤ))
 
 example : (Multiples 2) + (Multiples 3) = (Multiples 2) ⊔ (Multiples 3) := by rw [Submodule.add_eq_sup]
+
 /-
 Sum of ideals, via Mathlib's definition
 -/
@@ -496,5 +497,56 @@ example : (ℤ × ℤ) →+* (ℤ × ℤ) := {
   toFun := fun (a, b) => (b, b), map_one' := by simp, map_mul' x y := by simp, map_zero' := by simp, map_add' x y := by simp
 }
 
+/-
+# Definition (product of ideals)
+
+In mathlib, ideals are defined as submodules, so this
+-/
+open Pointwise in
+theorem Ideal.mul_def {R : Type*} [Semiring R] (I J : Ideal R) :
+    I * J = Ideal.span ((I : Set R) * (J : Set R)) := by
+  apply le_antisymm
+  · rw [Ideal.mul_le]
+    intro r hr s hs
+    exact Ideal.subset_span (Set.mul_mem_mul hr hs)
+  · rw [Ideal.span_le]
+    rintro x ⟨r, hr, s, hs, rfl⟩
+    exact Ideal.mul_mem_mul hr hs
+
+#synth Pow (Ideal ℤ) ℕ
+
+
+
+example (I : Ideal ℤ) : I^2 = I := by sorry
+
+-- Equivant ways to state that P is increasing
+lemma increasing_iff (P : ℕ → ℕ)
+: (∀ i, P i ≤ P (i + 1)) → (∀ i j, i < j → P i ≤ P j)
+:= by
+  intro h i j hij
+  induction hij with
+  | refl => exact h i
+  | step hij' ih => exact le_trans ih (h _)
+
+/-
+# Exercise 19
+-/
+example {R} [Ring R] (P : ℕ → (Ideal R)) (hP : ∀ i j, i < j → P i ≤ P j)
+: Ideal R where
+  carrier := { x | ∃ i, x ∈ P i }
+  add_mem' := by
+    intro a b ha hb
+    simp at *
+    obtain ⟨ i, ha ⟩ := ha
+    obtain ⟨ j, hb ⟩ := hb
+    use (max i j)
+    sorry
+  zero_mem' := by simp
+  smul_mem' c x hx := by
+    simp at *
+    obtain ⟨ i, hx ⟩ := hx
+    use i
+    have := @(P i).smul_mem' c x (by simpa)
+    simp_all
 
 end Chapter_7_3
