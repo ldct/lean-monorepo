@@ -6,44 +6,39 @@ import Mathlib
 @[ext]
 structure MyPolynomial where
   coeffs : ℕ → ℤ
-  support_deg : ℕ
-  vanish : ∀ i, i > support_deg → coeffs i = 0
+  vanish : ∃ n, ∀ i, i > n → coeffs i = 0
 
 instance MyPolynomial.instAdd : Add MyPolynomial where
   add a b := {
     coeffs := fun i => a.coeffs i + b.coeffs i,
-    support_deg := max a.support_deg b.support_deg,
-    vanish := fun i hi => by
-      have h1 : i > a.support_deg := by grind
-      have h2 : i > b.support_deg := by grind
-      simp [a.vanish i (by grind), b.vanish i (by grind)]
+    vanish := by
+      obtain ⟨ na, ha ⟩ := a.vanish
+      obtain ⟨ nb, hb ⟩ := b.vanish
+      use max na nb
+      grind
   }
 
 lemma MyPolynomial.coeffs_add (a b : MyPolynomial) (i : ℕ)
 : (a + b).coeffs i = a.coeffs i + b.coeffs i := rfl
 
-lemma MyPolynomial.support_deg_add (a b : MyPolynomial)
-: (a + b).support_deg = max a.support_deg b.support_deg := rfl
-
 instance MyPolynomial.instZero : Zero MyPolynomial where
   zero := {
     coeffs := fun i => 0,
-    support_deg := 0,
-    vanish := fun i hi => by dsimp
+    vanish := by
+      use 0
+      grind
   }
 
 lemma MyPolynomial.coeffs_zero (i : ℕ)
 : (0 : MyPolynomial).coeffs i = 0 := rfl
 
-lemma MyPolynomial.support_deg_zero
-: (0 : MyPolynomial).support_deg = 0 := rfl
-
 instance MyPolynomial.instNeg : Neg MyPolynomial where
   neg a := {
     coeffs := fun i => -a.coeffs i,
-    support_deg := a.support_deg,
-    vanish := fun i hi => by
-      simp [a.vanish i hi]
+    vanish := by
+      obtain ⟨ na, ha ⟩ := a.vanish
+      use na
+      grind
   }
 
 instance MyPolynomial.instAddGroup : AddGroup MyPolynomial :=
@@ -52,18 +47,13 @@ instance MyPolynomial.instAddGroup : AddGroup MyPolynomial :=
     ext i
     · repeat rw [MyPolynomial.coeffs_add]
       ring
-    · repeat rw [MyPolynomial.support_deg_add]
-      omega
   ) (by
     intro a
     ext i
     · simp [MyPolynomial.coeffs_add, coeffs_zero]
-    · rw [MyPolynomial.support_deg_add, support_deg_zero]
-      simp
   ) (by
     intro a
     ext i
     · change (-a).coeffs i + a.coeffs i = 0
       simp [MyPolynomial.instNeg]
-    · sorry -- support_deg is an upper bound, not canonical; -a + a has support_deg = a.support_deg ≠ 0
   )
