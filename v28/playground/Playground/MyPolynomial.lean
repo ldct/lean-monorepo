@@ -23,10 +23,8 @@ lemma MyPolynomial.coeffs_add (a b : MyPolynomial) (i : ℕ)
 
 instance MyPolynomial.instZero : Zero MyPolynomial where
   zero := {
-    coeffs := fun i => 0,
-    vanish := by
-      use 0
-      grind
+    coeffs i := 0,
+    vanish := by use 0; grind
   }
 
 lemma MyPolynomial.coeffs_zero (i : ℕ)
@@ -34,7 +32,7 @@ lemma MyPolynomial.coeffs_zero (i : ℕ)
 
 instance MyPolynomial.instNeg : Neg MyPolynomial where
   neg a := {
-    coeffs := fun i => -a.coeffs i,
+    coeffs i := -a.coeffs i,
     vanish := by
       obtain ⟨ na, ha ⟩ := a.vanish
       use na
@@ -45,15 +43,15 @@ instance MyPolynomial.instAddGroup : AddGroup MyPolynomial :=
   AddGroup.ofLeftAxioms (by
     intro a b c
     ext i
-    · repeat rw [MyPolynomial.coeffs_add]
-      ring
+    repeat rw [MyPolynomial.coeffs_add]
+    ring
   ) (by
     intro a
     ext i
-    · simp [MyPolynomial.coeffs_add, coeffs_zero]
+    simp [MyPolynomial.coeffs_add, coeffs_zero]
   ) (by
     intro a
     ext i
-    · change (-a).coeffs i + a.coeffs i = 0
-      simp [MyPolynomial.instNeg]
+    change (-a).coeffs i + a.coeffs i = 0
+    simp [MyPolynomial.instNeg]
   )
