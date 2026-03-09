@@ -1,0 +1,36 @@
+v24/playground/Playground/Geometry/Chapter_7_3_ideal_mul.lean
+  a854ff4635d59e2c 3-7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.8",
+  "base_commit_sha": "d4b1794f18cfea80f5a2aeac3d48a7368bec640f",
+  "prompts": {
+    "a854ff4635d59e2c": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9785e0b3-dd1a-4b81-b2f0-aab5e4321dab",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 0,
+      "total_deletions": 0,
+      "accepted_lines": 5,
+      "overriden_lines": 0
+    },
+    "bfe8bc8c2b7d9798": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "c3ad55fa-a819-4f30-8b20-20734d200f71",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 148,
+      "total_deletions": 61,
+      "accepted_lines": 129,
+      "overriden_lines": 0
+    }
+  }
+}
