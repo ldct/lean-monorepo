@@ -8,15 +8,35 @@ namespace Chapter_7_1
 
 /-
 This file formalizes the definitions, theorems and examples from Chapter 7.1 of Dummit and Foote (page 226).
-
-We work with the Mathlib typeclasses `NonUnitalRing` and `Ring`.
 -/
 
+-- Dummit and Foote calls this a ring
 #check NonUnitalRing
+
+-- Dummit and Foote calls this a ring with unity
 #check Ring
 
 
-instance : NonUnitalRing ℤ where
+/-
+In a unital ring, commutativity under addition is forced by the distributive law. Omitted.
+-/
+
+/-
+# Example 1 (page 224), the "trivial ring" (aka the "Rng of square zero")
+-/
+def AddComGroup.asZeroRing {G} [AddCommGroup G] : NonUnitalRing G where
+  mul := fun _ _ => 0
+  left_distrib _ _ _ := Eq.symm (add_eq_left.mpr rfl)
+  right_distrib _ _ _ := Eq.symm (add_eq_left.mpr rfl)
+  zero_mul _ := Eq.refl _
+  mul_zero _ := Eq.refl _
+  mul_assoc _ _ _ := Eq.refl _
+
+
+/-
+# Example 2 (page 224), the ring of integers
+-/
+example : NonUnitalRing ℤ where
   add := Int.add
   add_assoc := by grind
   zero := 0
@@ -31,113 +51,9 @@ instance : NonUnitalRing ℤ where
   zero_mul := by grind
   mul_zero := by grind
 
+#synth NonUnitalRing ℤ
+
 #synth Ring (ZMod 6)
-
-/-
-# Examples from Matt Macauley
-
-R1 - ZMod 6
-R2, R3, R4 hanve the same additive structure, but different multiplicative structures
--/
-structure R2 : Type where
-  elem : ZMod 6
-deriving DecidableEq
-
-instance R2.instAdd : Add R2 where add a b := { elem := a.elem + b.elem }
-lemma R2.add_eq (a b : R2) : a + b = ⟨ a.elem + b.elem ⟩ := rfl
-
-instance R2.instZero : Zero R2 where zero := ⟨0⟩
-lemma R2.zero_eq : (0 : R2) = ⟨0⟩ := rfl
-
-instance R2.instNeg : Neg R2 where neg a := ⟨-a.elem⟩
-lemma R2.neg_eq (a : R2) : -a = ⟨-a.elem⟩ := rfl
-
-instance R2.instAddCommGroup : AddCommGroup R2 where
-  add_assoc a b c := by simp [add_eq]; grind
-  zero := ⟨0⟩
-  zero_add := by simp [zero_eq, add_eq]
-  add_zero := by simp [zero_eq, add_eq]
-  nsmul := nsmulRec
-  zsmul := zsmulRec
-  neg_add_cancel := by simp [neg_eq, add_eq, zero_eq]
-  add_comm := by simp [add_eq, add_comm]
-
-instance R2.instMul : Mul R2 where mul _ _ := ⟨ 0 ⟩
-lemma R2.mul_eq (a b : R2) : a * b = ⟨ 0 ⟩ := rfl
-
-instance R2.instNonUnitalRing : NonUnitalRing R2 where
-  zero_mul := by simp [zero_eq, mul_eq]
-  mul_zero := by simp [zero_eq, mul_eq]
-  mul_assoc := by simp [mul_eq]
-  left_distrib := by simp [mul_eq, zero_eq]
-  right_distrib := by simp [mul_eq, zero_eq]
-
-structure R3 : Type where
-  elem : ZMod 6
-deriving Fintype, DecidableEq
-
-instance R3.instAdd : Add R3 where add a b := { elem := a.elem + b.elem }
-lemma R3.add_eq (a b : R3) : a + b = ⟨ a.elem + b.elem ⟩ := rfl
-
-instance R3.instZero : Zero R3 where zero := ⟨0⟩
-lemma R3.zero_eq : (0 : R3) = ⟨0⟩ := rfl
-
-instance R3.instNeg : Neg R3 where neg a := ⟨-a.elem⟩
-lemma R3.neg_eq (a : R3) : -a = ⟨-a.elem⟩ := rfl
-
-instance R3.instAddCommGroup : AddCommGroup R3 where
-  add_assoc a b c := by simp [add_eq]; grind
-  zero := ⟨0⟩
-  zero_add := by simp [zero_eq, add_eq]
-  add_zero := by simp [zero_eq, add_eq]
-  nsmul := nsmulRec
-  zsmul := zsmulRec
-  neg_add_cancel := by simp [neg_eq, add_eq, zero_eq]
-  add_comm := by simp [add_eq, add_comm]
-
-instance R3.instMul : Mul R3 where mul a b := ⟨ 4*a.elem*b.elem ⟩
-lemma R3.mul_eq (a b : R3) : a * b = ⟨ 4*a.elem*b.elem ⟩ := rfl
-
-instance R3.instNonUnitalRing : NonUnitalRing R3 where
-  zero_mul := by simp [zero_eq, mul_eq]
-  mul_zero := by simp [zero_eq, mul_eq]
-  mul_assoc := by decide
-  left_distrib := by decide
-  right_distrib := by decide
-
-
-structure R4 : Type where
-  elem : ZMod 6
-deriving Fintype, DecidableEq
-
-instance R4.instAdd : Add R4 where add a b := { elem := a.elem + b.elem }
-lemma R4.add_eq (a b : R4) : a + b = ⟨ a.elem + b.elem ⟩ := rfl
-
-instance R4.instZero : Zero R4 where zero := ⟨0⟩
-lemma R4.zero_eq : (0 : R4) = ⟨0⟩ := rfl
-
-instance R4.instNeg : Neg R4 where neg a := ⟨-a.elem⟩
-lemma R4.neg_eq (a : R4) : -a = ⟨-a.elem⟩ := rfl
-
-instance R4.instAddCommGroup : AddCommGroup R4 where
-  add_assoc a b c := by simp [add_eq]; grind
-  zero := ⟨0⟩
-  zero_add := by simp [zero_eq, add_eq]
-  add_zero := by simp [zero_eq, add_eq]
-  nsmul := nsmulRec
-  zsmul := zsmulRec
-  neg_add_cancel := by simp [neg_eq, add_eq, zero_eq]
-  add_comm := by simp [add_eq, add_comm]
-
-instance R4.instMul : Mul R4 where mul a b := ⟨ 3*a.elem*b.elem ⟩
-lemma R4.mul_eq (a b : R4) : a * b = ⟨ 3*a.elem*b.elem ⟩ := rfl
-
-instance R4.instNonUnitalRing : NonUnitalRing R4 where
-  zero_mul := by simp [zero_eq, mul_eq]
-  mul_zero := by simp [zero_eq, mul_eq]
-  mul_assoc := by decide
-  left_distrib := by decide
-  right_distrib := by decide
 
 /-
 # Units and zero divisors
