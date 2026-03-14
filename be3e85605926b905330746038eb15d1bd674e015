@@ -1,0 +1,37 @@
+v28/playground/Playground/Geometry/Chapter_7_4.lean
+  c8bb1b00cbea6314 39-50
+  ecf7cb3024a0d39f 127-129,135-139,141-155,190-211
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.11",
+  "base_commit_sha": "be3e85605926b905330746038eb15d1bd674e015",
+  "prompts": {
+    "c8bb1b00cbea6314": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "68f2dce1-73ab-44c1-ae55-7d77514e588a",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 12,
+      "total_deletions": 1,
+      "accepted_lines": 12,
+      "overriden_lines": 0
+    },
+    "ecf7cb3024a0d39f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9556af29-e905-4d41-944f-e4aca2adc24e",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 73,
+      "total_deletions": 24,
+      "accepted_lines": 45,
+      "overriden_lines": 4
+    }
+  }
+}
