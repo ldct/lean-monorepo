@@ -1,0 +1,23 @@
+v28/playground/Playground/Geometry/FDGroup.lean
+  57495c4594dbaffa 32-35
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.12",
+  "base_commit_sha": "faa7c88d0c2463846b0ff259ae22f1a9427a4ab4",
+  "prompts": {
+    "57495c4594dbaffa": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6122561a-4b07-4870-a1e0-2808bdc48997",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 4,
+      "total_deletions": 2,
+      "accepted_lines": 4,
+      "overriden_lines": 0
+    }
+  }
+}
