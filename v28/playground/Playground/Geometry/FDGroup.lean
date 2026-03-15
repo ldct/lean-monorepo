@@ -29,8 +29,10 @@ simproc_decl mySimproc' (Subgroup.center (DihedralGroup _)) := fun e => do
   else
     return .continue
 
--- lemma test'' (n : ℕ) : 2 * n ∣ n + n := by
---   grind [dvd_refl]
+attribute [grind ←] dvd_of_eq
+
+lemma test'' (n : ℕ) : 2 * n ∣ n + n := by
+  grind
 
 example : Subgroup.center (DihedralGroup 3) = ⊥ := by
   simp only [mySimproc']
