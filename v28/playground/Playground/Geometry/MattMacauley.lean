@@ -19,8 +19,106 @@ abbrev g2 : R := (1, 0)
 example : Ideal.span { g1, g2 } = ⊤ := by
   suffices _ : ⊤ ≤ Ideal.span {g1, g2} by order
   intro r _
-  fin_cases r <;> simp at *
-  simp_rw [Ideal.mem_span_insert, Ideal.mem_span_singleton]
+  fin_cases r
+  <;> simp only [Nat.reduceAdd, Fin.zero_eta, Fin.isValue]
+  <;> rw [Ideal.mem_span_pair]
+  <;> decide
+
+private lemma mem_span_g1 (x : R) : x ∈ Ideal.span ({g1} : Set R) ↔ x.1 = 0 := by
+  constructor
+  · intro hx
+    rw [Ideal.mem_span_singleton'] at hx
+    obtain ⟨r, rfl⟩ := hx
+    grind [Prod.fst_mul, mul_zero]
+  · intro hx
+    rw [Ideal.mem_span_singleton']
+    exact ⟨(0, x.2), by ext <;> simp [g1, hx]⟩
+
+private lemma mem_closure_g1 (x : R) :
+    x ∈ NonUnitalSubring.closure ({g1} : Set R) ↔ x.1 = 0 := by
+  constructor
+  · intro hx
+    refine NonUnitalSubring.closure_induction ?_ ?_ ?_ ?_ ?_ hx
+    · intro y hy; simp at hy; subst hy; rfl
+    · rfl
+    · intro a b _ _ ha hb; simp [ha, hb]
+    · intro a _ ha; simp [ha]
+    · intro a b _ _ ha hb; simp [ha, hb]
+  · intro hx
+    obtain ⟨a, b⟩ := x
+    simp at hx; subst hx
+    fin_cases b
+    · simp; exact NonUnitalSubring.zero_mem _
+    · simp; exact NonUnitalSubring.subset_closure rfl
+    · show ((0 : ZMod 3), (2 : ZMod 3)) ∈ _
+      have h1 : g1 ∈ NonUnitalSubring.closure ({g1} : Set R) := NonUnitalSubring.subset_closure rfl
+      have := NonUnitalSubring.add_mem _ h1 h1
+      simp [g1] at this ⊢
+      exact this
+
+example : (Ideal.span { g1 }).carrier = NonUnitalSubring.closure { g1 } := by
+  ext x; exact (mem_span_g1 x).trans (mem_closure_g1 x).symm
+
+private lemma mem_span_g2 (x : R) : x ∈ Ideal.span ({g2} : Set R) ↔ x.2 = 0 := by
+  constructor
+  · intro hx
+    rw [Ideal.mem_span_singleton'] at hx
+    obtain ⟨r, hr⟩ := hx
+    have : (r * g2).2 = 0 := by simp [g2]
+    rw [← hr]; exact this
+  · intro hx
+    rw [Ideal.mem_span_singleton']
+    exact ⟨(x.1, 0), by ext <;> simp [g2, hx]⟩
+
+private lemma mem_closure_g2 (x : R) :
+    x ∈ NonUnitalSubring.closure ({g2} : Set R) ↔ x.2 = 0 := by
+  constructor
+  · intro hx
+    refine NonUnitalSubring.closure_induction ?_ ?_ ?_ ?_ ?_ hx
+    · intro y hy; simp at hy; subst hy; rfl
+    · rfl
+    · intro a b _ _ ha hb; simp [ha, hb]
+    · intro a _ ha; simp [ha]
+    · intro a b _ _ ha hb; simp [ha, hb]
+  · intro hx
+    obtain ⟨a, b⟩ := x
+    simp at hx; subst hx
+    fin_cases a
+    · simp; exact NonUnitalSubring.zero_mem _
+    · simp; exact NonUnitalSubring.subset_closure rfl
+    · show ((2 : ZMod 3), (0 : ZMod 3)) ∈ _
+      have h1 : g2 ∈ NonUnitalSubring.closure ({g2} : Set R) := NonUnitalSubring.subset_closure rfl
+      have := NonUnitalSubring.add_mem _ h1 h1
+      simp [g2] at this ⊢
+      exact this
+
+example : (Ideal.span { g2 }).carrier = NonUnitalSubring.closure { g2 } := by
+  ext x; exact (mem_span_g2 x).trans (mem_closure_g2 x).symm
+
+private lemma mem_span_g1g2 (x : R) : x ∈ Ideal.span ({g1 + g2} : Set R) := by
+  rw [Ideal.mem_span_singleton']
+  exact ⟨x, by simp [g1, g2]; ext <;> simp [mul_one]⟩
+
+set_option maxHeartbeats 800000 in
+private lemma not_mem_closure_g1g2 :
+    ¬ ((1 : ZMod 3), (0 : ZMod 3)) ∈ NonUnitalSubring.closure ({g1 + g2} : Set R) := by
+  intro hx
+  have : ((1 : ZMod 3), (0 : ZMod 3)).1 = ((1 : ZMod 3), (0 : ZMod 3)).2 := by
+    refine NonUnitalSubring.closure_induction ?_ ?_ ?_ ?_ ?_ hx
+    · intro y hy; simp [g1, g2] at hy; subst hy; rfl
+    · rfl
+    · intro a b _ _ ha hb; simp [ha, hb]
+    · intro a _ ha; simp [ha]
+    · intro a b _ _ ha hb; simp [ha, hb]
+  simp at this
+
+example : (Ideal.span { g1 + g2 }).carrier ≠ NonUnitalSubring.closure { g1 + g2 } := by
+  intro h
+  have h1 : ((1 : ZMod 3), (0 : ZMod 3)) ∈ (Ideal.span { g1 + g2 }).carrier := mem_span_g1g2 _
+  rw [h] at h1
+  exact not_mem_closure_g1g2 h1
+
+#check Subring.closure
 
 
 /-

@@ -218,3 +218,5 @@ lemma cor_10' {F R} [Field F] [NonUnitalRing R] (φ : F →ₙ+* R) (h : φ ≠ 
 /-
 # Remark - a NonUnitalRing need not have maximal ideals, but a unital ring always has maximal ideals
 -/
+
+#check Ideal.Quotient.maximal_ideal_iff_isField_quotient
