@@ -1,0 +1,75 @@
+v28/playground/Playground/Geometry/MattMacauley.lean
+  8ec7a9cae94fdad4 27-30,33-93,96-113,116-119
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.12",
+  "base_commit_sha": "6ee6381697177f007bee22327a8f97bbef011eac",
+  "prompts": {
+    "6092d9c262e4b2f6": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "231c8ab9-d9d9-44fb-b0d3-63fab62a2ea2",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 104,
+      "total_deletions": 54,
+      "accepted_lines": 0,
+      "overriden_lines": 5
+    },
+    "6d12e750ce9293e3": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "ce485714-96b8-47a5-9453-86a502220492",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 176,
+      "total_deletions": 77,
+      "accepted_lines": 62,
+      "overriden_lines": 15
+    },
+    "8ec7a9cae94fdad4": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e8283cc0-aa87-434c-b3fb-b9b1fcc1b800",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 196,
+      "total_deletions": 106,
+      "accepted_lines": 87,
+      "overriden_lines": 2
+    },
+    "a0b9e5785b77a728": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b3a09281-e17a-444b-9b22-8c2aa44430c0",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 7,
+      "total_deletions": 1,
+      "accepted_lines": 0,
+      "overriden_lines": 0
+    },
+    "c6970b755891b148": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f90f65c1-3cc1-42d9-9a2e-04e32f4d6a37",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 337,
+      "total_deletions": 251,
+      "accepted_lines": 14,
+      "overriden_lines": 2
+    }
+  }
+}
