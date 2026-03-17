@@ -7,7 +7,7 @@ Construction of rational numbers as a quotient type
 
 set_option linter.style.emptyLine false
 
-namespace DyadicRat
+namespace Rational
 
 attribute [grind <=] mul_right_cancel₀
 attribute [grind .] Int.mul_ne_zero
@@ -194,4 +194,22 @@ AddGroup.ofLeftAxioms (by
   grind
  )
 
-end DyadicRat
+instance : CommRing Rat where
+  add_comm := by sorry
+  add_assoc := by sorry
+  add_zero := by sorry
+  zero_add := by sorry
+  nsmul := nsmulRec
+  zsmul := zsmulRec
+  neg_add_cancel := by sorry
+  mul_comm := by sorry
+  mul_assoc := by sorry
+  one_mul := by sorry
+  mul_one := by sorry
+  left_distrib := by sorry
+  right_distrib := by sorry
+  zero_mul := by sorry
+  mul_zero := by sorry
+  natCast_succ := by sorry
+
+end Rational
