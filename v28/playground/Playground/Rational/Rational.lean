@@ -289,4 +289,25 @@ instance : CommRing Rat where
         Rat.eq _ _ one_ne_zero (mul_ne_zero one_ne_zero one_ne_zero)]
     grind
 
+instance : Field Rat where
+  exists_pair_ne := ⟨0, 1, by
+    rw [Rat.zero_eq, Rat.of_Nat_eq]
+    intro h
+    have := (Rat.eq _ _ one_ne_zero one_ne_zero).mp h
+    omega⟩
+  mul_inv_cancel := by
+    intro x hx
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    have ha : a ≠ 0 := by
+      intro h
+      apply hx
+      rw [h, Rat.zero_eq, Rat.eq _ _ hb one_ne_zero]
+      ring
+    rw [Rat.inv_eq _ hb, Rat.mul_eq _ _ hb ha,
+        Rat.of_Nat_eq, Rat.eq _ _ (mul_ne_zero hb ha) one_ne_zero]
+    ring
+  inv_zero := Rat.inv_zero
+  nnqsmul := _
+  qsmul := _
+
 end Rational
