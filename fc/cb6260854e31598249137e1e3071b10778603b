@@ -1,0 +1,23 @@
+v28/playground/Playground/Rational/Rational.lean
+  e13431986bfeb0c2 199-202,204-208,210-212,214-216,220-222,224-229,231-250,252-261,263-286,288-289
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.12",
+  "base_commit_sha": "fccb6260854e31598249137e1e3071b10778603b",
+  "prompts": {
+    "e13431986bfeb0c2": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "9e989244-8328-48eb-b9b6-34a07038bdd0",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Li Xuanji <xuanji@duolingo.com>",
+      "messages": [],
+      "total_additions": 138,
+      "total_deletions": 61,
+      "accepted_lines": 80,
+      "overriden_lines": 1
+    }
+  }
+}
