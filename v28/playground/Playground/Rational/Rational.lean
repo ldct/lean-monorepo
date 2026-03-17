@@ -195,21 +195,98 @@ AddGroup.ofLeftAxioms (by
  )
 
 instance : CommRing Rat where
-  add_comm := by sorry
-  add_assoc := by sorry
-  add_zero := by sorry
-  zero_add := by sorry
+  add_comm := by
+    intro x y
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    obtain ⟨c, d, hd, rfl⟩ := Rat.eq_diff y
+    grind
+  add_assoc := by
+    intro x y z
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    obtain ⟨c, d, hd, rfl⟩ := Rat.eq_diff y
+    obtain ⟨e, f, hf, rfl⟩ := Rat.eq_diff z
+    grind
+  add_zero := by
+    intro x
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    grind
+  zero_add := by
+    intro x
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    grind
   nsmul := nsmulRec
   zsmul := zsmulRec
-  neg_add_cancel := by sorry
-  mul_comm := by sorry
-  mul_assoc := by sorry
-  one_mul := by sorry
-  mul_one := by sorry
-  left_distrib := by sorry
-  right_distrib := by sorry
-  zero_mul := by sorry
-  mul_zero := by sorry
-  natCast_succ := by sorry
+  neg_add_cancel := by
+    intro x
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    grind
+  mul_comm := by
+    intro x y
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    obtain ⟨c, d, hd, rfl⟩ := Rat.eq_diff y
+    rw [Rat.mul_eq _ _ hb hd, Rat.mul_eq _ _ hd hb,
+        Rat.eq _ _ (mul_ne_zero hb hd) (mul_ne_zero hd hb)]
+    ring
+  mul_assoc := by
+    intro x y z
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    obtain ⟨c, d, hd, rfl⟩ := Rat.eq_diff y
+    obtain ⟨e, f, hf, rfl⟩ := Rat.eq_diff z
+    rw [Rat.mul_eq _ _ hb hd, Rat.mul_eq _ _ hd hf,
+        Rat.mul_eq _ _ (mul_ne_zero hb hd) hf, Rat.mul_eq _ _ hb (mul_ne_zero hd hf),
+        Rat.eq _ _ (mul_ne_zero (mul_ne_zero hb hd) hf) (mul_ne_zero hb (mul_ne_zero hd hf))]
+    ring
+  one_mul := by
+    intro x
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    rw [Rat.of_Nat_eq, Rat.mul_eq _ _ one_ne_zero hb,
+        Rat.eq _ _ (mul_ne_zero one_ne_zero hb) hb]
+    ring
+  mul_one := by
+    intro x
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    rw [Rat.of_Nat_eq, Rat.mul_eq _ _ hb one_ne_zero,
+        Rat.eq _ _ (mul_ne_zero hb one_ne_zero) hb]
+    ring
+  left_distrib := by
+    intro x y z
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    obtain ⟨c, d, hd, rfl⟩ := Rat.eq_diff y
+    obtain ⟨e, f, hf, rfl⟩ := Rat.eq_diff z
+    rw [Rat.add_eq _ _ hd hf, Rat.mul_eq _ _ hb (mul_ne_zero hd hf),
+        Rat.mul_eq _ _ hb hd, Rat.mul_eq _ _ hb hf,
+        Rat.add_eq _ _ (mul_ne_zero hb hd) (mul_ne_zero hb hf),
+        Rat.eq _ _ (mul_ne_zero hb (mul_ne_zero hd hf))
+                    (mul_ne_zero (mul_ne_zero hb hd) (mul_ne_zero hb hf))]
+    ring
+  right_distrib := by
+    intro x y z
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    obtain ⟨c, d, hd, rfl⟩ := Rat.eq_diff y
+    obtain ⟨e, f, hf, rfl⟩ := Rat.eq_diff z
+    rw [Rat.add_eq _ _ hb hd, Rat.mul_eq _ _ (mul_ne_zero hb hd) hf,
+        Rat.mul_eq _ _ hb hf, Rat.mul_eq _ _ hd hf,
+        Rat.add_eq _ _ (mul_ne_zero hb hf) (mul_ne_zero hd hf),
+        Rat.eq _ _ (mul_ne_zero (mul_ne_zero hb hd) hf)
+                    (mul_ne_zero (mul_ne_zero hb hf) (mul_ne_zero hd hf))]
+    ring
+  zero_mul := by
+    intro x
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    rw [Rat.zero_eq, Rat.mul_eq _ _ one_ne_zero hb,
+        Rat.eq _ _ (mul_ne_zero one_ne_zero hb) one_ne_zero]
+    ring
+  mul_zero := by
+    intro x
+    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
+    rw [Rat.zero_eq, Rat.mul_eq _ _ hb one_ne_zero,
+        Rat.eq _ _ (mul_ne_zero hb one_ne_zero) one_ne_zero]
+    ring
+  natCast_succ := by
+    intro n
+    change (((n + 1) : ℤ) // 1 : Rat) = ((n : ℤ) // 1) + (1 : ℤ) // 1
+    rw [Rat.add_eq _ _ one_ne_zero one_ne_zero,
+        Rat.eq _ _ one_ne_zero (mul_ne_zero one_ne_zero one_ne_zero)]
+    grind
 
 end Rational
