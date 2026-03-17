@@ -1,6 +1,8 @@
 import Mathlib
 import Qq
 
+#check QuaternionGroup
+
 example : 55 ≠ 0 := of_decide_eq_true (Eq.refl true)
 
 #check Lean.Meta.Simp.SimpM
@@ -29,16 +31,30 @@ simproc_decl mySimproc' (Subgroup.center (DihedralGroup _)) := fun e => do
   else
     return .continue
 
+#check Set.subset_univ
+
+attribute [grind ←] dvd_iff_exists_eq_mul_left
 attribute [grind ←] dvd_of_eq
 
-lemma test'' (n : ℕ) : 2 * n ∣ n + n := by
+lemma test'' (n : ℕ) : 2 * n + n ∣ n + n + n := by
   grind
 
 example : Subgroup.center (DihedralGroup 3) = ⊥ := by
   simp only [mySimproc']
 
-lemma test (n : ℕ) : 2 * n = n + n := by
-  ring_nf
+example (n : ℕ) : 2 * n = n + n := by
+  grind
+
+
+lemma dvd_iff (a b : ℕ) : (∃ k, b = k * a) ↔ a ∣ b := by
+  exact Iff.symm dvd_iff_exists_eq_mul_left
+
+lemma test''' (n : ℕ) : ∃ k, k * n = 99*n + n + n  := by
+  grind -lia -ring only
+
+example (n : ℕ) : n ∣ (n + n) := by
+  grind
+
 
 open Lean Meta Mathlib.Tactic Mathlib.Tactic.Ring in
 simproc_decl dvdByRingNf (_ ∣ _) := fun e => do

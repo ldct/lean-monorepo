@@ -11,9 +11,12 @@ Let `T` be some finite type (e.g. `Fin 2`). If we can prove theorems of the form
 This file explores which types `T` have this property.
 -/
 
+--
+#register_hint 1 decide +revert
+
 /- Fin 1-/
 example (I : Finset (Fin 1)) : I = {} ∨ I = {0} := by
-  decide +revert
+  hint
 
 example (I : Finset (Finset (Fin 1))) :
   I = {} ∨ I = {{}} ∨ I = {{0}} ∨ I = {{}, {0}} := by

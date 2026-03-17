@@ -1,93 +1,100 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.MinimalAxioms
-set_option linter.style.multiGoal false
+
+/-
+Construction of rational numbers as a quotient type
+-/
+
+set_option linter.style.emptyLine false
 
 namespace DyadicRat
 
+attribute [grind <=] mul_right_cancel₀
+attribute [grind .] Int.mul_ne_zero
+
 structure PreRat where
-  numerator : ℤ
-  denominator : ℤ
-  nonzero : denominator ≠ 0
+  num : ℤ
+  den : ℤ
+  nz : den ≠ 0
 
 /-- Exercise 4.2.1 -/
 instance PreRat.instSetoid : Setoid PreRat where
-  r a b := a.numerator * b.denominator = b.numerator * a.denominator
+  r a b := a.num * b.den = b.num * a.den
   iseqv := {
     refl := by grind
     symm := by grind
     trans := by
       intro x y z hxy hyz
-      have h : x.numerator * z.denominator * y.denominator= z.numerator * x.denominator * y.denominator := by
+      have h : x.num * z.den * y.den = z.num * x.den * y.den := by
         grind
-      have hyz := y.nonzero
-      have : x.numerator * z.denominator * y.denominator = z.numerator * x.denominator * y.denominator := by linarith
-      exact mul_right_cancel₀ hyz this
+      grind [y.nz]
     }
 
-@[simp]
-theorem PreRat.eq (a b c d : ℤ) (hb : b ≠ 0) (hd : d ≠ 0) :
-    (⟨ a,b,hb ⟩ : PreRat) ≈ ⟨ c,d,hd ⟩ ↔ a * d = c * b := by rfl
+theorem PreRat.eq (a b c d : ℤ) (hb : b ≠ 0) (hd : d ≠ 0)
+: (⟨ a,b,hb ⟩ : PreRat) ≈ ⟨ c,d,hd ⟩ ↔ a * d = c * b := by rfl
 
+@[grind =]
+theorem PreRat.eq' (x y : PreRat) : x ≈ y ↔ x.num * y.den = x.den * y.num := by
+  rw [PreRat.eq]
+  grind
+
+@[grind]
 def PreRatZero : PreRat := ⟨ 0, 1, by decide ⟩
 
-theorem PreRatZero.equiv (a : PreRat) : a ≈ PreRatZero ↔ a.numerator = 0 := by
-  rw [PreRat.eq]
-  simp [PreRatZero]
+theorem PreRatZero.equiv (a : PreRat) : a ≈ PreRatZero ↔ a.num = 0 := by
+  grind
 
-abbrev Rat := Quotient PreRat.instSetoid
+def Rat := Quotient PreRat.instSetoid
 
 /-- We give division a "junk" value of 0//1 if the denominator is zero -/
-abbrev Rat.formalDiv (a b : ℤ) : Rat :=
+def Rat.formalDiv (a b : ℤ) : Rat :=
   Quotient.mk PreRat.instSetoid (if h:b ≠ 0 then ⟨ a,b,h ⟩ else ⟨ 0, 1, by decide ⟩)
+
+lemma Rat.formalDiv_eq (a b : ℤ) : formalDiv a b = Quotient.mk PreRat.instSetoid (if h:b ≠ 0 then ⟨ a,b,h ⟩ else ⟨ 0, 1, by decide ⟩) := rfl
+
+lemma Rat.formalDiv_eq' (a b : ℤ) (hb : b ≠ 0) : formalDiv a b = Quotient.mk PreRat.instSetoid  ⟨ a,b,hb ⟩ := by
+  simp only [formalDiv_eq]
+  rw [Quotient.eq]
+  simp only [Setoid.r]
+  grind
 
 infix:100 " // " => Rat.formalDiv
 
 /-- Definition 4.2.1 (Rationals) -/
+@[grind =]
 theorem Rat.eq (a c : ℤ) {b d : ℤ} (hb : b ≠ 0) (hd : d ≠ 0) : a // b = c // d ↔ a * d = c * b := by
-  change ⟦(if h : b ≠ 0 then ⟨ a, b, h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧ =
-         ⟦(if h : d ≠ 0 then ⟨ c, d, h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧ ↔ _
+  repeat rw [formalDiv_eq' _ _ (by positivity)]
   rw [Quotient.eq]
-  simp only [Setoid.r, dif_pos hb, dif_pos hd]
+  simp only [Setoid.r]
 
 /-- Definition 4.2.1 (Rationals) -/
 theorem Rat.eq_diff (n : Rat) : ∃ a b, b ≠ 0 ∧ n = a // b := by
-  apply Quot.ind _ n; intro ⟨ a, b, h ⟩
+  apply Quot.ind _ n
+  intro ⟨ a, b, h ⟩
   use a, b; refine ⟨ h, ?_ ⟩
-  simp [formalDiv, h]; rfl
+  simp [formalDiv, h]
+  rfl
 
 /-- Lemma 4.2.3 (Addition well-defined) -/
 instance Rat.add_inst : Add Rat where
-  add := Quotient.lift₂ (fun ⟨ a, b, h1 ⟩ ⟨ c, d, h2 ⟩ ↦ (a*d+b*c) // (b*d)) (by
-    intro ⟨ a, b, h1 ⟩ ⟨ c, d, h2 ⟩ ⟨ a', b', h1' ⟩ ⟨ c', d', h2' ⟩
-          (h3 : a * b' = a' * b) (h4 : c * d' = c' * d)
-    have hbd : b * d ≠ 0 := Int.mul_ne_zero h1 h2
-    have hbd' : b' * d' ≠ 0 := Int.mul_ne_zero h1' h2'
-    change ⟦(if h : (b*d) ≠ 0 then ⟨ a*d+b*c, b*d, h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧ =
-           ⟦(if h : (b'*d') ≠ 0 then ⟨ a'*d'+b'*c', b'*d', h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧
-    rw [dif_pos hbd, dif_pos hbd']
-    apply Quotient.sound
-    change (a * d + b * c) * (b' * d') = (a' * d' + b' * c') * (b * d)
-    linear_combination d * d' * h3 + b * b' * h4
+  add := Quotient.lift₂ (
+    fun ⟨ a, b, h1 ⟩ ⟨ c, d, h2 ⟩ ↦ (a*d+b*c) // (b*d)
+  ) (by
+    intro ⟨ a, b, _ ⟩ ⟨ c, d, _ ⟩ ⟨ a', b', _ ⟩ ⟨ c', d', _ ⟩
+    grind [formalDiv_eq']
   )
 
 /-- Definition 4.2.2 (Addition of rationals) -/
+@[grind =]
 theorem Rat.add_eq (a c : ℤ) {b d : ℤ} (hb : b ≠ 0) (hd : d ≠ 0) :
     (a // b) + (c // d) = (a*d + b*c) // (b*d) := by
   convert Quotient.lift₂_mk _ _ _ _ <;> simp [hb, hd]
 
 /-- Lemma 4.2.3 (Multiplication well-defined) -/
 instance Rat.mul_inst : Mul Rat where
-  mul := Quotient.lift₂ (fun ⟨ a, b, h1 ⟩ ⟨ c, d, h2 ⟩ ↦ (a*c) // (b*d)) (by
-    intro ⟨ a, b, h1 ⟩ ⟨ c, d, h2 ⟩ ⟨ a', b', h1' ⟩ ⟨ c', d', h2' ⟩
-          (h3 : a * b' = a' * b) (h4 : c * d' = c' * d)
-    have hbd : b * d ≠ 0 := Int.mul_ne_zero h1 h2
-    have hbd' : b' * d' ≠ 0 := Int.mul_ne_zero h1' h2'
-    change ⟦(if h : (b*d) ≠ 0 then ⟨ a*c, b*d, h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧ =
-           ⟦(if h : (b'*d') ≠ 0 then ⟨ a'*c', b'*d', h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧
-    rw [dif_pos hbd, dif_pos hbd']
-    apply Quotient.sound
-    change (a * c) * (b' * d') = (a' * c') * (b * d)
-    linear_combination c * d' * h3 + a' * b * h4
+  mul := Quotient.lift₂ (fun ⟨ a, b, _ ⟩ ⟨ c, d, _ ⟩ ↦ (a*c) // (b*d)) (by
+    intro ⟨ a, b, _ ⟩ ⟨ c, d, _ ⟩ ⟨ a', b', _ ⟩ ⟨ c', d', _ ⟩
+    grind [formalDiv_eq, Quotient.sound]
   )
 
 /-- Definition 4.2.2 (Multiplication of rationals) -/
@@ -98,16 +105,12 @@ theorem Rat.mul_eq (a c : ℤ) {b d : ℤ} (hb : b ≠ 0) (hd : d ≠ 0) :
 /-- Lemma 4.2.3 (Negation well-defined) -/
 instance Rat.neg_inst : Neg Rat where
   neg := Quotient.lift (fun ⟨ a, b, h1 ⟩ ↦ (-a) // b) (by
-    intro ⟨ a, b, h1 ⟩ ⟨ a', b', h2 ⟩ (h3 : a * b' = a' * b)
-    change ⟦(if h : b ≠ 0 then ⟨ -a, b, h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧ =
-           ⟦(if h : b' ≠ 0 then ⟨ -a', b', h ⟩ else ⟨ 0, 1, by decide ⟩ : PreRat)⟧
-    rw [dif_pos h1, dif_pos h2]
-    apply Quotient.sound
-    change (-a) * b' = (-a') * b
-    linarith
+    intro ⟨ a, b, _ ⟩ ⟨ a', b', _ ⟩
+    grind [formalDiv_eq']
   )
 
 /-- Definition 4.2.2 (Negation of rationals) -/
+@[grind =]
 theorem Rat.neg_eq (a : ℤ) {b : ℤ} (hb : b ≠ 0) : - (a // b) = (-a) // b := by
   convert Quotient.lift_mk _ _ _ <;> simp [hb]
 
@@ -121,6 +124,10 @@ instance Rat.instNatCast : NatCast Rat where
 instance Rat.instOfNat {n : ℕ} : OfNat Rat n where
   ofNat := (n : ℤ) // 1
 
+@[grind =]
+lemma Rat.zero_eq : (0 : Rat) = 0 // 1 := by rfl
+
+@[grind =]
 theorem Rat.coe_Int_eq (a : ℤ) : (a : Rat) = a // 1 := rfl
 
 theorem Rat.coe_Nat_eq (n : ℕ) : (n : Rat) = n // 1 := rfl
@@ -129,12 +136,11 @@ theorem Rat.of_Nat_eq (n : ℕ) : (ofNat(n) : Rat) = (ofNat(n) : Nat) // 1 := rf
 
 /-- intCast distributes over addition -/
 lemma Rat.intCast_add (a b : ℤ) : (a : Rat) + (b : Rat) = (a+b : ℤ) := by
-  rw [coe_Int_eq, coe_Int_eq, coe_Int_eq, add_eq _ _ (by positivity) (by positivity), eq _ _ (by norm_num) (by norm_num)]
-  omega
+  grind
 
 lemma Rat.intCast_mul (a b : ℤ) : (a : Rat) * (b : Rat) = (a*b : ℤ) := by
   rw [coe_Int_eq, coe_Int_eq, coe_Int_eq, mul_eq, eq]
-  ring
+  · ring
   all_goals positivity
 
 /-- intCast commutes with negation -/
@@ -142,11 +148,8 @@ lemma Rat.intCast_neg (a : ℤ) : - (a : Rat) = (-a : ℤ) := rfl
 
 theorem Rat.coe_Int_inj : Function.Injective (fun n : ℤ ↦ (n : Rat)) := by
   intro a b h
-  dsimp at h
-  rw [coe_Int_eq, coe_Int_eq, eq] at h
-  simp at h
-  exact h
-  all_goals positivity
+  grind
+
 
 lemma formalDiv_zero (a : ℤ) : a // 0 = 0 := by rfl
 
@@ -161,11 +164,8 @@ instance Rat.instInv : Inv Rat where
       rw [PreRatZero.equiv] at h1 h3
       simp_all [formalDiv_zero]
     · have h3 : ¬(b ≈ PreRatZero) := by
-        by_contra h4
-        have : a ≈ PreRatZero := Setoid.symm (Setoid.trans h4.symm h.symm)
-        exact h2 this
-      rw [PreRatZero.equiv] at h2 h3
-      rw [eq _ _ h2 h3, mul_comm, ← h, mul_comm]
+        grind [Setoid.symm, Setoid.trans]
+      grind [PreRatZero.equiv]
 )
 
 lemma Rat.inv_eq (a : ℤ) {b : ℤ} (hb : b ≠ 0) : (a // b)⁻¹ = b // a := by
@@ -182,31 +182,16 @@ AddGroup.ofLeftAxioms (by
   obtain ⟨ a, b, hb , rfl ⟩ := eq_diff x
   obtain ⟨ c, d, hd , rfl ⟩ := eq_diff y
   obtain ⟨ e, f, hf , rfl ⟩ := eq_diff z
-  have hbd : b*d ≠ 0 := Int.mul_ne_zero hb hd
-  have hdf : d*f ≠ 0 := Int.mul_ne_zero hd hf
-  have hbdf : b*d*f ≠ 0 := Int.mul_ne_zero hbd hf
-  rw [add_eq _ _ hb hd, add_eq _ _ hbd hf, add_eq _ _ hd hf,
-      add_eq _ _ hb hdf, ←mul_assoc b, eq _ _ hbdf hbdf]
-  ring
+  grind
 )
  (by
   intro x
   obtain ⟨ a, b, hb , rfl ⟩ := eq_diff x
-  rw [show (0:Rat) = 0 // 1 by rfl]
-  rw [add_eq _ _ (by norm_num) hb]
-  rw [eq _ _ (by simp [hb]) hb]
-  simp
+  grind
  ) (by
   intro a
   obtain ⟨ a, b, hb , rfl ⟩ := eq_diff a
-  rw [neg_eq _ hb]
-  rw [add_eq _ _ hb hb]
-  rw [show (0:Rat) = 0 // 1 by rfl]
-  rw [eq]
-  · ring
-  · positivity
-  · norm_num
+  grind
  )
 
 end DyadicRat
-

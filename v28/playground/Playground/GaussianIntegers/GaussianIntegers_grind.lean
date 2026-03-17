@@ -1,6 +1,5 @@
-import Mathlib
-
-
+import Mathlib.Algebra.Ring.Defs
+import Mathlib.Tactic.Ring.RingNF
 
 namespace GaussianIntegers_grind
 
@@ -15,8 +14,8 @@ Every proof of the instance is done by `grind`; as of v24, this takes 20k heartb
 
 @[grind ext]
 structure GaussInt where
-  re : ℤ
-  im : ℤ
+  re : Int
+  im : Int
 
 instance : Zero GaussInt := ⟨⟨0, 0⟩⟩
 
@@ -93,5 +92,6 @@ instance instCommRing : CommRing GaussInt where
   zero_mul := by grind
   mul_zero := by grind
 
+example (a b : GaussInt) : a^2 + b = b + a*a := by grind
 
 end GaussianIntegers_grind

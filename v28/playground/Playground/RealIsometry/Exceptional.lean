@@ -1,9 +1,6 @@
 import Playground.RealIsometry.Basic
 import Playground.RealIsometry.Dihedral
 
-set_option linter.unusedSimpArgs false
-set_option linter.style.nativeDecide false
-
 open Matrix
 
 abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
