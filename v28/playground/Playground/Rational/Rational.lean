@@ -1,5 +1,6 @@
 import Mathlib.Tactic
 import Mathlib.Algebra.Group.MinimalAxioms
+import Mathlib
 
 /-
 Construction of rational numbers as a quotient type
@@ -194,32 +195,28 @@ AddGroup.ofLeftAxioms (by
   grind
  )
 
-instance : CommRing Rat where
-  add_comm := by
+instance : IsAddCommutative (Rational.Rat) where
+  is_comm := by
+    apply Std.Commutative.mk
     intro x y
     obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
     obtain ⟨c, d, hd, rfl⟩ := Rat.eq_diff y
     grind
-  add_assoc := by
-    intro x y z
-    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
-    obtain ⟨c, d, hd, rfl⟩ := Rat.eq_diff y
-    obtain ⟨e, f, hf, rfl⟩ := Rat.eq_diff z
-    grind
-  add_zero := by
-    intro x
-    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
-    grind
-  zero_add := by
-    intro x
-    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
-    grind
+
+-- instance : Field (Rational.Rat) := @Field.ofMinimalAxioms _ (by sorry) (by sorry) (by sorry) (by sorry) (by sorry) (by sorry) (by sorry) (by sorry) (by sorry) (by sorry) (by sorry) (by sorry) (by sorry) (by sorry) (by sorry) (by sorry)
+
+example {T : Type*} [AddGroup T] (a : T) : -a + a = 0 := by exact neg_add_cancel a
+
+-- instance : GroupWithZero (Rational.Rat) where
+
+instance : AddCommGroup (Rational.Rat) := AddCommGroup.ofIsAddCommutative
+
+instance : CommRing Rat where
+  add_zero := AddMonoid.add_zero
+  zero_add := AddMonoid.zero_add
   nsmul := nsmulRec
   zsmul := zsmulRec
-  neg_add_cancel := by
-    intro x
-    obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
-    grind
+  neg_add_cancel := neg_add_cancel
   mul_comm := by
     intro x y
     obtain ⟨a, b, hb, rfl⟩ := Rat.eq_diff x
