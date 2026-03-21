@@ -40,7 +40,7 @@ theorem two_point_jensen
       exact hb
   have jensens := f_convex.map_sum_le hw hw' hmem
   unfold s at jensens
-  simp at jensens
+  simp only [smul_eq_mul, Fin.sum_univ_two, Fin.isValue] at jensens
   unfold w at jensens
   rw [show p 0 = a by rfl, show p 1 = b by rfl] at jensens
   exact jensens
@@ -69,7 +69,7 @@ theorem tpu
     trivial
   have jensens := f_convex.map_sum_le hw hw' hmem
   unfold s at jensens
-  simp at jensens
+  simp only [smul_eq_mul, Fin.sum_univ_two, Fin.isValue] at jensens
   unfold w at jensens
   rw [show p 0 = a by rfl, show p 1 = b by rfl] at jensens
   exact jensens

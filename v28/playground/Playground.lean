@@ -1,5 +1,4 @@
 import Playground.Basic
-import Playground.ml_tests
 import Playground.Analysis.Bassel
 import Playground.Analysis.Bounded
 import Playground.Analysis.Cancel
@@ -47,7 +46,6 @@ import Playground.NormNumI
 import Playground.NormNumI_test
 import Playground.Simproc
 import Playground.Topology.TopSpace
-import Playground.Rational.DyadicRat
 import Playground.Rational.ZNRat
 import Playground.Rational.ZZRat
 

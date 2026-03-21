@@ -148,7 +148,7 @@ theorem Rat.coe_Int_inj : Function.Injective (fun n : ℤ ↦ (n : Rat)) := by
   intro a b h
   dsimp at h
   rw [coe_Int_eq, coe_Int_eq, eq] at h
-  simp at h
+  simp only [mul_one] at h
   exact h
   all_goals positivity
 

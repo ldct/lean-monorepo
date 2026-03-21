@@ -20,7 +20,8 @@ theorem motzkin (x y : ℝ) : 0 ≤ x^4 * y^2 + x^2 * y^4  - 3 * x^2 * y^2 + 1 :
     intro i _
     fin_cases i <;> positivity
   )
-  simp at amgm
+  simp only [Fin.isValue, Finset.mem_insert, zero_ne_one, Finset.mem_singleton, Fin.reduceEq, or_self,
+    not_false_eq_true, Finset.prod_insert, Finset.prod_singleton, Finset.sum_insert, Finset.sum_singleton] at amgm
   unfold w at amgm
   unfold f at amgm
   dsimp at amgm

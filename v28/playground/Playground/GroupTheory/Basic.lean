@@ -97,7 +97,7 @@ example (G H : Type) [Group G] [Group H] (φ : G →* H) : Subgroup H where
     obtain ⟨g', phi_g'_is_g⟩ := hg
     simp only [Set.mem_setOf_eq]
     use g'⁻¹
-    simp
+    simp only [map_inv, inv_inj]
     exact phi_g'_is_g
 
 example : (1 : ZMod 4) ≠ -1 := by decide
