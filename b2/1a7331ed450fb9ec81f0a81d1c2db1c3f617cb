@@ -1,0 +1,49 @@
+v28/playground/Playground/Jensen.lean
+  733f4d5e23f13ca9 43,72
+v28/playground/Playground/Analysis/MonotoneConvergence.lean
+  733f4d5e23f13ca9 33,38
+v28/playground/Playground/Topology/TopSpace.lean
+  733f4d5e23f13ca9 17,198,205,218-224
+v28/playground/Playground/PermGeometry.lean
+  733f4d5e23f13ca9 234
+v28/playground/Playground/GroupTheory/DihActions.lean
+  733f4d5e23f13ca9 47
+v28/playground/Playground/GroupTheory/CentralizerOfRotations.lean
+  733f4d5e23f13ca9 54,68,89
+v28/playground/Playground/GroupTheory/Cyclic.lean
+  733f4d5e23f13ca9 36,42,45,51,54,60,64,71
+v28/playground/Playground/Rational/ZZRat.lean
+  733f4d5e23f13ca9 151
+v28/playground/Playground/Geometry/ZMul.lean
+  733f4d5e23f13ca9 71,84
+v28/playground/Playground/Analysis/motzkin.lean
+  733f4d5e23f13ca9 23-24
+v28/playground/Playground/Analysis/TendsTo.lean
+  733f4d5e23f13ca9 49,87
+v28/playground/Playground/GroupTheory/Basic.lean
+  733f4d5e23f13ca9 100
+v28/playground/Playground/GroupTheory/Dih4.lean
+  733f4d5e23f13ca9 126
+v28/playground/Playground/Rational/ZNRat.lean
+  733f4d5e23f13ca9 154
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.17",
+  "base_commit_sha": "b21a7331ed450fb9ec81f0a81d1c2db1c3f617cb",
+  "prompts": {
+    "733f4d5e23f13ca9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "222b94bf-2704-4061-af87-13eeb98003ce",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Xuanji Li <xuanji@gmail.com>",
+      "messages": [],
+      "total_additions": 79,
+      "total_deletions": 74,
+      "accepted_lines": 37,
+      "overriden_lines": 0
+    }
+  }
+}
