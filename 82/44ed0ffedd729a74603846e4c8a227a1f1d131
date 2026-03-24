@@ -1,0 +1,87 @@
+v28/playground/Playground/MonadicReduce.lean
+  52152bbc6560b180 1-40
+v28/playground/Playground/OrderOfSix.lean
+  5a4736933259e4de 1-29
+v28/playground/Playground/OrderOf12.lean
+  5a4736933259e4de 1-28
+v28/playground/Playground/RangeFilter.lean
+  733f4d5e23f13ca9 8-18
+v28/playground/Playground/FastDecide.lean
+  1ee70b9765df9945 21-22,24-27,31-39,42,45-98,100-101,103-121,123-158
+v28/playground/Playground/OrderOfSimproc.lean
+  5a4736933259e4de 1-195,197,203,207-208
+v28/playground/Playground/KernelTCO.lean
+  52152bbc6560b180 1-56
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.1.17",
+  "base_commit_sha": "8244ed0ffedd729a74603846e4c8a227a1f1d131",
+  "prompts": {
+    "1ee70b9765df9945": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0afbea68-62aa-4a64-a31d-1b941f043729",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Xuanji Li <xuanji@gmail.com>",
+      "messages": [],
+      "total_additions": 173,
+      "total_deletions": 17,
+      "accepted_lines": 153,
+      "overriden_lines": 8
+    },
+    "52152bbc6560b180": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "4b51499b-6b8d-4a01-accc-fe3849a1701d",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Xuanji Li <xuanji@gmail.com>",
+      "messages": [],
+      "total_additions": 734,
+      "total_deletions": 639,
+      "accepted_lines": 96,
+      "overriden_lines": 1
+    },
+    "5a4736933259e4de": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "cd159998-5d45-48e6-883c-03442ff7dc23",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Xuanji Li <xuanji@gmail.com>",
+      "messages": [],
+      "total_additions": 1032,
+      "total_deletions": 777,
+      "accepted_lines": 256,
+      "overriden_lines": 1
+    },
+    "733f4d5e23f13ca9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "222b94bf-2704-4061-af87-13eeb98003ce",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Xuanji Li <xuanji@gmail.com>",
+      "messages": [],
+      "total_additions": 18,
+      "total_deletions": 8,
+      "accepted_lines": 11,
+      "overriden_lines": 0
+    },
+    "983c117a16c07a88": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f8e5e4e7-ae63-45e6-9ef9-bc41443ab348",
+        "model": "claude-opus-4-6"
+      },
+      "human_author": "Xuanji Li <xuanji@gmail.com>",
+      "messages": [],
+      "total_additions": 107,
+      "total_deletions": 74,
+      "accepted_lines": 22,
+      "overriden_lines": 1
+    }
+  }
+}
