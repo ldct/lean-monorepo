@@ -1,8 +1,9 @@
 import Mathlib
 import Qq
 
-#check QuaternionGroup
-
+/--
+Center of the dihedral group on an even number of vertices
+-/
 example : 55 ≠ 0 := of_decide_eq_true (Eq.refl true)
 
 #check Lean.Meta.Simp.SimpM
@@ -83,6 +84,53 @@ lemma test' (n : ℕ) : 2 * n ∣ n + n := by
   ring_nf
   simp
 
+#check DihedralGroup.center_eq_bot_of_odd_ne_one
+
+open DihedralGroup in
+def halfTurnClosure (n : ℕ) : Subgroup (DihedralGroup (2*n)) where
+  carrier := { 1, r n }
+  mul_mem' := by
+    intro a b ha hb
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at *
+    rcases ha with rfl | rfl <;> rcases hb with rfl | rfl <;> simp
+  one_mem' := by grind
+  inv_mem' := by
+    intro a ha
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at *
+    rcases ha with rfl | rfl
+    · left
+      group
+    · right
+      grind [inv_r, r.injEq, zmod_two_mul_eq_zero, neg_eq_of_add_eq_zero_right]
+
+-- Helper: in ZMod (2*n), a + a = 0 implies a = 0 or a = n
+private lemma zmod_add_self_eq_zero_cases {n : ℕ} (hn : 0 < n) (a : ZMod (2 * n))
+    (ha : a + a = 0) : a = 0 ∨ a = (n : ZMod (2 * n)) := by
+  have h2n : NeZero (2 * n) := ⟨by omega⟩
+
+  -- a + a = 0 means 2 * a.val ≡ 0 (mod 2n)
+  have hval : (a.val + a.val) % (2 * n) = 0 := by
+    have := congr_arg ZMod.val ha
+    grind [ZMod.val_add, ZMod.val_zero]
+
+  -- So 2*n | a.val + a.val, hence n | a.val
+  have hdvd : 2 * n ∣ a.val + a.val := by grind [Nat.dvd_of_mod_eq_zero]
+
+  -- So n | a.val
+  have hndvd : n ∣ a.val := by grind [Nat.mul_dvd_mul_iff_left]
+
+  -- a.val < 2*n, so a.val = 0 or a.val = n
+  have hlt := ZMod.val_lt a
+  obtain ⟨k, hk⟩ := hndvd
+  have hk_bound : k ≤ 1 := Nat.lt_succ_iff.mp (by nlinarith)
+  interval_cases k
+  · left
+    rwa [Nat.mul_zero, ZMod.val_eq_zero] at hk
+  · right
+    rw [Nat.mul_one] at hk
+    have : a = ((a.val : ℕ) : ZMod (2 * n)) := (ZMod.natCast_zmod_val a).symm
+    rw [this, hk]
+
 lemma ndvd_two_then (z : ℕ) (hz : z ∣ 2) : z = 1 ∨ z = 2 := by
   have : z ∈ Nat.divisors 2 := by grind only [= Nat.mem_divisors]
   simp only [Nat.divisors_ofNat] at this
@@ -111,3 +159,30 @@ private lemma two_ne_zero_zmod (n : ℕ) (h : 2 ≤ n) : (2 : ZMod (2 * n)) ≠ 
 
 @[simp] lemma add_left_cancel_iff'' {n : ℕ} (a b c : ZMod n) : a + b = a - c ↔ b = -c := by
   grind
+
+open DihedralGroup in
+theorem my_thm_even (n : ℕ) (h4 : 2 ≤ n) :
+    Subgroup.center (DihedralGroup (2*n)) = halfTurnClosure n := by
+  have hn_pos : 0 < n := by omega
+  ext x
+  simp only [Subgroup.mem_center_iff, halfTurnClosure, Subgroup.mem_mk, Submonoid.mem_mk, Subsemigroup.mem_mk, Set.mem_insert_iff, Set.mem_singleton_iff]
+  constructor
+  · intro hx
+    match x with
+    | r i =>
+      have h1 := sr.inj (hx (sr 0))
+      simp only [zero_add, zero_sub] at h1
+      have hai : i + i = 0 := by linear_combination h1
+      rcases zmod_add_self_eq_zero_cases hn_pos i hai with rfl | rfl <;> simp
+    | sr i =>
+      have h1 := sr.inj (hx (r 1))
+      have h2 : (2 : ZMod (2 * n)) = 0 := by linear_combination -h1
+      exact absurd h2 (two_ne_zero_zmod n h4)
+  · intro hx
+    rcases hx with rfl | rfl
+    · grind [one_mul, mul_one]
+    · intro y
+      match y with
+      | r j => grind [r_mul_r, add_comm]
+      | sr j =>
+        grind [zmod_two_mul_eq_zero, r_mul_sr, sr_mul_r]

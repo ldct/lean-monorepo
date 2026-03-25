@@ -44,12 +44,12 @@ lemma zdvd_one_then (z : ℤ) (hz : z ∣ 1) : z = 1 ∨ z = -1 := by
     rw [← Int.ofNat_dvd_right]
     norm_num
     exact hz
-  have : (Int.natAbs z) ∈ Nat.divisors 1 := by grind [Nat.mem_divisors]
+  have : (Int.natAbs z) ∈ Nat.divisors 1 := by grind
   simp [show Nat.divisors 1 = {1} by rfl] at this
   grind
 
 lemma ndvd_two_then (z : ℕ) (hz : z ∣ 2) : z = 1 ∨ z = 2 := by
-  have : z ∈ Nat.divisors 2 := by grind [Nat.mem_divisors]
+  have : z ∈ Nat.divisors 2 := by grind
   rw [show Nat.divisors 2 = {1, 2} by rfl] at this
   grind
 
@@ -58,7 +58,7 @@ lemma zdvd_two_then (z : ℤ) (hz : z ∣ 2) : z = 1 ∨ z = -1 ∨ z = 2 ∨ z 
     rw [← Int.ofNat_dvd_right]
     norm_num
     exact hz
-  have : (Int.natAbs z) ∈ Nat.divisors 2 := by grind [Nat.mem_divisors]
+  have : (Int.natAbs z) ∈ Nat.divisors 2 := by grind
   simp [show Nat.divisors 2 = {1, 2} by rfl] at this
   grind
 
@@ -67,18 +67,14 @@ example : { (z : ℤ) | z : ℤˣ } = { 1, -1 } := by
   ext x
   constructor
   · intro h
-    simp at h
+    simp only [Set.mem_setOf_eq] at h
     obtain ⟨ z, rfl ⟩ := h
     have : (z.val : ℤ) ∣ 1 := Units.coe_dvd
     grind [zdvd_one_then]
 
   · intro h
-    simp at h
+    simp only [Int.reduceNeg, Set.mem_insert_iff, Set.mem_singleton_iff] at h
     obtain rfl | rfl := h <;> simp
-    use -1
-    norm_num
-
-attribute [grind] Nat.mem_divisors
 
 example {R} [Monoid R] (r : R) : r ∣ r := by simp
 example {R} [Monoid R] (r : R) : 1 ∣ r := by simp
@@ -99,16 +95,16 @@ lemma inv_val (q : PRat) : (q⁻¹).val = q.val⁻¹ := rfl
 instance : Group PRat := Group.ofLeftAxioms
   (by
     intro a b c
-    apply Subtype.eq
+    apply Subtype.ext
 
     simp [mul_val, Rat.mul_assoc]
   ) (by
     intro a
-    apply Subtype.eq
+    apply Subtype.ext
     simp [mul_val]
   ) (by
     intro a
-    apply Subtype.eq
+    apply Subtype.ext
     simp [mul_val, inv_val]
     have := a.property
     field_simp
@@ -257,7 +253,7 @@ example {G H} [Group G] [Group H] (φ : G ≃* H) (g : G) : orderOf g = orderOf 
 def IntSubgroupRat : AddSubgroup ℚ where
   carrier := { r | r : ℤ }
   add_mem' ha hb := by
-    simp at ha hb
+    simp only [Set.mem_setOf_eq] at ha hb
     obtain ⟨ a, rfl ⟩ := ha
     obtain ⟨ b, rfl ⟩ := hb
     use a + b
@@ -266,7 +262,7 @@ def IntSubgroupRat : AddSubgroup ℚ where
     use 0
     norm_num
   neg_mem' ha := by
-    simp at ha
+    simp only [Set.mem_setOf_eq] at ha
     obtain ⟨ a, rfl ⟩ := ha
     use -a
     norm_cast
@@ -274,7 +270,7 @@ def IntSubgroupRat : AddSubgroup ℚ where
 def RatSubgroupReal : AddSubgroup ℝ where
   carrier := { r | r : ℚ }
   add_mem' ha hb := by
-    simp at ha hb
+    simp only [Set.mem_setOf_eq] at ha hb
     obtain ⟨ a, rfl ⟩ := ha
     obtain ⟨ b, rfl ⟩ := hb
     use a + b
@@ -283,7 +279,7 @@ def RatSubgroupReal : AddSubgroup ℝ where
     use 0
     norm_num
   neg_mem' ha := by
-    simp at ha
+    simp only [Set.mem_setOf_eq] at ha
     obtain ⟨ a, rfl ⟩ := ha
     use -a
     norm_cast
@@ -295,7 +291,7 @@ D&F statement `ℤ ≤ ℚ ≤ ℝ` can have multiple formalizations. In particu
 def IntSubgroupReal : AddSubgroup ℝ where
   carrier := { r | r : ℤ }
   add_mem' ha hb := by
-    simp at ha hb
+    simp only [Set.mem_setOf_eq] at ha hb
     obtain ⟨ a, rfl ⟩ := ha
     obtain ⟨ b, rfl ⟩ := hb
     use a + b
@@ -304,13 +300,13 @@ def IntSubgroupReal : AddSubgroup ℝ where
     use 0
     norm_num
   neg_mem' ha := by
-    simp at ha
+    simp only [Set.mem_setOf_eq] at ha
     obtain ⟨ a, rfl ⟩ := ha
     use -a
     norm_cast
 
 example : IntSubgroupReal ≤ RatSubgroupReal := by
-  simp [IntSubgroupReal, RatSubgroupReal]
+  suffices h : ∀ (a : ℤ), ∃ r : ℚ, (r : ℝ) = a by simp_all [IntSubgroupReal, RatSubgroupReal]
   intro a
   use a
   norm_cast

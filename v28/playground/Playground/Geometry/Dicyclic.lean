@@ -1,6 +1,13 @@
 import Mathlib.Algebra.Lie.OfAssociative
 import Mathlib.Data.ZMod.Basic
 import Mathlib.Data.Fintype.Basic
+import Mathlib.GroupTheory.SpecificGroups.Quaternion
+
+/-
+Formalization of dicyclic group, but with `ax` instead of `xa` (the approach taken by `QuaternionGroup`)
+-/
+
+#check QuaternionGroup
 
 /-- Dicyclic group Dicₙ (order 4n) in normal form: a^k or x a^k. -/
 inductive DicyclicGroup (n : ℕ) : Type
