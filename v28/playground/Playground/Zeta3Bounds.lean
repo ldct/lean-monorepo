@@ -1,6 +1,5 @@
 import Mathlib
 
-set_option maxHeartbeats 4000000
 
 open Real Finset Filter Topology
 
@@ -224,7 +223,10 @@ def ζ_hi_q : ℚ :=
   (range 23).sum (fun k => 1 / ((k + 1 : ℚ)) ^ 3) +
     1 / (2 * 23 ^ 2)
 
+set_option maxHeartbeats 4000000 in
 lemma ζ_lo_q_ge : 12020 / 10000 ≤ ζ_lo_q := by norm_num [ζ_lo_q, Finset.sum_range_succ]
+
+set_option maxHeartbeats 4000000 in
 lemma ζ_hi_q_le : ζ_hi_q ≤ 12021 / 10000 := by norm_num [ζ_hi_q, Finset.sum_range_succ]
 
 lemma ζ_lo_q_cast : (ζ_lo_q : ℝ) = ζ_lo 23 := by
