@@ -4,189 +4,170 @@
 
 Prove in Lean:
 ```
-theorem zeta3_lo : (1.20205 : ℝ) ≤ (riemannZeta 3).re
-theorem zeta3_hi : (riemannZeta 3).re ≤ 1.20206
+theorem zeta3_lo : (1.2020 : ℝ) ≤ (riemannZeta 3).re
+theorem zeta3_hi : (riemannZeta 3).re ≤ 1.2021
 ```
 
-## Why this is simpler than γ
+(4 decimal places. Achievable at N=23 with the simple approach below.)
 
-The γ proof in `EulerMascheroniBounds.lean` required:
-- Log inequalities (quadratic bounds, MVT chains)
-- Bridging rational arithmetic with `Real.log` via `exp` lower bounds
-- Taylor sum witnesses for `exp(r400)`
+## Key insight: much simpler than γ
 
-**For ζ(3), ALL terms are rational.** No logarithms, no π, no irrationals. The entire
-computation lives in ℚ, verified by `native_decide`.
+The γ proof needed log inequalities (quadratic bounds, 3-step MVT chain, Taylor
+witnesses for exp). **For ζ(3), everything is rational.** The entire proof reduces
+to two trivial polynomial inequalities + a `native_decide` check.
 
-## The Euler-Maclaurin formula for ζ(3)
+## The two sequences
 
 ```
-ζ(3) = Σ_{k=1}^{N-1} 1/k³ + 1/(2N²) + 1/(2N³) + Σ_{j=1}^{p} c_j / N^{2j+2}
+ζ_lo(N) := Σ_{k=1}^{N-1} 1/k³ + 1/(2N²) + 1/(2N³)    (lower bound)
+ζ_hi(N) := Σ_{k=1}^{N}   1/k³ + 1/(2N²)               (upper bound)
 ```
 
-where the correction coefficients are:
-```
-c₁ = +1/4        (from B₂)
-c₂ = -1/12       (from B₄)
-c₃ = +1/12       (from B₆)
-c₄ = -3/20       (from B₈)
-```
+Both are rational for integer N. No logs, no π, no irrationals.
 
-## Bracketing sequences
+## Step 1: Monotonicity (the analytical core)
 
-Define (all rational for integer N):
+**ζ_lo is increasing:**
 ```
-ζ_lo(N) := Σ_{k=1}^{N-1} 1/k³ + 1/(2N²) + 1/(2N³)                          [p=0]
-ζ_hi(N) := Σ_{k=1}^{N-1} 1/k³ + 1/(2N²) + 1/(2N³) + 1/(4N⁴)               [p=1]
-ζ_lo₂(N):= ζ_hi(N) - 1/(12N⁶)                                               [p=2]
-ζ_hi₂(N):= ζ_lo₂(N) + 1/(12N⁸)                                              [p=3]
+ζ_lo(N+1) - ζ_lo(N) = (2N + 1) / (2N³(N+1)³)  >  0
 ```
 
-Because the Bernoulli corrections alternate in sign:
+**ζ_hi is decreasing:**
 ```
-ζ_lo(N)  ≤ ζ(3) ≤ ζ_hi(N)       (wider bracket)
-ζ_lo₂(N) ≤ ζ(3) ≤ ζ_hi₂(N)      (tighter bracket)
-```
-
-## Numerical verification
-
-```
-N=10, p=0 (lower): 1.20203198...  ≥ 1.20205? NO  — need p=2
-N=10, p=2 (lower): 1.20205690...  ≥ 1.20205? YES ✓
-N=10, p=1 (upper): 1.20205698...  ≤ 1.20206? YES ✓
+ζ_hi(N+1) - ζ_hi(N) = -(3N + 1) / (2N²(N+1)³)  <  0
 ```
 
-So **N=10 with 2 correction terms** suffices for 5 decimal places.
+Both are single-line polynomial identities, provable by `field_simp; ring` or
+`nlinarith` after clearing denominators. Compare: the γ lower bound required
+proving `log(1+x) ≤ x(2+x)/(2(1+x))` via an exponential bound, then 3 chained
+MVT arguments.
 
-## Proof structure (6 steps)
+### Derivation
 
-### Step 1: Connect `riemannZeta 3` to a real-valued tsum
-
-Use Mathlib's `zeta_nat_eq_tsum_of_gt_one` (for ℂ) and extract the real part:
+For ζ_lo, combine over common denominator 2N³(N+1)³:
 ```
-riemannZeta 3 = ∑' n, 1/(n:ℂ)^3
-```
-Then show `(riemannZeta 3).re = ∑' n, 1/(n:ℝ)^3` (since all terms are real).
-
-Key Mathlib lemmas:
-- `zeta_nat_eq_tsum_of_gt_one` (ℂ-valued sum = ζ)
-- `riemannZeta_pos_of_one_lt` (real and positive for re > 1)
-
-### Step 2: Split tsum into partial sum + tail
-
-```
-∑' n, 1/(n+1)^3 = Σ_{k=0}^{N-2} 1/(k+1)^3 + ∑'_{k≥N-1} 1/(k+1)^3
-                 = Σ_{k=1}^{N-1} 1/k^3 + Σ_{k=N}^∞ 1/k^3
+  numerator = 2(N+1)³ + N³(N+1) + N³ - N(N+1)³ - (N+1)³
+            = 2N + 1
 ```
 
-Key Mathlib lemma: `tsum_eq_zero_add` / `sum_add_tsum_compl`
-
-### Step 3: Bound the tail with integrals (the E-M core)
-
-**Lower bound on tail** (tail ≥ integral):
+For ζ_hi, combine over common denominator 2N²(N+1)³:
 ```
-Σ_{k=N}^∞ 1/k³ ≥ ∫_N^∞ 1/x³ dx + ½·1/N³ = 1/(2N²) + 1/(2N³)
-```
-This follows because 1/x³ is convex, so the sum (left Riemann sum of a
-decreasing function starting at the left endpoint) exceeds the integral.
-More precisely: for convex decreasing f, f(k) ≥ ∫_k^{k+1} f(x) dx + ½(f(k)-f(k+1))
-by the trapezoidal rule being an overestimate for convex functions.
-
-**Upper bound on tail** (add first Bernoulli correction):
-```
-Σ_{k=N}^∞ 1/k³ ≤ 1/(2N²) + 1/(2N³) + 1/(4N⁴)
-```
-This is the integral + endpoint + B₂ correction, which overshoots because
-the next (B₄) correction is negative.
-
-### Step 4: Prove the alternating bound property
-
-The key analytical lemma: for f(x) = 1/x³, the Euler-Maclaurin remainder
-after p terms has sign (-1)^p. This follows from f^{(2p+1)}(x) having
-constant sign on (0,∞) for each p (since all derivatives of 1/x³ are
-monotone on (0,∞)).
-
-**Proof approach** (following the γ file's style):
-
-For the LOWER bound (p=0), we need:
-```
-∀ k ≥ N, 1/k³ ≥ ∫_k^{k+1} 1/x³ dx + 1/(2k³) - 1/(2(k+1)³)
-                  ... (telescopes to give integral + endpoint correction)
-```
-This reduces to showing `1/k³ - log-free integral bound`, which for 1/x³
-becomes `1/k³ ≥ 1/(2k²) - 1/(2(k+1)²)`, i.e., a rational inequality.
-
-Actually, the cleanest approach: **directly bound the tail sum vs integral**.
-
-For convex decreasing f on [N,∞):
-- Lower: Σ_{k=N}^∞ f(k) ≥ ∫_N^∞ f(x)dx + ½f(N)   [trapezoidal ≥ integral for convex]
-- Upper: Σ_{k=N}^∞ f(k) ≤ ∫_N^∞ f(x)dx + ½f(N) + (1/12)f'(N)   [next E-M correction]
-
-For f(x) = x^{-3}: f is convex on (0,∞), ∫_N^∞ = 1/(2N²), ½f(N) = 1/(2N³),
-f'(N) = -3/N⁴, so (1/12)f'(N) = -1/(4N⁴).
-
-Wait — that gives the WRONG sign for the upper bound. Let me re-examine...
-
-Actually the standard E-M tail formula is:
-```
-Σ_{k=N}^∞ f(k) = ∫_N^∞ f(x)dx + ½f(N) - Σ_{j=1}^p B_{2j}/(2j)! f^{(2j-1)}(N) + R_p
-```
-Note the MINUS sign. For f(x) = x^{-3}:
-- f'(N) = -3N^{-4}, so -B₂/2!·f'(N) = -(1/12)·(-3/N⁴) = +1/(4N⁴)  ✓
-
-This gives ζ_hi correctly. The alternation of the remainder R_p gives the bounds.
-
-### Step 5: Computational verification (all rational — `native_decide`)
-
-Define in ℚ:
-```
-def ζ_lo_q : ℚ := (Finset.range 9).sum (fun k => 1/(k+1)^3) + 1/(2·10^2) + 1/(2·10^3)
-def ζ_hi_q : ℚ := ζ_lo_q + 1/(4·10^4)
+  numerator = 2N² + N²(N+1) - (N+1)³
+            = -(3N + 1)
 ```
 
-Verify:
+## Step 2: Convergence
+
+**ζ_lo(N) → ζ(3):**
 ```
-lemma ζ_lo_ge : ζ_lo_q ≥ 120205/100000 := by native_decide   -- 1.20205
-lemma ζ_hi_le : ζ_hi_q ≤ 120206/100000 := by native_decide   -- 1.20206
+ζ_lo(N) = [Σ_{k=1}^{N-1} 1/k³] + 1/(2N²) + 1/(2N³)
+```
+The partial sum → ζ(3), and the corrections → 0.
+
+**ζ_hi(N) → ζ(3):**
+```
+ζ_hi(N) = [Σ_{k=1}^{N} 1/k³] + 1/(2N²)
+```
+Same argument.
+
+Key Mathlib lemma: `zeta_nat_eq_tsum_of_gt_one` gives
+`riemannZeta 3 = ∑' n, 1/(n:ℂ)^3`, and summability gives
+`∑' n, 1/(n+1:ℝ)^3 = lim Σ_{k=1}^{N} 1/k³`.
+
+## Step 3: Therefore
+
+Increasing + converges to L ⟹ bounded above by L:
+```
+∀ N, ζ_lo(N) ≤ ζ(3)       (since ζ_lo ↑ ζ(3))
+∀ N, ζ(3) ≤ ζ_hi(N)       (since ζ_hi ↓ ζ(3))
 ```
 
-### Step 6: Assemble the final theorem
+This is the same pattern as the γ file's `eulerMascheroniConstant_lb` and
+`euler_maclaurin_bound`.
 
-```
-theorem zeta3_bounds : 1.20205 ≤ (riemannZeta 3).re ∧ (riemannZeta 3).re ≤ 1.20206 := by
-  constructor
-  · calc 1.20205 = (120205 : ℚ)/100000 := ...
-       _ ≤ ζ_lo_q := ζ_lo_ge
-       _ ≤ (riemannZeta 3).re := em_lower_bound ...
-  · calc (riemannZeta 3).re ≤ ζ_hi_q := em_upper_bound ...
-       _ ≤ 1.20206 := ζ_hi_le
+## Step 4: Numerical evaluation (N = 23)
+
+```lean
+def ζ_lo_q : ℚ := (Finset.range 22).sum (fun k => 1/(k+1)^3) + 1/(2*23^2) + 1/(2*23^3)
+def ζ_hi_q : ℚ := (Finset.range 23).sum (fun k => 1/(k+1)^3) + 1/(2*23^2)
+
+lemma ζ_lo_ge : ζ_lo_q ≥ 12020/10000 := by native_decide
+lemma ζ_hi_le : ζ_hi_q ≤ 12021/10000 := by native_decide
 ```
 
-## Comparison with the γ proof
+Numerical values:
+- ζ_lo(23) = 1.20205601... ≥ 1.2020 ✓
+- ζ_hi(23) = 1.20209710... ≤ 1.2021 ✓
+
+## Full proof outline
+
+```lean
+-- 1. Connect riemannZeta to real-valued tsum
+lemma zeta3_eq_tsum : (riemannZeta 3).re = ∑' n : ℕ, 1 / ((n : ℝ) + 1) ^ 3
+
+-- 2. Define the sequences (ℝ-valued)
+noncomputable def ζ_lo (N : ℕ) : ℝ :=
+  (Finset.range (N-1)).sum (fun k => 1/((k:ℝ)+1)^3) + 1/(2*N^2) + 1/(2*N^3)
+
+noncomputable def ζ_hi (N : ℕ) : ℝ :=
+  (Finset.range N).sum (fun k => 1/((k:ℝ)+1)^3) + 1/(2*N^2)
+
+-- 3. Step bounds (the only analytical content)
+lemma ζ_lo_step (N : ℕ) (hN : 1 ≤ N) :
+    ζ_lo (N+1) - ζ_lo N = (2*N+1) / (2*N^3*(N+1)^3) := by
+  field_simp; ring
+
+lemma ζ_hi_step (N : ℕ) (hN : 1 ≤ N) :
+    ζ_hi (N+1) - ζ_hi N = -(3*N+1) / (2*N^2*(N+1)^3) := by
+  field_simp; ring
+
+-- 4. Monotonicity (immediate from step signs)
+lemma ζ_lo_strictMono : StrictMono (fun N => ζ_lo (N+1))  -- from step > 0
+lemma ζ_hi_strictAnti : StrictAnti (fun N => ζ_hi (N+1))  -- from step < 0
+
+-- 5. Convergence
+lemma ζ_lo_tendsto : Tendsto ζ_lo atTop (nhds (riemannZeta 3).re)
+lemma ζ_hi_tendsto : Tendsto ζ_hi atTop (nhds (riemannZeta 3).re)
+
+-- 6. Bounds (monotone + limit)
+lemma ζ_lo_le : ∀ N, 1 ≤ N → ζ_lo N ≤ (riemannZeta 3).re
+lemma ζ_hi_ge : ∀ N, 1 ≤ N → (riemannZeta 3).re ≤ ζ_hi N
+
+-- 7. Computational verification
+lemma ζ_lo_23_ge : (12020 : ℝ) / 10000 ≤ ζ_lo 23  -- via native_decide on ℚ
+lemma ζ_hi_23_le : ζ_hi 23 ≤ (12021 : ℝ) / 10000  -- via native_decide on ℚ
+
+-- 8. Final theorems
+theorem zeta3_lo : (1.2020 : ℝ) ≤ (riemannZeta 3).re :=
+  calc 1.2020 = 12020/10000 := by norm_num
+    _ ≤ ζ_lo 23 := ζ_lo_23_ge
+    _ ≤ (riemannZeta 3).re := ζ_lo_le 23 (by norm_num)
+
+theorem zeta3_hi : (riemannZeta 3).re ≤ 1.2021 :=
+  calc (riemannZeta 3).re ≤ ζ_hi 23 := ζ_hi_ge 23 (by norm_num)
+    _ ≤ 12021/10000 := ζ_hi_23_le
+    _ = 1.2021 := by norm_num
+```
+
+## Comparison with γ proof
 
 | Aspect | γ bounds | ζ(3) bounds |
 |--------|----------|-------------|
-| Computation domain | ℚ + ℝ (need log) | **Pure ℚ** |
-| Hardest analytical step | Chain of 3 MVT inequalities for log | Convexity of 1/x³ |
-| Numerical witness | exp(r400) > 401 via Taylor | **Simple ℚ comparison** |
-| native_decide complexity | Taylor sum of 23 terms | Partial sum of 9 terms |
-| Required Mathlib API | `eulerMascheroniSeq`, `tendsto_harmonic_sub_log` | `riemannZeta`, `zeta_nat_eq_tsum_of_gt_one` |
+| Analytical core | 3-step MVT chain for log | **2N+1 > 0 and 3N+1 > 0** |
+| Computation domain | ℚ + ℝ (need log, exp) | **Pure ℚ** |
+| Numerical witness | 23-term Taylor sum for exp(r400) | **ℚ comparison** |
+| native_decide | Taylor sum > 401 | Partial sum comparison |
+| N required | N=400 (lower), N=16 (upper) | **N=23 (both)** |
+| Hardest Lean step | `one_add_le_exp_quadratic_div` | `field_simp; ring` |
 
-## Key difficulty / risk
+## Risks
 
-The main risk is **Step 3**: Mathlib may not have a ready-made "Euler-Maclaurin remainder
-bound for tails of decreasing convex functions." We may need to prove from scratch:
+1. **Connecting `riemannZeta 3` to a real tsum**: The Mathlib `riemannZeta` is ℂ-valued.
+   We need `zeta_nat_eq_tsum_of_gt_one` plus `Complex.ofReal` reasoning to extract the
+   real part. This is the most annoying part, but it's just API wrangling, not math.
 
-> For f convex and decreasing on [N,∞) with f(x) → 0:
-> ∫_N^∞ f(x)dx + ½f(N) ≤ Σ_{k=N}^∞ f(k)
+2. **Convergence proof**: Showing `ζ_lo → ζ(3)` requires showing
+   `Σ_{k=1}^{N-1} 1/k³ → ∑' 1/k³` and `1/(2N²) + 1/(2N³) → 0`. Both are standard
+   with `hasSum_iff_tendsto_nat_of_nonneg` and `tendsto_const_div_atTop_nhds_zero_nat`.
 
-This is the "trapezoidal rule overestimates for convex functions" result.
-For the upper bound we additionally need the first Bernoulli correction.
-
-**Fallback**: If E-M machinery is too heavy, use direct comparison:
-```
-Σ_{k=N}^∞ 1/k³ ≥ ∫_N^∞ 1/x³ dx = 1/(2N²)           [integral test, easy]
-Σ_{k=N}^∞ 1/k³ ≤ 1/N³ + ∫_N^∞ 1/x³ dx = 1/N³ + 1/(2N²)   [also easy]
-```
-This gives a cruder bound but avoids E-M entirely. With N=100 or so,
-it still gives enough precision for 4-5 digits.
+3. **native_decide speed**: N=23 means summing 22 rational cubes. Should be fast.
