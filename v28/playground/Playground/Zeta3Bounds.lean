@@ -1,7 +1,6 @@
 import Mathlib
 
-set_option linter.style.nativeDecide false
-set_option maxHeartbeats 800000
+set_option maxHeartbeats 4000000
 
 open Real Finset Filter Topology
 
@@ -17,7 +16,7 @@ open Real Finset Filter Topology
 
 We use Euler-Maclaurin style bounds. Both sequences are purely rational and
 converge to ζ(3): the lower bound is increasing, the upper bound is decreasing.
-At N = 23 we verify the numerical bounds via `native_decide` on ℚ.
+At N = 23 we verify the numerical bounds via `norm_num` on ℚ.
 -/
 
 namespace Zeta3Bounds
@@ -225,8 +224,8 @@ def ζ_hi_q : ℚ :=
   (range 23).sum (fun k => 1 / ((k + 1 : ℚ)) ^ 3) +
     1 / (2 * 23 ^ 2)
 
-lemma ζ_lo_q_ge : 12020 / 10000 ≤ ζ_lo_q := by native_decide
-lemma ζ_hi_q_le : ζ_hi_q ≤ 12021 / 10000 := by native_decide
+lemma ζ_lo_q_ge : 12020 / 10000 ≤ ζ_lo_q := by norm_num [ζ_lo_q, Finset.sum_range_succ]
+lemma ζ_hi_q_le : ζ_hi_q ≤ 12021 / 10000 := by norm_num [ζ_hi_q, Finset.sum_range_succ]
 
 lemma ζ_lo_q_cast : (ζ_lo_q : ℝ) = ζ_lo 23 := by
   simp only [ζ_lo_q, ζ_lo]; push_cast; norm_num
