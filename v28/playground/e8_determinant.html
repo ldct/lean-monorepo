@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>E₈ Determinant — Row Reduction Steps</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --card: #16213e;
+    --accent: #0f3460;
+    --highlight: #e94560;
+    --text: #eee;
+    --dim: #8899aa;
+    --zero: #00c853;
+    --diag-bg: rgba(233, 69, 96, 0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 2rem 1rem;
+    max-width: 900px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+  h1 {
+    text-align: center;
+    font-size: 1.8rem;
+    margin-bottom: 0.3rem;
+    color: #fff;
+  }
+  .subtitle {
+    text-align: center;
+    color: var(--dim);
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+  }
+  .step {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--accent);
+  }
+  .step h2 {
+    font-size: 1.15rem;
+    margin-bottom: 0.6rem;
+    color: #fff;
+  }
+  .step .desc {
+    color: var(--dim);
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+  }
+  .step .desc code {
+    background: rgba(255,255,255,0.08);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    color: #ccc;
+  }
+  table.matrix {
+    border-collapse: collapse;
+    margin: 0 auto;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 1.05rem;
+  }
+  table.matrix td {
+    width: 3rem;
+    height: 2.2rem;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.07);
+    transition: background 0.2s;
+  }
+  table.matrix td.diag {
+    background: var(--diag-bg);
+    font-weight: bold;
+  }
+  table.matrix tr.highlight-row td {
+    background: rgba(233, 69, 96, 0.15);
+  }
+  table.matrix td.zeroed {
+    color: var(--zero);
+    font-weight: bold;
+    background: rgba(0, 200, 83, 0.12) !important;
+  }
+  table.matrix td.changed.diag {
+    background: rgba(233, 69, 96, 0.25);
+  }
+  .final .calculation {
+    background: rgba(255,255,255,0.04);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    font-size: 1.05rem;
+    border-left: 3px solid var(--highlight);
+  }
+  .final .calculation p {
+    margin: 0.3rem 0;
+  }
+  .final .result {
+    font-size: 1.3rem;
+    margin-top: 0.8rem !important;
+    color: var(--zero);
+  }
+  @media (max-width: 600px) {
+    table.matrix { font-size: 0.8rem; }
+    table.matrix td { width: 2.2rem; height: 1.8rem; }
+    body { padding: 1rem 0.5rem; }
+  }
+</style>
+</head>
+<body>
+<h1>det(E₈) = 1</h1>
+<p class="subtitle">Row reduction proof from <code>Determinant1.lean</code> — all intermediate matrices</p>
+
+<div class="step">
+  <h2>Initial Matrix — E₈ Cartan Matrix</h2>
+  <p class="desc">The Cartan matrix of the E₈ root system. Goal: prove det = 1.</p>
+  <table class="matrix">
+  <tr>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>-1</td>
+    <td>0</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>-1</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+  </tr>
+</table>
+</div>
+
+
+<div class="step">
+  <h2>Step 1: row[2] ← 2 · row[2] + row[0]</h2>
+  <p class="desc">
+    Lean: <code>apply my_helper 2 0 (2:ℤ) (1:ℤ)</code><br>
+    Scale factor this step: <strong>2</strong> · Cumulative: <strong>2</strong>
+  </p>
+  <table class="matrix">
+  <tr>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr class="highlight-row">
+    <td class="changed zeroed">0</td>
+    <td class="changed">0</td>
+    <td class="changed diag">3</td>
+    <td class="changed">-2</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>-1</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+  </tr>
+</table>
+</div>
+
+
+<div class="step">
+  <h2>Step 2: row[3] ← 2 · row[3] + row[1]</h2>
+  <p class="desc">
+    Lean: <code>apply my_helper 3 1 (2:ℤ) (1:ℤ)</code><br>
+    Scale factor this step: <strong>2</strong> · Cumulative: <strong>4</strong>
+  </p>
+  <table class="matrix">
+  <tr>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">3</td>
+    <td>-2</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr class="highlight-row">
+    <td class="changed">0</td>
+    <td class="changed zeroed">0</td>
+    <td class="changed">-2</td>
+    <td class="changed diag">3</td>
+    <td class="changed">-2</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+  </tr>
+</table>
+</div>
+
+
+<div class="step">
+  <h2>Step 3: row[3] ← 3 · row[3] + 2 · row[2]</h2>
+  <p class="desc">
+    Lean: <code>apply my_helper 3 2 (3:ℤ) (2:ℤ)</code><br>
+    Scale factor this step: <strong>3</strong> · Cumulative: <strong>12</strong>
+  </p>
+  <table class="matrix">
+  <tr>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">3</td>
+    <td>-2</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr class="highlight-row">
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed zeroed">0</td>
+    <td class="changed diag">5</td>
+    <td class="changed">-6</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+  </tr>
+</table>
+</div>
+
+
+<div class="step">
+  <h2>Step 4: row[4] ← 5 · row[4] + row[3]</h2>
+  <p class="desc">
+    Lean: <code>apply my_helper 4 3 (5:ℤ) (1:ℤ)</code><br>
+    Scale factor this step: <strong>5</strong> · Cumulative: <strong>60</strong>
+  </p>
+  <table class="matrix">
+  <tr>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">3</td>
+    <td>-2</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">5</td>
+    <td>-6</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr class="highlight-row">
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed zeroed">0</td>
+    <td class="changed diag">4</td>
+    <td class="changed">-5</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+  </tr>
+</table>
+</div>
+
+
+<div class="step">
+  <h2>Step 5: row[5] ← 4 · row[5] + row[4]</h2>
+  <p class="desc">
+    Lean: <code>apply my_helper 5 4 (4:ℤ) (1:ℤ)</code><br>
+    Scale factor this step: <strong>4</strong> · Cumulative: <strong>240</strong>
+  </p>
+  <table class="matrix">
+  <tr>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">3</td>
+    <td>-2</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">5</td>
+    <td>-6</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">4</td>
+    <td>-5</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr class="highlight-row">
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed zeroed">0</td>
+    <td class="changed diag">3</td>
+    <td class="changed">-4</td>
+    <td class="changed">0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+    <td>-1</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+  </tr>
+</table>
+</div>
+
+
+<div class="step">
+  <h2>Step 6: row[6] ← 3 · row[6] + row[5]</h2>
+  <p class="desc">
+    Lean: <code>apply my_helper 6 5 (3:ℤ) (1:ℤ)</code><br>
+    Scale factor this step: <strong>3</strong> · Cumulative: <strong>720</strong>
+  </p>
+  <table class="matrix">
+  <tr>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">3</td>
+    <td>-2</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">5</td>
+    <td>-6</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">4</td>
+    <td>-5</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">3</td>
+    <td>-4</td>
+    <td>0</td>
+  </tr>
+  <tr class="highlight-row">
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed zeroed">0</td>
+    <td class="changed diag">2</td>
+    <td class="changed">-3</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>-1</td>
+    <td class="diag">2</td>
+  </tr>
+</table>
+</div>
+
+
+<div class="step">
+  <h2>Step 7: row[7] ← 2 · row[7] + row[6]</h2>
+  <p class="desc">
+    Lean: <code>apply my_helper 7 6 (2:ℤ) (1:ℤ)</code><br>
+    Scale factor this step: <strong>2</strong> · Cumulative: <strong>1440</strong>
+  </p>
+  <table class="matrix">
+  <tr>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td class="diag">2</td>
+    <td>0</td>
+    <td>-1</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">3</td>
+    <td>-2</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">5</td>
+    <td>-6</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">4</td>
+    <td>-5</td>
+    <td>0</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">3</td>
+    <td>-4</td>
+    <td>0</td>
+  </tr>
+  <tr>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td>0</td>
+    <td class="diag">2</td>
+    <td>-3</td>
+  </tr>
+  <tr class="highlight-row">
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed">0</td>
+    <td class="changed zeroed">0</td>
+    <td class="changed diag">1</td>
+  </tr>
+</table>
+</div>
+
+
+<div class="step final">
+  <h2>Result</h2>
+  <p class="desc">The matrix is now upper triangular. The determinant is the product of the diagonal
+  divided by the accumulated scale factors.</p>
+  <div class="calculation">
+    <p>Diagonal: 2 × 2 × 3 × 5 × 4 × 3 × 2 × 1 = <strong>1440</strong></p>
+    <p>Scale factors: 2 × 2 × 3 × 5 × 4 × 3 × 2 = <strong>1440</strong></p>
+    <p class="result">det(E₈) = 1440 ∕ 1440 = <strong>1</strong></p>
+  </div>
+  <p class="desc" style="margin-top:1em">In Lean, this final step is discharged by
+  <code>Matrix.det_of_upperTriangular</code> + <code>decide +kernel</code>.</p>
+</div>
+
+</body>
+</html>
