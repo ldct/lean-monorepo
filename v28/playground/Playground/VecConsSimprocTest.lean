@@ -132,3 +132,32 @@ open Lean Qq Meta
   let e : Q(Fin 3 → ℤ) := q(![1, 2, 3])
   guard (matchMatLitToVec e == none)
   IO.println "pass: plain vector is not a matrix"
+
+-- ========== updateRowSimproc tests ==========
+
+example : Matrix.updateRow !![1, 2, 3; 4, 5, 6; 7, 8, 9] (1 : Fin 3) ![10, 20, 30]
+    = !![1, 2, 3; 10, 20, 30; 7, 8, 9] := by
+  simp only [updateRowSimproc]
+
+example : Matrix.updateRow !![(1:ℤ), 2; 3, 4] (0 : Fin 2) ![(-1:ℤ), -2]
+    = !![(-1:ℤ), -2; 3, 4] := by
+  simp only [updateRowSimproc]
+
+example : Matrix.updateRow !![(1:ℤ), 2; 3, 4] (1 : Fin 2) ![(-1:ℤ), -2]
+    = !![(1:ℤ), 2; -1, -2] := by
+  simp only [updateRowSimproc]
+
+-- 1x1 matrix
+example : Matrix.updateRow !![(5:ℤ)] (0 : Fin 1) ![(7:ℤ)]
+    = !![(7:ℤ)] := by
+  simp only [updateRowSimproc]
+
+-- last row of a 3x3
+example : Matrix.updateRow !![1, 2, 3; 4, 5, 6; 7, 8, 9] (2 : Fin 3) ![0, 0, 0]
+    = !![1, 2, 3; 4, 5, 6; 0, 0, 0] := by
+  simp only [updateRowSimproc]
+
+-- with `show` coercion (the letE wrapper case)
+example : (show Matrix (Fin 2) (Fin 2) ℤ from !![1, 2; 3, 4]).updateRow 0 ![10, 20]
+    = !![10, 20; 3, 4] := by
+  simp only [updateRowSimproc]
