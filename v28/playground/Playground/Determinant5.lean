@@ -40,11 +40,41 @@ def E₈_U : Matrix (Fin 8) (Fin 8) ℤ :=
       0,  0,  0,  0,  0,  0,  0,  1]
 
 set_option linter.flexible false in
+lemma E₈_L_det : E₈_L.det = 116640000000 := by
+  simp only [E₈_L]
+  apply my_helper 2 0 (2:ℤ) (1:ℤ)
+  simp [updateRowSimproc, mySimproc]
+  apply my_helper 3 1 (2:ℤ) (1:ℤ)
+  simp [updateRowSimproc, mySimproc]
+  apply my_helper 3 2 (3:ℤ) (2:ℤ)
+  simp [updateRowSimproc, mySimproc]
+  apply my_helper 4 3 (5:ℤ) (1:ℤ)
+  simp [updateRowSimproc, mySimproc]
+  apply my_helper 5 4 (4:ℤ) (1:ℤ)
+  simp [updateRowSimproc, mySimproc]
+  apply my_helper 6 5 (3:ℤ) (1:ℤ)
+  simp [updateRowSimproc, mySimproc]
+  apply my_helper 7 6 (2:ℤ) (1:ℤ)
+  simp [updateRowSimproc, mySimproc]
+  rw [Matrix.det_of_upperTriangular]
+  · decide +kernel
+  · unfold Matrix.BlockTriangular; decide +kernel
+
+set_option linter.flexible false in
+lemma E₈_U_det : E₈_U.det = 1440 := by
+  simp only [E₈_U]
+  rw [Matrix.det_of_upperTriangular]
+  · decide +kernel
+  · unfold Matrix.BlockTriangular; decide +kernel
+
+lemma E₈_LU : 60 • E₈ = E₈_L * E₈_U := by
+  simp only [E₈, E₈_L, E₈_U]
+  decide +kernel
+
+set_option linter.flexible false in
 theorem E₈_det' : E₈.det = 1 := by
   apply det_of_smul_det (k := 60) (by decide)
-  -- Goal: (60 • E₈).det = 60 ^ 8 * 1
-  have hLU : 60 • E₈ = E₈_L * E₈_U := by sorry
   calc (60 • E₈).det
-      = (E₈_L * E₈_U).det := by rw [hLU]
+      = (E₈_L * E₈_U).det := by rw [E₈_LU]
     _ = E₈_L.det * E₈_U.det := Matrix.det_mul _ _
-    _ = 60 ^ 8 * 1 := by sorry
+    _ = 60 ^ 8 * 1 := by rw [E₈_L_det, E₈_U_det]; norm_num
