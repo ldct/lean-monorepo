@@ -87,34 +87,19 @@ def myFun (e : Expr) : MetaM (Option (Fin 8 → ℤ)) := fun e => do
 
 #check Matrix.vecCons
 
-variable {a b c d e f g h : ℤ}
-
-#check Matrix.cons_val
-example : ![a] 0 = a := by dsimp only [Matrix.cons_val]
+open Lean in
+partial def matchVecLit (e : Expr) : Option (List Expr) :=
+  match_expr e with
+  | Matrix.vecEmpty _ => some []
+  | Matrix.vecCons _ _ x xs => (x :: ·) <$> matchVecLit xs
+  | _ => none
 
 open Lean Meta Qq in
-simproc_decl my_simproc (M₄ _) := fun e => do
-  let row ← unsafe evalExpr (Fin 8 → ℤ) ( q(Fin 8 → ℤ)) e
-  let r0 := row ⟨0, by decide⟩
-  let r1 := row ⟨1, by decide⟩
-  let r2 := row ⟨2, by decide⟩
-  let r3 := row ⟨3, by decide⟩
-  let r4 := row ⟨4, by decide⟩
-  let r5 := row ⟨5, by decide⟩
-  let r6 := row ⟨6, by decide⟩
-  let r7 := row ⟨7, by decide⟩
-  logInfo m!"my_simproc row = ![{r0}, {r1}, {r2}, {r3}, {r4}, {r5}, {r6}, {r7}]"
-  let z0 : Q(ℤ) := mkIntLit r0
-  let z1 : Q(ℤ) := mkIntLit r1
-  let z2 : Q(ℤ) := mkIntLit r2
-  let z3 : Q(ℤ) := mkIntLit r3
-  let z4 : Q(ℤ) := mkIntLit r4
-  let z5 : Q(ℤ) := mkIntLit r5
-  let z6 : Q(ℤ) := mkIntLit r6
-  let z7 : Q(ℤ) := mkIntLit r7
-  let result : Q(Fin 8 → ℤ) := q(![$z0, $z1, $z2, $z3, $z4, $z5, $z6, $z7])
-  let proof ← mkDecideProof (← mkEq e result)
-  return .done { expr := result, proof? := some proof }
+simproc_decl mySimproc (@DFunLike.coe _ _ _ _ Matrix.of _ _) := fun e => do
+  let mat := (matchVecLit (e.getAppArgs[5]!)).get!
+  let idx := e.getAppArgs[6]!.nat?.get!
+  let proof ← mkDecideProof (← mkEq e mat[idx]!)
+  return .done { expr := mat[idx]!, proof? := some proof }
 
 private def M₅ : Matrix (Fin 8) (Fin 8) ℤ :=
   !![ 2,  0, -1,  0,  0,  0,  0,  0;
@@ -161,16 +146,16 @@ lemma count_201_true_eq_201 : Nat.count (fun _ ↦ True) 201 = 201 := by
 
 theorem E₈_det : E₈.det = 1 := by
   apply my_helper 2 0 (2:ℤ) (1:ℤ)
-  erw [show E₈.updateRow 2 (2 • E₈ 2 + 1 • E₈ 0) = M₁ by decide +kernel]
+  conv => lhs; rhs; rhs; simp [E₈, mySimproc]
+  erw [show E₈.updateRow 2 ![0, 0, 3, -2, 0, 0, 0, 0] = M₁ by decide +kernel]
   apply my_helper 3 1 (2:ℤ) (1:ℤ)
-  erw [show M₁.updateRow 3 (2 • M₁ 3 + 1 • M₁ 1) = M₂ by decide +kernel]
+  conv => lhs; rhs; rhs; simp [M₁, mySimproc]
+  erw [show M₁.updateRow 3 ![0, 0, -2, 3, -2, 0, 0, 0] = M₂ by decide +kernel]
   apply my_helper 3 2 (3:ℤ) (2:ℤ)
   erw [show M₂.updateRow 3 (3 • M₂ 3 + 2 • M₂ 2) = M₃ by decide +kernel]
   apply my_helper 4 3 (5:ℤ) (1:ℤ)
   erw [show M₃.updateRow 4 (5 • M₃ 4 + 1 • M₃ 3) = M₄ by decide +kernel]
   apply my_helper 5 4 (4:ℤ) (1:ℤ)
-  -- unfold M₄
-  simp only [m45_helper]
   erw [show M₄.updateRow 5 (4 • M₄ 5 + 1 • M₄ 4) = M₅ by decide +kernel]
   apply my_helper 6 5 (3:ℤ) (1:ℤ)
   erw [show M₅.updateRow 6 (3 • M₅ 6 + 1 • M₅ 5) = M₆ by decide +kernel]

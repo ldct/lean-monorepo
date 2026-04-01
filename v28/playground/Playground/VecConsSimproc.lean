@@ -1,6 +1,9 @@
 import Mathlib.Data.Fin.VecNotation
 import Mathlib.LinearAlgebra.Matrix.Notation
 
+/-
+The simproc `mySimproc` simplifies `!![...] n` where `n` is a literal
+-/
 open Lean
 
 partial def matchVecLit (e : Expr) : Option (List Expr) :=
@@ -8,14 +11,6 @@ partial def matchVecLit (e : Expr) : Option (List Expr) :=
   | Matrix.vecEmpty _ => some []
   | Matrix.vecCons _ _ x xs => (x :: ·) <$> matchVecLit xs
   | _ => none
-
-dsimproc vecCons_val (Matrix.vecCons _ _ _) := fun e => do
-  let_expr Matrix.vecCons _ _ x xs' n := e | return .continue
-  let some n := n.int? | return .continue -- The docstring claims only nat or int, but works fine for Fin
-  let some xs' := matchVecLit xs' | return .continue
-  let xs := x :: xs'
-  let n' := (n % xs.length).toNat
-  return .continue (xs[n']!)
 
 /-- Match `Matrix.of` applied via `DFunLike.coe` to a vector-of-vectors literal,
     returning rows as lists of expressions. -/
@@ -27,5 +22,16 @@ partial def matchMatLitToVec (e : Expr) : Option (List (List Expr)) := do
   let rows ← matchVecLit args[5]!
   rows.mapM matchVecLit
 
-lemma foo {a b c d : ℕ} : ![a, b, c, d, a, b, c, d, a, b, c, d] 33 = b := by dsimp
-lemma bar {a b c d : ℕ} : ![a, b, c, d, a, b, c, d, a, b, c, d] (-1) = d := by simp
+open Lean Meta Qq in
+simproc_decl mySimproc (@DFunLike.coe _ _ _ _ Matrix.of _ _) := fun e => do
+  let mat := (matchVecLit (e.getAppArgs[5]!)).get!
+  let idx := e.getAppArgs[6]!.nat?.get!
+  logInfo m!"logged! aa={mat[idx]!}"
+  let proof ← mkDecideProof (← mkEq e mat[idx]!)
+  return .done { expr := mat[idx]!, proof? := some proof }
+
+example : !![1, 1, 1; 2, 2, 2; 3, 3, 3] 0 = ![1, 1, 1] := by
+  simp only [mySimproc]
+
+example : !![1, 1, 1; 2, 2, 2; 3, 3, 3] 1 = ![2, 2, 2] := by
+  simp only [mySimproc]
