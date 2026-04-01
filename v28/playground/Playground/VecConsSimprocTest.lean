@@ -1,4 +1,5 @@
 import Playground.VecConsSimproc
+import Mathlib.LinearAlgebra.Matrix.Notation
 import Qq
 
 open Lean Qq Meta
@@ -59,3 +60,75 @@ open Lean Qq Meta
     let e : Q(Fin 3 → ℕ) := q(Matrix.vecCons (1 : ℕ) $f)
     guard (matchVecLit e == none)
     IO.println "pass: non-literal tail returns none"
+
+-- ========== matchMatLitToVec tests ==========
+
+/-- info: pass: non-matrix returns none -/
+#guard_msgs in
+#eval show MetaM Unit from do
+  let e : Q(ℤ) := q(42)
+  guard (matchMatLitToVec e == none)
+  IO.println "pass: non-matrix returns none"
+
+/-- info: pass: 1x1 matrix -/
+#guard_msgs in
+#eval show MetaM Unit from do
+  let e : Q(Matrix (Fin 1) (Fin 1) ℤ) := q(!![(5 : ℤ)])
+  let some rows := matchMatLitToVec e | throwError "expected some"
+  guard (rows.length == 1)
+  guard (rows[0]!.length == 1)
+  IO.println "pass: 1x1 matrix"
+
+/-- info: pass: 2x2 matrix shape -/
+#guard_msgs in
+#eval show MetaM Unit from do
+  let e : Q(Matrix (Fin 2) (Fin 2) ℤ) := q(!![1, 2; 3, 4])
+  let some rows := matchMatLitToVec e | throwError "expected some"
+  guard (rows.length == 2)
+  guard (rows[0]!.length == 2)
+  guard (rows[1]!.length == 2)
+  IO.println "pass: 2x2 matrix shape"
+
+/-- info: pass: 2x2 matrix values -/
+#guard_msgs in
+#eval show MetaM Unit from do
+  let e : Q(Matrix (Fin 2) (Fin 2) ℤ) := q(!![1, 2; 3, 4])
+  let some rows := matchMatLitToVec e | throwError "expected some"
+  guard ((rows[0]!)[0]!.int? == some 1)
+  guard ((rows[0]!)[1]!.int? == some 2)
+  guard ((rows[1]!)[0]!.int? == some 3)
+  guard ((rows[1]!)[1]!.int? == some 4)
+  IO.println "pass: 2x2 matrix values"
+
+/-- info: pass: 2x3 rectangular matrix -/
+#guard_msgs in
+#eval show MetaM Unit from do
+  let e : Q(Matrix (Fin 2) (Fin 3) ℤ) := q(!![1, 2, 3; 4, 5, 6])
+  let some rows := matchMatLitToVec e | throwError "expected some"
+  guard (rows.length == 2)
+  guard (rows[0]!.length == 3)
+  guard (rows[1]!.length == 3)
+  guard ((rows[0]!)[0]!.int? == some 1)
+  guard ((rows[0]!)[2]!.int? == some 3)
+  guard ((rows[1]!)[0]!.int? == some 4)
+  guard ((rows[1]!)[2]!.int? == some 6)
+  IO.println "pass: 2x3 rectangular matrix"
+
+/-- info: pass: 3x3 matrix with negatives -/
+#guard_msgs in
+#eval show MetaM Unit from do
+  let e : Q(Matrix (Fin 3) (Fin 3) ℤ) := q(!![(1 : ℤ), -2, 3; -4, 5, -6; 7, -8, 9])
+  let some rows := matchMatLitToVec e | throwError "expected some"
+  guard (rows.length == 3)
+  for row in rows do
+    guard (row.length == 3)
+  guard ((rows[1]!)[0]!.int? == some (-4))
+  guard ((rows[2]!)[1]!.int? == some (-8))
+  IO.println "pass: 3x3 matrix with negatives"
+
+/-- info: pass: plain vector is not a matrix -/
+#guard_msgs in
+#eval show MetaM Unit from do
+  let e : Q(Fin 3 → ℤ) := q(![1, 2, 3])
+  guard (matchMatLitToVec e == none)
+  IO.println "pass: plain vector is not a matrix"
