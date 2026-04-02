@@ -1,4 +1,6 @@
 
+- IsUpperTriangular
+- simproc for `det_of_lowerTriangular`
 - PR `#register_hint 1 decide +revert` to register `decide +revert` as a hint
 - Quaternion.lean, line 96 - simp lemma for ZMod 2n
 - simproc for computing order in a finite group by verifying factors
