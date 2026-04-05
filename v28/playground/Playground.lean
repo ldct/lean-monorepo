@@ -33,7 +33,7 @@ import Playground.Jensen
 import Playground.SMOQ2
 import Playground.Stern
 import Playground.cancellation
-import Playground.scratch
+-- import Playground.scratch  -- file missing
 import Playground.scratch2
 import Playground.scratch3
 import Playground.test
@@ -62,3 +62,8 @@ import Playground.Analysis.Reindex
 import Playground.Analysis.Harmonic
 import Playground.Analysis.CCT
 import Playground.FinsetInterval
+import Playground.HM_Geometry
+import Playground.IdealSumCarrier_aristotle
+import Playground.inv_question
+import Playground.ListsTest
+import Playground.ml_tests

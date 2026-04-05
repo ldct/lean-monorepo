@@ -12,7 +12,7 @@ Chapter 3, problems 1-5: Groups of permutations of `ℝ`
 -/
 
 open Equiv
-open MulAction hiding toSMul
+open MulAction
 
 /-! ## Problem 1 -/
 
@@ -329,7 +329,6 @@ example (a b : ℝ) (ha : a ≠ 0) {x y z : ℝ} (hxz : x ≠ z):
     have : x = z := by linarith
     exact hxz this
   field_simp
-  ring
 
 /-- A transformation which preserves ratios of lengths on the real line is called a *similarity* of
 the real line. -/
@@ -429,5 +428,5 @@ theorem IsSimilarity.exists_eq_mulLeftAddRight {α : Perm ℝ} (h : IsSimilarity
 
 /-- Give the algebraic form of the elements in the stabiliser of 0 in the subgroup of similiarites
 of R. -/
-example (α : A) : α ∈ stabilizer A (0:ℝ) ↔ ∃ (a : ℝ) (ha : a ≠ 0), α = mulLeftaddRight a 0 ha := by
+example (α : A) : α ∈ MulAction.stabilizer A (0:ℝ) ↔ ∃ (a : ℝ) (ha : a ≠ 0), α = mulLeftaddRight a 0 ha := by
   sorry

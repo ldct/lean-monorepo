@@ -1,3 +1,4 @@
+import Mathlib
 
 namespace IdealSumCarrier_aristotle
 
@@ -16,8 +17,6 @@ The following was proved by Aristotle:
 - example {R} [Ring R] (I J : Ideal R)
 : (I + J).carrier = {i + j | (i ∈ I.carrier) (j ∈ J.carrier) }
 -/
-
-import Mathlib
 
 
 example {R} [Ring R] (I J : Ideal R)
