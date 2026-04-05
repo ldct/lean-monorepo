@@ -56,3 +56,9 @@ import Playground.BucketProperty
 import Playground.a1_aristotle
 import Playground.LUMinScaling
 import Playground.IrregularityOfDistribution
+import Playground.Analysis.AlgebraicLimit
+import Playground.Analysis.OrderLimit
+import Playground.Analysis.Reindex
+import Playground.Analysis.Harmonic
+import Playground.Analysis.CCT
+import Playground.FinsetInterval

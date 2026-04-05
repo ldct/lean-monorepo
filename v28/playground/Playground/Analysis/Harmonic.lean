@@ -4,7 +4,7 @@ import Playground.Analysis.Bounded
 import Mathlib
 
 namespace Harmonic
-open AlgebraicLimit InfiniteSums Bounded
+open AlgebraicLimit InfiniteSums
 
 -- The terms 1/i
 def invNats (i : ℕ) : ℝ := (1 / (i+1):ℚ)
@@ -44,14 +44,11 @@ theorem s_unbounded_formula (k : ℕ) : s (2^k) ≥ 1 + (k:ℝ)/2 := by
     unfold s partialSums
     unfold s partialSums at IH
     rw [congrFun Finset.range_eq_Ico]
-
     rw [← Finset.sum_Ico_consecutive invNats (by positivity) (show 2^k ≤ 2^(k+1) by gcongr <;> omega)]
-
     have : (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i) ≥ 1/2 := by
       calc
         (∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i) ≥ (∑ _ ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats (2^(k+1)-1)) := e1 k
         _ = 1/2 := e2 k
-
     have t := calc
       (∑ i ∈ Finset.Ico 0 (2 ^ k), invNats i + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i) = (∑ i ∈ Finset.range (2 ^ k), invNats i + ∑ i ∈ Finset.Ico (2 ^ k) (2 ^ (k + 1)), invNats i) := by
         congr
@@ -61,7 +58,6 @@ theorem s_unbounded_formula (k : ℕ) : s (2^k) ≥ 1 + (k:ℝ)/2 := by
       _ ≥ 1 + k/2 + 1/2 := by
         gcongr
       _ = 1 + (k+1)/2 := by ring
-
     push_cast at t
     push_cast
     exact t

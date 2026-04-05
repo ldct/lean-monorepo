@@ -6,7 +6,7 @@ import Mathlib
 
 
 namespace Reindex
-open AlgebraicLimit InfiniteSums TendsTo
+open AlgebraicLimit InfiniteSums
 
 def drop (a : ℕ → ℝ) : ℕ → ℝ := fun i ↦ a (i + 1)
 

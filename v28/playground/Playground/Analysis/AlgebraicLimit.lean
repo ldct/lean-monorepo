@@ -4,7 +4,6 @@ import Playground.Analysis.TendsTo
 
 
 namespace AlgebraicLimit
-open Bounded TendsTo
 
 noncomputable def max_prefix : ((ℕ → ℝ)) → ℕ → ℝ
 | _, 0   => 0
@@ -49,36 +48,29 @@ theorem ConvergesThenBounded {f : ℕ → ℝ} (hc : Converges f) : Bounded f :=
   use (max (1 + Nat.ceil B) (Nat.ceil (|l|+2)))
 
   constructor
-  . rw [lt_max_iff]; left; linarith
+  · rw [lt_max_iff]; left; linarith
 
   intro n
 
-  cases (le_or_lt N n) with
-  | inl N_lt_n => {
-    rw [lt_max_iff]
+  by_cases N_lt_n : N ≤ n
+  · rw [lt_max_iff]
     right
-
     have fn_near_l := hN n N_lt_n
-
     have h6: |f n| - |l| ≤ |f n - l| := abs_sub_abs_le_abs_sub (f n) l
     have h7: |f n| - |l| < 1 := by linarith
     calc
       |f n| < |l| + 1 := sub_lt_iff_lt_add'.mp h7
       _ ≤ |l| + 2 := by linarith
       _ ≤ ⌈|l| + 2⌉₊ := Nat.le_ceil (|l| + 2)
-  }
-  | inr h1 => {
-    simp
+  · simp
     left
-
+    have h1 : n < N := by omega
     calc
       |f n| ≤ B := hB n h1
-      _ < (1 + ⌈B⌉₊) := by {
+      _ < (1 + ⌈B⌉₊) := by
         calc
           B ≤ ↑⌈B⌉₊ := Nat.le_ceil B
           _ < 1 +  ↑⌈B⌉₊ := by apply lt_one_add
-      }
-  }
 
 theorem tendsTo_mul_constant_nz
   {a : ℕ → ℝ}
@@ -160,14 +152,12 @@ theorem tendsTo_mul
     _ = |b n * (a n - A)| + |A * (b n - B)| := by ring_nf
     _ = |b n| * |a n - A| + |A * (b n - B)| := by congr; exact abs_mul (b n) (a n - A)
     _ = |b n| * |a n - A| + |A| * |b n - B| := by congr; exact abs_mul A (b n - B)
-    _ ≤ M * |a n - A| + |A| * |b n - B| := by {
+    _ ≤ M * |a n - A| + |A| * |b n - B| := by
       simp
       specialize m_bounds n
       have hpos : 0 ≤ |a n - A| := abs_nonneg (a n - A)
-      suffices : |b n| ≤ M
-      · exact mul_le_mul_of_nonneg_right this hpos
-      exact LT.lt.le m_bounds
-    }
+      have : |b n| ≤ M := LT.lt.le m_bounds
+      exact mul_le_mul_of_nonneg_right this hpos
     _ < M * (ε / (2*M)) + |A| * |b n - B| := by
       gcongr
       apply hn2
@@ -176,10 +166,9 @@ theorem tendsTo_mul
       gcongr
       apply hn1
       exact le_of_max_le_left hn
-    _ = ε := by {
+    _ = ε := by
       field_simp
       ring
-    }
 
 -- Theorem 2.3.3.iv (Algebraic Limit Theorem, inverses)
 theorem tendsTo_inv
@@ -252,10 +241,7 @@ theorem tendsTo_inv
     _ = ε * (|B| / 2 * (1 / |b n|)) := by
       field_simp
     _ < ε * (|B| / 2 * (2 / |B|)) := by
-      apply (mul_lt_mul_left hε).mpr _
-      have haux : 0 < |B| / 2 := by positivity
-      apply (mul_lt_mul_left (show 0 < |B| / 2 by positivity)).mpr
-      exact this
+      gcongr
     _ = ε := by
       field_simp
 

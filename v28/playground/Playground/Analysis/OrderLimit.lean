@@ -4,7 +4,7 @@ import Mathlib
 -- Theorem 2.3.4.i (Order Limit Theorem)
 
 namespace OrderLimit
-open AlgebraicLimit TendsTo
+open AlgebraicLimit
 
 theorem tendsTo_pos
   {a : ℕ → ℝ}

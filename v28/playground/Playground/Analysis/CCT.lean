@@ -12,7 +12,7 @@ import Playground.FinsetInterval
 
 
 namespace CCT
-open AlgebraicLimit InfiniteSums Bounded MonotoneConvergence Reindex Qq TendsTo
+open AlgebraicLimit InfiniteSums MonotoneConvergence Reindex Qq
 
 /-- The sequence b₁, 2b₂, 4b₄, 8b₈, ... --/
 def condense (a : ℕ → ℝ) : (ℕ → ℝ):= fun (i : ℕ) ↦
@@ -38,7 +38,7 @@ lemma s_converges
   have : (fun n ↦ ∑ i ∈ Finset.range n, a (i + 1)) = (fun n ↦ ∑ i ∈ Finset.Icc 1 n, a i) := by
     ext n
     rw [ri]
-    rw [Nat.Ico_succ_right]
+    rw [Finset.Ico_add_one_right_eq_Icc]
   rw [this]
 
 lemma s_le_t
@@ -66,22 +66,15 @@ lemma s_le_t
     | succ k hk IH =>
       unfold s t
       unfold s t at IH
-
       -- Write the LHS as (LHS of induction hypothesis) + something
       have : ∑ i ∈ Finset.Icc 1 (2 ^ (k + 2) - 1), a i = ∑ i ∈ Finset.Icc 1 (2 ^ (k + 1) - 1), a i + ∑ i ∈ Finset.Icc (2 ^ (k + 1)) (2 ^ (k + 2) - 1), a i := by
-        -- texify  -- LeanTeX not available in v24
         sorry
-
       -- Write the RHS as (RHS of induction hypothesis) + something
       have : ∑ i ∈ Finset.Icc 1 (2 ^ (k + 1)), a i = ∑ i ∈ Finset.Icc 1 (2 ^ k), a i + ∑ i ∈ Finset.Icc (2 ^ k + 1) (2 ^ (k + 1)), a i := by
-        -- texify  -- LeanTeX not available in v24
         sorry
-
-      -- texify  -- LeanTeX not available in v24
       sorry
 
   sorry
-
 
 
 
@@ -179,7 +172,6 @@ theorem cct1
       simp
       simp at IH
       rw [show k + 1 + 1 = (k + 2) by ring] at *
-
       -- Write the LHS as (LHS of induction hypothesis) + something
       have :  ∑ x ∈ Finset.range (2 ^ (k + 2) - 1), b (x + 1)
         = ∑ x ∈ Finset.range (2 ^ (k + 1) - 1), b (x + 1)
@@ -197,7 +189,6 @@ theorem cct1
         exact Finset.Ico_disjoint_Ico_consecutive _ _ _
       rw [this]
       clear this
-
       -- Write the RHS as (RHS of induction hypothesis) + something
       have : ∑ i ∈ Finset.range (k + 2), 2 ^ i * b (2 ^ i)
         = ∑ i ∈ Finset.range (k + 1), 2 ^ i * b (2 ^ i)
@@ -214,18 +205,14 @@ theorem cct1
         exact Finset.Ico_disjoint_Ico_consecutive _ _ _
       rw [this]
       clear this
-
-      -- texify  -- LeanTeX not available in v24
-
       suffices t : ∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), b (x + 1) ≤ ∑ i ∈ Finset.Ico (k + 1) (k + 2), 2 ^ i * b (2 ^ i) from by linarith
-
       -- Now we are comparing a sum of 2^(k+1) terms with a single term of the condensed series.
       clear IH c_summable M_bounds'
       rw [Nat.Ico_succ_singleton (k + 1)]
       simp
       have : 2 ^ (k + 1) = ∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), 1 := by
         rw [Finset.sum_const]
-        simp
+        simp only [Nat.card_Ico, smul_eq_mul, mul_one]
         rw [Nat.two_pow_succ (k + 1)]
         have rwl (t : ℕ) : t = t + t - 1 - (t - 1) := by omega
         exact rwl (2 ^ (k + 1))
@@ -237,16 +224,13 @@ theorem cct1
           rw [Finset.sum_const]
           simp
           rw [Nat.two_pow_succ (k + 1)]
-          -- texify  -- LeanTeX not available in v24
           have rwl (t : ℕ) : t = t + t - 1 - (t - 1) := by omega
           exact rwl (2 ^ (k + 1))
         ]
-
       have ttt :
         (∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), 1) * b (2 ^ (k + 1))
         = (∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), b (2 ^ (k + 1))) := by
         simp
-
       norm_cast at ttt
       rw [ttt]
       clear ttt
@@ -388,11 +372,8 @@ theorem invP_diverges (p : ℝ) (hp : 0 < p) (hp' : p < 1) : ¬ (Summable' (invP
     norm_cast
     simp
     norm_cast
-
     have hp' : 0 ≤ p := by linarith
-
     have : (m = 0 ∧ n = 0) ∨ (0 < m ∧ n = 0) ∨ (0 < m ∧ 0 < n) := by omega
-
     rcases this with h | h | h
     case inl h => simp [h]
     case inr.inl h =>
