@@ -29,7 +29,7 @@ abbrev SpaceIsometry := RealIsometry 3
 /-
 Lemma 1.2. Every isometry is injective.
 -/
-@[grind] theorem RealIsometry.injective {n : ℕ} (f : RealIsometry n) : Function.Injective f.toFun := by
+@[grind .] theorem RealIsometry.injective {n : ℕ} (f : RealIsometry n) : Function.Injective f.toFun := by
   intro x y hxy
   have := calc
     0 = ‖f.toFun x - f.toFun y‖ := by grind [norm_eq_zero]
@@ -39,7 +39,7 @@ Lemma 1.2. Every isometry is injective.
 /-
 Prerequisite for lemma 1.3 If f is an isometry, then f⁻¹ exists.
 -/
-example{n : ℕ} (f : RealIsometry n) : Function.Bijective f.toFun := by grind [Function.Bijective]
+example {n : ℕ} (f : RealIsometry n) : Function.Bijective f.toFun := by grind [Function.Bijective]
 
 noncomputable def RealIsometry.toEquiv {n : ℕ} (f : RealIsometry n) : Equiv.Perm (EuclideanSpace ℝ (Fin n)) where
   toFun := f.toFun
