@@ -53,3 +53,14 @@ theorem E₈_det' : E₈.det = 1 := by
   apply det_of_smul_det (k := 60) (by norm_num)
   erw [show 60 • E₈ = E₈_L * E₈_U by decide]
   grind [E₈_L_det, E₈_U_det, Matrix.det_mul]
+
+universe v
+variable {α β m n o : Type*} {m' n' : α → Type*}
+variable {R : Type v} {M N : Matrix m m R} {b : m → α}
+
+abbrev IsUpperTriangular [LT m] [Zero R] (M : Matrix m m R) : Prop := M.BlockTriangular id
+
+example : IsUpperTriangular E₈_U := by
+  unfold IsUpperTriangular
+  unfold Matrix.BlockTriangular
+  decide

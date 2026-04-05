@@ -1,8 +1,5 @@
 import Mathlib
 
-
-namespace Equiv
-
 /-- Demonstrations of equivalence relations, via Setoids -/
 
 structure Point where
@@ -12,17 +9,17 @@ structure Point where
 instance Point.instSetoid : Setoid Point where
   r a b := a.x = b.x
   iseqv := {
-    refl := by
-      intro ⟨a, b⟩
-      dsimp
-    symm := by
-      intro ⟨a, b⟩ ⟨c, d⟩ h
-      linarith
-    trans := by
-      intro ⟨ a,b ⟩ ⟨ c,d ⟩ ⟨ e,f ⟩ h1 h2
-      simp at h1 h2 ⊢
-      exact h1.trans h2
+    refl := by grind
+    symm := by grind
+    trans := by grind
     }
 
+def Q := Quotient Point.instSetoid
 
-end Equiv
+/- The canonical Equiv between `Q` and `ℝ`-/
+def myEquiv : Q ≃ ℝ where
+  toFun := Quotient.lift Point.x fun _ _ h => h
+  invFun r := Quotient.mk _ ⟨r, 0⟩
+  left_inv q :=
+    Quotient.inductionOn q fun p => Quotient.sound (show Point.instSetoid.r ⟨p.x, 0⟩ p by rfl)
+  right_inv r := by simp [Quotient.lift_mk]
