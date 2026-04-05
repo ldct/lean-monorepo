@@ -1,6 +1,0 @@
-
-
-namespace SumOfNZ
-
-
-end SumOfNZ
