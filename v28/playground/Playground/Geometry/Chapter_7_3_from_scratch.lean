@@ -58,7 +58,7 @@ instance : Mul (Fibre φ) := ⟨
     (fun x y => Quotient.mk (HomSetoid φ) (x * y))
     (by
       intro a₁ b₁ a₂ b₂ h₁ h₂
-      simp only [HomSetoid, Setoid.r] at h₁ h₂
+      simp only [HomSetoid] at h₁ h₂
       simp only [Quotient.eq]
       change φ (a₁ * b₁) = φ (a₂ * b₂)
       rw [φ.map_mul, φ.map_mul, h₁, h₂]
