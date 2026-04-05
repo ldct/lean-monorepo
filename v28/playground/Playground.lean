@@ -1,12 +1,4 @@
 import Playground.Basic
-import Playground.Analysis.Bassel
-import Playground.Analysis.Bounded
-import Playground.Analysis.Cancel
-import Playground.Analysis.InfiniteSums
-import Playground.Analysis.MonotoneConvergence
-import Playground.Analysis.TendsTo
-import Playground.Analysis.abbott
-import Playground.Analysis.motzkin
 import Playground.AoC.Parsers
 import Playground.AoC.day1
 import Playground.AoC.day2
@@ -56,12 +48,6 @@ import Playground.BucketProperty
 import Playground.a1_aristotle
 import Playground.LUMinScaling
 import Playground.IrregularityOfDistribution
-import Playground.Analysis.AlgebraicLimit
-import Playground.Analysis.OrderLimit
-import Playground.Analysis.Reindex
-import Playground.Analysis.Harmonic
-import Playground.Analysis.CCT
-import Playground.FinsetInterval
 import Playground.HM_Geometry
 import Playground.IdealSumCarrier_aristotle
 import Playground.inv_question
