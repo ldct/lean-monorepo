@@ -55,3 +55,4 @@ import Playground.BucketProperty
 -- import Playground.AristotleTest_aristotle  -- name collision with Combi1
 import Playground.a1_aristotle
 import Playground.LUMinScaling
+import Playground.IrregularityOfDistribution
