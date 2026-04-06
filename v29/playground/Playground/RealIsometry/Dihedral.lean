@@ -28,9 +28,7 @@ lemma rotMat_mul (θ₁ θ₂ : ℝ) : rotMat θ₁ * rotMat θ₂ = rotMat (θ�
   fin_cases i <;> fin_cases j <;> simp <;> ring
 
 lemma rotMat_zero : rotMat 0 = 1 := by
-  ext i j
-  simp [one_apply, rotMat]
-  fin_cases i <;> dsimp <;> fin_cases j <;> dsimp
+  ext i j; fin_cases i <;> fin_cases j <;> simp [rotMat, one_apply]
 
 lemma rotMat_periodic (θ : ℝ) (k : ℤ) : rotMat (θ + k * (2 * π)) = rotMat θ := by
   simp [rotMat, cos_add_int_mul_two_pi, sin_add_int_mul_two_pi]
@@ -68,12 +66,7 @@ lemma mul_mem_O3 {A B : MAT3}
     (hB : B ∈ Matrix.orthogonalGroup (Fin 3) ℝ)
     : A * B ∈ Matrix.orthogonalGroup (Fin 3) ℝ := by
   rw [mem_orthogonalGroup_iff'] at *
-  calc (A * B).transpose * (A * B)
-      = B.transpose * A.transpose * (A * B) := by rw [transpose_mul]
-    _ = B.transpose * (A.transpose * A) * B := by simp [Matrix.mul_assoc]
-    _ = B.transpose * 1 * B := by rw [hA]
-    _ = B.transpose * B := by rw [Matrix.mul_one]
-    _ = 1 := hB
+  rw [transpose_mul, Matrix.mul_assoc Bᵀ, ← Matrix.mul_assoc Aᵀ, hA, Matrix.one_mul, hB]
 
 /-! ## Angle arithmetic -/
 
@@ -94,19 +87,17 @@ lemma rotMatZMod_eq_rotMat (n : ℕ) [NeZero n] (k : ℤ) (a : ZMod n) (h : (k :
     n_mul_angle, rotMat_periodic]
 
 lemma rotMat_eq_rotMatZMod (n : ℕ) [NeZero n] (k : ℤ) :
-    rotMat (↑k * dihedralAngle n) = rotMatZMod n (k : ZMod n) := by
-  exact (rotMatZMod_eq_rotMat n k _ rfl).symm
+    rotMat (↑k * dihedralAngle n) = rotMatZMod n (k : ZMod n) :=
+  (rotMatZMod_eq_rotMat n k _ rfl).symm
 
 /-! ## rotMatZMod properties -/
 
 lemma rotMatZMod_add (n : ℕ) [NeZero n] (i j : ZMod n) :
     rotMatZMod n i * rotMatZMod n j = rotMatZMod n (i + j) := by
   simp only [rotMatZMod, rotMat_mul, ← add_mul]
-  -- Goal: rotMat((val i + val j) * angle) = rotMat(val(i+j) * angle)
-  -- Both equal rotMatZMod n (i+j) via rotMatZMod_eq_rotMat
-  rw [show rotMat (↑(ZMod.val (i + j)) * dihedralAngle n) = rotMatZMod n (i + j) from rfl]
-  rw [rotMatZMod_eq_rotMat n (↑(ZMod.val i) + ↑(ZMod.val j)) (i + j)
-    (by push_cast [ZMod.natCast_val]; simp)]
+  rw [show rotMat (↑(ZMod.val (i + j)) * dihedralAngle n) = rotMatZMod n (i + j) from rfl,
+    rotMatZMod_eq_rotMat n (↑(ZMod.val i) + ↑(ZMod.val j)) (i + j)
+      (by push_cast [ZMod.natCast_val]; simp)]
   congr 1; push_cast; ring
 
 lemma rotMatZMod_zero (n : ℕ) [NeZero n] : rotMatZMod n 0 = 1 := by
@@ -116,21 +107,10 @@ lemma rotMatZMod_zero (n : ℕ) [NeZero n] : rotMatZMod n 0 = 1 := by
 
 lemma reflMat_mul_rotMat_ne_rotMat (θ φ : ℝ) : reflMat * rotMat θ ≠ rotMat φ := by
   intro h
-  have h00 : cos θ = cos φ := by
-    have := congr_fun₂ h 0 0
-    simp [rotMat, reflMat, mul_apply, Fin.sum_univ_three, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons, head_fin_const] at this; linarith
-  have h11 : -cos θ = cos φ := by
-    have := congr_fun₂ h 1 1
-    simp [rotMat, reflMat, mul_apply, Fin.sum_univ_three, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons, head_fin_const] at this; linarith
-  have hcos : cos θ = 0 := by linarith
-  have hsin : sin θ = 0 := by
-    have h10 : -sin θ = sin φ := by
-      have := congr_fun₂ h 1 0
-      simp [rotMat, reflMat, mul_apply, Fin.sum_univ_three, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons, head_fin_const] at this; linarith
-    have h01 : sin θ = sin φ := by
-      have := congr_fun₂ h 0 1
-      simp [rotMat, reflMat, mul_apply, Fin.sum_univ_three, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons, head_fin_const] at this; linarith
-    linarith
+  have h00 := congr_fun₂ h 0 0; have h11 := congr_fun₂ h 1 1
+  have h10 := congr_fun₂ h 1 0; have h01 := congr_fun₂ h 0 1
+  simp [rotMat, reflMat, mul_apply, Fin.sum_univ_three, of_apply, cons_val',
+    cons_val_zero, cons_val_one, head_cons, head_fin_const] at h00 h11 h10 h01
   nlinarith [sin_sq_add_cos_sq θ]
 
 /-! ## rotMat equality and rotMatZMod injectivity -/
@@ -138,16 +118,12 @@ lemma reflMat_mul_rotMat_ne_rotMat (θ φ : ℝ) : reflMat * rotMat θ ≠ rotMa
 lemma rotMat_eq_iff (θ₁ θ₂ : ℝ) : rotMat θ₁ = rotMat θ₂ ↔ ∃ k : ℤ, θ₁ - θ₂ = k * (2 * π) := by
   constructor
   · intro h
-    have hcos : cos θ₁ = cos θ₂ := by
-      have := congr_fun₂ h 0 0
-      simp [rotMat, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons, head_fin_const] at this; linarith
-    have hsin : sin θ₁ = sin θ₂ := by
-      have := congr_fun₂ h 1 0
-      simp [rotMat, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons, head_fin_const] at this; linarith
-    have hcos_diff : cos (θ₁ - θ₂) = 1 := by
-      rw [cos_sub, hcos, hsin]; nlinarith [sin_sq_add_cos_sq θ₂]
-    rw [cos_eq_one_iff] at hcos_diff
-    obtain ⟨k, hk⟩ := hcos_diff; exact ⟨k, hk.symm⟩
+    have h00 := congr_fun₂ h 0 0; have h10 := congr_fun₂ h 1 0
+    simp [rotMat, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons,
+      head_fin_const] at h00 h10
+    have : cos (θ₁ - θ₂) = 1 := by rw [cos_sub, h00, h10]; nlinarith [sin_sq_add_cos_sq θ₂]
+    rw [cos_eq_one_iff] at this
+    obtain ⟨k, hk⟩ := this; exact ⟨k, hk.symm⟩
   · intro ⟨k, hk⟩
     have : θ₁ = θ₂ + k * (2 * π) := by linarith
     subst this; exact rotMat_periodic _ _
@@ -186,6 +162,14 @@ lemma dihedralToMat_mem_O3 (n : ℕ) [NeZero n] (g : DihedralGroup n) :
 lemma dihedralToMat_one (n : ℕ) [NeZero n] : dihedralToMat n 1 = 1 := by
   show dihedralToMat n (DihedralGroup.r 0) = 1; simp [dihedralToMat, rotMatZMod_zero]
 
+private lemma rotMatZMod_sub_eq (n : ℕ) [NeZero n] (i j : ZMod n) :
+    rotMat (↑(ZMod.val (j - i)) * dihedralAngle n) =
+    rotMat (-((↑(ZMod.val i) : ℝ) * dihedralAngle n) + ↑(ZMod.val j) * dihedralAngle n) := by
+  rw [show rotMat (↑(ZMod.val (j - i)) * dihedralAngle n) = rotMatZMod n (j - i) from rfl,
+    rotMatZMod_eq_rotMat n (-↑(ZMod.val i) + ↑(ZMod.val j)) (j - i)
+      (by push_cast [ZMod.natCast_val]; ring)]
+  congr 1; push_cast; ring
+
 lemma dihedralToMat_mul (n : ℕ) [NeZero n] (a b : DihedralGroup n) :
     dihedralToMat n (a * b) = dihedralToMat n a * dihedralToMat n b := by
   cases a with
@@ -194,43 +178,19 @@ lemma dihedralToMat_mul (n : ℕ) [NeZero n] (a b : DihedralGroup n) :
       simp only [DihedralGroup.r_mul_r, dihedralToMat]
       exact (rotMatZMod_add n i j).symm
     | sr j =>
-      -- r i * sr j = sr (j - i)
-      -- Need: reflMat * R(j-i) = R(i) * (reflMat * R(j))
       simp only [DihedralGroup.r_mul_sr, dihedralToMat, rotMatZMod]
       rw [← Matrix.mul_assoc, rotMat_reflMat_eq, Matrix.mul_assoc, rotMat_mul]
-      -- Goal: reflMat * rotMat(val(j-i)*θ) = reflMat * rotMat(-val(i)*θ + val(j)*θ)
-      congr 1
-      calc rotMat (↑(ZMod.val (j - i)) * dihedralAngle n)
-          = rotMatZMod n (j - i) := rfl
-        _ = rotMat ((-↑(ZMod.val i) + ↑(ZMod.val j)) * dihedralAngle n) := by
-            rw [rotMatZMod_eq_rotMat n (-↑(ZMod.val i) + ↑(ZMod.val j)) (j - i)
-              (by push_cast [ZMod.natCast_val]; ring)]
-            congr 1; push_cast; ring
-        _ = rotMat (-((↑(ZMod.val i) : ℝ) * dihedralAngle n) + ↑(ZMod.val j) * dihedralAngle n) := by
-            congr 1; ring
+      congr 1; exact rotMatZMod_sub_eq n i j
   | sr i => cases b with
     | r j =>
-      -- sr i * r j = sr (i + j)
       simp only [DihedralGroup.sr_mul_r, dihedralToMat]
       rw [Matrix.mul_assoc, rotMatZMod_add]
     | sr j =>
-      -- sr i * sr j = r (j - i)
-      -- (refl * R(i)) * (refl * R(j)) = refl * R(i) * refl * R(j)
-      --   = refl * (R(i) * refl) * R(j) = refl * refl * R(-i) * R(j)
-      --   = R(-i) * R(j) = R(j-i)
       simp only [DihedralGroup.sr_mul_sr, dihedralToMat, rotMatZMod]
       rw [Matrix.mul_assoc, ← Matrix.mul_assoc (rotMat _) reflMat,
           rotMat_reflMat_eq, ← Matrix.mul_assoc reflMat, ← Matrix.mul_assoc reflMat,
           reflMat_mul_self, Matrix.one_mul, rotMat_mul]
-      -- Goal: rotMat(val(j-i)*θ) = rotMat(-val(i)*θ + val(j)*θ)
-      calc rotMat (↑(ZMod.val (j - i)) * dihedralAngle n)
-          = rotMatZMod n (j - i) := rfl
-        _ = rotMat ((-↑(ZMod.val i) + ↑(ZMod.val j)) * dihedralAngle n) := by
-            rw [rotMatZMod_eq_rotMat n (-↑(ZMod.val i) + ↑(ZMod.val j)) (j - i)
-              (by push_cast [ZMod.natCast_val]; ring)]
-            congr 1; push_cast; ring
-        _ = rotMat (-((↑(ZMod.val i) : ℝ) * dihedralAngle n) + ↑(ZMod.val j) * dihedralAngle n) := by
-            congr 1; ring
+      exact rotMatZMod_sub_eq n i j
 
 lemma dihedralToMat_injective (n : ℕ) [NeZero n] : Function.Injective (dihedralToMat n) := by
   intro a b hab
@@ -256,49 +216,34 @@ noncomputable def multiplicationHom : O3 →* SpaceIsometry where
   toFun A := multiplication A
   map_one' := by ext x : 2; simp [multiplication]; rfl
   map_mul' A B := by
-    ext x : 2
-    simp only [multiplication, mul_eq, RealIsometry.comp, Function.comp]
-    rw [← SemigroupAction.mul_smul]
+    ext x : 2; simp only [multiplication, mul_eq, RealIsometry.comp, Function.comp,
+      SemigroupAction.mul_smul]
 
 lemma multiplicationHom_injective : Function.Injective multiplicationHom := by
   intro A B h
-  have key : ∀ x : R3, (A : MAT3) • x = (B : MAT3) • x := by
+  have key : ∀ x : R3, (A : MAT3) • x = (B : MAT3) • x :=
+    fun x => congr_fun (congr_arg RealIsometry.toFun h) x
+  have hmulVec : ∀ x : Fin 3 → ℝ, (A : MAT3).mulVec x = (B : MAT3).mulVec x := by
     intro x
-    have := congr_fun (congr_arg RealIsometry.toFun h) x
-    change (multiplication A).toFun x = (multiplication B).toFun x at this
-    simp only [multiplication] at this; exact this
-  have key2 : (A : MAT3) = (B : MAT3) := by
-    have h1 : ∀ x : Fin 3 → ℝ, (A : MAT3).mulVec x = (B : MAT3).mulVec x := by
-      intro x
-      have h := key ((WithLp.equiv 2 _).symm x)
-      -- M • v = (WithLp.equiv ..).symm (M.mulVec ((WithLp.equiv ..) v)) by rfl
-      -- So applying WithLp.equiv to both sides gives mulVec equality
-      have := congr_arg (WithLp.equiv 2 (Fin 3 → ℝ)) h
-      simp only [Equiv.apply_symm_apply] at this
-      exact this
-    exact Matrix.ext_of_mulVec_single fun j => h1 _
-  exact Subtype.ext key2
+    have := congr_arg (WithLp.equiv 2 (Fin 3 → ℝ)) (key ((WithLp.equiv 2 _).symm x))
+    simpa using this
+  exact Subtype.ext (Matrix.ext_of_mulVec_single fun j => hmulVec _)
 
 noncomputable def dihedralToIsometry (n : ℕ) [NeZero n] : DihedralGroup n →* SpaceIsometry where
   toFun g := multiplicationHom ⟨dihedralToMat n g, dihedralToMat_mem_O3 n g⟩
   map_one' := by
-    change multiplicationHom ⟨dihedralToMat n 1, _⟩ = 1
-    have : dihedralToMat n 1 = 1 := dihedralToMat_one n
-    simp only [this]; exact multiplicationHom.map_one
+    show multiplicationHom ⟨dihedralToMat n 1, _⟩ = 1
+    simp only [dihedralToMat_one]; exact multiplicationHom.map_one
   map_mul' a b := by
-    change multiplicationHom ⟨_, _⟩ = multiplicationHom ⟨_, _⟩ * multiplicationHom ⟨_, _⟩
+    show multiplicationHom ⟨_, _⟩ = multiplicationHom ⟨_, _⟩ * multiplicationHom ⟨_, _⟩
     rw [← multiplicationHom.map_mul]
-    have : dihedralToMat n (a * b) = dihedralToMat n a * dihedralToMat n b := dihedralToMat_mul n a b
-    congr 1; exact Subtype.ext this
+    exact congrArg multiplicationHom (Subtype.ext (dihedralToMat_mul n a b))
 
 lemma dihedralToIsometry_injective (n : ℕ) [NeZero n] :
     Function.Injective (dihedralToIsometry n) := by
   intro a b hab
   apply dihedralToMat_injective n
-  have h : multiplicationHom ⟨dihedralToMat n a, dihedralToMat_mem_O3 n a⟩ =
-           multiplicationHom ⟨dihedralToMat n b, dihedralToMat_mem_O3 n b⟩ := hab
-  have := multiplicationHom_injective h
-  exact congrArg Subtype.val this
+  exact congrArg Subtype.val (multiplicationHom_injective hab)
 
 /-! ## Main theorem -/
 
