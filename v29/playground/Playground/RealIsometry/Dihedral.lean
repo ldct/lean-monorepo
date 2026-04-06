@@ -160,7 +160,7 @@ lemma dihedralToMat_mem_O3 (n : ℕ) [NeZero n] (g : DihedralGroup n) :
   | sr k => exact mul_mem_O3 reflMat_mem_O3 (rotMat_mem_O3 _)
 
 lemma dihedralToMat_one (n : ℕ) [NeZero n] : dihedralToMat n 1 = 1 := by
-  show dihedralToMat n (DihedralGroup.r 0) = 1; simp [dihedralToMat, rotMatZMod_zero]
+  change dihedralToMat n (DihedralGroup.r 0) = 1; simp [dihedralToMat, rotMatZMod_zero]
 
 private lemma rotMatZMod_sub_eq (n : ℕ) [NeZero n] (i j : ZMod n) :
     rotMat (↑(ZMod.val (j - i)) * dihedralAngle n) =
@@ -232,10 +232,10 @@ lemma multiplicationHom_injective : Function.Injective multiplicationHom := by
 noncomputable def dihedralToIsometry (n : ℕ) [NeZero n] : DihedralGroup n →* SpaceIsometry where
   toFun g := multiplicationHom ⟨dihedralToMat n g, dihedralToMat_mem_O3 n g⟩
   map_one' := by
-    show multiplicationHom ⟨dihedralToMat n 1, _⟩ = 1
+    change multiplicationHom ⟨dihedralToMat n 1, _⟩ = 1
     simp only [dihedralToMat_one]; exact multiplicationHom.map_one
   map_mul' a b := by
-    show multiplicationHom ⟨_, _⟩ = multiplicationHom ⟨_, _⟩ * multiplicationHom ⟨_, _⟩
+    change multiplicationHom ⟨_, _⟩ = multiplicationHom ⟨_, _⟩ * multiplicationHom ⟨_, _⟩
     rw [← multiplicationHom.map_mul]
     exact congrArg multiplicationHom (Subtype.ext (dihedralToMat_mul n a b))
 

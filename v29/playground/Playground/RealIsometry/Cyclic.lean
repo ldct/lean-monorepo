@@ -1,6 +1,4 @@
-import Playground.RealIsometry.Dihedral
-
-set_option linter.style.multiGoal false
+import Playground.RealIsometry.Basic
 
 /-
 Cyclic subgroups of the isometry group
@@ -16,6 +14,7 @@ def rotZ (θ : ℝ) : MAT3 :=
 lemma rotZ_zero : rotZ 0 = 1 := by
   ext i j
   fin_cases i <;> fin_cases j <;> simp [rotZ]
+
 
 lemma rotZ_mul (a b : ℝ) : rotZ a * rotZ b = rotZ (a + b) := by
   simp only [rotZ, Real.cos_add, Real.sin_add]
@@ -60,8 +59,6 @@ lemma rotIsometry_pow (θ : ℝ) (n : ℕ) : rotIsometry θ ^ n = rotIsometry (n
     rw [pow_succ, ih, rotIsometry_mul]
     congr 1; push_cast; ring
 
--- rotIsometry_zpow is not needed for the main theorem
-
 open Real in
 lemma rotZ_eq_one_iff (θ : ℝ) : rotZ θ = 1 ↔ ∃ k : ℤ, θ = 2 * π * k := by
   constructor
@@ -73,12 +70,12 @@ lemma rotZ_eq_one_iff (θ : ℝ) : rotZ θ = 1 ↔ ∃ k : ℤ, θ = 2 * π * k 
     obtain ⟨k, hk⟩ := hcos
     exact ⟨k, by linarith⟩
   · rintro ⟨k, rfl⟩
-    have hcos : cos (2 * π * ↑k) = 1 := by
-      rw [show (2 : ℝ) * π * ↑k = ↑k * (2 * π) from by ring]; simp [cos_int_mul_two_pi]
-    have hsin : sin (2 * π * ↑k) = 0 := by
-      rw [show (2 : ℝ) * π * ↑k = 0 + ↑k * (2 * π) from by ring, sin_add_int_mul_two_pi, sin_zero]
+    rw [show 2 * π * k = k * (2 * π) from by ring]
+    have sin_int_mul_two_pi : sin (k * (2 * π)) = 0 := by -- missing simproc?
+      have := sin_int_mul_pi (2*k)
+      grind
     ext i j
-    fin_cases i <;> fin_cases j <;> simp [rotZ, hcos, hsin]
+    fin_cases i <;> fin_cases j <;> simp [rotZ, cos_int_mul_two_pi, sin_int_mul_two_pi]
 
 lemma rotZ_eq_one_of_rotIsometry_eq_one (θ : ℝ) (h : rotIsometry θ = 1) : rotZ θ = 1 := by
   have h2 := congr_arg RealIsometry.toFun h
@@ -101,7 +98,28 @@ lemma rotIsometry_pow_eq_one_iff (θ : ℝ) (m : ℕ) :
 open Real in
 lemma orderOf_rotIsometry (n : ℕ) (hn : n ≠ 0) :
     orderOf (rotIsometry (2 * π / n)) = n := by
-  sorry
+  apply orderOf_eq_of_pow_and_pow_div_prime (Nat.pos_of_ne_zero hn)
+  · rw [rotIsometry_pow_eq_one_iff]
+    exact ⟨1, by push_cast; field_simp⟩
+  · intro p hp hpn
+    rw [Ne, rotIsometry_pow_eq_one_iff]
+    push Not
+    intro k
+    have hn' : (n : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hn
+    have hp' : (p : ℝ) ≠ 0 := Nat.cast_ne_zero.mpr hp.ne_zero
+    rw [Nat.cast_div hpn hp']
+    field_simp
+    intro h
+    have hk : (k : ℝ) = 1 / p := by
+      have hn2 : (n : ℝ) * (2 * π) ≠ 0 := mul_ne_zero hn' (by positivity)
+      field_simp at h ⊢
+      linarith
+    have hp2 : (p : ℤ) ≥ 2 := by exact_mod_cast hp.two_le
+    have hkp : (k : ℝ) * p = 1 := by rw [hk]; field_simp
+    have hkp' : (k : ℤ) * p = 1 := by exact_mod_cast hkp
+    have hdvd : (p : ℤ) ∣ 1 := ⟨k, by linarith⟩
+    have hle : (p : ℤ) ≤ 1 := Int.le_of_dvd one_pos hdvd
+    linarith
 
 open Real in
 lemma rotIsometry_generates_cyclic (n : ℕ) (_hn : n ≠ 0) :

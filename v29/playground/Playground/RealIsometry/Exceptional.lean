@@ -26,11 +26,6 @@ Every element satisfies g² = 1 or g³ = 1, so the exponent divides 6.
 
 abbrev IMAT3 := Matrix (Fin 3) (Fin 3) ℤ
 
-#check Matrix.zpow_add
-#check Matrix.map_mul
-
-#synth HPow IMAT3 ℕ IMAT3
-
 abbrev Matrix.toReal (M : IMAT3) : MAT3 := M.map (Int.castRingHom ℝ)
 
 lemma toReal_mul (A B : IMAT3) : (A * B).toReal = A.toReal * B.toReal := by

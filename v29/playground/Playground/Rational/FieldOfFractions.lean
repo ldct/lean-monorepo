@@ -80,9 +80,8 @@ noncomputable instance Frac.add_inst {R : Type*} [CommRing R] [IsDomain R] : Add
   add := Quotient.lift₂ (
     fun ⟨ a, b, h1 ⟩ ⟨ c, d, h2 ⟩ ↦ (a*d+b*c) // (b*d)
   ) (by
-    intro ⟨ a, b, hb ⟩ ⟨ c, d, hd ⟩ ⟨ a', b', hb' ⟩ ⟨ c', d', hd' ⟩
-    intro h1 h2
-    show (a*d+b*c) // (b*d) = (a'*d'+b'*c') // (b'*d')
+    intro ⟨ a, b, hb ⟩ ⟨ c, d, hd ⟩ ⟨ a', b', hb' ⟩ ⟨ c', d', hd' ⟩ h1 h2
+    change (a*d+b*c) // (b*d) = (a'*d'+b'*c') // (b'*d')
     rw [Frac.eq _ _ (mul_ne_zero hb hd) (mul_ne_zero hb' hd')]
     have h1' : a * b' = a' * b := h1
     have h2' : c * d' = c' * d := h2
