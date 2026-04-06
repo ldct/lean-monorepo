@@ -74,7 +74,7 @@ noncomputable def PlaneIsometry.rotation (z : R2) (α : ℝ) : PlaneIsometry whe
     abel
 
 private lemma inner_eq_dotProduct (x y : R2) : @inner ℝ R2 _ x y = x ⬝ᵥ y := by
-  simp [PiLp.inner_apply, RCLike.inner_apply, dotProduct]; ring
+  simp [PiLp.inner_apply, inner, dotProduct]; ring
 
 /-
 Example 1.2d: reflection in a line through the origin perpendicular to a unit vector w
@@ -91,8 +91,7 @@ noncomputable def PlaneIsometry.reflection (w : R2) (hw : w ⬝ᵥ w = 1) : Plan
     set c := w ⬝ᵥ d
     -- It suffices to show the squares of the norms are equal
     suffices hsq : ‖d - (2 * c) • w‖ ^ 2 = ‖d‖ ^ 2 by
-      nlinarith [norm_nonneg d, norm_nonneg (d - (2 * c) • w),
-        sq_nonneg (‖d - (2 * c) • w‖ - ‖d‖)]
+      exact sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _) |>.mp hsq
     -- Expand ‖d - (2c)w‖² = ‖d‖² - 2·(2c)·⟨d,w⟩ + (2c)²·‖w‖²
     rw [norm_sub_sq_real, real_inner_smul_right, norm_smul, mul_pow]
     simp only [Real.norm_eq_abs, sq_abs]
@@ -129,8 +128,7 @@ noncomputable def PlaneIsometry.glideReflection0 (w : R2) (hw : w ⬝ᵥ w = 1)
     set u := x - y
     set c := w ⬝ᵥ u
     suffices hsq : ‖u - (2 * c) • w‖ ^ 2 = ‖u‖ ^ 2 by
-      nlinarith [norm_nonneg u, norm_nonneg (u - (2 * c) • w),
-        sq_nonneg (‖u - (2 * c) • w‖ - ‖u‖)]
+      exact sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _) |>.mp hsq
     rw [norm_sub_sq_real, real_inner_smul_right, norm_smul, mul_pow]
     simp only [Real.norm_eq_abs, sq_abs]
     have h_inner : @inner ℝ R2 _ u w = c := by
@@ -166,8 +164,7 @@ noncomputable def PlaneIsometry.glideReflection (w : R2) (hw : w ⬝ᵥ w = 1)
     set u := x - y
     set c := w ⬝ᵥ u
     suffices hsq : ‖u - (2 * c) • w‖ ^ 2 = ‖u‖ ^ 2 by
-      nlinarith [norm_nonneg u, norm_nonneg (u - (2 * c) • w),
-        sq_nonneg (‖u - (2 * c) • w‖ - ‖u‖)]
+      exact sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _) |>.mp hsq
     rw [norm_sub_sq_real, real_inner_smul_right, norm_smul, mul_pow]
     simp only [Real.norm_eq_abs, sq_abs]
     have h_inner : @inner ℝ R2 _ u w = c := by

@@ -258,17 +258,26 @@ noncomputable def multiplicationHom : O3 →* SpaceIsometry where
   map_mul' A B := by
     ext x : 2
     simp only [multiplication, mul_eq, RealIsometry.comp, Function.comp]
-    change (A * B).1 • x = A.1 • (B.1 • x)
-    rw [← MulAction.mul_smul]; rfl
+    rw [← SemigroupAction.mul_smul]
 
 lemma multiplicationHom_injective : Function.Injective multiplicationHom := by
   intro A B h
-  have key : ∀ x : R3, (A : MAT3).mulVec x = (B : MAT3).mulVec x := by
+  have key : ∀ x : R3, (A : MAT3) • x = (B : MAT3) • x := by
     intro x
     have := congr_fun (congr_arg RealIsometry.toFun h) x
     change (multiplication A).toFun x = (multiplication B).toFun x at this
     simp only [multiplication] at this; exact this
-  exact Subtype.ext (Matrix.ext_of_mulVec_single fun j => key _)
+  have key2 : (A : MAT3) = (B : MAT3) := by
+    have h1 : ∀ x : Fin 3 → ℝ, (A : MAT3).mulVec x = (B : MAT3).mulVec x := by
+      intro x
+      have h := key ((WithLp.equiv 2 _).symm x)
+      -- M • v = (WithLp.equiv ..).symm (M.mulVec ((WithLp.equiv ..) v)) by rfl
+      -- So applying WithLp.equiv to both sides gives mulVec equality
+      have := congr_arg (WithLp.equiv 2 (Fin 3 → ℝ)) h
+      simp only [Equiv.apply_symm_apply] at this
+      exact this
+    exact Matrix.ext_of_mulVec_single fun j => h1 _
+  exact Subtype.ext key2
 
 noncomputable def dihedralToIsometry (n : ℕ) [NeZero n] : DihedralGroup n →* SpaceIsometry where
   toFun g := multiplicationHom ⟨dihedralToMat n g, dihedralToMat_mem_O3 n g⟩
