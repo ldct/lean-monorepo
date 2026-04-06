@@ -1,7 +1,5 @@
 import Mathlib
 
-
-
 namespace GaussianIntegers_simp
 
 /-
