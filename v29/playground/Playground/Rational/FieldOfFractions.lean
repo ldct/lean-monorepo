@@ -59,18 +59,14 @@ noncomputable def Frac.formalDiv {R : Type*} [CommRing R] [IsDomain R] (a b : R)
 lemma Frac.formalDiv_eq {R : Type*} [CommRing R] [IsDomain R] (a b : R) : formalDiv a b = Quotient.mk PreFrac.instSetoid (if h:b ≠ 0 then (⟨ a,b,h ⟩ : PreFrac R) else ⟨ 0, 1, one_ne_zero ⟩) := rfl
 
 lemma Frac.formalDiv_eq' {R : Type*} [CommRing R] [IsDomain R] (a b : R) (hb : b ≠ 0) : formalDiv a b = Quotient.mk PreFrac.instSetoid  ⟨ a,b,hb ⟩ := by
-  simp only [formalDiv_eq]
-  rw [Quotient.eq]
-  simp only [Setoid.r]
-  grind
+  simp only [formalDiv_eq, dif_pos hb]
 
 infix:100 " // " => Frac.formalDiv
 
 @[grind =]
 theorem Frac.eq {R : Type*} [CommRing R] [IsDomain R] (a c : R) {b d : R} (hb : b ≠ 0) (hd : d ≠ 0) : a // b = c // d ↔ a * d = c * b := by
-  repeat rw [formalDiv_eq' _ _ (by grind)]
-  rw [Quotient.eq]
-  simp only [Setoid.r]
+  simp only [formalDiv_eq, dif_pos hb, dif_pos hd]
+  exact Quotient.eq (r := PreFrac.instSetoid)
 
 theorem Frac.eq_diff {R : Type*} [CommRing R] [IsDomain R] (n : Frac R) : ∃ a b, b ≠ 0 ∧ n = a // b := by
   apply Quot.ind _ n
@@ -84,13 +80,13 @@ noncomputable instance Frac.add_inst {R : Type*} [CommRing R] [IsDomain R] : Add
   add := Quotient.lift₂ (
     fun ⟨ a, b, h1 ⟩ ⟨ c, d, h2 ⟩ ↦ (a*d+b*c) // (b*d)
   ) (by
-    intro ⟨ a, b, _ ⟩ ⟨ c, d, _ ⟩ ⟨ a', b', _ ⟩ ⟨ c', d', _ ⟩
-    dsimp
-    rw [formalDiv_eq' _ (b * d) (by (expose_names; exact (mul_ne_zero_iff_right nz_1).mpr nz))]
-    rw [formalDiv_eq' _ (b' * d') (by (expose_names; exact (mul_ne_zero_iff_right nz_3).mpr nz_2))]
-    rw [Quotient.eq]
-    simp only [Setoid.r]
-    grind
+    intro ⟨ a, b, hb ⟩ ⟨ c, d, hd ⟩ ⟨ a', b', hb' ⟩ ⟨ c', d', hd' ⟩
+    intro h1 h2
+    show (a*d+b*c) // (b*d) = (a'*d'+b'*c') // (b'*d')
+    rw [Frac.eq _ _ (mul_ne_zero hb hd) (mul_ne_zero hb' hd')]
+    have h1' : a * b' = a' * b := h1
+    have h2' : c * d' = c' * d := h2
+    linear_combination d * d' * h1' + b * b' * h2'
   )
 
 /-- Definition 4.2.2 (Addition of rationals) -/

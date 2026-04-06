@@ -54,19 +54,15 @@ def Rat.formalDiv (a b : ℤ) : Rat :=
 lemma Rat.formalDiv_eq (a b : ℤ) : formalDiv a b = Quotient.mk PreRat.instSetoid (if h:b ≠ 0 then ⟨ a,b,h ⟩ else ⟨ 0, 1, by decide ⟩) := rfl
 
 lemma Rat.formalDiv_eq' (a b : ℤ) (hb : b ≠ 0) : formalDiv a b = Quotient.mk PreRat.instSetoid  ⟨ a,b,hb ⟩ := by
-  simp only [formalDiv_eq]
-  rw [Quotient.eq]
-  simp only [Setoid.r]
-  grind
+  simp only [formalDiv_eq, dif_pos hb]
 
 infix:100 " // " => Rat.formalDiv
 
 /-- Definition 4.2.1 (Rationals) -/
 @[grind =]
 theorem Rat.eq (a c : ℤ) {b d : ℤ} (hb : b ≠ 0) (hd : d ≠ 0) : a // b = c // d ↔ a * d = c * b := by
-  repeat rw [formalDiv_eq' _ _ (by positivity)]
-  rw [Quotient.eq]
-  simp only [Setoid.r]
+  simp only [formalDiv_eq, dif_pos hb, dif_pos hd]
+  exact Quotient.eq (r := PreRat.instSetoid)
 
 /-- Definition 4.2.1 (Rationals) -/
 theorem Rat.eq_diff (n : Rat) : ∃ a b, b ≠ 0 ∧ n = a // b := by

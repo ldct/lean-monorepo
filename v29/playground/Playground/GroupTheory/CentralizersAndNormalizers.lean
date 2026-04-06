@@ -7,9 +7,9 @@ namespace CentralizersAndNormalizers
 
 variable {G : Type*} [Group G]
 
-theorem centralizer_le_normalizer (H : Subgroup G) : Subgroup.centralizer H ≤ Subgroup.normalizer H := by {
+theorem centralizer_le_normalizer (H : Subgroup G) : Subgroup.centralizer H.carrier ≤ Subgroup.normalizer H.carrier := by {
   rintro g g_centralizes_H
-  have ginv_centralizes_h : g⁻¹ ∈ Subgroup.centralizer H := by {
+  have ginv_centralizes_h : g⁻¹ ∈ Subgroup.centralizer H.carrier := by {
     simp only [Subgroup.inv_mem_iff, g_centralizes_H]
   }
   intro h
@@ -29,38 +29,39 @@ theorem centralizer_le_normalizer (H : Subgroup G) : Subgroup.centralizer H ≤ 
 
 
 -- D&F pg 52, q2.1, proof via Mathlib
-example [Group G] : Subgroup.centralizer (Subgroup.center G).carrier = ⊤ := by
+example [Group G] : Subgroup.centralizer (Subgroup.center G : Subgroup G).carrier = ⊤ := by
   rw [Subgroup.centralizer_eq_top_iff_subset]
   exact fun ⦃a⦄ a ↦ a
 
 -- D&F pg 52, q2.1, manual proof
-theorem x : Subgroup.centralizer (Subgroup.center G) = (⊤ : Subgroup G) := by
+theorem x : Subgroup.centralizer (Subgroup.center G).carrier = (⊤ : Subgroup G) := by
   rw [eq_top_iff] -- rewrite as ⊤ ≤ ...
   intro g _ h h_in_center
   exact h_in_center.comm g
 
 -- D&F pg 52, q2.2, proof via Mathlib
-example [Group G] : Subgroup.normalizer (Subgroup.center G) = ⊤ := by
+example [Group G] : Subgroup.normalizer (Subgroup.center G).carrier = ⊤ := by
   sorry -- TODO: fix for v4.24 (Subgroup.le_normalizer_of_normal API changed)
 
 -- D&F pg 52, q2.2, direct proof
-example [Group G] : Subgroup.normalizer (Subgroup.center G) = ⊤ := by
+example [Group G] : Subgroup.normalizer (Subgroup.center G).carrier = ⊤ := by
   rw [eq_top_iff]
   rw [←x]
-  exact centralizer_le_normalizer (Subgroup.center G)
+  exact centralizer_le_normalizer (Subgroup.center G : Subgroup G)
 
 -- D&F pg 52, q3, proof via Mathlib
 example [Group G] (A B : Set G) (A_le_B : A ≤ B) : Subgroup.centralizer (B) ≤ Subgroup.centralizer A := by
   exact Subgroup.centralizer_le A_le_B
 
 -- D&F pg 52, q6a, direct proof
-example [Group G] (H : Subgroup G) : H ≤ Subgroup.normalizer H := by
+example [Group G] (H : Subgroup G) : (H : Set G) ≤ Subgroup.normalizer H.carrier := by
   intro x xH n
+  simp only [Subgroup.mem_carrier]
   rw [H.mul_mem_cancel_right (H.inv_mem xH)]
   rw [H.mul_mem_cancel_left xH]
 
 -- 6b, proof by mathlib
-example [Group G] (H : Subgroup G) : H ≤ Subgroup.centralizer H ↔ IsMulCommutative H := by
+example [Group G] (H : Subgroup G) : H ≤ Subgroup.centralizer H.carrier ↔ IsMulCommutative H := by
   exact Subgroup.le_centralizer_iff_isMulCommutative
 
 def evens := { i : ℕ | i.isPowerOfTwo }

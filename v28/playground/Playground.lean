@@ -8,19 +8,6 @@ import Playground.AoC.day4
 import Playground.AoC.day4_p2
 import Playground.AoC.james
 import Playground.AoC.test_json
-import Playground.GroupTheory.AffineQ
-import Playground.GroupTheory.Basic
-import Playground.GroupTheory.Center
-import Playground.GroupTheory.CentralizerOfRotations
-import Playground.GroupTheory.CentralizersAndNormalizers
-import Playground.GroupTheory.Closure
-import Playground.GroupTheory.Cyclic
-import Playground.GroupTheory.Dih4
-import Playground.GroupTheory.Dih6
-import Playground.GroupTheory.Dih6Subgroups
-import Playground.GroupTheory.DihActions
-import Playground.GroupTheory.NormalizerOfRotations
-import Playground.GroupTheory.Theorems
 import Playground.Jensen
 import Playground.SMOQ2
 import Playground.Stern
@@ -32,14 +19,11 @@ import Playground.test
 import Playground.abs
 import Playground.Combi1
 import Playground.ComplexExamples
-import Playground.LinearAlgebra.LinearAlgebra
 import Playground.MyPolynomial
 import Playground.NormNumI
 import Playground.NormNumI_test
 import Playground.Simproc
 import Playground.Topology.TopSpace
-import Playground.Rational.ZNRat
-import Playground.Rational.ZZRat
 
 import Playground.Enumerations
 import Playground.PermGeometry
