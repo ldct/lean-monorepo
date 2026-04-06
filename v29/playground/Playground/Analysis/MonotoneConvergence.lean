@@ -35,7 +35,7 @@ theorem MCT_formula
     specialize t l_ε_ub
     linarith
   unfold upperBounds at this
-  simp only [Set.mem_setOf_eq, not_forall, Classical.not_imp, not_le] at this
+  simp only [Set.mem_setOf_eq, not_forall, not_le] at this
   obtain ⟨aN, haN⟩ := this
   obtain ⟨aN_in_s, haN⟩ := haN
   obtain ⟨N, hN⟩ := aN_in_s

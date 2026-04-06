@@ -3,7 +3,8 @@ import Playground.Analysis.InfiniteSums
 import Mathlib
 
 -- This file proves that the series ∑ 1/n^2 converges to some limit
--- The bulk of this is a series of inequalities that show that the partial sums are bounded above by 2
+-- The bulk of this is a series of inequalities that show that the partial sums are
+-- bounded above by 2
 
 
 namespace Bassel
@@ -13,7 +14,8 @@ noncomputable def invSquares (i : ℕ) : ℝ := (1 / ((i+1)^2))
 noncomputable def bassel := partialSums invSquares
 
 -- first inequality
-theorem bb1 (m : ℕ) : bassel m ≤ ∑ i ∈ Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i)) := by
+theorem bb1 (m : ℕ) :
+    bassel m ≤ ∑ i ∈ Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i)) := by
   -- Unfold everything to ∑ and do a term-by-term comparison
   unfold bassel partialSums invSquares
   gcongr with i hi
@@ -27,7 +29,9 @@ theorem bb1 (m : ℕ) : bassel m ≤ ∑ i ∈ Finset.range m, if i = 0 then 1 e
   case h.inr i_eq_0 =>
     simp [i_eq_0]
 
-theorem bb2 (m : ℕ) : (∑ i ∈ Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i))) = ∑ i ∈ Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1)) := by
+theorem bb2 (m : ℕ) :
+    (∑ i ∈ Finset.range m, if i = 0 then 1 else (1/((i:ℝ)+1) * (1/i))) =
+    ∑ i ∈ Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1)) := by
   congr
   funext i
   cases ne_or_eq i 0
@@ -38,7 +42,8 @@ theorem bb2 (m : ℕ) : (∑ i ∈ Finset.range m, if i = 0 then 1 else (1/((i:�
   case h.inr i_eq_0 =>
     simp [i_eq_0]
 
-theorem bb3 (m : ℕ) (hm : 1 ≤ m) : (∑ i ∈ Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1))) = 2 - 1/(m:ℝ) := by
+theorem bb3 (m : ℕ) (hm : 1 ≤ m) :
+    (∑ i ∈ Finset.range m, if i = 0 then 1 else ((1/i:ℝ) - 1/(i+1))) = 2 - 1/(m:ℝ) := by
   induction m, hm using Nat.le_induction with
   | base =>
     rw [show Finset.range 1 = {0} by decide]

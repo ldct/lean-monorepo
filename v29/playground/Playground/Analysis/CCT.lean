@@ -14,7 +14,7 @@ import Playground.FinsetInterval
 namespace CCT
 open AlgebraicLimit InfiniteSums MonotoneConvergence Reindex Qq
 
-/-- The sequence b₁, 2b₂, 4b₄, 8b₈, ... --/
+/-- The sequence b₁, 2b₂, 4b₄, 8b₈, ... -/
 def condense (a : ℕ → ℝ) : (ℕ → ℝ):= fun (i : ℕ) ↦
   2^i * a (2^i)
 
@@ -35,7 +35,8 @@ lemma s_converges
 : Summable' a ↔ Converges (s a) := by
   rw [conv_drop]
   unfold Summable' partialSums drop s
-  have : (fun n ↦ ∑ i ∈ Finset.range n, a (i + 1)) = (fun n ↦ ∑ i ∈ Finset.Icc 1 n, a i) := by
+  have : (fun n ↦ ∑ i ∈ Finset.range n, a (i + 1))
+      = (fun n ↦ ∑ i ∈ Finset.Icc 1 n, a i) := by
     ext n
     rw [ri]
     rw [Finset.Ico_add_one_right_eq_Icc]
@@ -67,10 +68,14 @@ lemma s_le_t
       unfold s t
       unfold s t at IH
       -- Write the LHS as (LHS of induction hypothesis) + something
-      have : ∑ i ∈ Finset.Icc 1 (2 ^ (k + 2) - 1), a i = ∑ i ∈ Finset.Icc 1 (2 ^ (k + 1) - 1), a i + ∑ i ∈ Finset.Icc (2 ^ (k + 1)) (2 ^ (k + 2) - 1), a i := by
+      have : ∑ i ∈ Finset.Icc 1 (2 ^ (k + 2) - 1), a i
+          = ∑ i ∈ Finset.Icc 1 (2 ^ (k + 1) - 1), a i
+          + ∑ i ∈ Finset.Icc (2 ^ (k + 1)) (2 ^ (k + 2) - 1), a i := by
         sorry
       -- Write the RHS as (RHS of induction hypothesis) + something
-      have : ∑ i ∈ Finset.Icc 1 (2 ^ (k + 1)), a i = ∑ i ∈ Finset.Icc 1 (2 ^ k), a i + ∑ i ∈ Finset.Icc (2 ^ k + 1) (2 ^ (k + 1)), a i := by
+      have : ∑ i ∈ Finset.Icc 1 (2 ^ (k + 1)), a i
+          = ∑ i ∈ Finset.Icc 1 (2 ^ k), a i
+          + ∑ i ∈ Finset.Icc (2 ^ k + 1) (2 ^ (k + 1)), a i := by
         sorry
       sorry
 
@@ -123,8 +128,7 @@ theorem cct1
   unfold Summable' at c_summable
   have bdd := ConvergesThenBounded c_summable
   refold_let t at *
-  cases' bdd with M hM
-  cases' hM with M_pos M_bounds
+  obtain ⟨M, M_pos, M_bounds⟩ := bdd
   have M_bounds' : ∀ n, (partialSums (condense b) n) < M := by
     exact fun n ↦ lt_of_abs_lt (M_bounds n)
 
@@ -151,7 +155,7 @@ theorem cct1
       have : 1 ≤ 2^(m+1) := Nat.one_le_two_pow
       omega
 
-  cases' this with k hk
+  obtain ⟨k, hk⟩ := this
 
   have c1 : s m ≤ s (2^(k+1) - 1) := by
     have sm : Monotone s := monotone_psum_of_pos fun i ↦ b_pos (i + 1)
@@ -177,7 +181,8 @@ theorem cct1
         = ∑ x ∈ Finset.range (2 ^ (k + 1) - 1), b (x + 1)
         + ∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), b (x + 1)
       := by
-        rw [show Finset.range (2 ^ (k + 2) - 1) = Finset.range (2 ^ (k + 1) - 1) ∪ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1) by
+        rw [show Finset.range (2 ^ (k + 2) - 1)
+            = Finset.range (2 ^ (k + 1) - 1) ∪ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1) by
           rw [Finset.range_eq_Ico, Finset.Ico_union_Ico_eq_Ico]
           positivity
           gcongr
@@ -205,7 +210,8 @@ theorem cct1
         exact Finset.Ico_disjoint_Ico_consecutive _ _ _
       rw [this]
       clear this
-      suffices t : ∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), b (x + 1) ≤ ∑ i ∈ Finset.Ico (k + 1) (k + 2), 2 ^ i * b (2 ^ i) from by linarith
+      suffices t : ∑ x ∈ Finset.Ico (2 ^ (k + 1) - 1) (2 ^ (k + 2) - 1), b (x + 1)
+          ≤ ∑ i ∈ Finset.Ico (k + 1) (k + 2), 2 ^ i * b (2 ^ i) from by linarith
       -- Now we are comparing a sum of 2^(k+1) terms with a single term of the condensed series.
       clear IH c_summable M_bounds'
       rw [Nat.Ico_succ_singleton (k + 1)]
@@ -236,7 +242,7 @@ theorem cct1
       clear ttt
       gcongr with i a
       simp at a
-      cases' a with al ar
+      obtain ⟨al, ar⟩ := a
       exact b_antitone al
 
 
@@ -286,7 +292,8 @@ theorem cct2
   -- If the condensed series diverges, then the original series diverges
 
   -- First, prove that b diverges using s_unbounded_formula
-  have s_unbounded_formula (j : ℕ) : partialSums (condense b) (j+1) ≤ partialSums b (2^j+1) := by
+  have s_unbounded_formula (j : ℕ) :
+      partialSums (condense b) (j+1) ≤ partialSums b (2^j+1) := by
     induction j with
     | zero =>
       simp
@@ -343,10 +350,9 @@ theorem s_diverges : ¬ (Summable' invNats) := by
 
   by_contra summable
   have bounded := ConvergesThenBounded summable
-  cases' bounded with M hM
-  cases' hM with M_pos M_bounds
+  obtain ⟨M, M_pos, M_bounds⟩ := bounded
 
-  cases' (exists_nat_gt M) with m hm
+  obtain ⟨m, hm⟩ := exists_nat_gt M
 
   specialize M_bounds m
   unfold partialSums at M_bounds
@@ -388,7 +394,7 @@ theorem invP_diverges (p : ℝ) (hp : 0 < p) (hp' : p < 1) : ¬ (Summable' (invP
     case inr.inr h =>
       simp [h]
       have : (m:NNReal)⁻¹ ≤ (n:NNReal)⁻¹ := by
-        cases' h with h1 h2
+        obtain ⟨h1, h2⟩ := h
         rw [inv_le_inv₀]
         exact Nat.cast_le.mpr hnm
         all_goals positivity
@@ -402,10 +408,9 @@ theorem invP_diverges (p : ℝ) (hp : 0 < p) (hp' : p < 1) : ¬ (Summable' (invP
   field_simp
   by_contra summable
   have bounded := ConvergesThenBounded summable
-  cases' bounded with M hM
-  cases' hM with M_pos M_bounds
+  obtain ⟨M, M_pos, M_bounds⟩ := bounded
 
-  cases' (exists_nat_gt M) with m hm
+  obtain ⟨m, hm⟩ := exists_nat_gt M
   specialize M_bounds m
 
   unfold partialSums at M_bounds
@@ -434,7 +439,8 @@ theorem invP_diverges (p : ℝ) (hp : 0 < p) (hp' : p < 1) : ¬ (Summable' (invP
   -- simproc candidate?
   rw [abs_of_nonneg (by positivity)] at M_bounds
 
-  have sum_gt_sum_of_1 : ∑ x ∈ Finset.range m, 1 ≤ ∑ x ∈ Finset.range m, ((2 : ℝ) ^ x) ^ (1 - p) := by
+  have sum_gt_sum_of_1 :
+      ∑ x ∈ Finset.range m, 1 ≤ ∑ x ∈ Finset.range m, ((2 : ℝ) ^ x) ^ (1 - p) := by
     gcongr with i hi
     have : (1:NNReal) ≤ (2 : NNReal) ^ i := by
       norm_cast

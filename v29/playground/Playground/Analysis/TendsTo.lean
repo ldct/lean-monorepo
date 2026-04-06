@@ -143,8 +143,8 @@ example : ∀ t : ℝ, ¬(TendsTo (fun n ↦ n) t) := by
     refine And.intro ?left ?right
     case left =>
       rw [add_comm]
-      simp only [Nat.add_max_add_left, Nat.cast_add, Nat.cast_one, Nat.cast_max, add_lt_add_iff_left,
-        lt_sup_iff]
+      simp only [Nat.add_max_add_left, Nat.cast_add, Nat.cast_one, Nat.cast_max,
+        add_lt_add_iff_left, lt_sup_iff]
       left
       calc
         L < 1 + L := by linarith
