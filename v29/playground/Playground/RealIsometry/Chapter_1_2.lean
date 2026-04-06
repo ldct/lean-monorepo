@@ -31,7 +31,7 @@ private lemma rotMat_orthogonal (α : ℝ) : rotMat α ∈ Matrix.orthogonalGrou
   constructor
   · exact hRT
   · grind [
-    Matrix.mul_eq_one_comm,
+    mul_eq_one_comm,
     Matrix.star_eq_conjTranspose,
     Matrix.conjTranspose_eq_transpose_of_trivial
   ]
@@ -74,7 +74,7 @@ noncomputable def PlaneIsometry.rotation (z : R2) (α : ℝ) : PlaneIsometry whe
     abel
 
 private lemma inner_eq_dotProduct (x y : R2) : @inner ℝ R2 _ x y = x ⬝ᵥ y := by
-  simp [PiLp.inner_apply, inner, dotProduct]; ring
+  simp [inner, dotProduct]; ring
 
 /-
 Example 1.2d: reflection in a line through the origin perpendicular to a unit vector w
@@ -117,7 +117,7 @@ Example 1.2e: glide reflection in a line through the origin perpendicular to a u
 with translation d along the line (w ⬝ᵥ d = 0)
 -/
 noncomputable def PlaneIsometry.glideReflection0 (w : R2) (hw : w ⬝ᵥ w = 1)
-    (d : R2) (hd : w ⬝ᵥ d = 0) : PlaneIsometry where
+    (d : R2) (_hd : w ⬝ᵥ d = 0) : PlaneIsometry where
   toFun x := x - (2 * (w ⬝ᵥ x)) • w + d
   is_isometry x y := by
     -- The +d terms cancel: f(x) - f(y) = (x-y) - 2(w⬝(x-y))w

@@ -40,7 +40,7 @@ lemma toReal_one : toReal 1 = (1 : MAT3) := by simp
 
 lemma toReal_pow (A : IMAT3) (n : ℕ) : toReal (A ^ n) = (toReal A) ^ n := by
   induction n with
-  | zero => simp [pow_zero, toReal_one]
+  | zero => simp [pow_zero]
   | succ n IH => rw [pow_succ, toReal_mul, IH, pow_succ]
 
 lemma toReal_injective : Function.Injective toReal := by
