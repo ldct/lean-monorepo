@@ -52,7 +52,7 @@ Example 1.2c: rotation about a general point z by an angle α
 noncomputable def PlaneIsometry.rotation (z : R2) (α : ℝ) : PlaneIsometry where
   toFun x := !![Real.cos α, -Real.sin α; Real.sin α, Real.cos α]  • (x - z) + z
   is_isometry x y := by
-    show ‖(rotMat α) • (x - z) + z - ((rotMat α) • (y - z) + z)‖ = ‖x - y‖
+    change ‖(rotMat α) • (x - z) + z - ((rotMat α) • (y - z) + z)‖ = ‖x - y‖
     have heq : (rotMat α) • (x - z) + z - ((rotMat α) • (y - z) + z) = (rotMat α) • (x - y) := by
       have := (smul_sub (rotMat α) (x - z) (y - z)).symm
       rw [sub_sub_sub_cancel_right] at this
@@ -64,7 +64,7 @@ noncomputable def PlaneIsometry.rotation (z : R2) (α : ℝ) : PlaneIsometry whe
   surjective := by
     intro y
     use (rotO2 α)⁻¹ • (y - z) + z
-    show (rotMat α) • (((rotO2 α)⁻¹ • (y - z) + z) - z) + z = y
+    change (rotMat α) • (((rotO2 α)⁻¹ • (y - z) + z) - z) + z = y
     simp only [add_sub_cancel_right]
     -- rotMat α • v = (rotO2 α) • v for any v
     have key : ∀ v : R2, (rotMat α) • v = (rotO2 α) • v := fun _ => rfl
@@ -109,7 +109,7 @@ noncomputable def PlaneIsometry.reflection (w : R2) (hw : w ⬝ᵥ w = 1) : Plan
     -- Compute w⬝f(y) = w⬝(y - 2(w⬝y)w) = w⬝y - 2(w⬝y)(w⬝w) = -(w⬝y)
     have hfy : w ⬝ᵥ (y - (2 * (w ⬝ᵥ y)) • w) = -(w ⬝ᵥ y) := by
       rw [dotProduct_sub, dotProduct_smul, hw, smul_eq_mul]; ring
-    show y - (2 * (w ⬝ᵥ y)) • w - (2 * (w ⬝ᵥ (y - (2 * (w ⬝ᵥ y)) • w))) • w = y
+    change y - (2 * (w ⬝ᵥ y)) • w - (2 * (w ⬝ᵥ (y - (2 * (w ⬝ᵥ y)) • w))) • w = y
     rw [hfy]; push_cast; module
 
 /-
@@ -142,7 +142,7 @@ noncomputable def PlaneIsometry.glideReflection0 (w : R2) (hw : w ⬝ᵥ w = 1)
     -- Key: reflection is involution, so w⬝f⁻¹(y) = -(w⬝(y-d))
     have hinv : w ⬝ᵥ (y - d - (2 * (w ⬝ᵥ (y - d))) • w) = -(w ⬝ᵥ (y - d)) := by
       rw [dotProduct_sub, dotProduct_smul, hw, smul_eq_mul]; ring
-    show y - d - (2 * (w ⬝ᵥ (y - d))) • w -
+    change y - d - (2 * (w ⬝ᵥ (y - d))) • w -
       (2 * (w ⬝ᵥ (y - d - (2 * (w ⬝ᵥ (y - d))) • w))) • w + d = y
     rw [hinv]; push_cast; module
 
@@ -179,6 +179,6 @@ noncomputable def PlaneIsometry.glideReflection (w : R2) (hw : w ⬝ᵥ w = 1)
     have hinv : w ⬝ᵥ ((y - (2 * (w ⬝ᵥ (y - p))) • w - d) - p) = -(w ⬝ᵥ (y - p)) := by
       rw [dotProduct_sub, dotProduct_sub, dotProduct_sub, dotProduct_smul, smul_eq_mul,
         hw, hd, dotProduct_sub]; ring
-    show (y - (2 * (w ⬝ᵥ (y - p))) • w - d) -
+    change (y - (2 * (w ⬝ᵥ (y - p))) • w - d) -
       (2 * (w ⬝ᵥ ((y - (2 * (w ⬝ᵥ (y - p))) • w - d) - p))) • w + d = y
     rw [hinv]; push_cast; module

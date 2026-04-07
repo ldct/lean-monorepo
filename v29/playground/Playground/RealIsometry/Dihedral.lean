@@ -119,7 +119,7 @@ lemma rotMat_eq_iff (θ₁ θ₂ : ℝ) : rotMat θ₁ = rotMat θ₂ ↔ ∃ k 
   constructor
   · intro h
     have h00 := congr_fun₂ h 0 0; have h10 := congr_fun₂ h 1 0
-    simp [rotMat, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons,
+    simp only [rotMat, of_apply, cons_val', cons_val_zero, cons_val_one, head_cons,
       head_fin_const] at h00 h10
     have : cos (θ₁ - θ₂) = 1 := by rw [cos_sub, h00, h10]; nlinarith [sin_sq_add_cos_sq θ₂]
     rw [cos_eq_one_iff] at this
