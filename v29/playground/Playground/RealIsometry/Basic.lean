@@ -203,7 +203,26 @@ theorem exists_mul {n : ℕ} (a : RealIsometry n)
 
 theorem exists_mul_unique {n : ℕ} (a : RealIsometry n)
 : ∃! (p : Matrix.orthogonalGroup (Fin n) ℝ × EuclideanSpace ℝ (Fin n)), a.toFun = (standardForm p.1 p.2).toFun := by
-  sorry
+  obtain ⟨O, b, h⟩ := exists_mul a
+  refine ⟨⟨O, b⟩, h, ?_⟩
+  rintro ⟨O', b'⟩ h'
+  -- From h and h': standardForm O b and standardForm O' b' agree on all inputs
+  have heq : ∀ x, O • x + b = O' • x + b' := fun x =>
+    congr_fun (h.symm.trans h') x
+  -- b = b' by evaluating at 0
+  have hb : b = b' := by have := heq 0; simp [smul_zero] at this; exact this
+  subst hb
+  -- O • x = O' • x for all x
+  have hO : ∀ x, O • x = O' • x := fun x => add_right_cancel (heq x)
+  have hOval : O.val = O'.val := by
+    have h_eq : Matrix.toLpLin 2 2 (R := ℝ) (m := Fin n) (n := Fin n) O.val =
+                Matrix.toLpLin 2 2 (R := ℝ) (m := Fin n) (n := Fin n) O'.val := by
+      ext x : 1
+      show O • x = O' • x
+      exact hO x
+    rw [Matrix.toLpLin_eq_toLin] at h_eq
+    exact (Matrix.toLin _ _).injective h_eq
+  exact Prod.ext (Subtype.ext hOval.symm) rfl
 
 /-
 Example 1.2a: translations
