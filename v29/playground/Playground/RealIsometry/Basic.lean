@@ -154,7 +154,52 @@ Theorem 1.5 Every real isometry is of the form x ↦ Ax + b
 -/
 theorem exists_mul {n : ℕ} (a : RealIsometry n)
 : ∃ O : Matrix.orthogonalGroup (Fin n) ℝ, ∃ b : EuclideanSpace ℝ (Fin n), a.toFun = (standardForm O b).toFun := by
-  sorry
+  -- Step 1: Build an IsometryEquiv from the RealIsometry
+  let f : EuclideanSpace ℝ (Fin n) ≃ᵢ EuclideanSpace ℝ (Fin n) := {
+    toEquiv := a.toEquiv
+    isometry_toFun := by
+      rw [isometry_iff_dist_eq]
+      intro x y
+      simp only [RealIsometry.toEquiv]
+      rw [dist_eq_norm, dist_eq_norm]
+      exact a.is_isometry x y
+  }
+  -- Step 2: Apply Mazur-Ulam to get L with L x = a.toFun x - a.toFun 0
+  let L := f.toRealLinearIsometryEquiv
+  -- Step 3: Extract orthogonal matrix from L
+  let b₀ := EuclideanSpace.basisFun (Fin n) ℝ
+  let M := L.toLinearEquiv.toLinearMap.toMatrix b₀.toBasis b₀.toBasis
+  have hM : M ∈ Matrix.orthogonalGroup (Fin n) ℝ :=
+    L.toMatrix_mem_unitaryGroup b₀ b₀
+  let O : Matrix.orthogonalGroup (Fin n) ℝ := ⟨M, hM⟩
+  let b := a.toFun 0
+  refine ⟨O, b, ?_⟩
+  funext x
+  -- a.toFun x = L x + a.toFun 0 (from Mazur-Ulam: L x = f x - f 0)
+  have hL : ∀ y, a.toFun y = L y + a.toFun 0 := by
+    intro y
+    have h := IsometryEquiv.toRealLinearIsometryEquiv_apply f y
+    -- h : L y = f y - f 0, but with f expanded
+    -- f y = a.toFun y and f 0 = a.toFun 0 definitionally
+    change L y = a.toFun y - a.toFun 0 at h
+    rw [eq_comm, sub_eq_iff_eq_add] at h
+    exact h
+  rw [hL x]
+  simp only [standardForm]
+  congr 1
+  -- Goal: L x = O • x
+  -- O • x is matrix-vector multiplication by M (the matrix of L w.r.t. standard basis)
+  -- Need: L x = (toMatrix b₀ b₀ L) • x
+  -- This follows from toLin/toMatrix roundtrip
+  change L x = M • x
+  -- M • x = toLpLin 2 2 M x = toLin (PiLp.basisFun ..) (PiLp.basisFun ..) M x
+  -- and b₀.toBasis = PiLp.basisFun 2 ℝ (Fin n) by EuclideanSpace.basisFun_toBasis
+  -- So M • x = toLin b₀.toBasis b₀.toBasis M x
+  -- and M = toMatrix b₀.toBasis b₀.toBasis L, so roundtrip gives L x
+  conv_rhs => rw [show M • x = Matrix.toLpLin 2 2 M x from rfl, Matrix.toLpLin_eq_toLin,
+    ← EuclideanSpace.basisFun_toBasis (Fin n) ℝ]
+  simp only [b₀, M, Matrix.toLin_toMatrix]
+  rfl
 
 theorem exists_mul_unique {n : ℕ} (a : RealIsometry n)
 : ∃! (p : Matrix.orthogonalGroup (Fin n) ℝ × EuclideanSpace ℝ (Fin n)), a.toFun = (standardForm p.1 p.2).toFun := by
