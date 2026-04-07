@@ -163,7 +163,7 @@ structure Automorphism (G : Type*) [BorcherdsGroup G] where
   toFun : G → G
   bijective : Function.Bijective toFun
 
-instance {G : Type*} [BorcherdsGroup G]: Mul (Automorphism G) where mul a b := {
+instance {G : Type*} [BorcherdsGroup G] : Mul (Automorphism G) where mul a b := {
   toFun := a.toFun ∘ b.toFun
   bijective := a.bijective.comp b.bijective
 }
@@ -496,7 +496,7 @@ structure BSubgroup (G : Type*) [BorcherdsGroup G] where
   inv_mem : ∀ x : G, x ∈ carrier → x⁻¹ ∈ carrier
 
 
-instance SameLeftCoset (G) [BorcherdsGroup G] (H : BSubgroup G) : Setoid G where
+instance SameLeftCoset {G} [BorcherdsGroup G] (H : BSubgroup G) : Setoid G where
   r a b := a⁻¹ * b ∈ H.carrier
   iseqv := {
     refl := by
@@ -518,24 +518,24 @@ instance SameLeftCoset (G) [BorcherdsGroup G] (H : BSubgroup G) : Setoid G where
     }
 
 instance {G} [BorcherdsGroup G] : HasQuotient G (BSubgroup G) where
-  Quotient H := Quotient (SameLeftCoset G H)
+  Quotient H := Quotient (SameLeftCoset H)
 
 section Lagrange
 
-variable {G : Type*} [BorcherdsGroup G] (H : BSubgroup G)
+variable {G : Type*} [BorcherdsGroup G] (H : BSubgroup G) (g : G)
 
-open Classical in
-noncomputable instance : DecidableRel (SameLeftCoset G H).r :=
-  fun _ _ => inferInstance
+#check (⟦g⟧ = ⟦g⟧)
 
 /-- For `g : G`, left multiplication identifies `H` with the left coset of `g`. -/
 def BSubgroup.leftCosetEquiv (g : G) :
-    { x // x ∈ H.carrier } ≃
-      { x : G // (Quotient.mk (SameLeftCoset G H) x : G ⧸ H) = Quotient.mk (SameLeftCoset G H) g } where
+      { h : G // h ∈ H.carrier } ≃
+      { x : G // ⟦x⟧ = (⟦g⟧ : G ⧸ H) }
+  where
   toFun := fun ⟨h, hh⟩ =>
     ⟨g * h, Quotient.sound (by
       -- SameLeftCoset: `(g * h)⁻¹ * g ∈ H`.
       change (g * h)⁻¹ * g ∈ H.carrier
+      -- apply H.inv_mem h hh
       have key : (g * h)⁻¹ * g = h⁻¹ := by
         calc (g * h)⁻¹ * g
             = (h⁻¹ * g⁻¹) * g := by rw [BorcherdsGroup.mul_inv]
@@ -564,12 +564,17 @@ def BSubgroup.leftCosetEquiv (g : G) :
 /-- `G` splits non-canonically as the product of coset space and subgroup carrier (Schreier-style). -/
 noncomputable def BSubgroup.groupEquivQuotientProdSubtype :
     G ≃ (G ⧸ H) × { x // x ∈ H.carrier } :=
-  let π := @Quotient.mk G (SameLeftCoset G H)
+  let π := Quotient.mk (SameLeftCoset H)
   (Equiv.sigmaFiberEquiv π).symm.trans <|
     (Equiv.sigmaCongrRight fun L : G ⧸ H =>
-        (Equiv.subtypeEquivRight fun _ => Iff.intro
-          (fun h => h.trans (Quotient.out_eq L).symm)
-          (fun h => h.trans (Quotient.out_eq L))).trans
+        (Equiv.subtypeEquivRight
+        (by
+        intro _
+        constructor
+        · exact (fun h => by exact h.trans (Quotient.out_eq L).symm)
+        · exact (fun h => by exact h.trans (Quotient.out_eq L))
+        )
+        ).trans
           (BSubgroup.leftCosetEquiv H (Quotient.out L)).symm).trans
       (Equiv.sigmaEquivProd _ _)
 
@@ -610,6 +615,8 @@ instance (n : ℕ) : Inv (CyclicGroup n) where
 
 @[simp] lemma CyclicGroup.inv_val {n : ℕ} (a : CyclicGroup n) : (a⁻¹).val = -a.val :=
   rfl
+
+
 
 instance (n : ℕ) : BorcherdsGroup (CyclicGroup n) where
   mul_assoc a b c := by ext; simp [add_assoc]

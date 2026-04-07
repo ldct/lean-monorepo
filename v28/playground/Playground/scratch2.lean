@@ -1,6 +1,10 @@
 import Mathlib
--- import LeanTeXMathlib  -- not available in v24
 
+variable {G:Type*} [CommGroup G] (N:Subgroup G) (g : G) (a : G ⧸ N)
+
+#check (⟦g⟧  = a) -- option 1. does not have as great of an api as option 2.
+#check (QuotientGroup.mk g = a) -- option 2. using `rfl` doesn't unify this with option 1. this does seem to have good api, however.
+#check (↑g = a) -- the same as option 2, but with coe-sugar
 
 namespace scratch2
 

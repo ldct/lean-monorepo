@@ -1,5 +1,6 @@
 import Mathlib
 
+#check QuadraticAlgebra
 
 def f : Fin 2 → Fin 2
   | 0 => 0
