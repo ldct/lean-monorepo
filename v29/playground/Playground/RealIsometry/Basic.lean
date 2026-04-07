@@ -86,17 +86,14 @@ theorem norm_orthogonal (n : ℕ)
 : ‖A • v‖ = ‖v‖ := by
   have := A.2.2;
   rw [ EuclideanSpace.norm_eq, EuclideanSpace.norm_eq ]
-
   have h_norm_sq : (A.val.mulVec v) ⬝ᵥ (A.val.mulVec v) = v ⬝ᵥ v := by
-    simp_all [ Matrix.dotProduct_mulVec, Matrix.vecMul_mulVec ];
+    simp_all only [Matrix.dotProduct_mulVec, Matrix.vecMul_mulVec]
     erw [ A.2.1 ]
     norm_num
-
   have h_norm_sq : ∑ i, (A.val.mulVec v i) ^ 2 = ∑ i, (v i) ^ 2 := by
     simp only [ sq  ]
     exact h_norm_sq
-
-  simp_all [ Matrix.mulVec, dotProduct ]
+  simp_all only [WithLp.ofLp_smul, Real.norm_eq_abs, sq_abs]
   exact congrArg Real.sqrt h_norm_sq
 
 noncomputable def multiplication {n : ℕ} (A : Matrix.orthogonalGroup (Fin n) ℝ) : RealIsometry n where
@@ -190,7 +187,7 @@ def RealIsometry.translationSubgroup {n : ℕ} : Subgroup (RealIsometry n) where
   carrier := { RealIsometry.translation d | d : EuclideanSpace ℝ (Fin n) }
   mul_mem' := by
     intro a b ha hb
-    simp_all
+    simp_all only [Set.mem_setOf_eq]
     obtain ⟨a', rfl⟩ := ha
     obtain ⟨b', rfl⟩ := hb
     use a' + b'
@@ -282,13 +279,13 @@ lemma mem_rotationSubgroup_exists_multiplication {n : ℕ} {r : RealIsometry n}
   have h0 : r.toFun 0 = 0 := hr
   have hb : b = 0 := by
     have : (standardForm O b).toFun 0 = 0 := by rw [← congr_fun h]; exact h0
-    simp [standardForm, smul_zero] at this
+    simp only [standardForm, smul_zero, zero_add] at this
     exact this
   subst hb
   refine ⟨O, ?_⟩
   ext x : 2
   have : r.toFun x = (standardForm O 0).toFun x := congr_fun h x
-  simp [standardForm, multiplication] at this ⊢
+  simp only [standardForm, multiplication, add_zero] at this ⊢
   exact this
 
 -- translationSubgroup and rotationSubgroup are disjoint
