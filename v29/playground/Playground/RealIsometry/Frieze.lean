@@ -242,7 +242,9 @@ private lemma glide_sq_eq_T : glide ^ 2 = T := by
   -- x + σH • halfE₁ + halfE₁ = x + e₁
   -- σH • halfE₁ = halfE₁ (σH preserves the x-component, halfE₁ = (½, 0))
   have hσH_half : (σH : Matrix.orthogonalGroup (Fin 2) ℝ) • halfE₁ = halfE₁ := by
-    sorry -- computation: !![1,0;0,-1] • (½, 0) = (½, 0)
+    ext i; fin_cases i <;>
+      simp [σH, halfE₁, e₁, EuclideanSpace.single, Matrix.mulVec, dotProduct,
+        Fin.sum_univ_two, Pi.single]
   rw [hσH_half, halfE₁]
   simp only [e₁]; module
 
@@ -263,7 +265,9 @@ private lemma reflH_comm_T : reflH * T = T * reflH := by
   -- σH • (x + e₁) = σH • x + e₁
   -- i.e., σH • e₁ = e₁ (σH preserves the x-component)
   congr 1
-  sorry -- computation: !![1,0;0,-1] • (1, 0) = (1, 0)
+  ext i; fin_cases i <;>
+    simp [σH, e₁, EuclideanSpace.single, Matrix.mulVec, dotProduct,
+      Fin.sum_univ_two, Pi.single]
 
 /-- reflH has order 2. -/
 private lemma reflH_sq : reflH ^ 2 = 1 := by
@@ -278,7 +282,9 @@ private lemma rot180_conj_T : rot180 * T * rot180 = T⁻¹ := by
   simp only [mul_eq, RealIsometry.comp, Function.comp, rot180, multiplication, T,
     RealIsometry.translation, smul_add, ← mul_smul, ρ_sq, one_smul]
   congr 1
-  sorry -- computation: ρ • e₁ = -e₁, i.e., !![-1,0;0,-1] • (1,0) = (-1, 0)
+  ext i; fin_cases i <;>
+    simp [ρ, e₁, EuclideanSpace.single, Matrix.mulVec, dotProduct,
+      Fin.sum_univ_two, Pi.single]
 
 /-- rot180 has order 2. -/
 private lemma rot180_sq : rot180 ^ 2 = 1 := by
@@ -313,23 +319,485 @@ private lemma intToP11gHom_bijective : Function.Bijective intToP11gHom := by
 noncomputable def p11gEquivInt : p11g ≃* Multiplicative ℤ :=
   (MulEquiv.ofBijective intToP11gHom intToP11gHom_bijective).symm
 
-/-! #### Remaining isomorphisms (structural proofs with computational sorry's) -/
+/-! #### Helper lemmas for remaining isomorphisms -/
+
+private lemma commute_reflH_T' : Commute reflH T := reflH_comm_T
+
+private lemma reflH_mul_reflH : reflH * reflH = 1 := by
+  have h := reflH_sq; rwa [sq] at h
+
+private lemma rot180_mul_rot180 : rot180 * rot180 = 1 := by
+  have h := rot180_sq; rwa [sq] at h
+
+private lemma reflH_pow_val_add (a b : ZMod 2) :
+    reflH ^ (ZMod.val (a + b)) = reflH ^ (ZMod.val a) * reflH ^ (ZMod.val b) := by
+  fin_cases a <;> fin_cases b <;> (first | rfl | norm_num)
+  -- remaining: 1+1 case: reflH^0 = reflH * reflH
+  · show 1 = reflH * reflH
+    exact reflH_mul_reflH.symm
+
+private lemma T_mem_p11m : T ∈ p11m := Subgroup.subset_closure (by simp)
+private lemma reflH_mem_p11m : reflH ∈ p11m := Subgroup.subset_closure (by simp)
+
+-- rot180 conjugation
+private lemma semiconj_rot180_T : SemiconjBy rot180 T T⁻¹ := by
+  rw [SemiconjBy]
+  have hrot2 : rot180 * rot180 = 1 := rot180_mul_rot180
+  calc rot180 * T = rot180 * T * 1 := (mul_one _).symm
+    _ = rot180 * T * (rot180 * rot180) := by rw [hrot2]
+    _ = rot180 * T * rot180 * rot180 := (mul_assoc _ _ _).symm
+    _ = T⁻¹ * rot180 := by rw [rot180_conj_T]
+
+private lemma rot180_mul_T_zpow (n : ℤ) : rot180 * T ^ n = T ^ (-n) * rot180 := by
+  have h : SemiconjBy rot180 T T⁻¹ := semiconj_rot180_T
+  have h1 := (h.zpow_right n).eq
+  -- h1 : rot180 * T ^ n = (T⁻¹) ^ n * rot180
+  -- (T⁻¹)^n = (T^n)⁻¹ = T^(-n)
+  rwa [inv_zpow, ← zpow_neg] at h1
+
+-- Helper for converting zpow to pow with natAbs
+private lemma zpow_natAbs_eq_one {g : PlaneIsometry} {m : ℤ} (hm : g ^ m = 1) :
+    g ^ m.natAbs = 1 := by
+  cases m with
+  | ofNat k => simpa using hm
+  | negSucc k =>
+    rw [Int.natAbs_negSucc]
+    rwa [zpow_negSucc, inv_eq_one] at hm
+
+-- An element of order 2 (g²=1, g≠1) is not a zpow of an element of infinite order
+private lemma not_zpow_of_sq_eq_one_of_ne_one {g h : PlaneIsometry} (hg : g ^ 2 = 1) (hg1 : g ≠ 1)
+    (hh : ¬IsOfFinOrder h) (n : ℤ) : g ≠ h ^ n := by
+  intro heq
+  rcases eq_or_ne n 0 with rfl | hn
+  · simp at heq; exact hg1 heq
+  · have hg' : g ^ (2 : ℤ) = 1 := by norm_cast
+    have h1 : h ^ (n * 2) = 1 := by rw [zpow_mul, ← heq]; exact hg'
+    exact hh (isOfFinOrder_iff_pow_eq_one.mpr ⟨(n * 2).natAbs,
+      Int.natAbs_pos.mpr (by omega), zpow_natAbs_eq_one h1⟩)
+
+private lemma reflH_ne_one : reflH ≠ 1 := by
+  intro h
+  have h1 := congrArg (fun f => f.toFun (EuclideanSpace.single 1 1)) h
+  simp only [reflH, multiplication, one_eq, RealIsometry.identity, id] at h1
+  -- h1 : σH • single 1 1 = single 1 1
+  -- Get component equality via rw
+  have h4 : (σH • (EuclideanSpace.single 1 (1 : ℝ) : EuclideanSpace ℝ (Fin 2))) 1 =
+    (EuclideanSpace.single 1 (1 : ℝ) : EuclideanSpace ℝ (Fin 2)) 1 := by rw [h1]
+  simp [σH, EuclideanSpace.single, Pi.single, Matrix.mulVec, dotProduct, Fin.sum_univ_two] at h4
+  exact absurd h4 (by norm_num)
+
+private lemma rot180_ne_one : rot180 ≠ 1 := by
+  intro h
+  have h1 := congrArg (fun f => f.toFun (EuclideanSpace.single 0 1)) h
+  simp only [rot180, multiplication, one_eq, RealIsometry.identity, id] at h1
+  have h4 : (ρ • (EuclideanSpace.single 0 (1 : ℝ) : EuclideanSpace ℝ (Fin 2))) 0 =
+    (EuclideanSpace.single 0 (1 : ℝ) : EuclideanSpace ℝ (Fin 2)) 0 := by rw [h1]
+  simp [ρ, EuclideanSpace.single, Pi.single, Matrix.mulVec, dotProduct, Fin.sum_univ_two] at h4
+  exact absurd h4 (by norm_num)
+
+-- rot180 is not a power of T
+private lemma rot180_ne_T_zpow (n : ℤ) : rot180 ≠ T ^ n :=
+  not_zpow_of_sq_eq_one_of_ne_one rot180_sq rot180_ne_one T_not_isOfFinOrder n
+
+-- reflH is not a power of T
+private lemma reflH_ne_T_zpow (n : ℤ) : reflH ≠ T ^ n :=
+  not_zpow_of_sq_eq_one_of_ne_one reflH_sq reflH_ne_one T_not_isOfFinOrder n
+
+/-! #### p11m ≅ ℤ × ℤ/2 -/
+
+private noncomputable def p11mHom :
+    Multiplicative ℤ × Multiplicative (ZMod 2) →* p11m where
+  toFun := fun ⟨n, k⟩ => ⟨T ^ (Multiplicative.toAdd n) * reflH ^ (ZMod.val (Multiplicative.toAdd k)),
+    p11m.mul_mem (p11m.zpow_mem T_mem_p11m _) (p11m.pow_mem reflH_mem_p11m _)⟩
+  map_one' := by simp [Subtype.ext_iff]
+  map_mul' := fun ⟨n₁, k₁⟩ ⟨n₂, k₂⟩ => by
+    ext; simp only [toAdd_mul, Subgroup.coe_mul, Subtype.coe_mk]
+    rw [zpow_add, reflH_pow_val_add, mul_assoc, mul_assoc,
+      ← mul_assoc (reflH ^ _) (T ^ _) _,
+      ((commute_reflH_T'.pow_left _).zpow_right _).eq, mul_assoc]
+
+private lemma p11mHom_injective : Function.Injective p11mHom := by
+  intro ⟨n₁, k₁⟩ ⟨n₂, k₂⟩ h
+  have h' : T ^ Multiplicative.toAdd n₁ * reflH ^ ZMod.val (Multiplicative.toAdd k₁) =
+            T ^ Multiplicative.toAdd n₂ * reflH ^ ZMod.val (Multiplicative.toAdd k₂) :=
+    Subtype.ext_iff.mp h
+  have inj_T := injective_zpow_iff_not_isOfFinOrder.mpr T_not_isOfFinOrder
+  -- Case split on ZMod.val values (0 or 1)
+  have hk₁_lt := ZMod.val_lt (Multiplicative.toAdd k₁)
+  have hk₂_lt := ZMod.val_lt (Multiplicative.toAdd k₂)
+  -- We case split by using omega to get val = 0 or val = 1
+  rcases (by omega : ZMod.val (Multiplicative.toAdd k₁) = 0 ∨
+      ZMod.val (Multiplicative.toAdd k₁) = 1) with hk₁_eq | hk₁_eq <;>
+    rcases (by omega : ZMod.val (Multiplicative.toAdd k₂) = 0 ∨
+      ZMod.val (Multiplicative.toAdd k₂) = 1) with hk₂_eq | hk₂_eq <;>
+    simp only [hk₁_eq, hk₂_eq, pow_zero, mul_one, pow_one] at h' ⊢
+  -- Case 0,0: T^n₁ = T^n₂
+  · exact Prod.ext (Multiplicative.toAdd.injective (inj_T h'))
+      (Multiplicative.toAdd.injective (ZMod.val_injective 2 (by rw [hk₁_eq, hk₂_eq])))
+  -- Case 0,1: T^n₁ = T^n₂ * reflH → contradiction
+  · exfalso
+    have : reflH = T ^ (-(Multiplicative.toAdd n₂)) * T ^ (Multiplicative.toAdd n₁) := by
+      rw [h', ← mul_assoc, zpow_neg, inv_mul_cancel, one_mul]
+    rw [← zpow_add] at this
+    exact reflH_ne_T_zpow _ this
+  -- Case 1,0: T^n₁ * reflH = T^n₂ → contradiction
+  · exfalso
+    have : reflH = T ^ (-(Multiplicative.toAdd n₁)) * T ^ (Multiplicative.toAdd n₂) := by
+      rw [← h', ← mul_assoc, zpow_neg, inv_mul_cancel, one_mul]
+    rw [← zpow_add] at this
+    exact reflH_ne_T_zpow _ this
+  -- Case 1,1: T^n₁ * reflH = T^n₂ * reflH → T^n₁ = T^n₂
+  · exact Prod.ext (Multiplicative.toAdd.injective (inj_T (mul_right_cancel h')))
+      (Multiplicative.toAdd.injective (ZMod.val_injective 2 (by rw [hk₁_eq, hk₂_eq])))
+
+private lemma p11mHom_surjective : Function.Surjective p11mHom := by
+  suffices h : p11mHom.range = ⊤ by
+    intro b
+    obtain ⟨a, ha⟩ := MonoidHom.mem_range.mp (h ▸ Subgroup.mem_top b)
+    exact ⟨a, ha⟩
+  rw [eq_top_iff]
+  intro ⟨g, hg⟩ _
+  -- Show p11m ≤ p11mHom.range.map p11m.subtype, hence g ∈ range
+  have hle : p11m ≤ p11mHom.range.map p11m.subtype := by
+    change Subgroup.closure {T, reflH} ≤ _
+    rw [Subgroup.closure_le]
+    intro s hs
+    simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hs
+    rcases hs with rfl | rfl
+    · -- T is in the image: T = p11mHom (1, 0)
+      exact ⟨⟨T, T_mem_p11m⟩, MonoidHom.mem_range.mpr
+        ⟨(Multiplicative.ofAdd (1 : ℤ), Multiplicative.ofAdd (0 : ZMod 2)),
+          Subtype.ext (by simp [p11mHom])⟩, rfl⟩
+    · -- reflH is in the image: reflH = p11mHom (0, 1)
+      exact ⟨⟨reflH, reflH_mem_p11m⟩, MonoidHom.mem_range.mpr
+        ⟨(Multiplicative.ofAdd (0 : ℤ), Multiplicative.ofAdd (1 : ZMod 2)),
+          Subtype.ext (by
+            show T ^ (0 : ℤ) * reflH ^ ZMod.val (1 : ZMod 2) = reflH
+            simp [ZMod.val_one])⟩, rfl⟩
+  obtain ⟨⟨g', hg'_mem⟩, hg'_range, hg'_eq⟩ := hle hg
+  simp only [Subgroup.coe_subtype] at hg'_eq
+  subst hg'_eq
+  exact hg'_range
+
+private lemma p11mHom_bijective : Function.Bijective p11mHom :=
+  ⟨p11mHom_injective, p11mHom_surjective⟩
 
 /-- **p11m ≅ ℤ × ℤ/2**: horizontal reflection commutes with translation. -/
-noncomputable def p11mEquiv : p11m ≃* Multiplicative ℤ × Multiplicative (ZMod 2) := by
-  sorry
+noncomputable def p11mEquiv : p11m ≃* Multiplicative ℤ × Multiplicative (ZMod 2) :=
+  (MulEquiv.ofBijective p11mHom p11mHom_bijective).symm
+
+/-! #### p2 ≅ D∞ -/
+
+private lemma T_mem_p2 : T ∈ p2 := Subgroup.subset_closure (by simp)
+private lemma rot180_mem_p2 : rot180 ∈ p2 := Subgroup.subset_closure (by simp)
+
+private noncomputable def p2ToDihedral : DihedralGroup 0 →* p2 where
+  toFun
+    | .r n => ⟨T ^ (show ℤ from n), p2.zpow_mem T_mem_p2 _⟩
+    | .sr n => ⟨T ^ (-(show ℤ from n)) * rot180,
+        p2.mul_mem (p2.zpow_mem T_mem_p2 _) rot180_mem_p2⟩
+  map_one' := by
+    change (⟨T ^ (0 : ℤ), _⟩ : p2) = 1
+    simp [Subtype.ext_iff]
+  map_mul' := by
+    intro a b
+    match a, b with
+    | .r i, .r j =>
+      simp only [DihedralGroup.r_mul_r, Subtype.ext_iff, Subgroup.coe_mul, Subtype.coe_mk]
+      exact zpow_add T (show ℤ from i) (show ℤ from j)
+    | .r i, .sr j =>
+      simp only [DihedralGroup.r_mul_sr, Subtype.ext_iff, Subgroup.coe_mul, Subtype.coe_mk]
+      -- Goal: T^(-(j-i)) * rot180 = T^i * (T^(-j) * rot180)
+      -- After rw: T^(i + (-j)) * rot180 = T^(-(j-i)) * rot180
+      -- Need: i + (-j) = -(j - i), i.e., i - j = -(j - i) = i - j ✓
+      rw [← mul_assoc, ← zpow_add]
+      exact congrArg (· * rot180) (congrArg (T ^ ·) (show -(j - i) = i + -j by ring))
+    | .sr i, .r j =>
+      simp only [DihedralGroup.sr_mul_r, Subtype.ext_iff, Subgroup.coe_mul, Subtype.coe_mk]
+      rw [mul_assoc, rot180_mul_T_zpow, ← mul_assoc, ← zpow_add]
+      exact congrArg (· * rot180) (congrArg (T ^ ·) (neg_add i j))
+    | .sr i, .sr j =>
+      simp only [DihedralGroup.sr_mul_sr, Subtype.ext_iff, Subgroup.coe_mul, Subtype.coe_mk]
+      -- sr i * sr j = r (j - i), maps to T^(j-i)
+      -- RHS: (T^(-i) * rot180) * (T^(-j) * rot180) = T^(-i) * T^j * 1 = T^(j-i)
+      rw [mul_assoc, ← mul_assoc rot180 (T ^ _), rot180_mul_T_zpow]
+      rw [mul_assoc, rot180_mul_rot180, mul_one, ← zpow_add]
+      exact congrArg (T ^ ·) (show j - i = -i + - -j by ring)
+
+private lemma p2ToDihedral_bijective : Function.Bijective p2ToDihedral := by
+  constructor
+  · -- Injectivity
+    intro a b h
+    have h' : (p2ToDihedral a : PlaneIsometry) = (p2ToDihedral b : PlaneIsometry) :=
+      congrArg Subtype.val h
+    have inj_T := injective_zpow_iff_not_isOfFinOrder.mpr T_not_isOfFinOrder
+    match a, b with
+    | .r i, .r j =>
+      change T ^ (show ℤ from i) = T ^ (show ℤ from j) at h'
+      exact congrArg DihedralGroup.r (inj_T h')
+    | .sr i, .sr j =>
+      change T ^ (-(show ℤ from i)) * rot180 = T ^ (-(show ℤ from j)) * rot180 at h'
+      have h'' : T ^ (-(show ℤ from i)) = T ^ (-(show ℤ from j)) := mul_right_cancel h'
+      have : (show ℤ from i) = (show ℤ from j) := by
+        have := inj_T h''; omega
+      exact congrArg DihedralGroup.sr this
+    | .r i, .sr j =>
+      change T ^ (show ℤ from i) = T ^ (-(show ℤ from j)) * rot180 at h'
+      exfalso
+      have h1 : rot180 = T ^ ((show ℤ from j) + (show ℤ from i)) := by
+        have h2 : (T ^ (-(show ℤ from j)))⁻¹ * T ^ (show ℤ from i) =
+            (T ^ (-(show ℤ from j)))⁻¹ * (T ^ (-(show ℤ from j)) * rot180) := by
+          rw [h']
+        rw [inv_mul_cancel_left, zpow_neg, inv_inv, ← zpow_add] at h2
+        exact h2.symm
+      exact rot180_ne_T_zpow _ h1
+    | .sr i, .r j =>
+      change T ^ (-(show ℤ from i)) * rot180 = T ^ (show ℤ from j) at h'
+      exfalso
+      have h1 : rot180 = T ^ ((show ℤ from i) + (show ℤ from j)) := by
+        have h2 : (T ^ (-(show ℤ from i)))⁻¹ * (T ^ (-(show ℤ from i)) * rot180) =
+            (T ^ (-(show ℤ from i)))⁻¹ * T ^ (show ℤ from j) := by
+          rw [h']
+        rw [inv_mul_cancel_left, zpow_neg, inv_inv, ← zpow_add] at h2
+        exact h2
+      exact rot180_ne_T_zpow _ h1
+  · -- Surjectivity: show range contains generators T and rot180
+    intro ⟨g, hg⟩
+    -- Show the range of p2ToDihedral is the whole group p2
+    suffices h : p2ToDihedral.range = ⊤ by
+      obtain ⟨x, hx⟩ := MonoidHom.mem_range.mp (h ▸ Subgroup.mem_top (⟨g, hg⟩ : p2))
+      exact ⟨x, hx⟩
+    rw [eq_top_iff]
+    -- It suffices to show T and rot180 are in the range
+    have : p2 ≤ Subgroup.map p2.subtype p2ToDihedral.range := by
+      change Subgroup.closure {T, rot180} ≤ _
+      rw [Subgroup.closure_le]
+      intro s hs
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hs
+      rcases hs with rfl | rfl
+      · refine ⟨⟨T, T_mem_p2⟩, MonoidHom.mem_range.mpr ⟨.r 1, Subtype.ext ?_⟩, rfl⟩
+        change T ^ (show ℤ from (1 : ZMod 0)) = T
+        exact zpow_one T
+      · refine ⟨⟨rot180, rot180_mem_p2⟩, MonoidHom.mem_range.mpr ⟨.sr 0, Subtype.ext ?_⟩, rfl⟩
+        show T ^ (-(show ℤ from (0 : ZMod 0))) * rot180 = rot180
+        have : (show ℤ from (0 : ZMod 0)) = (0 : ℤ) := rfl
+        rw [this, neg_zero, zpow_zero, one_mul]
+    intro ⟨g', hg'⟩ _
+    obtain ⟨⟨g'', hg''_mem⟩, hg''_range, hg''_eq⟩ := this hg'
+    simp only [Subgroup.coe_subtype] at hg''_eq
+    subst hg''_eq
+    exact hg''_range
 
 /-- **p2 ≅ D∞**: the infinite dihedral group. rot180 conjugates T to T⁻¹. -/
-noncomputable def p2EquivDihedral : p2 ≃* DihedralGroup 0 := by
-  sorry
+noncomputable def p2EquivDihedral : p2 ≃* DihedralGroup 0 :=
+  (MulEquiv.ofBijective p2ToDihedral p2ToDihedral_bijective).symm
 
-/-- **p2mm ≅ D∞ × ℤ/2**: reflH commutes with the D∞ generated by T and reflV. -/
-noncomputable def p2mmEquiv : p2mm ≃* DihedralGroup 0 × Multiplicative (ZMod 2) := by
-  sorry
+/-! #### Helper lemmas for p2mg -/
+
+private lemma σV_half : (σV : Matrix.orthogonalGroup (Fin 2) ℝ) • halfE₁ = -halfE₁ := by
+  ext i; fin_cases i <;>
+    simp [σV, halfE₁, e₁, EuclideanSpace.single, Matrix.mulVec, dotProduct,
+      Fin.sum_univ_two]
+
+private lemma reflVHalf_sq : reflVHalf ^ 2 = 1 := by
+  ext x : 2
+  show reflVHalf.toFun (reflVHalf.toFun x) = x
+  simp only [reflVHalf, standardForm, smul_add, ← mul_smul, σV_sq, one_smul]
+  rw [σV_half]; abel
+
+private lemma reflVHalf_mul_reflVHalf : reflVHalf * reflVHalf = 1 := by
+  have h := reflVHalf_sq; rwa [sq] at h
+
+private lemma glide_eq_reflVHalf_mul_rot180 : glide = reflVHalf * rot180 := by
+  ext x : 2
+  simp only [glide, reflVHalf, rot180, standardForm, multiplication, mul_eq,
+    RealIsometry.comp, Function.comp, smul_add]
+  congr 1
+  ext i; fin_cases i <;>
+    simp [σH, σV, ρ, halfE₁, e₁, EuclideanSpace.single, Matrix.mulVec,
+      dotProduct, Fin.sum_univ_two, ← mul_smul]
+
+private lemma rot180_eq_reflVHalf_mul_glide : rot180 = reflVHalf * glide := by
+  rw [glide_eq_reflVHalf_mul_rot180, ← mul_assoc, reflVHalf_mul_reflVHalf, one_mul]
+
+private lemma T_mem_p2mg : T ∈ p2mg := Subgroup.subset_closure (by simp)
+private lemma rot180_mem_p2mg : rot180 ∈ p2mg := Subgroup.subset_closure (by simp)
+private lemma reflVHalf_mem_p2mg : reflVHalf ∈ p2mg := Subgroup.subset_closure (by simp)
+
+private lemma glide_mem_p2mg : glide ∈ p2mg :=
+  glide_eq_reflVHalf_mul_rot180 ▸ p2mg.mul_mem reflVHalf_mem_p2mg rot180_mem_p2mg
+
+-- reflVHalf conjugates glide to glide⁻¹
+private lemma reflVHalf_conj_glide :
+    reflVHalf * glide * reflVHalf = glide⁻¹ := by
+  rw [glide_eq_reflVHalf_mul_rot180]
+  -- reflVHalf * (reflVHalf * rot180) * reflVHalf
+  -- = (reflVHalf * reflVHalf) * rot180 * reflVHalf
+  -- = 1 * rot180 * reflVHalf = rot180 * reflVHalf
+  rw [← mul_assoc reflVHalf reflVHalf, reflVHalf_mul_reflVHalf, one_mul]
+  -- Now show rot180 * reflVHalf = (reflVHalf * rot180)⁻¹
+  rw [mul_inv_rev]
+  -- = rot180⁻¹ * reflVHalf⁻¹
+  -- rot180⁻¹ = rot180 (order 2), reflVHalf⁻¹ = reflVHalf (order 2)
+  congr 1
+  · exact (inv_eq_of_mul_eq_one_right rot180_mul_rot180).symm
+  · exact (inv_eq_of_mul_eq_one_right reflVHalf_mul_reflVHalf).symm
+
+private lemma semiconj_reflVHalf_glide : SemiconjBy reflVHalf glide glide⁻¹ := by
+  rw [SemiconjBy]
+  calc reflVHalf * glide = reflVHalf * glide * 1 := (mul_one _).symm
+    _ = reflVHalf * glide * (reflVHalf * reflVHalf) := by rw [reflVHalf_mul_reflVHalf]
+    _ = (reflVHalf * glide * reflVHalf) * reflVHalf := by group
+    _ = glide⁻¹ * reflVHalf := by rw [reflVHalf_conj_glide]
+
+private lemma reflVHalf_mul_glide_zpow (n : ℤ) :
+    reflVHalf * glide ^ n = glide ^ (-n) * reflVHalf := by
+  have h := (semiconj_reflVHalf_glide.zpow_right n).eq
+  rwa [inv_zpow, ← zpow_neg] at h
+
+private lemma reflVHalf_ne_one : reflVHalf ≠ 1 := by
+  intro h
+  have h1 := congrArg (fun f => f.toFun (EuclideanSpace.single 0 1)) h
+  simp only [reflVHalf, standardForm, one_eq, RealIsometry.identity, id] at h1
+  have h4 : ((σV : Matrix.orthogonalGroup (Fin 2) ℝ) •
+    (EuclideanSpace.single 0 (1 : ℝ) : EuclideanSpace ℝ (Fin 2)) + halfE₁) 0 =
+    (EuclideanSpace.single 0 (1 : ℝ) : EuclideanSpace ℝ (Fin 2)) 0 := by rw [h1]
+  simp [σV, halfE₁, e₁, EuclideanSpace.single, Pi.single, Matrix.mulVec, dotProduct,
+    Fin.sum_univ_two] at h4
+  linarith
+
+-- reflVHalf is not a power of glide (order 2 vs infinite order)
+private lemma reflVHalf_ne_glide_zpow (n : ℤ) : reflVHalf ≠ glide ^ n :=
+  not_zpow_of_sq_eq_one_of_ne_one reflVHalf_sq reflVHalf_ne_one glide_not_isOfFinOrder n
+
+/-! #### p2mg ≅ D∞ -/
+
+private noncomputable def p2mgToDihedral : DihedralGroup 0 →* p2mg where
+  toFun
+    | .r n => ⟨glide ^ (show ℤ from n), p2mg.zpow_mem glide_mem_p2mg _⟩
+    | .sr n => ⟨glide ^ (-(show ℤ from n)) * reflVHalf,
+        p2mg.mul_mem (p2mg.zpow_mem glide_mem_p2mg _) reflVHalf_mem_p2mg⟩
+  map_one' := by
+    change (⟨glide ^ (0 : ℤ), _⟩ : p2mg) = 1
+    simp [Subtype.ext_iff]
+  map_mul' := by
+    intro a b
+    match a, b with
+    | .r i, .r j =>
+      simp only [DihedralGroup.r_mul_r, Subtype.ext_iff, Subgroup.coe_mul, Subtype.coe_mk]
+      exact zpow_add glide (show ℤ from i) (show ℤ from j)
+    | .r i, .sr j =>
+      simp only [DihedralGroup.r_mul_sr, Subtype.ext_iff, Subgroup.coe_mul, Subtype.coe_mk]
+      rw [← mul_assoc, ← zpow_add]
+      exact congrArg (· * reflVHalf) (congrArg (glide ^ ·) (show -(j - i) = i + -j by ring))
+    | .sr i, .r j =>
+      simp only [DihedralGroup.sr_mul_r, Subtype.ext_iff, Subgroup.coe_mul, Subtype.coe_mk]
+      rw [mul_assoc, reflVHalf_mul_glide_zpow, ← mul_assoc, ← zpow_add]
+      exact congrArg (· * reflVHalf) (congrArg (glide ^ ·) (neg_add i j))
+    | .sr i, .sr j =>
+      simp only [DihedralGroup.sr_mul_sr, Subtype.ext_iff, Subgroup.coe_mul, Subtype.coe_mk]
+      rw [mul_assoc, ← mul_assoc reflVHalf (glide ^ _), reflVHalf_mul_glide_zpow]
+      rw [mul_assoc, reflVHalf_mul_reflVHalf, mul_one, ← zpow_add]
+      exact congrArg (glide ^ ·) (show j - i = -i + - -j by ring)
+
+private lemma p2mgToDihedral_bijective : Function.Bijective p2mgToDihedral := by
+  constructor
+  · -- Injectivity (same pattern as p2)
+    intro a b h
+    have h' : (p2mgToDihedral a : PlaneIsometry) = (p2mgToDihedral b : PlaneIsometry) :=
+      congrArg Subtype.val h
+    have inj_g := injective_zpow_iff_not_isOfFinOrder.mpr glide_not_isOfFinOrder
+    match a, b with
+    | .r i, .r j =>
+      change glide ^ (show ℤ from i) = glide ^ (show ℤ from j) at h'
+      exact congrArg DihedralGroup.r (inj_g h')
+    | .sr i, .sr j =>
+      change glide ^ (-(show ℤ from i)) * reflVHalf =
+          glide ^ (-(show ℤ from j)) * reflVHalf at h'
+      have h'' : glide ^ (-(show ℤ from i)) = glide ^ (-(show ℤ from j)) :=
+        mul_right_cancel h'
+      have : (show ℤ from i) = (show ℤ from j) := by
+        have := inj_g h''; omega
+      exact congrArg DihedralGroup.sr this
+    | .r i, .sr j =>
+      change glide ^ (show ℤ from i) =
+          glide ^ (-(show ℤ from j)) * reflVHalf at h'
+      exfalso
+      have h2 : (glide ^ (-(show ℤ from j)))⁻¹ * glide ^ (show ℤ from i) =
+          (glide ^ (-(show ℤ from j)))⁻¹ * (glide ^ (-(show ℤ from j)) * reflVHalf) := by
+        rw [h']
+      rw [inv_mul_cancel_left, zpow_neg, inv_inv, ← zpow_add] at h2
+      exact reflVHalf_ne_glide_zpow _ h2.symm
+    | .sr i, .r j =>
+      change glide ^ (-(show ℤ from i)) * reflVHalf =
+          glide ^ (show ℤ from j) at h'
+      exfalso
+      have h2 : (glide ^ (-(show ℤ from i)))⁻¹ * (glide ^ (-(show ℤ from i)) * reflVHalf) =
+          (glide ^ (-(show ℤ from i)))⁻¹ * glide ^ (show ℤ from j) := by
+        rw [h']
+      rw [inv_mul_cancel_left, zpow_neg, inv_inv, ← zpow_add] at h2
+      exact reflVHalf_ne_glide_zpow _ h2
+  · -- Surjectivity: image contains generators {T, rot180, reflVHalf}
+    intro ⟨g, hg⟩
+    suffices h : p2mgToDihedral.range = ⊤ by
+      obtain ⟨x, hx⟩ := MonoidHom.mem_range.mp (h ▸ Subgroup.mem_top (⟨g, hg⟩ : p2mg))
+      exact ⟨x, hx⟩
+    rw [eq_top_iff]
+    have hle : p2mg ≤ Subgroup.map p2mg.subtype p2mgToDihedral.range := by
+      change Subgroup.closure {T, rot180, reflVHalf} ≤ _
+      rw [Subgroup.closure_le]
+      intro s hs
+      simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hs
+      rcases hs with rfl | rfl | rfl
+      · -- T = glide² = p2mgToDihedral (r 2)
+        refine ⟨⟨T, T_mem_p2mg⟩, MonoidHom.mem_range.mpr ⟨.r 2, Subtype.ext ?_⟩, rfl⟩
+        change glide ^ (show ℤ from (2 : ZMod 0)) = T
+        show glide ^ (2 : ℤ) = T
+        exact glide_sq_eq_T
+      · -- rot180 = reflVHalf * glide = p2mgToDihedral (sr (-1))
+        -- sr (-1) maps to glide^(1) * reflVHalf
+        -- But we want rot180 = reflVHalf * glide
+        -- Actually: sr n maps to glide^(-n) * reflVHalf
+        -- glide^1 * reflVHalf: is this rot180?
+        -- rot180 = reflVHalf * glide but the map gives glide^(-n) * reflVHalf
+        -- For sr (-1): glide^(--1) * reflVHalf = glide^1 * reflVHalf
+        -- But rot180 = reflVHalf * glide, not glide * reflVHalf
+        -- glide * reflVHalf = reflVHalf * rot180 * reflVHalf
+        -- = reflVHalf * (rot180 * reflVHalf)
+        -- Hmm, let me think again. We have:
+        -- reflVHalf * glide * reflVHalf = glide⁻¹
+        -- So reflVHalf * glide = glide⁻¹ * reflVHalf
+        -- And glide * reflVHalf = reflVHalf * glide⁻¹
+        -- rot180 = reflVHalf * glide = glide⁻¹ * reflVHalf = glide^(-1) * reflVHalf
+        -- = p2mgToDihedral (sr 1) since sr 1 ↦ glide^(-1) * reflVHalf
+        refine ⟨⟨rot180, rot180_mem_p2mg⟩, MonoidHom.mem_range.mpr ⟨.sr 1, Subtype.ext ?_⟩, rfl⟩
+        change glide ^ (-(show ℤ from (1 : ZMod 0))) * reflVHalf = rot180
+        show glide ^ (-(1 : ℤ)) * reflVHalf = rot180
+        rw [zpow_neg, zpow_one]
+        -- glide⁻¹ * reflVHalf = rot180
+        -- glide = reflVHalf * rot180, so glide⁻¹ = rot180⁻¹ * reflVHalf⁻¹ = rot180 * reflVHalf
+        rw [glide_eq_reflVHalf_mul_rot180, mul_inv_rev,
+          inv_eq_of_mul_eq_one_right rot180_mul_rot180,
+          inv_eq_of_mul_eq_one_right reflVHalf_mul_reflVHalf,
+          mul_assoc, reflVHalf_mul_reflVHalf, mul_one]
+      · -- reflVHalf = p2mgToDihedral (sr 0)
+        refine ⟨⟨reflVHalf, reflVHalf_mem_p2mg⟩, MonoidHom.mem_range.mpr ⟨.sr 0, Subtype.ext ?_⟩, rfl⟩
+        change glide ^ (-(show ℤ from (0 : ZMod 0))) * reflVHalf = reflVHalf
+        have : (show ℤ from (0 : ZMod 0)) = (0 : ℤ) := rfl
+        rw [this, neg_zero, zpow_zero, one_mul]
+    intro ⟨g', hg'⟩ _
+    obtain ⟨⟨g'', hg''_mem⟩, hg''_range, hg''_eq⟩ := hle hg'
+    simp only [Subgroup.coe_subtype] at hg''_eq
+    subst hg''_eq
+    exact hg''_range
 
 /-- **p2mg ≅ D∞**: generated by glide (infinite order) and reflVHalf (order 2)
     satisfying the dihedral relation reflVHalf * glide * reflVHalf = glide⁻¹. -/
-noncomputable def p2mgEquivDihedral : p2mg ≃* DihedralGroup 0 := by
+noncomputable def p2mgEquivDihedral : p2mg ≃* DihedralGroup 0 :=
+  (MulEquiv.ofBijective p2mgToDihedral p2mgToDihedral_bijective).symm
+
+/-- **p2mm ≅ D∞ × ℤ/2**: reflH commutes with the D∞ generated by T and reflV. -/
+noncomputable def p2mmEquiv : p2mm ≃* DihedralGroup 0 × Multiplicative (ZMod 2) := by
   sorry
 
 /-- **p2gm ≅ D∞ × ℤ/2**: reflH commutes with the D∞ generated by T and rot180Half. -/
