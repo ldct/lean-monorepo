@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace Determinant1
+
 def E₈ : Matrix (Fin 8) (Fin 8) ℤ :=
   !![ 2,  0, -1,  0,  0,  0,  0,  0;
       0,  2,  0, -1,  0,  0,  0,  0;
@@ -143,3 +145,5 @@ theorem E₈_det : E₈.det = 1 := by
   rw [Matrix.det_of_upperTriangular]
   · decide +kernel
   · unfold Matrix.BlockTriangular; decide +kernel
+
+end Determinant1

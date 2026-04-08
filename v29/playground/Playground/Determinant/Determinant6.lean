@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace Determinant6
+
 instance : Fact (Nat.Prime 13) := ⟨by decide⟩
 
 /-!
@@ -59,3 +61,5 @@ lemma U₁₃_det : U₁₃.det = 9 := by
 theorem A₁₃_det : A₁₃.det = 9 := by
   rw [A₁₃_eq_LU, Matrix.det_mul, L₁₃_det, U₁₃_det]
   decide
+
+end Determinant6

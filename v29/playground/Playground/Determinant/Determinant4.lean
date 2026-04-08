@@ -1,4 +1,8 @@
-import Playground.Determinant2
+import Playground.Determinant.Determinant2
+
+namespace Determinant4
+
+open Determinant2
 
 def A₂₀ : Matrix (Fin 20) (Fin 20) ℤ :=
   !![    2,   -3,    2,    3,    0,   -2,    1,   -3,   -1,    0,    1,   -2,   -3,    0,    0,   -3,   -3,   -3,    3,   -2;
@@ -66,3 +70,5 @@ theorem A₂₀_det : A₂₀.det = 32 := by
   rw [Matrix.det_of_upperTriangular]
   · decide +kernel
   · unfold Matrix.BlockTriangular; decide +kernel
+
+end Determinant4

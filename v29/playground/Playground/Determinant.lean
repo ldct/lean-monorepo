@@ -1,0 +1,6 @@
+import Playground.Determinant.Determinant1
+import Playground.Determinant.Determinant2
+import Playground.Determinant.Determinant3
+import Playground.Determinant.Determinant4
+import Playground.Determinant.Determinant5
+import Playground.Determinant.Determinant6

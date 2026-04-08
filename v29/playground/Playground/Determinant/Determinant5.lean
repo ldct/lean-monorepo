@@ -1,5 +1,7 @@
 import Mathlib
 
+namespace Determinant5
+
 def E₈ : Matrix (Fin 8) (Fin 8) ℤ :=
   !![ 2,  0, -1,  0,  0,  0,  0,  0;
       0,  2,  0, -1,  0,  0,  0,  0;
@@ -64,3 +66,5 @@ example : IsUpperTriangular E₈_U := by
   unfold IsUpperTriangular
   unfold Matrix.BlockTriangular
   decide
+
+end Determinant5
