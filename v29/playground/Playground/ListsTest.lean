@@ -19,7 +19,8 @@ abbrev MyTypes' : List FintypeCat := [
 ]
 
 -- [2, 3, 5]
-#eval MyTypes'.map (fun x ↦ Fintype.card x.carrier)
+-- In v29, FintypeCat uses Finite (not Fintype), so Fintype.card is noncomputable.
+-- Use the Sigma-based approach above instead.
 
 
 end ListsTest

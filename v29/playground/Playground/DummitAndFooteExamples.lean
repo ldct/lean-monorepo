@@ -97,17 +97,18 @@ instance : Group PRat := Group.ofLeftAxioms
     intro a b c
     apply Subtype.ext
 
-    simp [mul_val, Rat.mul_assoc]
+    simp [mul_val, mul_assoc]
   ) (by
     intro a
     apply Subtype.ext
-    simp [mul_val]
+    simp [mul_val, one_val]
   ) (by
     intro a
     apply Subtype.ext
     simp [mul_val, inv_val]
     have := a.property
     field_simp
+    rfl
   )
 /-
 ℝ+ omitted
@@ -405,12 +406,7 @@ def g2 : AddSubgroup ℤ4 where
 
 def g3 : AddSubgroup ℤ4 := ⊤
 example : g3.carrier = {0, 1, 2, 3} := by
-  simp [g3]
-  -- The carrier of the top subgroup is the universal set, which in this case is {0, 1, 2, 3}.
-  simp [Set.ext_iff];
-  -- Since ℤ4 is a finite type with elements 0, 1, 2, and 3, we can check each element individually.
-  intro x
-  fin_cases x <;> simp +decide
+  ext x; simp [g3]; fin_cases x <;> aesop
 
 example : g1 < g2 := by
   apply lt_of_le_of_ne

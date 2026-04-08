@@ -52,6 +52,7 @@ instance MyPolynomial.instAddGroup : AddGroup MyPolynomial :=
   ) (by
     intro a
     ext i
-    change (-a).coeffs i + a.coeffs i = 0
-    simp [MyPolynomial.instNeg]
+    show (-a).coeffs i + a.coeffs i = 0
+    unfold instNeg
+    simp
   )
