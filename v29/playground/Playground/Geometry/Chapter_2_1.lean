@@ -146,7 +146,7 @@ Exercises
 Status: done
 -/
 -- Part a (2.1.1.a)
-example : AddSubgroup ℂ := Subgroup.ofAddSubgroupCriterion
+noncomputable example : AddSubgroup ℂ := Subgroup.ofAddSubgroupCriterion
 { a + a*Complex.I | a : ℝ }
 (by
   use 0+0*Complex.I

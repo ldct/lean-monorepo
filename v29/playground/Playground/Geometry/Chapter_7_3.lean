@@ -79,7 +79,7 @@ example : evalAtZero (X ^ 2 + 4) = 4 := by
 example (p : ℚ[X]) : p*X ∈ RingHom.ker evalAtZero := by
   simp [evalAtZero]
 
-example : Ideal ℚ[X] := RingHom.ker evalAtZero
+noncomputable example : Ideal ℚ[X] := RingHom.ker evalAtZero
 
 /-
 # Proposition 5, 6, 7 - omitted
