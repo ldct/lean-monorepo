@@ -126,7 +126,7 @@ lemma aut_determined_by_gens {n : ℕ} (f g : MulAut (DihedralGroup n))
           intro K hr hs; induction' k using Int.induction_on with n ihn n ihn; aesop;
           · convert K.mul_mem ihn hr using 1;
           · convert K.mul_mem ihn ( K.inv_mem hr ) using 1;
-        · fin_cases k ; simp_all +decide [ Set.insert_subset_iff ];
+        · fin_cases k ; simp_all +decide [ Set.insert_subset_iff ]; tauto;
         · intro K hK; have := hK ( Set.mem_insert _ _ ) ; have := hK ( Set.mem_insert_of_mem _ ( Set.mem_singleton _ ) ) ; simp_all +decide [ Set.insert_subset_iff ] ;
           convert K.mul_mem this ( K.pow_mem ‹DihedralGroup.r 1 ∈ K› k.val ) using 1 ; aesop;
     refine' MulEquiv.ext fun x => _;
