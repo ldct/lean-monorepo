@@ -37,11 +37,16 @@ instance : Group (MyQuaternionGroup n) where
   mul := mul
   mul_assoc := by
     rintro (i | i) (j | j) (k | k) <;> simp only [(· * ·), mul] <;> ring_nf
-    congr
-    calc
-      -(n : ZMod (2 * n)) = 0 - n := by rw [zero_sub]
-      _ = 2 * n - n := by norm_cast; simp
-      _ = n := by ring
+    all_goals {
+      have h : (n : ZMod (2 * n)) = -(n : ZMod (2 * n)) := by
+        have : -(n : ZMod (2 * n)) = n := by
+          calc -(n : ZMod (2 * n)) = 0 - n := by rw [zero_sub]
+            _ = 2 * n - n := by norm_cast; simp
+            _ = n := by ring
+        linear_combination -this
+      conv_rhs => rw [show (n : ZMod (2 * n)) = -(n : ZMod (2*n)) from h]
+      ring
+    }
   one := one
   one_mul := by
     rintro (i | i)
