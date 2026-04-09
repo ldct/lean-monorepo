@@ -17,18 +17,16 @@ namespace BaerNorm
 /-
 The norm of a group G is the intersection of all normalizers of subgroups of G.
 -/
-def baerNorm (G : Type*) [Group G] : Subgroup G := ⨅ (H : Subgroup G), H.normalizer
+def baerNorm (G : Type*) [Group G] : Subgroup G := ⨅ (H : Subgroup G), Subgroup.normalizer (H : Set G)
 
 /-
 For an abelian group, the norm is the whole group.
 -/
 theorem groupNorm_eq_top_of_abelian {G : Type*} [CommGroup G] : baerNorm G = ⊤ := by
   -- Since G is abelian, every subgroup H of G is normal. Therefore, the normalizer of every subgroup H is G.
-  have h_norm : ∀ H : Subgroup G, H.normalizer = ⊤ := by
+  have h_norm : ∀ H : Subgroup G, Subgroup.normalizer (H : Set G) = ⊤ := by
     intros H
-    -- Since G is abelian, every element of G normalizes every subgroup. Therefore, the normalizer of H is the entire group.
-    ext g
-    simp [Subgroup.normalizer];
+    exact @Subgroup.normalizer_eq_top G _ H (Subgroup.normal_of_comm H);
   unfold baerNorm; aesop;
 
 /-
@@ -38,7 +36,8 @@ theorem center_le_groupNorm {G : Type*} [Group G] : Subgroup.center G ≤ baerNo
   intro x hx
   simp [baerNorm];
   simp_all +decide [ Subgroup.mem_center_iff, Subgroup.mem_iInf, Subgroup.mem_normalizer_iff ];
-  simp +decide [ ← hx, mul_assoc ]
+  intro H h
+  simp +decide [ ← hx h, mul_assoc ]
 
 /-
 The norm of a group is a normal subgroup.
@@ -62,7 +61,7 @@ theorem groupNorm_normal {G : Type*} [Group G] : (baerNorm G).Normal := by
 /-
 An element is in the norm if and only if it normalizes every subgroup.
 -/
-theorem mem_groupNorm_iff {G : Type*} [Group G] (x : G) : x ∈ baerNorm G ↔ ∀ H : Subgroup G, x ∈ H.normalizer := by
+theorem mem_groupNorm_iff {G : Type*} [Group G] (x : G) : x ∈ baerNorm G ↔ ∀ H : Subgroup G, x ∈ Subgroup.normalizer (H : Set G) := by
   simp +decide [ baerNorm, Subgroup.mem_iInf]
 
 theorem q8_norm_ne_center : baerNorm (QuaternionGroup 2) ≠ Subgroup.center (QuaternionGroup 2) := by
