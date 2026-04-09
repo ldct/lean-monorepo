@@ -73,7 +73,14 @@ example (n : ℕ) (hn : 2 < n) : ¬IsAbelian (DihedralGroup n) := by
   have h_neq : (n - 1 : ℕ) ≠ 1 := by
 
     omega
-  rcases n with ( _ | _ | n ) <;> simp_all +decide [ ZMod, Fin.ext_iff ]
+  rcases n with ( _ | _ | n )
+  · omega
+  · omega
+  · simp_all +decide [ ZMod, Fin.ext_iff ]
+    intro h
+    have h2 : (-1 : Fin (n + 1 + 1)) = (1 : Fin (n + 1 + 1)) := Fin.val_injective h
+    simp [Fin.ext_iff] at h2
+    omega
 
 -- 1.6.3 part 1
 example {G H} [Group G] [Group H] (φ : G ≃* H) (hG : IsAbelian G) : IsAbelian H := by
