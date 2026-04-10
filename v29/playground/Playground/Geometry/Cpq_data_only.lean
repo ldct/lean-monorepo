@@ -69,25 +69,6 @@ example (a b c : Cpqr 4 4 3)
 -- : (a * b) * c = a * (b * c) := by
 --   plausible
 
-example (r : ZMod 25) (a b c : Cpqr 25 15 r) (h : r ^ 15 = 1)
-: (a * b) * c = a * (b * c) := by
-  have h_expand : ∀ a b c : Cpqr 25 15 r,
-    (a * b) * c = { Q := (a.Q + b.Q) + c.Q, P :=
-    (act 25 15 r ((act 25 15 r a.P b.Q).val + b.P) c.Q).val + c.P } ∧
-    a * (b * c) = { Q := a.Q + (b.Q + c.Q), P := (act 25 15 r a.P (b.Q + c.Q)).val +
-    ((act 25 15 r b.P c.Q).val + c.P) } := by
-    bound
-  simp_all [← add_assoc]
-  unfold act
-  ring_nf
-  erw [ZMod.val_add]
-  erw [← Nat.mod_add_div (b.Q.val + c.Q.val) 15]
-  norm_num [pow_add, pow_mul, h]
-  rw [show r ^ ((b.Q.val + c.Q.val) % 15) = r ^ (b.Q.val + c.Q.val) by
-    rw [← Nat.mod_add_div (b.Q.val + c.Q.val) 15, pow_add, pow_mul];
-    aesop]
-  ring
-
 theorem mul_assoc_helper (p q : PNat) (r : ZMod p) (a b c : Cpqr p q r) (h : r ^ (q.val) = 1)
 : (a * b) * c = a * (b * c) := by
   simp [Cpqr.mul_eq, act];
@@ -97,6 +78,9 @@ theorem mul_assoc_helper (p q : PNat) (r : ZMod p) (a b c : Cpqr p q r) (h : r ^
   rw [ ← h_sum, ← Nat.mod_add_div ( b.Q.val + c.Q.val ) q.val ]
   simp [ pow_add, pow_mul, h ]
   grind
+
+example (r : ZMod 25) (a b c : Cpqr 25 15 r) (h : r ^ 15 = 1)
+: (a * b) * c = a * (b * c) := mul_assoc_helper 25 15 r a b c h
 
 instance (p q : PNat) (r : ZMod p) : Inv (Cpqr p q r) where
   inv x :=

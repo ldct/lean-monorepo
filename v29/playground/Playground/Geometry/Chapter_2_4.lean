@@ -116,14 +116,16 @@ example {G} [Group G] (H : Subgroup G) (h1 : Group.IsAbelian H) : Group.IsAbelia
       simp +decide only [mul_assoc, Subgroup.mem_center_iff.mp hc₁ h₂];
     · rintro x hx ⟨ h, hh, c, hc, rfl ⟩;
       exact ⟨ h⁻¹, H.inv_mem hh, c⁻¹, Subgroup.inv_mem _ hc, by simp +decide [ mul_inv_rev, Subgroup.mem_center_iff.mp hc ] ⟩;
-  obtain ⟨ h1, hh1, c1, hc1, rfl ⟩ := hx_prod x hx; obtain ⟨ h2, hh2, c2, hc2, rfl ⟩ := hx_prod y hy; simp_all +decide [ mul_assoc, Subgroup.mem_center_iff ] ;
-  simp +decide only [← mul_assoc];
-  -- Since $H$ is Abelian, we have $h1 * h2 = h2 * h1$.
-  have h_comm : h1 * h2 = h2 * h1 := by
-    rename_i h;
-    have := h ( ⟨ h1, hh1 ⟩ : H ) ( ⟨ h2, hh2 ⟩ : H ) ; aesop;
-  simp +decide only [hc2, mul_assoc, h_comm, hc1];
-  simp +decide only [← mul_assoc, ← hc2]
+  obtain ⟨ hg1, hhg1, cg1, hcg1, rfl ⟩ := hx_prod x hx; obtain ⟨ hg2, hhg2, cg2, hcg2, rfl ⟩ := hx_prod y hy;
+  -- Since $H$ is Abelian, we have $hg1 * hg2 = hg2 * hg1$.
+  have h_comm : hg1 * hg2 = hg2 * hg1 := by
+    have := h1 ( ⟨ hg1, hhg1 ⟩ : H ) ( ⟨ hg2, hhg2 ⟩ : H ) ; aesop;
+  simp_all +decide [ Subgroup.mem_center_iff ]
+  apply Subtype.ext
+  change cg1 * hg1 * (cg2 * hg2) = cg2 * hg2 * (cg1 * hg1)
+  have := hcg1 hg2; have := hcg1 cg2; have := hcg2 hg1; have := hcg2 cg1
+  have := hcg1 (hg2 * cg2); have := hcg2 (hg1 * cg1)
+  grind
 
 
 end Chapter_2_4

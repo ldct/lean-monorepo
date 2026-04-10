@@ -164,8 +164,10 @@ instance {G} [Group G] : MulAction (MyRightMulAction G) G := {
   one_smul b := by
     simp [smul_eq']
   mul_smul x y b := by
-    simp [smul_eq', ofRightMulAction_eq]
-    group
+    simp only [smul_eq']
+    show b * (ofRightMulAction (x * y))⁻¹ = b * (ofRightMulAction y)⁻¹ * (ofRightMulAction x)⁻¹
+    simp only [ofRightMulAction_eq, map_mul]
+    rw [mul_inv_rev, mul_assoc]
 }
 
 -- 1.7.16
@@ -195,7 +197,11 @@ instance {G} [Group G] : MulAction (MyConjAct G) G := {
   one_smul b := by
     simp [smul_eq]
   mul_smul x y b := by
-    simp [smul_eq, ofConjAct_eq]
+    simp only [smul_eq]
+    show ofConjAct (x * y) * b * (ofConjAct (x * y))⁻¹ =
+      ofConjAct x * (ofConjAct y * b * (ofConjAct y)⁻¹) * (ofConjAct x)⁻¹
+    simp only [ofConjAct_eq, map_mul]
+    rw [mul_inv_rev]
     group
 }
 
@@ -311,10 +317,10 @@ example : ¬ IsFaithful (k1 (Fin 4) 4) := by
   use Equiv.swap 0 1
   simp
   constructor
-  · use { elems := {0, 1, 2, 3}, card_eq_k := by simp }
-    simp [smul_eq_]
+  · use ⟨{0, 1, 2, 3}, by simp⟩
+    apply kElementSubsets.mk.injEq _ _ _ _ |>.mpr
     ext x
-    simp [eq_comm]
+    simp [smul_eq_, eq_comm]
     decide +revert
   decide +revert
 
@@ -348,15 +354,15 @@ def myMulAction {G} [Group G] (H : Subgroup G) : MulAction H G := Subgroup.instM
 def myMap {G} [Group G] (H : Subgroup G) (x : G)
 : H ≃ (orbit (myMulAction H) x) := {
   toFun := fun h ↦ ⟨ h • x, by
-    use h
+    exact ⟨h, rfl⟩
   ⟩
   invFun := fun ⟨hx, p⟩ ↦ ⟨hx * x⁻¹, by
     unfold orbit at p
     simp at p
     unfold IsSameOrbit at p
     obtain ⟨h, rfl⟩ := p
-    rw [show h • x = h * x by rfl]
-    simp
+    change (h : G) * x * x⁻¹ ∈ H
+    simp [mul_assoc]
   ⟩
   left_inv h := by simp [Subgroup.smul_def]
   right_inv _ := by simp
@@ -390,9 +396,11 @@ example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G)
     have rwt : { b | IsSameOrbit myAction a b }  = orbit myAction a := rfl
     have h_bij : Nonempty (↥H ≃ {b : G | IsSameOrbit myAction a b}) := by
       exact ⟨ Equiv.ofBijective ( fun g => ⟨ g • a, by
-        use g ⟩ ) ⟨ by
+        exact ⟨g, rfl⟩ ⟩ ) ⟨ by
         intro g₁ g₂ h
-        aesop, by
+        have : g₁ • a = g₂ • a := by simpa using h
+        change (g₁ : G) * a = (g₂ : G) * a at this
+        exact SetCoe.ext (mul_right_cancel this), by
         rintro ⟨ b, ⟨ g, hg ⟩  ⟩
         use ⟨ g, by grind ⟩
         aesop
