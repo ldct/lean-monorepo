@@ -495,6 +495,39 @@ structure BSubgroup (G : Type*) [BorcherdsGroup G] where
   mul_mem : ∀ x y : G, x ∈ carrier → y ∈ carrier → x * y ∈ carrier
   inv_mem : ∀ x : G, x ∈ carrier → x⁻¹ ∈ carrier
 
+section GroupActingOnSetByPointwiseMultiplication
+open scoped Pointwise
+
+def leftMulEquiv {G} [Group G] (g : G) (S : Set G) : (g • S : Set G) ≃ S where
+  toFun := fun x => ⟨g⁻¹ * x.1, by
+    obtain ⟨s, hs, hgs⟩ := x.2
+    simp only [← hgs, smul_eq_mul, ← mul_assoc, inv_mul_cancel, one_mul]
+    exact hs⟩
+  invFun := fun x => ⟨g * x.1, Set.smul_mem_smul_set x.2⟩
+  left_inv := fun x => by ext; simp
+  right_inv := fun x => by ext; simp
+
+/-- Alternative: define the map `S → g • S` directly, then prove it is bijective. -/
+def leftMulMap {G} [Group G] (g : G) (S : Set G) : S → (g • S : Set G) :=
+  fun x => ⟨g * x.val, Set.smul_mem_smul_set x.2⟩
+
+lemma leftMulMap_bijective {G} [Group G] (g : G) (S : Set G) : Function.Bijective (leftMulMap g S) := by
+  refine ⟨?_, ?_⟩
+  · -- injective
+    rintro ⟨a, ha⟩ ⟨b, hb⟩ hab
+    simp_all [leftMulMap]
+  · -- surjective
+    rintro ⟨y, hy⟩
+    obtain ⟨s, hs, hgs⟩ := hy
+    refine ⟨⟨s, hs⟩, ?_⟩
+    simp only [leftMulMap, Subtype.mk.injEq]
+    simpa using hgs
+
+/-- Same signature as `leftMulEquiv`, built from `leftMulMap` + bijectivity. -/
+noncomputable def leftMulEquiv' {G} [Group G] (g : G) (S : Set G) : (g • S : Set G) ≃ S :=
+  (Equiv.ofBijective (leftMulMap g S) (leftMulMap_bijective g S)).symm
+
+end GroupActingOnSetByPointwiseMultiplication
 
 instance SameLeftCoset {G} [BorcherdsGroup G] (H : BSubgroup G) : Setoid G where
   r a b := a⁻¹ * b ∈ H.carrier
@@ -526,9 +559,10 @@ variable {G : Type*} [BorcherdsGroup G] (H : BSubgroup G) (g : G)
 
 #check (⟦g⟧ = ⟦g⟧)
 
+open scoped Pointwise in
 /-- For `g : G`, left multiplication identifies `H` with the left coset of `g`. -/
 def BSubgroup.leftCosetEquiv (g : G) :
-      { h : G // h ∈ H.carrier } ≃
+      H.carrier ≃
       { x : G // ⟦x⟧ = (⟦g⟧ : G ⧸ H) }
   where
   toFun := fun ⟨h, hh⟩ =>
@@ -560,6 +594,31 @@ def BSubgroup.leftCosetEquiv (g : G) :
         = (g * g⁻¹) * x := by rw [BorcherdsGroup.mul_assoc]
       _ = 1 * x := by rw [BorcherdsGroup.mul_inv_cancel]
       _ = x := by rw [BorcherdsGroup.one_mul])
+
+open scoped Pointwise in
+def BSubgroup.leftCosetEquiv' (g : G) :
+      H.carrier ≃
+      (g • H.carrier : Set G)
+  where
+  toFun := fun ⟨h, hh⟩ => ⟨g * h, ⟨h, hh, rfl⟩⟩
+  invFun := fun ⟨x, hx⟩ =>
+    ⟨g⁻¹ * x, by
+      obtain ⟨s, hs, hgs⟩ := hx
+      have : g⁻¹ * x = s := by
+        rw [← hgs]
+        change g⁻¹ * (g * s) = s
+        rw [← BorcherdsGroup.mul_assoc, BorcherdsGroup.inv_mul_cancel,
+            BorcherdsGroup.one_mul]
+      rw [this]
+      exact hs⟩
+  left_inv := fun ⟨h, _⟩ => Subtype.ext (by
+    change g⁻¹ * (g * h) = h
+    rw [← BorcherdsGroup.mul_assoc, BorcherdsGroup.inv_mul_cancel,
+        BorcherdsGroup.one_mul])
+  right_inv := fun ⟨x, _⟩ => Subtype.ext (by
+    change g * (g⁻¹ * x) = x
+    rw [← BorcherdsGroup.mul_assoc, BorcherdsGroup.mul_inv_cancel,
+        BorcherdsGroup.one_mul])
 
 /-- `G` splits non-canonically as the product of coset space and subgroup carrier (Schreier-style). -/
 noncomputable def BSubgroup.groupEquivQuotientProdSubtype :
