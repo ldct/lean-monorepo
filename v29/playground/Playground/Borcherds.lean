@@ -620,22 +620,51 @@ def BSubgroup.leftCosetEquiv' (g : G) :
     rw [← BorcherdsGroup.mul_assoc, BorcherdsGroup.mul_inv_cancel,
         BorcherdsGroup.one_mul])
 
+open scoped Pointwise in
+/-- Being in the same left coset (quotient sense) is equivalent to
+    membership in the pointwise smul set `g • H.carrier`. -/
+lemma BSubgroup.quotient_eq_iff_mem_smul (g x : G) :
+    (⟦x⟧ : G ⧸ H) = ⟦g⟧ ↔ x ∈ g • H.carrier where
+  mp hx := by
+    have hmem : x⁻¹ * g ∈ H.carrier := Quotient.exact hx
+    refine ⟨g⁻¹ * x, ?_, ?_⟩
+    · have heq : g⁻¹ * x = (x⁻¹ * g)⁻¹ := by
+        rw [BorcherdsGroup.mul_inv, BorcherdsGroup.inv_inv]
+      rw [heq]
+      exact H.inv_mem _ hmem
+    · change g * (g⁻¹ * x) = x
+      rw [← BorcherdsGroup.mul_assoc, BorcherdsGroup.mul_inv_cancel,
+          BorcherdsGroup.one_mul]
+  mpr := by
+    rintro ⟨s, hs, hgs⟩
+    have hxeq : x = g * s := hgs.symm
+    apply Quotient.sound
+    change x⁻¹ * g ∈ H.carrier
+    rw [hxeq]
+    have heq : (g * s)⁻¹ * g = s⁻¹ := by
+      rw [BorcherdsGroup.mul_inv, BorcherdsGroup.mul_assoc,
+          BorcherdsGroup.inv_mul_cancel, BorcherdsGroup.mul_one]
+    rw [heq]
+    exact H.inv_mem _ hs
+
 /-- `G` splits non-canonically as the product of coset space and subgroup carrier (Schreier-style). -/
 noncomputable def BSubgroup.groupEquivQuotientProdSubtype :
-    G ≃ (G ⧸ H) × { x // x ∈ H.carrier } :=
-  let π := Quotient.mk (SameLeftCoset H)
-  (Equiv.sigmaFiberEquiv π).symm.trans <|
-    (Equiv.sigmaCongrRight fun L : G ⧸ H =>
-        (Equiv.subtypeEquivRight
-        (by
-        intro _
-        constructor
-        · exact (fun h => by exact h.trans (Quotient.out_eq L).symm)
-        · exact (fun h => by exact h.trans (Quotient.out_eq L))
-        )
-        ).trans
-          (BSubgroup.leftCosetEquiv H (Quotient.out L)).symm).trans
-      (Equiv.sigmaEquivProd _ _)
+    G ≃ (G ⧸ H) × { x // x ∈ H.carrier } := by
+  calc G
+    -- Step 1: partition G into fibers of the quotient map
+      ≃ Σ C : G ⧸ H, { x // ⟦x⟧ = C } :=
+        (Equiv.sigmaFiberEquiv (Quotient.mk (SameLeftCoset H))).symm
+    -- Step 2: reindex: (⟦x⟧ = C) ↔ (⟦x⟧ = ⟦Quotient.out C⟧)
+    _ ≃ Σ C : G ⧸ H, { x // ⟦x⟧ = (⟦Quotient.out C⟧ : G ⧸ H) } := by
+        apply Equiv.sigmaCongrRight; intro C
+        apply Equiv.subtypeEquivRight; intro _
+        grind [H.quotient_eq_iff_mem_smul, Quotient.out_eq]
+    -- Step 3: each fiber { x // ⟦x⟧ = ⟦g⟧ } ≃ H.carrier via leftCosetEquiv
+    _ ≃ Σ C : G ⧸ H, H.carrier := by
+        apply Equiv.sigmaCongrRight; intro C
+        exact (H.leftCosetEquiv (Quotient.out C)).symm
+    -- Step 4: Σ over a constant fiber ≃ product
+    _ ≃ (G ⧸ H) × { x // x ∈ H.carrier } := Equiv.sigmaEquivProd _ _
 
 /-- **Lagrange:** `|G| = |G/H| · |H|` for finite `G` (with `|H|` meant as `Nat.card` of the carrier subtype). -/
 theorem BSubgroup.card_eq_card_quotient_mul_card_carrier [Finite G] :
@@ -675,14 +704,71 @@ instance (n : ℕ) : Inv (CyclicGroup n) where
 @[simp] lemma CyclicGroup.inv_val {n : ℕ} (a : CyclicGroup n) : (a⁻¹).val = -a.val :=
   rfl
 
-
-
 instance (n : ℕ) : BorcherdsGroup (CyclicGroup n) where
   mul_assoc a b c := by ext; simp [add_assoc]
   one_mul a := by ext; simp
   mul_one a := by ext; simp
   inv_mul_cancel a := by ext; simp
   mul_inv_cancel a := by ext; simp
+
+/- Classification of groups of order 2 -/
+
+/- The isomorphism between any group of order 1 and the trivial group -/
+noncomputable def orderTwoIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G = 2) :
+    GroupIso G (CyclicGroup 2) := by
+  classical
+  have hcard : Fintype.card G = 2 := by rwa [Nat.card_eq_fintype_card] at h
+  -- The group has a unique non-identity element g
+  have hne : ∃ g : G, g ≠ 1 := by
+    by_contra hall; push_neg at hall
+    have : Fintype.card G ≤ 1 :=
+      Fintype.card_le_one_iff.mpr (fun a b => by rw [hall a, hall b])
+    omega
+  let g : G := Classical.choose hne
+  have hg : g ≠ 1 := Classical.choose_spec hne
+  -- Every element is 1 or g
+  have helem : ∀ x : G, x = 1 ∨ x = g := by
+    have hpair : ({1, g} : Finset G).card = Fintype.card G := by
+      rw [Finset.card_insert_of_not_mem (by simpa using Ne.symm hg),
+          Finset.card_singleton, hcard]
+    intro x
+    have : x ∈ ({1, g} : Finset G) :=
+      (Finset.eq_univ_of_card _ hpair) ▸ Finset.mem_univ x
+    simpa using this
+  -- g * g = 1 (it can't be g, by cancellation that would give g = 1)
+  have hgg : g * g = 1 := by
+    rcases helem (g * g) with h | h
+    · exact h
+    · exfalso; exact hg (BorcherdsGroup.left_cancel g g 1 (by simp [h]))
+  -- g is its own inverse
+  have hginv : g⁻¹ = g := by
+    rw [← BorcherdsGroup.mul_eq_one_iff_right]; exact hgg
+  -- Build the isomorphism: 1 ↦ ⟨0⟩, g ↦ ⟨1⟩
+  exact {
+    toEquiv := {
+      toFun := fun x => if x = 1 then ⟨0⟩ else ⟨1⟩
+      invFun := fun y => if y.val = 0 then 1 else g
+      left_inv := by
+        intro x; rcases helem x with rfl | rfl
+        · simp
+        · simp [hg]
+      right_inv := by
+        intro ⟨y⟩; change (if (if y = 0 then (1 : G) else g) = 1 then _ else _) = _
+        fin_cases y <;> simp [hg]
+    }
+    map_mul := by
+      intro x y
+      rcases helem x with rfl | rfl <;> rcases helem y with rfl | rfl <;>
+        simp only [BorcherdsGroup.one_mul, BorcherdsGroup.mul_one, hgg,
+          ite_true, if_neg hg, if_pos rfl]
+      · rfl
+      · ext; decide
+    map_one := by simp
+    map_inv := by
+      intro x; rcases helem x with rfl | rfl
+      · simp [BorcherdsGroup.one_inv]
+      · simp [hg, hginv]
+  }
 
 /- Classification of groups of order p, p prime -/
 
