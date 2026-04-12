@@ -298,6 +298,7 @@ lemma BorcherdsGroup.mul_inv {G} [BorcherdsGroup G] (a b : G) : (a * b)⁻¹ = b
     _ = ((a * b)⁻¹ * (a * b)) * (b⁻¹ * a⁻¹) := by rw [← BorcherdsGroup.mul_assoc]
     _ = b⁻¹ * a⁻¹ := by simp
 
+@[simp]
 lemma BorcherdsGroup.one_inv {G} [BorcherdsGroup G] : (1 : G)⁻¹ = 1 := by
   apply BorcherdsGroup.left_unique_inv' 1 (1⁻¹)
   · simp only [BorcherdsGroup.inv_mul_cancel]
@@ -395,7 +396,7 @@ instance {G} [BorcherdsGroup G] : LeftAction (RightInverseMultiplicationAction G
   smul_smul s g h := by
     simp [BorcherdsGroup.mul_assoc, BorcherdsGroup.mul_inv]
   one_smul s := by
-    simp [BorcherdsGroup.one_inv]
+    simp
 
 /- The conjugation multiplication action -/
 @[ext]
@@ -424,7 +425,7 @@ instance {G} [BorcherdsGroup G] : LeftAction (ConjAction G) G where
   smul_smul s g h := by
     simp [BorcherdsGroup.mul_assoc, BorcherdsGroup.mul_inv]
   one_smul s := by
-    simp [BorcherdsGroup.one_inv]
+    simp
 
 /- Definition 1.4 - Group Homomorphisms -/
 structure GroupHom (G H : Type*) [BorcherdsGroup G] [BorcherdsGroup H] where
@@ -761,11 +762,7 @@ noncomputable def orderTwoIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G
       intro x
       simp only [Equiv.coe_fn_mk]
       rcases helem x with rfl | rfl
-      · simp only [BorcherdsGroup.one_inv]
-        ext; grind [CyclicGroup.inv_val]
-      · simp only [hginv, if_neg hg]
-        ext
-        grind [CyclicGroup.inv_val]
+      <;> simp [hginv, CyclicGroup.inv_val, CyclicGroup.ext_iff]
   }
 
 /- Classification of groups of order 3 -/
@@ -853,7 +850,7 @@ noncomputable def orderThreeIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card
       rcases helem x with rfl | rfl | rfl <;>
         simp only [BorcherdsGroup.one_inv, hginv, hg2inv,
           if_neg hg, if_neg hg2, if_neg hg2g] <;>
-        ext <;> simp +decide [CyclicGroup.inv_val, CyclicGroup.one_val]
+        ext <;> simp +decide [CyclicGroup.one_val]
   }
 
 /- Classification of groups of order 4 -/
@@ -876,6 +873,46 @@ instance : BorcherdsGroup Klein4 where
   mul_one a := by ext <;> simp
   inv_mul_cancel a := by ext <;> simp
   mul_inv_cancel a := by ext <;> simp
+
+inductive K4 : Type
+  | one
+  | a
+  | b
+  | c
+  deriving Fintype, DecidableEq
+
+instance : Mul K4 where
+  mul r s :=
+    match r, s with
+    | .one, s => s
+    | s, .one => s
+    | .a, .a => .one
+    | .b, .b => .one
+    | .c, .c => .one
+    | .a, .b => .c
+    | .b, .a => .c
+    | .a, .c => .b
+    | .c, .a => .b
+    | .b, .c => .a
+    | .c, .b => .a
+
+instance : One K4 where
+  one := .one
+
+instance : Inv K4 where
+  inv r :=
+    match r with
+    | .one => .one
+    | .a => .a
+    | .b => .b
+    | .c => .c
+
+instance : BorcherdsGroup K4 where
+  mul_assoc := by decide +revert
+  one_mul := by decide +revert
+  mul_one := by decide +revert
+  inv_mul_cancel := by decide +revert
+  mul_inv_cancel := by decide +revert
 
 /-- Every group of order 4 is isomorphic to Z/4 or to Z/2 × Z/2.
     The distinguishing invariant: does there exist an element of order > 2? -/
@@ -1349,7 +1386,7 @@ noncomputable def myIso (hp : (Nat.card G).Prime) :
   -- f.symm(x * y) = f.symm(x) + f.symm(y) in Fin p (= ZMod p)
   have f_symm_mul : ∀ x y : G, f.symm (x * y) = f.symm x + f.symm y := by
     intro x y
-    apply hinj; simp only [f_apply]
+    apply hinj; simp only
     -- LHS: npow g (f.symm (x * y)).val = x * y
     rw [f_symm_spec]
     -- RHS: npow g (f.symm x + f.symm y).val
@@ -1361,10 +1398,10 @@ noncomputable def myIso (hp : (Nat.card G).Prime) :
   have fin_cast_zmod : ∀ a : Fin p, ZMod.val (a : ZMod p) = a.val :=
     fun a => by simp [ZMod.val_natCast, Nat.mod_eq_of_lt a.isLt]
   have f_symm_one : f.symm 1 = 0 := by
-    apply hinj; simp only [f_apply]
+    apply hinj; simp only
     rw [f_symm_spec, Fin.val_zero, Bnpow_zero]
   have f_symm_inv : ∀ x : G, f.symm x⁻¹ = -(f.symm x) := by
-    intro x; apply hinj; simp only [f_apply]
+    intro x; apply hinj; simp only
     rw [f_symm_spec, Fin.val_neg' (f.symm x), ← npow_mod]
     have hk : (f.symm x).val < p := (f.symm x).isLt
     have hsum : npow g (p - (f.symm x).val) * npow g (f.symm x).val = 1 := by
@@ -1419,3 +1456,36 @@ noncomputable def myIso (hp : (Nat.card G).Prime) :
   })
 
 end PrimeOrder
+
+/-
+Definition 1.12 (Product)
+-/
+instance {G H} [BorcherdsGroup G] [BorcherdsGroup H] : Mul (G × H) where
+  mul a b := (a.1 * b.1, a.2 * b.2)
+
+instance {G H} [BorcherdsGroup G] [BorcherdsGroup H] : One (G × H) where
+  one := (1, 1)
+
+instance {G H} [BorcherdsGroup G] [BorcherdsGroup H] : Inv (G × H) where
+  inv a := (a.1⁻¹, a.2⁻¹)
+
+instance {G H} [BorcherdsGroup G] [BorcherdsGroup H] : BorcherdsGroup (G × H) where
+  mul_assoc a b c := by ext <;> simp [BorcherdsGroup.mul_assoc]
+  one_mul a := by ext <;> simp
+  mul_one a := by ext <;> simp
+  inv_mul_cancel a := by ext <;> simp [BorcherdsGroup.inv_mul_cancel]
+  mul_inv_cancel a := by ext <;> simp [BorcherdsGroup.mul_inv_cancel]
+
+/-
+Example 1.8.a
+-/
+def productIso : GroupIso K4 (CyclicGroup 2 × CyclicGroup 2) := sorry
+
+/-
+Example 1.9 - omitted
+-/
+
+/-
+Example 1.7
+Criterion for when a group is isomorphic to two of its subgroups
+-/
