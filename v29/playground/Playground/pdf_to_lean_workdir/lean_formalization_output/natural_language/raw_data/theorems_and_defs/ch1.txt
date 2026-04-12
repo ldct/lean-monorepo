@@ -1,0 +1,53 @@
+\section{Definitions}
+
+\begin{definition}[Definition 1.1, Concrete group]
+A set $G$ is a group iff it is the set of symmetries of something.
+\end{definition}
+
+\begin{definition}[Definition 1.2, Abstract group]
+A set $G$ with a binary relation (if $a, b \in G$, written $a \times b$, $a + b$, $a \cdot b$, $a \circ b$ or just $ab$) is a group iff this relation is associative, each element has an inverse, and there is an identity. In other words, for all $a, b, c \in G$,
+1. There exists $e \in G$ such that $ea = ae = a$
+2. There exists $a^{-1} \in G$ such that $aa^{-1} = a^{-1}a = e$
+3. $a(bc) = (ab)c$
+\end{definition}
+
+\begin{definition}[Definition 1.3, Subgroup]
+Let $G$ be a group. A subset $H \subseteq G$ is a subgroup of $G$ iff it contains the identity of $G$, is closed under the law of composition, and contains all inverses.
+\end{definition}
+
+\begin{definition}[Definition 1.4, Homomorphism]
+Let $G, H$ be two groups. Then a function $f : G \to H$ is a homomorphism iff for all $a, b \in G$,
+\[ f(ab) = f(a)f(b) \]
+\end{definition}
+
+\begin{theorem}[Proposition 1.1]
+Homomorphisms preserve inverses and the identity.
+\end{theorem}
+
+\begin{definition}[Definition 1.5, Isomorphism]
+A homomorphism is an isomorphism iff it is a bijection.
+\end{definition}
+
+\begin{definition}[Definition 1.6, Endomorphism]
+A homomorphism is an endomorphism iff it has the same domain as its codomain.
+\end{definition}
+
+\begin{definition}[Definition 1.7, Automorphism]
+A homomorphism is an automorphism iff it is an isomorphism and an endomorphism.
+\end{definition}
+
+\begin{definition}[Definition 1.8, Left action]
+Let $G$ be a group and $S$ a set. Then a map $\cdot : G \times S \to S$ is a left action of $G$ on $S$ iff for all $s \in S$ and all $g, h \in G$ we have:
+1. $g \cdot (h \cdot s) = (gh) \cdot s$
+2. $e \cdot s = s$
+where $e$ is the identity for $G$. A right action is a map $\cdot : S \times G \to S$ which satisfies the analogous properties.
+\end{definition}
+
+\begin{definition}[Definition 1.9, G-set]
+Let $G$ be a group. A set $S$ is a $G$-set iff we have an action of $G$ on $S$ which is a homomorphism
+\[ \pi : G \to \mathrm{Perm}(S) \]
+\end{definition}
+
+\begin{theorem}[Theorem 1.1]
+A set $G$ is an abstract group iff it is a concrete group.
+\end{theorem}

@@ -1,0 +1,141 @@
+{
+  "model": "opus",
+  "started": "2026-04-12 20:37:14",
+  "last_updated": "2026-04-12 21:21:05",
+  "total_input_tokens": 8027989,
+  "total_output_tokens": 109039,
+  "total_tokens": 8137028,
+  "total_elapsed_s": 2617.5,
+  "calls": [
+    {
+      "call": 1,
+      "name": "ch1 Stmt FL R1",
+      "input_tokens": 585582,
+      "output_tokens": 18548,
+      "elapsed_s": 350.2,
+      "cumul_input": 585582,
+      "cumul_output": 18548,
+      "timestamp": "2026-04-12 20:43:09"
+    },
+    {
+      "call": 2,
+      "name": "ch1 Stmt Verify R1",
+      "input_tokens": 156835,
+      "output_tokens": 9876,
+      "elapsed_s": 188.6,
+      "cumul_input": 742417,
+      "cumul_output": 28424,
+      "timestamp": "2026-04-12 20:46:18"
+    },
+    {
+      "call": 3,
+      "name": "ch1 Stmt Verdict R1",
+      "input_tokens": 25321,
+      "output_tokens": 144,
+      "elapsed_s": 7.9,
+      "cumul_input": 767738,
+      "cumul_output": 28568,
+      "timestamp": "2026-04-12 20:46:27"
+    },
+    {
+      "call": 4,
+      "name": "ch1 Proof Search R1",
+      "input_tokens": 5688878,
+      "output_tokens": 54833,
+      "elapsed_s": 1390.8,
+      "cumul_input": 6456616,
+      "cumul_output": 83401,
+      "timestamp": "2026-04-12 21:09:38"
+    },
+    {
+      "call": 5,
+      "name": "ch1 Proof Verify R1",
+      "input_tokens": 99940,
+      "output_tokens": 5185,
+      "elapsed_s": 100.7,
+      "cumul_input": 6556556,
+      "cumul_output": 88586,
+      "timestamp": "2026-04-12 21:11:19"
+    },
+    {
+      "call": 6,
+      "name": "ch1 Proof Verdict R1",
+      "input_tokens": 22116,
+      "output_tokens": 117,
+      "elapsed_s": 15.7,
+      "cumul_input": 6578672,
+      "cumul_output": 88703,
+      "timestamp": "2026-04-12 21:11:35"
+    },
+    {
+      "call": 7,
+      "name": "ch1 Stmt Change Check R1",
+      "input_tokens": 136712,
+      "output_tokens": 3035,
+      "elapsed_s": 89.1,
+      "cumul_input": 6715384,
+      "cumul_output": 91738,
+      "timestamp": "2026-04-12 21:13:05"
+    },
+    {
+      "call": 8,
+      "name": "ch1 Proof Search R2",
+      "input_tokens": 860871,
+      "output_tokens": 7134,
+      "elapsed_s": 211.8,
+      "cumul_input": 7576255,
+      "cumul_output": 98872,
+      "timestamp": "2026-04-12 21:16:39"
+    },
+    {
+      "call": 9,
+      "name": "ch1 Proof Verify R2",
+      "input_tokens": 131218,
+      "output_tokens": 3931,
+      "elapsed_s": 90.1,
+      "cumul_input": 7707473,
+      "cumul_output": 102803,
+      "timestamp": "2026-04-12 21:18:09"
+    },
+    {
+      "call": 10,
+      "name": "ch1 Proof Verdict R2",
+      "input_tokens": 21481,
+      "output_tokens": 117,
+      "elapsed_s": 15.2,
+      "cumul_input": 7728954,
+      "cumul_output": 102920,
+      "timestamp": "2026-04-12 21:18:25"
+    },
+    {
+      "call": 11,
+      "name": "ch1 Proof Search R3",
+      "input_tokens": 163526,
+      "output_tokens": 2172,
+      "elapsed_s": 59.1,
+      "cumul_input": 7892480,
+      "cumul_output": 105092,
+      "timestamp": "2026-04-12 21:19:26"
+    },
+    {
+      "call": 12,
+      "name": "ch1 Proof Verify R3",
+      "input_tokens": 114302,
+      "output_tokens": 3830,
+      "elapsed_s": 92.7,
+      "cumul_input": 8006782,
+      "cumul_output": 108922,
+      "timestamp": "2026-04-12 21:20:59"
+    },
+    {
+      "call": 13,
+      "name": "ch1 Proof Verdict R3",
+      "input_tokens": 21207,
+      "output_tokens": 117,
+      "elapsed_s": 5.7,
+      "cumul_input": 8027989,
+      "cumul_output": 109039,
+      "timestamp": "2026-04-12 21:21:05"
+    }
+  ]
+}

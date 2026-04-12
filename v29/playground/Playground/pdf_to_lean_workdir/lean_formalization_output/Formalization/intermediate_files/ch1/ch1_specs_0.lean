@@ -7,8 +7,6 @@ import Mathlib.GroupTheory.GroupAction.Defs
 import Mathlib.Algebra.Group.End
 import Mathlib.Algebra.Group.Units.Equiv
 
-universe u
-
 /-Exact quote of the latex code of the definition
 \begin{definition}[Definition 1.1, Concrete group]
 A set $G$ is a group iff it is the set of symmetries of something.
@@ -18,8 +16,8 @@ Natural language statement
 A set G is a concrete group iff it is the set of symmetries of something. Formally, G is a concrete group if there exists a type S and an injective group homomorphism from G into the group of permutations of S.
 
 Lean formalization of the natural language statement-/
-def Ch1_def_1 (G : Type u) [Group G] : Prop :=
-  ∃ (S : Type u), ∃ (f : G →* Equiv.Perm S), Function.Injective f
+def Ch1_def_1 (G : Type*) [Group G] : Prop :=
+  ∃ (S : Type*), ∃ (f : G →* Equiv.Perm S), Function.Injective f
 
 /-Exact quote of the latex code of the definition
 \begin{definition}[Definition 1.2, Abstract group]
@@ -79,7 +77,7 @@ If f : G → H is a group homomorphism, then f preserves the identity (f(e) = e)
 Lean formalization of the natural language statement-/
 theorem Ch1_theorem_5 (G H : Type*) [Group G] [Group H] (f : G →* H) :
     f 1 = 1 ∧ ∀ g : G, f g⁻¹ = (f g)⁻¹ := by
-  exact ⟨map_one f, fun g => map_inv f g⟩
+  sorry
 
 /-Exact quote of the latex code of the definition
 \begin{definition}[Definition 1.5, Isomorphism]
@@ -157,6 +155,4 @@ A set G is an abstract group if and only if it is a concrete group. That is, eve
 
 Lean formalization of the natural language statement-/
 theorem Ch1_theorem_11 (G : Type*) [Group G] : Ch1_def_1 G := by
-  refine ⟨G, MulAction.toPermHom G G, ?_⟩
-  rw [MulAction.coe_toPermHom]
-  exact MulAction.toPerm_injective
+  sorry

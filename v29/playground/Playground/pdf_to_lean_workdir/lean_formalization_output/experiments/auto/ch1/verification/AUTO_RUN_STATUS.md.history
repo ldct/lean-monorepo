@@ -1,0 +1,26 @@
+- [20:46:27] Chapter 1 Proof Search started
+- [20:46:27] Iteration 1 started (round dir: round_1)
+- [20:46:27] Iteration 1: Proof search started
+- [21:09:38] Iteration 1: Proof search completed
+- [21:09:38] Iteration 1: Verification started
+- [21:11:19] Iteration 1: Verification completed
+- [21:11:19] Iteration 1: Checking verdict
+- [21:11:35] Iteration 1: Decision = CONTINUE
+- [21:11:35] Iteration 1: Check statement change started
+- [21:13:05] Iteration 1: Check statement change completed
+- [21:13:07] Iteration 2 started (round dir: round_2)
+- [21:13:07] Iteration 2: Proof search started
+- [21:16:39] Iteration 2: Proof search completed
+- [21:16:39] Iteration 2: Verification started
+- [21:18:09] Iteration 2: Verification completed
+- [21:18:09] Iteration 2: Checking verdict
+- [21:18:25] Iteration 2: Decision = CONTINUE
+- [21:18:27] Iteration 3 started (round dir: round_3)
+- [21:18:27] Iteration 3: Proof search started
+- [21:19:27] Iteration 3: Proof search completed
+- [21:19:27] Iteration 3: Verification started
+- [21:21:00] Iteration 3: Verification completed
+- [21:21:00] Iteration 3: Checking verdict
+- [21:21:06] Iteration 3: Decision = DONE
+- [21:21:06] Process ended: FINISHED
+- [21:21:06] SUCCESS - All verifications passed
