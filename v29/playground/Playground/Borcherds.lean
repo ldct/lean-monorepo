@@ -711,6 +711,8 @@ instance (n : ℕ) : BorcherdsGroup (CyclicGroup n) where
   inv_mul_cancel a := by ext; simp
   mul_inv_cancel a := by ext; simp
 
+@[simp] lemma CyclicGroup.mk_zero_eq_one (n : ℕ) : (⟨0⟩ : CyclicGroup n) = 1 := rfl
+
 /- Classification of groups of order 2 -/
 
 /- The isomorphism between any group of order 2 and the cyclic group of order 2 -/
@@ -769,6 +771,370 @@ noncomputable def orderTwoIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G
         ext
         grind [CyclicGroup.inv_val]
   }
+
+/- Classification of groups of order 3 -/
+
+noncomputable def orderThreeIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G = 3) :
+    GroupIso G (CyclicGroup 3) := by
+  classical
+  have hcard : Fintype.card G = 3 := by rwa [Nat.card_eq_fintype_card] at h
+  -- Pick a non-identity element g
+  have hne : ∃ g : G, g ≠ 1 := by
+    by_contra hall; push Not at hall
+    have : Fintype.card G ≤ 1 :=
+      Fintype.card_le_one_iff.mpr (fun a b => by rw [hall a, hall b])
+    omega
+  let g : G := Classical.choose hne
+  have hg : g ≠ 1 := Classical.choose_spec hne
+  -- g² ≠ 1 (otherwise {1, g} is a subgroup of order 2, but 2 ∤ 3)
+  have hg2 : g * g ≠ 1 := by
+    intro hgg
+    let H : BSubgroup G := {
+      carrier := {1, g}
+      one_mem := by simp
+      mul_mem := fun x y hx hy => by
+        simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx hy ⊢
+        rcases hx with rfl | rfl <;> rcases hy with rfl | rfl <;> simp [hgg]
+      inv_mem := fun x hx => by
+        simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx ⊢
+        rcases hx with rfl | rfl
+        · left; exact BorcherdsGroup.one_inv
+        · right; exact ((BorcherdsGroup.mul_eq_one_iff_right g g).mp hgg).symm
+    }
+    have hdvd := H.card_carrier_dvd_card
+    rw [show H.carrier = ({1, g} : Set G) from rfl, Set.ncard_pair (Ne.symm hg), h] at hdvd
+    omega
+  -- g² ≠ g (by cancellation that would give g = 1)
+  have hg2g : g * g ≠ g := fun heq => hg (BorcherdsGroup.left_cancel g g 1 (by simp [heq]))
+  -- Every element is 1, g, or g²
+  have helem : ∀ x : G, x = 1 ∨ x = g ∨ x = g * g := by
+    have htriple : ({1, g, g * g} : Finset G).card = Fintype.card G := by
+      rw [Finset.card_insert_of_notMem (by simp [Ne.symm hg, Ne.symm hg2]),
+          Finset.card_insert_of_notMem (by simpa using Ne.symm hg2g),
+          Finset.card_singleton, hcard]
+    intro x
+    have : x ∈ ({1, g, g * g} : Finset G) :=
+      (Finset.eq_univ_of_card _ htriple) ▸ Finset.mem_univ x
+    simpa using this
+  -- g³ = 1
+  have hg3 : g * g * g = 1 := by
+    rcases helem (g * g * g) with h | h | h
+    · exact h
+    · -- g³ = g ⟹ g² = 1, contradiction
+      exfalso; exact hg2 (BorcherdsGroup.right_cancel g (g * g) 1 (by simp [h]))
+    · -- g³ = g² ⟹ g = 1, contradiction
+      exfalso; exact hg (BorcherdsGroup.left_cancel (g * g) g 1 (by
+        rw [h]; simp))
+  -- Inverses: g⁻¹ = g², (g²)⁻¹ = g
+  have hginv : g⁻¹ = g * g := by
+    have : g * (g * g) = 1 := by rw [← BorcherdsGroup.mul_assoc]; exact hg3
+    exact ((BorcherdsGroup.mul_eq_one_iff_right g (g * g)).mp this).symm
+  have hg2inv : (g * g)⁻¹ = g :=
+    ((BorcherdsGroup.mul_eq_one_iff_right (g * g) g).mp hg3).symm
+  -- Additional multiplication facts
+  have hg_g2 : g * (g * g) = 1 := by rw [← BorcherdsGroup.mul_assoc]; exact hg3
+  have hg2_g2 : (g * g) * (g * g) = g := by
+    calc (g * g) * (g * g)
+        = ((g * g) * g) * g := by rw [← BorcherdsGroup.mul_assoc]
+      _ = 1 * g := by rw [hg3]
+      _ = g := by simp
+  -- Build the isomorphism: 1 ↦ ⟨0⟩, g ↦ ⟨1⟩, g² ↦ ⟨2⟩
+  exact {
+    toEquiv := {
+      toFun := fun x => if x = 1 then ⟨0⟩ else if x = g then ⟨1⟩ else ⟨2⟩
+      invFun := fun y => if y.val = 0 then 1 else if y.val = 1 then g else g * g
+      left_inv x := by grind [helem x]
+      right_inv := by intro ⟨y⟩; fin_cases y <;> grind
+    }
+    map_mul x y := by
+      simp only [Equiv.coe_fn_mk]
+      rcases helem x with rfl | rfl | rfl <;> rcases helem y with rfl | rfl | rfl <;>
+        simp only [BorcherdsGroup.one_mul, BorcherdsGroup.mul_one, hg3, hg_g2, hg2_g2,
+          if_pos rfl, if_neg hg, if_neg hg2, if_neg hg2g] <;>
+        ext <;> simp [CyclicGroup.mul_val, CyclicGroup.one_val] <;> decide
+    map_one := by simp [Equiv.coe_fn_mk]
+    map_inv x := by
+      simp only [Equiv.coe_fn_mk]
+      rcases helem x with rfl | rfl | rfl <;>
+        simp only [BorcherdsGroup.one_inv, hginv, hg2inv,
+          if_pos rfl, if_neg hg, if_neg hg2, if_neg hg2g] <;>
+        ext <;> simp [CyclicGroup.inv_val, CyclicGroup.one_val] <;> decide
+  }
+
+/- Classification of groups of order 4 -/
+
+/- The Klein four-group Z/2 × Z/2 -/
+abbrev Klein4 := CyclicGroup 2 × CyclicGroup 2
+
+instance : Mul Klein4 where
+  mul a b := (a.1 * b.1, a.2 * b.2)
+
+instance : One Klein4 where
+  one := (1, 1)
+
+instance : Inv Klein4 where
+  inv a := (a.1⁻¹, a.2⁻¹)
+
+instance : BorcherdsGroup Klein4 where
+  mul_assoc a b c := by ext <;> simp [BorcherdsGroup.mul_assoc]
+  one_mul a := by ext <;> simp
+  mul_one a := by ext <;> simp
+  inv_mul_cancel a := by ext <;> simp
+  mul_inv_cancel a := by ext <;> simp
+
+/-- Every group of order 4 is isomorphic to Z/4 or to Z/2 × Z/2.
+    The distinguishing invariant: does there exist an element of order > 2? -/
+noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G = 4) :
+    GroupIso G (CyclicGroup 4) ⊕ GroupIso G Klein4 := by
+  classical
+  have hcard : Fintype.card G = 4 := by rwa [Nat.card_eq_fintype_card] at h
+  -- Case split: does there exist an element of order > 2?
+  by_cases h4 : ∃ g : G, g ≠ 1 ∧ g * g ≠ 1
+  · /-
+    Z/4 case: there exists g with g ≠ 1 and g² ≠ 1.
+    The elements are {1, g, g², g³} and g⁴ = 1.
+    -/
+    let g : G := Classical.choose h4
+    have hg : g ≠ 1 := (Classical.choose_spec h4).1
+    have hg2 : g * g ≠ 1 := (Classical.choose_spec h4).2
+    have hg2g : g * g ≠ g := fun heq => hg (BorcherdsGroup.left_cancel g g 1 (by simp [heq]))
+    -- g³ ≠ 1 (by Lagrange: {1, g, g²} would be subgroup of order 3, but 3 ∤ 4)
+    have hg3 : g * g * g ≠ 1 := by
+      intro hggg
+      let H : BSubgroup G := {
+        carrier := {1, g, g * g}
+        one_mem := by simp
+        mul_mem := fun x y hx hy => by
+          simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx hy ⊢
+          rcases hx with rfl | rfl | rfl <;> rcases hy with rfl | rfl | rfl <;>
+            simp -failIfUnchanged
+          · left; rw [← BorcherdsGroup.mul_assoc]; exact hggg  -- g*(g²) = g³ = 1
+          · left; exact hggg  -- g²*g = g³ = 1
+          · -- g²*g² = g⁴ = g³*g = 1*g = g
+            right; left
+            calc (g * g) * (g * g)
+                = ((g * g) * g) * g := by rw [← BorcherdsGroup.mul_assoc]
+              _ = 1 * g := by rw [hggg]
+              _ = g := by simp
+        inv_mem := fun x hx => by
+          simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx ⊢
+          rcases hx with rfl | rfl | rfl
+          · left; exact BorcherdsGroup.one_inv
+          · -- g⁻¹ = g² (since g²*g = g³ = 1)
+            right; right
+            exact ((BorcherdsGroup.mul_eq_one_iff_left (g * g) g).mp hggg).symm
+          · -- (g²)⁻¹ = g (since g²*g = g³ = 1)
+            right; left
+            exact ((BorcherdsGroup.mul_eq_one_iff_right (g * g) g).mp hggg).symm
+      }
+      have hdvd := H.card_carrier_dvd_card
+      rw [show H.carrier = ({1, g, g * g} : Set G) from rfl] at hdvd
+      have : Set.ncard ({1, g, g * g} : Set G) = 3 := by
+        rw [show ({1, g, g * g} : Set G) = {1, g, g * g} from rfl]
+        rw [Set.ncard_insert_of_notMem (by simp [Ne.symm hg, Ne.symm hg2])]
+        rw [Set.ncard_insert_of_notMem (by simp [Ne.symm hg2g])]
+        simp
+      rw [this, h] at hdvd
+      omega
+    -- g³ ≠ g, g³ ≠ g²
+    have hg3g : g * g * g ≠ g := fun heq =>
+      hg2 (BorcherdsGroup.right_cancel g (g * g) 1 (by simp [heq]))
+    have hg3g2 : g * g * g ≠ g * g := fun heq =>
+      hg (BorcherdsGroup.left_cancel (g * g) g 1 (by rw [heq]; simp))
+    -- Every element is 1, g, g², or g³
+    have helem : ∀ x : G, x = 1 ∨ x = g ∨ x = g * g ∨ x = g * g * g := by
+      have hquad : ({1, g, g * g, g * g * g} : Finset G).card = Fintype.card G := by
+        rw [Finset.card_insert_of_notMem (by simp [Ne.symm hg, Ne.symm hg2, Ne.symm hg3]),
+            Finset.card_insert_of_notMem (by simp [Ne.symm hg2g, Ne.symm hg3g]),
+            Finset.card_insert_of_notMem (by simpa using Ne.symm hg3g2),
+            Finset.card_singleton, hcard]
+      intro x
+      have : x ∈ ({1, g, g * g, g * g * g} : Finset G) :=
+        (Finset.eq_univ_of_card _ hquad) ▸ Finset.mem_univ x
+      simpa using this
+    -- g⁴ = 1
+    have hg4 : g * g * g * g = 1 := by
+      rcases helem (g * g * g * g) with h | h | h | h
+      · exact h
+      · exfalso; exact hg3 (BorcherdsGroup.right_cancel g (g * g * g) 1 (by simp [h]))
+      · exfalso; exact hg2 (BorcherdsGroup.left_cancel (g * g) (g * g) 1 (by
+          rw [BorcherdsGroup.mul_assoc (g * g) g g] at h; simp [h]))
+      · exfalso; exact hg (BorcherdsGroup.left_cancel (g * g * g) g 1 (by simp [h]))
+    -- Inverses
+    have hginv : g⁻¹ = g * g * g := by
+      have : g * (g * g * g) = 1 := by
+        rw [← BorcherdsGroup.mul_assoc g (g * g) g, ← BorcherdsGroup.mul_assoc g g g]
+        exact hg4
+      exact ((BorcherdsGroup.mul_eq_one_iff_right g (g * g * g)).mp this).symm
+    have hg2inv : (g * g)⁻¹ = g * g := by
+      -- (g²)⁻¹ = g² since g⁴ = 1 means (g²)² = 1
+      have h : (g * g) * (g * g) = 1 := by
+        rw [← BorcherdsGroup.mul_assoc (g * g) g g]; exact hg4
+      exact ((BorcherdsGroup.mul_eq_one_iff_right (g * g) (g * g)).mp h).symm
+    have hg3inv : (g * g * g)⁻¹ = g :=
+      ((BorcherdsGroup.mul_eq_one_iff_right (g * g * g) g).mp hg4).symm
+    -- Multiplication facts
+    have hg_g2 : g * (g * g) = g * g * g := by rw [BorcherdsGroup.mul_assoc]
+    have hg_g3 : g * (g * g * g) = 1 := by
+      rw [← BorcherdsGroup.mul_assoc g (g * g) g, ← BorcherdsGroup.mul_assoc g g g]; exact hg4
+    have hg2_g : (g * g) * g = g * g * g := rfl
+    have hg2_g2 : (g * g) * (g * g) = 1 := by
+      rw [← BorcherdsGroup.mul_assoc]; exact hg4
+    have hg2_g3 : (g * g) * (g * g * g) = g := by
+      calc (g * g) * (g * g * g) = ((g * g) * (g * g)) * g := by rw [← BorcherdsGroup.mul_assoc]
+        _ = 1 * g := by rw [hg2_g2]
+        _ = g := by simp
+    have hg3_g : (g * g * g) * g = 1 := hg4
+    have hg3_g2 : (g * g * g) * (g * g) = g := by
+      calc (g * g * g) * (g * g)
+          = ((g * g * g) * g) * g := by rw [← BorcherdsGroup.mul_assoc]
+        _ = 1 * g := by rw [hg4]
+        _ = g := by simp
+    have hg3_g3 : (g * g * g) * (g * g * g) = g * g := by
+      calc (g * g * g) * (g * g * g)
+          = ((g * g * g) * (g * g)) * g := by rw [← BorcherdsGroup.mul_assoc]
+        _ = g * g := by rw [hg3_g2]
+    -- Build Z/4 isomorphism: 1 ↦ ⟨0⟩, g ↦ ⟨1⟩, g² ↦ ⟨2⟩, g³ ↦ ⟨3⟩
+    exact Sum.inl {
+      toEquiv := {
+        toFun := fun x =>
+          if x = 1 then ⟨0⟩ else if x = g then ⟨1⟩
+          else if x = g * g then ⟨2⟩ else ⟨3⟩
+        invFun := fun y =>
+          if y.val = 0 then 1 else if y.val = 1 then g
+          else if y.val = 2 then g * g else g * g * g
+        left_inv x := by grind [helem x]
+        right_inv := by intro ⟨y⟩; fin_cases y <;> grind
+      }
+      map_mul x y := by
+        simp only [Equiv.coe_fn_mk]
+        rcases helem x with rfl | rfl | rfl | rfl <;>
+          rcases helem y with rfl | rfl | rfl | rfl <;>
+          simp only [BorcherdsGroup.one_mul, BorcherdsGroup.mul_one,
+            hg_g2, hg_g3, hg2_g, hg2_g2, hg2_g3, hg3_g, hg3_g2, hg3_g3,
+            if_pos rfl, if_neg hg, if_neg hg2, if_neg hg2g,
+            if_neg hg3, if_neg hg3g, if_neg hg3g2] <;>
+          ext <;> simp [CyclicGroup.mul_val, CyclicGroup.one_val] <;> decide
+      map_one := by simp [Equiv.coe_fn_mk]
+      map_inv x := by
+        simp only [Equiv.coe_fn_mk]
+        rcases helem x with rfl | rfl | rfl | rfl <;>
+          simp only [BorcherdsGroup.one_inv, hginv, hg2inv, hg3inv,
+            if_pos rfl, if_neg hg, if_neg hg2, if_neg hg3,
+            if_neg hg2g, if_neg hg3g, if_neg hg3g2] <;>
+          ext <;> simp [CyclicGroup.inv_val, CyclicGroup.one_val] <;> decide
+    }
+  · /-
+    Klein four case: every non-identity element has order 2.
+    -/
+    push Not at h4
+    -- Every non-identity element squares to 1
+    have hall2 : ∀ x : G, x ≠ 1 → x * x = 1 := h4
+    -- Pick two distinct non-identity elements g, a
+    have hne : ∃ g : G, g ≠ 1 := by
+      by_contra hall; push Not at hall
+      have : Fintype.card G ≤ 1 :=
+        Fintype.card_le_one_iff.mpr (fun a b => by rw [hall a, hall b])
+      omega
+    let g : G := Classical.choose hne
+    have hg : g ≠ 1 := Classical.choose_spec hne
+    have hg2 : g * g = 1 := hall2 g hg
+    have hne2 : ∃ a : G, a ≠ 1 ∧ a ≠ g := by
+      by_contra hall; push Not at hall
+      have : Finset.univ ⊆ ({1, g} : Finset G) := by
+        intro x _
+        simp only [Finset.mem_insert, Finset.mem_singleton]
+        by_cases hx1 : x = 1
+        · left; exact hx1
+        · right; exact hall x hx1
+      exact absurd (Finset.card_le_card this) (by
+        rw [Finset.card_insert_of_notMem (by simpa using Ne.symm hg),
+            Finset.card_singleton, Finset.card_univ, hcard]; omega)
+    let a : G := Classical.choose hne2
+    have ha1 : a ≠ 1 := (Classical.choose_spec hne2).1
+    have hag : a ≠ g := (Classical.choose_spec hne2).2
+    have ha2 : a * a = 1 := hall2 a ha1
+    -- The 4th element is a*g, distinct from 1, g, a
+    have hag_ne1 : a * g ≠ 1 := by
+      intro heq
+      have haeq : a = g⁻¹ := (BorcherdsGroup.mul_eq_one_iff_left a g).mp heq
+      have hginveq : g⁻¹ = g := ((BorcherdsGroup.mul_eq_one_iff_right g g).mp hg2).symm
+      exact hag (haeq.trans hginveq)
+    have hag_neg : a * g ≠ g :=
+      fun heq => ha1 (BorcherdsGroup.right_cancel g a 1 (by simp [heq]))
+    have hag_nea : a * g ≠ a :=
+      fun heq => hg (BorcherdsGroup.left_cancel a g 1 (by simp [heq]))
+    -- (a*g)² = 1
+    have hag2 : (a * g) * (a * g) = 1 := hall2 (a * g) hag_ne1
+    -- Every element is 1, g, a, or a*g
+    have helem : ∀ x : G, x = 1 ∨ x = g ∨ x = a ∨ x = a * g := by
+      have hquad : ({1, g, a, a * g} : Finset G).card = Fintype.card G := by
+        rw [Finset.card_insert_of_notMem (by simp [Ne.symm hg, Ne.symm ha1, Ne.symm hag_ne1]),
+            Finset.card_insert_of_notMem (by simp [Ne.symm hag, Ne.symm hag_neg]),
+            Finset.card_insert_of_notMem (by simpa using Ne.symm hag_nea),
+            Finset.card_singleton, hcard]
+      intro x
+      have : x ∈ ({1, g, a, a * g} : Finset G) :=
+        (Finset.eq_univ_of_card _ hquad) ▸ Finset.mem_univ x
+      simpa using this
+    -- Commutativity: g*a = a*g
+    have hga : g * a = a * g := by
+      rcases helem (g * a) with h | h | h | h
+      · exfalso; exact hag (((BorcherdsGroup.mul_eq_one_iff_right g a).mp h).trans
+            ((BorcherdsGroup.mul_eq_one_iff_right g g).mp hg2).symm)
+      · exfalso; exact ha1 (BorcherdsGroup.left_cancel g a 1 (by simp [h]))
+      · exfalso; exact hg (BorcherdsGroup.right_cancel a g 1 (by simp [h]))
+      · exact h
+    -- Inverses (all self-inverse)
+    have hginv : g⁻¹ = g := ((BorcherdsGroup.mul_eq_one_iff_right g g).mp hg2).symm
+    have hainv : a⁻¹ = a := ((BorcherdsGroup.mul_eq_one_iff_right a a).mp ha2).symm
+    have haginv : (a * g)⁻¹ = a * g :=
+      ((BorcherdsGroup.mul_eq_one_iff_right (a * g) (a * g)).mp hag2).symm
+    -- Multiplication table
+    have ha_ag : a * (a * g) = g := by rw [← BorcherdsGroup.mul_assoc]; simp [ha2]
+    have hg_ag : g * (a * g) = a := by
+      calc g * (a * g) = (g * a) * g := by rw [BorcherdsGroup.mul_assoc]
+        _ = (a * g) * g := by rw [hga]
+        _ = a * (g * g) := by rw [BorcherdsGroup.mul_assoc]
+        _ = a := by simp [hg2]
+    have hag_a : (a * g) * a = g := by
+      rw [BorcherdsGroup.mul_assoc, hga, ← BorcherdsGroup.mul_assoc, ha2, BorcherdsGroup.one_mul]
+    have hag_g : (a * g) * g = a := by
+      rw [BorcherdsGroup.mul_assoc]; simp [hg2]
+    -- Build Klein4 isomorphism: 1↦(1,1), g↦(⟨1⟩,1), a↦(1,⟨1⟩), ag↦(⟨1⟩,⟨1⟩)
+    exact Sum.inr {
+      toEquiv := {
+        toFun := fun x =>
+          if x = 1 then (⟨0⟩, ⟨0⟩)
+          else if x = g then (⟨1⟩, ⟨0⟩)
+          else if x = a then (⟨0⟩, ⟨1⟩)
+          else (⟨1⟩, ⟨1⟩)
+        invFun := fun p =>
+          if p.1.val = 0 && p.2.val = 0 then 1
+          else if p.1.val = 1 && p.2.val = 0 then g
+          else if p.1.val = 0 && p.2.val = 1 then a
+          else a * g
+        left_inv x := by grind [helem x]
+        right_inv := by intro ⟨⟨y1⟩, ⟨y2⟩⟩; fin_cases y1 <;> fin_cases y2 <;> grind
+      }
+      map_mul x y := by
+        simp only [Equiv.coe_fn_mk]
+        rcases helem x with rfl | rfl | rfl | rfl <;>
+          rcases helem y with rfl | rfl | rfl | rfl <;>
+          simp only [BorcherdsGroup.one_mul, BorcherdsGroup.mul_one,
+            hg2, ha2, hag2, hga, ha_ag, hg_ag, hag_a, hag_g,
+            if_pos rfl, if_neg hg, if_neg ha1, if_neg hag,
+            if_neg hag_ne1, if_neg hag_neg, if_neg hag_nea,
+            if_neg (Ne.symm hg), if_neg (Ne.symm ha1), if_neg (Ne.symm hag_ne1)] <;>
+          ext <;> simp [CyclicGroup.mul_val, CyclicGroup.one_val] <;> decide
+      map_one := by simp [Equiv.coe_fn_mk]
+      map_inv x := by
+        simp only [Equiv.coe_fn_mk]
+        rcases helem x with rfl | rfl | rfl | rfl <;>
+          simp only [BorcherdsGroup.one_inv, hginv, hainv, haginv,
+            if_pos rfl, if_neg hg, if_neg ha1, if_neg hag_ne1] <;>
+          ext <;> simp [CyclicGroup.inv_val, CyclicGroup.one_val] <;> decide
+    }
 
 /- Classification of groups of order p, p prime -/
 
