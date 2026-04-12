@@ -713,14 +713,13 @@ instance (n : ℕ) : BorcherdsGroup (CyclicGroup n) where
 
 /- Classification of groups of order 2 -/
 
-/- The isomorphism between any group of order 1 and the trivial group -/
+/- The isomorphism between any group of order 2 and the cyclic group of order 2 -/
 noncomputable def orderTwoIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G = 2) :
     GroupIso G (CyclicGroup 2) := by
   classical
-  have hcard : Fintype.card G = 2 := by rwa [Nat.card_eq_fintype_card] at h
-  -- The group has a unique non-identity element g
+  rw [Nat.card_eq_fintype_card] at h
   have hne : ∃ g : G, g ≠ 1 := by
-    by_contra hall; push_neg at hall
+    by_contra hall; push Not at hall
     have : Fintype.card G ≤ 1 :=
       Fintype.card_le_one_iff.mpr (fun a b => by rw [hall a, hall b])
     omega
@@ -729,8 +728,8 @@ noncomputable def orderTwoIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G
   -- Every element is 1 or g
   have helem : ∀ x : G, x = 1 ∨ x = g := by
     have hpair : ({1, g} : Finset G).card = Fintype.card G := by
-      rw [Finset.card_insert_of_not_mem (by simpa using Ne.symm hg),
-          Finset.card_singleton, hcard]
+      rw [Finset.card_insert_of_notMem (by simpa using Ne.symm hg),
+          Finset.card_singleton, h]
     intro x
     have : x ∈ ({1, g} : Finset G) :=
       (Finset.eq_univ_of_card _ hpair) ▸ Finset.mem_univ x
@@ -742,32 +741,33 @@ noncomputable def orderTwoIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G
     · exfalso; exact hg (BorcherdsGroup.left_cancel g g 1 (by simp [h]))
   -- g is its own inverse
   have hginv : g⁻¹ = g := by
-    rw [← BorcherdsGroup.mul_eq_one_iff_right]; exact hgg
+    exact ((BorcherdsGroup.mul_eq_one_iff_right g g).mp hgg).symm
   -- Build the isomorphism: 1 ↦ ⟨0⟩, g ↦ ⟨1⟩
   exact {
     toEquiv := {
       toFun := fun x => if x = 1 then ⟨0⟩ else ⟨1⟩
       invFun := fun y => if y.val = 0 then 1 else g
-      left_inv := by
-        intro x; rcases helem x with rfl | rfl
-        · simp
-        · simp [hg]
+      left_inv x := by grind [helem x]
       right_inv := by
-        intro ⟨y⟩; change (if (if y = 0 then (1 : G) else g) = 1 then _ else _) = _
-        fin_cases y <;> simp [hg]
+        intro ⟨y⟩
+        fin_cases y <;> grind
     }
     map_mul := by
       intro x y
+      simp only [Equiv.coe_fn_mk]
       rcases helem x with rfl | rfl <;> rcases helem y with rfl | rfl <;>
-        simp only [BorcherdsGroup.one_mul, BorcherdsGroup.mul_one, hgg,
-          ite_true, if_neg hg, if_pos rfl]
-      · rfl
-      · ext; decide
-    map_one := by simp
+        simp only [hg, hgg, BorcherdsGroup.one_mul, BorcherdsGroup.mul_one] <;>
+        ext <;> simp [show (1 : ZMod 2) + 1 = 0 from rfl]
+    map_one := by simp only [Equiv.coe_fn_mk, if_true]; rfl
     map_inv := by
-      intro x; rcases helem x with rfl | rfl
-      · simp [BorcherdsGroup.one_inv]
-      · simp [hg, hginv]
+      intro x
+      simp only [Equiv.coe_fn_mk]
+      rcases helem x with rfl | rfl
+      · simp only [BorcherdsGroup.one_inv]
+        ext; grind [CyclicGroup.inv_val]
+      · simp only [hginv, if_neg hg]
+        ext
+        grind [CyclicGroup.inv_val]
   }
 
 /- Classification of groups of order p, p prime -/
