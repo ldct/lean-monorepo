@@ -1,0 +1,4 @@
+=== PDF-to-LaTeX conversion started at 2026-04-12 14:07:45 ===
+Input: /Users/xuanji/gits/lean-monorepo/v29/playground/Playground/pdf_to_lean_workdir/textbook_first8.pdf
+Output dir: /Users/xuanji/gits/lean-monorepo/v29/playground/Playground/pdf_to_lean_workdir/extracted_latex
+Log: /Users/xuanji/gits/lean-monorepo/v29/playground/Playground/pdf_to_lean_workdir/pdf_to_latex/log/convert_20260412_140745.log
