@@ -729,13 +729,9 @@ noncomputable def orderTwoIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G
   have hg : g ≠ 1 := Classical.choose_spec hne
   -- Every element is 1 or g
   have helem : ∀ x : G, x = 1 ∨ x = g := by
-    have hpair : ({1, g} : Finset G).card = Fintype.card G := by
-      rw [Finset.card_insert_of_notMem (by simpa using Ne.symm hg),
-          Finset.card_singleton, h]
-    intro x
-    have : x ∈ ({1, g} : Finset G) :=
-      (Finset.eq_univ_of_card _ hpair) ▸ Finset.mem_univ x
-    simpa using this
+    have huniv : ({1, g} : Finset G) = Finset.univ := Finset.eq_univ_of_card _ (by
+      rw [Finset.card_insert_of_notMem (by simpa using Ne.symm hg), Finset.card_singleton, h])
+    intro x; simpa [← huniv] using Finset.mem_univ x
   -- g * g = 1 (it can't be g, by cancellation that would give g = 1)
   have hgg : g * g = 1 := by
     rcases helem (g * g) with h | h
@@ -849,16 +845,15 @@ noncomputable def orderThreeIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card
     map_mul x y := by
       simp only [Equiv.coe_fn_mk]
       rcases helem x with rfl | rfl | rfl <;> rcases helem y with rfl | rfl | rfl <;>
-        simp only [BorcherdsGroup.one_mul, BorcherdsGroup.mul_one, hg3, hg_g2, hg2_g2,
-          if_pos rfl, if_neg hg, if_neg hg2, if_neg hg2g] <;>
-        ext <;> simp [CyclicGroup.mul_val, CyclicGroup.one_val] <;> decide
+        simp only [BorcherdsGroup.one_mul, BorcherdsGroup.mul_one, hg3, hg_g2, hg2_g2, if_neg hg, if_neg hg2, if_neg hg2g] <;>
+        ext <;> simp +decide [CyclicGroup.mul_val, CyclicGroup.one_val]
     map_one := by simp [Equiv.coe_fn_mk]
     map_inv x := by
       simp only [Equiv.coe_fn_mk]
       rcases helem x with rfl | rfl | rfl <;>
         simp only [BorcherdsGroup.one_inv, hginv, hg2inv,
-          if_pos rfl, if_neg hg, if_neg hg2, if_neg hg2g] <;>
-        ext <;> simp [CyclicGroup.inv_val, CyclicGroup.one_val] <;> decide
+          if_neg hg, if_neg hg2, if_neg hg2g] <;>
+        ext <;> simp +decide [CyclicGroup.inv_val, CyclicGroup.one_val]
   }
 
 /- Classification of groups of order 4 -/
@@ -1136,9 +1131,291 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
           ext <;> simp [CyclicGroup.inv_val, CyclicGroup.one_val] <;> decide
     }
 
+/- Powers of a group element -/
+
+section Powers
+
+variable {G : Type*} [BorcherdsGroup G]
+
+def npow (g : G) : ℕ → G
+  | 0 => 1
+  | n + 1 => npow g n * g
+
+@[simp] lemma Bnpow_zero (g : G) : npow g 0 = 1 := rfl
+@[simp] lemma npow_succ (g : G) (n : ℕ) : npow g (n + 1) = npow g n * g := rfl
+@[simp] lemma Bnpow_one (g : G) : npow g 1 = g := by simp [npow]
+
+lemma Bnpow_add (g : G) (m n : ℕ) : npow g (m + n) = npow g m * npow g n := by
+  induction n with
+  | zero => simp
+  | succ n ih => rw [Nat.add_succ, npow_succ, npow_succ, ih, BorcherdsGroup.mul_assoc]
+
+end Powers
+
+/- Cyclic subgroups -/
+
+section CyclicSubgroup
+
+variable {G : Type*} [BorcherdsGroup G]
+
+/-- For g with gᵐ = 1 (m > 0), the set {gᵏ | k < m} is a subgroup. -/
+def cyclicSubgroup (g : G) (m : ℕ) (hm : 0 < m) (hgm : npow g m = 1) : BSubgroup G where
+  carrier := { x | ∃ k, k < m ∧ npow g k = x }
+  one_mem := ⟨0, hm, rfl⟩
+  mul_mem := by
+    rintro x y ⟨i, hi, rfl⟩ ⟨j, hj, rfl⟩
+    by_cases h : i + j < m
+    · exact ⟨i + j, h, Bnpow_add g i j⟩
+    · refine ⟨i + j - m, by omega, ?_⟩
+      -- Goal: npow g (i+j-m) = npow g i * npow g j
+      -- npow g i * npow g j = npow g (i+j) = npow g ((i+j-m)+m) = npow g (i+j-m) * npow g m
+      --   = npow g (i+j-m) * 1 = npow g (i+j-m)
+      have hstep1 : npow g i * npow g j = npow g (i + j) := (Bnpow_add g i j).symm
+      have hstep2 : npow g (i + j) = npow g (i + j - m) * npow g m := by
+        conv_lhs => rw [show i + j = (i + j - m) + m from by omega]
+        exact Bnpow_add g (i + j - m) m
+      rw [hstep1, hstep2, hgm, BorcherdsGroup.mul_one]
+  inv_mem := by
+    rintro x ⟨i, hi, rfl⟩
+    by_cases h : i = 0
+    · subst h; simp [BorcherdsGroup.one_inv]; exact ⟨0, hm, rfl⟩
+    · refine ⟨m - i, by omega, ?_⟩
+      have : npow g i * npow g (m - i) = 1 := by
+        rw [← Bnpow_add, show i + (m - i) = m from by omega, hgm]
+      exact (BorcherdsGroup.mul_eq_one_iff_right (npow g i) (npow g (m - i))).mp this
+
+/-- If npow g is injective on {0,...,m-1}, the cyclic subgroup has m elements. -/
+lemma ncard_cyclicSubgroup (g : G) (m : ℕ) (hm : 0 < m) (hgm : npow g m = 1)
+    (hinj : ∀ i j, i < m → j < m → npow g i = npow g j → i = j) :
+    Set.ncard (cyclicSubgroup g m hm hgm).carrier = m := by
+  have hset : (cyclicSubgroup g m hm hgm).carrier = (npow g) '' (Finset.range m : Set ℕ) := by
+    ext x
+    constructor
+    · rintro ⟨k, hk, rfl⟩
+      exact Set.mem_image_of_mem _ (Finset.mem_coe.mpr (Finset.mem_range.mpr hk))
+    · rintro ⟨k, hk, rfl⟩
+      simp only [Finset.mem_coe, Finset.mem_range] at hk
+      exact ⟨k, hk, rfl⟩
+  rw [hset]
+  have hfin : Set.Finite (Finset.range m : Set ℕ) := Finset.finite_toSet _
+  have hinjOn : Set.InjOn (npow g) (Finset.range m : Set ℕ) := by
+    intro a ha b hb hab
+    simp only [Finset.mem_coe, Finset.mem_range] at ha hb
+    exact hinj a b ha hb hab
+  rw [hinjOn.ncard_image, Set.ncard_coe_finset, Finset.card_range]
+
+end CyclicSubgroup
+
 /- Classification of groups of order p, p prime -/
 
+section PrimeOrder
+
+attribute [local instance] Classical.propDecidable
+
+variable {G : Type*} [BorcherdsGroup G] [Fintype G]
+
+/-- In a finite group, every element has finite order: ∃ k > 0, gᵏ = 1. -/
+lemma exists_npow_eq_one (g : G) : ∃ k : ℕ, 0 < k ∧ npow g k = 1 := by
+  -- By pigeonhole, npow g can't be injective on Fin (|G| + 1)
+  by_contra hall
+  push Not at hall
+  have hall' : ∀ k : ℕ, 0 < k → npow g k ≠ 1 := fun k hk => hall k hk
+  have hinj : Function.Injective (fun i : Fin (Fintype.card G + 1) => npow g i.val) := by
+    intro ⟨i, hi⟩ ⟨j, hj⟩ hij
+    simp only [Fin.mk.injEq]
+    simp only at hij
+    by_contra hne
+    -- WLOG i < j
+    have hlt : i < j ∨ j < i := by omega
+    rcases hlt with h | h
+    · have heq : npow g (j - i) = 1 := by
+        have hadd := Bnpow_add g (j - i) i
+        rw [show (j - i) + i = j from by omega] at hadd
+        -- hadd : npow g j = npow g (j-i) * npow g i
+        -- hij : npow g i = npow g j
+        -- so npow g (j-i) * npow g i = npow g i = 1 * npow g i
+        exact BorcherdsGroup.right_cancel (npow g i) (npow g (j - i)) 1
+          (by rw [← hadd, hij, BorcherdsGroup.one_mul])
+      exact hall' (j - i) (by omega) heq
+    · have heq : npow g (i - j) = 1 := by
+        have hadd := Bnpow_add g (i - j) j
+        rw [show (i - j) + j = i from by omega] at hadd
+        exact BorcherdsGroup.right_cancel (npow g j) (npow g (i - j)) 1
+          (by rw [← hadd, ← hij, BorcherdsGroup.one_mul])
+      exact hall' (i - j) (by omega) heq
+  have hle := Fintype.card_le_of_injective _ hinj
+  simp [Fintype.card_fin] at hle
+
+/-- The order of g: smallest positive k with gᵏ = 1. -/
+noncomputable def elemOrder (g : G) : ℕ :=
+  Nat.find (exists_npow_eq_one g)
+
+lemma elemOrder_pos (g : G) : 0 < elemOrder g :=
+  (Nat.find_spec (exists_npow_eq_one g)).1
+
+lemma npow_elemOrder (g : G) : npow g (elemOrder g) = 1 :=
+  (Nat.find_spec (exists_npow_eq_one g)).2
+
+lemma elemOrder_minimal (g : G) (k : ℕ) (hk : 0 < k) (hgk : npow g k = 1) :
+    elemOrder g ≤ k :=
+  Nat.find_min' (exists_npow_eq_one g) ⟨hk, hgk⟩
+
+/-- npow g is injective on {0, ..., elemOrder g - 1}. -/
+lemma npow_injective_of_order (g : G) (i j : ℕ)
+    (hi : i < elemOrder g) (hj : j < elemOrder g) (hij : npow g i = npow g j) : i = j := by
+  by_contra hne
+  rcases Nat.lt_or_gt_of_ne hne with hlt | hlt
+  · have heq : npow g (j - i) = 1 := by
+      have hadd := Bnpow_add g (j - i) i
+      rw [show (j - i) + i = j from by omega] at hadd
+      exact BorcherdsGroup.right_cancel (npow g i) (npow g (j - i)) 1
+        (by rw [← hadd, hij, BorcherdsGroup.one_mul])
+    have hle := elemOrder_minimal g (j - i) (by omega) heq
+    omega
+  · have heq : npow g (i - j) = 1 := by
+      have hadd := Bnpow_add g (i - j) j
+      rw [show (i - j) + j = i from by omega] at hadd
+      exact BorcherdsGroup.right_cancel (npow g j) (npow g (i - j)) 1
+        (by rw [← hadd, ← hij, BorcherdsGroup.one_mul])
+    have hle := elemOrder_minimal g (i - j) (by omega) heq
+    omega
+
+/-- The order of g divides |G|. -/
+lemma elemOrder_dvd_card (g : G) : elemOrder g ∣ Nat.card G := by
+  have hm := elemOrder_pos g
+  have hgm := npow_elemOrder g
+  let H := cyclicSubgroup g (elemOrder g) hm hgm
+  have hdvd : H.carrier.ncard ∣ Nat.card G := H.card_carrier_dvd_card
+  have hcard : H.carrier.ncard = elemOrder g :=
+    ncard_cyclicSubgroup g (elemOrder g) hm hgm (npow_injective_of_order g)
+  rwa [hcard] at hdvd
+
+/-- g ≠ 1 implies elemOrder g > 1. -/
+lemma elemOrder_gt_one (g : G) (hg : g ≠ 1) : elemOrder g > 1 := by
+  have hpos := elemOrder_pos g
+  by_contra h
+  push Not at h
+  have heq : elemOrder g = 1 := by omega
+  have : npow g (elemOrder g) = 1 := npow_elemOrder g
+  rw [heq, Bnpow_one] at this
+  exact hg this
+
 /- Isomorphism from a group of prime order to `CyclicGroup p` (noncanonical generator choice). -/
-noncomputable def myIso {G} [BorcherdsGroup G] [Fintype G] (hp : (Nat.card G).Prime) :
-    GroupIso G (CyclicGroup (Nat.card G)) :=
-  sorry
+noncomputable def myIso (hp : (Nat.card G).Prime) :
+    GroupIso G (CyclicGroup (Nat.card G)) := by
+  classical
+  set p := Nat.card G with hp_def
+  have hcard : Fintype.card G = p := by rw [← Nat.card_eq_fintype_card]
+  -- Pick g ≠ 1
+  have hne : ∃ g : G, g ≠ 1 := by
+    by_contra hall
+    push Not at hall
+    have : Fintype.card G ≤ 1 :=
+      Fintype.card_le_one_iff.mpr (fun a b => by rw [hall a, hall b])
+    rw [hcard] at this; exact absurd hp.one_lt (by omega)
+  let g : G := Classical.choose hne
+  have hg : g ≠ 1 := Classical.choose_spec hne
+  -- The order of g equals p (divides p, is > 1, p is prime)
+  have hord : elemOrder g = p := by
+    have hdvd := elemOrder_dvd_card g
+    have hgt := elemOrder_gt_one g hg
+    exact (hp.eq_one_or_self_of_dvd _ hdvd).resolve_left (by omega)
+  -- npow g : Fin p → G is injective, hence bijective
+  have hp_pos : 0 < p := Nat.Prime.pos hp
+  have hinj : Function.Injective (fun k : Fin p => npow g k.val) := by
+    intro ⟨i, hi⟩ ⟨j, hj⟩ hij; simp only [Fin.mk.injEq]
+    exact npow_injective_of_order g i j (hord ▸ hi) (hord ▸ hj) hij
+  have hbij : Function.Bijective (fun k : Fin p => npow g k.val) :=
+    ⟨hinj, hinj.surjective_of_finite (Fintype.equivOfCardEq (by simp [hcard]))⟩
+  -- npow g is periodic with period p
+  have hgp : npow g p = 1 := hord ▸ npow_elemOrder g
+  have npow_mul_p : ∀ k, npow g (k * p) = 1 := by
+    intro k; induction k with
+    | zero => simp
+    | succ k ih => rw [Nat.succ_mul, Bnpow_add, ih, BorcherdsGroup.one_mul, hgp]
+  have npow_mod : ∀ k, npow g k = npow g (k % p) := by
+    intro k
+    conv_lhs => rw [show k = k % p + (k / p) * p from by linarith [Nat.div_add_mod k p]]
+    rw [Bnpow_add, npow_mul_p, BorcherdsGroup.mul_one]
+  -- The discrete log: inverse of npow g on Fin p
+  let f := Equiv.ofBijective (fun k : Fin p => npow g k.val) hbij
+  -- Spec lemmas
+  have f_apply : ∀ k : Fin p, f k = npow g k.val := fun _ => rfl
+  have f_symm_spec : ∀ x : G, npow g (f.symm x).val = x :=
+    fun x => f.apply_symm_apply x
+  have f_symm_apply : ∀ k : Fin p, f.symm (npow g k.val) = k :=
+    fun k => f.symm_apply_apply k
+  -- Key: f.symm is an "additive-to-multiplicative" map
+  -- f.symm(x * y) = f.symm(x) + f.symm(y) in Fin p (= ZMod p)
+  have f_symm_mul : ∀ x y : G, f.symm (x * y) = f.symm x + f.symm y := by
+    intro x y
+    apply hinj; simp only [f_apply]
+    -- LHS: npow g (f.symm (x * y)).val = x * y
+    rw [f_symm_spec]
+    -- RHS: npow g (f.symm x + f.symm y).val
+    -- In Fin p (= ZMod p for p ≥ 2): (a + b).val = (a.val + b.val) % p
+    rw [show (f.symm x + f.symm y).val = (((f.symm x).val + (f.symm y).val) % p) from
+      Fin.val_add (f.symm x) (f.symm y)]
+    rw [← npow_mod, Bnpow_add, f_symm_spec, f_symm_spec]
+  haveI hNeZero : NeZero p := ⟨Nat.pos_iff_ne_zero.mp hp_pos⟩
+  have fin_cast_zmod : ∀ a : Fin p, ZMod.val (a : ZMod p) = a.val :=
+    fun a => by simp [ZMod.val_natCast, Nat.mod_eq_of_lt a.isLt]
+  have f_symm_one : f.symm 1 = 0 := by
+    apply hinj; simp only [f_apply]
+    rw [f_symm_spec, Fin.val_zero, Bnpow_zero]
+  have f_symm_inv : ∀ x : G, f.symm x⁻¹ = -(f.symm x) := by
+    intro x; apply hinj; simp only [f_apply]
+    rw [f_symm_spec, Fin.val_neg' (f.symm x), ← npow_mod]
+    have hk : (f.symm x).val < p := (f.symm x).isLt
+    have hsum : npow g (p - (f.symm x).val) * npow g (f.symm x).val = 1 := by
+      rw [← Bnpow_add, show (p - (f.symm x).val) + (f.symm x).val = p from by omega, hgp]
+    exact (((BorcherdsGroup.mul_eq_one_iff_left
+        (npow g (p - (f.symm x).val)) (npow g (f.symm x).val)).mp hsum).trans
+      (by rw [f_symm_spec])).symm
+  -- Coercion lemmas: Fin p operation cast to ZMod p
+  have cast_add : ∀ a b : Fin p, ((a + b : Fin p) : ZMod p) = (a : ZMod p) + (b : ZMod p) :=
+    fun a b => by simp [Fin.val_add]
+  have cast_neg : ∀ a : Fin p, ((-a : Fin p) : ZMod p) = -(a : ZMod p) :=
+    fun a => by simp [Fin.val_neg']
+  have cast_zero : ((0 : Fin p) : ZMod p) = 0 := by simp
+  -- Build GroupIso: x ↦ ⟨↑(f.symm x)⟩, inverse ⟨k⟩ ↦ npow g (ZMod.val k)
+  exact (show GroupIso G (CyclicGroup p) from {
+    toEquiv := {
+      toFun := fun x => ⟨(f.symm x : ZMod p)⟩
+      invFun := fun ⟨k⟩ => npow g (ZMod.val k)
+      left_inv := fun x => by
+        simp only [fin_cast_zmod]
+        exact f_symm_spec x
+      right_inv := fun ⟨k⟩ => by
+        ext
+        simp only
+        have hlt : ZMod.val k < p := ZMod.val_lt k
+        have h := f_symm_apply ⟨ZMod.val k, hlt⟩
+        -- h : f.symm (npow g (ZMod.val k)) = ⟨ZMod.val k, hlt⟩ : Fin p
+        -- Need: (f.symm (npow g (ZMod.val k)) : ZMod p) = k
+        have : (f.symm (npow g (ZMod.val k)) : ZMod p) = ((⟨ZMod.val k, hlt⟩ : Fin p) : ZMod p) :=
+          congr_arg (fun a : Fin p => (a : ZMod p)) h
+        rw [this]
+        simp
+    }
+    map_mul := fun x y => by
+      ext
+      simp only [Equiv.coe_fn_mk, CyclicGroup.mul_val]
+      -- goal: (f.symm (x * y) : ZMod p) = (f.symm x : ZMod p) + (f.symm y : ZMod p)
+      rw [congr_arg (fun a : Fin p => (a : ZMod p)) (f_symm_mul x y)]
+      exact cast_add (f.symm x) (f.symm y)
+    map_one := by
+      ext
+      simp only [Equiv.coe_fn_mk, CyclicGroup.one_val]
+      -- goal: (f.symm 1 : ZMod p) = 0
+      rw [congr_arg (fun a : Fin p => (a : ZMod p)) f_symm_one]
+      exact cast_zero
+    map_inv := fun x => by
+      ext
+      simp only [Equiv.coe_fn_mk, CyclicGroup.inv_val]
+      -- goal: (f.symm x⁻¹ : ZMod p) = -(f.symm x : ZMod p)
+      rw [congr_arg (fun a : Fin p => (a : ZMod p)) (f_symm_inv x)]
+      exact cast_neg (f.symm x)
+  })
+
+end PrimeOrder
