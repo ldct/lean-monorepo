@@ -1,0 +1,219 @@
+\section{Definitions}
+
+\begin{definition}[Definition 3.1, Module]
+Let $A$ be a ring. A left module $M$ over $A$, also called a left $A$-module, is an abelian group $M$, paired with an operation of $A$ on $M$ written $\cdot : A \times M \to M$ which must satisfy the following conditions for all $a, b \in A$ and $x, y \in M$:
+1. $(a + b) \cdot x = ax + bx$
+2. $a \cdot (x + y) = a \cdot x + a \cdot y$
+3. $(ab) \cdot x = a \cdot (b \cdot x)$
+4. $1 \cdot x = x$
+We define a right $A$-module in a similar way.
+\end{definition}
+
+\begin{definition}[Definition 3.2, Module homomorphism]
+Let $M_1, M_2$ be two $R$-modules. A module homomorphism between $M_1, M_2$ is a function $f : M_1 \to M_2$ such that for all $m_1 \in M_1$, $m_2 \in M_2$, and $r \in R$ we have
+\[ f(m_1 + m_2) = f(m_1) + f(m_2), \quad f(r \cdot m_1) = r \cdot f(m_1) \]
+\end{definition}
+
+\begin{definition}[Definition 3.3, Bimodule]
+A module $M$ is a bimodule over two rings iff it is a left module over one ring, and a right module over another, and the actions commute with one another.
+\end{definition}
+
+\section{Free modules}
+
+\begin{definition}[Definition 3.4, Direct Sum of Modules]
+The direct sum of a collection of modules $\{M_\alpha\}_{\alpha \in A}$ is given by $\bigoplus_\alpha M_\alpha$ which is an abelian group with a corresponding action by $R$ given by the component-wise action on $M_\alpha$.
+\end{definition}
+
+\begin{definition}[Definition 3.5, Free Module]
+A module is a free module iff it is a sum of copies of a ring $R$. This is often written $R^n$.
+\end{definition}
+
+\begin{theorem}[Claim 3.1]
+If we have that $R^m \cong R^n$ we have that $n = m$ if $R$ is a field.
+\end{theorem}
+
+\begin{theorem}[Theorem 3.1]
+Let $R$ be a non-trivial commutative ring. Then if $R^m \cong R^n$ we have that $n = m$.
+\end{theorem}
+
+\section{Projective modules}
+
+\begin{definition}[Definition 3.6, Adjunction]
+Let $\mathcal{A}, \mathcal{B}$ be categories. An adjunction from $\mathcal{A}$ to $\mathcal{B}$ is a triple $\langle F, G, \varphi \rangle : \mathcal{A} \rightharpoonup \mathcal{B}$ where $F, G$ are functors and $\varphi$ is a function bringing pairs $(a, b)$ for $a \in \mathrm{Obj}(\mathcal{A})$ and $b \in \mathrm{Obj}(\mathcal{B})$ to a bijection
+\[ \varphi_{a,b} : \mathrm{Mor}(Fa, b) \cong \mathrm{Mor}(a, Gb) \]
+which is natural in $a, b$. The functors $F, G$ are also said to be adjoint.
+\end{definition}
+
+\begin{definition}[Definition 3.7, Projective Module]
+A module $P$ is a projective module iff it satisfies the following property: Given that $M \to N \to 0$ is exact, any map $P \to N$ lifts to some map $P \to M$.
+\end{definition}
+
+\begin{theorem}[Proposition 3.1]
+All free modules are projective.
+\end{theorem}
+
+\begin{lemma}[Lemma 3.1]
+The following are equivalent:
+1. $P$ is projective.
+2. There exists some module $Q$ such that $P \oplus Q$ is free.
+\end{lemma}
+
+\begin{theorem}[Proposition 3.2, Eilenberg-Mazur swindle]
+An infinite sum can often be regrouped in two different ways to give two different values. This is only valid when:
+1. The elements in question have additive inverses.
+2. All infinite sums in question are well defined.
+\end{theorem}
+
+\section{Tensor products}
+
+\begin{definition}[Definition 3.8, Bilinear map]
+Let $f : X \times Y \to Z$. This is a bilinear map iff $f(x, \cdot)$ is linear for fixed $x$, and $f(\cdot, y)$ is linear for fixed $y$.
+\end{definition}
+
+\begin{definition}[Definition 3.9, Tensor Product]
+Let $R$ be a commutative ring, and $M, N, P$ be $R$-modules. A module is the tensor product $M \otimes N$ iff it is the module such that given a bilinear map $f : M \times N \to P$ there exists a linear map $g : M \otimes N \to P$ making the following diagram commutative:
+\[ M \times N \xrightarrow{\otimes} M \otimes N \xrightarrow{g} P \]
+\end{definition}
+
+\begin{lemma}[Lemma 3.2]
+Let $A, B, C$ be modules. The sequence $A \to B \to C \to 0$ is exact iff $\mathrm{Hom}(C, M) \to \mathrm{Hom}(B, M) \to \mathrm{Hom}(A, M) \to 0$ is exact.
+\end{lemma}
+
+\begin{theorem}[Proposition 3.3]
+Let $M$ be a module, and let $A \to B \to C \to 0$ be exact. This implies that the following sequence is also exact:
+\[ A \otimes M \to B \otimes M \to C \otimes M \to 0 \]
+We say that $\otimes M$ is right exact.
+\end{theorem}
+
+\begin{definition}[Definition 3.10, Algebra]
+A commutative ring $S$ is an algebra over a ring $R$ iff it is paired with a homomorphism $R \to S$ which makes $S$ an $R$-module. If this is associative, $S$ is called an associative algebra.
+\end{definition}
+
+\begin{definition}[Definition 3.11, Division algebra]
+An algebra $S$ over a ring $R$ is a division algebra iff it is non-trivial, and for any $a \in S$ and nonzero $b \in S$, there exists exactly one element $s \in S$ such that $a = bs$ and exactly one element $t \in S$ such that $a = tb$. If $S$ is an associative algebra, then $S$ is a division algebra iff it has a multiplicative identity $1 \neq 0$ and every nonzero element of $S$ has a multiplicative inverse.
+\end{definition}
+
+\section{Duality}
+
+\begin{definition}[Definition 3.12, Dual module]
+Let $M$ be a module over a ring $R$. The dual of $M$, written $M^*$, is the set $\mathrm{Hom}_R(M, R)$. $R$ is called the dualizing object.
+\end{definition}
+
+\begin{theorem}[Theorem 3.2]
+If $V = \bigoplus_{n=1}^\infty k$ then the dimension of $V$ is countable, but the dimension of $V^*$ is uncountable.
+\end{theorem}
+
+\begin{theorem}[Theorem 3.3]
+Let $M$ be a module over a ring $R$. There is a natural isomorphism from a module to its double dual given by
+\[ m \mapsto (f \mapsto f(m)) \]
+for $m \in M$ and $f \in \mathrm{Hom}(M, R)$.
+\end{theorem}
+
+\begin{theorem}[Proposition 3.4]
+Let $M$ be a projective module. Then $M \cong M^{**}$.
+\end{theorem}
+
+\begin{definition}[Definition 3.13, Dirichlet characters]
+The elements of $(\mathbb{Z}/n\mathbb{Z})^\times$ are called Dirichlet characters and are denoted by $\{\chi_i\}_i$.
+\end{definition}
+
+\begin{definition}[Definition 3.14, Fourier transform]
+Let $f$ be a complex valued function on a finite group $G$. A function $\tilde{f}$ on $G^*$ is a Fourier transform iff it is defined to be:
+\[ \tilde{f}(\chi) = (\chi, f) = \sum_{x \in G} \overline{\chi(x)} f(x) \]
+\end{definition}
+
+\begin{theorem}[Theorem 3.4]
+Suppose $\chi_1 \neq \chi_2$. Then we have an inner product of characters given by
+\[ (\chi_1, \chi_2) := \sum_{x \in (\mathbb{Z}/n\mathbb{Z})^\times} \chi_1(x) \overline{\chi_2(x)} = 0 \]
+\end{theorem}
+
+\begin{theorem}[Proposition 3.5]
+Duality for infinite abelian groups (with a topology) has the following characteristics:
+1. The dualizing object is $S^1$.
+2. All groups should be locally compact.
+3. Homomorphisms should be continuous.
+\end{theorem}
+
+\begin{definition}[Definition 3.15, Injective module]
+A module $I$ is an injective module iff we have that a sequence $0 \to B \to A$ being exact implies that any map $B \to I$ induces a homomorphism $A \to I$.
+\end{definition}
+
+\begin{definition}[Definition 3.16, Divisible group]
+A group $G$ is divisible iff given some $g \in G$ and some $n \in \mathbb{Z}^+$, there exists some $h \in G$ such that $nh = g$.
+\end{definition}
+
+\begin{lemma}[Lemma 3.3]
+Let $I$ be some module. If it is a divisible abelian group, then it is an injective module.
+\end{lemma}
+
+\begin{lemma}[Lemma 3.4]
+Every abelian group is contained in some injective module.
+\end{lemma}
+
+\begin{lemma}[Lemma 3.5]
+Let $R$ be a ring. Then $R^* = \mathrm{Hom}_{\mathbb{Z}}(R, \mathbb{Q}/\mathbb{Z})$ is an injective $R$-module.
+\end{lemma}
+
+\begin{theorem}[Theorem 3.5]
+Every module is a submodule of some injective module.
+\end{theorem}
+
+\section{Limits, colimits}
+
+\begin{definition}[Definition 3.17, Colimit]
+Let $\mathcal{A}$ be a category and $I$ a small category. Let $D : I \to \mathcal{A}$ be a diagram in $\mathcal{A}$, and write $D^{\mathrm{op}}$ for the corresponding functor $I^{\mathrm{op}} \to \mathcal{A}^{\mathrm{op}}$. A cocone on $D$ is a cone on $D^{\mathrm{op}}$ and a colimit of $D$ is a limit of $D^{\mathrm{op}}$.
+\end{definition}
+
+\begin{definition}[Definition 3.18, Cokernel]
+An object $X$ of a category is the cokernel of $f : A \to B$ iff it is the colimit (coequalizer) of $f$ and the zero map.
+\end{definition}
+
+\begin{definition}[Definition 3.19, Push-out]
+An object $X \in \mathrm{Obj}(\mathcal{C})$ is the push-out of $A, B$ with morphisms $f : C \to A$ and $g : C \to B$ iff it is the colimit of $A, B, C$ with these morphisms.
+\end{definition}
+
+\begin{definition}[Definition 3.20, Directed set]
+A set $S$ is a directed set iff it is partially ordered and for all $a, b \in S$ we have some $c \in S$ such that $a \leq c$ and $b \leq c$.
+\end{definition}
+
+\begin{definition}[Definition 3.21, Direct Limit]
+A colimit is a direct limit iff it is the colimit of a family indexed by a directed set.
+\end{definition}
+
+\begin{theorem}[Theorem 3.6]
+Direct limits preserve exact sequences.
+\end{theorem}
+
+\begin{definition}[Definition 3.22, Inverse limit]
+The limit of a family of objects in a category is an inverse limit iff it is the limit of a directed family.
+\end{definition}
+
+\begin{definition}[Definition 3.23, p-adic integers]
+A set $\mathbb{Z}_p$ is the set of $p$-adic integers iff it is the inverse limit of
+\[ \mathbb{Z}/p\mathbb{Z} \leftarrow \mathbb{Z}/p^2\mathbb{Z} \leftarrow \mathbb{Z}/p^3\mathbb{Z} \leftarrow \cdots \]
+\end{definition}
+
+\section{Snake Lemma}
+
+\begin{lemma}[Lemma 3.6, Snake Lemma]
+Let the following diagram be commutative and exact:
+\[ \begin{array}{ccccccc} & A_0 & \xrightarrow{i_0} & B_0 & \xrightarrow{p_0} & C_0 & \to 0 \\ & \downarrow f & & \downarrow g & & \downarrow h & \\ 0 \to & A_1 & \xrightarrow{i_1} & B_1 & \xrightarrow{p_1} & C_1 & \end{array} \]
+The map $\delta : \ker(h) \to \mathrm{coker}(f)$ induced by $\delta z'' = \alpha^{-1} \circ g \circ \beta^{-1} z''$ is well defined, and we have an exact sequence
+\[ \ker(f) \to \ker(g) \to \ker(h) \xrightarrow{\delta} \mathrm{coker}(f) \to \mathrm{coker}(g) \to \mathrm{coker}(h) \]
+\end{lemma}
+
+\begin{definition}[Definition 3.24, Mittag-Leffler condition]
+Consider some sequence $\cdots \to A_3 \to A_2 \to A_1 \to A_0$. The Mittag-Leffler condition is that the sequence of images stabilizes for all $A_n$. In particular, for each $n \in \mathbb{N}$ there exists some $i \geq n$ such that $\mathrm{im}(A_i \to A_n) = \mathrm{im}(A_{i+1} \to A_n) = \cdots$.
+\end{definition}
+
+\begin{theorem}[Theorem 3.7]
+Consider the diagram with exact rows $0 \to A_i \to B_i \to C_i \to 0$. If the Mittag-Leffler condition is satisfied for the $A_i$, then
+\[ 0 \to \varprojlim A_i \to \varprojlim B_i \to \varprojlim C_i \to 0 \]
+is also exact.
+\end{theorem}
+
+\section{Finitely generated modules over a PID}
+
+\begin{theorem}[Theorem 3.8]
+Any finitely generated module of a PID is a sum of cyclic modules of the form $R/I$.
+\end{theorem}

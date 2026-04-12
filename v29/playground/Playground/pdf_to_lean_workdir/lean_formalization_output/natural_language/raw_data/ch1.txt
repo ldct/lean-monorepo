@@ -68,5 +68,658 @@ A set $G$ is an abstract group iff it is a concrete group.
 
 \begin{proof}
 ($\Leftarrow$): Suppose $G$ is a concrete group. Then take composition of symmetries as the binary relation, and we see that this structure satisfies the axioms of an abstract group.
-($\Rightarrow$): Suppose $G$ is an abstract group. We desire to find some object $S$ such that $G$ comprises the symmetries of $S$ which preserve whatever structure is on $S$. Explicitly we take $S$ to be a $G$-set, and consider the right action of $G$ on itself.
+($\Rightarrow$): Suppose $G$ is an abstract group. We desire to find some object $S$ such that $G$ comprises the symmetries of $S$ which preserve whatever structure is on $S$. Explicitly we take $S$ to be a $G$-set, and consider the right action of $G$ on $S$ to be such a structure. A symmetry $f : S \to S$ is said to preserve the right action $\cdot : S \times G \to S$ iff for all $g \in G$ and all $s \in S$, $f(s \cdot g) = f(s) \cdot g$. In other words the symmetry commutes with the right action. Now notice that if we set $S = G$ we get such a symmetry automatically from the left action of $G$ on itself. This preservation follows directly from the associativity given in the definition of an abstract group. This means we have shown that the left action of a group $G$ on itself, is a symmetry of $G$ which respects the structure given by the right action of $G$ on itself.
+We now wish to show, that every symmetry $f : S \to S$ which commutes with the right action of $G$ on $S$ is given by the left action of some element $g \in G$. We know $f(e) = g$ for some $g$ since we set $S = G$ and we can write that
+\[ f(s) = f(es) = f(e) \cdot s = g \cdot s \]
+So $f$ is effectively the ``same'' as $g$, and therefore every such symmetry $f$ is given by some $g \in G$.
+\end{proof}
+
+\begin{lemma}[Lemma 1.1]
+If we have a left action of a group $G$ on a set $S$, then we automatically have a right action and vice versa. In particular, we write
+\[ s \cdot g = g^{-1}s \]
+to define a right action in terms of a given left action.
+\end{lemma}
+
+\begin{proof}
+To see this, we write:
+\[ s(gh) = (gh)^{-1}s = h^{-1}(g^{-1}s) = (sg)h \]
+as desired.
+\end{proof}
+
+\begin{theorem}[Proposition 1.2]
+There are 8 types of actions of a group on itself. There are four right, and four left actions on a group. The left four are:
+1. Trivial: $g \cdot s = s$
+2. Left: $g \cdot s = gs$
+3. Right (to Left): $g \cdot s = sg^{-1}$
+4. Adjoint (Conjugation): $g \cdot s = gsg^{-1}$
+\end{theorem}
+
+\section{Lagrange's theorem and product groups}
+
+\begin{theorem}[Proposition 1.3]
+The only group of order 1 is the trivial group.
+\end{theorem}
+
+\begin{definition}[Definition 1.10, Coset]
+Let $G$ be a group and $H \subseteq G$ a subgroup. Then the left cosets of $H$ are sets of the form $gH = \{gh \mid h \in H\}$ for any $g \in G$. The right cosets of $H$ are sets of the form $Hg = \{hg \mid h \in H\}$ for any $g \in G$.
+\end{definition}
+
+\begin{theorem}[Theorem 1.2, Lagrange's theorem]
+Let $G$ be a group, and $H \subseteq G$ be a subgroup. If both $|H|, |G|$ are finite, then $|H|$ divides $|G|$.
+\end{theorem}
+
+\begin{proof}
+To prove this we look at the cosets of $H$. We notice that all cosets have the same order, and any two are either equal or disjoint. In particular, if $g_1h_1 = g_2h_2$ then for any $h$ we have that $g_1h = g_2h_2h_1^{-1}h \in g_2H$ as desired. The map $h \mapsto gh$ is a bijection from $H$ into $gH$, with obvious inverse. Therefore,
+\[ |G| = \text{number of left cosets of } H \times |H| \]
+and we are done.
+\end{proof}
+
+\begin{corollary}[Corollary 1.1]
+There is only one group of prime order.
+\end{corollary}
+
+\begin{proof}
+Let $G$ be a group such that $|G| = p < \infty$ for prime $p$. Consider any $g \in G$. We know $|g| = |\langle g \rangle|$ also has order dividing $|G|$ from Lagrange's theorem. If $|g| = 1$, then $g = e$. Otherwise the order of $g$ is $p$ and therefore all other elements of $G$ are $1, g, \ldots, g^{p-1}$ where $p^ap^b = p^{ab \pmod{p}}$. In particular, $G$ is cyclic.
+\end{proof}
+
+\begin{theorem}[Theorem 1.3, Fermat's little theorem]
+Let $a, p \in \mathbb{Z}$ and $p$ prime, then
+\[ a^{p-1} \equiv 1 \pmod{p} \]
+\end{theorem}
+
+\begin{proof}
+If $a = 0$, this is trivial, so we take $a \neq 0$. Look at $(\mathbb{Z}/p\mathbb{Z})^\times$ under multiplication. We can also take $\tilde{a} := a \bmod p \in (\mathbb{Z}/p\mathbb{Z})^\times$ by definition. Since this is a group of order $p - 1$ every element has order dividing $p - 1$. Formally, there exists $n \in \mathbb{Z}$ such that $|\tilde{a}| n = p - 1$. This means, we can write
+\[ \tilde{a}^{p-1} = \tilde{a}^{|\tilde{a}|n} = e \]
+as desired.
+\end{proof}
+
+\begin{definition}[Definition 1.11, Euler totient function]
+A function $\varphi : \mathbb{Z} \to \mathbb{N}$ is called the Euler totient function iff it returns the number of integers between the argument and zero, which are relatively prime to the argument.
+\end{definition}
+
+\begin{theorem}[Proposition 1.4]
+If $\varphi$ is Euler's totient function and $n \in \mathbb{Z}$, then
+\[ \varphi(n) = n \prod_{p \mid n} \left(1 - \frac{1}{p}\right) \]
+where the product is over all distinct prime integers $p$ dividing $n$.
+\end{theorem}
+
+\begin{theorem}[Theorem 1.4, Euler's little theorem]
+Take integers $g, m \in \mathbb{Z}$ such that $(g, m) = 1$. It is then the case that
+\[ a^{\varphi(n)} \equiv 1 \pmod{n} \]
+where $\varphi$ is the Euler's totient function.
+\end{theorem}
+
+\begin{proof}
+Let $G = (\mathbb{Z}/n\mathbb{Z})^\times$ under multiplication. Then $|G| = \varphi(n)$. Now by Lagrange's theorem, for all $g \in G$ we have $g^{\varphi(n)} = e$, as desired.
+\end{proof}
+
+\begin{lemma}[Lemma 1.2]
+If all elements have order 2 the group is abelian.
+\end{lemma}
+
+\begin{proof}
+Let $G$ be a group. Take $g, h \in G$. We have $1 = (gh)^2 = ghgh$ and $1 = g^2h^2 = gghh$ so $gh = hg$.
+\end{proof}
+
+\begin{theorem}[Proposition 1.5]
+There are only two groups of order 4. In particular, they are $\mathbb{Z}/4\mathbb{Z}$ and $\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$.
+\end{theorem}
+
+\begin{proof}
+Let $G$ be a group of order 4. Lagrange's theorem implies that all elements of $G$ have order 1, 2 or 4. If some element has order 4, then all of the elements are $1, g, g^2, g^3$ where $g^ag^b = g^{a+b \pmod{4}}$ so we have the cyclic case and the group is isomorphic to $\langle \mathbb{Z}/4\mathbb{Z}, + \rangle$.
+Then if we have all elements of order 2, by the preceding lemma, we have that $G$ is abelian. Now writing additively, $G$ is a vector space over the field $\mathbb{F}_2$. This means $G$ is isomorphic to the unique 2-dimensional vector space over $\mathbb{F}_2$. This implies there are only two groups of order 4.
+\end{proof}
+
+\begin{theorem}[Proposition 1.6]
+The group of order 5 is unique up to isomorphism.
+\end{theorem}
+
+\begin{proof}
+Since 5 is prime, we have this directly from corollary 1.1.
+\end{proof}
+
+\begin{definition}[Definition 1.12, Product]
+Let $G, H$ be groups. The group $G \times H$ is the product of $G$ and $H$ iff it is the cartesian product of $G$ and $H$ equipped with a binary relation given by the component operations of $G$ and $H$. Explicitly:
+\[ (g_1, h_1)(g_2, h_2) = (g_1g_2, h_1h_2) \]
+for all $(g_1, h_1), (g_2, h_2) \in G \times H$.
+\end{definition}
+
+\begin{theorem}[Proposition 1.7]
+To see if $G = H_1 \times H_2$ we have to check:
+1. Anything in $G$ is of the form $h_1 \times h_2$ for $h_1 \in H_1, h_2 \in H_2$.
+2. $H_1 \cap H_2 = e$.
+3. $H_1$ commutes with $H_2$.
+\end{theorem}
+
+\section{Quotient groups}
+
+\begin{definition}[Definition 1.13, Normal subgroup]
+Let $G$ be a group, and $H$ a subgroup. Then $H$ is normal iff for all $g \in G$, $gH = Hg$.
+\end{definition}
+
+\begin{theorem}[Proposition 1.8]
+The cosets of a normal subgroup form a group under the multiplication of representative elements.
+\end{theorem}
+
+\begin{proof}
+Let $G$ be a group, and $H \subseteq G$ a subgroup. Define $G/H := \{aH : a \in G\}$. We define an equivalence relation: $a \equiv b \iff aH = bH \iff ab^{-1} \in H$. We need to check that if $a_1 \equiv a_2$ and $b_1 \equiv b_2$ then $a_1b_1 \equiv a_2b_2$. Suppose $b_1 \equiv b_2$, then there exists $h \in H$ such that $b_1 = b_2h$. Then $ab_1 = ab_2h$ so $ab_1 \equiv ab_2$. Now suppose $a_1 \equiv a_2$ so there is some $h \in H$ such that $a_1 = a_2h$. Then $a_1b = a_2hb \equiv a_2b$ provided we can ``move'' $h$ past $b$. This is allowed if for all $b$ there exists $h' \in H$ such that $hb = bh'$, or equivalently that $b^{-1}Hb = H$. This is exactly the condition that $H$ is normal.
+\end{proof}
+
+\begin{definition}[Definition 1.14, Quotient group]
+Let $N \subseteq G$ be a normal subgroup. Then $G/N$ is the quotient group of $G$ by $N$.
+\end{definition}
+
+\begin{theorem}[Theorem 1.5]
+Any subgroup of index 2 is normal.
+\end{theorem}
+
+\begin{proof}
+If $H$ has index 2 then the left cosets are just $H$, and the things not in $H$. Then these are also the right cosets, so $G/H$ is a group of order 2.
+\end{proof}
+
+\begin{theorem}[Proposition 1.9]
+There is 1 abelian, cyclic group of order 6. It also splits as the following product:
+\[ \mathbb{Z}/6\mathbb{Z} \cong \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/3\mathbb{Z} \]
+\end{theorem}
+
+\begin{theorem}[Proposition 1.10]
+Let $G = \mathbb{Z}/6\mathbb{Z}$ and $A = \{0, 2, 4\}$, $B = \{0, 3\}$. We have that $G \cong A \times B$.
+\end{theorem}
+
+\begin{proof}
+We check that $G = AB$, $A \cap B = \{0\}$, and $AB = BA$, and the result follows directly from this.
+\end{proof}
+
+\begin{theorem}[Proposition 1.11]
+The other group of order 6 is the symmetric group $S_3$.
+\end{theorem}
+
+\begin{definition}[Definition 1.15, Center]
+Let $G$ be a group. Then a subgroup $Z \subseteq G$ is the center of $G$ iff it consists of all the elements of $G$ which commute with all other elements of $G$.
+\end{definition}
+
+\begin{definition}[Definition 1.16, Orbit and Stabilizer]
+Let $G$ be a group, and $S$ be a $G$-set. Then the orbit of an element $s \in S$ is
+\[ Gs = \{g \cdot s \mid g \in G\} \]
+The stabilizer of $s \in S$ is
+\[ G_s = \{g \in G \mid g \cdot s = s\} \]
+\end{definition}
+
+\begin{theorem}[Proposition 1.12]
+The orbits of a group $G$ on a $G$-set $S$ form a partition of $S$.
+\end{theorem}
+
+\begin{theorem}[Theorem 1.6, Cauchy's theorem]
+Suppose $p$ is prime, and $p$ divides the order of a group $G$. Then there exists $a \in G$ such that the order of $a$ is $p$.
+\end{theorem}
+
+\begin{proof}
+Proceed by induction on the order of groups. First we prove the theorem for $G$ abelian. Pick an element $g$ of prime order $q$. We know this element exists since any element has order dividing $|G|$, and if $g$ has order $mn$, $|g^m| = n$. If $q = p$ then we are done. If $q \neq p$ look at $G/\langle g \rangle$ which is of order $|G|/q \leq |G|$ which is divisible by $p$. As such, $G/\langle g \rangle$ falls under our inductive hypothesis, and has an element $h$ of order $p$. Now we lift $h$ to some $a \in G$. Then we know $a^p \in \langle g \rangle$ so $a$ has order $p$, or $pq$. This means $a$ or $a^q$ has order $p$. Then we are done for abelian $G$.
+If $G$ is not abelian, we look at the adjoint action of $G$ on itself: $g \cdot s = gsg^{-1}$. Now decompose $G$ into orbits under conjugation. Since Lagrange's theorem tells us that the order of the orbit is the order of the group divided by the order of the stabilizer, we have that $|\text{orbit}| = |G|/|H|$. Since these orbits form a partition of $G$, we can write
+\[ |G| = \sum_{\text{orbits}} |\text{orbit}| = \sum_{\text{orbits}} |G|/|H| \]
+We now have two different cases for $H$.
+Case 1: There is some $H \subset G$ such that $|H| < |G|$ has order divisible by $p$. Then by induction, $H$ has an element of order $p$, so $G$ does as well.
+Case 2: If $H \subset G$ such that $|H|$ is not divisible by $p$, then $|G|/|H|$ is divisible by $p$, so
+\[ |G| = \sum_{\substack{\text{orbits} \\ |H| < |G|}} |G|/|H| + \sum_{\substack{\text{orbits} \\ |H| = |G|}} 1 \]
+The last sum is over elements $g$ with $gh = hg$ for all $h \in G$. We recognize this as the center of $G$, which is abelian, and has order divisible by $p$, so it has element of order $p$ from the first case. We also already know the first term is divisible by $p$, so we are done.
+\end{proof}
+
+\begin{definition}[Definition 1.17, Direct product]
+Let $A, B$ be two normal subgroups of a group $G$. The direct product of $A, B$ is the cartesian product with componentwise multiplication:
+\[ (a_1, b_1)(a_2, b_2) := (a_1a_2, b_1b_2) \]
+as inherited from $G$.
+\end{definition}
+
+\begin{theorem}[Proposition 1.13]
+The direct product commutes.
+\end{theorem}
+
+\begin{proof}
+If $A, B$ are two normal subgroups, then they commute with one another.
+\end{proof}
+
+\begin{definition}[Definition 1.18, Semidirect product]
+Let $A$ be a normal subgroup of a group $G$. Let $B$ be another subgroup of $G$, which is not necessarily normal. For each $b \in B$ the map $a \mapsto bab^{-1}$ is an automorphism of $A$. Then if we write each such automorphism as $\varphi_b$ for $b \in B$, then take $\varphi_{b_1}\varphi_{b_2} := \varphi_{b_1b_2}$ for $b_1, b_2 \in B$, so we have a homomorphism from $B$ to $\mathrm{Aut}(A)$. The semidirect product of $A$ and $B$, written $A \rtimes B$, is then the cartesian product of the sets $A, B$ equipped with the operation:
+\[ (a, b)(a', b') := (a \varphi_b(a'), bb') \]
+\end{definition}
+
+\begin{definition}[Definition 1.19, Exact sequence]
+Let $A, B, C$ be groups, such that we have $A \xrightarrow{f} B \xrightarrow{g} C$. This is called an exact sequence iff $\mathrm{im}(f) = \ker(g)$. An exact sequence is a short exact sequence iff it is of the form:
+\[ 1 \to A \to B \to C \to 1 \]
+\end{definition}
+
+\section{Groups of order 8}
+
+\begin{theorem}[Proposition 1.14]
+The only groups of order 8 are $\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$, $\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/4\mathbb{Z}$, $\mathbb{Z}/8\mathbb{Z}$, the quaternion group $Q$, and the dihedral group $D_8$.
+\end{theorem}
+
+\begin{proof}
+We seek to classify all groups of order 8. Let $G$ be a group of order 8. If $G$ has all elements of order 2, then we have $(\mathbb{Z}/2\mathbb{Z})^3$. Alternatively, we have some $g$ of order 4, so the subgroup $H = \langle g \rangle$ has index 2 and is therefore normal. Now pick some $h \in G$ mapping to a non-trivial element in $G/H = \mathbb{Z}/2\mathbb{Z}$. Then $G$ contains $g, h, g^4 = e$ and $h^2$ which is $e$, $g^{-1}$ or $g^2$. Note that $g^3 = g^{-1}$. Then since $H$ is normal, $hgh^{-1}$ is either $g$ or $g^3$. Note that $G$ is abelian iff $hgh^{-1} = g$. Therefore the non-abelian cases correspond to $hgh^{-1} = g^3 = g^{-1}$.
+If $h^2 = g$ and $hgh^{-1} = g$, then $G \cong \mathbb{Z}/8\mathbb{Z}$. Otherwise, for abelian $G$, we could either have $h^2 = e$ or $h^2 = g^2$. If $h^2 = e$, we just get $G \cong \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$. If $h^2 = g^2$, we have $G \cong \mathbb{Z}/4\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$.
+Now we consider the non-abelian cases. If $hgh^{-1} = g^3$ then either $h^2 = g^2$ or $h^2 = e$. In the former case, we have the quaternion group $Q$, and in the latter we get the dihedral group $D_8$.
+\end{proof}
+
+\begin{theorem}[Theorem 1.7, Burnside's lemma]
+Suppose there is some finite group $G$ which acts on a set $S$. Then the number of orbits is equal to the average number of fixed points.
+\[ |S/G| = \frac{1}{|G|} \sum_{g \in G} |S^g| \]
+where $S/G$ denotes the collection of orbits, and $S^g$ is the set of elements of $S$ fixed by $g$.
+\end{theorem}
+
+\begin{proof}
+We look at the set of pairs with $g \cdot s = s$, and count this in two ways. First, for each $g$, there are $|S^g|$ choices for $s$ so we get $\sum_{g \in G} |S^g|$ pairs.
+Secondly, we look at each orbit of $G$ on $S$. Say the orbit contains some $s \in S$. Then the number of points in the orbit is $|G|/|G_s|$. So
+\[ |\text{pairs}(g, s)| = \sum_{\text{orbits}} |\{\text{pairs in the orbit}\}| = \sum_i |G_{s_i}| \cdot |G^{s_i}| = |G| \cdot |S/G| \]
+where the index $i$ runs over representatives $s_i$ of distinct orbits. Then we divide by $|G|$ and we are done.
+\end{proof}
+
+\begin{definition}[Definition 1.20, Conjugate elements]
+Let $G$ be a group. Two elements $a, b \in G$ are conjugate iff there is some $g \in G$ such that $a = gbg^{-1}$.
+\end{definition}
+
+\begin{definition}[Definition 1.21, Quaternion group]
+The quaternion group consists of 8 elements: $\pm 1, \pm i, \pm j, \pm k$ where
+\[ ij = -ji = k, \quad ji = -ik = j, \quad jk = -kj = i, \quad i^2 = j^2 = k^2 = -1 \]
+\end{definition}
+
+\begin{definition}[Definition 1.22, Quaternion numbers]
+The quaternion numbers are given by
+\[ \{a + bI + cJ + dK \mid a, b, c, d \in \mathbb{R}\} \]
+where we have a notion of conjugation given by:
+\[ z = a + bI + cJ + dK, \quad \bar{z} = a - bI - cJ - dK \]
+\end{definition}
+
+\begin{theorem}[Proposition 1.17]
+The quaternion numbers form a 4-dimensional division algebra containing $\mathbb{C}$. The non-zero quaternions form a group under multiplication.
+\end{theorem}
+
+\begin{proof}
+Any non-zero quaternion has an inverse. For $z = a + bI + cJ + dK$ we have $\bar{z} := a - bI - cJ - dK$ so $z\bar{z} = a^2 + b^2 + c^2 + d^2$. We can now write
+\[ z^{-1} = \frac{\bar{z}}{z\bar{z}} \]
+This means non-zero quaternions form a group under multiplication. The quaternion group is a subgroup of the non-zero quaternions.
+\end{proof}
+
+\begin{definition}[Definition 1.23, Special orthogonal group]
+The set of matrices $\mathrm{SO}_3(\mathbb{R})$ is the special orthogonal group iff it consists of all rotations in $\mathbb{R}^3$. Explicitly these are transformations that preserve the origin, euclidean distance, and orientation.
+\end{definition}
+
+\begin{theorem}[Proposition 1.20]
+Conjugation by an element of $\mathbb{H}^\times$ gives a homomorphism $S^3 \to \mathrm{SO}_3(\mathbb{R})$.
+\end{theorem}
+
+\begin{proof}
+Identify $\mathbb{R}^3 = \{bI + cJ + dK\} \subseteq \mathbb{H}$. Then for $g \in \mathbb{H}^\times$, the map $v \mapsto g^{-1}vg$ maps $\mathbb{R}^3 \to \mathbb{R}^3$. This map preserves $|v|$. It is in fact a rotation, and we therefore get a homomorphism $S^3 \to \mathrm{SO}_3(\mathbb{R})$. This is not quite an isomorphism because the kernel is of order 2, explicitly $\{\pm 1\}$. So we get the exact sequence
+\[ 1 \to \{\pm 1\} \to S^3 \to \mathrm{SO}_3(\mathbb{R}) \to 1 \]
+\end{proof}
+
+\section{Groups of order $p^2$}
+
+\begin{theorem}[Proposition 1.21]
+There are only two abelian groups of order 9: $\mathbb{Z}/9\mathbb{Z}$ and $\mathbb{Z}/3\mathbb{Z} \times \mathbb{Z}/3\mathbb{Z}$.
+\end{theorem}
+
+\begin{proof}
+These two groups clearly have order 9. These are also the only abelian groups of this order, because if we have an element of order 9 then we must have $\mathbb{Z}/9\mathbb{Z}$. If we have an element of order 3 then it is abelian, and isomorphic to a vector space over $\mathbb{F}_3$, giving $\mathbb{F}_3 \times \mathbb{F}_3 \cong \mathbb{Z}/3\mathbb{Z} \times \mathbb{Z}/3\mathbb{Z}$.
+\end{proof}
+
+\begin{definition}[Definition 1.24, Center]
+Given a group $G$, the center of $G$ is a subgroup of $G$ consisting of all of the elements of $G$ which commute with all the other elements of $G$.
+\end{definition}
+
+\begin{lemma}[Lemma 1.3]
+Any group of order $p^n$ for $n \geq 1$ has a non-trivial center.
+\end{lemma}
+
+\begin{proof}
+We look at conjugacy classes of $G$. Let $C_g$ denote the conjugacy class of an element $g \in G$. Then each conjugacy class corresponding to $g$ has size equal to the order of $G$ divided by the elements fixing $g$. We call the center $Z$, and write:
+\[ |G| = \sum_g |C_g| = \sum_g \frac{|G|}{|G_g|} = \sum_{g \notin Z} \frac{|G|}{|G_g|} + |Z| \]
+The conjugacy classes are the orbits under adjoint action $g \cdot h = ghg^{-1}$. Now we have two possibilities. If $g$ is in the center the size of the conjugacy class is 1. Otherwise it is not in the center, in which case the conjugacy class has order divisible by $p$. So the number of conjugacy classes of size 1 is divisible by $p$. The key point is that $p$ divides the order of the center, and therefore it has at least $p$ elements, and is non-trivial as desired.
+\end{proof}
+
+\begin{theorem}[Theorem 1.8]
+Every group of order $p^2$ is abelian.
+\end{theorem}
+
+\begin{proof}
+Suppose $|G| = p^2$. By the previous lemma we know the center $Z$ cannot have order 1, so it must have order $p$ or $p^2$. Since $p^2$ implies it is equal to the entire group, we want to show that $|Z| = p$ is not possible.
+Suppose $g \notin Z$. If $g^2 \in Z$, then $g$ has order $p^2$, and generates all of $G$. Then assume $g^2 \notin Z$, so $\langle g \rangle \cap Z = \{e\}$. Then $G = \langle g \rangle Z$ so every element of $G$ can be written $g^m a$ for some $m \in \mathbb{Z}$, and $a \in Z$. Therefore the order of the center is $p^2$ which means $G = Z$ and $G$ is abelian as desired.
+\end{proof}
+
+\section{Nilpotent groups}
+
+\begin{definition}[Definition 1.25, Nilpotent group]
+A group is called nilpotent if it can be reduced to one element by killing the center repeatedly.
+\end{definition}
+
+\begin{theorem}[Proposition 1.22]
+All groups of order $p^n$ are nilpotent. Furthermore all products of groups of prime order are nilpotent.
+\end{theorem}
+
+\begin{proof}
+All such groups of order $p^n$ have non-trivial center, and never acquire a trivial center, since they are repeatedly of prime power order.
+\end{proof}
+
+\section{Groups of order $2p$}
+
+\begin{theorem}[Theorem 1.9]
+All groups of order $2p$ for prime $p$ are of the form $H \rtimes \mathbb{Z}/2\mathbb{Z}$ for $H$ normal of order $p$.
+\end{theorem}
+
+\begin{proof}
+Automorphisms of $\mathbb{Z}/p\mathbb{Z}$ are just given by nonzero elements of $\mathbb{Z}/p\mathbb{Z}$. In particular, we can just take $1 \mapsto$ any non-zero element. Then the group $(\mathbb{Z}/p\mathbb{Z})^\times$ is cyclic of order $p - 1$. In addition, the only elements of order 2 are $\pm 1$. As such, there are 2 groups of this order. If the group is abelian, we have $\mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/p\mathbb{Z}$. Otherwise we get the dihedral group, which consists of the symmetries of the regular $p$-gon.
+\end{proof}
+
+\section{Groups of order 12}
+
+\begin{theorem}[Proposition 1.23]
+For any $n \in \mathbb{N}$, the group $D_{8n+4}$ can be split into the product $D_{4n+2} \times \mathbb{Z}/2\mathbb{Z}$.
+\end{theorem}
+
+\begin{theorem}[Proposition 1.26]
+The five groups of order 12 that we have already listed, are the only groups of order 12.
+\end{theorem}
+
+\begin{proof}
+We apply the Sylow theorems to groups of order 12. First look at subgroups of order 3. The number of these subgroups is $1 \bmod 3$ and divides 12 as well. Then there are only two possibilities: 1 and 4.
+If there is only one subgroup of order 3, it must be normal. It also must then have a subgroup of order $2^2 = 4$. Therefore $G = A \times B$ where $A$ is normal of order 3, and $B$ of order 4.
+Now returning above, we take the case of 4 subgroups of order 3. We get $4 \times 2 = 8$ elements of order 3 which leaves 4 elements not of order 3. But we know that there exists a subgroup of order 4 from the Sylow theorems, so it must consist exactly of elements not of order 3. So $G = X \rtimes Y$ where $X$ is normal of order 4 and $Y$ is of order 3. This implies that $G = A_4$, the rotations of a tetrahedron.
+\end{proof}
+
+\begin{definition}[Definition 1.26, Solvable group]
+Let $G$ be a group. Then it is solvable iff it is either cyclic, or it has a normal subgroup $N$ such that $G/N$ is solvable.
+\end{definition}
+
+\begin{definition}[Definition 1.27, Simple group]
+A group $G$ is simple iff it has no non-trivial normal subgroups.
+\end{definition}
+
+\begin{theorem}[Theorem 1.10, Sylow theorems]
+Suppose $p^n$ divides $|G|$ and $p^{n+1}$ does not divide $|G|$. Then we have that:
+1. There exists a subgroup of order $p^n$.
+2. All Sylow subgroups are conjugate.
+3. The number of $p$-Sylow subgroups of $G$ is $\equiv 1 \pmod{p}$.
+4. Any subgroup of order $p^m$ for $m \leq n$ is contained in some $p$-Sylow subgroup.
+\end{theorem}
+
+\begin{proof}
+(1): We have two cases, then we proceed by induction on $|G|$. Either some proper subgroup has index prime to $p$ or the index of every proper subgroup is divisible by $p$. In the first case, $p$ divides $|H|$ so $H$ has a subgroup of order $p^n$ by induction. In the second case all proper subgroups have index divisible by $p$. Consider the action of $G$ on itself by conjugation. The order of each conjugacy class divides $|G|$. We know that
+\[ |G| = \sum_i |C_{g_i}| \]
+Since the order of the group is divisible by $p$, the order of the center is divisible by $p$. Now pick $g$ in the center of order divisible by $p$. Then $G/\langle g \rangle$ has subgroup of order $p^{n-1}$ by induction. The inverse image of this subgroup has order $p^n$.
+See Lang for (2), (3), (4).
+\end{proof}
+
+\begin{theorem}[Theorem 1.11, Jordan-H\"older theorem]
+Let $G$ be a group with a normal decomposition which eventually reaches the trivial group. Then the simple groups we get are independent of splitting choice.
+\end{theorem}
+
+\section{Groups of order 13--16}
+
+\begin{theorem}[Proposition 1.27]
+There is only one group of order 13: $\mathbb{Z}/13\mathbb{Z}$. There are only two groups of order 14: $\mathbb{Z}/14\mathbb{Z}$ and $D_{14}$.
+\end{theorem}
+
+\begin{proof}
+Since 13 is prime, the group of this order is unique. Since $14 = 2 \times 7$ and 7 is prime, this is a group of order $2p$ which we have already classified.
+\end{proof}
+
+\begin{theorem}[Theorem 1.12]
+If $G$ is a group of order $pq$ for $p, q \in \mathbb{Z}$ primes, then if $p$ does not divide $(q - 1)$ we have that $G \cong \mathbb{Z}/pq\mathbb{Z}$. If $p$ does divide $q - 1$, we have that either $G \cong \mathbb{Z}/pq\mathbb{Z}$ or $G \cong \mathbb{Z}/q\mathbb{Z} \rtimes \mathbb{Z}/p\mathbb{Z}$.
+\end{theorem}
+
+\begin{proof}
+First take $p < q$. From the Sylow theorems we know there is some subgroup of order $q$, and the number of conjugate subgroups is $\equiv 1 \bmod q$ and divides $pq$. Since $p < q$, the only possibility is 1. Therefore $G$ has a normal subgroup $\mathbb{Z}/q\mathbb{Z}$, so $G$ is the semi-direct product of $\mathbb{Z}/q\mathbb{Z}$ and $\mathbb{Z}/p\mathbb{Z}$.
+We know $\mathrm{Aut}(\mathbb{Z}/q\mathbb{Z}) = (\mathbb{Z}/q\mathbb{Z})^*$ is of order $q - 1$. This is also cyclic, so has subgroup of order $p$ if $p$ divides $q - 1$. If it does not, the only group of order $pq$ is cyclic. If it does divide $q - 1$ then we get two possibilities: cyclic $\mathbb{Z}/pq\mathbb{Z}$ or the semi-direct product $\mathbb{Z}/q\mathbb{Z} \rtimes \mathbb{Z}/p\mathbb{Z}$.
+\end{proof}
+
+\begin{theorem}[Proposition 1.28]
+The following are the abelian groups of order 16:
+1. $\mathbb{Z}/16\mathbb{Z}$
+2. $\mathbb{Z}/8\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$
+3. $\mathbb{Z}/4\mathbb{Z} \times \mathbb{Z}/4\mathbb{Z}$
+4. $\mathbb{Z}/4\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z} \times \mathbb{Z}/2\mathbb{Z}$
+5. $(\mathbb{Z}/2\mathbb{Z})^4$
+\end{theorem}
+
+\section{Finitely Generated Abelian Groups}
+
+\begin{theorem}[Theorem 1.13, Classification of finitely generated abelian groups]
+Let $G$ be a finitely generated abelian group. Then $G$ is a finite product of groups of the form $\mathbb{Z}$ and $\mathbb{Z}/n\mathbb{Z}$ for $n \geq 1$.
+\end{theorem}
+
+\begin{proof}
+Suppose $G$ is an abelian group generated by $g_1, \ldots, g_n$. We write the general generating relations as follows:
+\[ m_{11}g_1 + \cdots + m_{1n}g_n = 0 \]
+\[ m_{21}g_1 + \cdots + m_{2n}g_n = 0 \]
+so we have a possibly infinite matrix of coefficients. We now can use the following operations to get it in a more comfortable form:
+\begin{itemize}
+\item Add $k \times$ any column to any other column. This corresponds to changing generators: $g_i \to g_i + kg_j$ ($i \neq j$).
+\item Add $k \times$ any row to any other row. This is allowed since if rows $r = s = 0$ then $k \times r + s = 0$.
+\end{itemize}
+We apply these to make $m_{11} > 0$ as small as possible. We then subtract column 1 from the other columns to make row 1 have all other entries be zero. The point is that $m_{11}$ divides $m_{12}$. If this were not the case, then $m_{12} = km_{11} + r$ for $|r| < m_{11}$ and we could make $m_{11}$ smaller, contradicting minimality.
+Now repeat to kill every column. We are left with only the diagonal $M_{ii}$. We can assume they are all non-negative. This means $G$ is generated by $\{g_i\}$ with relations $m_{ii}g_i = 0$. Therefore
+\[ G \cong \mathbb{Z}/m_{11}\mathbb{Z} \times \cdots \times \mathbb{Z}/m_{nn}\mathbb{Z} \]
+as desired.
+\end{proof}
+
+\section{Groups of order 17--24}
+
+\begin{theorem}[Proposition 1.32]
+There is only one group of orders 17, 19 and 23.
+\end{theorem}
+
+\begin{proof}
+The numbers 17, 19, 23 are prime so this follows from corollary 1.1.
+\end{proof}
+
+\begin{theorem}[Proposition 1.33]
+There are 5 groups of order 18 given by semidirect products.
+\end{theorem}
+
+\begin{theorem}[Proposition 1.34]
+There are 5 groups of order 20 given by semidirect products.
+\end{theorem}
+
+\begin{theorem}[Proposition 1.35]
+The only abelian group of order 21 is $\mathbb{Z}/21\mathbb{Z}$. There is also a non-abelian group of order 21.
+\end{theorem}
+
+\begin{proof}
+This falls under the $pq$ case for $p = 3$ and $q = 7$. Then $3 \mid 6 = 7 - 1$ so the result follows from the classification of groups of order $pq$.
+\end{proof}
+
+\begin{theorem}[Proposition 1.36]
+The only two groups of order 22 are $D_{22}$ and $\mathbb{Z}/22\mathbb{Z}$.
+\end{theorem}
+
+\begin{proof}
+Since $22 = 2 \times 11$ and 11 is prime we have that this falls under the classification of groups of order $2p$.
+\end{proof}
+
+\section{Symmetric Group}
+
+\begin{definition}[Definition 1.28, Symmetric group]
+The symmetric group $S_n$ is the group of all permutations of $n$ elements.
+\end{definition}
+
+\begin{theorem}[Proposition 1.37]
+Let $S_n$ be as in definition 1.28. Then $|S_n| = n!$.
+\end{theorem}
+
+\begin{proof}
+There are $n$ choices for the image of 1, $n - 1$ choices for the image of 2, etc.
+\end{proof}
+
+\begin{definition}[Definition 1.29, Cycle]
+A cycle $(a\; b\; c)$ is a function bringing $a \mapsto b \mapsto c \mapsto a$.
+\end{definition}
+
+\begin{definition}[Definition 1.30, Transposition]
+A cycle is a transposition iff it exchanges 2 elements and leaves all the others.
+\end{definition}
+
+\begin{theorem}[Proposition 1.38]
+The transpositions generate $S_n$. In other words, we can get any permutation by swapping adjacent elements.
+\end{theorem}
+
+\begin{proof}
+Bubble sort is a sorting algorithm which works by swapping adjacent elements until it reaches the desired order. It takes $n(n-1)/2$ changes in the worst case.
+\end{proof}
+
+\begin{definition}[Definition 1.31, Alternating group]
+The alternating group is defined as follows:
+\[ A_n := \{\sigma \in S_n : \varepsilon(\sigma) = 1\} \]
+where $\varepsilon : S_n \to \{\pm 1\}$ is the sign homomorphism defined by the action on the discriminant $\Delta = \prod_{i < j}(x_i - x_j)$. Note $A_n = \ker(\varepsilon)$.
+\end{definition}
+
+\begin{theorem}[Proposition 1.39]
+The group $A_n$ is normal in $S_n$ and of order $n!/2$ for $n \geq 2$.
+\end{theorem}
+
+\begin{definition}[Definition 1.32, Cycle shape]
+The cycle shape of an element of $S_n$ is the multiplicity of cycles of each given size.
+\end{definition}
+
+\begin{theorem}[Theorem 1.14]
+$A_n$ is simple for all $n \geq 5$.
+\end{theorem}
+
+\begin{proof}
+Proceed by induction on $n$. Let $n \geq 5$, and suppose $N$ is normal in $S_n$. Pick some $g \in N$, $g \neq 1$, and find $h$ so that $ghg^{-1}h^{-1}$ fixes the point 1. Then $ghg^{-1}h^{-1} = g(hg^{-1}h^{-1}) \in N$. This means $N$ has a non-trivial intersection with $S_{n-1}$ (the elements fixing 1) so $N \cap S_{n-1}$ is either $A_{n-1}$ or $S_{n-1}$ since $A_{n-1}$ is simple.
+So $N$ contains all elements of $A_n$ fixing 1. Similarly, it contains all elements fixing $i$ for any $i$. These generate $A_n$.
+\end{proof}
+
+\begin{definition}[Definition 1.33, Inner automorphism]
+Let $G$ be a group. An inner automorphism of $G$ is given by the conjugate action of some element of $G$. This yields the exact sequence:
+\[ 1 \to Z \to G \xrightarrow{\text{conjugations}} \mathrm{Aut}(G) \to \mathrm{Out}(G) \to 1 \]
+where $\mathrm{Out}$ denotes the set of outer automorphisms which is the quotient $\mathrm{Aut}/\mathrm{Inn}$ where $\mathrm{Inn}$ is the subgroup consisting of all inner automorphisms.
+\end{definition}
+
+\begin{theorem}[Proposition 1.40]
+$\mathrm{Aut}(S_n) \cong S_n$ for $n \geq 3$ except when $n = 6$. All of these automorphisms are inner automorphisms.
+\end{theorem}
+
+\begin{proof}
+We find a non-inner automorphism of $S_6$. Start with $S_5$. The key point is that $S_5$ has a subgroup of order 20. $S_5$ acts on $\{0, 1, 2, 3, 4\} = \mathbb{F}_5$, and has a subgroup consisting of all permutations of the form $x \to ax + b$ where $a, b \in \mathbb{F}_5$, so there are 20 elements. This means $S_5$ has subgroup of index $6 = 120/20$, so it acts transitively on 6 points. This gives us a homomorphism $S_5 \to S_6$ which is different from the usual non-transitive homomorphisms. So $S_6$ has 12 subgroups isomorphic to $S_5$, rather than 6. Any subgroup of index 6 in $S_6$ gives a homomorphism from $S_6 \to S_6$. Pick one of the ``funny'' subgroups, and we get an automorphism of $S_6$ which is not inner.
+\end{proof}
+
+\section{Category Theory}
+
+\begin{definition}[Definition 1.34, Category]
+A category $\mathcal{C}$ is a collection of objects $\mathrm{Obj}(\mathcal{C})$ such that for any $A, B \in \mathrm{Obj}(\mathcal{C})$, there is a collection $\mathrm{Hom}(A, B)$ of maps (or arrows or morphisms) from $A$ to $B$. Also, for each $A, B, C \in \mathrm{Obj}(\mathcal{C})$ we have a function
+\[ \mathrm{Hom}(B, C) \times \mathrm{Hom}(A, B) \to \mathrm{Hom}(A, C) \]
+where $(g, f) \mapsto g \circ f$ called composition. Furthermore, for each $A \in \mathrm{Obj}(\mathcal{C})$, we have some element $\mathrm{id}_A \in \mathrm{Hom}(A, A)$ called the identity on $A$ such that:
+1. Associativity: For each $f \in \mathrm{Hom}(A, B)$, $g \in \mathrm{Hom}(B, C)$ and $h \in \mathrm{Hom}(C, D)$ we have $(h \circ g) \circ f = h \circ (g \circ f)$.
+2. Identity laws: For all $A, B \in \mathrm{Obj}(\mathcal{C})$, for all $f \in \mathrm{Hom}(A, B)$, we have $f \circ \mathrm{id}_A = f = \mathrm{id}_B \circ f$.
+\end{definition}
+
+\begin{definition}[Definition 1.35, Dual category]
+If $\mathcal{C}$ is a category, the dual category is given by simply reversing all of the arrows. This is also written $\mathcal{C}^{\mathrm{op}}$.
+\end{definition}
+
+\begin{definition}[Definition 1.36, Functor]
+Given two categories $\mathcal{A}$ and $\mathcal{B}$, a covariant functor between $\mathcal{A}$ and $\mathcal{B}$ is a function $F : \mathrm{Obj}(\mathcal{A}) \to \mathrm{Obj}(\mathcal{B})$ such that for all $A, A' \in \mathrm{Obj}(\mathcal{A})$ we have a function $F : \mathrm{Hom}(A, A') \to \mathrm{Hom}(F(A), F(A'))$ written $f \mapsto F(f)$ which satisfies the following axioms:
+1. Whenever $A \xrightarrow{f} A' \xrightarrow{g} A''$ we have that $F(g \circ f) = F(g) \circ F(f)$.
+2. $F(\mathrm{id}_A) = \mathrm{id}_{F(A)}$.
+A contravariant functor $G$ from $\mathcal{A}$ to $\mathcal{B}$ is a covariant functor from $\mathcal{A}^{\mathrm{op}} \to \mathcal{B}$.
+\end{definition}
+
+\begin{definition}[Definition 1.37, Natural transformation]
+Consider two categories $\mathcal{C}, \mathcal{D}$ and functors $F, G : \mathcal{C} \to \mathcal{D}$. A natural transformation is a map $\varphi : F \to G$ such that for each $a \in \mathrm{Obj}(\mathcal{C})$ we have $\varphi(a) : F(a) \to G(a)$ and the following diagram commutes: for any $f : a \to b$ in $\mathcal{C}$,
+\[ G(f) \circ \varphi(a) = \varphi(b) \circ F(f) \]
+\end{definition}
+
+\begin{definition}[Definition 1.38, Product in a category]
+Given a category $\mathcal{C}$, two elements $A, B \in \mathrm{Obj}(\mathcal{C})$ have a product $A \times B$ where $A \times B \in \mathrm{Obj}(\mathcal{C})$ equipped with projections $\pi_1 : A \times B \to A$ and $\pi_2 : A \times B \to B$ such that for any $X \in \mathrm{Obj}(\mathcal{C})$ with morphisms $f : X \to A$ and $g : X \to B$, there is a unique morphism $\varphi : X \to A \times B$ making the diagram commute. This defines $A \times B$ up to canonical isomorphism.
+\end{definition}
+
+\begin{definition}[Definition 1.39, Equalizer]
+Let $\mathcal{C}$ be a category, and $A, B \in \mathrm{Obj}(\mathcal{C})$ with $f, g \in \mathrm{Hom}(A, B)$. Then the equalizer of $A, B$ is an object $E \in \mathrm{Obj}(\mathcal{C})$ and a morphism $i \in \mathrm{Hom}(E, A)$ such that $g \circ i = f \circ i$ and for any $C \in \mathrm{Obj}(\mathcal{C})$ such that there is some $h \in \mathrm{Hom}(C, A)$ where $g \circ h = f \circ h$, then $C$ factors uniquely through $E$.
+\end{definition}
+
+\begin{definition}[Definition 1.40, Kernel]
+Suppose $A, B$ are groups, $f : A \to B$ is a group homomorphism, and $g : A \to B$ is the trivial homomorphism. Then $\ker(f)$ is the equalizer of $f$ and $g$.
+\end{definition}
+
+\begin{definition}[Definition 1.41, Initial object]
+Let $A \in \mathrm{Obj}(\mathcal{C})$ for some category $\mathcal{C}$. Then $A$ is an initial object iff there exists a unique morphism from $A$ to any other element of $\mathrm{Obj}(\mathcal{C})$.
+\end{definition}
+
+\begin{theorem}[Proposition 1.41]
+Initial objects are unique up to isomorphism.
+\end{theorem}
+
+\begin{definition}[Definition 1.42, Final object]
+Let $A \in \mathrm{Obj}(\mathcal{C})$ for some category $\mathcal{C}$. Then $A$ is a final object iff there exists a unique morphism from any other element of $\mathrm{Obj}(\mathcal{C})$ to $A$.
+\end{definition}
+
+\begin{theorem}[Proposition 1.42]
+Final objects are unique up to isomorphism.
+\end{theorem}
+
+\begin{definition}[Definition 1.43, Limit]
+Let $\mathcal{C}$ be a category, $\{X_\alpha\}_{\alpha \in I}$ be a family of objects of $\mathcal{C}$, and $\{f_{\alpha_1, \alpha_2}\}_{\alpha_1, \alpha_2 \in I}$ be a family of morphisms where $f_{\alpha_1, \alpha_2} \in \mathrm{Hom}(X_{\alpha_1}, X_{\alpha_2})$. Then the limit of this family of objects is an object $A \in \mathrm{Obj}(\mathcal{C})$ and a collection of morphisms $\pi_\alpha \in \mathrm{Hom}(A, X_\alpha)$ such that:
+\begin{itemize}
+\item For any $f_{\alpha_1, \alpha_2}$ we have $\pi_{\alpha_2} = f_{\alpha_1, \alpha_2} \circ \pi_{\alpha_1}$.
+\item Any other $B$ with these properties factors uniquely through $A$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Definition 1.44, Pullback]
+Let $A, B, C \in \mathrm{Obj}(\mathcal{C})$ and $f : A \to C$, $g : B \to C$. Then $X \in \mathrm{Obj}(\mathcal{C})$ is called the pullback iff it is the limit of $A, B, C$ with morphisms $f, g$.
+\end{definition}
+
+\begin{definition}[Definition 1.45, Coproduct]
+The coproduct is the product with all arrows reversed. In other words, the coproduct of $A, B \in \mathrm{Obj}(\mathcal{C})$ is some $A \amalg B \in \mathrm{Obj}(\mathcal{C})$ such that for any $X$ with morphisms $\varphi_1 : A \to X$ and $\varphi_2 : B \to X$, there is a unique morphism $\psi : A \amalg B \to X$ making the diagram commute.
+\end{definition}
+
+\section{Free groups}
+
+\begin{definition}[Definition 1.46, Free abelian group]
+The free abelian group on $n$ generators $\{g_i\}_{i=1}^n$ is the group of elements of the form
+\[ \sum_{i=1}^n n_i g_i \]
+where $n_i \in \mathbb{Z}$ for all $i$.
+\end{definition}
+
+\begin{theorem}[Proposition 1.43]
+There is a unique isomorphism $\mathbb{Z}^n \cong G$ for any free abelian group $G$. Explicitly this brings $e_i \to g_i$. The free abelian group is the coproduct of $n$ copies of $\mathbb{Z}$.
+\end{theorem}
+
+\begin{definition}[Definition 1.47, Rank]
+Let $G \cong \mathbb{Z}^n$ be a free abelian group. Then the exponent $n$ is the rank of $G$.
+\end{definition}
+
+\begin{theorem}[Proposition 1.44]
+Any subgroup of $\mathbb{Z}^n$ is free of rank $\leq n$.
+\end{theorem}
+
+\begin{proof}
+Recall the proof that finite abelian groups are the same as products of cyclic groups. We showed that for $A \subseteq \mathbb{Z}^n$ we can find generators $g_1, \ldots, g_n$ of $\mathbb{Z}^n$ meaning $A$ is generated by $n_1g_1, n_2g_2, \ldots$ for some $\{n_i\}$. Therefore $A$ is free of rank $\leq n$.
+\end{proof}
+
+\begin{definition}[Definition 1.48, Free group]
+The free group on generators $\{g_i\}_{i=0}^n$ is the universal group generated by these elements. It maps uniquely to any other group generated by $G_1, \ldots, G_n$ by $g_i \to G_i$. This is the coproduct of $\mathbb{Z}, \ldots, \mathbb{Z}$ in $\mathrm{Grp}$ rather than $\mathrm{Ab}$.
+\end{definition}
+
+\begin{theorem}[Theorem 1.15]
+If $A$ is a reduced word (not the empty string) in a free group, we can find a finite group $G$ and a map from the free group to $G$ such that the image of $A$ is not 1.
+\end{theorem}
+
+\begin{proof}
+Let $G = S_n$ for $n = 1 + \text{the length of the word } A$. We illustrate with $A = b^{-1}a^{-1}ba^{-1}ba$. There are $7 = 1 + \text{length}$ points. We construct a graph and desire to complete it to a permutation in $S_7$. This is possible since the word is reduced (no adjacent inverse pairs). We map $a$ to a permutation $\sigma_a$ and $b$ to a permutation $\sigma_b$ satisfying the constraints from the graph. Then $A$ maps to a permutation sending the leftmost vertex (element 1) to the rightmost vertex (element $n$), so it is not the identity.
+\end{proof}
+
+\begin{definition}[Definition 1.49, Homotopy class]
+Homotopy classes mean that two paths are equivalent if the difference between the two are just edges traversed that were immediately retraced backwards.
+\end{definition}
+
+\begin{definition}[Definition 1.50, Fundamental group of a graph]
+The fundamental group of a graph consists of the homotopy classes of loops from the base point back to itself where loops follow the edges of the graph.
+\end{definition}
+
+\begin{theorem}[Proposition 1.45]
+The fundamental group of a graph consisting of a single vertex mapping back to itself $n$ times is the free group on $n$ generators. Conversely, the fundamental group of any graph is free.
+\end{theorem}
+
+\begin{proof}
+The idea is that we can pick an edge with distinct vertices and contract edges. This doesn't change the fundamental group of the graph. So keep contracting edges until it is a single node, and the fundamental group is a free group on the number of loops.
 \end{proof}

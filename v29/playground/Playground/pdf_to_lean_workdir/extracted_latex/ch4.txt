@@ -1,0 +1,347 @@
+%
+% Chapter 4
+%
+
+\chapter[Polynomials]{Polynomials}
+
+\section{Preliminaries}
+
+\begin{theorem}[Theorem 4.1]
+Let $f, g \in R[x]$ be polynomials with coefficients in $R$. Let $f$ have leading coefficient 1. Then there exist polynomials $q(x), r(x) \in R[x]$ such that
+\[ g(x) = f(x)q(x) + r(x) \]
+where $\deg(r) < \deg(f)$.
+\end{theorem}
+
+\begin{corollary}[Corollary 4.1]
+Let $K$ be a field. The ring $K[x]$ is a Euclidean domain.
+\end{corollary}
+
+\begin{proof}
+We can assume the leading coefficient of any polynomial to be 1, since $K$ is a field. As such, we can apply Theorem 4.1.
+\end{proof}
+
+\begin{corollary}[Corollary 4.2]
+Let $K$ be a field. We then have that $K[x]$ is a principal ideal domain, and a unique factorization domain.
+\end{corollary}
+
+\begin{proof}
+By Corollary 4.1, $K[x]$ is a Euclidean domain. From Theorems 2.1 and 2.2, all Euclidean domains are principal ideal domains, and all principal ideal domains are unique factorization domains.
+\end{proof}
+
+\begin{theorem}[Proposition 4.1]
+Suppose a polynomial $f \in R[x]$ has a root $a$, then there exists some $g \in R[x]$ such that
+\[ f(x) = g(x)(x - a) \]
+\end{theorem}
+
+\begin{proof}
+Apply the division algorithm to $f(x)$. This gives some $g, r$ such that $f(x) = g(x)(x - a) + r(x)$, but then $\deg(r) < 1$ which means $r$ is constant. Now taking $x = a$, we have $f(a) = g(a)(a - a) + r = r = 0$ which is zero because $a$ is a root by assumption.
+\end{proof}
+
+\begin{corollary}[Corollary 4.3]
+Any polynomial $f \in R[x]$ of degree $n$ where $R$ is an integral domain has at most $n$ roots.
+\end{corollary}
+
+\begin{proof}
+If we have $\{a_i\}_{i=1}^k$ roots of $f$, then by Proposition 4.1 we have that for some $g(x)$, $f(x) = (x - a_1) \cdots (x - a_k) g(x)$, which means $k \leq n$. If the product is zero, then some factor $(x - a_i)$ is zero because $R$ is an integral domain.
+\end{proof}
+
+\section{Application to fields}
+
+\begin{lemma}[Lemma 4.1]
+Let $G$ be an abelian group with at most $n$ elements of order $n$. Then $G$ is cyclic.
+\end{lemma}
+
+\begin{proof}
+For some primes $\{p_i\}$ and $\{n_i\} \subseteq \mathbb{N}$ we have $G \cong \mathbb{Z}/p_1^{n_1}\mathbb{Z} \times \mathbb{Z}/p_2^{n_2}\mathbb{Z} \times \cdots$. Suppose $p_1 = p_2$. Then $G$ has $p^2$ elements $x$ such that $x^p = 1$, since $\mathbb{Z}/p\mathbb{Z} \times \mathbb{Z}/p\mathbb{Z} \subseteq G$. This is impossible, so the $\{p_i\}$ are distinct. Now $G$ is cyclic by the Chinese remainder theorem.
+\end{proof}
+
+\begin{theorem}[Proposition 4.2]
+Let $p$ be prime. Then the group $(\mathbb{Z}/p\mathbb{Z})^\times$ is cyclic.
+\end{theorem}
+
+\begin{proof}
+Since $p$ is prime, $R = \mathbb{Z}/p\mathbb{Z}$ is a field. Therefore any polynomial in $R[x]$ of degree $n$ has $\leq n$ roots. In particular, $x^n - 1$ has at most $n$ roots for any $n \geq 1$. This means $G$ has $\leq n$ elements $x$ such that $x^n = 1$. Then applying Lemma 4.1 we are done.
+\end{proof}
+
+\begin{definition}[Definition 4.1, Primitive root]
+An element of $(\mathbb{Z}/p\mathbb{Z})^\times$ is a primitive root iff it is a generator.
+\end{definition}
+
+\begin{theorem}[Theorem 4.2]
+Let $F$ be a field. Then any finite subgroup of $F^\times$ is cyclic.
+\end{theorem}
+
+\begin{corollary}[Corollary 4.4]
+Let $F$ be a finite field. We then have that $F^\times$ is cyclic.
+\end{corollary}
+
+\section{Unique factorization in polynomial rings}
+
+\begin{definition}[Definition 4.2, Content]
+Let $f \in \mathbb{Q}[x]$ and $p \in \mathbb{Z}$ be prime. Write $f(x) = x^n a_n + \cdots + a_0$. Then $a_i = p^{m_i} b_i$ where $\{m_i\} \subseteq \mathbb{Z}$ and the $\{b_i\}$ have no factors of $p$ in the numerator or denominator. Then the number $c(f)$ is the content of $f$ iff $c(f) = p^{\min(m_i)} b$ where $b$ is some number with no factors of $p$.
+\end{definition}
+
+\begin{lemma}[Lemma 4.2, Gauss's lemma]
+Let $f, g \in \mathbb{Z}[x]$ then we have $c(fg) = c(f) c(g)$.
+\end{lemma}
+
+\begin{proof}
+WLOG we may assume that $c(f) = c(g) = 1$. It is sufficient to show that $c(fg) = 1$. Let $p$ be any prime. We show that $p$ does not divide $c(fg)$. Since $c(f) = c(g) = 1$, $p$ cannot divide all coefficients of $f$ or $g$. Let $a_i$ be the first coefficient of $f$ not divisible by $p$, and $b_j$ the first coefficient of $g$ not divisible by $p$. Then the coefficient of $x^{i+j}$ in $fg$ is $a_0b_{i+j} + a_1b_{i+j-1} + \cdots + a_i b_j + \cdots + a_{i+j}b_0$. Each term is divisible by $p$ except for $a_i b_j$, so the entire coefficient is not divisible by $p$.
+\end{proof}
+
+\begin{lemma}[Lemma 4.3]
+The only irreducibles of $\mathbb{Z}[x]$ are the prime integers and polynomials $f$ such that $c(f) = 1$. Furthermore, every element of $\mathbb{Z}[x]$ is a product of irreducibles.
+\end{lemma}
+
+\begin{theorem}[Proposition 4.3]
+$\mathbb{Z}[x]$ is a unique factorization domain.
+\end{theorem}
+
+\begin{proof}
+The main point is to show that irreducible elements are prime. By Lemmas 4.2 and 4.3, if $\deg(f) = 0$ then $f = p$ is prime in $\mathbb{Z}$. If $f \mid gh$, then $p \mid c(gh)$ so either $c(g)$ or $c(h)$ is divisible by $p$, and therefore $p \mid gh$.
+\end{proof}
+
+\begin{theorem}[Theorem 4.3]
+If $R$ is a UFD, then $R[x]$ is a UFD.
+\end{theorem}
+
+\begin{proof}
+Perform the same proof as in Proposition 4.3 with minor changes. Irreducibles of $R[x]$ are either irreducibles of $R$, or irreducibles of $K[x]$ with content 1, where $K$ is the quotient field of $R$.
+\end{proof}
+
+\begin{corollary}[Corollary 4.5]
+$\mathbb{Z}[x_1, \ldots, x_n]$ is a UFD.
+\end{corollary}
+
+\begin{proof}
+Induction on number of variables.
+\end{proof}
+
+\begin{corollary}[Corollary 4.6]
+If $K$ is a field, $K[x_1, x_2, \ldots, x_n]$ is a UFD.
+\end{corollary}
+
+\begin{proof}
+Induction on number of variables.
+\end{proof}
+
+\section{Irreducibility}
+
+\begin{theorem}[Proposition 4.4]
+Another way to test for reducibility is to factorize modulo $p$. If $f(x) = g(x)h(x)$ then $f(x) \equiv \bar{g}(x)\bar{h}(x) \pmod{p}$ for some prime $p$.
+\end{theorem}
+
+\begin{theorem}[Theorem 4.4, Eisenstein's criterion]
+Let $f$ have the following properties:
+1. The leading coefficient is 1.
+2. All other coefficients are divisible by $p$.
+3. The constant term is not divisible by $p^2$.
+Then $f$ is irreducible.
+\end{theorem}
+
+\begin{theorem}[Proposition 4.5]
+Consider the polynomial $f = x^n + a_{n-1}x^{n-1} + \cdots + a_0$. Then the only linear factors of $f$ are of the form $x - b$ for $b \mid a_0$. If the leading coefficient is not 1, then the roots can only be $\alpha = b/d$ where $b \mid a_0$ and $d \mid a_n$.
+\end{theorem}
+
+\begin{proof}
+Consider $(cx + b)(\cdots) = x^n + \cdots + a_0$. Then $1 = c \times \bullet$ and $a_0 = b \times \bullet$ as desired.
+\end{proof}
+
+\begin{lemma}[Lemma 4.4]
+Every polynomial with no linear factors of degree $\leq 3$ is irreducible.
+\end{lemma}
+
+\begin{theorem}[Claim 4.1]
+Any number that can be ``constructed'' with compass and ruler cannot satisfy an irreducible polynomial of degree $n$, unless $n$ is a power of 2.
+\end{theorem}
+
+\section{Noetherian rings and polynomials}
+
+\begin{definition}[Definition 4.3, Noetherian ring]
+A ring is Noetherian iff all ideals of the ring are finitely generated.
+\end{definition}
+
+\begin{theorem}[Theorem 4.5]
+Let $R$ be a ring. The following are equivalent:
+1. $R$ is Noetherian.
+2. Every non-empty set of ideals of $R$ has a maximal element.
+3. Every strictly increasing chain of ideals is finite.
+\end{theorem}
+
+\begin{proof}
+$(2) \iff (3)$: Zorn's lemma gives $(3) \implies (2)$. For the other direction, an infinite strictly increasing chain of ideals would have no maximal element.
+
+$(1) \implies (3)$: Suppose $I_1 \subseteq I_2 \subseteq \cdots$ is an increasing chain. Define $I = \cup_i I_i$. Then $I$ is an ideal, and by (1), $I = (x_1, \ldots, x_n)$ so $x_i$ is in some $I_m$ for all $i$. Therefore $I_m = I_{m+1} = \cdots$.
+
+$(3) \implies (1)$: Let $I$ be an ideal. Take $x_1 \in I$. If $I \neq (x_1)$, take $x_2 \in I \setminus (x_1)$. Continue to get a chain $(x_1) \subseteq (x_1, x_2) \subseteq \cdots$ which must stop after finitely many steps by (3). So $I = (x_1, \ldots, x_n)$.
+\end{proof}
+
+\begin{definition}[Definition 4.4, Artinian ring]
+A ring $R$ is called Artinian iff every strictly descending chain of ideals of $R$ eventually terminates.
+\end{definition}
+
+\begin{theorem}[Proposition 4.6]
+All Artinian rings are Noetherian.
+\end{theorem}
+
+\begin{theorem}[Theorem 4.6, Hilbert's basis theorem for polynomials]
+If $R$ is a Noetherian ring, so is $R[x]$.
+\end{theorem}
+
+\begin{proof}
+Let $I$ be an ideal of $R[x]$. Consider the chain of ideals $I_0 \subseteq I_1 \subseteq I_2 \subseteq \cdots$ where $I_k$ is the set of leading coefficients of polynomials in $I$ of degree $\leq k$. Since $R$ is Noetherian, there is some $m$ such that for all $s \geq m$, $I_s = I_m$. Pick polynomials of degree $0, 1, \ldots, m$ whose leading coefficients generate $I_0, I_1, \ldots, I_m$. These finitely many polynomials generate $I$.
+\end{proof}
+
+\begin{theorem}[Theorem 4.7, Hilbert's basis theorem]
+If $I$ is an ideal of the ring $K[x_1, \ldots, x_n]$ then $I$ is finitely generated.
+\end{theorem}
+
+\begin{proof}
+Use induction on the number of variables in Noether's theorem.
+\end{proof}
+
+\section{Invariants and symmetric functions}
+
+\begin{definition}[Definition 4.5, Ring of invariants]
+The ring of invariants is the set of polynomials fixed by $G$. That is, the polynomials $p$ such that for all $g \in G$, $g \cdot p = p$.
+\end{definition}
+
+\begin{definition}[Definition 4.6, Symmetric function]
+Let $V$ be a vector space with basis $\{x_i\}_{i=1}^n$. Let $G$ be the symmetric group on the basis of $V$. Then the ring of symmetric functions is the ring of invariant polynomials.
+\end{definition}
+
+\begin{theorem}[Theorem 4.8]
+All symmetric functions are a polynomial in elementary symmetric functions.
+\end{theorem}
+
+\begin{proof}
+Order the monomials lexicographically: $x_1^{n_1} x_2^{n_2} \cdots \geq x_1^{m_1} x_2^{m_2} \cdots \iff (n_1, n_2, \ldots) \geq (m_1, m_2, \ldots)$. Let $p$ be a symmetric polynomial with biggest monomial $x_1^{n_1} x_2^{n_2} \cdots$. Subtract $(x_1 + \cdots + x_n)^{n_1 - n_2} (x_1x_2 + \cdots)^{n_2 - n_3} \cdots$. The key point is $n_1 \geq n_2 \geq \cdots$ since $f$ is symmetric. Repeat until we get 0, since there is no infinite sequence of strictly decreasing monomials.
+\end{proof}
+
+\begin{definition}[Definition 4.7, Logarithmic derivative]
+The logarithmic derivative of a function $f$ is
+\[ \frac{d}{dx}(\log(f)) = \frac{f'}{f} \]
+\end{definition}
+
+\begin{definition}[Definition 4.8, Antisymmetric polynomial]
+Let $f$ be a polynomial in $x_1, \ldots, x_n$. $f$ is antisymmetric iff it changes sign under elements $\sigma \notin A_n$.
+\end{definition}
+
+\begin{theorem}[Proposition 4.8]
+Let $f$ be invariant under $A_n$. We then have some symmetric $g$, and some antisymmetric $h$ such that $f = g + h$.
+\end{theorem}
+
+\begin{proof}
+Define $g := (f + \sigma f)/2$ and $h := (f - \sigma f)/2$.
+\end{proof}
+
+\begin{definition}[Definition 4.9, Discriminant]
+Let $\Delta := \prod_{i < j} (x_i - x_j)$. The discriminant of a polynomial $f(x) = a_n x^n + \cdots + a_0$ is $a_n^{2n-2} \Delta^2$.
+\end{definition}
+
+\begin{theorem}[Claim 4.1, Discriminant vanishing]
+The discriminant vanishes iff $f$ has multiple roots.
+\end{theorem}
+
+\begin{theorem}[Proposition 4.9]
+Invariant functions of $A_n$ are generated by the symmetric functions $e_1, \ldots, e_n$ and $\Delta$. Furthermore, $\Delta^2$ is symmetric and is some polynomial in $e_1, \ldots, e_n$.
+\end{theorem}
+
+\begin{theorem}[Proposition 4.10]
+Let $f$ be a polynomial. $f$ has multiple roots iff $f, f'$ have a common factor.
+\end{theorem}
+
+\begin{proof}
+If $f = (x - x_1)^2 \cdots$, then $f' = 2(x - x_1) \cdots + (x - x_1)^2(\cdots)$, so they share a factor of $(x - x_1)$.
+\end{proof}
+
+\begin{definition}[Definition 4.10, Resultant]
+The resultant is the determinant of the Sylvester matrix.
+\end{definition}
+
+\begin{definition}[Definition 4.11, Reynolds operator]
+The Reynolds operator $\rho$ is the average of the elements of the group:
+\[ \rho := \frac{1}{|G|} \sum_{g \in G} g \]
+\end{definition}
+
+\begin{theorem}[Proposition 4.11]
+Let $\rho$ be the Reynolds operator. Then we have the following properties:
+1. $\rho(f + g) = \rho(f) + \rho(g)$
+2. $\rho(1) = 1$
+3. $\rho(fg) = \rho(f)\rho(g)$ if $f = \rho(f)$
+\end{theorem}
+
+\begin{theorem}[Theorem 4.9, Hilbert's theorem on invariants]
+Let $G$ be a finite group. The ring of invariants of $G$ is always finitely generated over $\mathbb{C}$.
+\end{theorem}
+
+\begin{proof}
+Look at $\mathbb{C}[x_1, \ldots, x_n]$ graded by degree. Let $I$ be the ring of invariants, and $I_m$ the invariants homogeneous of degree $m$. Then $I = \mathbb{C} \oplus I_1 \oplus I_2 \oplus \cdots$. The ideal generated by $I_1 \oplus I_2 \oplus \cdots$ is finitely generated by Hilbert's theorem. Take generators $i_1, \ldots, i_k$. We show they generate $I$.
+Suppose they generate $I_1, \ldots, I_K$. Take $f \in I_{K+1}$. Then $f$ is in the ideal, so $f = a_1 i_1 + \cdots + a_n i_n$ where $\deg(a_n) > 0$. Apply the Reynolds operator: $f = \rho(f) = \rho(a_1) i_1 + \cdots + \rho(a_n) i_n$. Since $\deg(\rho(a_n)) < K$ and $\deg(i_n) > 0$, by induction $\rho(a_n)$ is a polynomial in $i_1, \ldots, i_n$.
+\end{proof}
+
+\section{Formal power series}
+
+\begin{definition}[Definition 4.12, Formal power series ring]
+Let $R$ be a ring. Then we define $R\llbracket x \rrbracket$ to be the formal power series ring consisting of elements of the form $a_0 + a_1 x + a_2 x^2 + \cdots$ for $a_i \in R$.
+\end{definition}
+
+\begin{theorem}[Proposition 4.12]
+Let $k$ be a field and $f(x) = a_0 + a_1 x + \cdots \in k\llbracket x \rrbracket$ such that $a_0 \neq 0$. Then $f$ has an inverse.
+\end{theorem}
+
+\begin{proof}
+WLOG let $a_0 = 1$ so for some $g$ we have $f = 1 + g$ and $\frac{1}{f} = \frac{1}{1+g} = 1 - g + g^2 - g^3 + \cdots$. This makes sense since the coefficient for $x^n$ is given by a finite sum.
+\end{proof}
+
+\begin{theorem}[Proposition 4.13]
+Let $k$ be a field. Then the ideals of $k\llbracket x \rrbracket$ are $\{0\}$ and $(x^n)$ for $n \geq 1$.
+\end{theorem}
+
+\begin{proof}
+Any element of $k\llbracket x \rrbracket$ can be written $a_n x^n + a_{n+1} x^{n+1} + \cdots = x^n(a_n + a_{n+1}x + \cdots) = x^n \times \text{unit}$.
+\end{proof}
+
+\begin{corollary}[Corollary 4.7]
+Let $k$ be a field. Then $k\llbracket x \rrbracket$ is a PID, UFD, and the only prime element is $x$.
+\end{corollary}
+
+\begin{theorem}[Proposition 4.14]
+Let $k$ be a field. Then $k\llbracket x, y \rrbracket$ is not a PID.
+\end{theorem}
+
+\begin{proof}
+Consider the ideal $(x, y)$. This is not principal since it consists of power series without a constant term.
+\end{proof}
+
+\begin{theorem}[Theorem 4.10]
+If $R$ is Noetherian, so is $R\llbracket x \rrbracket$.
+\end{theorem}
+
+\begin{corollary}[Corollary 4.8]
+If $R$ is Noetherian, so is $R\llbracket x_1, \ldots, x_n \rrbracket$.
+\end{corollary}
+
+\begin{proof}
+Let $I$ be an ideal. Define $I_n$ to be the ideal of the coefficients of $x^n$ in series with smallest term $x^n$. Then $I_0 \subseteq I_1 \subseteq \cdots$ which stabilizes since $R$ is Noetherian. Each individual ideal is finitely generated, meaning the ring is finitely generated.
+\end{proof}
+
+\begin{theorem}[Theorem 4.11, Weierstrass preparation theorem]
+Let $k$ be a field. Given $f \in k\llbracket x, y \rrbracket$ there exists a unit $u$, and $g$ a polynomial in $y$ with coefficients in $k\llbracket x \rrbracket$ with leading coefficient a power of $x$ such that $f = ug$.
+\end{theorem}
+
+\begin{proof}
+Pick a monomial $x^m y^n$ such that $x^m y^n \neq 0$ and if $a_{b,c} = 0$ then either $b < m$ or $b = m, c < n$. Kill the other coefficients by multiplying by units $1 + cx^i y^j$ for positive $i, j$. Then $f = x^m y^n + \sum b_{ij} x^i y^j$ (up to a unit) for $i \geq m+1$ and $j \leq m$. The unit is an infinite product which is well defined because each coefficient depends on only a finite calculation.
+\end{proof}
+
+\begin{theorem}[Theorem 4.12]
+Let $k$ be a field. Then $k\llbracket x_1, \ldots, x_n \rrbracket$ is a UFD.
+\end{theorem}
+
+\begin{proof}
+We prove this for $k\llbracket x, y \rrbracket$. First, every element has a factorization into irreducibles since $R\llbracket x \rrbracket$ is Noetherian. For uniqueness, irreducible implies prime: if $f \mid gh$, by Weierstrass we can assume $f, g, h \in k\llbracket x \rrbracket[y]$. Since $k\llbracket x \rrbracket[y]$ is a UFD (because $k\llbracket x \rrbracket$ is a UFD by induction), $f \mid g$ or $f \mid h$ in $k\llbracket x \rrbracket[y]$ and therefore in $k\llbracket x, y \rrbracket$.
+\end{proof}
+
+\begin{lemma}[Lemma 4.5, Hensel's Lemma]
+Suppose $f(x, y) \in k\llbracket x, y \rrbracket$, and that the smallest nonzero coefficients are of degree $d$ and form a polynomial $f_d(x, y)$. Suppose $f_d = gh$ where $g, h$ are coprime. Then $f = GH$ where $g, h$ are the smallest degree $d$ terms of $G, H$.
+\end{lemma}
