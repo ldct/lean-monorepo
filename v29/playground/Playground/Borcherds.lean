@@ -1631,5 +1631,172 @@ example : HasCommutingSubgroups K4 s₁ s₂ := by
   decide +revert
 
 /-
+The recognition theorem (← direction only).
+The forward direction fails for the weak definition IsIsomorphicToProductOfSubgroups:
+  Counterexample: G = K4, H₁ = H₂ = {1, a}. Then H₁ × H₂ ≅ Z/2 × Z/2 ≅ K4 = G,
+  but H₁ ∩ H₂ = {1, a} ≠ {1}.
+See IsIsomorphicToProductOfSubgroups' below for the corrected biconditional.
+-/
+
+/- Helper: uniqueness of decomposition from trivial intersection -/
+private lemma decomp_unique {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
+    (htrivial : HasTrivialIntersection G H₁ H₂)
+    {a₁ b₁ a₂ b₂ : G}
+    (ha₁ : a₁ ∈ H₁.carrier) (hb₁ : b₁ ∈ H₁.carrier)
+    (ha₂ : a₂ ∈ H₂.carrier) (hb₂ : b₂ ∈ H₂.carrier)
+    (heq : a₁ * a₂ = b₁ * b₂) : a₁ = b₁ ∧ a₂ = b₂ := by
+  -- Show b₁⁻¹ * a₁ ∈ H₁ ∩ H₂ = {1}
+  have hkey : b₁⁻¹ * a₁ = b₂ * a₂⁻¹ := by
+    apply BorcherdsGroup.left_cancel b₁
+    apply BorcherdsGroup.right_cancel a₂
+    calc b₁ * (b₁⁻¹ * a₁) * a₂
+        = (b₁ * b₁⁻¹) * a₁ * a₂ := by
+          rw [← BorcherdsGroup.mul_assoc b₁ b₁⁻¹ a₁, BorcherdsGroup.mul_assoc]
+      _ = a₁ * a₂ := by simp
+      _ = b₁ * b₂ := heq
+      _ = b₁ * (b₂ * (a₂⁻¹ * a₂)) := by simp
+      _ = b₁ * (b₂ * a₂⁻¹) * a₂ := by
+          rw [← BorcherdsGroup.mul_assoc b₂ a₂⁻¹ a₂, ← BorcherdsGroup.mul_assoc]
+  have hmem : b₁⁻¹ * a₁ ∈ H₁.carrier ∩ H₂.carrier :=
+    ⟨H₁.mul_mem _ _ (H₁.inv_mem _ hb₁) ha₁, hkey ▸ H₂.mul_mem _ _ hb₂ (H₂.inv_mem _ ha₂)⟩
+  rw [htrivial] at hmem
+  have h1 : b₁⁻¹ * a₁ = 1 := Set.mem_singleton_iff.mp hmem
+  constructor
+  · exact BorcherdsGroup.left_cancel b₁⁻¹ a₁ b₁ (by simp [h1])
+  · have : a₁ = b₁ := BorcherdsGroup.left_cancel b₁⁻¹ a₁ b₁ (by simp [h1])
+    rw [this] at heq
+    exact BorcherdsGroup.left_cancel b₁ a₂ b₂ heq
+
+/- Helper: the four-term associativity rearrangement using commutativity -/
+private lemma mul_mul_comm {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
+    (hcommute : HasCommutingSubgroups G H₁ H₂)
+    {a₁ b₁ : G} {a₂ b₂ : G}
+    (ha₁ : a₁ ∈ H₁.carrier) (hb₁ : b₁ ∈ H₁.carrier)
+    (ha₂ : a₂ ∈ H₂.carrier) (hb₂ : b₂ ∈ H₂.carrier)
+    : (a₁ * b₁) * (a₂ * b₂) = (a₁ * a₂) * (b₁ * b₂) := by
+  -- Need: a₂ * b₁ = b₁ * a₂ (from commutativity, with b₁ ∈ H₁, a₂ ∈ H₂)
+  have hc : b₁ * a₂ = a₂ * b₁ := hcommute b₁ hb₁ a₂ ha₂
+  calc (a₁ * b₁) * (a₂ * b₂)
+      = a₁ * (b₁ * (a₂ * b₂)) := by rw [BorcherdsGroup.mul_assoc]
+    _ = a₁ * ((b₁ * a₂) * b₂) := by rw [← BorcherdsGroup.mul_assoc b₁ a₂ b₂]
+    _ = a₁ * ((a₂ * b₁) * b₂) := by rw [hc]
+    _ = a₁ * (a₂ * (b₁ * b₂)) := by rw [BorcherdsGroup.mul_assoc a₂ b₁ b₂]
+    _ = (a₁ * a₂) * (b₁ * b₂) := by rw [← BorcherdsGroup.mul_assoc]
+
+/- Core construction: build a GroupIso from the three conditions -/
+noncomputable def mulMapIso {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
+    (htrivial : HasTrivialIntersection G H₁ H₂)
+    (hdecomp : HasUniqueDecomposition G H₁ H₂)
+    (hcommute : HasCommutingSubgroups G H₁ H₂)
+    : GroupIso (H₁ × H₂) G := by
+  classical
+  -- Extract decomposition functions
+  have hspec := fun g => Classical.choose_spec (hdecomp g)
+  let d₁ : G → G := fun g => Classical.choose (hdecomp g)
+  have hd₁_mem : ∀ g, d₁ g ∈ H₁.carrier := fun g => (hspec g).1
+  have hspec₂ := fun g => Classical.choose_spec (hspec g).2
+  let d₂ : G → G := fun g => Classical.choose (hspec g).2
+  have hd₂_mem : ∀ g, d₂ g ∈ H₂.carrier := fun g => (hspec₂ g).1
+  have hd_eq : ∀ g, g = d₁ g * d₂ g := fun g => (hspec₂ g).2
+  exact {
+    toEquiv := {
+      toFun := fun p => p.1.val * p.2.val
+      invFun := fun g => (⟨d₁ g, hd₁_mem g⟩, ⟨d₂ g, hd₂_mem g⟩)
+      left_inv := by
+        intro ⟨⟨h₁, hh₁⟩, ⟨h₂, hh₂⟩⟩
+        simp only
+        have hu := decomp_unique htrivial (hd₁_mem (h₁ * h₂)) hh₁
+          (hd₂_mem (h₁ * h₂)) hh₂ (hd_eq (h₁ * h₂)).symm
+        exact Prod.ext (Subtype.ext hu.1) (Subtype.ext hu.2)
+      right_inv := by
+        intro g; simp only; exact (hd_eq g).symm
+    }
+    map_mul := by
+      intro ⟨⟨a₁, ha₁⟩, ⟨a₂, ha₂⟩⟩ ⟨⟨b₁, hb₁⟩, ⟨b₂, hb₂⟩⟩
+      show (a₁ * b₁) * (a₂ * b₂) = (a₁ * a₂) * (b₁ * b₂)
+      exact mul_mul_comm hcommute ha₁ hb₁ ha₂ hb₂
+    map_one := by
+      show (1 : G) * 1 = 1
+      simp
+    map_inv := by
+      intro ⟨⟨a₁, ha₁⟩, ⟨a₂, ha₂⟩⟩
+      show a₁⁻¹ * a₂⁻¹ = (a₁ * a₂)⁻¹
+      rw [BorcherdsGroup.mul_inv]
+      exact hcommute a₁⁻¹ (H₁.inv_mem _ ha₁) a₂⁻¹ (H₂.inv_mem _ ha₂)
+  }
+
+@[simp]
+lemma mulMapIso_apply {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
+    (htrivial : HasTrivialIntersection G H₁ H₂)
+    (hdecomp : HasUniqueDecomposition G H₁ H₂)
+    (hcommute : HasCommutingSubgroups G H₁ H₂)
+    (h₁ : H₁) (h₂ : H₂)
+    : (mulMapIso htrivial hdecomp hcommute).toEquiv (h₁, h₂) = h₁.val * h₂.val := rfl
+
+theorem recognition_backward (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G)
+    (htrivial : HasTrivialIntersection G H₁ H₂)
+    (hdecomp : HasUniqueDecomposition G H₁ H₂)
+    (hcommute : HasCommutingSubgroups G H₁ H₂)
+    : IsIsomorphicToProductOfSubgroups G H₁ H₂ :=
+  ⟨mulMapIso htrivial hdecomp hcommute⟩
+
+/-
+Strengthened definition: the isomorphism must be the multiplication map (h₁, h₂) ↦ h₁ · h₂.
+With this definition, both directions of the recognition theorem hold.
+-/
+def IsIsomorphicToProductOfSubgroups' (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : Prop :=
+  ∃ (φ : GroupIso (H₁ × H₂) G), ∀ (h₁ : H₁) (h₂ : H₂), φ.toEquiv (h₁, h₂) = h₁.val * h₂.val
+
+theorem recognition_theorem (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G)
+    : IsIsomorphicToProductOfSubgroups' G H₁ H₂ ↔
+      (HasTrivialIntersection G H₁ H₂ ∧ HasUniqueDecomposition G H₁ H₂ ∧ HasCommutingSubgroups G H₁ H₂) := by
+  constructor
+  · -- Forward: strengthened iso → three conditions
+    rintro ⟨φ, hφ⟩
+    refine ⟨?_, ?_, ?_⟩
+    · -- Trivial intersection
+      simp only [HasTrivialIntersection]
+      ext x; simp only [Set.mem_inter_iff, Set.mem_singleton_iff]
+      constructor
+      · rintro ⟨hx₁, hx₂⟩
+        -- φ(⟨x, hx₁⟩, ⟨x⁻¹, _⟩) = x * x⁻¹ = 1 = φ(1, 1)
+        have h1 : φ.toEquiv (⟨x, hx₁⟩, ⟨x⁻¹, H₂.inv_mem x hx₂⟩) = 1 := by
+          rw [hφ]; simp
+        have h2 : φ.toEquiv (⟨1, H₁.one_mem⟩, ⟨1, H₂.one_mem⟩) = 1 := by
+          rw [hφ]; simp
+        have hinj := φ.toEquiv.injective (h1.trans h2.symm)
+        exact (Prod.ext_iff.mp hinj).1 |> Subtype.ext_iff.mp |> fun h => h
+      · rintro rfl; exact ⟨H₁.one_mem, H₂.one_mem⟩
+    · -- Unique decomposition
+      simp only [HasUniqueDecomposition]
+      intro g
+      obtain ⟨⟨⟨h₁, hh₁⟩, ⟨h₂, hh₂⟩⟩, hg⟩ := φ.toEquiv.surjective g
+      rw [hφ] at hg
+      exact ⟨h₁, hh₁, h₂, hh₂, hg.symm⟩
+    · -- Commuting subgroups
+      simp only [HasCommutingSubgroups]
+      intro h₁ hh₁ h₂ hh₂
+      -- Name the key elements of H₁ × H₂
+      let p₁₀ : H₁ × H₂ := (⟨h₁, hh₁⟩, ⟨1, H₂.one_mem⟩)
+      let p₀₂ : H₁ × H₂ := (⟨1, H₁.one_mem⟩, ⟨h₂, hh₂⟩)
+      -- φ maps (h₁, 1) to h₁ and (1, h₂) to h₂
+      have hφ₁ : φ.toEquiv p₁₀ = h₁ := by simp only [p₁₀]; rw [hφ]; simp
+      have hφ₂ : φ.toEquiv p₀₂ = h₂ := by simp only [p₀₂]; rw [hφ]; simp
+      -- In H₁ × H₂, (h₁, 1) * (1, h₂) = (1, h₂) * (h₁, 1)
+      have hprod : p₁₀ * p₀₂ = p₀₂ * p₁₀ := by
+        apply Prod.ext
+        · exact Subtype.ext (show h₁ * 1 = 1 * h₁ by simp)
+        · exact Subtype.ext (show (1 : G) * h₂ = h₂ * 1 by simp)
+      calc h₁ * h₂
+          = φ.toEquiv p₁₀ * φ.toEquiv p₀₂ := by rw [hφ₁, hφ₂]
+        _ = φ.toEquiv (p₁₀ * p₀₂) := (φ.map_mul _ _).symm
+        _ = φ.toEquiv (p₀₂ * p₁₀) := by rw [hprod]
+        _ = φ.toEquiv p₀₂ * φ.toEquiv p₁₀ := φ.map_mul _ _
+        _ = h₂ * h₁ := by rw [hφ₁, hφ₂]
+  · -- Backward: three conditions → strengthened iso
+    rintro ⟨htrivial, hdecomp, hcommute⟩
+    exact ⟨mulMapIso htrivial hdecomp hcommute, fun h₁ h₂ => rfl⟩
+
+/-
 1.3 - Quotient Groups
 -/
