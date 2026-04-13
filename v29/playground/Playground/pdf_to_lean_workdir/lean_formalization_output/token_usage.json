@@ -1,11 +1,11 @@
 {
   "model": "opus",
   "started": "2026-04-12 22:51:07",
-  "last_updated": "2026-04-13 00:03:11",
-  "total_input_tokens": 6130176,
-  "total_output_tokens": 224162,
-  "total_tokens": 6354338,
-  "total_elapsed_s": 4305.2,
+  "last_updated": "2026-04-13 02:58:04",
+  "total_input_tokens": 33479623,
+  "total_output_tokens": 437235,
+  "total_tokens": 33916858,
+  "total_elapsed_s": 12020.9,
   "calls": [
     {
       "call": 1,
@@ -156,6 +156,126 @@
       "cumul_input": 6130176,
       "cumul_output": 224162,
       "timestamp": "2026-04-13 00:03:11"
+    },
+    {
+      "call": 16,
+      "name": "ch2 Proof Search R1",
+      "input_tokens": 13819479,
+      "output_tokens": 74678,
+      "elapsed_s": 3834.6,
+      "cumul_input": 19949655,
+      "cumul_output": 298840,
+      "timestamp": "2026-04-13 01:53:14"
+    },
+    {
+      "call": 17,
+      "name": "ch2 Proof Verify R1",
+      "input_tokens": 359878,
+      "output_tokens": 6975,
+      "elapsed_s": 134.4,
+      "cumul_input": 20309533,
+      "cumul_output": 305815,
+      "timestamp": "2026-04-13 01:55:29"
+    },
+    {
+      "call": 18,
+      "name": "ch2 Proof Verdict R1",
+      "input_tokens": 23001,
+      "output_tokens": 117,
+      "elapsed_s": 6.8,
+      "cumul_input": 20332534,
+      "cumul_output": 305932,
+      "timestamp": "2026-04-13 01:55:36"
+    },
+    {
+      "call": 19,
+      "name": "ch2 Stmt Change Check R1",
+      "input_tokens": 529983,
+      "output_tokens": 9694,
+      "elapsed_s": 195.9,
+      "cumul_input": 20862517,
+      "cumul_output": 315626,
+      "timestamp": "2026-04-13 01:58:53"
+    },
+    {
+      "call": 20,
+      "name": "ch2 Proof Search R2",
+      "input_tokens": 5435178,
+      "output_tokens": 47636,
+      "elapsed_s": 1750.2,
+      "cumul_input": 26297695,
+      "cumul_output": 363262,
+      "timestamp": "2026-04-13 02:28:05"
+    },
+    {
+      "call": 21,
+      "name": "ch2 Proof Verify R2",
+      "input_tokens": 244955,
+      "output_tokens": 6185,
+      "elapsed_s": 123.1,
+      "cumul_input": 26542650,
+      "cumul_output": 369447,
+      "timestamp": "2026-04-13 02:30:09"
+    },
+    {
+      "call": 22,
+      "name": "ch2 Proof Verdict R2",
+      "input_tokens": 22850,
+      "output_tokens": 117,
+      "elapsed_s": 10.2,
+      "cumul_input": 26565500,
+      "cumul_output": 369564,
+      "timestamp": "2026-04-13 02:30:19"
+    },
+    {
+      "call": 23,
+      "name": "ch2 Stmt Change Check R2",
+      "input_tokens": 166051,
+      "output_tokens": 3885,
+      "elapsed_s": 113.6,
+      "cumul_input": 26731551,
+      "cumul_output": 373449,
+      "timestamp": "2026-04-13 02:32:13"
+    },
+    {
+      "call": 24,
+      "name": "ch2 Proof Search R3",
+      "input_tokens": 1831676,
+      "output_tokens": 25020,
+      "elapsed_s": 773.3,
+      "cumul_input": 28563227,
+      "cumul_output": 398469,
+      "timestamp": "2026-04-13 02:45:09"
+    },
+    {
+      "call": 25,
+      "name": "ch2 Proof Verify R3",
+      "input_tokens": 196047,
+      "output_tokens": 7085,
+      "elapsed_s": 136.6,
+      "cumul_input": 28759274,
+      "cumul_output": 405554,
+      "timestamp": "2026-04-13 02:47:26"
+    },
+    {
+      "call": 26,
+      "name": "ch2 Proof Verdict R3",
+      "input_tokens": 23317,
+      "output_tokens": 117,
+      "elapsed_s": 9.4,
+      "cumul_input": 28782591,
+      "cumul_output": 405671,
+      "timestamp": "2026-04-13 02:47:36"
+    },
+    {
+      "call": 27,
+      "name": "ch3 Stmt FL R1",
+      "input_tokens": 4697032,
+      "output_tokens": 31564,
+      "elapsed_s": 627.6,
+      "cumul_input": 33479623,
+      "cumul_output": 437235,
+      "timestamp": "2026-04-13 02:58:04"
     }
   ]
 }

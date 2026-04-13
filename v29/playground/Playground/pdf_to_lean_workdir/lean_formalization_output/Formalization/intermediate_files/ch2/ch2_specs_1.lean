@@ -14,7 +14,6 @@ import Mathlib.Data.ZMod.Basic
 import Mathlib.RingTheory.Int.Basic
 import Mathlib.RingTheory.Nilpotent.Defs
 import Mathlib.NumberTheory.SumTwoSquares
-import Mathlib.RingTheory.Idempotents
 
 universe u
 
@@ -102,34 +101,14 @@ For a ring R, if e ∈ R is idempotent (e * e = e), then there exist rings A, B 
 Lean formalization of the natural language statement-/
 theorem Ch2_theorem_5 :
     -- Forward: for an idempotent e in a commutative ring, R is isomorphic to a product via a map sending e to (1, 0)
-    (∀ (R : Type u) [CommRing R] (e : R), e * e = e →
-      ∃ (A B : Type u) (_ : Ring A) (_ : Ring B) (f : R ≃+* A × B), f e = (1, 0)) ∧
+    (∀ (R : Type*) [CommRing R] (e : R), e * e = e →
+      ∃ (A B : Type*) (_ : Ring A) (_ : Ring B) (f : R ≃+* A × B), f e = (1, 0)) ∧
     -- Converse: (1, 0) in A × B is idempotent
-    (∀ (A B : Type u) [Ring A] [Ring B],
+    (∀ (A B : Type*) [Ring A] [Ring B],
       ((1 : A), (0 : B)) * ((1 : A), (0 : B)) = ((1 : A), (0 : B))) := by
   constructor
   · intro R _inst e he
-    have he_idem : IsIdempotentElem e := he
-    have he' : IsIdempotentElem (1 - e) := he_idem.one_sub
-    have hef₁ : (1 - e) + e = 1 := sub_add_cancel 1 e
-    have hef₂ : (1 - e) * e = 0 := he_idem.one_sub_mul_self
-    let φ := AlgEquiv.prodQuotientOfIsIdempotentElem ℤ he' he_idem hef₁ hef₂
-    refine ⟨R ⧸ Ideal.span {1 - e}, R ⧸ Ideal.span {e},
-      inferInstance, inferInstance, φ.toRingEquiv, ?_⟩
-    show (AlgEquiv.prodQuotientOfIsIdempotentElem ℤ he' he_idem hef₁ hef₂) e = (1, 0)
-    have hmk1 : (Ideal.Quotient.mk (Ideal.span ({1 - e} : Set R))) e = 1 := by
-      have h1 : (Ideal.Quotient.mk (Ideal.span ({1 - e} : Set R))) e =
-        (Ideal.Quotient.mk (Ideal.span ({1 - e} : Set R))) 1 := by
-        rw [Ideal.Quotient.eq]
-        show e - 1 ∈ _
-        have : (e : R) - 1 = -(1 - e) := by ring
-        rw [this]
-        exact (Ideal.neg_mem_iff _).mpr (Ideal.subset_span rfl)
-      rw [h1, map_one]
-    have hmk2 : (Ideal.Quotient.mk (Ideal.span ({e} : Set R))) e = 0 :=
-      Ideal.Quotient.mk_singleton_self e
-    rw [AlgEquiv.prodQuotientOfIsIdempotentElem_apply]
-    exact Prod.ext hmk1 hmk2
+    sorry
   · intro A B _instA _instB
     simp [Prod.mul_def, mul_one, mul_zero]
 
@@ -227,7 +206,7 @@ Every Euclidean domain is a principal ideal domain.
 Lean formalization of the natural language statement-/
 theorem Ch2_theorem_12 (R : Type*) [EuclideanDomain R] :
     IsPrincipalIdealRing R := by
-  exact EuclideanDomain.to_principal_ideal_domain
+  sorry
 
 /-Exact quote of the latex code of the definition
 \begin{definition}[Definition 2.10, Divides]
@@ -583,12 +562,11 @@ theorem Ch2_theorem_30 :
     · dsimp only; rw [if_pos rfl, if_neg hb]; exact Nat.zero_lt_one
   · -- ED ⊂ PID
     intro R _
-    exact EuclideanDomain.to_principal_ideal_domain
+    sorry
   · intro R _ _ _; infer_instance
   · intro R _ _ _
-    haveI : NoZeroDivisors R :=
-      isCancelMulZero_iff_noZeroDivisors.mp inferInstance
-    exact ⟨⟩
+    sorry
+
   · intro R inst _; exact ⟨inst, trivial⟩
 
 /-Exact quote of the latex code of the definition
@@ -747,7 +725,7 @@ theorem Ch2_theorem_38 (R : Type u) [CommRing R] [IsDomain R] (S : Submonoid R)
       rcases mul_eq_zero.mp key with h | h
       · exact sub_eq_zero.mp h
       · exact absurd h hs₂
-  · exact ⟨Localization S, inferInstance, inferInstance, Localization.isLocalization⟩
+  · sorry
 
 /-Exact quote of the latex code of the theorem
 \begin{theorem}[Proposition 2.7]
@@ -788,7 +766,4 @@ theorem Ch2_theorem_39 (R : Type u) [CommRing R] (S : Submonoid R) :
       push_cast
       linear_combination
         ↑t₂ * ↑s₃ * ht₁ + ↑t₁ * ↑s₁ * ht₂
-  · exact ⟨Localization S, inferInstance, inferInstance,
-      Localization.isLocalization,
-      ⟨algebraMap R (Localization S), fun _ => rfl⟩,
-      fun s => IsLocalization.map_units (Localization S) s⟩
+  · sorry

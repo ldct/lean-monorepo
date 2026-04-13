@@ -2,17 +2,17 @@
 
 **Model:** `opus`  
 **Started:** 2026-04-12 22:51:07  
-**Last updated:** 2026-04-13 00:03:11  
+**Last updated:** 2026-04-13 02:58:04  
 
 ## Summary
 
 | Metric | Value |
 |--------|-------|
-| Total input tokens | 6,130,176 |
-| Total output tokens | 224,162 |
-| Total tokens | 6,354,338 |
-| Total elapsed | 4305s |
-| Agent calls | 15 |
+| Total input tokens | 33,479,623 |
+| Total output tokens | 437,235 |
+| Total tokens | 33,916,858 |
+| Total elapsed | 12021s |
+| Agent calls | 27 |
 
 ## Per-Call Breakdown
 
@@ -33,3 +33,15 @@
 | 13 | ch2 Stmt FL R5 | 257,587 | 8,850 | 167.3s | 5,743,987 | 197,458 |
 | 14 | ch2 Stmt Verify R5 | 357,898 | 26,560 | 541.1s | 6,101,885 | 224,018 |
 | 15 | ch2 Stmt Verdict R5 | 28,291 | 144 | 9.7s | 6,130,176 | 224,162 |
+| 16 | ch2 Proof Search R1 | 13,819,479 | 74,678 | 3834.6s | 19,949,655 | 298,840 |
+| 17 | ch2 Proof Verify R1 | 359,878 | 6,975 | 134.4s | 20,309,533 | 305,815 |
+| 18 | ch2 Proof Verdict R1 | 23,001 | 117 | 6.8s | 20,332,534 | 305,932 |
+| 19 | ch2 Stmt Change Check R1 | 529,983 | 9,694 | 195.9s | 20,862,517 | 315,626 |
+| 20 | ch2 Proof Search R2 | 5,435,178 | 47,636 | 1750.2s | 26,297,695 | 363,262 |
+| 21 | ch2 Proof Verify R2 | 244,955 | 6,185 | 123.1s | 26,542,650 | 369,447 |
+| 22 | ch2 Proof Verdict R2 | 22,850 | 117 | 10.2s | 26,565,500 | 369,564 |
+| 23 | ch2 Stmt Change Check R2 | 166,051 | 3,885 | 113.6s | 26,731,551 | 373,449 |
+| 24 | ch2 Proof Search R3 | 1,831,676 | 25,020 | 773.3s | 28,563,227 | 398,469 |
+| 25 | ch2 Proof Verify R3 | 196,047 | 7,085 | 136.6s | 28,759,274 | 405,554 |
+| 26 | ch2 Proof Verdict R3 | 23,317 | 117 | 9.4s | 28,782,591 | 405,671 |
+| 27 | ch3 Stmt FL R1 | 4,697,032 | 31,564 | 627.6s | 33,479,623 | 437,235 |

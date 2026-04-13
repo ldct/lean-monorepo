@@ -13,6 +13,8 @@ import Mathlib.Algebra.MonoidAlgebra.Defs
 import Mathlib.Data.ZMod.Basic
 import Mathlib.RingTheory.Int.Basic
 import Mathlib.RingTheory.Nilpotent.Defs
+import Mathlib.NumberTheory.SumTwoSquares
+import Mathlib.RingTheory.Idempotents
 
 universe u
 
@@ -70,7 +72,10 @@ theorem Ch2_theorem_3 :
       (∀ (a b c : Rˣ), a * b * c = a * (b * c))) ∧
     -- Part 2: If R is commutative, Rˣ is abelian
     (∀ (R : Type*) [CommRing R] (a b : Rˣ), a * b = b * a) := by
-  sorry
+  exact ⟨fun R inst => ⟨fun a => ⟨mul_one a, one_mul a⟩,
+    fun a => ⟨mul_inv_cancel a, inv_mul_cancel a⟩,
+    fun a b c => mul_assoc a b c⟩,
+    fun R _ a b => mul_comm a b⟩
 
 /-Exact quote of the latex code of the definition
 \begin{definition}[Definition 2.3, Group ring]
@@ -96,13 +101,29 @@ For a ring R, if e ∈ R is idempotent (e * e = e), then there exist rings A, B 
 
 Lean formalization of the natural language statement-/
 theorem Ch2_theorem_5 :
-    -- Forward: for an idempotent e, R is isomorphic to a product via a map sending e to (1, 0)
-    (∀ (R : Type*) [Ring R] (e : R), e * e = e →
-      ∃ (A B : Type*) (_ : Ring A) (_ : Ring B) (f : R ≃+* A × B), f e = (1, 0)) ∧
+    -- Forward: for an idempotent e in a commutative ring, R is isomorphic to a product via a map sending e to (1, 0)
+    (∀ (R : Type u) [CommRing R] (e : R), e * e = e →
+      ∃ (A B : Type u) (_ : Ring A) (_ : Ring B) (f : R ≃+* A × B), f e = (1, 0)) ∧
     -- Converse: (1, 0) in A × B is idempotent
-    (∀ (A B : Type*) [Ring A] [Ring B],
+    (∀ (A B : Type u) [Ring A] [Ring B],
       ((1 : A), (0 : B)) * ((1 : A), (0 : B)) = ((1 : A), (0 : B))) := by
-  sorry
+  constructor
+  · intro R _inst e he
+    /- PROOF ATTEMPTS LOG (do not delete — helps next iteration):
+      Attempt 1 (Round 1): Tried CRT with Ideal.quotientInfEquivQuotientProd → requires CommRing,
+        statement originally had [Ring R]. Flagged as unfaithful for non-central idempotents.
+      Attempt 2 (Round 2): Statement has [CommRing R]. Used
+        RingHom.prod_bijective_of_isIdempotentElem with e'=1-e, f'=e to get bijective map
+        R →+* (R ⧸ span{1-e}) × (R ⧸ span{e}), then RingEquiv.ofBijective.
+        Math proof is complete and correct. But providing the existential witnesses fails:
+        ∃ (A B : Type*) introduces A : Type u_2, B : Type u_3 as separate universe
+        parameters, while witnesses R ⧸ ... are in Type u_1. Lean cannot unify u_2 = u_1.
+      Key blocker: Universe mismatch. The existential ∃ (A B : Type*) creates universe
+        parameters independent of R's universe. Fix: change to same universe as R.
+    -/
+    sorry
+  · intro A B _instA _instB
+    simp [Prod.mul_def, mul_one, mul_zero]
 
 /-Exact quote of the latex code of the definition
 \begin{definition}[Definition 2.4, Convolution]
@@ -196,9 +217,9 @@ Natural language statement
 Every Euclidean domain is a principal ideal domain.
 
 Lean formalization of the natural language statement-/
-theorem Ch2_theorem_12 (R : Type*) [CommRing R] [IsDomain R] [EuclideanDomain R] :
+theorem Ch2_theorem_12 (R : Type*) [EuclideanDomain R] :
     IsPrincipalIdealRing R := by
-  sorry
+  exact EuclideanDomain.to_principal_ideal_domain
 
 /-Exact quote of the latex code of the definition
 \begin{definition}[Definition 2.10, Divides]
@@ -247,7 +268,7 @@ In a principal ideal domain, every irreducible element is prime.
 Lean formalization of the natural language statement-/
 lemma Ch2_lemma_16 (R : Type*) [CommRing R] [IsDomain R] [IsPrincipalIdealRing R]
     (a : R) (ha : Irreducible a) : Prime a := by
-  sorry
+  exact Irreducible.prime ha
 
 /-Exact quote of the latex code of the theorem
 \begin{theorem}[Proposition 2.3]
@@ -260,7 +281,7 @@ If R is an integral domain, then every prime element of R is irreducible.
 Lean formalization of the natural language statement-/
 theorem Ch2_theorem_17 (R : Type*) [CommRing R] [IsDomain R]
     (a : R) (ha : Prime a) : Irreducible a := by
-  sorry
+  exact Prime.irreducible ha
 
 /-Exact quote of the latex code of the definition
 \begin{definition}[Definition 2.13, Unique factorization domain]
@@ -285,7 +306,7 @@ If R is a unique factorization domain, then every irreducible element of R is pr
 Lean formalization of the natural language statement-/
 theorem Ch2_theorem_19 (R : Type*) [CommRing R] [IsDomain R] [UniqueFactorizationMonoid R]
     (a : R) (ha : Irreducible a) : Prime a := by
-  sorry
+  exact UniqueFactorizationMonoid.irreducible_iff_prime.mp ha
 
 /-Exact quote of the latex code of the theorem
 \begin{theorem}[Theorem 2.2]
@@ -298,8 +319,10 @@ Every principal ideal domain is a unique factorization domain.
 Lean formalization of the natural language statement-/
 theorem Ch2_theorem_20 (R : Type*) [CommRing R] [IsDomain R] [IsPrincipalIdealRing R] :
     UniqueFactorizationMonoid R := by
-  sorry
+  infer_instance
 
+-- Increased heartbeats for the uniqueness proof (many nlinarith calls)
+set_option maxHeartbeats 800000 in
 /-Exact quote of the latex code of the theorem
 \begin{theorem}[Theorem 2.3, Fermat's two-square theorem]
 Any prime $p \in \mathbb{Z}$ where $p > 0$ and $p \equiv 1 \pmod{4}$ can be uniquely expressed as $a^2 + b^2$ up to sign changes for $a, b$.
@@ -309,12 +332,111 @@ Natural language statement
 Any prime p ∈ ℤ with p > 0 and p ≡ 1 (mod 4) can be uniquely expressed as a² + b² for some integers a, b, up to sign changes.
 
 Lean formalization of the natural language statement-/
+
 theorem Ch2_theorem_21 (p : ℕ) (hp : Nat.Prime p) (hmod : p % 4 = 1) :
     ∃ a b : ℤ, (p : ℤ) = a ^ 2 + b ^ 2 ∧
       ∀ x y : ℤ, (p : ℤ) = x ^ 2 + y ^ 2 →
         (x = a ∨ x = -a) ∧ (y = b ∨ y = -b) ∨
         (x = b ∨ x = -b) ∧ (y = a ∨ y = -a) := by
-  sorry
+  -- Existence from Mathlib's Fermat two-square theorem
+  haveI : Fact (Nat.Prime p) := ⟨hp⟩
+  obtain ⟨a, b, hab⟩ := Nat.Prime.sq_add_sq (by omega : p % 4 ≠ 3)
+  refine ⟨(a : ℤ), (b : ℤ), ?_, ?_⟩
+  · exact_mod_cast hab.symm
+  -- Uniqueness via elementary number theory
+  intro x y hxy
+  have habz : (p : ℤ) = (a : ℤ) ^ 2 + (b : ℤ) ^ 2 := by exact_mod_cast hab.symm
+  have hp_pos : (p : ℤ) > 0 := by exact_mod_cast hp.pos
+  have hp_int : Prime (p : ℤ) := by rwa [← Nat.prime_iff_prime_int]
+  -- Product identity: (ax-by)(ax+by) = p(x²-b²)
+  have hprod : ((a : ℤ) * x - (b : ℤ) * y) * ((a : ℤ) * x + (b : ℤ) * y) =
+      (p : ℤ) * (x ^ 2 - (b : ℤ) ^ 2) := by
+    have lhs : ((a : ℤ) * x - (b : ℤ) * y) * ((a : ℤ) * x + (b : ℤ) * y) =
+        (a : ℤ) ^ 2 * x ^ 2 - (b : ℤ) ^ 2 * y ^ 2 := by ring
+    rw [lhs]
+    have h1 : (a : ℤ) ^ 2 = (p : ℤ) - (b : ℤ) ^ 2 := by linarith
+    have h2 : y ^ 2 = (p : ℤ) - x ^ 2 := by linarith
+    rw [h1, h2]; ring
+  -- p divides the product
+  have hdvd_prod : (p : ℤ) ∣ ((a : ℤ) * x - (b : ℤ) * y) * ((a : ℤ) * x + (b : ℤ) * y) :=
+    ⟨x ^ 2 - (b : ℤ) ^ 2, hprod⟩
+  -- Lagrange identities: (ax∓by)² + (ay±bx)² = (a²+b²)(x²+y²) = p²
+  have hid1 : ((a : ℤ) * x - (b : ℤ) * y) ^ 2 + ((a : ℤ) * y + (b : ℤ) * x) ^ 2 =
+      (p : ℤ) ^ 2 := by
+    have : ((a : ℤ) * x - (b : ℤ) * y) ^ 2 + ((a : ℤ) * y + (b : ℤ) * x) ^ 2 =
+      ((a : ℤ) ^ 2 + (b : ℤ) ^ 2) * (x ^ 2 + y ^ 2) := by ring
+    rw [this, ← habz, ← hxy]; ring
+  have hid2 : ((a : ℤ) * x + (b : ℤ) * y) ^ 2 + ((a : ℤ) * y - (b : ℤ) * x) ^ 2 =
+      (p : ℤ) ^ 2 := by
+    have : ((a : ℤ) * x + (b : ℤ) * y) ^ 2 + ((a : ℤ) * y - (b : ℤ) * x) ^ 2 =
+      ((a : ℤ) ^ 2 + (b : ℤ) ^ 2) * (x ^ 2 + y ^ 2) := by ring
+    rw [this, ← habz, ← hxy]; ring
+  -- Cauchy-Schwarz bounds from the identities
+  have hcs1 : ((a : ℤ) * x - (b : ℤ) * y) ^ 2 ≤ (p : ℤ) ^ 2 := by
+    linarith [sq_nonneg ((a : ℤ) * y + (b : ℤ) * x)]
+  have hcs2 : ((a : ℤ) * x + (b : ℤ) * y) ^ 2 ≤ (p : ℤ) ^ 2 := by
+    linarith [sq_nonneg ((a : ℤ) * y - (b : ℤ) * x)]
+  -- Helper: if p | n and n² ≤ p² then n ∈ {0, p, -p}
+  have bound : ∀ n : ℤ, (p : ℤ) ∣ n → n ^ 2 ≤ (p : ℤ) ^ 2 →
+      n = 0 ∨ n = (p : ℤ) ∨ n = -(p : ℤ) := by
+    intro n hdvd hle
+    obtain ⟨k, hk⟩ := hdvd
+    have hp2 : (0 : ℤ) < (p : ℤ) ^ 2 := by positivity
+    have hpk : n ^ 2 = (p : ℤ) ^ 2 * k ^ 2 := by rw [hk]; ring
+    have h1 : (p : ℤ) ^ 2 * k ^ 2 ≤ (p : ℤ) ^ 2 := by linarith
+    have hkb : k ^ 2 ≤ 1 := by
+      by_contra h; push_neg at h; nlinarith
+    have : k ≤ 1 := by nlinarith
+    have : -1 ≤ k := by nlinarith
+    interval_cases k <;> omega
+  -- Helper: u² = v² implies u = v or u = -v
+  have sq_eq : ∀ u v : ℤ, u ^ 2 = v ^ 2 → u = v ∨ u = -v := by
+    intro u v h
+    have : (u - v) * (u + v) = 0 := by nlinarith
+    rcases mul_eq_zero.mp this with h | h <;> omega
+  -- Helper: from a·u = b·v and p = u²+v², deduce u² = b² and v² = a²
+  have from_eq : ∀ u v : ℤ, (a : ℤ) * u = (b : ℤ) * v → (p : ℤ) = u ^ 2 + v ^ 2 →
+      u ^ 2 = (b : ℤ) ^ 2 ∧ v ^ 2 = (a : ℤ) ^ 2 := by
+    intro u v huv hpuv
+    have h2 : ((a : ℤ) * u) ^ 2 = ((b : ℤ) * v) ^ 2 := by rw [huv]
+    have h3 : (a : ℤ) ^ 2 * u ^ 2 = (b : ℤ) ^ 2 * v ^ 2 := by
+      linarith [mul_pow (a : ℤ) u 2, mul_pow (b : ℤ) v 2]
+    constructor <;> nlinarith
+  -- Main case split: since p is prime and p | (ax-by)(ax+by),
+  -- either p | (ax-by) or p | (ax+by)
+  rcases hp_int.dvd_or_dvd hdvd_prod with hdvd_minus | hdvd_plus
+  · -- Case: p | (ax - by)
+    rcases bound _ hdvd_minus hcs1 with h | h | h
+    · -- Subcase: ax - by = 0, i.e., ax = by
+      have haxby : (a : ℤ) * x = (b : ℤ) * y := by linarith
+      obtain ⟨hxb, hya⟩ := from_eq x y haxby hxy
+      right; exact ⟨sq_eq x (b : ℤ) hxb, sq_eq y (a : ℤ) hya⟩
+    · -- Subcase: ax - by = p, then ay + bx = 0 from Lagrange identity
+      have haybx_zero : (a : ℤ) * y + (b : ℤ) * x = 0 := by
+        nlinarith [sq_nonneg ((a : ℤ) * y + (b : ℤ) * x)]
+      obtain ⟨hyb, hxa⟩ := from_eq y (-x) (by linarith) (by linarith [sq_nonneg x])
+      left; exact ⟨sq_eq x (a : ℤ) (by nlinarith), sq_eq y (b : ℤ) hyb⟩
+    · -- Subcase: ax - by = -p, same conclusion
+      have haybx_zero : (a : ℤ) * y + (b : ℤ) * x = 0 := by
+        nlinarith [sq_nonneg ((a : ℤ) * y + (b : ℤ) * x)]
+      obtain ⟨hyb, hxa⟩ := from_eq y (-x) (by linarith) (by linarith [sq_nonneg x])
+      left; exact ⟨sq_eq x (a : ℤ) (by nlinarith), sq_eq y (b : ℤ) hyb⟩
+  · -- Case: p | (ax + by)
+    rcases bound _ hdvd_plus hcs2 with h | h | h
+    · -- Subcase: ax + by = 0, i.e., ax = b·(-y)
+      have haxby : (a : ℤ) * x = (b : ℤ) * (-y) := by linarith
+      obtain ⟨hxb, hya⟩ := from_eq x (-y) haxby (by linarith [sq_nonneg y])
+      right; exact ⟨sq_eq x (b : ℤ) hxb, sq_eq y (a : ℤ) (by nlinarith)⟩
+    · -- Subcase: ax + by = p, then ay - bx = 0 from Lagrange identity
+      have haybx_zero : (a : ℤ) * y - (b : ℤ) * x = 0 := by
+        nlinarith [sq_nonneg ((a : ℤ) * y - (b : ℤ) * x)]
+      obtain ⟨hyb, hxa⟩ := from_eq y x (by linarith) (by linarith)
+      left; exact ⟨sq_eq x (a : ℤ) hxa, sq_eq y (b : ℤ) hyb⟩
+    · -- Subcase: ax + by = -p, same conclusion
+      have haybx_zero : (a : ℤ) * y - (b : ℤ) * x = 0 := by
+        nlinarith [sq_nonneg ((a : ℤ) * y - (b : ℤ) * x)]
+      obtain ⟨hyb, hxa⟩ := from_eq y x (by linarith) (by linarith)
+      left; exact ⟨sq_eq x (a : ℤ) hxa, sq_eq y (b : ℤ) hyb⟩
 
 /-Exact quote of the latex code of the definition
 \begin{definition}[Definition 2.14, Integral domain]
@@ -376,7 +498,7 @@ An ideal I of a commutative ring R is maximal if and only if R/I is a field.
 Lean formalization of the natural language statement-/
 theorem Ch2_theorem_26 (R : Type*) [CommRing R] (I : Ideal R) :
     I.IsMaximal ↔ IsField (R ⧸ I) := by
-  sorry
+  exact Ideal.Quotient.maximal_ideal_iff_isField_quotient I
 
 /-Exact quote of the latex code of the theorem
 \begin{theorem}[Theorem 2.5]
@@ -389,7 +511,7 @@ An ideal I of a commutative ring R is prime if and only if R/I is an integral do
 Lean formalization of the natural language statement-/
 theorem Ch2_theorem_27 (R : Type*) [CommRing R] (I : Ideal R) :
     I.IsPrime ↔ IsDomain (R ⧸ I) := by
-  sorry
+  exact (Ideal.Quotient.isDomain_iff_prime I).symm
 
 /-Exact quote of the latex code of the theorem
 \begin{theorem}[Theorem 2.6]
@@ -402,7 +524,7 @@ Every maximal ideal is a prime ideal.
 Lean formalization of the natural language statement-/
 theorem Ch2_theorem_28 (R : Type*) [CommRing R] (I : Ideal R) (hI : I.IsMaximal) :
     I.IsPrime := by
-  sorry
+  exact hI.isPrime
 
 /-Exact quote of the latex code of the theorem
 \begin{theorem}[Theorem 2.7]
@@ -415,7 +537,9 @@ In a field, the only maximal ideal is the zero ideal {0}.
 Lean formalization of the natural language statement-/
 theorem Ch2_theorem_29 (F : Type*) [Field F] (I : Ideal F) (hI : I.IsMaximal) :
     I = ⊥ := by
-  sorry
+  rcases Ideal.eq_bot_or_top I with h | h
+  · exact h
+  · exact absurd h hI.ne_top
 
 /-Exact quote of the latex code of the theorem
 \begin{theorem}[Proposition 2.5]
@@ -433,16 +557,31 @@ theorem Ch2_theorem_30 :
       ∃ (norm : R → ℕ), ∀ a b : R, b ≠ 0 →
         ∃ q r : R, a = b * q + r ∧ norm r < norm b) ∧
     -- ED ⊂ PID
-    (∀ (R : Type*) [CommRing R] [IsDomain R] [EuclideanDomain R], IsPrincipalIdealRing R) ∧
+    (∀ (R : Type*) [EuclideanDomain R], IsPrincipalIdealRing R) ∧
     -- PID ⊂ UFD
     (∀ (R : Type*) [CommRing R] [IsDomain R] [IsPrincipalIdealRing R], UniqueFactorizationMonoid R) ∧
     -- UFD ⊂ ID
-    (∀ (R : Type*) [CommRing R] [UniqueFactorizationMonoid R], IsDomain R) ∧
+    (∀ (R : Type*) [CommRing R] [Nontrivial R] [UniqueFactorizationMonoid R], IsDomain R) ∧
     -- ID ⊂ CRings (every integral domain is a commutative ring, captured as:
     -- the CommRing instance is available whenever IsDomain holds, which is
     -- trivially true since IsDomain requires CommRing in its context)
     (∀ (R : Type*) [CommRing R] [IsDomain R], ∃ _ : CommRing R, True) := by
-  sorry
+  refine ⟨?_, ?_, ?_, ?_, ?_⟩
+  · -- Fields ⊂ ED: use norm(x) = 0 for x = 0, 1 for x ≠ 0; q = a/b, r = 0
+    intro R _
+    classical
+    refine ⟨fun x => if x = 0 then 0 else 1, fun a b hb => ⟨b⁻¹ * a, 0, ?_, ?_⟩⟩
+    · rw [add_zero, ← mul_assoc, mul_inv_cancel₀ hb, one_mul]
+    · dsimp only; rw [if_pos rfl, if_neg hb]; exact Nat.zero_lt_one
+  · -- ED ⊂ PID
+    intro R _
+    exact EuclideanDomain.to_principal_ideal_domain
+  · intro R _ _ _; infer_instance
+  · intro R _ _ _
+    haveI : NoZeroDivisors R :=
+      isCancelMulZero_iff_noZeroDivisors.mp inferInstance
+    exact ⟨⟩
+  · intro R inst _; exact ⟨inst, trivial⟩
 
 /-Exact quote of the latex code of the definition
 \begin{definition}[Definition 2.18, Maximal element]
@@ -488,7 +627,10 @@ Lean formalization of the natural language statement-/
 lemma Ch2_lemma_33 (S : Type*) [PartialOrder S] [Nonempty S]
     (h : ∀ (C : Set S), IsChain (· ≤ ·) C → ∃ ub, ∀ c ∈ C, c ≤ ub) :
     ∃ m : S, ∀ s : S, m ≤ s → s = m := by
-  sorry
+  obtain ⟨m, hm⟩ := zorn_le (α := S) (fun c hc => by
+    obtain ⟨ub, hub⟩ := h c hc
+    exact ⟨ub, fun _ ha => hub _ ha⟩)
+  exact ⟨m, fun s hs => (le_antisymm hs (hm hs)).symm⟩
 
 /-Exact quote of the latex code of the lemma
 \begin{lemma}[Lemma 2.3]
@@ -502,7 +644,23 @@ Lean formalization of the natural language statement-/
 lemma Ch2_lemma_34 (R : Type*) [CommRing R]
     (C : Set (Ideal R)) (hC : IsChain (· ≤ ·) C) (hne : C.Nonempty) :
     ∃ I : Ideal R, ∀ x : R, x ∈ I ↔ ∃ J ∈ C, x ∈ J := by
-  sorry
+  refine ⟨{
+    carrier := {x | ∃ J ∈ C, x ∈ J}
+    add_mem' := ?_
+    zero_mem' := ?_
+    smul_mem' := ?_
+  }, fun x => Iff.rfl⟩
+  · intro _ _ ha hb
+    obtain ⟨J₁, hJ₁C, hxJ₁⟩ := ha
+    obtain ⟨J₂, hJ₂C, hyJ₂⟩ := hb
+    rcases hC.total hJ₁C hJ₂C with h | h
+    · exact ⟨J₂, hJ₂C, J₂.add_mem (h hxJ₁) hyJ₂⟩
+    · exact ⟨J₁, hJ₁C, J₁.add_mem hxJ₁ (h hyJ₂)⟩
+  · obtain ⟨J, hJC⟩ := hne
+    exact ⟨J, hJC, J.zero_mem⟩
+  · intro r _ hx
+    obtain ⟨J, hJC, hxJ⟩ := hx
+    exact ⟨J, hJC, J.smul_mem r hxJ⟩
 
 /-Exact quote of the latex code of the theorem
 \begin{theorem}[Theorem 2.8]
@@ -515,7 +673,8 @@ If I is a proper ideal of a ring R, then I is contained in some maximal ideal. I
 Lean formalization of the natural language statement-/
 theorem Ch2_theorem_35 (R : Type*) [CommRing R] (I : Ideal R) (hI : I ≠ ⊤) :
     ∃ M : Ideal R, M.IsMaximal ∧ I ≤ M := by
-  sorry
+  obtain ⟨M, hM, hIM⟩ := I.exists_le_maximal hI
+  exact ⟨M, hM, hIM⟩
 
 /-Exact quote of the latex code of the corollary
 \begin{corollary}[Corollary 2.1]
@@ -528,7 +687,10 @@ The intersection of all prime ideals of a commutative ring R equals the set of a
 Lean formalization of the natural language statement-/
 theorem Ch2_corollary_36 (R : Type*) [CommRing R] :
     (⨅ (P : Ideal R) (_ : P.IsPrime), P) = nilradical R := by
-  sorry
+  ext x
+  simp only [Ideal.mem_iInf]
+  rw [nilradical_eq_sInf]
+  simp only [Ideal.mem_sInf, Set.mem_setOf_eq]
 
 /-Exact quote of the latex code of the definition
 \begin{definition}[Definition 2.20, Quotient ring / Localization]
@@ -552,14 +714,32 @@ Natural language statement
 Let R be a commutative ring and S ⊆ R a multiplicative subset containing 1 with no zero divisors. Then the relation (r₁, s₁) ∼ (r₂, s₂) ↔ r₁s₂ = r₂s₁ is an equivalence relation, and the equivalence classes form the localization R[S⁻¹].
 
 Lean formalization of the natural language statement-/
-theorem Ch2_theorem_38 (R : Type*) [CommRing R] [IsDomain R] (S : Submonoid R)
+theorem Ch2_theorem_38 (R : Type u) [CommRing R] [IsDomain R] (S : Submonoid R)
     (hS : ∀ s : S, (s : R) ≠ 0) :
     -- The relation (r₁,s₁) ∼ (r₂,s₂) ↔ r₁s₂ = r₂s₁ is an equivalence relation
     (let r := fun (p q : R × S) => (p.1 : R) * (q.2 : R) = (q.1 : R) * (p.2 : R)
      Equivalence r) ∧
     -- and the equivalence classes form the localization R[S⁻¹]
-    (∃ (L : Type*) (_ : CommRing L) (_ : Algebra R L), IsLocalization S L) := by
-  sorry
+    (∃ (L : Type u) (_ : CommRing L) (_ : Algebra R L), IsLocalization S L) := by
+  constructor
+  · -- Equivalence relation
+    constructor
+    · intro ⟨_, _⟩; rfl
+    · intro ⟨r₁, s₁⟩ ⟨r₂, s₂⟩ h
+      change r₂ * (s₁ : R) = r₁ * (s₂ : R)
+      change r₁ * (s₂ : R) = r₂ * (s₁ : R) at h
+      exact h.symm
+    · intro ⟨r₁, s₁⟩ ⟨r₂, s₂⟩ ⟨r₃, s₃⟩ h₁₂ h₂₃
+      change r₁ * (s₃ : R) = r₃ * (s₁ : R)
+      change r₁ * (s₂ : R) = r₂ * (s₁ : R) at h₁₂
+      change r₂ * (s₃ : R) = r₃ * (s₂ : R) at h₂₃
+      have hs₂ : (s₂ : R) ≠ 0 := hS s₂
+      have key : (r₁ * ↑s₃ - r₃ * ↑s₁) * ↑s₂ = 0 := by
+        linear_combination ↑s₃ * h₁₂ + ↑s₁ * h₂₃
+      rcases mul_eq_zero.mp key with h | h
+      · exact sub_eq_zero.mp h
+      · exact absurd h hs₂
+  · exact ⟨Localization S, inferInstance, inferInstance, Localization.isLocalization⟩
 
 /-Exact quote of the latex code of the theorem
 \begin{theorem}[Proposition 2.7]
@@ -576,16 +756,31 @@ Let R be a commutative ring and S ⊆ R a multiplicative subset with 1 ∈ S. De
 3. R[S⁻¹] is universal with these properties (captured by IsLocalization).
 
 Lean formalization of the natural language statement-/
-theorem Ch2_theorem_39 (R : Type*) [CommRing R] (S : Submonoid R) :
+theorem Ch2_theorem_39 (R : Type u) [CommRing R] (S : Submonoid R) :
     -- The s₃-relation is an equivalence relation
     (Equivalence (fun (p q : R × S) =>
       ∃ s₃ : S, (s₃ : R) * (q.1 * (p.2 : R) - (q.2 : R) * p.1) = 0)) ∧
     -- The equivalence classes form the localization R[S⁻¹]: there exists a
     -- localization with a homomorphism R → L, all of S invertible, and universality
-    (∃ (L : Type*) (_ : CommRing L) (_ : Algebra R L),
+    (∃ (L : Type u) (_ : CommRing L) (_ : Algebra R L),
       IsLocalization S L ∧
       -- homomorphism R → L exists (via algebraMap)
       (∃ f : R →+* L, ∀ r, f r = algebraMap R L r) ∧
       -- elements of S are invertible in L
       (∀ s : S, IsUnit (algebraMap R L (s : R)))) := by
-  sorry
+  constructor
+  · constructor
+    · intro ⟨r, s⟩
+      exact ⟨⟨1, S.one_mem⟩, by simp [mul_comm, sub_self]⟩
+    · rintro ⟨r₁, s₁⟩ ⟨r₂, s₂⟩ ⟨s₃, hs₃⟩
+      exact ⟨s₃, by linear_combination -hs₃⟩
+    · rintro ⟨r₁, s₁⟩ ⟨r₂, s₂⟩ ⟨r₃, s₃⟩ ⟨t₁, ht₁⟩ ⟨t₂, ht₂⟩
+      refine ⟨⟨t₁ * t₂ * s₂,
+        S.mul_mem (S.mul_mem t₁.2 t₂.2) s₂.2⟩, ?_⟩
+      push_cast
+      linear_combination
+        ↑t₂ * ↑s₃ * ht₁ + ↑t₁ * ↑s₁ * ht₂
+  · exact ⟨Localization S, inferInstance, inferInstance,
+      Localization.isLocalization,
+      ⟨algebraMap R (Localization S), fun _ => rfl⟩,
+      fun s => IsLocalization.map_units (Localization S) s⟩
