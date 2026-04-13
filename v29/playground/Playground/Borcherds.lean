@@ -496,6 +496,19 @@ structure BSubgroup (G : Type*) [BorcherdsGroup G] where
   mul_mem : ∀ x y : G, x ∈ carrier → y ∈ carrier → x * y ∈ carrier
   inv_mem : ∀ x : G, x ∈ carrier → x⁻¹ ∈ carrier
 
+instance {G : Type*} [BorcherdsGroup G] : CoeSort (BSubgroup G) (Type _) where
+  coe H := { x : G // x ∈ H.carrier }
+
+instance {G : Type*} [BorcherdsGroup G] (H : BSubgroup G) : BorcherdsGroup H where
+  mul := fun ⟨a, ha⟩ ⟨b, hb⟩ => ⟨a * b, H.mul_mem a b ha hb⟩
+  one := ⟨1, H.one_mem⟩
+  inv := fun ⟨a, ha⟩ => ⟨a⁻¹, H.inv_mem a ha⟩
+  mul_assoc := fun ⟨a, _⟩ ⟨b, _⟩ ⟨c, _⟩ => Subtype.ext (BorcherdsGroup.mul_assoc a b c)
+  one_mul := fun ⟨a, _⟩ => Subtype.ext (BorcherdsGroup.one_mul a)
+  mul_one := fun ⟨a, _⟩ => Subtype.ext (BorcherdsGroup.mul_one a)
+  inv_mul_cancel := fun ⟨a, _⟩ => Subtype.ext (BorcherdsGroup.inv_mul_cancel a)
+  mul_inv_cancel := fun ⟨a, _⟩ => Subtype.ext (BorcherdsGroup.mul_inv_cancel a)
+
 section GroupActingOnSetByPointwiseMultiplication
 open scoped Pointwise
 
@@ -1168,6 +1181,52 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
           ext <;> simp [CyclicGroup.inv_val, CyclicGroup.one_val] <;> decide
     }
 
+noncomputable def orderFourIso' {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G = 4) :
+    GroupIso G (CyclicGroup 4) ⊕ GroupIso G K4 := by
+  rcases orderFourIso h with hZ4 | hK4
+  · exact Sum.inl hZ4
+  · -- hK4 : GroupIso G Klein4 = GroupIso G (CyclicGroup 2 × CyclicGroup 2)
+    -- Compose with the inverse of the K4 ≃ Klein4 mapping
+    let toK4 : CyclicGroup 2 × CyclicGroup 2 → K4 := fun p => match p with
+      | (⟨0⟩, ⟨0⟩) => .one
+      | (⟨1⟩, ⟨0⟩) => .a
+      | (⟨0⟩, ⟨1⟩) => .b
+      | (⟨1⟩, ⟨1⟩) => .c
+    let fromK4 : K4 → CyclicGroup 2 × CyclicGroup 2 := fun x => match x with
+      | .one => (⟨0⟩, ⟨0⟩)
+      | .a => (⟨1⟩, ⟨0⟩)
+      | .b => (⟨0⟩, ⟨1⟩)
+      | .c => (⟨1⟩, ⟨1⟩)
+    have hleft : ∀ p, fromK4 (toK4 p) = p := by
+      intro ⟨⟨a⟩, ⟨b⟩⟩; fin_cases a <;> fin_cases b <;> rfl
+    have hright : ∀ x, toK4 (fromK4 x) = x := by
+      intro x; cases x <;> rfl
+    have htoK4_mul : ∀ a b, toK4 (a * b) = toK4 a * toK4 b := by
+      intro ⟨⟨a1⟩, ⟨a2⟩⟩ ⟨⟨b1⟩, ⟨b2⟩⟩
+      fin_cases a1 <;> fin_cases a2 <;> fin_cases b1 <;> fin_cases b2 <;> decide
+    have htoK4_one : toK4 1 = 1 := by decide
+    have htoK4_inv : ∀ a, toK4 a⁻¹ = (toK4 a)⁻¹ := by
+      intro ⟨⟨a1⟩, ⟨a2⟩⟩; fin_cases a1 <;> fin_cases a2 <;> decide
+    let ps : CyclicGroup 2 × CyclicGroup 2 ≃ K4 := {
+      toFun := toK4
+      invFun := fromK4
+      left_inv := hleft
+      right_inv := hright
+    }
+    exact Sum.inr {
+      toEquiv := hK4.toEquiv.trans ps
+      map_mul := fun x y => by
+        show toK4 (hK4.toEquiv (x * y)) = toK4 (hK4.toEquiv x) * toK4 (hK4.toEquiv y)
+        rw [hK4.map_mul, htoK4_mul]
+      map_one := by
+        show toK4 (hK4.toEquiv 1) = 1
+        rw [hK4.map_one, htoK4_one]
+      map_inv := fun x => by
+        show toK4 (hK4.toEquiv x⁻¹) = (toK4 (hK4.toEquiv x))⁻¹
+        rw [hK4.map_inv, htoK4_inv]
+    }
+
+
 /- Powers of a group element -/
 
 section Powers
@@ -1479,13 +1538,98 @@ instance {G H} [BorcherdsGroup G] [BorcherdsGroup H] : BorcherdsGroup (G × H) w
 /-
 Example 1.8.a
 -/
-def productIso : GroupIso K4 (CyclicGroup 2 × CyclicGroup 2) := sorry
+def productIso : GroupIso K4 (CyclicGroup 2 × CyclicGroup 2) := {
+  toEquiv := {
+    toFun := fun x => match x with
+      | .one => (⟨0⟩, ⟨0⟩)
+      | .a => (⟨1⟩, ⟨0⟩)
+      | .b => (⟨0⟩, ⟨1⟩)
+      | .c => (⟨1⟩, ⟨1⟩)
+    invFun := fun p => match p with
+      | (⟨0⟩, ⟨0⟩) => .one
+      | (⟨1⟩, ⟨0⟩) => .a
+      | (⟨0⟩, ⟨1⟩) => .b
+      | (⟨1⟩, ⟨1⟩) => .c
+    left_inv := by intro x; cases x <;> decide
+    right_inv := by intro ⟨⟨a⟩, ⟨b⟩⟩; fin_cases a <;> fin_cases b <;> rfl
+  }
+  map_mul := by intro x y; cases x <;> cases y <;> ext <;> simp +decide
+  map_one := rfl
+  map_inv := by intro x; cases x <;> ext <;> simp
+}
 
 /-
 Example 1.9 - omitted
 -/
 
 /-
-Example 1.7
-Criterion for when a group is isomorphic to two of its subgroups
+Proposition 1.7, part 1
+-/
+def leftCopy {G} [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : BSubgroup (H₁ × H₂) where
+  carrier := { p | p.2 = 1 }
+  one_mem := by simp
+  mul_mem := by simp
+  inv_mem := by simp
+
+def rightCopy {G} [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : BSubgroup (H₁ × H₂) where
+  carrier := { p | p.1 = 1 }
+  one_mem := by simp
+  mul_mem := by simp
+  inv_mem := by simp
+
+/-
+Definition: a group is isomorphic to the product of two of its subgroups
+-/
+def IsIsomorphicToProductOfSubgroups (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : Prop :=
+  Nonempty (GroupIso (H₁ × H₂) G)
+
+def s₁ : BSubgroup K4 := {
+  carrier := { .one, .a }
+  one_mem := by decide
+  mul_mem := by decide
+  inv_mem := by decide
+}
+
+def s₂ : BSubgroup K4 := {
+  carrier := { .one, .b }
+  one_mem := by decide
+  mul_mem := by decide
+  inv_mem := by decide
+}
+
+def s₃ : BSubgroup K4 := {
+  carrier := { .one, .c }
+  one_mem := by decide
+  mul_mem := by decide
+  inv_mem := by decide
+}
+
+example : IsIsomorphicToProductOfSubgroups K4 s₁ s₂ := by sorry
+
+def HasTrivialIntersection (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : Prop :=
+  H₁.carrier ∩ H₂.carrier = {1}
+
+def HasUniqueDecomposition (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : Prop :=
+  ∀ g : G, ∃ h₁ ∈ H₁.carrier, ∃ h₂ ∈ H₂.carrier, g = h₁ * h₂
+
+def HasCommutingSubgroups (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : Prop :=
+  ∀ h₁ ∈ H₁.carrier, ∀ h₂ ∈ H₂.carrier, h₁ * h₂ = h₂ * h₁
+
+example : HasTrivialIntersection K4 s₁ s₂ := by
+  simp only [HasTrivialIntersection, s₁, s₂]
+  ext x
+  decide +revert
+
+example : HasUniqueDecomposition K4 s₁ s₂ := by
+  simp only [HasUniqueDecomposition, s₁, s₂]
+  intro g
+  fin_cases g <;> decide -- decide is a bit powerful here, it's closing existential goals of the form `∃ ...`
+
+example : HasCommutingSubgroups K4 s₁ s₂ := by
+  simp only [HasCommutingSubgroups, s₁, s₂]
+  intro h₁ hh₁ h₂ hh₂
+  decide +revert
+
+/-
+1.3 - Quotient Groups
 -/
