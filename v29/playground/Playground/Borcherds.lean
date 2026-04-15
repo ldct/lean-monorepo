@@ -1056,8 +1056,8 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
         rcases helem x with rfl | rfl | rfl | rfl <;>
           rcases helem y with rfl | rfl | rfl | rfl <;>
           simp only [BorcherdsGroup.one_mul, BorcherdsGroup.mul_one,
-            hg_g2, hg_g3, hg2_g, hg2_g2, hg2_g3, hg3_g, hg3_g2, hg3_g3,
-            if_pos rfl, if_neg hg, if_neg hg2, if_neg hg2g,
+            hg_g2, hg_g3, hg2_g2, hg2_g3, hg3_g, hg3_g2, hg3_g3,
+            if_neg hg, if_neg hg2, if_neg hg2g,
             if_neg hg3, if_neg hg3g, if_neg hg3g2] <;>
           ext <;> simp [CyclicGroup.mul_val, CyclicGroup.one_val] <;> decide
       map_one := by simp [Equiv.coe_fn_mk]
@@ -1065,7 +1065,7 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
         simp only [Equiv.coe_fn_mk]
         rcases helem x with rfl | rfl | rfl | rfl <;>
           simp only [BorcherdsGroup.one_inv, hginv, hg2inv, hg3inv,
-            if_pos rfl, if_neg hg, if_neg hg2, if_neg hg3,
+            if_neg hg, if_neg hg2, if_neg hg3,
             if_neg hg2g, if_neg hg3g, if_neg hg3g2] <;>
           ext <;> simp [CyclicGroup.inv_val, CyclicGroup.one_val] <;> decide
     }
@@ -1168,17 +1168,17 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
           rcases helem y with rfl | rfl | rfl | rfl <;>
           simp only [BorcherdsGroup.one_mul, BorcherdsGroup.mul_one,
             hg2, ha2, hag2, hga, ha_ag, hg_ag, hag_a, hag_g,
-            if_pos rfl, if_neg hg, if_neg ha1, if_neg hag,
+            if_neg hg, if_neg ha1, if_neg hag,
             if_neg hag_ne1, if_neg hag_neg, if_neg hag_nea,
-            if_neg (Ne.symm hg), if_neg (Ne.symm ha1), if_neg (Ne.symm hag_ne1)] <;>
+            if_neg (Ne.symm hg), if_neg (Ne.symm ha1)] <;>
           ext <;> simp [CyclicGroup.mul_val, CyclicGroup.one_val] <;> decide
       map_one := by simp [Equiv.coe_fn_mk]
       map_inv x := by
         simp only [Equiv.coe_fn_mk]
         rcases helem x with rfl | rfl | rfl | rfl <;>
           simp only [BorcherdsGroup.one_inv, hginv, hainv, haginv,
-            if_pos rfl, if_neg hg, if_neg ha1, if_neg hag_ne1] <;>
-          ext <;> simp [CyclicGroup.inv_val, CyclicGroup.one_val] <;> decide
+            if_neg hg, if_neg ha1, if_neg hag_ne1] <;>
+          ext <;> simp [CyclicGroup.inv_val, CyclicGroup.one_val]
     }
 
 noncomputable def orderFourIso' {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G = 4) :
@@ -1671,8 +1671,8 @@ private lemma decomp_unique {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
 private lemma mul_mul_comm {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
     (hcommute : HasCommutingSubgroups G H₁ H₂)
     {a₁ b₁ : G} {a₂ b₂ : G}
-    (ha₁ : a₁ ∈ H₁.carrier) (hb₁ : b₁ ∈ H₁.carrier)
-    (ha₂ : a₂ ∈ H₂.carrier) (hb₂ : b₂ ∈ H₂.carrier)
+    (_ha₁ : a₁ ∈ H₁.carrier) (hb₁ : b₁ ∈ H₁.carrier)
+    (ha₂ : a₂ ∈ H₂.carrier) (_hb₂ : b₂ ∈ H₂.carrier)
     : (a₁ * b₁) * (a₂ * b₂) = (a₁ * a₂) * (b₁ * b₂) := by
   -- Need: a₂ * b₁ = b₁ * a₂ (from commutativity, with b₁ ∈ H₁, a₂ ∈ H₂)
   have hc : b₁ * a₂ = a₂ * b₁ := hcommute b₁ hb₁ a₂ ha₂
