@@ -133,37 +133,85 @@ partial def detAux (m : QMat) (n : Nat) (sign : Rat) : Rat :=
 def det (m : QMat) : Rat := detAux m m.rows 1
 
 -- ============================================================
--- LU decomposition (Doolittle, no pivoting)
+-- LU decomposition (Doolittle, with partial row pivoting)
 -- ============================================================
 
+/-- Result of `luDecompose`. `L * U = perm-applied A`, scaled below by
+`exactMinScaling`. `perm[i]` is the original row index of row `i` after
+pivoting; `perm = [0, 1, …, n-1]` when no swaps were needed. `ok` is
+false only when the matrix is singular. -/
 structure LUResult where
   L : QMat
   U : QMat
-  ok : Bool  -- false if pivot was zero (needs permutation)
+  perm : List Nat
+  ok : Bool
 deriving Nonempty
+
+namespace QMat
+
+/-- Swap rows `i` and `j` of a `QMat`. -/
+def swapRows (m : QMat) (i j : Nat) : QMat :=
+  if i == j then m else
+    let ri := m.getRow i
+    let rj := m.getRow j
+    m.zipIdx.map fun ⟨row, idx⟩ =>
+      if idx == i then rj else if idx == j then ri else row
+
+/-- Swap rows `i` and `j` of a `QMat`, but only the first `cols` entries
+of each row. The remainder of each row is left unchanged. Used for
+`L` during pivoting (only the already-computed columns matter). -/
+def swapRowsPartial (m : QMat) (i j cols : Nat) : QMat :=
+  if i == j then m else
+    let ri := m.getRow i
+    let rj := m.getRow j
+    m.zipIdx.map fun ⟨row, idx⟩ =>
+      if idx == i then rj.take cols ++ row.drop cols
+      else if idx == j then ri.take cols ++ row.drop cols
+      else row
+
+end QMat
+
+/-- Swap elements at indices `i` and `j` in a `List Nat`. -/
+def swapIndices (l : List Nat) (i j : Nat) : List Nat :=
+  if i == j then l else
+    let vi := l.getD i 0
+    let vj := l.getD j 0
+    l.zipIdx.map fun ⟨v, idx⟩ =>
+      if idx == i then vj else if idx == j then vi else v
 
 partial def luDecompose (A : QMat) : LUResult :=
   let n := A.rows
   let L := QMat.identity n
   let U := QMat.zeros n n
-  let rec go (k : Nat) (L U : QMat) : LUResult :=
-    if k >= n then { L, U, ok := true }
+  let perm := List.range n
+  let rec go (k : Nat) (Aw L U : QMat) (perm : List Nat) : LUResult :=
+    if k >= n then { L, U, perm, ok := true }
     else
-      -- U[k][j] = A[k][j] - sum_{s<k} L[k][s]*U[s][j]
-      let U' := (List.range n).foldl (fun U j =>
-        let s := (List.range k).foldl (fun acc s => acc + L.get k s * U.get s j) 0
-        U.set k j (A.get k j - s)) U
-      let pivot := U'.get k k
-      if pivot == 0 then { L, U := U', ok := false }
-      else
-        -- L[i][k] = (A[i][k] - sum_{s<k} L[i][s]*U[s][k]) / U[k][k]
-        let L' := (List.range n).foldl (fun L i =>
+      -- candidate pivot for row i ≥ k
+      let candidate := fun i =>
+        Aw.get i k -
+          (List.range k).foldl (fun acc s => acc + L.get i s * U.get s k) 0
+      let pivot? := (List.range n).find? fun i => decide (k ≤ i) && candidate i != 0
+      match pivot? with
+      | none => { L, U, perm, ok := false }
+      | some pi =>
+        let (Aw', L', perm') :=
+          if pi == k then (Aw, L, perm)
+          else
+            (Aw.swapRows k pi, L.swapRowsPartial k pi k, swapIndices perm k pi)
+        -- U[k][j] = Aw'[k][j] - sum_{s<k} L'[k][s]*U[s][j]
+        let U' := (List.range n).foldl (fun U j =>
+          let s := (List.range k).foldl (fun acc s => acc + L'.get k s * U.get s j) 0
+          U.set k j (Aw'.get k j - s)) U
+        let pivotVal := U'.get k k
+        -- L[i][k] = (Aw'[i][k] - sum_{s<k} L'[i][s]*U'[s][k]) / pivot
+        let L'' := (List.range n).foldl (fun L i =>
           if i <= k then L
           else
             let s := (List.range k).foldl (fun acc s => acc + L.get i s * U'.get s k) 0
-            L.set i k ((A.get i k - s) / pivot)) L
-        go (k + 1) L' U'
-  go 0 L U
+            L.set i k ((Aw'.get i k - s) / pivotVal)) L'
+        go (k + 1) Aw' L'' U' perm'
+  go 0 A L U perm
 
 -- ============================================================
 -- Rat utilities
@@ -189,12 +237,16 @@ def rowMinMultiplier (row : List Rat) : Rat :=
 -- Exact minimal scaling
 -- ============================================================
 
+/-- Result of `exactMinScaling`. Satisfies
+`L_int * U_int = n_min · (perm-applied A)` where `(perm-applied A)[i] = A[perm[i]]`.
+When `perm` is the identity, `L_int * U_int = n_min · A`. -/
 structure MinScalingResult where
   n_min : Nat
   L_int : QMat
   U_int : QMat
   L_rat : QMat
   U_rat : QMat
+  perm : List Nat
   a : List Nat
   r : List Rat
   t : List Int
@@ -236,6 +288,7 @@ def exactMinScaling (A : QMat) : Option MinScalingResult := do
     U_int
     L_rat := lu.L
     U_rat := lu.U
+    perm := lu.perm
     a := aList
     r := rList
     t := tList

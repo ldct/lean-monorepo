@@ -55,11 +55,31 @@ private def E₈ : Matrix (Fin 8) (Fin 8) ℤ :=
 
 theorem E₈_det : E₈.det = 1 := by simp only [E₈, intDetSimproc]
 
-/-! ## No-op cases: simproc returns `.continue`.
+/-! ## Pivoting cases — handled by the perm-aware path. -/
 
-For these inputs `intDetSimproc` bails out; the goal is closed by other
-means. Each test would fail-to-close if the simproc incorrectly claimed
-a determinant value. -/
+-- 2×2 with first pivot zero — needs a single row swap.
+private def SwapNeeded2 : Matrix (Fin 2) (Fin 2) ℤ := !![0, 1; 1, 0]
+example : SwapNeeded2.det = -1 := by simp only [SwapNeeded2, intDetSimproc]
+
+-- 3×3 with first pivot zero.
+private def SwapNeeded3 : Matrix (Fin 3) (Fin 3) ℤ :=
+  !![0, 1, 2; 3, 4, 5; 6, 7, 9]
+example : SwapNeeded3.det = -3 := by simp only [SwapNeeded3, intDetSimproc]
+
+-- 8×8 obtained by row-permuting `E₈` (rows reversed).
+private def E₈_perm : Matrix (Fin 8) (Fin 8) ℤ :=
+  !![ 0,  0,  0,  0,  0,  0, -1,  2;
+      0,  0,  0,  0,  0, -1,  2, -1;
+      0,  0,  0,  0, -1,  2, -1,  0;
+      0,  0,  0, -1,  2, -1,  0,  0;
+      0, -1, -1,  2, -1,  0,  0,  0;
+     -1,  0,  2, -1,  0,  0,  0,  0;
+      0,  2,  0, -1,  0,  0,  0,  0;
+      2,  0, -1,  0,  0,  0,  0,  0]
+-- E₈ has det 1; reversing 8 rows is `floor(8/2)=4` swaps, sign = +1.
+theorem E₈_perm_det : E₈_perm.det = 1 := by simp only [E₈_perm, intDetSimproc]
+
+/-! ## No-op cases: simproc returns `.continue`. -/
 
 -- Singular matrix: `exactMinScaling` returns `none` because det = 0.
 private def Sing : Matrix (Fin 2) (Fin 2) ℤ := !![1, 2; 2, 4]
@@ -67,14 +87,9 @@ set_option linter.unusedSimpArgs false in
 example : Sing.det = 0 := by
   simp only [Sing, intDetSimproc, Matrix.det_fin_two_of]; decide
 
--- Matrix whose ℚ-LU needs a permutation (first pivot is zero).
-private def NeedsPerm : Matrix (Fin 2) (Fin 2) ℤ := !![0, 1; 1, 0]
-set_option linter.unusedSimpArgs false in
-example : NeedsPerm.det = -1 := by
-  simp only [NeedsPerm, intDetSimproc, Matrix.det_fin_two_of]; decide
-
 end IntDetSimprocTest
 
--- Confirm the E₈ proof only uses the standard axioms — no `sorryAx`,
--- no `Lean.ofReduceBool`.
+-- Confirm both proofs only use the standard axioms — no `sorryAx`,
+-- no `Lean.ofReduceBool` from any computation.
 #print axioms IntDetSimprocTest.E₈_det
+#print axioms IntDetSimprocTest.E₈_perm_det
