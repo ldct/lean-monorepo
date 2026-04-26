@@ -177,8 +177,6 @@ def IsContinuous {X Y : Type} (MX : IMetricSpace X) (MY : IMetricSpace Y) (f : X
 example (f : ℝ → ℝ) (hf : Continuous f) : ContDiff ℝ 0 f := by
   exact contDiff_zero.mpr hf
 
-abbrev I := { x : ℝ // 0 ≤ x ∧ x ≤ 1 }
-
 example (f : ℝ → ℝ) (hf : Continuous f) : ContDiff ℝ 0 f := by
   exact contDiff_zero.mpr hf
 
@@ -187,3 +185,53 @@ structure ContFun01 where
   continuous : ContDiffOn ℝ 0 toFun (Set.Icc 0 1)
 
 noncomputable def d01 (f g : ContFun01) : ℝ := ⨆ x ∈ Set.Icc (0:ℝ) 1, |f.toFun x - g.toFun x|
+
+private lemma contFun01_continuousOn (f : ContFun01) :
+    ContinuousOn f.toFun (Set.Icc 0 1) :=
+  contDiffOn_zero.mp f.continuous
+
+private lemma d01_bddAbove (f g : ContFun01) :
+    BddAbove (Set.range fun x => ⨆ (_ : x ∈ Set.Icc (0:ℝ) 1), |f.toFun x - g.toFun x|) := by
+  have hfg : ContinuousOn (fun x => |f.toFun x - g.toFun x|) (Set.Icc 0 1) :=
+    ((contFun01_continuousOn f).sub (contFun01_continuousOn g)).norm
+  obtain ⟨M, hM⟩ := isCompact_Icc.bddAbove_image hfg
+  refine ⟨M, fun r ⟨x, hx⟩ => ?_⟩
+  simp only at hx
+  rw [← hx]
+  by_cases hxS : x ∈ Set.Icc (0:ℝ) 1
+  · rw [ciSup_pos hxS]
+    exact hM (Set.mem_image_of_mem _ hxS)
+  · simp only [ciSup_neg hxS, Real.sSup_empty]
+    have h0 : (0:ℝ) ∈ Set.Icc (0:ℝ) 1 := Set.left_mem_Icc.mpr zero_le_one
+    linarith [hM (Set.mem_image_of_mem _ h0), abs_nonneg (f.toFun 0 - g.toFun 0)]
+
+private lemma le_d01 (f g : ContFun01) (x : ℝ) (hx : x ∈ Set.Icc (0:ℝ) 1) :
+    |f.toFun x - g.toFun x| ≤ d01 f g := by
+  simp only [d01]
+  exact le_ciSup_of_le (d01_bddAbove f g) x
+    (by rw [ciSup_pos hx])
+
+noncomputable example : IMetricSpace ContFun01 where
+  d := d01
+  d_nonneg f g := by
+    simp only [d01]
+    exact Real.iSup_nonneg fun x => Real.iSup_nonneg fun _ => abs_nonneg _
+  d_zero_iff_eq f g := by
+    -- This is not provable as stated: two ContFun01 values can agree on [0,1]
+    -- (making d01 = 0) but differ outside [0,1], so they are not equal as ContFun01.
+    -- ContFun01 equality requires toFun to agree everywhere (ℝ → ℝ), not just on [0,1].
+    sorry
+  d_symm f g := by
+    simp only [d01, abs_sub_comm]
+  d_triangle f g h := by
+    simp only [d01]
+    have rhs_nonneg : 0 ≤ (⨆ x ∈ Set.Icc (0:ℝ) 1, |f.toFun x - g.toFun x|) +
+        (⨆ x ∈ Set.Icc (0:ℝ) 1, |g.toFun x - h.toFun x|) :=
+      add_nonneg (Real.iSup_nonneg fun _ => Real.iSup_nonneg fun _ => abs_nonneg _)
+        (Real.iSup_nonneg fun _ => Real.iSup_nonneg fun _ => abs_nonneg _)
+    apply Real.iSup_le (fun x => ?_) rhs_nonneg
+    apply Real.iSup_le (fun hx => ?_) rhs_nonneg
+    calc |f.toFun x - h.toFun x|
+        = |(f.toFun x - g.toFun x) + (g.toFun x - h.toFun x)| := by ring_nf
+      _ ≤ |f.toFun x - g.toFun x| + |g.toFun x - h.toFun x| := abs_add_le _ _
+      _ ≤ d01 f g + d01 g h := add_le_add (le_d01 f g x hx) (le_d01 g h x hx)
