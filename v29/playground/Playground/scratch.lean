@@ -1,12 +1,10 @@
 import Mathlib
 
-#check QuadraticAlgebra
-
 def f : Fin 2 → Fin 2
   | 0 => 0
   | 1 => 1
 
-def g : Fin 24 → Fin 24 :=
+def g : Fin 23 → Fin 23
   | 0 => 0
   | 1 => 1
   | 2 => 2
@@ -30,7 +28,6 @@ def g : Fin 24 → Fin 24 :=
   | 20 => 20
   | 21 => 21
   | 22 => 22
-  | 23 => 23
 
 example (a b : ℕ) : a + b = b + a := by
   rw [add_comm]

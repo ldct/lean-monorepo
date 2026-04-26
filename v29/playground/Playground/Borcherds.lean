@@ -699,6 +699,7 @@ end Lagrange
 @[ext]
 structure CyclicGroup (n : ℕ) where
   val : ZMod n
+deriving DecidableEq
 
 instance (n : ℕ) : Mul (CyclicGroup n) where
   mul a b := ⟨(a.val + b.val)⟩
@@ -1747,12 +1748,66 @@ With this definition, both directions of the recognition theorem hold.
 def IsIsomorphicToProductOfSubgroups' (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : Prop :=
   ∃ (φ : GroupIso (H₁ × H₂) G), ∀ (h₁ : H₁) (h₂ : H₂), φ.toEquiv (h₁, h₂) = h₁.val * h₂.val
 
+example : (K4.a ∈ s₁.carrier) := by simp [s₁]
+
+example : ¬ (K4.a ∈ s₂.carrier) := by simp [s₂]
+
+example : ¬  (K4.b ∈ s₁.carrier) := by simp [s₁]
+
+def K4.s12Equiv : ({ x // x ∈ s₁.carrier } × { x // x ∈ s₂.carrier }) ≃ K4 where
+  toFun := fun p => match p with
+    | (⟨.one, _⟩, ⟨.one, _⟩) => .one
+    | (⟨.a, _⟩, ⟨.one, _⟩) => .a
+    | (⟨.one, _⟩, ⟨.b, _⟩) => .b
+    | (⟨.a, _⟩, ⟨.b, _⟩) => .c
+  invFun := fun x => match x with -- could a *tactic* come up with the inverse?
+    | .one => (⟨.one, by simp [s₁]⟩, ⟨.one, by simp [s₂]⟩)
+    | .a => (⟨.a, by simp [s₁]⟩, ⟨.one, by simp [s₂]⟩)
+    | .b => (⟨.one, by simp [s₁]⟩, ⟨.b, by simp [s₂]⟩)
+    | .c => (⟨.a, by simp [s₁]⟩, ⟨.b, by simp [s₂]⟩)
+
+  -- Would these proofs be easier if the carrier were a `Finset`?
+  -- idea for a tactic, make `fin_cases` work on hypotheses `x ∈ {...}` and `0 ≤ x ≤ 10` and `a | 10`
+  left_inv := by
+    simp only [Function.LeftInverse, Prod.forall, Subtype.forall]
+    intro x hx y hy
+    simp only [s₁, s₂] at hx hy
+    fin_cases x <;> fin_cases y <;> simp at hx hy ⊢
+  right_inv := by
+    simp only [Function.RightInverse, Function.LeftInverse]
+    intro x
+    fin_cases x
+    <;> simp
+
+def K4.s12Iso : GroupIso ({ x // x ∈ s₁.carrier } × { x // x ∈ s₂.carrier }) K4 where
+  toEquiv := s12Equiv
+  map_mul := by
+    rintro ⟨⟨x1, hx1⟩, ⟨x2, hx2⟩⟩ ⟨⟨y1, hy1⟩, ⟨y2, hy2⟩⟩
+    simp only [s₁, s₂] at hx1 hx2 hy1 hy2
+    fin_cases x1 <;> simp at hx1
+    <;> fin_cases x2 <;> simp at hx2
+    <;> fin_cases y1 <;> simp at hy1
+    <;> fin_cases y2 <;> simp at hy2
+    <;> rfl
+  map_one := by
+    simp only [s12Equiv]
+    rfl
+  map_inv := by
+    rintro ⟨⟨x1, hx1⟩, ⟨x2, hx2⟩⟩
+    simp only [s₁, s₂] at hx1 hx2
+    fin_cases x1 <;> simp at hx1
+    <;> fin_cases x2 <;> simp at hx2
+    <;> rfl
+
+example : IsIsomorphicToProductOfSubgroups' K4 s₁ s₂ := by
+  rw [IsIsomorphicToProductOfSubgroups']
+  sorry
+
 theorem recognition_theorem (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G)
     : IsIsomorphicToProductOfSubgroups' G H₁ H₂ ↔
       (HasTrivialIntersection G H₁ H₂ ∧ HasUniqueDecomposition G H₁ H₂ ∧ HasCommutingSubgroups G H₁ H₂) := by
   constructor
-  · -- Forward: strengthened iso → three conditions
-    rintro ⟨φ, hφ⟩
+  · rintro ⟨φ, hφ⟩
     refine ⟨?_, ?_, ?_⟩
     · -- Trivial intersection
       simp only [HasTrivialIntersection]
