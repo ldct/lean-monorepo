@@ -192,31 +192,46 @@ lemma UnitIntervalC.contDiffOn (k : ℕ) (u : UnitIntervalC k) : ContDiffOn ℝ 
 Example 11 - Metric on continuous functions on [0, 1]
 -/
 
-noncomputable def d_sup0 (f g : UnitIntervalC 0) : ℝ :=
+noncomputable def d_sup {k : ℕ} (f g : UnitIntervalC k) : ℝ :=
   ⨆ x : unitInterval, |f.toFun x - g.toFun x|
 
 attribute [fun_prop] ContinuousOn.restrict
 
-private lemma d_sup0_bddAbove (f g : UnitIntervalC 0) :
+private lemma d_sup_bddAbove {k : ℕ} (f g : UnitIntervalC k) :
     BddAbove (Set.range fun x : unitInterval => |f.toFun x - g.toFun x|) := by
   have : CompactSpace unitInterval := isCompact_iff_compactSpace.mp isCompact_Icc
   apply IsCompact.bddAbove
   apply isCompact_range
-  change Continuous (Set.restrict unitInterval (fun x ↦ |f.toFun x - g.toFun x|))
-  fun_prop
+  exact ((f.contDiff.continuousOn.sub g.contDiff.continuousOn).abs).restrict
 
-private lemma le_d_sup0 (f g : UnitIntervalC 0) (x : ↥unitInterval) :
-    |f.toFun ↑x - g.toFun ↑x| ≤ d_sup0 f g :=
-  le_ciSup (d_sup0_bddAbove f g) x
+private lemma le_d_sup {k : ℕ} (f g : UnitIntervalC k) (x : ↥unitInterval) :
+    |f.toFun ↑x - g.toFun ↑x| ≤ d_sup f g :=
+  le_ciSup (d_sup_bddAbove f g) x
+
+lemma d_sup_symm {k : ℕ} (f g : UnitIntervalC k) : d_sup f g = d_sup g f := by
+  simp only [d_sup]
+  simp [abs_sub_comm]
+
+lemma d_sup_nonneg {k : ℕ} (f g : UnitIntervalC k) : 0 ≤ d_sup f g := by
+  simp [d_sup, Real.iSup_nonneg]
+
+lemma d_sup_triangle {k : ℕ} (f g h : UnitIntervalC k) : d_sup f h ≤ d_sup f g + d_sup g h := by
+  simp only [d_sup]
+  apply ciSup_le
+  intro x
+  calc |f.toFun ↑x - h.toFun ↑x|
+      = |(f.toFun ↑x - g.toFun ↑x) + (g.toFun ↑x - h.toFun ↑x)| := by ring_nf
+    _ ≤ |f.toFun ↑x - g.toFun ↑x| + |g.toFun ↑x - h.toFun ↑x| := abs_add_le _ _
+    _ ≤ d_sup f g + d_sup g h := add_le_add (le_d_sup f g x) (le_d_sup g h x)
 
 noncomputable def SupMetric0 : IMetricSpace (UnitIntervalC 0) where -- the sup metric on C^0 functions on [0,1]
-  d := d_sup0
-  d_nonneg f g := by simp [d_sup0, Real.iSup_nonneg]
+  d := d_sup
+  d_nonneg := d_sup_nonneg
   d_zero_iff_eq f g := by
-    simp only [d_sup0]
+    simp only [d_sup]
     constructor
     · intro h
-      have hbdd := d_sup0_bddAbove f g
+      have hbdd := d_sup_bddAbove f g
       ext x
       by_cases hx : x ∈ unitInterval
       · have hle : |f.toFun x - g.toFun x| ≤ 0 :=
@@ -229,16 +244,8 @@ noncomputable def SupMetric0 : IMetricSpace (UnitIntervalC 0) where -- the sup m
     · intro h
       subst h
       simp
-  d_symm f g := by
-    simp only [d_sup0, abs_sub_comm]
-  d_triangle f g h := by
-    simp only [d_sup0]
-    apply ciSup_le
-    intro x
-    calc |f.toFun ↑x - h.toFun ↑x|
-        = |(f.toFun ↑x - g.toFun ↑x) + (g.toFun ↑x - h.toFun ↑x)| := by ring_nf
-      _ ≤ |f.toFun ↑x - g.toFun ↑x| + |g.toFun ↑x - h.toFun ↑x| := abs_add_le _ _
-      _ ≤ d_sup0 f g + d_sup0 g h := add_le_add (le_d_sup0 f g x) (le_d_sup0 g h x)
+  d_symm := d_sup_symm
+  d_triangle := d_sup_triangle
 
 /-
 Example 14
@@ -253,46 +260,6 @@ noncomputable def UnitIntervalC.deriv {k : ℕ} (f : UnitIntervalC (k + 1)) : (U
     intro x hx
     apply derivWithin_zero_of_notMem_closure
     rwa [closure_Icc]
-
-noncomputable def d_sup {k : ℕ} (f g : UnitIntervalC k) : ℝ :=
-  ⨆ x : unitInterval, |f.toFun x - g.toFun x|
-
-
-lemma d_sup_symm {k : ℕ} (f g : UnitIntervalC k) : d_sup f g = d_sup g f := by
-  simp only [d_sup]
-  simp [abs_sub_comm]
-
-lemma d_sup_nonneg {k : ℕ} (f g : UnitIntervalC k) : 0 ≤ d_sup f g := by
-  simp [d_sup, Real.iSup_nonneg]
-
-private lemma d_sup_bddAbove {k : ℕ} (f g : UnitIntervalC k) :
-    BddAbove (Set.range fun x : ℝ => |f.toFun x - g.toFun x|) := by
-  have hc : ContinuousOn (fun x => |f.toFun x - g.toFun x|) unitInterval :=
-    (f.contDiff.continuousOn.sub g.contDiff.continuousOn).abs
-  obtain ⟨M, hM⟩ := (isCompact_Icc.image_of_continuousOn hc).bddAbove
-  refine ⟨max M 0, ?_⟩
-  rintro y ⟨x, rfl⟩
-  simp only
-  by_cases hxI : x ∈ unitInterval
-  · exact le_max_of_le_left (hM ⟨x, hxI, rfl⟩)
-  · rw [f.vanishesOutside x hxI, g.vanishesOutside x hxI, sub_self, abs_zero]
-    exact le_max_right M 0
-
-private lemma d_sup_bddAbove' {k : ℕ} (f g : UnitIntervalC k) :
-    BddAbove (Set.range fun (x : ↥unitInterval) => |f.toFun ↑x - g.toFun ↑x|) := by
-  obtain ⟨M, hM⟩ := d_sup_bddAbove f g
-  exact ⟨M, fun y ⟨⟨a, ha⟩, heq⟩ => hM ⟨a, by simp [heq]⟩⟩
-
-lemma d_sup_triangle {k : ℕ} (f g h : UnitIntervalC k) : d_sup f h ≤ d_sup f g + d_sup g h := by
-  simp only [d_sup]
-  apply ciSup_le
-  intro x
-  calc |f.toFun ↑x - h.toFun ↑x|
-      = |(f.toFun ↑x - g.toFun ↑x) + (g.toFun ↑x - h.toFun ↑x)| := by ring_nf
-    _ ≤ |f.toFun ↑x - g.toFun ↑x| + |g.toFun ↑x - h.toFun ↑x| := abs_add_le _ _
-    _ ≤ (⨆ x : ↥unitInterval, |f.toFun ↑x - g.toFun ↑x|) +
-        (⨆ x : ↥unitInterval, |g.toFun ↑x - h.toFun ↑x|) :=
-      add_le_add (le_ciSup (d_sup_bddAbove' f g) x) (le_ciSup (d_sup_bddAbove' g h) x)
 
 noncomputable def d_sup_add_deriv (f g : UnitIntervalC 1) : ℝ := d_sup f g + d_sup (UnitIntervalC.deriv f) (UnitIntervalC.deriv g)
 
@@ -313,7 +280,7 @@ noncomputable def GraphMetric1 : IMetricSpace (UnitIntervalC 1) where
       · by_contra hne
         unfold d_sup at h_sup
         have h' : 0 < |f.toFun x - g.toFun x| := by grind
-        have hle := le_ciSup (d_sup_bddAbove' f g) ⟨x, hx⟩
+        have hle := le_ciSup (d_sup_bddAbove f g) ⟨x, hx⟩
         rw [h_sup] at hle
         linarith
       · rw [f.vanishesOutside x hx, g.vanishesOutside x hx]
@@ -369,9 +336,42 @@ example : IsContinuous GraphMetric1 SupMetric0 UnitIntervalC.deriv ⊤ := by
   intro h
   dsimp [GraphMetric1, d_sup_add_deriv] at h
   dsimp [SupMetric0]
-  have h1 : 0 ≤ d_sup f g := d_sup_nonneg f g
-  have h2 : d_sup (UnitIntervalC.deriv f) (UnitIntervalC.deriv g) < ε := by linarith
-  change d_sup0 (UnitIntervalC.deriv f) (UnitIntervalC.deriv g) < ε
-  unfold d_sup0
-  unfold d_sup at h2
-  exact h2
+  linarith [d_sup_nonneg f g]
+
+/-
+Example 18 - Geodesic - deliberately omitted
+-/
+
+
+/-
+Example 19 - Trivial metric
+-/
+
+def TrivialMetric {X : Type} [DecidableEq X] : IMetricSpace X where
+  d := fun x y => if x = y then 0 else 1
+  d_nonneg x y := by grind
+  d_zero_iff_eq x y := by grind
+  d_symm x y := by grind
+  d_triangle x y z := by grind
+
+noncomputable def integral01 (f : ℝ → ℝ) : ℝ :=
+  ∫ x in 0..1, |f x|
+
+noncomputable def integral01' (f g : UnitIntervalC 0) : ℝ :=
+  integral01 (fun x => |f.toFun x - g.toFun x|)
+
+lemma integral01'_nonneg (f g : UnitIntervalC 0) : 0 ≤ integral01' f g := by
+  unfold integral01' integral01
+  apply intervalIntegral.integral_nonneg (by norm_num)
+  intro u _
+  positivity
+
+/-
+Example 21 - L1 metric
+-/
+noncomputable def L1Metric : IMetricSpace (UnitIntervalC 0) where
+  d := integral01'
+  d_nonneg := integral01'_nonneg
+  d_zero_iff_eq := sorry
+  d_symm := sorry
+  d_triangle := sorry
