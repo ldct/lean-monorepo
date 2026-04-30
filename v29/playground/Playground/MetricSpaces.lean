@@ -49,8 +49,6 @@ example {n : ℕ} (x y : 𝔼 n) : euclideanDistance x y = euclideanDistance y x
   ext i
   grind
 
-#check MetricSpace
-
 /-
 Definition 3 - Metric space
 -/
@@ -172,66 +170,208 @@ maybe it's better to define continuity at a point
 
 -- The function `f` from a metric space `X` to a metric space `Y` is continuous on `A ⊆ X`
 def IsContinuous {X Y : Type} (MX : IMetricSpace X) (MY : IMetricSpace Y) (f : X → Y) (A : Set X) : Prop :=
-  ∀ x ∈ A, ∀ ε > 0, ∃ δ > 0, ∀ y ∈ A, MX.d x y < δ → MY.d (f x) (f y) < ε
+  ∀ x ∈ A, ∀ y ∈ A, ∀ ε > 0, ∃ δ > 0, MX.d x y < δ → MY.d (f x) (f y) < ε
 
-example (f : ℝ → ℝ) (hf : Continuous f) : ContDiff ℝ 0 f := by
-  exact contDiff_zero.mpr hf
+abbrev I01 := Set.Icc (0:ℝ) 1
 
-example (f : ℝ → ℝ) (hf : Continuous f) : ContDiff ℝ 0 f := by
-  exact contDiff_zero.mpr hf
+/--
+The class of C^k functions on [0, 1], where k is a natural number.
 
-structure ContFun01 where
+We represent this as a function from ℝ to ℝ that is ContDiff(k) on unitInterval, where "ContDiff on" means `ContDiffOn`, and which are zero outside the unit interval.
+-/
+@[ext]
+structure UnitIntervalC (k : ℕ) where
   toFun : ℝ → ℝ
-  continuous : ContDiffOn ℝ 0 toFun (Set.Icc 0 1)
+  contDiff : ContDiffOn ℝ k toFun unitInterval
+  vanishesOutside : ∀ x ∉ unitInterval, toFun x = 0
 
-noncomputable def d01 (f g : ContFun01) : ℝ := ⨆ x ∈ Set.Icc (0:ℝ) 1, |f.toFun x - g.toFun x|
+@[fun_prop]
+lemma UnitIntervalC.contDiffOn (k : ℕ) (u : UnitIntervalC k) : ContDiffOn ℝ k u.toFun unitInterval := u.contDiff
 
-private lemma contFun01_continuousOn (f : ContFun01) :
-    ContinuousOn f.toFun (Set.Icc 0 1) :=
-  contDiffOn_zero.mp f.continuous
+/-
+Example 11 - Metric on continuous functions on [0, 1]
+-/
 
-private lemma d01_bddAbove (f g : ContFun01) :
-    BddAbove (Set.range fun x => ⨆ (_ : x ∈ Set.Icc (0:ℝ) 1), |f.toFun x - g.toFun x|) := by
-  have hfg : ContinuousOn (fun x => |f.toFun x - g.toFun x|) (Set.Icc 0 1) :=
-    ((contFun01_continuousOn f).sub (contFun01_continuousOn g)).norm
-  obtain ⟨M, hM⟩ := isCompact_Icc.bddAbove_image hfg
-  refine ⟨M, fun r ⟨x, hx⟩ => ?_⟩
-  simp only at hx
-  rw [← hx]
-  by_cases hxS : x ∈ Set.Icc (0:ℝ) 1
-  · rw [ciSup_pos hxS]
-    exact hM (Set.mem_image_of_mem _ hxS)
-  · simp only [ciSup_neg hxS, Real.sSup_empty]
-    have h0 : (0:ℝ) ∈ Set.Icc (0:ℝ) 1 := Set.left_mem_Icc.mpr zero_le_one
-    linarith [hM (Set.mem_image_of_mem _ h0), abs_nonneg (f.toFun 0 - g.toFun 0)]
+noncomputable def d_sup0 (f g : UnitIntervalC 0) : ℝ :=
+  ⨆ x : unitInterval, |f.toFun x - g.toFun x|
 
-private lemma le_d01 (f g : ContFun01) (x : ℝ) (hx : x ∈ Set.Icc (0:ℝ) 1) :
-    |f.toFun x - g.toFun x| ≤ d01 f g := by
-  simp only [d01]
-  exact le_ciSup_of_le (d01_bddAbove f g) x
-    (by rw [ciSup_pos hx])
+attribute [fun_prop] ContinuousOn.restrict
 
-noncomputable example : IMetricSpace ContFun01 where
-  d := d01
-  d_nonneg f g := by
-    simp only [d01]
-    exact Real.iSup_nonneg fun x => Real.iSup_nonneg fun _ => abs_nonneg _
+private lemma d_sup0_bddAbove (f g : UnitIntervalC 0) :
+    BddAbove (Set.range fun x : unitInterval => |f.toFun x - g.toFun x|) := by
+  have : CompactSpace unitInterval := isCompact_iff_compactSpace.mp isCompact_Icc
+  apply IsCompact.bddAbove
+  apply isCompact_range
+  change Continuous (Set.restrict unitInterval (fun x ↦ |f.toFun x - g.toFun x|))
+  fun_prop
+
+private lemma le_d_sup0 (f g : UnitIntervalC 0) (x : ↥unitInterval) :
+    |f.toFun ↑x - g.toFun ↑x| ≤ d_sup0 f g :=
+  le_ciSup (d_sup0_bddAbove f g) x
+
+noncomputable def SupMetric0 : IMetricSpace (UnitIntervalC 0) where -- the sup metric on C^0 functions on [0,1]
+  d := d_sup0
+  d_nonneg f g := by simp [d_sup0, Real.iSup_nonneg]
   d_zero_iff_eq f g := by
-    -- This is not provable as stated: two ContFun01 values can agree on [0,1]
-    -- (making d01 = 0) but differ outside [0,1], so they are not equal as ContFun01.
-    -- ContFun01 equality requires toFun to agree everywhere (ℝ → ℝ), not just on [0,1].
-    sorry
+    simp only [d_sup0]
+    constructor
+    · intro h
+      have hbdd := d_sup0_bddAbove f g
+      ext x
+      by_cases hx : x ∈ unitInterval
+      · have hle : |f.toFun x - g.toFun x| ≤ 0 :=
+          calc |f.toFun x - g.toFun x|
+              ≤ ⨆ y : ↥unitInterval, |f.toFun ↑y - g.toFun ↑y| :=
+                le_ciSup hbdd ⟨x, hx⟩
+            _ = 0 := h
+        exact sub_eq_zero.mp (abs_nonpos_iff.mp hle)
+      · rw [f.vanishesOutside x hx, g.vanishesOutside x hx]
+    · intro h
+      subst h
+      simp
   d_symm f g := by
-    simp only [d01, abs_sub_comm]
+    simp only [d_sup0, abs_sub_comm]
   d_triangle f g h := by
-    simp only [d01]
-    have rhs_nonneg : 0 ≤ (⨆ x ∈ Set.Icc (0:ℝ) 1, |f.toFun x - g.toFun x|) +
-        (⨆ x ∈ Set.Icc (0:ℝ) 1, |g.toFun x - h.toFun x|) :=
-      add_nonneg (Real.iSup_nonneg fun _ => Real.iSup_nonneg fun _ => abs_nonneg _)
-        (Real.iSup_nonneg fun _ => Real.iSup_nonneg fun _ => abs_nonneg _)
-    apply Real.iSup_le (fun x => ?_) rhs_nonneg
-    apply Real.iSup_le (fun hx => ?_) rhs_nonneg
-    calc |f.toFun x - h.toFun x|
-        = |(f.toFun x - g.toFun x) + (g.toFun x - h.toFun x)| := by ring_nf
-      _ ≤ |f.toFun x - g.toFun x| + |g.toFun x - h.toFun x| := abs_add_le _ _
-      _ ≤ d01 f g + d01 g h := add_le_add (le_d01 f g x hx) (le_d01 g h x hx)
+    simp only [d_sup0]
+    apply ciSup_le
+    intro x
+    calc |f.toFun ↑x - h.toFun ↑x|
+        = |(f.toFun ↑x - g.toFun ↑x) + (g.toFun ↑x - h.toFun ↑x)| := by ring_nf
+      _ ≤ |f.toFun ↑x - g.toFun ↑x| + |g.toFun ↑x - h.toFun ↑x| := abs_add_le _ _
+      _ ≤ d_sup0 f g + d_sup0 g h := add_le_add (le_d_sup0 f g x) (le_d_sup0 g h x)
+
+/-
+Example 14
+-/
+
+
+
+noncomputable def UnitIntervalC.deriv {k : ℕ} (f : UnitIntervalC (k + 1)) : (UnitIntervalC k) where
+  toFun := fun x => derivWithin f.toFun unitInterval x
+  contDiff := f.contDiff.derivWithin uniqueDiffOn_Icc_zero_one (by norm_cast)
+  vanishesOutside := by
+    intro x hx
+    apply derivWithin_zero_of_notMem_closure
+    rwa [closure_Icc]
+
+noncomputable def d_sup {k : ℕ} (f g : UnitIntervalC k) : ℝ :=
+  ⨆ x : unitInterval, |f.toFun x - g.toFun x|
+
+
+lemma d_sup_symm {k : ℕ} (f g : UnitIntervalC k) : d_sup f g = d_sup g f := by
+  simp only [d_sup]
+  simp [abs_sub_comm]
+
+lemma d_sup_nonneg {k : ℕ} (f g : UnitIntervalC k) : 0 ≤ d_sup f g := by
+  simp [d_sup, Real.iSup_nonneg]
+
+private lemma d_sup_bddAbove {k : ℕ} (f g : UnitIntervalC k) :
+    BddAbove (Set.range fun x : ℝ => |f.toFun x - g.toFun x|) := by
+  have hc : ContinuousOn (fun x => |f.toFun x - g.toFun x|) unitInterval :=
+    (f.contDiff.continuousOn.sub g.contDiff.continuousOn).abs
+  obtain ⟨M, hM⟩ := (isCompact_Icc.image_of_continuousOn hc).bddAbove
+  refine ⟨max M 0, ?_⟩
+  rintro y ⟨x, rfl⟩
+  simp only
+  by_cases hxI : x ∈ unitInterval
+  · exact le_max_of_le_left (hM ⟨x, hxI, rfl⟩)
+  · rw [f.vanishesOutside x hxI, g.vanishesOutside x hxI, sub_self, abs_zero]
+    exact le_max_right M 0
+
+private lemma d_sup_bddAbove' {k : ℕ} (f g : UnitIntervalC k) :
+    BddAbove (Set.range fun (x : ↥unitInterval) => |f.toFun ↑x - g.toFun ↑x|) := by
+  obtain ⟨M, hM⟩ := d_sup_bddAbove f g
+  exact ⟨M, fun y ⟨⟨a, ha⟩, heq⟩ => hM ⟨a, by simp [heq]⟩⟩
+
+lemma d_sup_triangle {k : ℕ} (f g h : UnitIntervalC k) : d_sup f h ≤ d_sup f g + d_sup g h := by
+  simp only [d_sup]
+  apply ciSup_le
+  intro x
+  calc |f.toFun ↑x - h.toFun ↑x|
+      = |(f.toFun ↑x - g.toFun ↑x) + (g.toFun ↑x - h.toFun ↑x)| := by ring_nf
+    _ ≤ |f.toFun ↑x - g.toFun ↑x| + |g.toFun ↑x - h.toFun ↑x| := abs_add_le _ _
+    _ ≤ (⨆ x : ↥unitInterval, |f.toFun ↑x - g.toFun ↑x|) +
+        (⨆ x : ↥unitInterval, |g.toFun ↑x - h.toFun ↑x|) :=
+      add_le_add (le_ciSup (d_sup_bddAbove' f g) x) (le_ciSup (d_sup_bddAbove' g h) x)
+
+noncomputable def d_sup_add_deriv (f g : UnitIntervalC 1) : ℝ := d_sup f g + d_sup (UnitIntervalC.deriv f) (UnitIntervalC.deriv g)
+
+noncomputable def GraphMetric1 : IMetricSpace (UnitIntervalC 1) where
+  d := d_sup_add_deriv
+  d_nonneg f g := by
+    simp [d_sup_add_deriv]
+    linarith [d_sup_nonneg f g, d_sup_nonneg f.deriv g.deriv]
+  d_zero_iff_eq f g := by
+    constructor
+    · intro h
+      simp only [d_sup_add_deriv] at h
+      have h1 : 0 ≤ d_sup f g := by exact d_sup_nonneg f g
+      have h2 : 0 ≤ d_sup (UnitIntervalC.deriv f) (UnitIntervalC.deriv g) := by exact d_sup_nonneg f.deriv g.deriv
+      have h_sup : d_sup f g = 0 := by linarith
+      ext x
+      by_cases hx : x ∈ unitInterval
+      · by_contra hne
+        unfold d_sup at h_sup
+        have h' : 0 < |f.toFun x - g.toFun x| := by grind
+        have hle := le_ciSup (d_sup_bddAbove' f g) ⟨x, hx⟩
+        rw [h_sup] at hle
+        linarith
+      · rw [f.vanishesOutside x hx, g.vanishesOutside x hx]
+    · rintro rfl
+      simp [d_sup_add_deriv, d_sup]
+  d_symm f g := by
+    simp [d_sup_add_deriv, d_sup_symm]
+  d_triangle f g h := by
+    simp [d_sup_add_deriv]
+    have h1 := d_sup_triangle f g h
+    have h2 := d_sup_triangle f.deriv g.deriv h.deriv
+    linarith
+
+/-- x · 𝟙_{[0,1]} as a C¹ function on [0,1] that vanishes outside. -/
+noncomputable def xIndicator : UnitIntervalC 1 where
+  toFun := fun x => x * Set.indicator unitInterval 1 x
+  contDiff := contDiffOn_id.congr fun x hx => by simp [Set.indicator_of_mem hx]
+  vanishesOutside := by
+    intro x hx
+    simp [Set.indicator, hx]
+
+-- Helper: f agrees with 0 outside unitInterval
+private lemma xInd_eq_zero {y : ℝ} (hy : y ∉ unitInterval) :
+    y * Set.indicator unitInterval 1 y = 0 := by
+  simp [Set.indicator_of_notMem hy]
+
+-- Helper: f agrees with id inside unitInterval
+private lemma xInd_eq_id {y : ℝ} (hy : y ∈ unitInterval) :
+    y * Set.indicator unitInterval 1 y = y := by
+  simp [Set.indicator_of_mem hy]
+
+/-- The derivWithin of x · 𝟙_{[0,1]} on [0,1] equals 1 on [0,1]. -/
+theorem xIndicator_deriv :
+    Set.EqOn (UnitIntervalC.deriv xIndicator).toFun (fun _ => 1) unitInterval := by
+  set f := fun x : ℝ => x * Set.indicator unitInterval 1 x with hf_def
+  have hf_id : ∀ y, y ∈ unitInterval → f y = y := fun y hy => xInd_eq_id hy
+  intro x hx
+  simp only [UnitIntervalC.deriv, xIndicator]
+  have huniq : UniqueDiffWithinAt ℝ unitInterval x := by
+    apply UniqueDiffOn.uniqueDiffWithinAt _ hx
+    exact uniqueDiffOn_Icc_zero_one
+  have : derivWithin f unitInterval x = derivWithin id unitInterval x :=
+    derivWithin_congr (fun y hy => hf_id y hy) (hf_id x hx)
+  rw [this, derivWithin_id _ _ huniq]
+
+/-
+Example 16
+-/
+
+example : IsContinuous GraphMetric1 SupMetric0 UnitIntervalC.deriv ⊤ := by
+  intro f _ g _ ε hε
+  use ε, hε
+  intro h
+  dsimp [GraphMetric1, d_sup_add_deriv] at h
+  dsimp [SupMetric0]
+  have h1 : 0 ≤ d_sup f g := d_sup_nonneg f g
+  have h2 : d_sup (UnitIntervalC.deriv f) (UnitIntervalC.deriv g) < ε := by linarith
+  change d_sup0 (UnitIntervalC.deriv f) (UnitIntervalC.deriv g) < ε
+  unfold d_sup0
+  unfold d_sup at h2
+  exact h2
