@@ -374,16 +374,33 @@ lemma integral01'_symm (f g : UnitIntervalC 0) : integral01' f g = integral01' g
   dsimp [integral01', integral01]
   grind [abs_sub_comm]
 
-lemma integral01'_triangle (f g h : UnitIntervalC 0) : integral01' f h ≤ integral01' f g + integral01' g h := by
-  dsimp [integral01', integral01]
-  rw [← intervalIntegral.integral_add
-        ((((f.contDiff.continuousOn.sub g.contDiff.continuousOn).abs).abs).intervalIntegrable_of_Icc (by norm_num))
-        ((((g.contDiff.continuousOn.sub h.contDiff.continuousOn).abs).abs).intervalIntegrable_of_Icc (by norm_num))]
+lemma integral01'_triangle_aux (f g h : UnitIntervalC 0) :
+    ∫ x in (0:ℝ)..1, |(|f.toFun x - h.toFun x|)| ≤
+    ∫ x in (0:ℝ)..1, (|(|f.toFun x - g.toFun x|)| + |(|g.toFun x - h.toFun x|)|) := by
   gcongr with x hx
   · exact (((f.contDiff.continuousOn.sub h.contDiff.continuousOn).abs).abs).intervalIntegrable_of_Icc (by norm_num)
   · exact ((((f.contDiff.continuousOn.sub g.contDiff.continuousOn).abs).abs).intervalIntegrable_of_Icc (by norm_num)).add
           ((((g.contDiff.continuousOn.sub h.contDiff.continuousOn).abs).abs).intervalIntegrable_of_Icc (by norm_num))
   · grind [abs_add_le]
+
+attribute [fun_prop] IntervalIntegrable
+attribute [fun_prop] IntervalIntegrable.abs IntervalIntegrable.sub IntervalIntegrable.add IntervalIntegrable.neg
+attribute [fun_prop] ContinuousOn.intervalIntegrable_of_Icc
+
+lemma intervalIntegrable_abs_abs_sub {f g : ℝ → ℝ}
+    (hf : ContinuousOn f (Set.Icc 0 1)) (hg : ContinuousOn g (Set.Icc 0 1)) :
+    IntervalIntegrable (fun x => |(|f x - g x|)|) MeasureTheory.volume 0 1 := by
+  fun_prop (disch := norm_num)
+
+lemma integral01'_intervalIntegrable (f g : UnitIntervalC 0) :
+    IntervalIntegrable (fun x => |(|f.toFun x - g.toFun x|)|) MeasureTheory.volume 0 1 :=
+  intervalIntegrable_abs_abs_sub f.contDiff.continuousOn g.contDiff.continuousOn
+
+lemma integral01'_triangle (f g h : UnitIntervalC 0) : integral01' f h ≤ integral01' f g + integral01' g h := by
+  dsimp [integral01', integral01]
+  rw [← intervalIntegral.integral_add
+        (integral01'_intervalIntegrable f g) (integral01'_intervalIntegrable g h)]
+  exact integral01'_triangle_aux f g h
 
 /-
 Example 21 - L1 metric
