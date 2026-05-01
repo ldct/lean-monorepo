@@ -360,11 +360,30 @@ noncomputable def integral01 (f : ℝ → ℝ) : ℝ :=
 noncomputable def integral01' (f g : UnitIntervalC 0) : ℝ :=
   integral01 (fun x => |f.toFun x - g.toFun x|)
 
+attribute [gcongr] intervalIntegral.integral_mono_on
+
 lemma integral01'_nonneg (f g : UnitIntervalC 0) : 0 ≤ integral01' f g := by
   unfold integral01' integral01
-  apply intervalIntegral.integral_nonneg (by norm_num)
-  intro u _
-  positivity
+  nth_rw 1 [show (0:ℝ) = ∫ _ in (0:ℝ)..1, (0:ℝ) by simp]
+  gcongr with x hx
+  · exact intervalIntegrable_const
+  · exact (((f.contDiff.continuousOn.sub g.contDiff.continuousOn).abs).abs).intervalIntegrable_of_Icc (by norm_num)
+  · positivity
+
+lemma integral01'_symm (f g : UnitIntervalC 0) : integral01' f g = integral01' g f := by
+  dsimp [integral01', integral01]
+  grind [abs_sub_comm]
+
+lemma integral01'_triangle (f g h : UnitIntervalC 0) : integral01' f h ≤ integral01' f g + integral01' g h := by
+  dsimp [integral01', integral01]
+  rw [← intervalIntegral.integral_add
+        ((((f.contDiff.continuousOn.sub g.contDiff.continuousOn).abs).abs).intervalIntegrable_of_Icc (by norm_num))
+        ((((g.contDiff.continuousOn.sub h.contDiff.continuousOn).abs).abs).intervalIntegrable_of_Icc (by norm_num))]
+  gcongr with x hx
+  · exact (((f.contDiff.continuousOn.sub h.contDiff.continuousOn).abs).abs).intervalIntegrable_of_Icc (by norm_num)
+  · exact ((((f.contDiff.continuousOn.sub g.contDiff.continuousOn).abs).abs).intervalIntegrable_of_Icc (by norm_num)).add
+          ((((g.contDiff.continuousOn.sub h.contDiff.continuousOn).abs).abs).intervalIntegrable_of_Icc (by norm_num))
+  · grind [abs_add_le]
 
 /-
 Example 21 - L1 metric
@@ -373,5 +392,5 @@ noncomputable def L1Metric : IMetricSpace (UnitIntervalC 0) where
   d := integral01'
   d_nonneg := integral01'_nonneg
   d_zero_iff_eq := sorry
-  d_symm := sorry
-  d_triangle := sorry
+  d_symm := integral01'_symm
+  d_triangle := integral01'_triangle
