@@ -1,34 +1,13 @@
 import Mathlib
 
+example (f g : ℝ → ℝ) (h : f = g) : sorry := by
+  have h' := congr(($h 0)^2 + 1)
+  sorry
+
 def f : Fin 2 → Fin 2
   | 0 => 0
   | 1 => 1
 
-def g : Fin 23 → Fin 23
-  | 0 => 0
-  | 1 => 1
-  | 2 => 2
-  | 3 => 3
-  | 4 => 4
-  | 5 => 5
-  | 6 => 6
-  | 7 => 7
-  | 8 => 8
-  | 9 => 9
-  | 10 => 10
-  | 11 => 11
-  | 12 => 12
-  | 13 => 13
-  | 14 => 14
-  | 15 => 15
-  | 16 => 16
-  | 17 => 17
-  | 18 => 18
-  | 19 => 19
-  | 20 => 20
-  | 21 => 21
-  | 22 => 22
-
 example (a b : ℕ) : a + b = b + a := by
   rw [add_comm]
 
@@ -40,3 +19,17 @@ example (a b : ℕ) : a + b = b + a := by
 
 example (a b : ℕ) : a + b = b + a := by
   rw [add_comm]
+
+abbrev O3 := Matrix.specialOrthogonalGroup (Fin 3) ℝ
+
+#synth Group O3
+
+@[push]
+lemma test (a b c : ℕ) : a * (b + c) = a * b + a * c := by grind
+
+@[push]
+lemma test2 (a b c : ℕ) : (a + b) * c = a * c + b * c := by grind
+
+example (a b c d : ℕ) : (a + b) * (c + d) = a * c + a * d + b * c + b * d := by
+  push (_ * _)
+  ac_rfl

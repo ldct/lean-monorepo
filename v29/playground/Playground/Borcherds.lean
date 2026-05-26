@@ -1,22 +1,27 @@
 import Mathlib
 
+
 /-
 https://web.ma.utexas.edu/users/vandyke/notes/250a_notes/main.pdf
 -/
 
 variable {α : Type*}
 
+namespace Borcherds
+
 /-
 Definition 1.2 - Abstract Group
 -/
-class BorcherdsGroup (G : Type*) extends Mul G, One G, Inv G where
+class Group (G : Type*) extends Mul G, One G, Inv G where
   mul_assoc : ∀ a b c : G, (a * b) * c = a * (b * c)
   one_mul : ∀ a : G, 1 * a = a
   mul_one : ∀ a : G, a * 1 = a
   inv_mul_cancel : ∀ a : G, a⁻¹ * a = 1
   mul_inv_cancel : ∀ a : G, a * a⁻¹ = 1
 
-attribute [simp] BorcherdsGroup.one_mul BorcherdsGroup.mul_one BorcherdsGroup.inv_mul_cancel BorcherdsGroup.mul_inv_cancel
+
+attribute [simp] Group.one_mul Group.mul_one Group.inv_mul_cancel Group.mul_inv_cancel
+
 
 /-
 Definition 1.1 - Concrete Group
@@ -96,7 +101,7 @@ noncomputable instance {α : Type*} [Nonempty α] : Inv (Permutation α) where i
     Function.invFun_surjective a.bijective.injective⟩
 }
 
-noncomputable instance {α : Type*} [Nonempty α] : BorcherdsGroup (Permutation α) where
+noncomputable instance {α : Type*} [Nonempty α] : Borcherds.Group (Permutation α) where
   mul_assoc a b c :=
     Permutation.ext (Function.comp_assoc a.toFun b.toFun c.toFun)
   one_mul a :=
@@ -149,7 +154,7 @@ noncomputable instance : Inv LinearTransformation where
       bijective := ⟨(Function.rightInverse_invFun L.bijective.surjective).injective,
         Function.invFun_surjective L.bijective.injective⟩ }
 
-noncomputable instance : BorcherdsGroup LinearTransformation where
+noncomputable instance : Borcherds.Group LinearTransformation where
   mul_assoc _ _ _ := by ext; rfl
   one_mul _ := by ext; rfl
   mul_one _ := by ext; rfl
@@ -159,11 +164,11 @@ noncomputable instance : BorcherdsGroup LinearTransformation where
     ext1; exact Function.RightInverse.comp_eq_id (Function.rightInverse_invFun L.bijective.surjective)
 
 /- Example: symmetries of a group respecting the group structure -/
-structure Automorphism (G : Type*) [BorcherdsGroup G] where
+structure Automorphism (G : Type*) [Borcherds.Group G] where
   toFun : G → G
   bijective : Function.Bijective toFun
 
-instance {G : Type*} [BorcherdsGroup G] : Mul (Automorphism G) where mul a b := {
+instance {G : Type*} [Borcherds.Group G] : Mul (Automorphism G) where mul a b := {
   toFun := a.toFun ∘ b.toFun
   bijective := a.bijective.comp b.bijective
 }
@@ -212,7 +217,7 @@ noncomputable instance : Inv Translation where
     is_translation := ⟨-Classical.choose a.is_translation, rfl⟩
   }
 
-noncomputable instance : BorcherdsGroup Translation where
+noncomputable instance : Borcherds.Group Translation where
   mul_assoc a b c :=
     Translation.ext (Function.comp_assoc a.toFun b.toFun c.toFun)
   one_mul a :=
@@ -238,26 +243,27 @@ instance : Mul Translation where
 In other cases, for e.g. `LinearTransformation` / `RealIsometry`, it's not obvious what data we need. It turns out `LinearTransformation` is 3x3 matrices of nonzero determinant, and `RealIsometry` is 3x3 orthogonal matrices plus a translation vector.
 -/
 
+
 /- Lemmas about the abstract group properties -/
-lemma BorcherdsGroup.left_cancel {G} [BorcherdsGroup G] (a b c : G) (h : a * b = a * c) : b = c := by
+lemma Group.left_cancel {G} [Group G] (a b c : G) (h : a * b = a * c) : b = c := by
   calc
     b = 1 * b := by simp
     _ = (a⁻¹ * a) * b := by simp
-    _ = a⁻¹ * (a * b) := by rw [BorcherdsGroup.mul_assoc]
+    _ = a⁻¹ * (a * b) := by rw [Group.mul_assoc]
     _ = a⁻¹ * (a * c) := by rw [h]
-    _ = (a⁻¹ * a) * c := by rw [BorcherdsGroup.mul_assoc]
+    _ = (a⁻¹ * a) * c := by rw [Group.mul_assoc]
     _ = c := by simp
 
-lemma BorcherdsGroup.right_cancel {G} [BorcherdsGroup G] (a b c : G) (h : b * a = c * a) : b = c := by
+lemma Group.right_cancel {G} [Group G] (a b c : G) (h : b * a = c * a) : b = c := by
   calc
     b = b * 1 := by simp
     _ = b * (a * a⁻¹) := by simp
-    _ = (b * a) * a⁻¹ := by rw [BorcherdsGroup.mul_assoc]
+    _ = (b * a) * a⁻¹ := by rw [Group.mul_assoc]
     _ = (c * a) * a⁻¹ := by rw [h]
-    _ = c * (a * a⁻¹) := by rw [BorcherdsGroup.mul_assoc]
+    _ = c * (a * a⁻¹) := by rw [Group.mul_assoc]
     _ = c := by simp
 
-lemma BorcherdsGroup.mul_eq_one_iff_left {G} [BorcherdsGroup G] (a b : G) : a * b = 1 ↔ a = b⁻¹ := by
+lemma Group.mul_eq_one_iff_left {G} [Group G] (a b : G) : a * b = 1 ↔ a = b⁻¹ := by
   constructor
   · intro h
     rw [show 1 = b⁻¹ * b by simp] at h
@@ -265,7 +271,7 @@ lemma BorcherdsGroup.mul_eq_one_iff_left {G} [BorcherdsGroup G] (a b : G) : a * 
   · rintro rfl
     simp
 
-lemma BorcherdsGroup.mul_eq_one_iff_right {G} [BorcherdsGroup G] (a b : G) : a * b = 1 ↔ b = a⁻¹ := by
+lemma Group.mul_eq_one_iff_right {G} [Group G] (a b : G) : a * b = 1 ↔ b = a⁻¹ := by
   constructor
   · intro h
     rw [show 1 = a * a⁻¹ by simp] at h
@@ -273,41 +279,88 @@ lemma BorcherdsGroup.mul_eq_one_iff_right {G} [BorcherdsGroup G] (a b : G) : a *
   · rintro rfl
     simp
 
-lemma BorcherdsGroup.left_unique_inv' {G} [BorcherdsGroup G] (a b c : G) (ha : b * a = 1) (hb : c * a = 1) : b = c := by
+lemma Group.left_unique_inv' {G} [Group G] (a b c : G) (ha : b * a = 1) (hb : c * a = 1) : b = c := by
   rw [← hb] at ha
-  exact BorcherdsGroup.right_cancel _ _ _ ha
+  exact Group.right_cancel _ _ _ ha
 
-lemma BorcherdsGroup.inv_inv {G} [BorcherdsGroup G] (a : G) : (a⁻¹)⁻¹ = a := by
+lemma Group.inv_inv {G} [Group G] (a : G) : (a⁻¹)⁻¹ = a := by
   calc
     (a⁻¹)⁻¹ = (a⁻¹)⁻¹ * 1 := by simp
     _ = (a⁻¹)⁻¹ * (a⁻¹ * a) := by simp
-    _ = ((a⁻¹)⁻¹ * a⁻¹) * a := by rw [BorcherdsGroup.mul_assoc]
+    _ = ((a⁻¹)⁻¹ * a⁻¹) * a := by rw [Group.mul_assoc]
     _ = 1 * a := by simp
     _ = a := by simp
 
-lemma BorcherdsGroup.mul_inv {G} [BorcherdsGroup G] (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹ := by
+lemma Group.mul_inv {G} [Group G] (a b : G) : (a * b)⁻¹ = b⁻¹ * a⁻¹ := by
   have h : (a * b) * (b⁻¹ * a⁻¹) = 1 := by
     calc (a * b) * (b⁻¹ * a⁻¹)
-        = a * (b * (b⁻¹ * a⁻¹)) := by rw [BorcherdsGroup.mul_assoc]
-      _ = a * ((b * b⁻¹) * a⁻¹) := by rw [← BorcherdsGroup.mul_assoc b _ _]
+        = a * (b * (b⁻¹ * a⁻¹)) := by rw [Group.mul_assoc]
+      _ = a * ((b * b⁻¹) * a⁻¹) := by rw [← Group.mul_assoc b _ _]
       _ = a * a⁻¹ := by simp
       _ = 1 := by simp
   calc (a * b)⁻¹
       = (a * b)⁻¹ * 1 := by simp
     _ = (a * b)⁻¹ * ((a * b) * (b⁻¹ * a⁻¹)) := by rw [← h]
-    _ = ((a * b)⁻¹ * (a * b)) * (b⁻¹ * a⁻¹) := by rw [← BorcherdsGroup.mul_assoc]
+    _ = ((a * b)⁻¹ * (a * b)) * (b⁻¹ * a⁻¹) := by rw [← Group.mul_assoc]
     _ = b⁻¹ * a⁻¹ := by simp
 
 @[simp]
-lemma BorcherdsGroup.one_inv {G} [BorcherdsGroup G] : (1 : G)⁻¹ = 1 := by
-  apply BorcherdsGroup.left_unique_inv' 1 (1⁻¹)
-  · simp only [BorcherdsGroup.inv_mul_cancel]
+lemma Group.one_inv {G} [Group G] : (1 : G)⁻¹ = 1 := by
+  apply Group.left_unique_inv' 1 (1⁻¹)
+  · simp only [Group.inv_mul_cancel]
   · simp
 
-/- Definition 1.8 - Left Actions -/
-class LeftAction (G S : Type*) [BorcherdsGroup G] [SMul G S] where
+
+/- Definition 1.8 - Left Actions
+
+Let G be a group and S be a set. Then a map · : G × S → S is a left action of G on S iff for all s ∈ S and all g, h ∈ G we have:
+- g · (h · s) = (gh) · s
+- 1 · s = s
+-/
+class LeftAction (G S : Type*) [Group G] [SMul G S] where
   smul_smul : ∀ s : S, ∀ g h : G,  g • (h • s) = (g * h) • s
   one_smul : ∀ s : S, (1 : G) • s = s
+
+
+/-
+A right action is a map · : S × G → S which satisfies the analogous properties.
+-/
+
+open scoped RightActions in
+class RightAction (G S : Type*) [Group G] [HSMul Gᵐᵒᵖ S S] where
+  smul_smul : ∀ s : S, ∀ g h : G,  (s <• g) <• h = (s <• (g * h))
+  one_smul : ∀ s : S, s <• (1 : G) = s
+
+
+/-
+Definition 1.9 - G-set
+-/
+
+/-
+Theorem 1.1 - A set is an abstract group iff it is a concrete group. Omitted.
+-/
+
+/-
+Lemma 1.1 - If we have a left action of a group G on a set S, then we automatically have a right action and vice versa.
+In particular, we write s • g = s⁻¹ • g to define a right action in terms of a given left action.
+-/
+
+instance {G S} [Group G] [SMul G S] : HSMul Gᵐᵒᵖ S S where
+  hSMul := fun g s => ((MulOpposite.unop g : G)⁻¹ • s)
+
+open scoped RightActions in
+lemma right_smul_def {G S} [Group G] [SMul G S] (g : G) (s : S) :
+    (s <• g : S) = g⁻¹ • s := rfl
+
+open scoped RightActions in
+example {G S} [Borcherds.Group G] [SMul G S] [LeftAction G S]: RightAction G S where
+  smul_smul s g h := by
+    simp only [right_smul_def]
+    rw [LeftAction.smul_smul, Group.mul_inv]
+  one_smul s := by
+    rw [right_smul_def, Group.one_inv, LeftAction.one_smul]
+
+end Borcherds
 
 /-
 Proposition 1.2 - The four left actions of a group on itself
@@ -315,142 +368,142 @@ Proposition 1.2 - The four left actions of a group on itself
 
 /- The trivial action -/
 @[ext]
-structure TrivialAction (G : Type*) [BorcherdsGroup G] where
+structure TrivialAction (G : Type*) [Borcherds.Group G] where
   val : G
 
-instance {G} [BorcherdsGroup G] : Mul (TrivialAction G) where mul a b := {val := a.val * b.val}
-@[simp] lemma TrivialAction.mul_val {G} [BorcherdsGroup G] (a b : TrivialAction G) : (a * b).val = a.val * b.val := rfl
-instance {G} [BorcherdsGroup G] : One (TrivialAction G) where one := {val := 1}
-@[simp] lemma TrivialAction.one_val {G} [BorcherdsGroup G] : (1 : TrivialAction G).val = 1 := rfl
-instance {G} [BorcherdsGroup G] : Inv (TrivialAction G) where inv a := {val := a.val⁻¹}
-@[simp] lemma TrivialAction.inv_val {G} [BorcherdsGroup G] (a : TrivialAction G) : (a⁻¹).val = a.val⁻¹ := rfl
-instance {G} [BorcherdsGroup G] : BorcherdsGroup (TrivialAction G) where
-  mul_assoc a b c := by ext; simp [BorcherdsGroup.mul_assoc]
+instance {G} [Borcherds.Group G] : Mul (TrivialAction G) where mul a b := {val := a.val * b.val}
+@[simp] lemma TrivialAction.mul_val {G} [Borcherds.Group G] (a b : TrivialAction G) : (a * b).val = a.val * b.val := rfl
+instance {G} [Borcherds.Group G] : One (TrivialAction G) where one := {val := 1}
+@[simp] lemma TrivialAction.one_val {G} [Borcherds.Group G] : (1 : TrivialAction G).val = 1 := rfl
+instance {G} [Borcherds.Group G] : Inv (TrivialAction G) where inv a := {val := a.val⁻¹}
+@[simp] lemma TrivialAction.inv_val {G} [Borcherds.Group G] (a : TrivialAction G) : (a⁻¹).val = a.val⁻¹ := rfl
+instance {G} [Borcherds.Group G] : Borcherds.Group (TrivialAction G) where
+  mul_assoc a b c := by ext; simp [Borcherds.Group.mul_assoc]
   one_mul a := by ext; simp
   mul_one a := by ext; simp
   inv_mul_cancel a := by ext; simp
   mul_inv_cancel a := by ext; simp
 
-instance {G} [BorcherdsGroup G] : SMul (TrivialAction G) G where
+instance {G} [Borcherds.Group G] : SMul (TrivialAction G) G where
   smul _ s := s
 
-@[simp] lemma TrivialAction.smul_val {G} [BorcherdsGroup G] (g : TrivialAction G) (s : G) : (g • s) = s := rfl
+@[simp] lemma TrivialAction.smul_val {G} [Borcherds.Group G] (g : TrivialAction G) (s : G) : (g • s) = s := rfl
 
-instance {G} [BorcherdsGroup G] : LeftAction (TrivialAction G) G where
+instance {G} [Borcherds.Group G] : Borcherds.LeftAction (TrivialAction G) G where
   smul_smul s g h := by simp
   one_smul := by simp
 
 
 /- The left multiplication action -/
 @[ext]
-structure LeftMultiplicationAction (G : Type*) [BorcherdsGroup G] where
+structure LeftMultiplicationAction (G : Type*) [Borcherds.Group G] where
   val : G
 
-instance {G} [BorcherdsGroup G] : Mul (LeftMultiplicationAction G) where mul a b := {val := a.val * b.val}
-@[simp] lemma LeftMultiplicationAction.mul_val {G} [BorcherdsGroup G] (a b : LeftMultiplicationAction G) : (a * b).val = a.val * b.val := rfl
-instance {G} [BorcherdsGroup G] : One (LeftMultiplicationAction G) where one := {val := 1}
-@[simp] lemma LeftMultiplicationAction.one_val {G} [BorcherdsGroup G] : (1 : LeftMultiplicationAction G).val = 1 := rfl
-instance {G} [BorcherdsGroup G] : Inv (LeftMultiplicationAction G) where inv a := {val := a.val⁻¹}
-@[simp] lemma LeftMultiplicationAction.inv_val {G} [BorcherdsGroup G] (a : LeftMultiplicationAction G) : (a⁻¹).val = a.val⁻¹ := rfl
-instance {G} [BorcherdsGroup G] : BorcherdsGroup (LeftMultiplicationAction G) where
-  mul_assoc a b c := by ext; simp [BorcherdsGroup.mul_assoc]
+instance {G} [Borcherds.Group G] : Mul (LeftMultiplicationAction G) where mul a b := {val := a.val * b.val}
+@[simp] lemma LeftMultiplicationAction.mul_val {G} [Borcherds.Group G] (a b : LeftMultiplicationAction G) : (a * b).val = a.val * b.val := rfl
+instance {G} [Borcherds.Group G] : One (LeftMultiplicationAction G) where one := {val := 1}
+@[simp] lemma LeftMultiplicationAction.one_val {G} [Borcherds.Group G] : (1 : LeftMultiplicationAction G).val = 1 := rfl
+instance {G} [Borcherds.Group G] : Inv (LeftMultiplicationAction G) where inv a := {val := a.val⁻¹}
+@[simp] lemma LeftMultiplicationAction.inv_val {G} [Borcherds.Group G] (a : LeftMultiplicationAction G) : (a⁻¹).val = a.val⁻¹ := rfl
+instance {G} [Borcherds.Group G] : Borcherds.Group (LeftMultiplicationAction G) where
+  mul_assoc a b c := by ext; simp [Borcherds.Group.mul_assoc]
   one_mul a := by ext; simp
   mul_one a := by ext; simp
   inv_mul_cancel a := by ext; simp
   mul_inv_cancel a := by ext; simp
 
-instance {G} [BorcherdsGroup G] : SMul (LeftMultiplicationAction G) G where
+instance {G} [Borcherds.Group G] : SMul (LeftMultiplicationAction G) G where
   smul g s := g.val * s
 
-@[simp] lemma LeftMultiplicationAction.smul_val {G} [BorcherdsGroup G] (g : LeftMultiplicationAction G) (s : G) : (g • s) = g.val * s := rfl
+@[simp] lemma LeftMultiplicationAction.smul_val {G} [Borcherds.Group G] (g : LeftMultiplicationAction G) (s : G) : (g • s) = g.val * s := rfl
 
-instance {G} [BorcherdsGroup G] : LeftAction (LeftMultiplicationAction G) G where
+instance {G} [Borcherds.Group G] : Borcherds.LeftAction (LeftMultiplicationAction G) G where
   smul_smul s g h := by
-    simp [BorcherdsGroup.mul_assoc]
+    simp [Borcherds.Group.mul_assoc]
   one_smul := by simp
 
 /- The right inverse multiplication action -/
 @[ext]
-structure RightInverseMultiplicationAction (G : Type*) [BorcherdsGroup G] where
+structure RightInverseMultiplicationAction (G : Type*) [Borcherds.Group G] where
   val : G
 
-instance {G} [BorcherdsGroup G] : Mul (RightInverseMultiplicationAction G) where mul a b := {val := a.val * b.val}
-@[simp] lemma RightInverseMultiplicationAction.mul_val {G} [BorcherdsGroup G] (a b : RightInverseMultiplicationAction G) : (a * b).val = a.val * b.val := rfl
-instance {G} [BorcherdsGroup G] : One (RightInverseMultiplicationAction G) where one := {val := 1}
-@[simp] lemma RightInverseMultiplicationAction.one_val {G} [BorcherdsGroup G] : (1 : RightInverseMultiplicationAction G).val = 1 := rfl
-instance {G} [BorcherdsGroup G] : Inv (RightInverseMultiplicationAction G) where inv a := {val := a.val⁻¹}
-@[simp] lemma RightInverseMultiplicationAction.inv_val {G} [BorcherdsGroup G] (a : RightInverseMultiplicationAction G) : (a⁻¹).val = a.val⁻¹ := rfl
-instance {G} [BorcherdsGroup G] : BorcherdsGroup (RightInverseMultiplicationAction G) where
-  mul_assoc a b c := by ext; simp [BorcherdsGroup.mul_assoc]
+instance {G} [Borcherds.Group G] : Mul (RightInverseMultiplicationAction G) where mul a b := {val := a.val * b.val}
+@[simp] lemma RightInverseMultiplicationAction.mul_val {G} [Borcherds.Group G] (a b : RightInverseMultiplicationAction G) : (a * b).val = a.val * b.val := rfl
+instance {G} [Borcherds.Group G] : One (RightInverseMultiplicationAction G) where one := {val := 1}
+@[simp] lemma RightInverseMultiplicationAction.one_val {G} [Borcherds.Group G] : (1 : RightInverseMultiplicationAction G).val = 1 := rfl
+instance {G} [Borcherds.Group G] : Inv (RightInverseMultiplicationAction G) where inv a := {val := a.val⁻¹}
+@[simp] lemma RightInverseMultiplicationAction.inv_val {G} [Borcherds.Group G] (a : RightInverseMultiplicationAction G) : (a⁻¹).val = a.val⁻¹ := rfl
+instance {G} [Borcherds.Group G] : Borcherds.Group (RightInverseMultiplicationAction G) where
+  mul_assoc a b c := by ext; simp [Borcherds.Group.mul_assoc]
   one_mul a := by ext; simp
   mul_one a := by ext; simp
   inv_mul_cancel a := by ext; simp
   mul_inv_cancel a := by ext; simp
 
-instance {G} [BorcherdsGroup G] : SMul (RightInverseMultiplicationAction G) G where
+instance {G} [Borcherds.Group G] : SMul (RightInverseMultiplicationAction G) G where
   smul g s := s * g.val⁻¹
 
-@[simp] lemma RightInverseMultiplicationAction.smul_val {G} [BorcherdsGroup G] (g : RightInverseMultiplicationAction G) (s : G) : (g • s) = s * g.val⁻¹ := rfl
+@[simp] lemma RightInverseMultiplicationAction.smul_val {G} [Borcherds.Group G] (g : RightInverseMultiplicationAction G) (s : G) : (g • s) = s * g.val⁻¹ := rfl
 
-instance {G} [BorcherdsGroup G] : LeftAction (RightInverseMultiplicationAction G) G where
+instance {G} [Borcherds.Group G] : Borcherds.LeftAction (RightInverseMultiplicationAction G) G where
   smul_smul s g h := by
-    simp [BorcherdsGroup.mul_assoc, BorcherdsGroup.mul_inv]
+    simp [Borcherds.Group.mul_assoc, Borcherds.Group.mul_inv]
   one_smul s := by
     simp
 
 /- The conjugation multiplication action -/
 @[ext]
-structure ConjAction (G : Type*) [BorcherdsGroup G] where
+structure ConjAction (G : Type*) [Borcherds.Group G] where
   val : G
 
-instance {G} [BorcherdsGroup G] : Mul (ConjAction G) where mul a b := {val := a.val * b.val}
-@[simp] lemma ConjAction.mul_val {G} [BorcherdsGroup G] (a b : ConjAction G) : (a * b).val = a.val * b.val := rfl
-instance {G} [BorcherdsGroup G] : One (ConjAction G) where one := {val := 1}
-@[simp] lemma ConjAction.one_val {G} [BorcherdsGroup G] : (1 : ConjAction G).val = 1 := rfl
-instance {G} [BorcherdsGroup G] : Inv (ConjAction G) where inv a := {val := a.val⁻¹}
-@[simp] lemma ConjAction.inv_val {G} [BorcherdsGroup G] (a : ConjAction G) : (a⁻¹).val = a.val⁻¹ := rfl
-instance {G} [BorcherdsGroup G] : BorcherdsGroup (ConjAction G) where
-  mul_assoc a b c := by ext; simp [BorcherdsGroup.mul_assoc]
+instance {G} [Borcherds.Group G] : Mul (ConjAction G) where mul a b := {val := a.val * b.val}
+@[simp] lemma ConjAction.mul_val {G} [Borcherds.Group G] (a b : ConjAction G) : (a * b).val = a.val * b.val := rfl
+instance {G} [Borcherds.Group G] : One (ConjAction G) where one := {val := 1}
+@[simp] lemma ConjAction.one_val {G} [Borcherds.Group G] : (1 : ConjAction G).val = 1 := rfl
+instance {G} [Borcherds.Group G] : Inv (ConjAction G) where inv a := {val := a.val⁻¹}
+@[simp] lemma ConjAction.inv_val {G} [Borcherds.Group G] (a : ConjAction G) : (a⁻¹).val = a.val⁻¹ := rfl
+instance {G} [Borcherds.Group G] : Borcherds.Group (ConjAction G) where
+  mul_assoc a b c := by ext; simp [Borcherds.Group.mul_assoc]
   one_mul a := by ext; simp
   mul_one a := by ext; simp
   inv_mul_cancel a := by ext; simp
   mul_inv_cancel a := by ext; simp
 
-instance {G} [BorcherdsGroup G] : SMul (ConjAction G) G where
+instance {G} [Borcherds.Group G] : SMul (ConjAction G) G where
   smul g s := g.val * s * g.val⁻¹
 
-@[simp] lemma ConjAction.smul_val {G} [BorcherdsGroup G] (g : ConjAction G) (s : G) : (g • s) = g.val * s * g.val⁻¹ := rfl
+@[simp] lemma ConjAction.smul_val {G} [Borcherds.Group G] (g : ConjAction G) (s : G) : (g • s) = g.val * s * g.val⁻¹ := rfl
 
-instance {G} [BorcherdsGroup G] : LeftAction (ConjAction G) G where
+instance {G} [Borcherds.Group G] : Borcherds.LeftAction (ConjAction G) G where
   smul_smul s g h := by
-    simp [BorcherdsGroup.mul_assoc, BorcherdsGroup.mul_inv]
+    simp [Borcherds.Group.mul_assoc, Borcherds.Group.mul_inv]
   one_smul s := by
     simp
 
 /- Definition 1.4 - Group Homomorphisms -/
-structure GroupHom (G H : Type*) [BorcherdsGroup G] [BorcherdsGroup H] where
+structure GroupHom (G H : Type*) [Borcherds.Group G] [Borcherds.Group H] where
   toFun : G → H
   map_mul : ∀ x y : G, toFun (x * y) = toFun x * toFun y
 
 /- Proposition 1.1 - Homomorphism preserves the identity element -/
-lemma GroupHom.map_one {G H} [BorcherdsGroup G] [BorcherdsGroup H] (φ : GroupHom G H) : φ.toFun (1 : G) = 1 := by
+lemma GroupHom.map_one {G H} [Borcherds.Group G] [Borcherds.Group H] (φ : GroupHom G H) : φ.toFun (1 : G) = 1 := by
   have h₁ := calc
     φ.toFun 1 * 1 = φ.toFun (1 * 1) := by simp
     _ = φ.toFun 1 * φ.toFun 1 := φ.map_mul 1 1
-  have := BorcherdsGroup.left_cancel _ _ _ h₁
+  have := Borcherds.Group.left_cancel _ _ _ h₁
   exact this.symm
 
 /- Proposition 1.1 - Homomorphism preserves inverses -/
-lemma GroupHome.map_inv {G H} [BorcherdsGroup G] [BorcherdsGroup H] (φ : GroupHom G H) (x : G) : φ.toFun (x⁻¹) = (φ.toFun x)⁻¹ := by
+lemma GroupHome.map_inv {G H} [Borcherds.Group G] [Borcherds.Group H] (φ : GroupHom G H) (x : G) : φ.toFun (x⁻¹) = (φ.toFun x)⁻¹ := by
   have h₁ := calc
     1 = φ.toFun 1 := by rw [GroupHom.map_one]
     _ = φ.toFun (x * x⁻¹) := by simp
     _ = φ.toFun x * φ.toFun x⁻¹ := φ.map_mul x x⁻¹
-  rw [← BorcherdsGroup.mul_eq_one_iff_right]
+  rw [← Borcherds.Group.mul_eq_one_iff_right]
   exact h₁.symm
 
 /- Definition 1.5 - Group Isomorphisms -/
-structure GroupIso (G H : Type*) [BorcherdsGroup G] [BorcherdsGroup H] where
+structure GroupIso (G H : Type*) [Borcherds.Group G] [Borcherds.Group H] where
   toEquiv : G ≃ H
   map_mul : ∀ x y : G, toEquiv (x * y) = toEquiv x * toEquiv y
   map_one : toEquiv (1 : G) = 1
@@ -464,7 +517,7 @@ instance : One TrivialGroup where one := {val := Unit.unit}
 instance : Mul TrivialGroup where mul _ _ := {val := Unit.unit}
 instance : Inv TrivialGroup where inv _ := {val := Unit.unit}
 
-instance : BorcherdsGroup TrivialGroup where
+instance : Borcherds.Group TrivialGroup where
   mul_assoc a b c := by ext
   one_mul a := by ext
   mul_one a := by ext
@@ -472,7 +525,7 @@ instance : BorcherdsGroup TrivialGroup where
   mul_inv_cancel a := by ext
 
 /- The `Equiv` between any group of order 1 and the trivial group -/
-def trivialEquiv {G} [BorcherdsGroup G] (h : Nat.card G = 1) : G ≃ TrivialGroup where
+def trivialEquiv {G} [Borcherds.Group G] (h : Nat.card G = 1) : G ≃ TrivialGroup where
   toFun _ := ⟨()⟩
   invFun _ := 1
   left_inv x := by
@@ -483,36 +536,36 @@ def trivialEquiv {G} [BorcherdsGroup G] (h : Nat.card G = 1) : G ≃ TrivialGrou
 /- Classification of groups of order 1 -/
 
 /- The isomorphism between any group of order 1 and the trivial group -/
-def trivialIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G = 1) : GroupIso G TrivialGroup where
+def trivialIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card G = 1) : GroupIso G TrivialGroup where
   toEquiv := trivialEquiv h
   map_mul x y := by ext
   map_one := by ext
   map_inv x := by ext
 
 /- Definition 1.3 - Subgroups-/
-structure BSubgroup (G : Type*) [BorcherdsGroup G] where
+structure BSubgroup (G : Type*) [Borcherds.Group G] where
   carrier : Set G
   one_mem : 1 ∈ carrier
   mul_mem : ∀ x y : G, x ∈ carrier → y ∈ carrier → x * y ∈ carrier
   inv_mem : ∀ x : G, x ∈ carrier → x⁻¹ ∈ carrier
 
-instance {G : Type*} [BorcherdsGroup G] : CoeSort (BSubgroup G) (Type _) where
+instance {G : Type*} [Borcherds.Group G] : CoeSort (BSubgroup G) (Type _) where
   coe H := { x : G // x ∈ H.carrier }
 
-instance {G : Type*} [BorcherdsGroup G] (H : BSubgroup G) : BorcherdsGroup H where
+instance {G : Type*} [Borcherds.Group G] (H : BSubgroup G) : Borcherds.Group H where
   mul := fun ⟨a, ha⟩ ⟨b, hb⟩ => ⟨a * b, H.mul_mem a b ha hb⟩
   one := ⟨1, H.one_mem⟩
   inv := fun ⟨a, ha⟩ => ⟨a⁻¹, H.inv_mem a ha⟩
-  mul_assoc := fun ⟨a, _⟩ ⟨b, _⟩ ⟨c, _⟩ => Subtype.ext (BorcherdsGroup.mul_assoc a b c)
-  one_mul := fun ⟨a, _⟩ => Subtype.ext (BorcherdsGroup.one_mul a)
-  mul_one := fun ⟨a, _⟩ => Subtype.ext (BorcherdsGroup.mul_one a)
-  inv_mul_cancel := fun ⟨a, _⟩ => Subtype.ext (BorcherdsGroup.inv_mul_cancel a)
-  mul_inv_cancel := fun ⟨a, _⟩ => Subtype.ext (BorcherdsGroup.mul_inv_cancel a)
+  mul_assoc := fun ⟨a, _⟩ ⟨b, _⟩ ⟨c, _⟩ => Subtype.ext (Borcherds.Group.mul_assoc a b c)
+  one_mul := fun ⟨a, _⟩ => Subtype.ext (Borcherds.Group.one_mul a)
+  mul_one := fun ⟨a, _⟩ => Subtype.ext (Borcherds.Group.mul_one a)
+  inv_mul_cancel := fun ⟨a, _⟩ => Subtype.ext (Borcherds.Group.inv_mul_cancel a)
+  mul_inv_cancel := fun ⟨a, _⟩ => Subtype.ext (Borcherds.Group.mul_inv_cancel a)
 
 section GroupActingOnSetByPointwiseMultiplication
 open scoped Pointwise
 
-def leftMulEquiv {G} [Group G] (g : G) (S : Set G) : (g • S : Set G) ≃ S where
+def leftMulEquiv {G} [_root_.Group G] (g : G) (S : Set G) : (g • S : Set G) ≃ S where
   toFun := fun x => ⟨g⁻¹ * x.1, by
     obtain ⟨s, hs, hgs⟩ := x.2
     simp only [← hgs, smul_eq_mul, ← mul_assoc, inv_mul_cancel, one_mul]
@@ -543,7 +596,7 @@ noncomputable def leftMulEquiv' {G} [Group G] (g : G) (S : Set G) : (g • S : S
 
 end GroupActingOnSetByPointwiseMultiplication
 
-instance SameLeftCoset {G} [BorcherdsGroup G] (H : BSubgroup G) : Setoid G where
+instance SameLeftCoset {G} [Borcherds.Group G] (H : BSubgroup G) : Setoid G where
   r a b := a⁻¹ * b ∈ H.carrier
   iseqv := {
     refl := by
@@ -552,24 +605,24 @@ instance SameLeftCoset {G} [BorcherdsGroup G] (H : BSubgroup G) : Setoid G where
     symm := by
       intro a b h
       have := H.inv_mem _ h
-      rw [BorcherdsGroup.mul_inv] at this
-      rwa [BorcherdsGroup.inv_inv] at this
+      rw [Borcherds.Group.mul_inv] at this
+      rwa [Borcherds.Group.inv_inv] at this
     trans := by
       intro a b c h1 h2
       have := H.mul_mem _ _ h1 h2
-      rw [← BorcherdsGroup.mul_assoc] at this
+      rw [← Borcherds.Group.mul_assoc] at this
       rw [show a⁻¹ * b * b⁻¹ = a⁻¹ * (b * b⁻¹) by apply
-        BorcherdsGroup.mul_assoc] at this
-      simp only [BorcherdsGroup.mul_inv_cancel, BorcherdsGroup.mul_one] at this
+        Borcherds.Group.mul_assoc] at this
+      simp only [Borcherds.Group.mul_inv_cancel, Borcherds.Group.mul_one] at this
       exact this
     }
 
-instance {G} [BorcherdsGroup G] : HasQuotient G (BSubgroup G) where
+instance {G} [Borcherds.Group G] : HasQuotient G (BSubgroup G) where
   Quotient H := Quotient (SameLeftCoset H)
 
 section Lagrange
 
-variable {G : Type*} [BorcherdsGroup G] (H : BSubgroup G) (g : G)
+variable {G : Type*} [Borcherds.Group G] (H : BSubgroup G) (g : G)
 
 #check (⟦g⟧ = ⟦g⟧)
 
@@ -586,8 +639,8 @@ def BSubgroup.leftCosetEquiv (g : G) :
       -- apply H.inv_mem h hh
       have key : (g * h)⁻¹ * g = h⁻¹ := by
         calc (g * h)⁻¹ * g
-            = (h⁻¹ * g⁻¹) * g := by rw [BorcherdsGroup.mul_inv]
-          _ = h⁻¹ * (g⁻¹ * g) := by rw [BorcherdsGroup.mul_assoc]
+            = (h⁻¹ * g⁻¹) * g := by rw [Borcherds.Group.mul_inv]
+          _ = h⁻¹ * (g⁻¹ * g) := by rw [Borcherds.Group.mul_assoc]
           _ = h⁻¹ := by simp
       rw [key]
       exact H.inv_mem h hh)⟩
@@ -595,19 +648,19 @@ def BSubgroup.leftCosetEquiv (g : G) :
     ⟨g⁻¹ * x, by
       have hxrel : x⁻¹ * g ∈ H.carrier := Quotient.exact hx
       have key : g⁻¹ * x = (x⁻¹ * g)⁻¹ := by
-        rw [BorcherdsGroup.mul_inv, BorcherdsGroup.inv_inv]
+        rw [Borcherds.Group.mul_inv, Borcherds.Group.inv_inv]
       rw [key]
       exact H.inv_mem (x⁻¹ * g) hxrel⟩
   left_inv := fun ⟨h, _⟩ => Subtype.ext (by
     calc g⁻¹ * (g * h)
-        = (g⁻¹ * g) * h := by rw [BorcherdsGroup.mul_assoc]
-      _ = 1 * h := by rw [BorcherdsGroup.inv_mul_cancel]
-      _ = h := by rw [BorcherdsGroup.one_mul])
+        = (g⁻¹ * g) * h := by rw [Borcherds.Group.mul_assoc]
+      _ = 1 * h := by rw [Borcherds.Group.inv_mul_cancel]
+      _ = h := by rw [Borcherds.Group.one_mul])
   right_inv := fun ⟨x, _⟩ => Subtype.ext (by
     calc g * (g⁻¹ * x)
-        = (g * g⁻¹) * x := by rw [BorcherdsGroup.mul_assoc]
-      _ = 1 * x := by rw [BorcherdsGroup.mul_inv_cancel]
-      _ = x := by rw [BorcherdsGroup.one_mul])
+        = (g * g⁻¹) * x := by rw [Borcherds.Group.mul_assoc]
+      _ = 1 * x := by rw [Borcherds.Group.mul_inv_cancel]
+      _ = x := by rw [Borcherds.Group.one_mul])
 
 open scoped Pointwise in
 def BSubgroup.leftCosetEquiv' (g : G) :
@@ -621,18 +674,18 @@ def BSubgroup.leftCosetEquiv' (g : G) :
       have : g⁻¹ * x = s := by
         rw [← hgs]
         change g⁻¹ * (g * s) = s
-        rw [← BorcherdsGroup.mul_assoc, BorcherdsGroup.inv_mul_cancel,
-            BorcherdsGroup.one_mul]
+        rw [← Borcherds.Group.mul_assoc, Borcherds.Group.inv_mul_cancel,
+            Borcherds.Group.one_mul]
       rw [this]
       exact hs⟩
   left_inv := fun ⟨h, _⟩ => Subtype.ext (by
     change g⁻¹ * (g * h) = h
-    rw [← BorcherdsGroup.mul_assoc, BorcherdsGroup.inv_mul_cancel,
-        BorcherdsGroup.one_mul])
+    rw [← Borcherds.Group.mul_assoc, Borcherds.Group.inv_mul_cancel,
+        Borcherds.Group.one_mul])
   right_inv := fun ⟨x, _⟩ => Subtype.ext (by
     change g * (g⁻¹ * x) = x
-    rw [← BorcherdsGroup.mul_assoc, BorcherdsGroup.mul_inv_cancel,
-        BorcherdsGroup.one_mul])
+    rw [← Borcherds.Group.mul_assoc, Borcherds.Group.mul_inv_cancel,
+        Borcherds.Group.one_mul])
 
 open scoped Pointwise in
 /-- Being in the same left coset (quotient sense) is equivalent to
@@ -643,12 +696,12 @@ lemma BSubgroup.quotient_eq_iff_mem_smul (g x : G) :
     have hmem : x⁻¹ * g ∈ H.carrier := Quotient.exact hx
     refine ⟨g⁻¹ * x, ?_, ?_⟩
     · have heq : g⁻¹ * x = (x⁻¹ * g)⁻¹ := by
-        rw [BorcherdsGroup.mul_inv, BorcherdsGroup.inv_inv]
+        rw [Borcherds.Group.mul_inv, Borcherds.Group.inv_inv]
       rw [heq]
       exact H.inv_mem _ hmem
     · change g * (g⁻¹ * x) = x
-      rw [← BorcherdsGroup.mul_assoc, BorcherdsGroup.mul_inv_cancel,
-          BorcherdsGroup.one_mul]
+      rw [← Borcherds.Group.mul_assoc, Borcherds.Group.mul_inv_cancel,
+          Borcherds.Group.one_mul]
   mpr := by
     rintro ⟨s, hs, hgs⟩
     have hxeq : x = g * s := hgs.symm
@@ -656,8 +709,8 @@ lemma BSubgroup.quotient_eq_iff_mem_smul (g x : G) :
     change x⁻¹ * g ∈ H.carrier
     rw [hxeq]
     have heq : (g * s)⁻¹ * g = s⁻¹ := by
-      rw [BorcherdsGroup.mul_inv, BorcherdsGroup.mul_assoc,
-          BorcherdsGroup.inv_mul_cancel, BorcherdsGroup.mul_one]
+      rw [Borcherds.Group.mul_inv, Borcherds.Group.mul_assoc,
+          Borcherds.Group.inv_mul_cancel, Borcherds.Group.mul_one]
     rw [heq]
     exact H.inv_mem _ hs
 
@@ -719,7 +772,7 @@ instance (n : ℕ) : Inv (CyclicGroup n) where
 @[simp] lemma CyclicGroup.inv_val {n : ℕ} (a : CyclicGroup n) : (a⁻¹).val = -a.val :=
   rfl
 
-instance (n : ℕ) : BorcherdsGroup (CyclicGroup n) where
+instance (n : ℕ) : Borcherds.Group (CyclicGroup n) where
   mul_assoc a b c := by ext; simp [add_assoc]
   one_mul a := by ext; simp
   mul_one a := by ext; simp
@@ -731,7 +784,7 @@ instance (n : ℕ) : BorcherdsGroup (CyclicGroup n) where
 /- Classification of groups of order 2 -/
 
 /- The isomorphism between any group of order 2 and the cyclic group of order 2 -/
-noncomputable def orderTwoIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G = 2) :
+noncomputable def orderTwoIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card G = 2) :
     GroupIso G (CyclicGroup 2) := by
   classical
   rw [Nat.card_eq_fintype_card] at h
@@ -751,10 +804,10 @@ noncomputable def orderTwoIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G
   have hgg : g * g = 1 := by
     rcases helem (g * g) with h | h
     · exact h
-    · exfalso; exact hg (BorcherdsGroup.left_cancel g g 1 (by simp [h]))
+    · exfalso; exact hg (Borcherds.Group.left_cancel g g 1 (by simp [h]))
   -- g is its own inverse
   have hginv : g⁻¹ = g := by
-    exact ((BorcherdsGroup.mul_eq_one_iff_right g g).mp hgg).symm
+    exact ((Borcherds.Group.mul_eq_one_iff_right g g).mp hgg).symm
   -- Build the isomorphism: 1 ↦ ⟨0⟩, g ↦ ⟨1⟩
   exact {
     toEquiv := {
@@ -769,7 +822,7 @@ noncomputable def orderTwoIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G
       intro x y
       simp only [Equiv.coe_fn_mk]
       rcases helem x with rfl | rfl <;> rcases helem y with rfl | rfl <;>
-        simp only [hg, hgg, BorcherdsGroup.one_mul, BorcherdsGroup.mul_one] <;>
+        simp only [hg, hgg, Borcherds.Group.one_mul, Borcherds.Group.mul_one] <;>
         ext <;> simp [show (1 : ZMod 2) + 1 = 0 from rfl]
     map_one := by simp only [Equiv.coe_fn_mk, if_true]; rfl
     map_inv := by
@@ -781,7 +834,7 @@ noncomputable def orderTwoIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G
 
 /- Classification of groups of order 3 -/
 
-noncomputable def orderThreeIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G = 3) :
+noncomputable def orderThreeIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card G = 3) :
     GroupIso G (CyclicGroup 3) := by
   classical
   have hcard : Fintype.card G = 3 := by rwa [Nat.card_eq_fintype_card] at h
@@ -805,14 +858,14 @@ noncomputable def orderThreeIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card
       inv_mem := fun x hx => by
         simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx ⊢
         rcases hx with rfl | rfl
-        · left; exact BorcherdsGroup.one_inv
-        · right; exact ((BorcherdsGroup.mul_eq_one_iff_right g g).mp hgg).symm
+        · left; exact Borcherds.Group.one_inv
+        · right; exact ((Borcherds.Group.mul_eq_one_iff_right g g).mp hgg).symm
     }
     have hdvd := H.card_carrier_dvd_card
     rw [show H.carrier = ({1, g} : Set G) from rfl, Set.ncard_pair (Ne.symm hg), h] at hdvd
     omega
   -- g² ≠ g (by cancellation that would give g = 1)
-  have hg2g : g * g ≠ g := fun heq => hg (BorcherdsGroup.left_cancel g g 1 (by simp [heq]))
+  have hg2g : g * g ≠ g := fun heq => hg (Borcherds.Group.left_cancel g g 1 (by simp [heq]))
   -- Every element is 1, g, or g²
   have helem : ∀ x : G, x = 1 ∨ x = g ∨ x = g * g := by
     have htriple : ({1, g, g * g} : Finset G).card = Fintype.card G := by
@@ -828,21 +881,21 @@ noncomputable def orderThreeIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card
     rcases helem (g * g * g) with h | h | h
     · exact h
     · -- g³ = g ⟹ g² = 1, contradiction
-      exfalso; exact hg2 (BorcherdsGroup.right_cancel g (g * g) 1 (by simp [h]))
+      exfalso; exact hg2 (Borcherds.Group.right_cancel g (g * g) 1 (by simp [h]))
     · -- g³ = g² ⟹ g = 1, contradiction
-      exfalso; exact hg (BorcherdsGroup.left_cancel (g * g) g 1 (by
+      exfalso; exact hg (Borcherds.Group.left_cancel (g * g) g 1 (by
         rw [h]; simp))
   -- Inverses: g⁻¹ = g², (g²)⁻¹ = g
   have hginv : g⁻¹ = g * g := by
-    have : g * (g * g) = 1 := by rw [← BorcherdsGroup.mul_assoc]; exact hg3
-    exact ((BorcherdsGroup.mul_eq_one_iff_right g (g * g)).mp this).symm
+    have : g * (g * g) = 1 := by rw [← Borcherds.Group.mul_assoc]; exact hg3
+    exact ((Borcherds.Group.mul_eq_one_iff_right g (g * g)).mp this).symm
   have hg2inv : (g * g)⁻¹ = g :=
-    ((BorcherdsGroup.mul_eq_one_iff_right (g * g) g).mp hg3).symm
+    ((Borcherds.Group.mul_eq_one_iff_right (g * g) g).mp hg3).symm
   -- Additional multiplication facts
-  have hg_g2 : g * (g * g) = 1 := by rw [← BorcherdsGroup.mul_assoc]; exact hg3
+  have hg_g2 : g * (g * g) = 1 := by rw [← Borcherds.Group.mul_assoc]; exact hg3
   have hg2_g2 : (g * g) * (g * g) = g := by
     calc (g * g) * (g * g)
-        = ((g * g) * g) * g := by rw [← BorcherdsGroup.mul_assoc]
+        = ((g * g) * g) * g := by rw [← Borcherds.Group.mul_assoc]
       _ = 1 * g := by rw [hg3]
       _ = g := by simp
   -- Build the isomorphism: 1 ↦ ⟨0⟩, g ↦ ⟨1⟩, g² ↦ ⟨2⟩
@@ -856,13 +909,13 @@ noncomputable def orderThreeIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card
     map_mul x y := by
       simp only [Equiv.coe_fn_mk]
       rcases helem x with rfl | rfl | rfl <;> rcases helem y with rfl | rfl | rfl <;>
-        simp only [BorcherdsGroup.one_mul, BorcherdsGroup.mul_one, hg3, hg_g2, hg2_g2, if_neg hg, if_neg hg2, if_neg hg2g] <;>
+        simp only [Borcherds.Group.one_mul, Borcherds.Group.mul_one, hg3, hg_g2, hg2_g2, if_neg hg, if_neg hg2, if_neg hg2g] <;>
         ext <;> simp +decide [CyclicGroup.mul_val, CyclicGroup.one_val]
     map_one := by simp [Equiv.coe_fn_mk]
     map_inv x := by
       simp only [Equiv.coe_fn_mk]
       rcases helem x with rfl | rfl | rfl <;>
-        simp only [BorcherdsGroup.one_inv, hginv, hg2inv,
+        simp only [Borcherds.Group.one_inv, hginv, hg2inv,
           if_neg hg, if_neg hg2, if_neg hg2g] <;>
         ext <;> simp +decide [CyclicGroup.one_val]
   }
@@ -881,8 +934,8 @@ instance : One Klein4 where
 instance : Inv Klein4 where
   inv a := (a.1⁻¹, a.2⁻¹)
 
-instance : BorcherdsGroup Klein4 where
-  mul_assoc a b c := by ext <;> simp [BorcherdsGroup.mul_assoc]
+instance : Borcherds.Group Klein4 where
+  mul_assoc a b c := by ext <;> simp [Borcherds.Group.mul_assoc]
   one_mul a := by ext <;> simp
   mul_one a := by ext <;> simp
   inv_mul_cancel a := by ext <;> simp
@@ -921,7 +974,7 @@ instance : Inv K4 where
     | .b => .b
     | .c => .c
 
-instance : BorcherdsGroup K4 where
+instance : Borcherds.Group K4 where
   mul_assoc := by decide +revert
   one_mul := by decide +revert
   mul_one := by decide +revert
@@ -930,7 +983,7 @@ instance : BorcherdsGroup K4 where
 
 /-- Every group of order 4 is isomorphic to Z/4 or to Z/2 × Z/2.
     The distinguishing invariant: does there exist an element of order > 2? -/
-noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G = 4) :
+noncomputable def orderFourIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card G = 4) :
     GroupIso G (CyclicGroup 4) ⊕ GroupIso G Klein4 := by
   classical
   have hcard : Fintype.card G = 4 := by rwa [Nat.card_eq_fintype_card] at h
@@ -943,7 +996,7 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
     let g : G := Classical.choose h4
     have hg : g ≠ 1 := (Classical.choose_spec h4).1
     have hg2 : g * g ≠ 1 := (Classical.choose_spec h4).2
-    have hg2g : g * g ≠ g := fun heq => hg (BorcherdsGroup.left_cancel g g 1 (by simp [heq]))
+    have hg2g : g * g ≠ g := fun heq => hg (Borcherds.Group.left_cancel g g 1 (by simp [heq]))
     -- g³ ≠ 1 (by Lagrange: {1, g, g²} would be subgroup of order 3, but 3 ∤ 4)
     have hg3 : g * g * g ≠ 1 := by
       intro hggg
@@ -954,24 +1007,24 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
           simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx hy ⊢
           rcases hx with rfl | rfl | rfl <;> rcases hy with rfl | rfl | rfl <;>
             simp -failIfUnchanged
-          · left; rw [← BorcherdsGroup.mul_assoc]; exact hggg  -- g*(g²) = g³ = 1
+          · left; rw [← Borcherds.Group.mul_assoc]; exact hggg  -- g*(g²) = g³ = 1
           · left; exact hggg  -- g²*g = g³ = 1
           · -- g²*g² = g⁴ = g³*g = 1*g = g
             right; left
             calc (g * g) * (g * g)
-                = ((g * g) * g) * g := by rw [← BorcherdsGroup.mul_assoc]
+                = ((g * g) * g) * g := by rw [← Borcherds.Group.mul_assoc]
               _ = 1 * g := by rw [hggg]
               _ = g := by simp
         inv_mem := fun x hx => by
           simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx ⊢
           rcases hx with rfl | rfl | rfl
-          · left; exact BorcherdsGroup.one_inv
+          · left; exact Borcherds.Group.one_inv
           · -- g⁻¹ = g² (since g²*g = g³ = 1)
             right; right
-            exact ((BorcherdsGroup.mul_eq_one_iff_left (g * g) g).mp hggg).symm
+            exact ((Borcherds.Group.mul_eq_one_iff_left (g * g) g).mp hggg).symm
           · -- (g²)⁻¹ = g (since g²*g = g³ = 1)
             right; left
-            exact ((BorcherdsGroup.mul_eq_one_iff_right (g * g) g).mp hggg).symm
+            exact ((Borcherds.Group.mul_eq_one_iff_right (g * g) g).mp hggg).symm
       }
       have hdvd := H.card_carrier_dvd_card
       rw [show H.carrier = ({1, g, g * g} : Set G) from rfl] at hdvd
@@ -984,9 +1037,9 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
       omega
     -- g³ ≠ g, g³ ≠ g²
     have hg3g : g * g * g ≠ g := fun heq =>
-      hg2 (BorcherdsGroup.right_cancel g (g * g) 1 (by simp [heq]))
+      hg2 (Borcherds.Group.right_cancel g (g * g) 1 (by simp [heq]))
     have hg3g2 : g * g * g ≠ g * g := fun heq =>
-      hg (BorcherdsGroup.left_cancel (g * g) g 1 (by rw [heq]; simp))
+      hg (Borcherds.Group.left_cancel (g * g) g 1 (by rw [heq]; simp))
     -- Every element is 1, g, g², or g³
     have helem : ∀ x : G, x = 1 ∨ x = g ∨ x = g * g ∨ x = g * g * g := by
       have hquad : ({1, g, g * g, g * g * g} : Finset G).card = Fintype.card G := by
@@ -1002,43 +1055,43 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
     have hg4 : g * g * g * g = 1 := by
       rcases helem (g * g * g * g) with h | h | h | h
       · exact h
-      · exfalso; exact hg3 (BorcherdsGroup.right_cancel g (g * g * g) 1 (by simp [h]))
-      · exfalso; exact hg2 (BorcherdsGroup.left_cancel (g * g) (g * g) 1 (by
-          rw [BorcherdsGroup.mul_assoc (g * g) g g] at h; simp [h]))
-      · exfalso; exact hg (BorcherdsGroup.left_cancel (g * g * g) g 1 (by simp [h]))
+      · exfalso; exact hg3 (Borcherds.Group.right_cancel g (g * g * g) 1 (by simp [h]))
+      · exfalso; exact hg2 (Borcherds.Group.left_cancel (g * g) (g * g) 1 (by
+          rw [Borcherds.Group.mul_assoc (g * g) g g] at h; simp [h]))
+      · exfalso; exact hg (Borcherds.Group.left_cancel (g * g * g) g 1 (by simp [h]))
     -- Inverses
     have hginv : g⁻¹ = g * g * g := by
       have : g * (g * g * g) = 1 := by
-        rw [← BorcherdsGroup.mul_assoc g (g * g) g, ← BorcherdsGroup.mul_assoc g g g]
+        rw [← Borcherds.Group.mul_assoc g (g * g) g, ← Borcherds.Group.mul_assoc g g g]
         exact hg4
-      exact ((BorcherdsGroup.mul_eq_one_iff_right g (g * g * g)).mp this).symm
+      exact ((Borcherds.Group.mul_eq_one_iff_right g (g * g * g)).mp this).symm
     have hg2inv : (g * g)⁻¹ = g * g := by
       -- (g²)⁻¹ = g² since g⁴ = 1 means (g²)² = 1
       have h : (g * g) * (g * g) = 1 := by
-        rw [← BorcherdsGroup.mul_assoc (g * g) g g]; exact hg4
-      exact ((BorcherdsGroup.mul_eq_one_iff_right (g * g) (g * g)).mp h).symm
+        rw [← Borcherds.Group.mul_assoc (g * g) g g]; exact hg4
+      exact ((Borcherds.Group.mul_eq_one_iff_right (g * g) (g * g)).mp h).symm
     have hg3inv : (g * g * g)⁻¹ = g :=
-      ((BorcherdsGroup.mul_eq_one_iff_right (g * g * g) g).mp hg4).symm
+      ((Borcherds.Group.mul_eq_one_iff_right (g * g * g) g).mp hg4).symm
     -- Multiplication facts
-    have hg_g2 : g * (g * g) = g * g * g := by rw [BorcherdsGroup.mul_assoc]
+    have hg_g2 : g * (g * g) = g * g * g := by rw [Borcherds.Group.mul_assoc]
     have hg_g3 : g * (g * g * g) = 1 := by
-      rw [← BorcherdsGroup.mul_assoc g (g * g) g, ← BorcherdsGroup.mul_assoc g g g]; exact hg4
+      rw [← Borcherds.Group.mul_assoc g (g * g) g, ← Borcherds.Group.mul_assoc g g g]; exact hg4
     have hg2_g : (g * g) * g = g * g * g := rfl
     have hg2_g2 : (g * g) * (g * g) = 1 := by
-      rw [← BorcherdsGroup.mul_assoc]; exact hg4
+      rw [← Borcherds.Group.mul_assoc]; exact hg4
     have hg2_g3 : (g * g) * (g * g * g) = g := by
-      calc (g * g) * (g * g * g) = ((g * g) * (g * g)) * g := by rw [← BorcherdsGroup.mul_assoc]
+      calc (g * g) * (g * g * g) = ((g * g) * (g * g)) * g := by rw [← Borcherds.Group.mul_assoc]
         _ = 1 * g := by rw [hg2_g2]
         _ = g := by simp
     have hg3_g : (g * g * g) * g = 1 := hg4
     have hg3_g2 : (g * g * g) * (g * g) = g := by
       calc (g * g * g) * (g * g)
-          = ((g * g * g) * g) * g := by rw [← BorcherdsGroup.mul_assoc]
+          = ((g * g * g) * g) * g := by rw [← Borcherds.Group.mul_assoc]
         _ = 1 * g := by rw [hg4]
         _ = g := by simp
     have hg3_g3 : (g * g * g) * (g * g * g) = g * g := by
       calc (g * g * g) * (g * g * g)
-          = ((g * g * g) * (g * g)) * g := by rw [← BorcherdsGroup.mul_assoc]
+          = ((g * g * g) * (g * g)) * g := by rw [← Borcherds.Group.mul_assoc]
         _ = g * g := by rw [hg3_g2]
     -- Build Z/4 isomorphism: 1 ↦ ⟨0⟩, g ↦ ⟨1⟩, g² ↦ ⟨2⟩, g³ ↦ ⟨3⟩
     exact Sum.inl {
@@ -1056,7 +1109,7 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
         simp only [Equiv.coe_fn_mk]
         rcases helem x with rfl | rfl | rfl | rfl <;>
           rcases helem y with rfl | rfl | rfl | rfl <;>
-          simp only [BorcherdsGroup.one_mul, BorcherdsGroup.mul_one,
+          simp only [Borcherds.Group.one_mul, Borcherds.Group.mul_one,
             hg_g2, hg_g3, hg2_g2, hg2_g3, hg3_g, hg3_g2, hg3_g3,
             if_neg hg, if_neg hg2, if_neg hg2g,
             if_neg hg3, if_neg hg3g, if_neg hg3g2] <;>
@@ -1065,7 +1118,7 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
       map_inv x := by
         simp only [Equiv.coe_fn_mk]
         rcases helem x with rfl | rfl | rfl | rfl <;>
-          simp only [BorcherdsGroup.one_inv, hginv, hg2inv, hg3inv,
+          simp only [Borcherds.Group.one_inv, hginv, hg2inv, hg3inv,
             if_neg hg, if_neg hg2, if_neg hg3,
             if_neg hg2g, if_neg hg3g, if_neg hg3g2] <;>
           ext <;> simp [CyclicGroup.inv_val, CyclicGroup.one_val] <;> decide
@@ -1103,13 +1156,13 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
     -- The 4th element is a*g, distinct from 1, g, a
     have hag_ne1 : a * g ≠ 1 := by
       intro heq
-      have haeq : a = g⁻¹ := (BorcherdsGroup.mul_eq_one_iff_left a g).mp heq
-      have hginveq : g⁻¹ = g := ((BorcherdsGroup.mul_eq_one_iff_right g g).mp hg2).symm
+      have haeq : a = g⁻¹ := (Borcherds.Group.mul_eq_one_iff_left a g).mp heq
+      have hginveq : g⁻¹ = g := ((Borcherds.Group.mul_eq_one_iff_right g g).mp hg2).symm
       exact hag (haeq.trans hginveq)
     have hag_neg : a * g ≠ g :=
-      fun heq => ha1 (BorcherdsGroup.right_cancel g a 1 (by simp [heq]))
+      fun heq => ha1 (Borcherds.Group.right_cancel g a 1 (by simp [heq]))
     have hag_nea : a * g ≠ a :=
-      fun heq => hg (BorcherdsGroup.left_cancel a g 1 (by simp [heq]))
+      fun heq => hg (Borcherds.Group.left_cancel a g 1 (by simp [heq]))
     -- (a*g)² = 1
     have hag2 : (a * g) * (a * g) = 1 := hall2 (a * g) hag_ne1
     -- Every element is 1, g, a, or a*g
@@ -1126,27 +1179,27 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
     -- Commutativity: g*a = a*g
     have hga : g * a = a * g := by
       rcases helem (g * a) with h | h | h | h
-      · exfalso; exact hag (((BorcherdsGroup.mul_eq_one_iff_right g a).mp h).trans
-            ((BorcherdsGroup.mul_eq_one_iff_right g g).mp hg2).symm)
-      · exfalso; exact ha1 (BorcherdsGroup.left_cancel g a 1 (by simp [h]))
-      · exfalso; exact hg (BorcherdsGroup.right_cancel a g 1 (by simp [h]))
+      · exfalso; exact hag (((Borcherds.Group.mul_eq_one_iff_right g a).mp h).trans
+            ((Borcherds.Group.mul_eq_one_iff_right g g).mp hg2).symm)
+      · exfalso; exact ha1 (Borcherds.Group.left_cancel g a 1 (by simp [h]))
+      · exfalso; exact hg (Borcherds.Group.right_cancel a g 1 (by simp [h]))
       · exact h
     -- Inverses (all self-inverse)
-    have hginv : g⁻¹ = g := ((BorcherdsGroup.mul_eq_one_iff_right g g).mp hg2).symm
-    have hainv : a⁻¹ = a := ((BorcherdsGroup.mul_eq_one_iff_right a a).mp ha2).symm
+    have hginv : g⁻¹ = g := ((Borcherds.Group.mul_eq_one_iff_right g g).mp hg2).symm
+    have hainv : a⁻¹ = a := ((Borcherds.Group.mul_eq_one_iff_right a a).mp ha2).symm
     have haginv : (a * g)⁻¹ = a * g :=
-      ((BorcherdsGroup.mul_eq_one_iff_right (a * g) (a * g)).mp hag2).symm
+      ((Borcherds.Group.mul_eq_one_iff_right (a * g) (a * g)).mp hag2).symm
     -- Multiplication table
-    have ha_ag : a * (a * g) = g := by rw [← BorcherdsGroup.mul_assoc]; simp [ha2]
+    have ha_ag : a * (a * g) = g := by rw [← Borcherds.Group.mul_assoc]; simp [ha2]
     have hg_ag : g * (a * g) = a := by
-      calc g * (a * g) = (g * a) * g := by rw [BorcherdsGroup.mul_assoc]
+      calc g * (a * g) = (g * a) * g := by rw [Borcherds.Group.mul_assoc]
         _ = (a * g) * g := by rw [hga]
-        _ = a * (g * g) := by rw [BorcherdsGroup.mul_assoc]
+        _ = a * (g * g) := by rw [Borcherds.Group.mul_assoc]
         _ = a := by simp [hg2]
     have hag_a : (a * g) * a = g := by
-      rw [BorcherdsGroup.mul_assoc, hga, ← BorcherdsGroup.mul_assoc, ha2, BorcherdsGroup.one_mul]
+      rw [Borcherds.Group.mul_assoc, hga, ← Borcherds.Group.mul_assoc, ha2, Borcherds.Group.one_mul]
     have hag_g : (a * g) * g = a := by
-      rw [BorcherdsGroup.mul_assoc]; simp [hg2]
+      rw [Borcherds.Group.mul_assoc]; simp [hg2]
     -- Build Klein4 isomorphism: 1↦(1,1), g↦(⟨1⟩,1), a↦(1,⟨1⟩), ag↦(⟨1⟩,⟨1⟩)
     exact Sum.inr {
       toEquiv := {
@@ -1167,7 +1220,7 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
         simp only [Equiv.coe_fn_mk]
         rcases helem x with rfl | rfl | rfl | rfl <;>
           rcases helem y with rfl | rfl | rfl | rfl <;>
-          simp only [BorcherdsGroup.one_mul, BorcherdsGroup.mul_one,
+          simp only [Borcherds.Group.one_mul, Borcherds.Group.mul_one,
             hg2, ha2, hag2, hga, ha_ag, hg_ag, hag_a, hag_g,
             if_neg hg, if_neg ha1, if_neg hag,
             if_neg hag_ne1, if_neg hag_neg, if_neg hag_nea,
@@ -1177,12 +1230,12 @@ noncomputable def orderFourIso {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card 
       map_inv x := by
         simp only [Equiv.coe_fn_mk]
         rcases helem x with rfl | rfl | rfl | rfl <;>
-          simp only [BorcherdsGroup.one_inv, hginv, hainv, haginv,
+          simp only [Borcherds.Group.one_inv, hginv, hainv, haginv,
             if_neg hg, if_neg ha1, if_neg hag_ne1] <;>
           ext <;> simp [CyclicGroup.inv_val, CyclicGroup.one_val]
     }
 
-noncomputable def orderFourIso' {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card G = 4) :
+noncomputable def orderFourIso' {G} [Borcherds.Group G] [Fintype G] (h : Nat.card G = 4) :
     GroupIso G (CyclicGroup 4) ⊕ GroupIso G K4 := by
   rcases orderFourIso h with hZ4 | hK4
   · exact Sum.inl hZ4
@@ -1232,7 +1285,7 @@ noncomputable def orderFourIso' {G} [BorcherdsGroup G] [Fintype G] (h : Nat.card
 
 section Powers
 
-variable {G : Type*} [BorcherdsGroup G]
+variable {G : Type*} [Borcherds.Group G]
 
 def npow (g : G) : ℕ → G
   | 0 => 1
@@ -1245,7 +1298,7 @@ def npow (g : G) : ℕ → G
 lemma Bnpow_add (g : G) (m n : ℕ) : npow g (m + n) = npow g m * npow g n := by
   induction n with
   | zero => simp
-  | succ n ih => rw [Nat.add_succ, npow_succ, npow_succ, ih, BorcherdsGroup.mul_assoc]
+  | succ n ih => rw [Nat.add_succ, npow_succ, npow_succ, ih, Borcherds.Group.mul_assoc]
 
 end Powers
 
@@ -1253,7 +1306,7 @@ end Powers
 
 section CyclicSubgroup
 
-variable {G : Type*} [BorcherdsGroup G]
+variable {G : Type*} [Borcherds.Group G]
 
 /-- For g with gᵐ = 1 (m > 0), the set {gᵏ | k < m} is a subgroup. -/
 def cyclicSubgroup (g : G) (m : ℕ) (hm : 0 < m) (hgm : npow g m = 1) : BSubgroup G where
@@ -1271,15 +1324,15 @@ def cyclicSubgroup (g : G) (m : ℕ) (hm : 0 < m) (hgm : npow g m = 1) : BSubgro
       have hstep2 : npow g (i + j) = npow g (i + j - m) * npow g m := by
         conv_lhs => rw [show i + j = (i + j - m) + m from by omega]
         exact Bnpow_add g (i + j - m) m
-      rw [hstep1, hstep2, hgm, BorcherdsGroup.mul_one]
+      rw [hstep1, hstep2, hgm, Borcherds.Group.mul_one]
   inv_mem := by
     rintro x ⟨i, hi, rfl⟩
     by_cases h : i = 0
-    · subst h; simp [BorcherdsGroup.one_inv]; exact ⟨0, hm, rfl⟩
+    · subst h; simp [Borcherds.Group.one_inv]; exact ⟨0, hm, rfl⟩
     · refine ⟨m - i, by omega, ?_⟩
       have : npow g i * npow g (m - i) = 1 := by
         rw [← Bnpow_add, show i + (m - i) = m from by omega, hgm]
-      exact (BorcherdsGroup.mul_eq_one_iff_right (npow g i) (npow g (m - i))).mp this
+      exact (Borcherds.Group.mul_eq_one_iff_right (npow g i) (npow g (m - i))).mp this
 
 /-- If npow g is injective on {0,...,m-1}, the cyclic subgroup has m elements. -/
 lemma ncard_cyclicSubgroup (g : G) (m : ℕ) (hm : 0 < m) (hgm : npow g m = 1)
@@ -1309,7 +1362,7 @@ section PrimeOrder
 
 attribute [local instance] Classical.propDecidable
 
-variable {G : Type*} [BorcherdsGroup G] [Fintype G]
+variable {G : Type*} [Borcherds.Group G] [Fintype G]
 
 /-- In a finite group, every element has finite order: ∃ k > 0, gᵏ = 1. -/
 lemma exists_npow_eq_one (g : G) : ∃ k : ℕ, 0 < k ∧ npow g k = 1 := by
@@ -1331,14 +1384,14 @@ lemma exists_npow_eq_one (g : G) : ∃ k : ℕ, 0 < k ∧ npow g k = 1 := by
         -- hadd : npow g j = npow g (j-i) * npow g i
         -- hij : npow g i = npow g j
         -- so npow g (j-i) * npow g i = npow g i = 1 * npow g i
-        exact BorcherdsGroup.right_cancel (npow g i) (npow g (j - i)) 1
-          (by rw [← hadd, hij, BorcherdsGroup.one_mul])
+        exact Borcherds.Group.right_cancel (npow g i) (npow g (j - i)) 1
+          (by rw [← hadd, hij, Borcherds.Group.one_mul])
       exact hall' (j - i) (by omega) heq
     · have heq : npow g (i - j) = 1 := by
         have hadd := Bnpow_add g (i - j) j
         rw [show (i - j) + j = i from by omega] at hadd
-        exact BorcherdsGroup.right_cancel (npow g j) (npow g (i - j)) 1
-          (by rw [← hadd, ← hij, BorcherdsGroup.one_mul])
+        exact Borcherds.Group.right_cancel (npow g j) (npow g (i - j)) 1
+          (by rw [← hadd, ← hij, Borcherds.Group.one_mul])
       exact hall' (i - j) (by omega) heq
   have hle := Fintype.card_le_of_injective _ hinj
   simp [Fintype.card_fin] at hle
@@ -1365,15 +1418,15 @@ lemma npow_injective_of_order (g : G) (i j : ℕ)
   · have heq : npow g (j - i) = 1 := by
       have hadd := Bnpow_add g (j - i) i
       rw [show (j - i) + i = j from by omega] at hadd
-      exact BorcherdsGroup.right_cancel (npow g i) (npow g (j - i)) 1
-        (by rw [← hadd, hij, BorcherdsGroup.one_mul])
+      exact Borcherds.Group.right_cancel (npow g i) (npow g (j - i)) 1
+        (by rw [← hadd, hij, Borcherds.Group.one_mul])
     have hle := elemOrder_minimal g (j - i) (by omega) heq
     omega
   · have heq : npow g (i - j) = 1 := by
       have hadd := Bnpow_add g (i - j) j
       rw [show (i - j) + j = i from by omega] at hadd
-      exact BorcherdsGroup.right_cancel (npow g j) (npow g (i - j)) 1
-        (by rw [← hadd, ← hij, BorcherdsGroup.one_mul])
+      exact Borcherds.Group.right_cancel (npow g j) (npow g (i - j)) 1
+        (by rw [← hadd, ← hij, Borcherds.Group.one_mul])
     have hle := elemOrder_minimal g (i - j) (by omega) heq
     omega
 
@@ -1429,11 +1482,11 @@ noncomputable def myIso (hp : (Nat.card G).Prime) :
   have npow_mul_p : ∀ k, npow g (k * p) = 1 := by
     intro k; induction k with
     | zero => simp
-    | succ k ih => rw [Nat.succ_mul, Bnpow_add, ih, BorcherdsGroup.one_mul, hgp]
+    | succ k ih => rw [Nat.succ_mul, Bnpow_add, ih, Borcherds.Group.one_mul, hgp]
   have npow_mod : ∀ k, npow g k = npow g (k % p) := by
     intro k
     conv_lhs => rw [show k = k % p + (k / p) * p from by linarith [Nat.div_add_mod k p]]
-    rw [Bnpow_add, npow_mul_p, BorcherdsGroup.mul_one]
+    rw [Bnpow_add, npow_mul_p, Borcherds.Group.mul_one]
   -- The discrete log: inverse of npow g on Fin p
   let f := Equiv.ofBijective (fun k : Fin p => npow g k.val) hbij
   -- Spec lemmas
@@ -1466,7 +1519,7 @@ noncomputable def myIso (hp : (Nat.card G).Prime) :
     have hk : (f.symm x).val < p := (f.symm x).isLt
     have hsum : npow g (p - (f.symm x).val) * npow g (f.symm x).val = 1 := by
       rw [← Bnpow_add, show (p - (f.symm x).val) + (f.symm x).val = p from by omega, hgp]
-    exact (((BorcherdsGroup.mul_eq_one_iff_left
+    exact (((Borcherds.Group.mul_eq_one_iff_left
         (npow g (p - (f.symm x).val)) (npow g (f.symm x).val)).mp hsum).trans
       (by rw [f_symm_spec])).symm
   -- Coercion lemmas: Fin p operation cast to ZMod p
@@ -1520,21 +1573,21 @@ end PrimeOrder
 /-
 Definition 1.12 (Product)
 -/
-instance {G H} [BorcherdsGroup G] [BorcherdsGroup H] : Mul (G × H) where
+instance {G H} [Borcherds.Group G] [Borcherds.Group H] : Mul (G × H) where
   mul a b := (a.1 * b.1, a.2 * b.2)
 
-instance {G H} [BorcherdsGroup G] [BorcherdsGroup H] : One (G × H) where
+instance {G H} [Borcherds.Group G] [Borcherds.Group H] : One (G × H) where
   one := (1, 1)
 
-instance {G H} [BorcherdsGroup G] [BorcherdsGroup H] : Inv (G × H) where
+instance {G H} [Borcherds.Group G] [Borcherds.Group H] : Inv (G × H) where
   inv a := (a.1⁻¹, a.2⁻¹)
 
-instance {G H} [BorcherdsGroup G] [BorcherdsGroup H] : BorcherdsGroup (G × H) where
-  mul_assoc a b c := by ext <;> simp [BorcherdsGroup.mul_assoc]
+instance {G H} [Borcherds.Group G] [Borcherds.Group H] : Borcherds.Group (G × H) where
+  mul_assoc a b c := by ext <;> simp [Borcherds.Group.mul_assoc]
   one_mul a := by ext <;> simp
   mul_one a := by ext <;> simp
-  inv_mul_cancel a := by ext <;> simp [BorcherdsGroup.inv_mul_cancel]
-  mul_inv_cancel a := by ext <;> simp [BorcherdsGroup.mul_inv_cancel]
+  inv_mul_cancel a := by ext <;> simp [Borcherds.Group.inv_mul_cancel]
+  mul_inv_cancel a := by ext <;> simp [Borcherds.Group.mul_inv_cancel]
 
 /-
 Example 1.8.a
@@ -1566,13 +1619,13 @@ Example 1.9 - omitted
 /-
 Proposition 1.7, part 1
 -/
-def leftCopy {G} [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : BSubgroup (H₁ × H₂) where
+def leftCopy {G} [Borcherds.Group G] (H₁ H₂ : BSubgroup G) : BSubgroup (H₁ × H₂) where
   carrier := { p | p.2 = 1 }
   one_mem := by simp
   mul_mem := by simp
   inv_mem := by simp
 
-def rightCopy {G} [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : BSubgroup (H₁ × H₂) where
+def rightCopy {G} [Borcherds.Group G] (H₁ H₂ : BSubgroup G) : BSubgroup (H₁ × H₂) where
   carrier := { p | p.1 = 1 }
   one_mem := by simp
   mul_mem := by simp
@@ -1581,7 +1634,7 @@ def rightCopy {G} [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : BSubgroup (H₁
 /-
 Definition: a group is isomorphic to the product of two of its subgroups
 -/
-def IsIsomorphicToProductOfSubgroups (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : Prop :=
+def IsIsomorphicToProductOfSubgroups (G) [Borcherds.Group G] (H₁ H₂ : BSubgroup G) : Prop :=
   Nonempty (GroupIso (H₁ × H₂) G)
 
 def s₁ : BSubgroup K4 := {
@@ -1607,13 +1660,13 @@ def s₃ : BSubgroup K4 := {
 
 example : IsIsomorphicToProductOfSubgroups K4 s₁ s₂ := by sorry
 
-def HasTrivialIntersection (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : Prop :=
+def HasTrivialIntersection (G) [Borcherds.Group G] (H₁ H₂ : BSubgroup G) : Prop :=
   H₁.carrier ∩ H₂.carrier = {1}
 
-def HasUniqueDecomposition (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : Prop :=
+def HasUniqueDecomposition (G) [Borcherds.Group G] (H₁ H₂ : BSubgroup G) : Prop :=
   ∀ g : G, ∃ h₁ ∈ H₁.carrier, ∃ h₂ ∈ H₂.carrier, g = h₁ * h₂
 
-def HasCommutingSubgroups (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : Prop :=
+def HasCommutingSubgroups (G) [Borcherds.Group G] (H₁ H₂ : BSubgroup G) : Prop :=
   ∀ h₁ ∈ H₁.carrier, ∀ h₂ ∈ H₂.carrier, h₁ * h₂ = h₂ * h₁
 
 example : HasTrivialIntersection K4 s₁ s₂ := by
@@ -1640,7 +1693,7 @@ See IsIsomorphicToProductOfSubgroups' below for the corrected biconditional.
 -/
 
 /- Helper: uniqueness of decomposition from trivial intersection -/
-private lemma decomp_unique {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
+private lemma decomp_unique {G} [Borcherds.Group G] {H₁ H₂ : BSubgroup G}
     (htrivial : HasTrivialIntersection G H₁ H₂)
     {a₁ b₁ a₂ b₂ : G}
     (ha₁ : a₁ ∈ H₁.carrier) (hb₁ : b₁ ∈ H₁.carrier)
@@ -1648,28 +1701,28 @@ private lemma decomp_unique {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
     (heq : a₁ * a₂ = b₁ * b₂) : a₁ = b₁ ∧ a₂ = b₂ := by
   -- Show b₁⁻¹ * a₁ ∈ H₁ ∩ H₂ = {1}
   have hkey : b₁⁻¹ * a₁ = b₂ * a₂⁻¹ := by
-    apply BorcherdsGroup.left_cancel b₁
-    apply BorcherdsGroup.right_cancel a₂
+    apply Borcherds.Group.left_cancel b₁
+    apply Borcherds.Group.right_cancel a₂
     calc b₁ * (b₁⁻¹ * a₁) * a₂
         = (b₁ * b₁⁻¹) * a₁ * a₂ := by
-          rw [← BorcherdsGroup.mul_assoc b₁ b₁⁻¹ a₁, BorcherdsGroup.mul_assoc]
+          rw [← Borcherds.Group.mul_assoc b₁ b₁⁻¹ a₁, Borcherds.Group.mul_assoc]
       _ = a₁ * a₂ := by simp
       _ = b₁ * b₂ := heq
       _ = b₁ * (b₂ * (a₂⁻¹ * a₂)) := by simp
       _ = b₁ * (b₂ * a₂⁻¹) * a₂ := by
-          rw [← BorcherdsGroup.mul_assoc b₂ a₂⁻¹ a₂, ← BorcherdsGroup.mul_assoc]
+          rw [← Borcherds.Group.mul_assoc b₂ a₂⁻¹ a₂, ← Borcherds.Group.mul_assoc]
   have hmem : b₁⁻¹ * a₁ ∈ H₁.carrier ∩ H₂.carrier :=
     ⟨H₁.mul_mem _ _ (H₁.inv_mem _ hb₁) ha₁, hkey ▸ H₂.mul_mem _ _ hb₂ (H₂.inv_mem _ ha₂)⟩
   rw [htrivial] at hmem
   have h1 : b₁⁻¹ * a₁ = 1 := Set.mem_singleton_iff.mp hmem
   constructor
-  · exact BorcherdsGroup.left_cancel b₁⁻¹ a₁ b₁ (by simp [h1])
-  · have : a₁ = b₁ := BorcherdsGroup.left_cancel b₁⁻¹ a₁ b₁ (by simp [h1])
+  · exact Borcherds.Group.left_cancel b₁⁻¹ a₁ b₁ (by simp [h1])
+  · have : a₁ = b₁ := Borcherds.Group.left_cancel b₁⁻¹ a₁ b₁ (by simp [h1])
     rw [this] at heq
-    exact BorcherdsGroup.left_cancel b₁ a₂ b₂ heq
+    exact Borcherds.Group.left_cancel b₁ a₂ b₂ heq
 
 /- Helper: the four-term associativity rearrangement using commutativity -/
-private lemma mul_mul_comm {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
+private lemma mul_mul_comm {G} [Borcherds.Group G] {H₁ H₂ : BSubgroup G}
     (hcommute : HasCommutingSubgroups G H₁ H₂)
     {a₁ b₁ : G} {a₂ b₂ : G}
     (_ha₁ : a₁ ∈ H₁.carrier) (hb₁ : b₁ ∈ H₁.carrier)
@@ -1678,14 +1731,14 @@ private lemma mul_mul_comm {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
   -- Need: a₂ * b₁ = b₁ * a₂ (from commutativity, with b₁ ∈ H₁, a₂ ∈ H₂)
   have hc : b₁ * a₂ = a₂ * b₁ := hcommute b₁ hb₁ a₂ ha₂
   calc (a₁ * b₁) * (a₂ * b₂)
-      = a₁ * (b₁ * (a₂ * b₂)) := by rw [BorcherdsGroup.mul_assoc]
-    _ = a₁ * ((b₁ * a₂) * b₂) := by rw [← BorcherdsGroup.mul_assoc b₁ a₂ b₂]
+      = a₁ * (b₁ * (a₂ * b₂)) := by rw [Borcherds.Group.mul_assoc]
+    _ = a₁ * ((b₁ * a₂) * b₂) := by rw [← Borcherds.Group.mul_assoc b₁ a₂ b₂]
     _ = a₁ * ((a₂ * b₁) * b₂) := by rw [hc]
-    _ = a₁ * (a₂ * (b₁ * b₂)) := by rw [BorcherdsGroup.mul_assoc a₂ b₁ b₂]
-    _ = (a₁ * a₂) * (b₁ * b₂) := by rw [← BorcherdsGroup.mul_assoc]
+    _ = a₁ * (a₂ * (b₁ * b₂)) := by rw [Borcherds.Group.mul_assoc a₂ b₁ b₂]
+    _ = (a₁ * a₂) * (b₁ * b₂) := by rw [← Borcherds.Group.mul_assoc]
 
 /- Core construction: build a GroupIso from the three conditions -/
-noncomputable def mulMapIso {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
+noncomputable def mulMapIso {G} [Borcherds.Group G] {H₁ H₂ : BSubgroup G}
     (htrivial : HasTrivialIntersection G H₁ H₂)
     (hdecomp : HasUniqueDecomposition G H₁ H₂)
     (hcommute : HasCommutingSubgroups G H₁ H₂)
@@ -1722,19 +1775,19 @@ noncomputable def mulMapIso {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
     map_inv := by
       intro ⟨⟨a₁, ha₁⟩, ⟨a₂, ha₂⟩⟩
       show a₁⁻¹ * a₂⁻¹ = (a₁ * a₂)⁻¹
-      rw [BorcherdsGroup.mul_inv]
+      rw [Borcherds.Group.mul_inv]
       exact hcommute a₁⁻¹ (H₁.inv_mem _ ha₁) a₂⁻¹ (H₂.inv_mem _ ha₂)
   }
 
 @[simp]
-lemma mulMapIso_apply {G} [BorcherdsGroup G] {H₁ H₂ : BSubgroup G}
+lemma mulMapIso_apply {G} [Borcherds.Group G] {H₁ H₂ : BSubgroup G}
     (htrivial : HasTrivialIntersection G H₁ H₂)
     (hdecomp : HasUniqueDecomposition G H₁ H₂)
     (hcommute : HasCommutingSubgroups G H₁ H₂)
     (h₁ : H₁) (h₂ : H₂)
     : (mulMapIso htrivial hdecomp hcommute).toEquiv (h₁, h₂) = h₁.val * h₂.val := rfl
 
-theorem recognition_backward (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G)
+theorem recognition_backward (G) [Borcherds.Group G] (H₁ H₂ : BSubgroup G)
     (htrivial : HasTrivialIntersection G H₁ H₂)
     (hdecomp : HasUniqueDecomposition G H₁ H₂)
     (hcommute : HasCommutingSubgroups G H₁ H₂)
@@ -1745,7 +1798,7 @@ theorem recognition_backward (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G)
 Strengthened definition: the isomorphism must be the multiplication map (h₁, h₂) ↦ h₁ · h₂.
 With this definition, both directions of the recognition theorem hold.
 -/
-def IsIsomorphicToProductOfSubgroups' (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G) : Prop :=
+def IsIsomorphicToProductOfSubgroups' (G) [Borcherds.Group G] (H₁ H₂ : BSubgroup G) : Prop :=
   ∃ (φ : GroupIso (H₁ × H₂) G), ∀ (h₁ : H₁) (h₂ : H₂), φ.toEquiv (h₁, h₂) = h₁.val * h₂.val
 
 example : (K4.a ∈ s₁.carrier) := by simp [s₁]
@@ -1803,7 +1856,7 @@ example : IsIsomorphicToProductOfSubgroups' K4 s₁ s₂ := by
   rw [IsIsomorphicToProductOfSubgroups']
   sorry
 
-theorem recognition_theorem (G) [BorcherdsGroup G] (H₁ H₂ : BSubgroup G)
+theorem recognition_theorem (G) [Borcherds.Group G] (H₁ H₂ : BSubgroup G)
     : IsIsomorphicToProductOfSubgroups' G H₁ H₂ ↔
       (HasTrivialIntersection G H₁ H₂ ∧ HasUniqueDecomposition G H₁ H₂ ∧ HasCommutingSubgroups G H₁ H₂) := by
   constructor
