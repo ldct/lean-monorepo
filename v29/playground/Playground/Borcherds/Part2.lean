@@ -1,5 +1,7 @@
 import Playground.Borcherds.Part1
 
+namespace Borcherds
+
 /- Section 1.2 -/
 
 @[ext]
@@ -10,7 +12,7 @@ instance : One TrivialGroup where one := {val := Unit.unit}
 instance : Mul TrivialGroup where mul _ _ := {val := Unit.unit}
 instance : Inv TrivialGroup where inv _ := {val := Unit.unit}
 
-instance : Borcherds.Group TrivialGroup where
+instance : Group TrivialGroup where
   mul_assoc a b c := by ext
   one_mul a := by ext
   mul_one a := by ext
@@ -18,7 +20,7 @@ instance : Borcherds.Group TrivialGroup where
   mul_inv_cancel a := by ext
 
 /- The `Equiv` between any group of order 1 and the trivial group -/
-def trivialEquiv {G} [Borcherds.Group G] (h : Nat.card G = 1) : G ≃ TrivialGroup where
+def trivialEquiv {G} [Group G] (h : Nat.card G = 1) : G ≃ TrivialGroup where
   toFun _ := ⟨()⟩
   invFun _ := 1
   left_inv x := by
@@ -29,34 +31,39 @@ def trivialEquiv {G} [Borcherds.Group G] (h : Nat.card G = 1) : G ≃ TrivialGro
 /- Classification of groups of order 1, proposition 1.3 -/
 
 /- The isomorphism between any group of order 1 and the trivial group -/
-def trivialIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card G = 1) : Borcherds.GroupIso G TrivialGroup where
+def trivialIso {G} [Group G] [Fintype G] (h : Nat.card G = 1) : GroupIso G TrivialGroup where
   toEquiv := trivialEquiv h
   map_mul x y := by ext
   map_one := by ext
   map_inv x := by ext
 
 /- Definition 1.3 - Subgroups-/
-structure BSubgroup (G : Type*) [Borcherds.Group G] where
+structure BSubgroup (G : Type*) [Group G] where
   carrier : Set G
   one_mem : 1 ∈ carrier
   mul_mem : ∀ x y : G, x ∈ carrier → y ∈ carrier → x * y ∈ carrier
   inv_mem : ∀ x : G, x ∈ carrier → x⁻¹ ∈ carrier
 
-instance {G : Type*} [Borcherds.Group G] : CoeSort (BSubgroup G) (Type _) where
+instance {G : Type*} [Group G] : CoeSort (BSubgroup G) (Type _) where
   coe H := { x : G // x ∈ H.carrier }
 
-instance {G : Type*} [Borcherds.Group G] (H : BSubgroup G) : Borcherds.Group H where
+
+/- The group structure on the coercion of a subgroup to a type -/
+instance {G : Type*} [Group G] (H : BSubgroup G) : Group H where
   mul := fun ⟨a, ha⟩ ⟨b, hb⟩ => ⟨a * b, H.mul_mem a b ha hb⟩
   one := ⟨1, H.one_mem⟩
   inv := fun ⟨a, ha⟩ => ⟨a⁻¹, H.inv_mem a ha⟩
-  mul_assoc := fun ⟨a, _⟩ ⟨b, _⟩ ⟨c, _⟩ => Subtype.ext (Borcherds.Group.mul_assoc a b c)
-  one_mul := fun ⟨a, _⟩ => Subtype.ext (Borcherds.Group.one_mul a)
-  mul_one := fun ⟨a, _⟩ => Subtype.ext (Borcherds.Group.mul_one a)
-  inv_mul_cancel := fun ⟨a, _⟩ => Subtype.ext (Borcherds.Group.inv_mul_cancel a)
-  mul_inv_cancel := fun ⟨a, _⟩ => Subtype.ext (Borcherds.Group.mul_inv_cancel a)
+  mul_assoc := fun ⟨a, _⟩ ⟨b, _⟩ ⟨c, _⟩ => Subtype.ext (Group.mul_assoc a b c)
+  one_mul := fun ⟨a, _⟩ => Subtype.ext (Group.one_mul a)
+  mul_one := fun ⟨a, _⟩ => Subtype.ext (Group.mul_one a)
+  inv_mul_cancel := fun ⟨a, _⟩ => Subtype.ext (Group.inv_mul_cancel a)
+  mul_inv_cancel := fun ⟨a, _⟩ => Subtype.ext (Group.mul_inv_cancel a)
 
+/-
+g • S ≃ S as sets
+-/
 open scoped Pointwise in
-def leftMulEquiv {G} [_root_.Group G] (g : G) (S : Set G) : (g • S : Set G) ≃ S where
+example {G} [_root_.Group G] (g : G) (S : Set G) : (g • S : Set G) ≃ S where
   toFun := fun x => ⟨g⁻¹ * x.1, by
     obtain ⟨s, hs, hgs⟩ := x.2
     simp only [← hgs, smul_eq_mul, ← mul_assoc, inv_mul_cancel, one_mul]
@@ -65,7 +72,7 @@ def leftMulEquiv {G} [_root_.Group G] (g : G) (S : Set G) : (g • S : Set G) �
   left_inv := fun x => by ext; simp
   right_inv := fun x => by ext; simp
 
-instance SameLeftCoset {G} [Borcherds.Group G] (H : BSubgroup G) : Setoid G where
+instance SameLeftCoset {G} [Group G] (H : BSubgroup G) : Setoid G where
   r a b := a⁻¹ * b ∈ H.carrier
   iseqv := {
     refl g := by
@@ -85,6 +92,7 @@ instance SameLeftCoset {G} [Borcherds.Group G] (H : BSubgroup G) : Setoid G wher
       exact this
     }
 
+/- The quotient of a group by a subgroup is the quotient of the setoid on G where two elements are related if they are in the same left coset of the subgroup. -/
 instance {G} [Borcherds.Group G] : HasQuotient G (BSubgroup G) where
   Quotient H := Quotient (SameLeftCoset H)
 
@@ -93,42 +101,7 @@ section Lagrange
 variable {G : Type*} [Borcherds.Group G] (H : BSubgroup G) (g : G)
 
 open scoped Pointwise in
-/-- For `g : G`, left multiplication identifies `H` with the left coset of `g`. -/
-def BSubgroup.leftCosetEquiv (g : G) :
-      H.carrier ≃
-      { x : G // ⟦x⟧ = (⟦g⟧ : G ⧸ H) }
-  where
-  toFun := fun ⟨h, hh⟩ =>
-    ⟨g * h, Quotient.sound (by
-      -- SameLeftCoset: `(g * h)⁻¹ * g ∈ H`.
-      change (g * h)⁻¹ * g ∈ H.carrier
-      -- apply H.inv_mem h hh
-      have key : (g * h)⁻¹ * g = h⁻¹ := by
-        calc (g * h)⁻¹ * g
-            = (h⁻¹ * g⁻¹) * g := by rw [Borcherds.Group.mul_inv]
-          _ = h⁻¹ * (g⁻¹ * g) := by rw [Borcherds.Group.mul_assoc]
-          _ = h⁻¹ := by simp
-      rw [key]
-      exact H.inv_mem h hh)⟩
-  invFun := fun ⟨x, hx⟩ =>
-    ⟨g⁻¹ * x, by
-      have hxrel : x⁻¹ * g ∈ H.carrier := Quotient.exact hx
-      have key : g⁻¹ * x = (x⁻¹ * g)⁻¹ := by
-        rw [Borcherds.Group.mul_inv, Borcherds.Group.inv_inv]
-      rw [key]
-      exact H.inv_mem (x⁻¹ * g) hxrel⟩
-  left_inv := fun ⟨h, _⟩ => Subtype.ext (by
-    calc g⁻¹ * (g * h)
-        = (g⁻¹ * g) * h := by rw [Borcherds.Group.mul_assoc]
-      _ = 1 * h := by rw [Borcherds.Group.inv_mul_cancel]
-      _ = h := by rw [Borcherds.Group.one_mul])
-  right_inv := fun ⟨x, _⟩ => Subtype.ext (by
-    calc g * (g⁻¹ * x)
-        = (g * g⁻¹) * x := by rw [Borcherds.Group.mul_assoc]
-      _ = 1 * x := by rw [Borcherds.Group.mul_inv_cancel]
-      _ = x := by rw [Borcherds.Group.one_mul])
-
-open scoped Pointwise in
+/-- For `g : G`, left multiplication identifies `H` with the left coset `g • H`. -/
 def BSubgroup.leftCosetEquiv' (g : G) :
       H.carrier ≃
       (g • H.carrier : Set G)
@@ -154,7 +127,7 @@ def BSubgroup.leftCosetEquiv' (g : G) :
         Borcherds.Group.one_mul])
 
 open scoped Pointwise in
-/-- Being in the same left coset (quotient sense) is equivalent to
+/-- Being in the same left coset is equivalent to
     membership in the pointwise smul set `g • H.carrier`. -/
 lemma BSubgroup.quotient_eq_iff_mem_smul (g x : G) :
     (⟦x⟧ : G ⧸ H) = ⟦g⟧ ↔ x ∈ g • H.carrier where
@@ -180,6 +153,7 @@ lemma BSubgroup.quotient_eq_iff_mem_smul (g x : G) :
     rw [heq]
     exact H.inv_mem _ hs
 
+open scoped Pointwise in
 /-- `G` splits non-canonically as the product of coset space and subgroup carrier. -/
 noncomputable def BSubgroup.groupEquivQuotientProdSubtype :
     G ≃ (G ⧸ H) × { x // x ∈ H.carrier } := by
@@ -187,15 +161,15 @@ noncomputable def BSubgroup.groupEquivQuotientProdSubtype :
     -- Step 1: partition G into fibers of the quotient map
       ≃ Σ C : G ⧸ H, { x // ⟦x⟧ = C } :=
         (Equiv.sigmaFiberEquiv (Quotient.mk (SameLeftCoset H))).symm
-    -- Step 2: reindex: (⟦x⟧ = C) ↔ (⟦x⟧ = ⟦Quotient.out C⟧)
-    _ ≃ Σ C : G ⧸ H, { x // ⟦x⟧ = (⟦Quotient.out C⟧ : G ⧸ H) } := by
+    -- Step 2: identify each fiber with the left coset `(Quotient.out C) • H.carrier`
+    _ ≃ Σ C : G ⧸ H, (Quotient.out C • H.carrier : Set G) := by
         apply Equiv.sigmaCongrRight; intro C
-        apply Equiv.subtypeEquivRight; intro _
-        grind [H.quotient_eq_iff_mem_smul, Quotient.out_eq]
-    -- Step 3: each fiber { x // ⟦x⟧ = ⟦g⟧ } ≃ H.carrier via leftCosetEquiv
+        apply Equiv.subtypeEquivRight; intro x
+        rw [← H.quotient_eq_iff_mem_smul, Quotient.out_eq]
+    -- Step 3: each coset `g • H.carrier ≃ H.carrier` via leftCosetEquiv'
     _ ≃ Σ C : G ⧸ H, H.carrier := by
         apply Equiv.sigmaCongrRight; intro C
-        exact (H.leftCosetEquiv (Quotient.out C)).symm
+        exact (H.leftCosetEquiv' (Quotient.out C)).symm
     -- Step 4: Σ over a constant fiber ≃ product
     _ ≃ (G ⧸ H) × { x // x ∈ H.carrier } := Equiv.sigmaEquivProd _ _
 
@@ -256,8 +230,9 @@ noncomputable def orderTwoIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card 
   rw [Nat.card_eq_fintype_card] at h
   have hne : ∃ g : G, g ≠ 1 := by
     by_contra hall; push Not at hall
-    have : Fintype.card G ≤ 1 :=
-      Fintype.card_le_one_iff.mpr (fun a b => by rw [hall a, hall b])
+    have : Fintype.card G ≤ 1 := by
+      apply Fintype.card_le_one_iff.mpr
+      intro a b; rw [hall a, hall b]
     omega
   let g : G := Classical.choose hne
   have hg : g ≠ 1 := Classical.choose_spec hne
@@ -1374,3 +1349,5 @@ theorem recognition_theorem (G) [Borcherds.Group G] (H₁ H₂ : BSubgroup G)
 /-
 1.3 - Quotient Groups
 -/
+
+end Borcherds
