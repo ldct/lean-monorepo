@@ -42,10 +42,11 @@ instance instMul : Mul (Fiber φ) := ⟨
     (fun x y => Quotient.mk (HomSetoid φ) (x * y))
     (by
       intro a₁ b₁ a₂ b₂ h₁ h₂
-      simp [HomSetoid, φ.map_mul]
       change φ a₁ = φ a₂ at h₁
       change φ b₁ = φ b₂ at h₂
-      congr
+      apply Quotient.sound
+      show φ (a₁ * b₁) = φ (a₂ * b₂)
+      rw [map_mul, map_mul, h₁, h₂]
     )
 ⟩
 
@@ -59,9 +60,10 @@ lemma one_eq {G H} [Group G] [Group H] (φ : G →* H) : 1 = Quotient.mk (HomSet
 
 instance instInvFibers {G H} [Group G] [Group H] (φ : G →* H) : Inv (Fiber φ) := ⟨ Quotient.lift (fun x => Quotient.mk (HomSetoid φ) (x⁻¹)) (by
   intro a b h
-  simp [HomSetoid]
   change φ a = φ b at h
-  rw [h]
+  apply Quotient.sound
+  show φ a⁻¹ = φ b⁻¹
+  rw [map_inv, map_inv, h]
 ) ⟩
 
 
@@ -154,7 +156,8 @@ def Kernel (G H) [Group G] [Group H] (φ : G →* H) : Subgroup G := {
 #check φ.ker
 
 example : ZQuot2.mk 3 = ZQuot2.mk 1 := by
-  simp [ZQuot2.mk, AddHomSetoid]
+  apply Quotient.sound
+  show φ' 3 = φ' 1
   decide
 
 

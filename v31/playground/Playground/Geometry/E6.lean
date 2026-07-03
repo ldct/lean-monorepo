@@ -177,7 +177,6 @@ def U₈ : Matrix (Fin 8) (Fin 8) ℚ :=
 
 example {G} (g : G) : g = g := by exact rfl
 
-def my_theorem :=
 #check Matrix.det_mul L₈ U₈
 
 theorem prod_helper : (L₈ * U₈).det = L₈.det * U₈.det := Matrix.det_mul L₈ U₈
@@ -216,7 +215,7 @@ theorem E₈_det : E₈.det = 1 := by
   rw [E₈Q, det_map_ℚ] at h
   exact (test₁ (E₈.det)).1 h
 
-#check Matrix (Fin n) (Fin n) ℚ
+#check fun (n : ℕ) => Matrix (Fin n) (Fin n) ℚ
 
 
 end E6

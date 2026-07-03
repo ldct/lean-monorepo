@@ -105,12 +105,15 @@ private def inv : QuaternionGroup n → QuaternionGroup n
 instance : Group (QuaternionGroup n) where
   mul := mul
   mul_assoc := by
-    rintro (i | i) (j | j) (k | k) <;> simp only [(· * ·), mul] <;> ring_nf
-    congr
-    calc
-      -(n : ZMod (2 * n)) = 0 - n := by rw [zero_sub]
-      _ = 2 * n - n := by norm_cast; simp
-      _ = n := by ring
+    have hn : (n : ZMod (2 * n)) + n = 0 := by
+      have h := ZMod.natCast_self (2 * n)
+      push_cast at h
+      linear_combination h
+    rintro (i | i) (j | j) (k | k) <;>
+      simp only [(· * ·), mul] <;>
+      congr 1 <;>
+      (try ring) <;>
+      linear_combination -hn
   one := one
   one_mul := by
     rintro (i | i)
@@ -167,7 +170,7 @@ instance [NeZero n] : Fintype (QuaternionGroup n) :=
   Fintype.ofEquiv _ fintypeHelper
 
 
-#eval { z^2 | z : (QuaternionGroup 40)}.toFinset
+-- #eval { z^2 | z : (QuaternionGroup 40)}.toFinset  -- diagnostic removed: no `Repr (QuaternionGroup 40)` instance
 
 #eval ∀ a : (QuaternionGroup 40), a^6 = a
 

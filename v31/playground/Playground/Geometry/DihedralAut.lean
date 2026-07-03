@@ -99,8 +99,9 @@ The map from parameters (k, m) to automorphisms is injective.
 lemma dihedralAut_injective {n : ℕ} (hn : 3 ≤ n) : Function.Injective (fun (p : (ZMod n)ˣ × ZMod n) => dihedralAut p.1 p.2) := by
   intros p q h;
   -- By definition of dihedralAut, we know that if two automorphisms are equal, then their corresponding dihedralMap functions must be equal.
-  have h_map_eq : dihedralMap p.1 p.2 = dihedralMap q.1 q.2 := by
-    exact funext fun x => by simpa using congr_arg ( fun f => f x ) h;
+  have h_map_eq : dihedralMap (p.1 : ZMod n) p.2 = dihedralMap (q.1 : ZMod n) q.2 := by
+    funext x
+    exact DFunLike.congr_fun h x
   unfold dihedralMap at h_map_eq;
   have := congr_fun h_map_eq ( DihedralGroup.sr 0 ) ; have := congr_fun h_map_eq ( DihedralGroup.sr 1 ) ; aesop;
 
@@ -112,23 +113,23 @@ lemma aut_determined_by_gens {n : ℕ} (f g : MulAut (DihedralGroup n))
   (h_sr : f (DihedralGroup.sr 0) = g (DihedralGroup.sr 0)) : f = g := by
     -- Since $r 1$ and $sr 0$ generate the entire group, if $f$ and $g$ agree on these generators, they must be equal.
     have h_gen : ∀ x : DihedralGroup n, x ∈ Subgroup.closure ({DihedralGroup.r 1, DihedralGroup.sr 0} : Set (DihedralGroup n)) := by
+      set S := Subgroup.closure ({DihedralGroup.r 1, DihedralGroup.sr 0} : Set (DihedralGroup n))
+        with hS
+      have hr1 : DihedralGroup.r 1 ∈ S := Subgroup.subset_closure (by simp)
+      have hsr0 : DihedralGroup.sr 0 ∈ S := Subgroup.subset_closure (by simp)
+      -- Every rotation `r i` is an integer power of `r 1`, hence in `S`.
+      have hr : ∀ i : ZMod n, DihedralGroup.r i ∈ S := by
+        intro i
+        obtain ⟨k, rfl⟩ := ZMod.intCast_surjective i
+        have : DihedralGroup.r (k : ZMod n) = DihedralGroup.r 1 ^ k := (DihedralGroup.r_one_zpow k).symm
+        rw [this]; exact S.zpow_mem hr1 k
       intro x
-      induction' x using DihedralGroup.rec with k k ih;
-      · rcases n with ( _ | _ | n );
-        · induction' k using Int.induction_on with n ihn n ihn;
-          · exact Subgroup.one_mem _;
-          · simpa [ add_comm ] using Subgroup.mul_mem _ ihn ( Subgroup.subset_closure ( Set.mem_insert _ _ ) );
-          · simpa [ sub_eq_add_neg ] using Subgroup.mul_mem _ ihn ( Subgroup.inv_mem _ ( Subgroup.subset_closure ( Set.mem_insert _ _ ) ) );
-        · fin_cases k ; exact Subgroup.subset_closure ( Set.mem_insert _ _ );
-        · convert Subgroup.pow_mem _ ( Subgroup.subset_closure ( Set.mem_insert _ _ ) ) k.val using 1 ; simp +decide [ DihedralGroup.r ];
-      · rcases n with ( _ | _ | n ) <;> simp_all +decide [ Subgroup.mem_closure ];
-        · simp_all +decide [ Set.insert_subset_iff ];
-          intro K hr hs; induction' k using Int.induction_on with n ihn n ihn; aesop;
-          · convert K.mul_mem ihn hr using 1;
-          · convert K.mul_mem ihn ( K.inv_mem hr ) using 1;
-        · fin_cases k ; simp_all +decide [ Set.insert_subset_iff ]; tauto;
-        · intro K hK; have := hK ( Set.mem_insert _ _ ) ; have := hK ( Set.mem_insert_of_mem _ ( Set.mem_singleton _ ) ) ; simp_all +decide [ Set.insert_subset_iff ] ;
-          convert K.mul_mem this ( K.pow_mem ‹DihedralGroup.r 1 ∈ K› k.val ) using 1 ; aesop;
+      cases x with
+      | r i => exact hr i
+      | sr i =>
+          have : DihedralGroup.sr i = DihedralGroup.sr 0 * DihedralGroup.r i := by
+            rw [DihedralGroup.sr_mul_r, zero_add]
+          rw [this]; exact S.mul_mem hsr0 (hr i)
     refine' MulEquiv.ext fun x => _;
     induction h_gen x using Subgroup.closure_induction ; aesop;
     · simp +decide;

@@ -35,7 +35,7 @@ structure FSIG (X : Type) where
   -- Not all points lie on the same line
   a4 : ¬∃ l, IsLine l ∧ ∀ P, P ∈ l
 
-instance (X : Type) (fsig : FSIG X) : IncidenceGeometry where
+def instFSIG (X : Type) (fsig : FSIG X) : IncidenceGeometry where
   Point := X
   Line := { l : Finset X // fsig.IsLine l }
   IsOnLine P l := P ∈ l.val
@@ -47,7 +47,7 @@ instance (X : Type) (fsig : FSIG X) : IncidenceGeometry where
     constructor
     exact ⟨ h2, h3 ⟩
     intro l' ⟨ h5, h6 ⟩
-    rw [Subtype.ext_val_iff]
+    rw [Subtype.ext_iff]
     specialize h4 l'
     apply h4
     and_intros

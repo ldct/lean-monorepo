@@ -66,7 +66,7 @@ lemma card_eq_two_mul_orderOf_of_generators {G : Type*} [Group G] [Fintype G] (x
       intro g n hn hn' hn'' m hm hm';
       contrapose! h_not_mem;
       refine' ⟨ n - m, _ ⟩;
-      rw [ zpow_sub ] ; aesop;
+      rw [ zpow_sub, hn'', ← h_not_mem ] ; group;
     -- The union of $H$ and $yH$ is the entire group $G$.
     have h_union : Set.image (fun n : ℤ => x ^ n) (Set.Ico 0 (orderOf x)) ∪ Set.image (fun n : ℤ => y * x ^ n) (Set.Ico 0 (orderOf x)) = Set.univ := by
       ext g;
@@ -132,9 +132,7 @@ def dihedralHom {G : Type*} [Group G] [Finite G] (x y : G) (m : ℕ)
     intros a b
     cases' a with a ha
     cases' b with b hb;
-    · convert zpow_zmod_val_add x _ _ _ _ using 1;
-      · rw [ ← hm, pow_orderOf_eq_one ];
-      · exact hm ▸ orderOf_pos x;
+    · exact zpow_zmod_val_add x (hm ▸ pow_orderOf_eq_one x) (hm ▸ orderOf_pos x) a b;
     · simp +decide [ pow_add, pow_one, mul_assoc, hy, hconj ];
       have h_comm : ∀ n : ℕ, y * x ^ n = x ^ (-n : ℤ) * y := by
         intro n
@@ -195,18 +193,16 @@ example (n : ℕ) (hn : 6 < n) (H : Subgroup (DihedralGroup n)) (hg : Subgroup.N
         obtain ⟨n, hn⟩ : ∃ n : ℤ, g = x ^ n ∨ g = y * x ^ n := by
           have := mem_closure_of_generators_eq_zpow_or_mul_zpow x y hconj hy g ( hgen ▸ Subgroup.mem_top g ) ; tauto;
         rcases hn with ( rfl | rfl );
-        · use DihedralGroup.r (n : ZMod (orderOf x));
-          simp +decide [ dihedralHom ];
-          rw [ ← zpow_mod_orderOf ];
-          norm_num [ ZMod.val ];
-          rcases k : orderOf x with ( _ | _ | k ) <;> simp_all +decide [ ZMod, Fin.ext_iff ];
-          erw [ ← zpow_natCast, Int.toNat_of_nonneg ( Int.emod_nonneg _ ( by linarith ) ) ];
-        · use DihedralGroup.sr (n : ZMod (orderOf x));
-          simp +decide [ dihedralHom ];
-          rw [ ← zpow_mod_orderOf ];
-          norm_num [ ZMod.val ];
-          rcases k : orderOf x with ( _ | _ | k ) <;> simp_all +decide [ ZMod, Fin.ext_iff ];
-          erw [ ← zpow_natCast, Int.toNat_of_nonneg ( Int.emod_nonneg _ ( by linarith ) ) ];
+        · refine ⟨DihedralGroup.r (n : ZMod (orderOf x)), ?_⟩;
+          have hpos : 0 < orderOf x := orderOf_pos x;
+          have : NeZero (orderOf x) := ⟨hpos.ne'⟩;
+          show x ^ ((n : ZMod (orderOf x)).val) = x ^ n;
+          rw [← zpow_natCast, ZMod.val_intCast, zpow_mod_orderOf];
+        · refine ⟨DihedralGroup.sr (n : ZMod (orderOf x)), ?_⟩;
+          have hpos : 0 < orderOf x := orderOf_pos x;
+          have : NeZero (orderOf x) := ⟨hpos.ne'⟩;
+          show y * x ^ ((n : ZMod (orderOf x)).val) = y * x ^ n;
+          rw [← zpow_natCast, ZMod.val_intCast, zpow_mod_orderOf];
       have h_card : Nat.card G = 2 * orderOf x := by
         convert card_eq_two_mul_orderOf_of_generators x y hgen hy hconj hy_not_mem using 1;
         convert Nat.card_eq_fintype_card;
@@ -255,9 +251,13 @@ example (n : ℕ) (hn : 6 < n) (H : Subgroup (DihedralGroup n)) (hg : Subgroup.N
     · intro hy_mem;
       refine' h_cases.2 _;
       have h_cyclic : Subgroup.closure { x } = ⊤ := by
-        simp_all +decide [ Subgroup.closure ];
-        congr with K ; simp +decide [ Set.insert_subset_iff, hy_mem ];
-        exact hy_mem K;
+        refine le_antisymm le_top ?_;
+        rw [hxy.2, Subgroup.closure_le];
+        intro z hz;
+        simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hz;
+        rcases hz with rfl | rfl;
+        · exact Subgroup.subset_closure rfl;
+        · exact hy_mem;
       use x;
       intro g;
       have := Subgroup.mem_closure_singleton.mp ( h_cyclic.symm ▸ Subgroup.mem_top g ) ; tauto;

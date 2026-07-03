@@ -70,13 +70,25 @@ def Hp (p : ℕ) [Fact (Prime p)] : Subgroup ZMul where
 def Closure {G} [Group G] (A : Set G) : Subgroup G :=
   IndexedIntersection { H : Subgroup G | A ⊆ H.carrier }
 
+-- `Closure` (intersection of all subgroups containing `A`) agrees with `Subgroup.closure`.
+theorem Closure_eq {G} [Group G] (A : Set G) : Closure A = Subgroup.closure A := by
+  apply le_antisymm
+  · intro x hx
+    simp [Closure, IndexedIntersection] at hx
+    exact hx (Subgroup.closure A) Subgroup.subset_closure
+  · rw [Subgroup.closure_le]
+    intro x hx
+    simp only [SetLike.mem_coe]
+    simp [Closure, IndexedIntersection]
+    intro H hH
+    exact hH hx
+
 -- Exercise 1: A subgroup equals the closure of its underlying set.
 example {G} [Group G] (H : Subgroup G) : H = Closure H := by
   ext x
   constructor
   · -- x ∈ H implies x is in every subgroup containing H
     intro hx
-    simp at hx
     simp [Closure, IndexedIntersection]
     intro i hi
     have hi : H ≤ i := hi
@@ -113,7 +125,7 @@ example {G} [Group G] (H : Subgroup G) (h1 : Group.IsAbelian H) : Group.IsAbelia
       ∃ (h : G), h ∈ H ∧ ∃ (c : G), c ∈ Subgroup.center G ∧ x = h * c := by
     intro x hx
     have hx_prod : x ∈ Subgroup.closure (H.carrier ∪ (Subgroup.center G).carrier) := by
-      convert hx
+      rwa [← Closure_eq]
     refine Subgroup.closure_induction (fun x hx => ?_) ?_ ?_ ?_ hx_prod
     · -- Base case: elements from H or Z(G)
       rcases hx with hx | hx

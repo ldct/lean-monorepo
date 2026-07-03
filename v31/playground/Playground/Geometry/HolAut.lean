@@ -1,7 +1,12 @@
 import Mathlib
+import Playground.Geometry.C2
+import Playground.Geometry.Dihedralization
 
 
 namespace HolAut
+
+open C2
+open Dihedralization (Dihedralization)
 
 structure Hol (G) [Group G] [Fintype G] [DecidableEq G] : Type where
   g : G
@@ -28,19 +33,19 @@ g*c = (1, g) * (c, 1) = (c, g^c)
 -/
 
 instance {G} [CommGroup G] : HPow G C2 G where
-  hPow a b := act a b
+  hPow a b := Dihedralization.act a b
 
 instance {G} [Group G] [Fintype G] [DecidableEq G] : Mul (Hol G) :=
   {
     mul a b := {
-      c := a.c * b.c
-      g := a.g ^ b.c * b.g
+      g := a.g * b.g
+      aut := a.aut * b.aut
     }
   }
 
 theorem Dihedralization.mul_eq {G} [CommGroup G] [Fintype G] (a b : Dihedralization G) : a * b = {
   c := a.c * b.c
-  g := (act a.g b.c) * b.g
+  g := (Dihedralization.act a.g b.c) * b.g
 } := rfl
 
 theorem either_one_or_neg (v : C2) : v = .one ∨ v = .neg := by
@@ -48,7 +53,7 @@ theorem either_one_or_neg (v : C2) : v = .one ∨ v = .neg := by
 
 theorem mul_assoc_helper {G} [CommGroup G] [Fintype G] (a b c : Dihedralization G)
 : (a * b) * c = a * (b * c) := by
-  simp [Dihedralization.mul_eq, act]
+  simp [Dihedralization.mul_eq, Dihedralization.act]
   obtain h1 | h1 := either_one_or_neg a.c
   <;> obtain h2 | h2 := either_one_or_neg b.c
   <;> obtain h3 | h3 := either_one_or_neg c.c
@@ -69,16 +74,15 @@ theorem test2 (a : C2) : .one * a = a := by decide +revert
 instance {G} [CommGroup G] [Fintype G] : Group (Dihedralization G) := {
     mul_assoc a b c := mul_assoc_helper a b c
     one_mul a := by
-      simp [one_eq, Dihedralization.mul_eq, act_one, test2]
+      simp [one_eq, Dihedralization.mul_eq, Dihedralization.act_one, test2]
     mul_one a := by
       simp [one_eq, Dihedralization.mul_eq, test1]
-      rfl
-    inv a := { g := (act a.g a.c)⁻¹, c := a.c }
+    inv a := { g := (Dihedralization.act a.g a.c)⁻¹, c := a.c }
     inv_mul_cancel a:= by
       rw [Dihedralization.mul_eq]
       simp
       obtain h1 | h1 := either_one_or_neg a.c
-      <;> simp [h1, test1, act_g_one, act_g_neg]
+      <;> simp [h1, test1, Dihedralization.act_g_one, Dihedralization.act_g_neg]
       <;> rfl
   }
 
