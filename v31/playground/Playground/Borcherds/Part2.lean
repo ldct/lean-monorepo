@@ -282,27 +282,18 @@ noncomputable def orderThreeIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.car
   classical
   have hcard : Fintype.card G = 3 := by rwa [Nat.card_eq_fintype_card] at h
   -- Pick a non-identity element g
-  have hne : ∃ g : G, g ≠ 1 := by
-    by_contra hall; push Not at hall
-    have : Fintype.card G ≤ 1 :=
-      Fintype.card_le_one_iff.mpr (fun a b => by rw [hall a, hall b])
-    omega
+  have hne : ∃ g : G, g ≠ 1 := Fintype.exists_ne_of_one_lt_card (by omega) 1
   let g : G := Classical.choose hne
   have hg : g ≠ 1 := Classical.choose_spec hne
   -- g² ≠ 1 (otherwise {1, g} is a subgroup of order 2, but 2 ∤ 3)
   have hg2 : g * g ≠ 1 := by
     intro hgg
+    have hinv : g⁻¹ = g := ((Borcherds.Group.mul_eq_one_iff_right g g).mp hgg).symm
     let H : BSubgroup G := {
       carrier := {1, g}
       one_mem := by simp
-      mul_mem := fun x y hx hy => by
-        simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx hy ⊢
-        rcases hx with rfl | rfl <;> rcases hy with rfl | rfl <;> simp [hgg]
-      inv_mem := fun x hx => by
-        simp only [Set.mem_insert_iff, Set.mem_singleton_iff] at hx ⊢
-        rcases hx with rfl | rfl
-        · left; exact Borcherds.Group.one_inv
-        · right; exact ((Borcherds.Group.mul_eq_one_iff_right g g).mp hgg).symm
+      mul_mem := by rintro x y (rfl | rfl) (rfl | rfl) <;> simp [hgg]
+      inv_mem := by rintro x (rfl | rfl) <;> simp [hinv, Borcherds.Group.one_inv]
     }
     have hdvd := H.card_carrier_dvd_card
     rw [show H.carrier = ({1, g} : Set G) from rfl, Set.ncard_pair (Ne.symm hg), h] at hdvd
@@ -311,36 +302,23 @@ noncomputable def orderThreeIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.car
   have hg2g : g * g ≠ g := fun heq => hg (Borcherds.Group.left_cancel g g 1 (by simp [heq]))
   -- Every element is 1, g, or g²
   have helem : ∀ x : G, x = 1 ∨ x = g ∨ x = g * g := by
-    have htriple : ({1, g, g * g} : Finset G).card = Fintype.card G := by
+    have huniv : ({1, g, g * g} : Finset G) = Finset.univ := Finset.eq_univ_of_card _ (by
       rw [Finset.card_insert_of_notMem (by simp [Ne.symm hg, Ne.symm hg2]),
           Finset.card_insert_of_notMem (by simpa using Ne.symm hg2g),
-          Finset.card_singleton, hcard]
-    intro x
-    have : x ∈ ({1, g, g * g} : Finset G) :=
-      (Finset.eq_univ_of_card _ htriple) ▸ Finset.mem_univ x
-    simpa using this
-  -- g³ = 1
+          Finset.card_singleton, hcard])
+    intro x; simpa [← huniv] using Finset.mem_univ x
+  -- g³ = 1 (it can't be g or g², by cancellation)
   have hg3 : g * g * g = 1 := by
     rcases helem (g * g * g) with h | h | h
     · exact h
-    · -- g³ = g ⟹ g² = 1, contradiction
-      exfalso; exact hg2 (Borcherds.Group.right_cancel g (g * g) 1 (by simp [h]))
-    · -- g³ = g² ⟹ g = 1, contradiction
-      exfalso; exact hg (Borcherds.Group.left_cancel (g * g) g 1 (by
-        rw [h]; simp))
-  -- Inverses: g⁻¹ = g², (g²)⁻¹ = g
-  have hginv : g⁻¹ = g * g := by
-    have : g * (g * g) = 1 := by rw [← Borcherds.Group.mul_assoc]; exact hg3
-    exact ((Borcherds.Group.mul_eq_one_iff_right g (g * g)).mp this).symm
-  have hg2inv : (g * g)⁻¹ = g :=
-    ((Borcherds.Group.mul_eq_one_iff_right (g * g) g).mp hg3).symm
-  -- Additional multiplication facts
+    · exact absurd (Borcherds.Group.right_cancel g (g * g) 1 (by simp [h])) hg2
+    · exact absurd (Borcherds.Group.left_cancel (g * g) g 1 (by rw [h]; simp)) hg
   have hg_g2 : g * (g * g) = 1 := by rw [← Borcherds.Group.mul_assoc]; exact hg3
   have hg2_g2 : (g * g) * (g * g) = g := by
-    calc (g * g) * (g * g)
-        = ((g * g) * g) * g := by rw [← Borcherds.Group.mul_assoc]
-      _ = 1 * g := by rw [hg3]
-      _ = g := by simp
+    rw [Borcherds.Group.mul_assoc, hg_g2, Borcherds.Group.mul_one]
+  -- Inverses: g⁻¹ = g², (g²)⁻¹ = g
+  have hginv : g⁻¹ = g * g := ((Borcherds.Group.mul_eq_one_iff_right _ _).mp hg_g2).symm
+  have hg2inv : (g * g)⁻¹ = g := ((Borcherds.Group.mul_eq_one_iff_right _ _).mp hg3).symm
   -- Build the isomorphism: 1 ↦ ⟨0⟩, g ↦ ⟨1⟩, g² ↦ ⟨2⟩
   exact {
     toEquiv := {
