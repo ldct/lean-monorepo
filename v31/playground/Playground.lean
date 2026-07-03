@@ -8,7 +8,7 @@ import Playground.Basic
 import Playground.Borcherds
 import Playground.BucketProperty
 import Playground.CPolynomial
-import Playground.CatalanBounds
+import Playground.Numerics
 import Playground.Combi1
 import Playground.ComplexExamples
 import Playground.Determinant
@@ -47,7 +47,6 @@ import Playground.OrderOf12
 import Playground.OrderOfSimproc
 import Playground.OrderOfSix
 -- import Playground.PermGeometry  -- name collision
-import Playground.PiSqBounds
 import Playground.PrimePlayground
 import Playground.ProdOfNZ
 import Playground.RDV
@@ -68,23 +67,12 @@ import Playground.VecConsSimproc
 import Playground.VecConsSimprocTest
 import Playground.ZMod'
 import Playground.ZModnZ
-import Playground.Zeta11Bounds
-import Playground.Zeta13Bounds
-import Playground.Zeta15Bounds
-import Playground.Zeta17Bounds
-import Playground.Zeta19Bounds
-import Playground.Zeta21Bounds
-import Playground.Zeta3Bounds
-import Playground.Zeta5Bounds
-import Playground.Zeta7Bounds
-import Playground.Zeta9Bounds
 import Playground.a1_aristotle
 import Playground.abc436_a
 import Playground.abs
 -- TODO(v31 port): import Playground.bt_2025
 import Playground.cancellation
 import Playground.decide_experiment
-import Playground.eulerMascheroniConstant
 import Playground.inv_question
 -- import Playground.matchMatLitToVec  -- name collision
 import Playground.meromorphic_tanh

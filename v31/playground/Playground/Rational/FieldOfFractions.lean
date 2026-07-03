@@ -13,7 +13,7 @@ namespace FieldOfFractions
 attribute [grind <=] mul_right_cancel₀
 attribute [grind .] Int.mul_ne_zero
 
-structure PreFrac (R : Type*) [CommRing R] [IsDomain R]where
+structure PreFrac (R : Type*) [CommRing R] [IsDomain R] where
   num : R
   den : R
   nz : den ≠ 0
