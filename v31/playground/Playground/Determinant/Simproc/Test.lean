@@ -1,4 +1,4 @@
-import Playground.Determinant.IntDetSimproc
+import Playground.Determinant.Simproc.IntDetSimproc
 
 /-!
 # Tests for `intDetSimproc`

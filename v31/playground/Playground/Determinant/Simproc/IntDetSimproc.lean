@@ -1,5 +1,5 @@
 import Mathlib
-import Playground.LUMinScaling
+import Playground.Determinant.Simproc.LUMinScaling
 
 /-!
 # `intDetSimproc` — determinants of integer matrices via scaled LU

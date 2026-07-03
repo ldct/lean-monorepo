@@ -32,11 +32,6 @@ import Playground.CPolynomial
 import Playground.CatalanBounds
 import Playground.Combi1
 import Playground.ComplexExamples
--- TODO(v31 port): import Playground.DetSimproc
-import Playground.DetSimproc.Extract
-import Playground.DetSimproc.GaussElim
-import Playground.DetSimproc.Lemmas
--- TODO(v31 port): import Playground.DetSimproc.ProofBuilder
 import Playground.Determinant
 import Playground.Determinant.Determinant1
 import Playground.Determinant.Determinant2
@@ -44,8 +39,7 @@ import Playground.Determinant.Determinant3
 import Playground.Determinant.Determinant4
 import Playground.Determinant.Determinant5
 import Playground.Determinant.Determinant6
-import Playground.Determinant.IntDetSimproc
-import Playground.Determinant.IntDetSimprocTest
+import Playground.Determinant.Simproc
 import Playground.DihedralCenter
 import Playground.DummitAndFooteExamples
 import Playground.EnumeratingTypes.Enumerations
@@ -156,7 +150,6 @@ import Playground.IdealSumCarrier_aristotle
 import Playground.Jensen
 import Playground.KernelTCO
 import Playground.LADRDW
-import Playground.LUMinScaling
 import Playground.LinearAlgebra.LinearAlgebra
 import Playground.ListsTest
 import Playground.MetricSpaces
