@@ -256,8 +256,10 @@ noncomputable def orderTwoIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card 
       invFun := fun y => if y.val = 0 then 1 else g
       left_inv x := by grind [helem x]
       right_inv := by
-        intro ⟨y⟩
-        fin_cases y <;> simp [hg]
+        have key : ∀ y : ZMod 2, y = 0 ∨ y = 1 := by decide
+        rintro ⟨y⟩
+        rw [CyclicGroup.ext_iff]
+        rcases key y with rfl | rfl <;> simp [hg, CyclicGroup.one_val]
     }
     map_mul := by
       intro x y
@@ -346,9 +348,11 @@ noncomputable def orderThreeIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.car
       invFun := fun y => if y.val = 0 then 1 else if y.val = 1 then g else g * g
       left_inv x := by grind [helem x]
       right_inv := by
-        intro ⟨y⟩; fin_cases y
-        · rfl
-        · show (if g = 1 then _ else _) = _; rw [if_neg hg]
+        have key : ∀ y : ZMod 3, y = 0 ∨ y = 1 ∨ y = 2 := by decide
+        rintro ⟨y⟩
+        rw [CyclicGroup.ext_iff]
+        rcases key y with rfl | rfl | rfl <;>
+          simp +decide [hg, hg2, hg2g, CyclicGroup.one_val]
     }
     map_mul x y := by
       simp only [Equiv.coe_fn_mk]
@@ -547,7 +551,12 @@ noncomputable def orderFourIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card
           if y.val = 0 then 1 else if y.val = 1 then g
           else if y.val = 2 then g * g else g * g * g
         left_inv x := by grind [helem x]
-        right_inv := by intro ⟨y⟩; fin_cases y <;> simp_all
+        right_inv := by
+          have key : ∀ y : ZMod 4, y = 0 ∨ y = 1 ∨ y = 2 ∨ y = 3 := by decide
+          rintro ⟨y⟩
+          rw [CyclicGroup.ext_iff]
+          rcases key y with rfl | rfl | rfl | rfl <;>
+            simp +decide [hg, hg2, hg2g, hg3, hg3g, hg3g2, CyclicGroup.one_val]
       }
       map_mul x y := by
         simp only [Equiv.coe_fn_mk]
@@ -658,7 +667,12 @@ noncomputable def orderFourIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card
           else if p.1.val = 0 && p.2.val = 1 then a
           else a * g
         left_inv x := by grind [helem x]
-        right_inv := by intro ⟨⟨y1⟩, ⟨y2⟩⟩; fin_cases y1 <;> fin_cases y2 <;> simp_all
+        right_inv := by
+          have key : ∀ y : ZMod 2, y = 0 ∨ y = 1 := by decide
+          rintro ⟨⟨y1⟩, ⟨y2⟩⟩
+          rcases key y1 with rfl | rfl <;> rcases key y2 with rfl | rfl <;>
+            simp +decide [hg, ha1, hag, hag_ne1, hag_neg, hag_nea,
+              Prod.ext_iff, CyclicGroup.ext_iff, CyclicGroup.one_val]
       }
       map_mul x y := by
         simp only [Equiv.coe_fn_mk]
