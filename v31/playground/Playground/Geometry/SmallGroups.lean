@@ -1,0 +1,15 @@
+-- Aggregator for `Playground/Geometry/SmallGroups/`. Commented lines are excluded on purpose.
+-- import Playground.Geometry.SmallGroups.AlternatingGroup  -- name collision: inv_eq vs RealIsometry.Basic
+-- TODO(v31 port): import Playground.Geometry.SmallGroups.EvalAbelian
+-- TODO(v31 port): import Playground.Geometry.SmallGroups.EvalCardinality
+-- TODO(v31 port): import Playground.Geometry.SmallGroups.EvalCommutingFraction
+-- TODO(v31 port): import Playground.Geometry.SmallGroups.EvalExponent
+-- TODO(v31 port): import Playground.Geometry.SmallGroups.EvalFracInvolutions
+-- TODO(v31 port): import Playground.Geometry.SmallGroups.EvalNumSubgroups
+-- TODO(v31 port): import Playground.Geometry.SmallGroups.EvalZ1Size
+-- TODO(v31 port): import Playground.Geometry.SmallGroups.EvalZ2Size
+-- TODO(v31 port): import Playground.Geometry.SmallGroups.EvalZ3Size
+-- TODO(v31 port): import Playground.Geometry.SmallGroups.EvalZ4Size
+import Playground.Geometry.SmallGroups.GroupProps
+-- import Playground.Geometry.SmallGroups.MyTest  -- name collision with LUMinScaling (main)
+-- TODO(v31 port): import Playground.Geometry.SmallGroups.SmallGroups
