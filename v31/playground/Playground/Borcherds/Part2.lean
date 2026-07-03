@@ -326,24 +326,17 @@ noncomputable def orderThreeIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.car
       invFun := fun y => if y.val = 0 then 1 else if y.val = 1 then g else g * g
       left_inv x := by grind [helem x]
       right_inv := by
-        have key : ∀ y : ZMod 3, y = 0 ∨ y = 1 ∨ y = 2 := by decide
         rintro ⟨y⟩
-        rw [CyclicGroup.ext_iff]
-        rcases key y with rfl | rfl | rfl <;>
-          simp +decide [hg, hg2, hg2g, CyclicGroup.one_val]
+        rcases (by decide : ∀ z : ZMod 3, z = 0 ∨ z = 1 ∨ z = 2) y with rfl | rfl | rfl <;>
+          simp +decide [hg, hg2, hg2g]
     }
     map_mul x y := by
-      simp only [Equiv.coe_fn_mk]
       rcases helem x with rfl | rfl | rfl <;> rcases helem y with rfl | rfl | rfl <;>
-        simp only [Borcherds.Group.one_mul, Borcherds.Group.mul_one, hg3, hg_g2, hg2_g2, if_neg hg, if_neg hg2, if_neg hg2g] <;>
-        ext <;> simp +decide [CyclicGroup.mul_val, CyclicGroup.one_val]
+        simp +decide [hg, hg2, hg2g, hg3, hg_g2, hg2_g2,
+          Borcherds.Group.one_mul, Borcherds.Group.mul_one]
     map_one := by simp [Equiv.coe_fn_mk]
     map_inv x := by
-      simp only [Equiv.coe_fn_mk]
-      rcases helem x with rfl | rfl | rfl <;>
-        simp only [Borcherds.Group.one_inv, hginv, hg2inv,
-          if_neg hg, if_neg hg2, if_neg hg2g] <;>
-        ext <;> simp +decide [CyclicGroup.one_val]
+      grind [helem x, CyclicGroup.ext_iff, CyclicGroup.inv_val, Borcherds.Group.one_inv]
   }
 
 /- Classification of groups of order 4 -/
