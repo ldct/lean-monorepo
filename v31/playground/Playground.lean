@@ -5,7 +5,6 @@ import Playground.Analysis.All
 import Playground.AoC.All
 import Playground.Basic
 import Playground.Borcherds.All
-import Playground.BucketProperty
 import Playground.CPolynomial
 import Playground.Numerics.All
 import Playground.Combi1
@@ -28,7 +27,7 @@ import Playground.GroupTheory.All
 import Playground.HM_Geometry
 import Playground.IdealSumCarrier
 import Playground.IdealSumCarrier_aristotle
--- import Playground.IrregularityOfDistribution  -- name collision
+import Playground.IrregularityOfDistribution
 import Playground.Jensen
 import Playground.KernelTCO
 import Playground.LADRDW
@@ -64,7 +63,6 @@ import Playground.ZMod'
 import Playground.ZModnZ
 import Playground.abc436_a
 import Playground.abs
--- TODO(v31 port): import Playground.bt_2025
 import Playground.cancellation
 import Playground.decide_experiment
 import Playground.inv_question
