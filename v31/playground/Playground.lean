@@ -3,7 +3,6 @@ import Playground.AddOrderOf1
 import Playground.AddOrderOf1_aristotle
 import Playground.Analysis.All
 import Playground.AoC.All
--- import Playground.AristotleTest_aristotle  -- name collision with Combi1
 import Playground.Basic
 import Playground.Borcherds.All
 import Playground.BucketProperty
@@ -67,7 +66,6 @@ import Playground.VecConsSimproc
 import Playground.VecConsSimprocTest
 import Playground.ZMod'
 import Playground.ZModnZ
-import Playground.a1_aristotle
 import Playground.abc436_a
 import Playground.abs
 -- TODO(v31 port): import Playground.bt_2025
@@ -81,9 +79,7 @@ import Playground.orthogonal
 import Playground.pq_aristotle
 import Playground.reintro
 import Playground.rotationsAreCyclic
--- import Playground.scratch  -- name collision
 import Playground.scratch2
 import Playground.scratch3
-import Playground.setIntegral_Ici_const_mul
 import Playground.test
 import Playground.zDiv2
