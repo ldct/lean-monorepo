@@ -33,13 +33,6 @@ import Playground.CatalanBounds
 import Playground.Combi1
 import Playground.ComplexExamples
 import Playground.Determinant
-import Playground.Determinant.Determinant1
-import Playground.Determinant.Determinant2
-import Playground.Determinant.Determinant3
-import Playground.Determinant.Determinant4
-import Playground.Determinant.Determinant5
-import Playground.Determinant.Determinant6
-import Playground.Determinant.Simproc
 import Playground.DihedralCenter
 import Playground.DummitAndFooteExamples
 import Playground.EnumeratingTypes.Enumerations
