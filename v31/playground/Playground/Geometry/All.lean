@@ -4,12 +4,12 @@ import Playground.Geometry.AltSimple
 import Playground.Geometry.BaerNorm
 import Playground.Geometry.C2
 import Playground.Geometry.Chapter_0
--- TODO(v31 port): import Playground.Geometry.Chapter_1_1
--- TODO(v31 port): import Playground.Geometry.Chapter_1_2
+import Playground.Geometry.Chapter_1_1
+-- import Playground.Geometry.Chapter_1_2  -- name collision: MyDihedralGroup vs MyDihedral
 import Playground.Geometry.Chapter_1_6
--- TODO(v31 port): import Playground.Geometry.Chapter_1_7
--- TODO(v31 port): import Playground.Geometry.Chapter_2_1
--- TODO(v31 port): import Playground.Geometry.Chapter_2_2
+import Playground.Geometry.Chapter_1_7
+import Playground.Geometry.Chapter_2_1
+import Playground.Geometry.Chapter_2_2
 import Playground.Geometry.Chapter_2_3
 -- TODO(v31 port): import Playground.Geometry.Chapter_2_4
 -- TODO(v31 port): import Playground.Geometry.Chapter_3_1

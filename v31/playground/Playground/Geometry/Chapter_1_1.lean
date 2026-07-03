@@ -6,7 +6,6 @@ set_option linter.style.cases false
 
 
 namespace Chapter_1_1
-open StrangeMultiplicationWorld
 
 /-
 This file formalizes the definitions, theorems and exercises from Chapter 1.1 of Dummit and Foote (page 16).
@@ -42,7 +41,7 @@ lemma C2.mul_eq (a b : C2) : a * b =
     match a, b with
     | .one, x => x
     | x, .one => x
-    | .neg, .neg => .one := by rfl
+    | .neg, .neg => .one := by cases a <;> cases b <;> rfl
 
 #synth One C2
 
@@ -237,10 +236,8 @@ We use an alternate proof, pulling forward some ideas from Poposition 2.
 
 lemma MyGroup.test2 {G} [MyGroup G] (a b : G) (h : a * b = 1) : (b * a = 1) := by
   have := congrArg (fun x => x * b⁻¹) h
-  dsimp at this
   rw [mul_assoc, mul_inv_cancel, mul_one, one_mul] at this
   have := congrArg (fun x => x⁻¹) this
-  dsimp at this
   rw [inv_inv] at this
   rw [← AreInverse.iff] at this
   exact this.2
@@ -265,7 +262,6 @@ lemma MyGroup.mul_left_cancel {G} [MyGroup G] (a u v : G) : a * u = a * v ↔ u 
   constructor
   · intro h
     have := congrArg (fun x => a⁻¹ * x) h
-    dsimp at this
     rwa [← MyGroup.mul_assoc, MyGroup.inv_mul_cancel, MyGroup.one_mul, ← MyGroup.mul_assoc, MyGroup.inv_mul_cancel, MyGroup.one_mul] at this
   · grind
 
@@ -273,7 +269,6 @@ lemma MyGroup.mul_right_cancel {G} [MyGroup G] (b u v : G) : u * b = v * b ↔ u
   constructor
   · intro h
     have := congrArg (fun x => x * b⁻¹) h
-    dsimp at this
     rwa [MyGroup.mul_assoc, MyGroup.mul_inv_cancel, MyGroup.mul_one, MyGroup.mul_assoc, MyGroup.mul_inv_cancel, MyGroup.mul_one] at this
   · grind
 
@@ -463,22 +458,16 @@ lemma MyGroup.mul_inv_rev {G} [MyGroup G] (a b : G) : (a * b)⁻¹ = b⁻¹ * a�
 The inverse of the n-th power is the n-th power of the inverse.
 -/
 lemma MyGroup.inv_npow {G} [MyGroup G] (g : G) (n : ℕ) : (g⁻¹) ^ n = (g ^ n)⁻¹ := by
-  induction' n using Nat.strong_induction_on with n ih;
-  rcases n with ( _ | _ | n );
-  · cases' ‹MyGroup G› with _ _ _ _ _ h;
-    rename_i h₁ h₂ h₃;
-    have := h₂ ( g * g⁻¹ ) ; simp_all +decide [ mul_assoc ]
-  · simp +decide [ MyGroup.npow_succ ];
-    simp +decide [ MyGroup.mul_one ];
-  · simp_all +decide [ MyGroup.npow_succ, MyGroup.mul_assoc, MyGroup.mul_inv_rev ];
-    simp +decide [ ← mul_assoc, ← ih n ( Nat.lt_succ_of_lt ( Nat.lt_succ_self _ ) ) ];
-    induction' n with n ih;
-    · simp +decide [ MyGroup.npow_zero ];
-      simp +decide [ MyGroup.mul_one, MyGroup.one_mul ];
-    · simp_all +decide [← ih];
-      induction' n + 1 with n ih <;> simp_all +decide [mul_assoc];
-      · simp +decide [ MyGroup.one_mul ];
-      · simp_all +decide [ ← mul_assoc, MyGroup.npow_succ ]
+  have hr : ∀ (x : G) (m : ℕ), x ^ (m + 1) = x ^ m * x := by
+    intro x m; rw [MyGroup.npow_add, MyGroup.npow_one]
+  induction n with
+  | zero =>
+    have h1 : (1 : G)⁻¹ = 1 := by
+      have h := MyGroup.inv_mul_cancel (1 : G)
+      rwa [MyGroup.mul_one] at h
+    simp [MyGroup.npow_zero, h1]
+  | succ n ih =>
+    rw [hr g⁻¹ n, ih, MyGroup.npow_succ, MyGroup.mul_inv_rev]
 
 end AristotleLemmas
 

@@ -75,9 +75,7 @@ instance instMyGroup {n : ℕ} : MyGroup (MyDihedralGroup n) where
 TODO - all of exercise 1
 -/
 example : MyGroup.orderOf (r 1 : MyDihedralGroup 3) = 3 := by
-  apply MyGroup.orderOf_of_hasFiniteOrder_spec
-  · norm_num
-  <;> sorry
+  sorry
 
 
 

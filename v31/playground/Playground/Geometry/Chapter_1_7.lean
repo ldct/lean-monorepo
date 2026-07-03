@@ -409,7 +409,7 @@ example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G)
       exact Nat.card_congr h_bij.some;
     rw [ ← Nat.card_eq_finsetCard ] ; aesop;
   have h_sum : ∑ t ∈ myFP.parts, t.card = Fintype.card G := by
-    convert myFP.sum_card_parts;
+    rw [myFP.sum_card_parts, Finset.card_univ]
   have h_card_parts : ∑ t ∈ myFP.parts, t.card = (Finset.card myFP.parts) * Nat.card H := by
     rw [ Finset.sum_congr rfl this, Finset.sum_const, nsmul_eq_mul ];
     simp [Nat.cast_id];

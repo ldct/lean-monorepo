@@ -147,22 +147,22 @@ Status: done
 -/
 -- Part a (2.1.1.a)
 noncomputable example : AddSubgroup ℂ := Subgroup.ofAddSubgroupCriterion
-{ a + a*Complex.I | a : ℝ }
-(by
-  use 0+0*Complex.I
-  simp only [zero_mul, add_zero, Set.mem_setOf_eq]
-  use 0
-  norm_num
-)
-(by
-  rintro x hx y hy
-  simp only [Set.mem_setOf_eq] at *
-  obtain ⟨a, rfl⟩ := hx
-  obtain ⟨b, rfl⟩ := hy
-  use a - b
-  simp only [Complex.ofReal_sub, neg_add_rev]
-  ring
-)
+  { a + a*Complex.I | a : ℝ }
+  (by
+    use 0+0*Complex.I
+    simp only [zero_mul, add_zero, Set.mem_setOf_eq]
+    use 0
+    norm_num
+  )
+  (by
+    rintro x hx y hy
+    simp only [Set.mem_setOf_eq] at *
+    obtain ⟨a, rfl⟩ := hx
+    obtain ⟨b, rfl⟩ := hy
+    use a - b
+    simp only [Complex.ofReal_sub, neg_add_rev]
+    ring
+  )
 
 -- Part b (2.1.1.b)
 example : Subgroup ℂˣ := Subgroup.ofSubgroupCriterion
@@ -172,27 +172,27 @@ example : Subgroup ℂˣ := Subgroup.ofSubgroupCriterion
 
 -- Part c (2.1.1.c)
 example (n : PNat) : AddSubgroup ℚ := Subgroup.ofAddSubgroupCriterion
-{ a | a.den ∣ n }
-(by use 0; simp only [Set.mem_setOf_eq, Rat.den_ofNat, isUnit_iff_eq_one, IsUnit.dvd])
-(by
-  rintro x hx y hy
-  simp only [Set.mem_setOf_eq] at *
-  have h_denom : (x + (-y)).den ∣ Nat.lcm x.den y.den :=
-    Rat.add_den_dvd_lcm _ _
-  exact h_denom.trans ( Nat.lcm_dvd hx hy )
-)
+  { a | a.den ∣ n }
+  (by use 0; simp only [Set.mem_setOf_eq, Rat.den_ofNat, isUnit_iff_eq_one, IsUnit.dvd])
+  (by
+    rintro x hx y hy
+    simp only [Set.mem_setOf_eq] at *
+    have h_denom : (x + (-y)).den ∣ Nat.lcm x.den y.den :=
+      Rat.add_den_dvd_lcm _ _
+    exact h_denom.trans ( Nat.lcm_dvd hx hy )
+  )
 
 -- Part d (2.1.1.d)
 example (n : PNat) : AddSubgroup ℚ := Subgroup.ofAddSubgroupCriterion
-{ a | a.den.Coprime n }
-(by use 0; simp only [Set.mem_setOf_eq, Rat.den_ofNat, Nat.coprime_one_left_eq_true])
-(by
-  rintro x hx y hy
-  simp only [Set.mem_setOf_eq] at *
-  have h_den : (x + -y).den ∣ x.den * y.den :=
-    Rat.add_den_dvd _ _
-  exact Nat.Coprime.coprime_dvd_left h_den ( Nat.Coprime.mul_left hx hy )
-)
+  { a | a.den.Coprime n }
+  (by use 0; simp only [Set.mem_setOf_eq, Rat.den_ofNat, Nat.coprime_one_left_eq_true])
+  (by
+    rintro x hx y hy
+    simp only [Set.mem_setOf_eq] at *
+    have h_den : (x + -y).den ∣ x.den * y.den :=
+      Rat.add_den_dvd _ _
+    exact Nat.Coprime.coprime_dvd_left h_den ( Nat.Coprime.mul_left hx hy )
+  )
 
 def Rational (x : ℝ) : Prop := ∃ q : ℚ, x = q
 
