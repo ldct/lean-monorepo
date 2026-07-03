@@ -15,7 +15,7 @@ import Playground.DummitAndFooteExamples
 import Playground.EnumeratingTypes.Enumerations
 import Playground.Enumerations
 import Playground.Equiv
--- TODO(v31 port): import Playground.FastDecide
+import Playground.FastDecide
 import Playground.Fib
 import Playground.FibZ
 import Playground.FinsetInterval
