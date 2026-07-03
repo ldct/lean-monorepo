@@ -228,12 +228,8 @@ noncomputable def orderTwoIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card 
     Borcherds.GroupIso G (CyclicGroup 2) := by
   classical
   rw [Nat.card_eq_fintype_card] at h
-  have hne : ∃ g : G, g ≠ 1 := by
-    by_contra hall; push Not at hall
-    have : Fintype.card G ≤ 1 := by
-      apply Fintype.card_le_one_iff.mpr
-      intro a b; rw [hall a, hall b]
-    omega
+  -- Pick a non-identity element g
+  have hne : ∃ g : G, g ≠ 1 := Fintype.exists_ne_of_one_lt_card (by omega) 1
   let g : G := Classical.choose hne
   have hg : g ≠ 1 := Classical.choose_spec hne
   -- Every element is 1 or g
@@ -245,10 +241,9 @@ noncomputable def orderTwoIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card 
   have hgg : g * g = 1 := by
     rcases helem (g * g) with h | h
     · exact h
-    · exfalso; exact hg (Borcherds.Group.left_cancel g g 1 (by simp [h]))
+    · exact absurd (Borcherds.Group.left_cancel g g 1 (by simp [h])) hg
   -- g is its own inverse
-  have hginv : g⁻¹ = g := by
-    exact ((Borcherds.Group.mul_eq_one_iff_right g g).mp hgg).symm
+  have hginv : g⁻¹ = g := ((Borcherds.Group.mul_eq_one_iff_right g g).mp hgg).symm
   -- Build the isomorphism: 1 ↦ ⟨0⟩, g ↦ ⟨1⟩
   exact {
     toEquiv := {
@@ -256,23 +251,15 @@ noncomputable def orderTwoIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card 
       invFun := fun y => if y.val = 0 then 1 else g
       left_inv x := by grind [helem x]
       right_inv := by
-        have key : ∀ y : ZMod 2, y = 0 ∨ y = 1 := by decide
         rintro ⟨y⟩
-        rw [CyclicGroup.ext_iff]
-        rcases key y with rfl | rfl <;> simp [hg, CyclicGroup.one_val]
+        rcases (by decide : ∀ z : ZMod 2, z = 0 ∨ z = 1) y with rfl | rfl <;> simp +decide [hg]
     }
-    map_mul := by
-      intro x y
-      simp only [Equiv.coe_fn_mk]
+    map_mul x y := by
       rcases helem x with rfl | rfl <;> rcases helem y with rfl | rfl <;>
-        simp only [hg, hgg, Borcherds.Group.one_mul, Borcherds.Group.mul_one] <;>
-        ext <;> simp [show (1 : ZMod 2) + 1 = 0 from rfl]
-    map_one := by simp only [Equiv.coe_fn_mk, if_true]; rfl
-    map_inv := by
-      intro x
-      simp only [Equiv.coe_fn_mk]
-      rcases helem x with rfl | rfl
-      <;> simp [hginv, CyclicGroup.inv_val, CyclicGroup.ext_iff]
+        simp +decide [hg, hgg, Borcherds.Group.one_mul, Borcherds.Group.mul_one]
+    map_one := by simp [Equiv.coe_fn_mk]
+    map_inv x := by
+      grind [helem x, CyclicGroup.ext_iff, CyclicGroup.inv_val, Borcherds.Group.one_inv]
   }
 
 /- Classification of groups of order 3 -/
