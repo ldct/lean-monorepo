@@ -36,7 +36,6 @@ import Playground.LinearAlgebra.LinearAlgebra
 import Playground.ListsTest
 import Playground.MetricSpaces.All
 -- import Playground.MissingTactics  -- name collision
-import Playground.MonadicReduce
 import Playground.MyPolynomial
 import Playground.NZisSpan
 import Playground.NZisSpan_aristotle
@@ -53,10 +52,7 @@ import Playground.RangeFilter
 import Playground.Rational.All
 import Playground.RealIsometry.All
 import Playground.Ring0eq1
-import Playground.Ring0eq1_aristotle
 import Playground.SMOQ2
-import Playground.SO3_subgroups
-import Playground.Simproc
 import Playground.Stern
 import Playground.SumOfNZ
 import Playground.TendsTo
@@ -73,13 +69,8 @@ import Playground.cancellation
 import Playground.decide_experiment
 import Playground.inv_question
 -- import Playground.matchMatLitToVec  -- name collision
-import Playground.meromorphic_tanh
-import Playground.ml_tests
 import Playground.orthogonal
 import Playground.pq_aristotle
 import Playground.reintro
 import Playground.rotationsAreCyclic
 import Playground.scratch2
-import Playground.scratch3
-import Playground.test
-import Playground.zDiv2
