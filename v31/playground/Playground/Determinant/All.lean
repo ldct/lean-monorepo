@@ -4,7 +4,7 @@ import Playground.Determinant.Determinant3
 import Playground.Determinant.Determinant4
 import Playground.Determinant.Determinant5
 import Playground.Determinant.Determinant6
-import Playground.Determinant.Simproc
+import Playground.Determinant.Simproc.All
 
 /-!
 # Determinants

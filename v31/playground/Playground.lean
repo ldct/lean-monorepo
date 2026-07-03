@@ -1,17 +1,17 @@
 import Playground.AbsArith
 import Playground.AddOrderOf1
 import Playground.AddOrderOf1_aristotle
-import Playground.Analysis
-import Playground.AoC
+import Playground.Analysis.All
+import Playground.AoC.All
 -- import Playground.AristotleTest_aristotle  -- name collision with Combi1
 import Playground.Basic
-import Playground.Borcherds
+import Playground.Borcherds.All
 import Playground.BucketProperty
 import Playground.CPolynomial
-import Playground.Numerics
+import Playground.Numerics.All
 import Playground.Combi1
 import Playground.ComplexExamples
-import Playground.Determinant
+import Playground.Determinant.All
 import Playground.DihedralCenter
 import Playground.DummitAndFooteExamples
 import Playground.EnumeratingTypes.Enumerations
@@ -23,9 +23,9 @@ import Playground.FibZ
 import Playground.FinsetInterval
 import Playground.FracPartIntegral
 import Playground.FunctionalTheorems
-import Playground.GaussianIntegers
-import Playground.Geometry
-import Playground.GroupTheory
+import Playground.GaussianIntegers.All
+import Playground.Geometry.All
+import Playground.GroupTheory.All
 import Playground.HM_Geometry
 import Playground.IdealSumCarrier
 import Playground.IdealSumCarrier_aristotle
@@ -35,7 +35,7 @@ import Playground.KernelTCO
 import Playground.LADRDW
 import Playground.LinearAlgebra.LinearAlgebra
 import Playground.ListsTest
-import Playground.MetricSpaces
+import Playground.MetricSpaces.All
 -- import Playground.MissingTactics  -- name collision
 import Playground.MonadicReduce
 import Playground.MyPolynomial
@@ -51,8 +51,8 @@ import Playground.PrimePlayground
 import Playground.ProdOfNZ
 import Playground.RDV
 import Playground.RangeFilter
-import Playground.Rational
-import Playground.RealIsometry
+import Playground.Rational.All
+import Playground.RealIsometry.All
 import Playground.Ring0eq1
 import Playground.Ring0eq1_aristotle
 import Playground.SMOQ2

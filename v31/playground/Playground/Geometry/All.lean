@@ -56,7 +56,7 @@ import Playground.Geometry.Perf
 import Playground.Geometry.RingEquivProps
 import Playground.Geometry.RingEquivProps2
 import Playground.Geometry.RingEquivProps_aristotle
-import Playground.Geometry.SmallGroups
+import Playground.Geometry.SmallGroups.All
 import Playground.Geometry.SumOfNZ
 import Playground.Geometry.SumOfNZ_aristotle
 import Playground.Geometry.ZModIntersect
