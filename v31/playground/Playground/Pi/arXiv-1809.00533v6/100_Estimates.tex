@@ -1,0 +1,392 @@
+\en{In this chapter, we prove the estimates and approximations for $1728J(\tau)$ and $s_2(\tau)$ phrased in the following two theorems.}%
+\de{In diesem Kapitel beweisen wir die Abschätzungen und Näherungen für $1728J(\tau)$ und $s_2(\tau)$, die in den folgenden beiden Theoremen formuliert sind.}
+\en{These will be used to prove that Kummer's solution in Ch.~\ref{\en{EN}kapkummer} converges, and they are needed to calculate the coefficients in Ch.~\ref{\en{EN}kapFormel}.}%
+\de{Diese garantieren, dass Kummers Lösung in Kap.~\ref{\en{EN}kapkummer} konvergiert und ermöglichen die Berechnungen der Koeffizienten in Kap.~\ref{\en{EN}kapFormel}.}
+\medskip
+
+\begin{theo}\label{\en{EN}theonaeherJ}
+    \en{For the $J$-function from Theorem~\ref{\en{EN}fouriertheorem}:}%
+    \de{Für die $J$-Funktion aus Theorem~\ref{\en{EN}fouriertheorem}:}
+    $$ J(\tau) := \frac{ E_4(\tau)^3}{ E_4(\tau)^3- E_6(\tau)^2}$$
+    \en{the following estimates hold in the region $\im(\tau)>1\ko25$:}%
+    \de{gelten im Bereich $\im(\tau)>1\ko25$ folgende Abschätzungen:}
+    $$|J(\tau)|>1\ko096>1\qquad\text{\en{and}\de{sowie}}\qquad\frac{0\ko737}{|q|}<|1728J(\tau)|<\frac{1\ko321}{|q|}$$
+    \en{For calculating values of $J(\tau)$, one can use the following approximation:}%
+    \de{Zur Berechnung kann man die folgende Näherung verwenden:}
+    $$\tilde J(\tau) := \frac{\left(1 + 240\left( q + 9 q^2\right)\right)^3}{1728 q \cdot (1-q-q^2)^{24}}\qquad\text{\en{with}\de{mit}}\quad q=e^{2\pi i \tau}$$
+    \en{This differs by less than $0\ko2$ from the exact value, if~~$\im(\tau)>1\ko25$:}%
+    \de{Diese weicht für $\im(\tau)>1\ko25$ um weniger als $0\ko2$ vom exakten Wert ab:}
+    $$|1728J(\tau)-1728\tilde J(\tau)|< 500|q| < 0\ko2 $$
+\end{theo}
+
+\begin{bem}\label{\en{EN}penta}
+\en{The representation of $\tilde J$ is a consequence of the Dedekind $\eta$ function and Euler's pentagonal number theorem.
+Both are not proven here, because the estimations we need can be proven without them.
+For even better approximations of the $J$-function, we could add more terms of Prop.~\ref{\en{EN}sigmaeisen} in the nominator
+and more terms of the pentagonal number theorem in the denominator, i.e.~more terms of $\left(1-q-q^2+q^5+q^7-q^{12}-q^{15}+q^{22}+q^{26}\pm\ldots\right)^{24}$.}%
+\de{Die Darstellung des Nenners von $\tilde J$ folgt aus der Dedekind'schen $\eta$-Funk"-tion und dem Euler'schen Pentagonalzahlensatz.
+Beide beweisen wir hier nicht, weil die vorliegende Abschätzung auch ohne den vollen Beweis nachgerechnet werden kann.
+Wollte man eine genauere Näherung für die $J$-Funktion erhalten, könnte man im Zähler weitere Terme aus Satz~\ref{\en{EN}sigmaeisen} verwenden
+und im Nenner weitere Terme des Pentagonalzahlensatzes, also mehr von $\left(1-q-q^2+q^5+q^7-q^{12}-q^{15}+q^{22}+q^{26}\pm\ldots\right)^{24}$ ergänzen.}
+\end{bem}
+
+\begin{theo}\label{\en{EN}theonaehers2}
+    \en{The function $s_2$, defined in the upper half plane by:}%
+    \de{Die Funktion $s_2$, die auf der oberen Halbebene wie folgt definiert ist:}
+    $$s_2(\tau):=\frac{E_4(\tau)}{E_6(\tau)}\cdot\left(E_2(\tau)-\frac{3}{\pi \im(\tau)}\right)$$
+    \en{can be replaced by the following approximation using $q=e^{2\pi i \tau}$:}%
+    \de{kann mit $q=e^{2\pi i \tau}$ durch die folgende Näherung ersetzt werden:}
+    $$\tilde s_2(\tau):=\frac{1+240 (q+9q^2)}{1 - 504 (q+33q^2)}\cdot\left(1 - 24  (q+3q^2) -\frac{3}{\pi \im(\tau)}\right)$$
+    \en{If~~$\im(\tau)>1\ko25$, the following estimate holds for this approximation:}%
+    \de{Für diese Näherung gilt im Bereich $\im(\tau)>1\ko25$ folgende Abschätzung:}
+    $$|s_2(\tau)-\tilde s_2 (\tau)| < 222000|q|^3 $$
+\end{theo}
+\medskip
+\en{In order to prove these two theorems, we prove first:}%
+\de{Für den Beweis der beiden Theoreme beweisen wir zunächst:}
+
+\begin{thm}\label{\en{EN}sigmaeisen}
+    \en{With help of the sum of the divisors of the number $n$, more accurate with $$\sigma_k(n):=\sum_{d|n}d^k$$ we get the following equivalent representation of the normalized Eisenstein series:}%
+    \de{Mit Hilfe der Summe über die Teiler der Zahl $n$, genauer mit $$\sigma_k(n):=\sum_{d|n}d^k$$ erhalten wir äquivalente Darstellungen der normierten Eisensteinreihen:}
+    \begin{align*}
+    E_2(\tau) &= 1- 24 \sum_{n=1}^\infty \sigma_1(n)\cdot q^n = 1 - 24\left( q + 3 q^2 +\sum_{n=3}^\infty \sigma_1(n)\cdot q^n\right)\\
+    E_4(\tau) &= 1+ 240 \sum_{n=1}^\infty \sigma_3(n)\cdot q^n = 1 + 240\left( q + 9 q^2 +\sum_{n=3}^\infty \sigma_3(n)\cdot q^n\right)\\
+    E_6(\tau) &= 1- 504 \sum_{n=1}^\infty \sigma_5(n)\cdot q^n = 1 -504\left( q + 33 q^2 +\sum_{n=3}^\infty \sigma_5(n)\cdot q^n\right)
+    \end{align*}
+\end{thm}
+\begin{proof}
+\en{In Theorem~\ref{\en{EN}fouriertheorem} we defined the normalized Eisenstein series $E_k$. Now we use the summation formula of the geometric series:}%
+\de{In Theorem~\ref{\en{EN}fouriertheorem} wurden die normierten Eisensteinreihen $E_k$ definiert. Jetzt formen wir mit der Formel für die geometrische Reihe um:}
+$$\sum_{n=1}^\infty n^k\cdot \frac{q^n}{1-q^n} = \sum_{n=1}^\infty n^k \cdot \sum_{m=1}^\infty (q^n)^m = \sum_{m,n=1}^\infty n^k\cdot q^{m\cdot n}$$
+\en{Then we combine all summands with the same exponent $m\cdot n = p$ and get}%
+\de{Dann fassen wir alle Summanden, die zum selben Exponenten $m\cdot n = p$ führen zusammen und erhalten}
+$$\sum_{m,n=1}^\infty n^k\cdot q^{m\cdot n} = \sum_{p=1}^\infty\left(\sum_{n|p} n^k\right)\cdot q^p=\sum_{p=1}^\infty\sigma_k(p)\cdot q^p$$
+\en{Thus we get the new representations of the normalized Eisenstein series. The beginnings of the $q$-series from Prop.~\ref{\en{EN}sigmaeisen} are a consequence of $\sigma_k(1)=1^k$ and $\sigma_k(2)=1^k+2^k$.}%
+\de{Somit erhalten wir die neuen Darstellungen der Eisensteinreihen. Die angegebenen An"-fänge der $q$-Entwicklungen folgen aus $\sigma_k(1)=1^k$ und $\sigma_k(2)=1^k+2^k$.}
+\end{proof}
+
+\begin{bem}
+\en{We calculated the first eight values of $\sigma_{1;3;5}$ for Table~\ref{\en{EN}tab:WerteSigmaK}, but we will use only the first three of each.}%
+\de{Für Tabelle~\ref{\en{EN}tab:WerteSigmaK} wurden jeweils die ersten acht Werte von $\sigma_{1;3;5}$ berechnet. Wir werden allerdings nur jeweils die ersten drei verwenden.}
+\end{bem}
+
+\begin{table}[ht]
+    \centering\renewcommand{\arraystretch}{1.5}
+    \begin{tabular}{c||c|c|c|c|c|c|c|c}
+        $n$ & $1$ & $2$ & $3$ & $4$ & $5$ & $6$ & $7$ & $8$\\
+        \hline
+        $\{d|n\}$ & $\{1\}$ & $\{1;2\}$ & $\{1;3\}$ & $\{1;2;4\}$ & $\{1;5\}$ & $\{1;2;3;6\}$ & $\{1;7\}$ & $\{1;2;4;8\}$\\
+        \hline
+        $\sigma_1(n)$ & $1$ & $3$ & $4$ & $7$ & $6$ & $12$ & $8$ & $15$\\
+        $\sigma_3(n)$ & $1$ & $9$ & $28$ & $73$ & $126$ & $252$ & $344$ & $585$\\
+        $\sigma_5(n)$ & $1$ & $33$ & $244$ & $1057$ & $3126$ & $8052$ & $16808$ & $33825$\\
+    \end{tabular}\bigskip 
+    \caption{\en{Some values of the divisor functions $\sigma_k$}\de{Einige Werte der $\sigma_k$-Funktionen}}
+    \label{\en{EN}tab:WerteSigmaK}
+\end{table}
+
+\begin{lem}\label{\en{EN}sigmaschaetz}
+\en{For all natural $n$ and $k$ it holds}%
+\de{Für alle natürlichen $k$ und $n$ gilt die Abschätzung}
+$$\sigma_k(n)\leq n^{k+1}.$$
+\end{lem}
+\begin{proof}
+\en{We extend the summation over the divisors of $n$ to all natural numbers until $n$:}%
+\de{Wir erweitern die Summe über die Teiler der Zahl $n$ auf die Summe über alle Zahlen bis $n$:}\belowdisplayskip=-12pt
+$$\sigma_k(n) = \sum_{d|n}d^k \leq \sum_{d=1}^n d^k \leq \sum_{d=1}^n n^k = n\cdot n^k = n^{k+1}$$
+\end{proof}
+
+\begin{lem}\label{\en{EN}lemrestchaezt}
+\en{For the remainder $R_k^{(l)}$ in the normalized Eisenstein series $E_k$ of Prop.~\ref{\en{EN}sigmaeisen}}%
+\de{Für das Restglied $R_k^{(l)}$ in den normierten Eisensteinreihen $E_k$ von Satz~\ref{\en{EN}sigmaeisen}}
+$$R_k^{(l)} := \sum_{n=l}^\infty \sigma_{k-1}(n)\cdot q^n$$
+\en{the following estimate holds, if $\left(1+\frac 1 l\right)^k\cdot |q|<1$:}%
+\de{gilt die folgende Abschätzung, falls $\left(1+\frac 1 l\right)^k\cdot |q|<1$ ist:}
+$$\left|R_k^{(l)}\right| \leq \frac{l^k\cdot |q|^l}{1-\left(1+\frac 1 l\right)^k\cdot |q|}$$
+\end{lem}
+\begin{proof}
+\en{Lemma~\ref{\en{EN}sigmaschaetz} yields:}%
+\de{Zunächst folgt aus Lemma~\ref{\en{EN}sigmaschaetz}:}
+$$\left|R_k^{(l)}\right| \leq \sum_{n=l}^\infty \sigma_{k-1}(n)\cdot |q|^n\leq \sum_{n=l}^\infty \underbrace{n^k\cdot |q|^n}_{=:r_n}$$
+\en{In this sum, we apply the ratio test:}%
+\de{In der Summe wenden wir das Quotientenkriterium an:}
+\begin{align*}
+    \frac{r_{n+1}}{r_n} = \frac{(n+1)^k\cdot |q|^{n+1}}{n^k\cdot |q|^n}
+    = \left(1 +\frac{1}{n}\right)^k\cdot |q|
+    \leq \left(1 +\frac{1}{l}\right)^k\cdot |q| =: s
+\end{align*}
+\en{Here, direct comparison $r_n \leq r_l \cdot s^{n-l}$ yields a geometric series, converging if $|s|<1$: }%
+\de{also kann man mit $r_n \leq r_l \cdot s^{n-l}$ die geometrische Reihe als Majorante verwenden:}\belowdisplayskip=-12pt
+$$\left|R_k^{(l)}\right| \leq r_l\cdot\sum_{n=l}^\infty s^{n-l} = r_l\cdot\frac{1}{1-s} = \frac{l^k\cdot |q|^l}{1-\left(1+\frac 1 l\right)^k\cdot |q|}$$
+\end{proof}
+
+\begin{lem}[Archimedes]\label{\en{EN}archim-lem}
+\en{It holds $3+\frac{10}{71}<\pi<3+\frac{1}{7}$. This implies:}%
+\de{Es gilt $3+\frac{10}{71}<\pi<3+\frac{1}{7}$. Daraus folgt:}
+$$\text{\en{If}\de{Wenn} }\im(\tau)>1\ko25\text{, \en{then}\de{dann ist} }|q|<e^{-7\ko852}.$$
+\end{lem}
+\begin{proof}
+\en{Archimedes proved in \cite[p.~91--98]{\en{EN}archimedes}, that $3+\frac{1}{7}>\pi>3+\frac{10}{71}> 3\ko1408$\footnote{For an alternative proof of this, evaluate Dalzell's integral $I:=\int_{0}^{1}{\frac {x^{4}\left(1-x\right)^{4}}{1+x^{2}}}\,dx = {\frac {22}{7}}-\pi$.
+Then observe $0< I < \int_{0}^{1}{x^{4}\left(1-x\right)^{4}}\,dx=\frac 1 {630}$ and thus $3+\frac{10}{71}<\frac{22}{7}-\frac 1 {630}<\pi<\frac{22}{7}$.}.
+If we now denote $\tau=x+iy$, we get $q=e^{2\pi i \tau} = e^{2\pi i x}\cdot e^{-2\pi y}$ and $$|q|=e^{-2\pi \im(\tau)}$$
+Then $\im(\tau)>1\ko25$ and $\pi>3\ko1408$ yields $2\pi \im(\tau)>7\ko852$ and $|q|<e^{-7\ko852}$.}%
+\de{Archimedes bewies in \cite[S.~91--98]{\en{EN}archimedes}, dass $3+\frac{1}{7}>\pi>3+\frac{10}{71}> 3\ko1408$ gilt\footnote{Einen Alternativbeweis für diese Abschätzung liefert das Dalzell-Integral $I:=\int_{0}^{1}{\frac {x^{4}\left(1-x\right)^{4}}{1+x^{2}}}\,dx = {\frac {22}{7}}-\pi$.
+Für dieses gilt nämlich $0< I < \int_{0}^{1}{x^{4}\left(1-x\right)^{4}}\,dx=\frac 1 {630}$ und somit $3+\frac{10}{71}<\frac{22}{7}-\frac 1 {630}<\pi<\frac{22}{7}$.}.
+Mit $\tau=x+iy$ erhalten wir $q=e^{2\pi i \tau} = e^{2\pi i x}\cdot e^{-2\pi y}$ und $$|q|=e^{-2\pi \im(\tau)}$$
+Aus $\im(\tau)>1\ko25$ und $\pi>3\ko1408$ folgt dann $2\pi \im(\tau)>7\ko852$ bzw.~$|q|<e^{-7\ko852}$.}
+\end{proof}
+
+\begin{bem}
+\en{From here onwards, the calculations are merely technical. One misses next to nothing by skipping the remainder of this chapter.}%
+\de{Ab hier werden die Rechnungen rein technisch, man verpasst nichts wenn man den Rest dieses Kapitels überblättert.}
+\end{bem}
+
+\begin{lem}\label{\en{EN}lemrestkonkr}
+\en{In the region $\im(\tau)>1\ko25$, it holds for the remainders from Lemma~\ref{\en{EN}lemrestchaezt}:}%
+\de{Im Bereich $\im(\tau)>1\ko25$ gilt für die Restglieder aus Lemma~\ref{\en{EN}lemrestchaezt}:}
+\begin{align*}
+    \left|R_2^{(3)}\right| &\leq ~4\ko007|q|^3
+    \qquad\text{\en{and}\de{und}}\qquad
+    \left|R_4^{(3)}\right| \leq ~28\ko1|q|^3
+    \qquad\text{\en{and}\de{und}}\qquad
+    \left|R_6^{(3)}\right| \leq 245\ko6|q|^3
+\end{align*}
+\end{lem}
+\begin{proof}
+\en{First we use Lemma~\ref{\en{EN}lemrestchaezt} and then $|q|<e^{-7\ko852}$ from Lemma~\ref{\en{EN}archim-lem}:}%
+\de{Zunächst nutzen wir Lemma~\ref{\en{EN}lemrestchaezt} und dann $|q|<e^{-7\ko852}$ aus Lemma~\ref{\en{EN}archim-lem}:}
+\begin{align*}
+    \left|R_2^{(4)}\right| &\leq \frac{4^2\cdot |q|^4}{1-\left(1+\frac 1 4\right)^2\cdot |q|}\leq ~~16\ko01|q|^4\\
+    \left|R_4^{(4)}\right| &\leq \frac{4^4\cdot |q|^4}{1-\left(1+\frac 1 4\right)^4\cdot |q|}\leq 256\ko25|q|^4\\
+    \left|R_6^{(4)}\right| &\leq \frac{4^6\cdot |q|^4}{1-\left(1+\frac 1 4\right)^6\cdot |q|}\leq 4102\ko1|q|^4
+\end{align*}
+\en{Then we use the values of $\sigma_k$ from Table~\ref{\en{EN}tab:WerteSigmaK} and obtain the stated estimates:}%
+\de{Dann verwenden wir die Werte der $\sigma_k$ aus Tabelle~\ref{\en{EN}tab:WerteSigmaK} und erhalten die zu beweisenden besseren Abschätzungen:}\belowdisplayskip=-12pt
+\begin{align*}
+    \left|R_2^{(3)}\right| &= \left|\sigma_1(3)\cdot q^3 + R_2^{(4)}\right| \leq ~~4|q|^3 + ~~~16\ko01|q|^4 \leq 4\ko007|q|^3\\
+    \left|R_4^{(3)}\right| &= \left|\sigma_3(3)\cdot q^3 + R_4^{(4)}\right| \leq ~28|q|^3 + 256\ko25|q|^4 \leq ~28\ko1|q|^3\\
+    \left|R_6^{(3)}\right| &= \left|\sigma_5(3)\cdot q^3 + R_6^{(4)}\right| \leq 244|q|^3 + 4102\ko1|q|^4 \leq 245\ko6|q|^3
+\end{align*}
+\end{proof}
+
+
+
+\begin{lem}\label{\en{EN}lemE6}
+\en{If $\im(\tau)>1\ko25$ it holds $|E_6(\tau)|>0\ko8$ and in particular $E_6(\tau)\neq 0$.}%
+\de{Im Bereich $\im(\tau)>1\ko25$ gilt $|E_6(\tau)|>0\ko8$ und insbesondere $E_6(\tau)\neq 0$.}
+\end{lem}
+\begin{proof}
+\en{It holds}\de{Es gilt} \belowdisplayskip=-12pt
+\begin{align*}
+|E_6(\tau)| &= \left|1-504\left(q+33q^2+R_6^{(3)}\right)\right|\\
+&\geq 1 - 504 \left(|q| +33|q|^2+245\ko6|q|^3\right) >0\ko8
+\end{align*}
+\end{proof}
+
+\begin{defi}\label{\en{EN}delta}
+\en{We denote the difference between a function $f$ and its approximation $\tilde f$ with $\dl{\tilde f}$:}%
+\de{Wir bezeichnen die Differenz zwischen einer Funktion $f$ und ihrer Näherung $\tilde f$ mit $\dl{\tilde f}$:}
+$$f = \tilde f + \dl{\tilde f}$$
+\end{defi}
+
+\pagebreak
+
+
+
+\begin{lem}\label{\en{EN}lemxy}
+\en{For the quadratic approximations}%
+\de{Für die drei quadratischen Näherungen}
+\begin{align*}
+    X&:=E_4^{(2)}=1+240(q+9q^2)\\
+    Y&:=E_6^{(2)}=1-504(q+33q^2)\\
+    Z&:=E_2^{(2)}-\frac{3}{\pi \im(\tau)}=1-24(q+3q^2)-\frac{3}{\pi \im(\tau)}
+\end{align*}
+\en{with $E_4(\tau)=X+\dl{X}$, $E_6(\tau)=Y+\dl{Y}$ and $E_2(\tau)-\frac{3}{\pi \im(\tau)}=Z+\dl{Z}$, the following estimates hold in the region $\im(\tau)>1\ko25$:}
+\de{mit $E_4(\tau)=X+\dl{X}$, $E_6(\tau)=Y+\dl{Y}$ und $E_2(\tau)-\frac{3}{\pi \im(\tau)}=Z+\dl{Z}$ gelten im Bereich $\im(\tau)>1\ko25$ die Abschätzungen:}
+\begin{align*}
+    \begin{aligned}
+    |\dl{X}|& \leq 6744 |q|^3\\
+    |\dl{Y}|& \leq 123783 |q|^3\\
+    |\dl{X^3}|& \leq 24202 |q|^3\\
+    |\dl{Y^2}|& \leq 296734 |q|^3\\
+    |\dl{Z}|& \leq 96\ko2 |q|^3
+    \end{aligned}
+    \qquad \text{\en{and}\de{und}} \qquad\quad 
+    \begin{aligned}
+    0\ko9063 \leq |X| &\leq 1\ko0937\\
+    0\ko8014 \leq |Y| &\leq 1\ko1986\\
+    0\ko7444 \leq |X^3| &\leq 1\ko3083\\
+    0\ko6422 \leq |Y^2| &\leq 1\ko4367\\
+                   |Z| &\leq 1\ko0094
+    \end{aligned}
+\end{align*}
+\end{lem}
+\begin{proof}
+\en{From the definition of $X$ and $Y$ we obtain:}%
+\de{Zunächst folgt aus der Definition von $X$ und $Y$:}
+\begin{align*}
+    |X - 1|&\leq 240(|q|+\phantom{3}9|q|^2)\leq 0\ko0937\qquad\Longrightarrow\qquad 0\ko9063 \leq |X| \leq 1\ko0937\\
+    |Y - 1|&\leq 504(|q|+33|q|^2)\leq 0\ko1986\qquad\Longrightarrow\qquad 0\ko8014 \leq |Y| \leq 1\ko1986
+\end{align*}
+\en{This yields:}\de{Hieraus folgt}
+\begin{align*}
+    0\ko7444\leq 0\ko9063^3 \leq |X^3| \leq 1\ko0937^3\leq 1\ko3083\\
+    0\ko6422 \leq 0\ko8014^2 \leq |Y^2| \leq 1\ko1986^2 \leq 1\ko4367
+\end{align*}
+\en{From the definition of $Z$ we obtain:}%
+\de{Dann folgt aus der Definition von $Z$:}
+$$|Z|\leq\left|1-\frac{3}{\pi \im(\tau)}\right|+24(|q|+3|q|^2) \leq 1+24(|q|+3|q|^2)\leq 1\ko0094$$
+\en{Then we get from}\de{Außerdem gilt mit} Lemma~\ref{\en{EN}lemrestkonkr}:
+\begin{align*}
+    |\dl{X}|&= 240\left|R_4^{(3)}\right|\leq 6744 |q|^3\\
+    |\dl{Y}|&= 504\left|R_6^{(3)}\right|\leq 123783 |q|^3\\
+    |\dl{Z}|&= 24\left|R_2^{(3)}\right|\leq 96\ko2 |q|^3
+\end{align*}
+\en{This yields the errors of $X^3$ and $Y^2$ compared to $E_4^3$ and $E_6^2$:}%
+\de{Hieraus folgen die Fehler von $X^3$ und $Y^2$ im Vergleich zu $E_4^3$ und $E_6^2$:}\belowdisplayskip=-12pt
+\begin{align*}
+    E_4^3=(X+\dl{X})^3 &= X^3 + \dl{X}\cdot\left(3 X^2 + 3 X \dl{X} + (\dl{X})^2\right)=X^3 + \dl{X^3}\\
+    \Longrightarrow\quad |\dl{X^3}| &\leq |\dl{X}|\cdot\left(3 |X|^2 + 3 |X|\cdot |\dl{X}| + |\dl{X}|^2\right)\leq 24202|q|^3\\
+    E_6^2 = (Y+\dl{Y})^2 &= Y^2 + \dl{Y}\cdot\left(2 Y + \dl{Y}\right) =Y^2 + \dl{Y^2}\\
+    \Longrightarrow\quad |\dl{Y^2}| &\leq |\dl{Y}|\cdot\left(2 |Y| + |\dl{Y}|\right)\leq 296734|q|^3
+\end{align*}
+\end{proof}
+
+
+
+\begin{proof}[{\textbf{\en{Proof of Theorem}\de{Beweis des Theorems}~\ref{\en{EN}theonaehers2}}}]
+\en{In the notation of Lemma~\ref{\en{EN}lemxy}, the definitions of Thm.~\ref{\en{EN}theonaehers2} read $\tilde s_2 = \frac{X}{Y}\cdot Z$ and:}%
+\de{In der Notation von Lemma~\ref{\en{EN}lemxy} übersetzen sich die Definitionen von Thm.~\ref{\en{EN}theonaehers2} zu $\tilde s_2 = \frac{X}{Y}\cdot Z$ und:}
+\begin{align*}
+    s_2(\tau) = \tilde s_2 + \dl{\tilde s_2} &= \left.\frac{X+\dl{X}}{Y+\dl{Y}}\cdot\left(Z+\dl{Z}\right)\quad\right|\cdot\left(Y + \dl{Y}\right)\\
+    \left(\tilde s_2 + \dl{\tilde s_2}\right)\cdot\left(Y + \dl{Y}\right) &= \left(X + \dl{X}\right)\cdot\left(Z + \dl{Z}\right)\\
+    \tilde s_2\cdot Y + \tilde s_2\cdot\dl{Y} + \dl{\tilde s_2}\cdot\left(Y + \dl{Y}\right) &= X\cdot Z + \dl{X}\cdot Z + X\cdot\dl{Z} + \dl{X}\cdot\dl{Z}
+\end{align*}
+
+\pagebreak
+
+\noindent\en{From this equation we substract $\tilde s_2\cdot Y = X\cdot Z$ and obtain:}%
+\de{Von dieser Gleichung subtrahieren wir $\tilde s_2\cdot Y = X\cdot Z$ und erhalten:}
+\begin{align}
+\dl{\tilde s_2}&=\frac{\dl{X}\cdot Z + X\cdot\dl{Z} + \dl{X}\cdot\dl{Z} - \tilde s_2\cdot\dl{Y}}{Y + \dl{Y}}\label{\en{EN}glgxyz}
+\end{align}
+\en{From Lemma~\ref{\en{EN}lemxy} we deduce:}%
+\de{Aus Lemma~\ref{\en{EN}lemxy} folgt nun noch:}
+\begin{align*}
+    |\tilde s_2| &= \left|\frac{X}{Y}\cdot Z\right| \leq \frac{1\ko0937}{0\ko8014}\cdot 1\ko0094\leq 1\ko3776
+\end{align*}
+\en{If we take this and the other estimates of Lemma~\ref{\en{EN}lemxy} into~(\ref{\en{EN}glgxyz}) we obtain:}%
+\de{Das und die anderen Abschätzungen aus Lemma~\ref{\en{EN}lemxy} setzen wir in~(\ref{\en{EN}glgxyz}) ein und erhalten:}
+\begin{align*}
+    |\dl{s_2}| &\leq \frac{|\dl{X}|\cdot |Z| + |X|\cdot|\dl{Z}| + |\dl{X}|\cdot|\dl{Z}| + |\tilde s_2|\cdot|\dl{Y}|}{|Y| - |\dl{Y}|}\\
+    &\leq \frac{6808|q|^3+106|q|^3+4\cdot10^{-5}|q|^3+170550|q|^3}{0\ko8014-123800|q|^3} < 222000|q|^3
+\end{align*}
+\en{Here we used $|q|<e^{-7\ko852}$ (Lemma~\ref{\en{EN}archim-lem}). Thus the estimate from Thm.~\ref{\en{EN}theonaehers2} is proven.}
+\de{Hier haben wir $|q|<e^{-7\ko852}$ (Lemma~\ref{\en{EN}archim-lem}) benutzt. Somit ist die Abschätzung aus Theorem~\ref{\en{EN}theonaehers2} bewiesen.}
+\end{proof}
+
+
+
+
+\begin{lem}\label{\en{EN}lemk}
+\en{We define the following function $k$, which is analytic in the upper half plane, and its approximation $\tilde k$:}%
+\de{Wir definieren die folgende in der oberen Halbebene analytische Funktion $k$ und ihre Näherung $\tilde k$:}
+$$k(\tau):=\frac{E_4^3-E_6^2}{1728q}\qquad \text{\en{and}\de{und}} \qquad \tilde k(\tau):=(1-q-q^2)^{24}$$
+\en{Then we get the following estimates in the region $\im(\tau)>1\ko25$:}%
+\de{Dann gelten im Bereich $\im(\tau)>1\ko25$ folgenden Abschätzungen:}
+\begin{align*}
+    |k-\tilde k| \leq 365\ko6 |q|^2
+    \qquad \text{\en{and}\de{und}} \qquad\quad 
+        0\ko9907 \leq |\tilde k|  \leq 1\ko0094
+\end{align*}
+%Eigentlich gilt in diesem Bereich sogar $|k-\tilde k|<25|q|^5$
+\end{lem}
+\begin{proof}
+\en{From $|q|<e^{-7\ko852}$ (Lemma~\ref{\en{EN}archim-lem}) we get the estimate of $|\tilde k|$:}%
+\de{Die Abschätzung für $|\tilde k|$ folgt direkt aus $|q|<e^{-7\ko852}$ (Lemma~\ref{\en{EN}archim-lem}), denn}
+$$0\ko9907\leq (1-|q|-|q|^2)^{24}\leq |\tilde k| \leq (1+|q|+|q|^2)^{24}\leq 1\ko0094$$
+\en{Now we add another term into the error estimation, so that we can use Lemma~\ref{\en{EN}lemxy}:}%
+\de{Dann fügen wir für die Fehlerabschätzung einen zusätzlichen Term ein, um Lemma~\ref{\en{EN}lemxy} verwenden zu können:}
+\begin{align}
+    |k-\tilde k|&=\left|\frac{E_4^3-E_6^2}{1728q}-(1-q-q^2)^{24}\right|\nonumber\\
+    &\leq\left|\frac{E_4^3-E_6^2}{1728q}-\frac{X^3-Y^2}{1728q}\right|+\left|\frac{X^3-Y^2}{1728q}-(1-q-q^2)^{24}\right|\nonumber\\
+    &\leq\left|\frac{E_4^3-X^3}{1728q}\right| + \left|\frac{E_6^2-Y^2}{1728q}\right| + \left|\frac{X^3-Y^2}{1728q}-(1-q-q^2)^{24}\right|\nonumber\\
+    &\leq \frac{24202|q|^3}{1728|q|} + \frac{296734|q|^3}{1728|q|} + \left|\frac{X^3-Y^2}{1728q}-(1-q-q^2)^{24}\right|\nonumber\\
+    &\leq 185\ko8|q|^2 + \left|\frac{X^3-Y^2}{1728q}-(1-q-q^2)^{24}\right|\label{\en{EN}kkstr}
+\end{align}
+\en{It remains to find an estimate for the last term. We derive several times by $q$:}%
+\de{Es fehlt also noch eine Abschätzung für den letzten Ausdruck. Wir leiten einige Male nach $q$ ab:}
+\begin{align*}
+    f(q) &:=(1-q-q^2)^{24}\qquad\Longrightarrow\qquad f(0)=1\\
+    f'(q) &= -24(1+2q)(1-q-q^2)^{23}\qquad\Longrightarrow\qquad f'(0)=-24\\
+    f''(q) &= 24(21+94q+94q^2)(1-q-q^2)^{22}\qquad\Longrightarrow\qquad f''(0)=504\\
+    f'''(q) &= -1104(1+2q)(8+47q+47q^2)(1-q-q^2)^{21}\qquad\Longrightarrow\qquad |f'''(q)|\leq 8932
+\end{align*}
+\en{This proves the existence of a $\xi$ with}%
+\de{Somit folgt, dass es ein $\xi$ gibt mit}
+$$(1-q-q^2)^{24} = 1 -24 q + \frac{504}{2}q^2 + \frac{f'''(\xi)}{6}\cdot q^3$$
+\en{Furthermore, we expand the other expression:}%
+\de{Außerdem lautet die ausmultiplizierte Form des anderen Ausdrucks}
+\begin{align*}
+    \frac{X^3-Y^2}{1728q} &= \frac{(1+240(q+9q^2))^3-(1-504(q+33q^2))^2}{1728q}\\
+    &= 1-24q+98q^2+64017q^3+1944000q^4+5832000q^5
+\end{align*}
+\en{Subtracting these two representations yields}%
+\de{Wenn wir diese beiden Darstellungen subtrahieren, erhalten wir}
+\begin{align*}
+    ~&\left|\frac{X^3-Y^2}{1728q}-(1-q-q^2)^{24}\right|\\
+    =& \left| (98-252)q^2+64017q^3+1944000q^4+5832000q^5 - \frac{f'''(\xi)}{6}\cdot q^3\right|\\
+    \leq & ~154 |q|^2 + 64017|q|^3+1944000|q|^4+5832000|q|^5 + \frac{8932}{6}\cdot |q|^3 \leq 179\ko8|q|^2
+\end{align*}
+\en{If we use this, we obtain from eq.~(\ref{\en{EN}kkstr}):}%
+\de{Wenn wir das in Glg.~(\ref{\en{EN}kkstr}) einsetzen, erhalten wir die angekündigte Abschätzung:}
+$$|k-\tilde k| \leq 185\ko8|q|^2 + 179\ko8|q|^2\leq 365\ko6|q|^2$$
+\en{Using the pentagonal number theorem (Remark~\ref{\en{EN}penta}) one could prove the better error estimation $|k-\tilde k| < 25|q|^5$, but for our means $|k-\tilde k| \leq 365\ko6|q|^2$ is enough.}%
+\de{Mit dem Pentagonalzahlensatz aus Bemerkung~\ref{\en{EN}penta} könnte man sogar beweisen, dass die Abweichung $|k-\tilde k| < 25|q|^5$ ist, aber das wird wie gesagt nicht benötigt.}
+\end{proof}
+
+\begin{lem}\label{\en{EN}lem3}
+\en{We define $J_2$ and its approximation $\tilde J_2$ as follows:}%
+\de{Wir definieren die folgende Funktion $J_2$ und ihre Näherung $\tilde J_2$:}
+$$J_2(\tau):=1728q\cdot J(\tau) = \frac{E_4^3}{k}\qquad \text{\en{and}\de{und}} \qquad \tilde J_2(\tau):=1728q\cdot \tilde J(\tau) = \frac{X^3}{\tilde k}$$
+\en{Then the following estimates hold in the region $\im(\tau)>1\ko25$:}%
+\de{Dann gelten im Bereich $\im(\tau)>1\ko25$ folgenden Abschätzungen:}
+\begin{align*}
+    \begin{aligned}
+        |\delta(\tilde J_2)|&:=|J_2-\tilde J_2| < 500 |q|^2
+    \end{aligned}
+    \qquad \text{\en{and}\de{und}} \qquad\quad 
+    \begin{aligned}
+        0\ko7374 \leq |\tilde J_2| \leq 1\ko3206
+    \end{aligned}
+\end{align*}
+\end{lem}
+\begin{proof}
+\en{The estimate of $|\tilde J_2|$ is a consequence of those of $|X^3|$ and $|\tilde k|$ from Lemma~\ref{\en{EN}lemxy} and~\ref{\en{EN}lemk}:}%
+\de{Die Abschätzung für $|\tilde J_2|$ folgt aus denen für $|X^3|$ und $|\tilde k|$ (Lemma~\ref{\en{EN}lemxy} und~\ref{\en{EN}lemk}):}
+$$0\ko7374 \leq \frac{0\ko7444}{1\ko0094} \leq |\tilde J_2| \leq \frac{1\ko3083}{0\ko9907} \leq 1\ko3206$$
+\en{From the definitions of $J_2$ and $\tilde J_2$ we obtain (as in eq.~(\ref{\en{EN}glgxyz})):}%
+\de{Aus der Definition von $J_2$ und $\tilde J_2$ folgt dann, ähnlich wie in Glg.~(\ref{\en{EN}glgxyz}):}
+\begin{align*}
+    \tilde J_2 +\delta(\tilde J_2) = \frac{X^3+ \delta(X^3)}{\tilde k + \delta(\tilde k)}\qquad\Longrightarrow\qquad
+    \delta(\tilde J_2) = \frac{\delta(X^3) -\tilde J_2 \cdot\delta(\tilde k)}{\tilde k + \delta(\tilde k)}
+\end{align*}
+\en{and again, using Lemma~\ref{\en{EN}lemxy} and~\ref{\en{EN}lemk}:}%
+\de{und somit, wieder mit Lemma~\ref{\en{EN}lemxy} und~\ref{\en{EN}lemk}:}\belowdisplayskip=-12pt
+\begin{align*}
+|\delta(\tilde J_2)| \leq \frac{24202 |q|^3 + 1\ko3206 \cdot 365\ko6 |q|^2}{0\ko9907 - 365\ko6 |q|^2} < 496\ko9 |q|^2 < 500 |q|^2
+\end{align*}
+\end{proof}
+
+\begin{proof}[{\textbf{\en{Proof of Theorem}\de{Beweis des Theorems}~\ref{\en{EN}theonaeherJ}}}]
+\en{We use the estimates of $J_2$ from Lemma~\ref{\en{EN}lem3} and apply them to $J$ with $1728J = \frac{J_2}{q}$:}%
+\de{Wir verwenden die Abschätzungen für $J_2$ aus Lemma~\ref{\en{EN}lem3} und übertragen sie auf $J$ mit Hilfe von $1728J = \frac{J_2}{q}$:}
+\begin{align*}
+    |1728J-1728\tilde J| &\leq \frac{|\delta(\tilde J_2)|}{|q|}< \frac{500|q|^2}{|q|} = 500|q| < 0\ko2\\
+    \text{\en{and}\de{und}}\qquad |J(\tau)|&\geq \frac{|\tilde J_2|-|\delta(\tilde J_2)|}{1728|q|} \geq \frac{0\ko7374-500|q|^2}{1728|q|} > 1\ko096 > 1\\
+    \text{\en{and}\de{und}}\qquad |1728J(\tau)|&\leq \frac{|\tilde J_2|+|\delta(\tilde J_2)|}{|q|} \leq \frac{1\ko3206+500|q|^2}{|q|} < \frac{1\ko321}{|q|}\\
+    \text{\en{and}\de{und}}\qquad |1728J(\tau)|&\geq \frac{|\tilde J_2|-|\delta(\tilde J_2)|}{|q|} \geq \frac{0\ko7374-500|q|^2}{|q|} > \frac{0\ko737}{|q|}
+\end{align*}
+\en{Thus we have proven all estimates of Theorem~\ref{\en{EN}theonaeherJ}.}%
+\de{Somit sind alle Abschätzungen des Theorems~\ref{\en{EN}theonaeherJ} bewiesen.}
+\end{proof}

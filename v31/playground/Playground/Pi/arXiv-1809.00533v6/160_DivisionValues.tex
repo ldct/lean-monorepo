@@ -1,0 +1,639 @@
+\en{In this chapter we prove that $m\cdot\wp(u;L)$ is an algebraic integer of $\mathbb Z\mathopen{}\left[\frac 1 4 g_2(L); \frac 1 4 g_3(L)\right]\mathclose{}$ for all positive integers $m$ and for all $u\in\mathbb C-L$ with $m\cdot u\in L$.}%
+\de{In diesem Kapitel beweisen wir, dass $m\cdot\wp(u;L)$ für alle natürlichen Zahlen $m\neq 0$ und für alle $u\in\mathbb C-L$ mit $m\cdot u\in L$ ganzalgebraisch in $\mathbb Z\mathopen{}\left[\frac 1 4 g_2(L); \frac 1 4 g_3(L)\right]\mathclose{}$ ist.}
+
+\en{This appendix elaborates \cite[pp.~184-185]{\en{EN}Fricke2}.}%
+\de{Dieser Anhang arbeitet \cite[pp.~184-185]{\en{EN}Fricke2} aus.}
+
+\begin{defi}\label{\en{EN}defidivi}
+\en{Given a complex number $m\neq 0$ and a lattice $L$.
+Then $u$ is called a $m$-division-point and $\wp(u)$ is called a $m$-division value iff it holds:}%
+\de{Gegeben sind eine komplexe Zahl $m\neq 0$ und ein Gitter $L$.
+Dann nennen wir $u$ eine $m$-Teilungsstelle und $\wp(u)$ einen $m$-Teilungswert genau dann, wenn:}
+$$m\cdot u\in L,\quad\text{ \en{but}\de{aber} }\quad u\notin L.$$
+\en{We denote the following set $\DIV(m)$, which contains all $m$-division-points in the fundamental parallelogram $\mathcal P$ from Def.~\ref{\en{EN}fund}:}%
+\de{Wir bezeichnen die folgende Menge mit $\DIV(m)$, sie enthält alle $m$-Teilungsstellen im Fundamentalparallelogramm $\mathcal P$ aus Def.~\ref{\en{EN}fund}:}
+\begin{align*}
+\DIV(m)&=\left\{~u\in\mathcal P~\left|~m\cdot u\in L,\text{ \en{but }\de{aber } }u\notin L\right.\right\}\\
+\text{\en{where}\de{wobei}}\quad \mathcal P&=\left\{~a\omega_1+b\omega_2\in\mathbb C~\left|~0\leq a,b < 1\right.\right\}
+\end{align*}
+\en{Throughout Appendix~\ref{\en{EN}kapdivi}, $m$ will even be a positive integer.
+
+\noindent Fig.~\ref{\en{EN}abbwege} on p.~\pageref{\en{EN}abbwege} shows $\overline{\mathcal P}$ and those points in $\overline{\mathcal P}$ which are equivalent to $u\in \DIV(2)$.}%
+\de{Im gesamten Anhang~\ref{\en{EN}kapdivi} wird $m$ sogar positiv ganzzahlig sein.
+
+\noindent Abb.~\ref{\en{EN}abbwege} auf S.~\pageref{\en{EN}abbwege} zeigt $\overline{\mathcal P}$ und die Stellen in $\overline{\mathcal P}$, die zu $u\in \DIV(2)$ äquivalent sind.}%
+\end{defi}
+
+
+\begin{lem}\label{\en{EN}lemmm}
+\en{If $m\neq 0$ is integral, then the number of $m$-division-points in $\mathcal P$ is $m^2-1$.}%
+\de{Wenn $m\neq 0$ ganzzahlig ist, dann gibt es $m^2-1$ $m$-Teilungs-Punkte in $\mathcal P$.}
+\end{lem}
+\begin{proof}
+\en{$u\in \DIV(m)$ is equivalent to $m\cdot u = k\omega_1+l\omega_2$ with integral $k,l$ such that $u=\frac{k}{m}\cdot \omega_1+\frac{l}{m}\cdot\omega_2\in \mathcal P-\{0\}$.
+So every pair $(k,l)\in\mathbb Z^2-\{(0,0)\}$ with $0\leq k,l < m$ yields one $u$. Since there are $m^2-1$ such pairs, the Lemma is proven.}%
+\de{$u\in \DIV(m)$ ist äquivalent zu $m\cdot u = k\omega_1+l\omega_2$ mit ganzzahligen $k,l$ so dass $u=\frac{k}{m}\cdot \omega_1+\frac{l}{m}\cdot\omega_2\in \mathcal P-\{0\}$.
+Also liefert jedes Paar $(k,l)\in\mathbb Z^2-\{(0,0)\}$ mit $0\leq k,l < m$ eine Stelle $u$. Weil es $m^2-1$ solche Paare gibt, ist das Lemma bewiesen.}
+\end{proof}
+
+
+\begin{lem}\label{\en{EN}lemdefifm}
+\en{The following quotient of Weierstraß $\sigma$-functions (cf.~Def.~\ref{\en{EN}defisigma}) is an elliptic function with periods $\omega_{1;2}$:}%
+\de{Der folgende Quotient Weierstraß'scher $\sigma$-Funktionen (Def.~\ref{\en{EN}defisigma}) ist eine elliptische Funktion mit Perioden $\omega_{1;2}$:}
+$$F_m(z):=\frac{\sigma(m\cdot z)}{(\sigma(z))^{m\cdot m}}$$
+\en{It has a pole of order $m^2-1$ at $z\in L$ (e.g.~at $z=0$), and $m^2-1$ zeros of order one at $z\in \DIV(m)$.
+Modulo $L$, $F_m$ has no further poles or zeros.}%
+\de{Sie hat bei $z\in L$ (z.B.~bei $z=0$) einen Pol der Ordnung $m^2-1$ und $m^2-1$ einfache Nullstellen bei $z\in \DIV(m)$.
+Modulo $L$ hat $F_m$ keine weiteren Null- oder Polstellen.}
+\end{lem}
+\begin{proof}
+\en{In Prop.~\ref{\en{EN}trafosigma} we proved}%
+\de{Satz~\ref{\en{EN}trafosigma} besagt}
+$$\sigma(z+\omega_k)=-\exp\lk\eta_k\cdot\left(z+\frac{\omega_k}{2}\right)\rk\cdot \sigma(z)$$
+\en{From this we will prove by induction that}%
+\de{Hieraus werden wir per vollständiger Induktion beweisen:}
+\begin{align}
+    \sigma(z+n\omega_k) &= (-1)^n \cdot \exp\lk n\cdot\eta_k\left(z+n\cdot\frac{\omega_k}{2}\right)\rk \cdot ~\sigma(z)\label{\en{EN}glgsigmatr}
+\end{align}
+\en{For $n=0$ we have $\sigma(z)=\sigma(z)$. Then we do the step $n-1\rightarrow n$, where we first use Prop.~\ref{\en{EN}trafosigma}:}%
+\de{Zum Induktionsanfang $n=0$: Hier besagt Glg.~(\ref{\en{EN}glgsigmatr}) nur, dass $\sigma(z)=\sigma(z)$ ist.\\
+Im Induktionsschritt $n-1\rightarrow n$ nutzen wir zunächst Satz~\ref{\en{EN}trafosigma}:}
+\begin{align*}
+    \sigma(z+n\omega_k) &= \sigma((z+(n-1)\omega_k)+~\omega_k)\\
+    &= \underbrace{- \exp\lk \eta_k\left(z+(n-1)\omega_k+\frac{\omega_k}{2}\right)\rk}_{P} \cdot ~\sigma(z+(n-1)\omega_k)
+\end{align*}
+\en{Then we use the induction basis:}%
+\de{Dann benutzen wir die Induktionsvoraussetzung:}
+\begin{align*}
+\sigma(z+(n-1)\omega_k) = \underbrace{(-1)^{n-1} \cdot \exp\lk (n-1)\cdot\eta_k\left(z+(n-1)\cdot\frac{\omega_k}{2}\right)\rk}_Q \cdot~\sigma(z)    
+\end{align*}
+\en{These factors can be combined to:}%
+\de{Dann fassen wir diese Faktoren zusammen:}
+\begin{align*}
+  P\cdot Q &= (-1)^n \cdot \exp\lk \eta_k \cdot\left( z+(n-1)\omega_k+\frac{\omega_k}{2} + (n-1)\cdot\left(z+(n-1)\cdot\frac{\omega_k}{2}\right)   \right)\rk\\
+  &= (-1)^n \cdot \exp\lk \eta_k \cdot\left(n\cdot z+\omega_k\cdot\left(n-1 + \frac 1 2 + \frac{(n-1)^2}{2}\right)   \right)\rk\\
+  &= (-1)^n \cdot \exp\lk \eta_k \cdot\left(n\cdot z+\frac{\omega_k}{2}\cdot n^2   \right)\rk
+\end{align*}
+\en{This proves~(\ref{\en{EN}glgsigmatr}).
+Now we prove the periodicity of $F_m$ using~(\ref{\en{EN}glgsigmatr}):}%
+\de{Somit ist~(\ref{\en{EN}glgsigmatr}) bewiesen.
+Dies benutzen wir nun, um die Perioden von $F_m$ zu beweisen:}
+\begin{align*}
+    F_m(z+\omega_k) &= \frac{\sigma(m\cdot z+m\omega_k)}{(\sigma(z+\omega_k))^{m\cdot m}}
+    = \frac{(-1)^m \cdot \exp\lk m\cdot\eta_k\left(m\cdot z+m\cdot\frac{\omega_k}{2}\right)\rk \cdot ~\sigma(m\cdot z)}{\left(-\exp\lk\eta_k\cdot\left(z+\frac{\omega_k}{2}\right)\rk\cdot \sigma(z)\right)^{m\cdot m}}
+\end{align*}
+\en{But for all integral $m$ we have $(-1)^m=(-1)^{m\cdot m}$ and}%
+\de{Aber für alle ganzzahligen $m$ gilt $(-1)^m=(-1)^{m\cdot m}$ und}
+$$\exp\lk m\cdot\eta_k\left(m\cdot z+m\cdot\frac{\omega_k}{2}\right)\rk = \left(\exp\lk \eta_k\left(z+\frac{\omega_k}{2}\right)\rk\right)^{m\cdot m},$$
+\en{thus we have proven $F_m(z+\omega_k)=F_m(z)$.
+Since the $\sigma$-function has zeros of order one in all points of the lattice (cf.~Def.~\ref{\en{EN}defisigma}), the nominator is zero iff $mz\in L$ and the denominator is zero iff $z\in L$.
+This proves that $F_m(z)$ has zeros of order one for all $z\in \DIV(m)$ and that $F_m$ has a pole of order $m^2-1$ at $z\in L$.}%
+\de{somit haben wir $F_m(z+\omega_k)=F_m(z)$ bewiesen.
+Da die $\sigma$-Funktion in allen Gitterpunkten einfache Nullstellen hat (siehe Def.~\ref{\en{EN}defisigma}), liefern genau diejenigen $z$ mit $mz\in L$ Nullstellen des Zählers und die mit $z\in L$ Nullstellen des Nenners.
+Somit hat $F_m(z)$ einfache Nullstellen bei $z\in \DIV(m)$ und einen Pol der Ordnung $m^2-1$ bei $z\in L$.}
+\end{proof}
+
+\begin{lem}\label{\en{EN}lemnullst}
+\en{For any positive integer $m$, the function}%
+\de{Für alle natürlichen $m\neq 0$ hat die Funktion}
+$$h_m(z) := m^2\cdot\prod_{u\in \DIV(m)}\left(\wp(z)-\wp(u)\right)$$
+\en{has zeros of order two for all $z\in \DIV(m)$ and no further zeros modulo $L$.}%
+\de{doppelte Nullstellen für alle $z\in \DIV(m)$ und keine weiteren Nullstellen modulo $L$.}%
+\end{lem}
+\begin{proof}
+\en{If $z\in \DIV(m)$ and $z\notin \DIV(2)$, we deduce $2z\not\equiv 0$ and $z\not\equiv -z$.
+Prop.~\ref{\en{EN}pgerade} tells $\wp(-z)=\wp(z)$, thus both the factor with $u\equiv z$ and the factor with $u\equiv -z$ vanish and we get a zero of order two for these $z$.}%
+\de{Falls $z\in \DIV(m)$ und $z\notin \DIV(2)$ gilt, folgt $2z\not\equiv 0$ und $z\not\equiv -z$.
+Dann besagt Satz~\ref{\en{EN}pgerade}, dass $\wp(-z)=\wp(z)$ gilt und folglich sowohl der Faktor mit $u\equiv z$ als auch der mit $u\equiv -z$ verschwindet, weshalb wir bei solchen $z$ eine \emph{doppelte} Nullstelle haben.}
+
+\en{If there are $z\in \DIV(m)\cap \DIV(2)$, we combine these three factors like in Prop.~\ref{\en{EN}pstrichprod}:
+$\left(\wp(z)-e_1\right) \cdot\left(\wp(z)-e_2\right) \cdot\left(\wp(z)-e_3\right)=\frac 1 4 \wp'(z)^2$.
+From the zeros of $\wp'$ in Prop.~\ref{\en{EN}zerowp} we see that $h_m$ has zeros of order two for these $z$ as well.}%
+\de{Falls noch $z\in \DIV(m)\cap \DIV(2)$ verbleiben, fassen wir diese drei Faktoren wie in Satz~\ref{\en{EN}pstrichprod} zusammen:
+$\left(\wp(z)-e_1\right) \cdot\left(\wp(z)-e_2\right) \cdot\left(\wp(z)-e_3\right)=\frac 1 4 \wp'(z)^2$.
+Aus den Nullstellen von $\wp'$ in Satz~\ref{\en{EN}zerowp} folgt, dass $h_m$ auch bei diesen $z$ doppelte Nullstellen hat.}
+
+
+\en{Since there are $m^2-1$ factors in $h_m(z)$ (Lemma~\ref{\en{EN}lemmm}) and $\wp(z)$ has the order two (Def.~\ref{\en{EN}defiwp}), $h_m$ has the order $2\cdot(m^2-1)$.
+Thus (by the third Liouville theorem, Prop.~\ref{\en{EN}liouville3}) $h_m$ has no further zeros modulo $L$.}%
+\de{Da $m^2-1$ Faktoren in $h_m(z)$ sind (Lemma~\ref{\en{EN}lemmm}) und $\wp(z)$ die Ordnung zwei hat (Def.~\ref{\en{EN}defiwp}), hat $h_m$ die Ordnung $2\cdot(m^2-1)$.
+Aus dem dritten Liouville'schen Satz~\ref{\en{EN}liouville3} folgt daher, dass $h_m$ modulo $L$ keine weiteren Nullstellen hat.}
+\end{proof}
+
+\begin{thm}\label{\en{EN}propfmprod}
+\en{For the $F_m$ and $h_m$ from Lemma~\ref{\en{EN}lemdefifm} and \ref{\en{EN}lemnullst}, it holds $F_m^2(z)=h_m(z)$.}%
+\de{Für die $F_m$ aus Lemma~\ref{\en{EN}lemdefifm} und die $h_m$ aus Lemma~\ref{\en{EN}lemnullst} gilt $F_m^2(z)=h_m(z)$.}
+\end{thm}
+\begin{proof}
+\en{Both $F_m^2(z)$ and $h_m(z)$ are elliptic functions with no poles outside of $L$.
+From $\sigma(z)\approx z$ (Def.~\ref{\en{EN}defisigma}) and from Lemma~\ref{\en{EN}lemdefifm} we see that the Laurent series of $F_m(z)^2$ starts with $m^2\cdot z^{-2(m^2-1)}$. The same is true for $h_m(z)$ (cf.~Lemma~\ref{\en{EN}lemmm} and $\wp(z)\approx 1/z^2$ from Prop.~\ref{\en{EN}laurentwp}), thus the quotient $q_m:=h_m/F_m^2$ takes the value $1$ at $z=0$, which proves that the quotient $q_m:=h_m/F_m^2$ has no pole at $z\in L$.}%
+\de{Sowohl $F_m^2(z)$ als auch $h_m(z)$ sind elliptische Funktionen, die keine Pole außerhalb von $L$ haben.
+Aus $\sigma(z)\approx z$ (Def.~\ref{\en{EN}defisigma}) und aus Lemma~\ref{\en{EN}lemdefifm} folgt, dass die Laurentreihe von $F_m(z)^2$ mit $m^2\cdot z^{-2(m^2-1)}$ beginnt. $h_m(z)$ beginnt ebenso (wegen $\wp(z)\approx 1/z^2$ aus Satz~\ref{\en{EN}laurentwp} und wegen Lemma~\ref{\en{EN}lemmm}), folglich hat der Quotient $q_m:=h_m/F_m^2$ bei $z=0$ den Wert $1$ (und keinen Pol bei $z\in L$).}
+
+\en{The quotient $q_m$ could still have poles in the zeros of $F_m^2$, but since $F_m^2$ and $h_m$ have the same zeros (Lemma~\ref{\en{EN}lemdefifm} and~\ref{\en{EN}lemnullst}), $q_m$ is elliptic without poles. By the first Liouville theorem (Prop.~\ref{\en{EN}liouville1}), the quotient is constant.
+
+We just proved $q_m(0)=1$, thus we obtain $q_m(z)=1$ and $F_m^2(z)=h_m(z)$.}%
+\de{Der Quotient $q_m$ könnte noch Pole in den Nullstellen von $F_m^2$ haben, aber da $F_m^2$ und $h_m$ die gleichen Nullstellen haben (Lemma~\ref{\en{EN}lemdefifm} und~\ref{\en{EN}lemnullst}), ist $q_m$ eine elliptische Funktion ohne Pole. Aufgrund des ersten Liouville'schen Satzes~\ref{\en{EN}liouville1} ist der Quotient konstant.
+
+Soeben haben wir $q_m(0)=1$ bewiesen, also gilt $q_m(z)=1$ und $F_m^2(z)=h_m(z)$.}
+\end{proof}
+
+\begin{bem}
+\en{Prop.~\ref{\en{EN}propfmprod} gives $F_m^2(z)$ as a polynomial in $\wp(z)$. In the rest of this chapter, we will construct this polynomial recursively and use this recursion to prove that $m\cdot\wp(u)$ is an algebraic integer of~\,$\mathbb Z\mathopen{}\left[\frac 1 4 g_2(L);\frac 1 4 g_3(L)\right]\mathclose{}$.}%
+\de{Satz~\ref{\en{EN}propfmprod} stellt $F_m^2(z)$ als Polynom in $\wp(z)$ dar. Im Rest dieses Kapitels werden wir dieses Polynom rekursiv konstruieren und diese Rekursion nutzen, um zu beweisen, dass $m\cdot\wp(u)$ für $u\in \DIV(m)$ ganzalgebraisch in $\mathbb Z\mathopen{}\left[\frac 1 4 g_2(L);\frac 1 4 g_3(L)\right]\mathclose{}$ ist.}
+\end{bem}
+
+
+\begin{lem}\label{\en{EN}lemwpsigma}
+\en{For all $u,v\notin L$ it holds}%
+\de{Für alle $u,v\notin L$ gilt}
+$$\wp(v) - \wp (u) = \frac{\sigma(u+v)\sigma(u-v)}{\sigma^2(u)\sigma^2(v)}$$
+\end{lem}
+\begin{proof}
+\en{We define the function}%
+\de{Wir definieren die Funktion}
+$$F(u,v):=\frac{\sigma(u+v)\sigma(u-v)}{\sigma^2(u)\sigma^2(v)}+\wp(u)-\wp(v)$$
+\en{First we fix $v\notin L$ and analyze $F(u,v)$ as a function $g(u)$ which has no poles outside $L$. Around $u=0$, we use $\sigma(u)\approx u$ (cf.~Def.~\ref{\en{EN}defisigma}) and obtain:}%
+\de{Zunächst fixieren wir $v\notin L$ und betrachten $F(u,v)$ als Funktion $g(u)$, welche keine Pole außerhalb $L$ hat. Um $u=0$ nutzen wir $\sigma(u)\approx u$ (vgl.~Def.~\ref{\en{EN}defisigma}) und erhalten:}
+$$g(u) \approx\frac{\sigma(v)\sigma(-v)}{u^2\sigma^2(v)}+\frac{1}{u^2}-\wp(v)$$
+\en{But since $\sigma(-v)=-\sigma(v)$ (cf.~Prop.~\ref{\en{EN}sigmaodd}), the two terms $\pm u^{-2}$ in the Laurent series of $g(u)$ cancel each other out.
+And since $g(-u)=g(u)$, there can't be a pole of order one at $u=0$, which proves that $g(u)$ has no poles.
+
+Prop.~\ref{\en{EN}trafosigma} shows that $g(u)$ is elliptic (details on this can be found in the calculation of eq.~(\ref{\en{EN}eqellip}) on p.~\pageref{\en{EN}eqellip}), thus $g(u)=F(u,v)$ is constant with respect to $u$.
+In the same way we can prove that $F(u,v)$ is constant with respect to $v$, thus $F(u,v)$ is constant.
+From Def.~\ref{\en{EN}defisigma} we get $\sigma(0)=0$ and thus $F(v,v)=0$, so $F(u,v)=0$ for all $u,v\notin L$.}%
+\de{Satz~\ref{\en{EN}sigmaodd} besagt, dass $\sigma(-v)=-\sigma(v)$ gilt, also heben sich die beiden Terme $\pm u^{-2}$ in der Laurentreihe von $g(u)$ gegenseitig auf.
+Weil weiter $g(-u)=g(u)$ gilt, kann es keinen Pol der Ordnung $1$ bei $u=0$ geben. Somit ist bewiesen, dass $g(u)$ keine Pole hat.
+
+Aus Satz~\ref{\en{EN}trafosigma} folgt, dass $g(u)$ elliptisch ist (siehe hierzu auch die Rechnung zu Glg.~(\ref{\en{EN}eqellip}) auf S.~\pageref{\en{EN}eqellip}), also ist $g(u)=F(u,v)$ konstant bezüglich $u$.
+Gleichermaßen können wir beweisen, dass $F(u,v)$ konstant bezüglich $v$ ist, also ist $F(u,v)$ konstant.
+Aus Def.~\ref{\en{EN}defisigma} folgt $\sigma(0)=0$ und somit $F(v,v)=0$, also ist $F(u,v)=0$ für alle $u,v\notin L$.}
+\end{proof}
+
+\begin{lem}\label{\en{EN}lemwpnz}
+\en{Using the $F_m$ from Lemma~\ref{\en{EN}lemdefifm}, it holds}%
+\de{Für die $F_m$ aus Lemma~\ref{\en{EN}lemdefifm} gilt}
+$$\wp(nz)= \wp(z) - \frac{F_{n-1}(z)\cdot F_{n+1}(z)}{F_n(z)^2}$$
+\end{lem}
+\begin{proof}
+\en{Using Lemma~\ref{\en{EN}lemwpsigma} with $u=z$ and $v=nz$ yields:}%
+\de{Lemma~\ref{\en{EN}lemwpsigma} liefert mit $u=z$ und $v=nz$:}
+$$\wp(nz) - \wp (z) = \frac{\sigma((n+1)z)\sigma(-(n-1)z)}{\sigma^2(z)\sigma^2(nz)}$$
+\en{Next we use $\sigma(z)=-\sigma(-z)$ (Prop.~\ref{\en{EN}sigmaodd}) and the definition of $F_k$ from Lemma~\ref{\en{EN}lemdefifm} which yields $\sigma(kz)=F_k(z)\cdot \sigma(z)^{k\cdot k}$:}
+\de{Dann nutzen wir $\sigma(z)=-\sigma(-z)$ (Satz~\ref{\en{EN}sigmaodd}) und die Definition der $F_k$ aus Lemma~\ref{\en{EN}lemdefifm} in der Form $\sigma(kz)=F_k(z)\cdot \sigma(z)^{k\cdot k}$:}
+\begin{align*}
+    \wp(nz) - \wp (z) &= - \frac{F_{n+1}(z)\sigma(z)^{(n+1)\cdot(n+1)}\cdot F_{n-1}(z)\sigma(z)^{(n-1)\cdot(n-1)}}{\sigma^2(z)\cdot F_n(z)^2\sigma(z)^{2\cdot n\cdot n}}
+\end{align*}
+\en{Reducing this fraction by $\sigma(z)^{2n^2+2}$ proves the Lemma.}%
+\de{Indem wir diesen Bruch mit $\sigma(z)^{2n^2+2}$ kürzen, ist das Lemma bewiesen.}
+\end{proof}
+
+\begin{lem}\label{\en{EN}lemwp2str}
+\en{For all $z\in\mathbb C$ it holds}%
+\de{Für alle $z\in\mathbb C$ gilt}
+$\wp''(z) = 6\wp(z)^2-\frac 1 2 g_2$
+\en{and}\de{und}
+$$\wp(2z) = \frac 1 4 \cdot \left(\frac{\wp''(z)}{\wp'(z)}\right)^2-2\wp(z)$$
+\end{lem}
+\begin{proof}
+\en{The algebraic differential equation of the $\wp$-function (Prop.~\ref{\en{EN}dglP}) yields:}%
+\de{Die algebraische Differentialgleichung der $\wp$-Funktion aus Satz~\ref{\en{EN}dglP} lautet:}
+\begin{align*}
+    \wp'(z)^2 &= 4\wp(z)^3-g_2\wp(z)-g_3\qquad\left|\frac{d}{dz}\right.\\
+    \Longrightarrow\quad 2\wp'(z)\wp''(z) &= 12 \wp(z)^2\wp'(z) - g_2\wp'(z)
+\end{align*}
+\en{Dividing by $2\cdot\wp'(z)$ yields $\wp''(z)$.}%
+\de{Indem wir dies durch $2\cdot\wp'(z)$ dividieren, erhalten wir $\wp''(z)$.}
+
+\en{Next we recall the Laurent series of $\wp(z)$ from Prop.~\ref{\en{EN}laurentwp}:}%
+\de{Als nächstes rufen wir uns die Laurentreihe von $\wp(z)$ aus Satz~\ref{\en{EN}laurentwp} ins Gedächtnis:}
+\begin{align*}
+    \wp(z) &= z^{-2} + 3 G_4 z^2  + 5 G_6 z^4 + 7 G_8 z^6  + O(z^8)\\
+    \wp'(z) &= -2z^{-3} + 6 G_4 z + 20 G_6 z^3 + 42 G_8 z^5  + O(z^7)\\
+    \wp''(z) &= 6z^{-4} + 6 G_4   + 60 G_6 z^2 + 210 G_8 z^4  + O(z^6)
+\end{align*}
+\en{If we put this into $\wp''(z) = 6\wp(z)^2-\frac 1 2 g_2$ and compare the coefficients of $z^4$, we obtain:}%
+\de{Wenn wir diese Reihen in $\wp''(z) = 6\wp(z)^2-\frac 1 2 g_2$ einsetzen und die Koeffizienten vor $z^4$ vergleichen, erhalten wir:}
+$$210 G_8 = 6\cdot\left(2\cdot 7 G_8 + 9 G_4^2\right)\qquad\Longrightarrow\qquad 7G_8 = 3 G_4^2$$
+\en{To prove the second equation, compare the Laurent series expansions of}%
+\de{Um die zweite Gleichung zu beweisen, vergleichen wir die Laurentreihen von}
+$\left(\frac{\wp''(z)}{2}\right)^2$ \en{and}\de{und} $\wp'(z)^2\cdot\left(\wp(2z)+2\wp(z)\right)$ \en{using}\de{unter Nutzung von} $7G_8=3 G_4^2$:
+\begin{align*}
+    \wp(z) &= z^{-2} + 3 G_4 z^2  + 5 G_6 z^4 + 3 G_4^2 z^6  + O(z^8)\\
+    \wp'(z) &= -2z^{-3} + 6 G_4 z + 20 G_6 z^3 + 18 G_4^2 z^5  + O(z^7)\\
+    \wp''(z) &= 6z^{-4} + 6 G_4   + 60 G_6 z^2 + 90 G_4^2 z^4  + O(z^6)\\
+    \wp''(z)/2 &= 3z^{-4} + 3 G_4   + 30 G_6 z^2 + 45 G_4^2 z^4  + O(z^6)\\
+    (\wp''(z)/2)^2 &= 9z^{-8} + 18 G_4 z^{-4} + 180 G_6 z^{-2} + 279 G_4^2 + O(z^2)
+    \end{align*}\begin{align*}
+    \wp'(z)^2 &= 4 z^{-6} - 24 G_4 z^{-2} - 80 G_6 - 36 G_4^2 z^2 + O(z^4)\\
+    \wp(2z) &= 0\ko25 z^{-2} + 12 G_4 z^2  + 80 G_6 z^4 + 192 G_4^2 z^6  + O(z^8)\\
+    \wp(2z)+2\wp(z) &= 2\ko25 z^{-2} + 18 G_4 z^2  + 90 G_6 z^4 + 198 G_4^2 z^6  + O(z^8)\\
+    \wp'(z)^2\cdot\left(\wp(2z)+2\wp(z)\right) &= 9z^{-8} + 18 G_4 z^{-4} + 180 G_6 z^{-2} + 279 G_4^2 + O(z^2)
+\end{align*}
+\en{Since both $\left(\frac{\wp''(z)}{2}\right)^2$ and $\wp'(z)^2\cdot\left(\wp(2z)+2\wp(z)\right)$ are elliptic function without poles outside of $L$ (because the additional poles of $\wp(2z)$ are eliminated by the zeros of $\wp'(z)^2$ from Prop.~\ref{\en{EN}zerowp}) and their Laurent series are equal up to $O(z^2)$, the first Liouville theorem~\ref{\en{EN}liouville1} yields:}%
+\de{Sowohl $\left(\frac{\wp''(z)}{2}\right)^2$ als auch $\wp'(z)^2\cdot\left(\wp(2z)+2\wp(z)\right)$ sind elliptische Funktionen, die keine Pole außerhalb von $L$ haben (weil die zusätzlichen Pole von $\wp(2z)$ durch die Nullstellen von $\wp'(z)^2$ aus Satz~\ref{\en{EN}zerowp} aufgehoben werden). Außerdem stimmen ihre Laurentreihen bis auf $O(z^2)$ überein, also liefert der erste Liouville'sche Satz~\ref{\en{EN}liouville1}:}
+\begin{align*}
+    \left(\frac{\wp''(z)}{2}\right)^2 - \wp'(z)^2\cdot\left(\wp(2z)+2\wp(z)\right) = 0
+\end{align*}
+\en{Solving this equation for $\wp(2z)$ produces the equation of Lemma~\ref{\en{EN}lemwp2str}.}%
+\de{Wenn wir diese Gleichung nach $\wp(2z)$ auflösen, erhalten wir die zu beweisende Gleichung des Lemmas~\ref{\en{EN}lemwp2str}.}
+\end{proof}
+
+
+\begin{lem}\label{\en{EN}lemsigmasigma}
+\en{For all $u, u_1, u_2, u_3 \in \mathbb C$ it holds}%
+\de{Für alle $u, u_1, u_2, u_3 \in \mathbb C$ gilt}
+\begin{align*}
+  \sigma(u+u_1)\sigma(u-u_1)\sigma(u_2+u_3)\sigma(u_2-u_3)&\\
++~\sigma(u+u_2)\sigma(u-u_2)\sigma(u_3+u_1)\sigma(u_3-u_1)&\\
++~\sigma(u+u_3)\sigma(u-u_3)\sigma(u_1+u_2)\sigma(u_1-u_2)& = 0
+\end{align*}
+\en{where $\sigma$ denotes the Weierstraß $\sigma$-function.}%
+\de{wobei $\sigma$ die Weierstraß'sche $\sigma$-Funktion bezeichnet.}
+\end{lem}
+\begin{proof}
+\en{We distinguish two cases:}\de{Wir unterscheiden zwei Fälle:}
+\en{In the \emph{first case}, at least two of the four complex numbers $u, u_1, u_2, u_3$ are equal modulo $L$. But then the equation of the Lemma is true, because one of the three terms is zero (since $\sigma(0)=0$) and the other two cancel each other out (since $\sigma(-z)=-\sigma(z)$).
+For example $u_2=u_3$ yields:}%
+\de{Im \emph{ersten Fall} sind mindestens zwei der vier komplexen Zahlen $u, u_1, u_2, u_3$ äquivalent modulo $L$. Dann liefert $\sigma(0)=0$, dass einer der drei Summanden Null ist, und die anderen beiden heben sich gegenseitig auf (weil $\sigma(-z)=-\sigma(z)$ ist).
+Beispielsweise liefert $u_2=u_3$:}
+\begin{align*}
+  \sigma(u+u_1)\sigma(u-u_1)\sigma(u_2+u_2)\sigma(u_2-u_2)&\\
++~\sigma(u+u_2)\sigma(u-u_2)\sigma(u_2+u_1)\sigma(u_2-u_1)&\\
++~\sigma(u+u_2)\sigma(u-u_2)\sigma(u_1+u_2)\sigma(u_1-u_2)&\\
+= 0 + \sigma(u+u_2)\sigma(u-u_2)\sigma(u_2+u_1)\sigma(u_2-u_1)&\\
+    -~\sigma(u+u_2)\sigma(u-u_2)\sigma(u_2+u_1)\sigma(u_2-u_1)&=0
+\end{align*}
+
+\en{In the \emph{second case}, we have four complex numbers $u$, $u_1$, $u_2$ and $u_3$ which are pairwise distinct modulo $L$. Then we choose $u_4$ so that $u_4$ is not equivalent to any of the numbers $\{\pm u; \pm u_1; \pm u_2; \pm u_3; -u_4\}$ modulo $L$.}%
+\de{Im \emph{zweiten Fall} haben wir vier komplexe Zahlen $u$, $u_1$, $u_2$ und $u_3$ welche paarweise inäquivalent modulo $L$ sind. Dann wählen wir $u_4$ so, dass $u_4$ inäquivalent zu allen Zahlen $\{\pm u; \pm u_1; \pm u_2; \pm u_3; -u_4\}$ modulo $L$ ist.}
+\en{Next we define for $l\in\{1;2;3\}$ the functions}%
+\de{Dann definieren für $l\in\{1;2;3\}$ die Funktionen}
+$$f_l(z):=\frac{\sigma(z+u_l)\sigma(z-u_l)}{\sigma(z+u_4)\sigma(z-u_4)}$$
+\en{From Prop.~\ref{\en{EN}trafosigma} we deduce that the $f_l(z)$ are elliptic functions:}%
+\de{Aus Satz~\ref{\en{EN}trafosigma} folgt, dass die $f_l(z)$ elliptisch sind:}
+\begin{align}
+    f_l(z+\omega_k) &= \frac{\sigma(z+u_l+\omega_k)\cdot\sigma(z-u_l+\omega_k)}{\sigma(z+u_4+\omega_k)\cdot\sigma(z-u_4+\omega_k)}\nonumber\\
+    &= \frac{\exp\lk\eta_k\left(z+u_l+\omega_k/2\right)\rk\cdot\exp\lk\eta_k\left(z-u_l+\omega_k/2\right)\rk}
+    {\exp\lk\eta_k\left(z+u_4+\omega_k/2\right)\rk\cdot\exp\lk\eta_k\left(z-u_4+\omega_k/2\right)\rk}\cdot f_l(z) = f_l(z)\label{\en{EN}eqellip}
+\end{align}
+\en{From our choice of $u_4$, we see that it has two poles of order one at $\pm u_4$ (we have chosen $u_4$ such that the zeros of the denominator are inequivalent modulo $L$), thus it is an elliptic function of order two.}%
+\de{Aus unserer Wahl von $u_4$ folgt, dass die $f_l$ zwei Pole erster Ordnung bei $\pm u_4$ haben (wir haben $u_4$ so gewählt, dass die Nullstellen des Nenners inäquivalent sind), also ist $f_l$ eine elliptische Funktion der Ordnung zwei.}
+\en{Next we define the function}%
+\de{Nun definieren wir die Funktion}
+\begin{align*}
+    f(z):= f_1(z)\cdot\sigma(u_2+u_3)\sigma(u_2-u_3)&\\
++f_2(z)\cdot\sigma(u_3+u_1)\sigma(u_3-u_1)&\\
++f_3(z)\cdot\sigma(u_1+u_2)\sigma(u_1-u_2)&
+\end{align*}
+\en{Since this is a linear combination of elliptic functions, it is also an elliptic function.}%
+\de{Diese ist eine elliptische Funktion, weil sie eine Linearkombination elliptischer Funktionen ist.}
+\en{But if we use $z\in\{u_1;u_2;u_3\}$, we obtain $f(z)=0$ (as in the first case). Since we know that these three numbers are pairwise inequivalent modulo $L$, the third Liouville theorem (Prop.~\ref{\en{EN}liouville3}) tells us that $f(z)$ must be a constant function (since a non-constant elliptic function of order two would have only two zeros modulo $L$), thus $f(z)$ is equal to zero.}%
+\de{Aber für $z\in\{u_1;u_2;u_3\}$ erhalten wir $f(z)=0$ (wie im ersten Fall). Diese drei Zahlen sind aber paarweise inäquivalent modulo $L$. Aus dem dritten Liouville'schen Satz~\ref{\en{EN}liouville3} folgt nun, dass $f(z)$ konstant sein muss (weil eine nichtkonstante elliptische Funktion vom Grad zwei nur zwei Nullstellen modulo $L$ hätte) und somit  ist $f(z)=0$.}
+
+\en{Finally we use $z=u$ with the originally given $u$ we get $f(u)=0$. But because $u_4$ is not equivalent to $\pm u$, we can multiply this with $\sigma(u+u_4)\sigma(u-u_4)$ and obtain the equation from the Lemma.}%
+\de{Schließlich setzen wir $z=u$ mit dem ursprünglich gegebenen $u$ ein und erhalten $f(u)=0$.
+Weiter gilt $u_4\not\equiv \pm u$ und wir dürfen $f(u)=0$ mit $\sigma(u+u_4)\sigma(u-u_4)$ multiplizieren. Somit ist das Lemma bewiesen.}
+\end{proof}
+
+
+\begin{lem}\label{\en{EN}lemfrekur}
+\en{For the functions $F_m(z)$ from Lemma~\ref{\en{EN}lemdefifm}, it holds:}%
+\de{Für die Funktionen $F_m(z)$ aus Lemma~\ref{\en{EN}lemdefifm} gilt:}
+\begin{align*}
+    F_{2n+1}(z) &=  F_{n+2}(z)\cdot F_n(z)^3 - F_{n-1}(z)\cdot F_{n+1}(z)^3 \\
+    F_{2n}(z)\cdot F_2(z) &=  F_n(z)\cdot \left( F_{n+2}(z)\cdot F_{n-1}(z)^2 - F_{n-2}(z)\cdot F_{n+1}(z)^2\right)
+\end{align*}
+\end{lem}
+\begin{proof}
+\en{Using Lemma~\ref{\en{EN}lemsigmasigma} with $u=0$, $u_1=z$, $u_2=n\cdot z$ and $u_3=-(n+1)\cdot z$
+yields:}%
+\de{Wir setzen $u=0$, $u_1=z$, $u_2=n\cdot z$ und $u_3=-(n+1)\cdot z$ in Lemma~\ref{\en{EN}lemsigmasigma} ein:}
+\begin{align*}
+  \sigma(z)\sigma(-z)\sigma(-z)\sigma((2n+1)z)&\\
++~\sigma(nz)\sigma(-nz)\sigma(-nz)\sigma(-(n+2)z)&\\
++~\sigma(-(n+1)z)\sigma((n+1)z)\sigma((n+1)z)\sigma(-(n-1)z)& = 0
+\end{align*}
+\en{This can be simplified using $\sigma(-z)=-\sigma(z)$ from Prop.~\ref{\en{EN}sigmaodd}:}%
+\de{Dann nutzen wir $\sigma(-z)=-\sigma(z)$ aus Satz~\ref{\en{EN}sigmaodd}:}
+\begin{align*}
+  \sigma(z)^3\sigma((2n+1)z)&=
+  \sigma(nz)^3\sigma((n+2)z)
+ -\sigma((n+1)z)^3\sigma((n-1)z)
+\end{align*}
+\en{Next we use the definition of the $F_k$ (cf.~Lemma~\ref{\en{EN}lemdefifm}) which yields $\sigma(kz)=F_k(z)\cdot \sigma(z)^{k\cdot k}$:}%
+\de{Dann folgt aus der Definition der $F_k$ (in Lemma~\ref{\en{EN}lemdefifm}), dass $\sigma(kz)=F_k(z)\cdot \sigma(z)^{k\cdot k}$ gilt:}
+\begin{align*}
+  &~\sigma(z)^3 F_{2n+1}(z)\sigma(z)^{(2n+1)\cdot(2n+1)}\\
+  =&~F_n(z)^3\sigma(z)^{3\cdot n\cdot n}\cdot F_{n+2}(z)\sigma(z)^{(n+2)\cdot(n+2)}\\
+  &-F_{n+1}(z)^3\sigma(z)^{3\cdot (n+1)\cdot (n+1)}\cdot F_{n-1}(z)\sigma(z)^{(n-1)\cdot (n-1)}
+\end{align*}
+\en{Dividing by $\sigma(z)^{4n^2+4n+4}$ yields the first equation.}%
+\de{Die erste Gleichung folgt hieraus durch Kürzen mit $\sigma(z)^{4n^2+4n+4}$.}
+
+\en{To prove the second equation, we use Lemma~\ref{\en{EN}lemsigmasigma} with $u=\frac 1 2 z$, $u_1=\frac 3 2 z$, $u_2=\frac 1 2 \cdot(2n-1)\cdot z$ and $u_3=- \frac 1 2 \cdot(2n+1)\cdot z$:}%
+\de{Um die zweite Gleichung zu beweisen, setzen wir $u=\frac 1 2 z$, $u_1=\frac 3 2 z$, $u_2=\frac 1 2 \cdot(2n-1)\cdot z$ und $u_3=- \frac 1 2 \cdot(2n+1)\cdot z$ in Lemma~\ref{\en{EN}lemsigmasigma} ein:}
+\begin{align*}
+  \sigma(2z)\sigma(-z)\sigma(-z)\sigma(2nz)&\\
++~\sigma(nz)\sigma(-(n-1)z)\sigma(-(n-1)z)\sigma(-(n+2)z)&\\
++~\sigma(-nz)\sigma((n+1)z)\sigma((n+1)z)\sigma(-(n-2)z)& = 0
+\end{align*}
+\en{Again, this can be simplified using $\sigma(-z)=-\sigma(z)$ to:}%
+\de{Dann nutzen wir wieder $\sigma(-z)=-\sigma(z)$:}
+\begin{align*}
+ &~\sigma(2z)\sigma(z)^2\sigma(2nz)\\
+=&~\sigma(nz)\sigma((n-1)z)^2\sigma((n+2)z)\\
+ &-\sigma(nz)\sigma((n+1)z)^2\sigma((n-2)z)
+\end{align*}
+\en{As above, we use the definition of the $F_k$ which yields $\sigma(kz)=F_k(z)\cdot \sigma(z)^{k\cdot k}$:}%
+\de{Dann folgt wie oben aus der Definition der $F_k$, dass $\sigma(kz)=F_k(z)\cdot \sigma(z)^{k\cdot k}$ gilt und somit}
+\begin{align*}
+ &~F_2(z)\sigma(z)^{2\cdot 2}\cdot \sigma(z)^2\cdot F_{2n}(z)\sigma(z)^{2n\cdot 2n}\\
+=&~F_n(z)\sigma(z)^{n\cdot n}\cdot F_{n-1}(z)^2\sigma(z)^{2\cdot(n-1)\cdot(n-1)} \cdot F_{n+2}(z)\sigma(z)^{(n+2)\cdot(n+2)}\\
+ &-F_n(z)\sigma(z)^{n\cdot n} \cdot F_{n+1}(z)^2\sigma(z)^{2\cdot(n+1)\cdot(n+1)} \cdot F_{n-2}(z)\sigma(z)^{(n-2)\cdot(n-2)}
+\end{align*}
+\en{Dividing by $\sigma(z)^{4n^2+6}$ yields the second equation.}%
+\de{Die zweite Gleichung folgt hieraus durch Kürzen mit $\sigma(z)^{4n^2+6}$.}
+\end{proof}
+
+\pagebreak
+
+\begin{defi}\label{\en{EN}defipm}
+\en{For any positive integer $m$, we define the polynomial $P_m(x)$ as follows:}%
+\de{Für alle natürlichen $m\neq 0$ definieren wir das Polynom $P_m(x)$ wie folgt:}
+\begin{align*}
+    P_1 &= 1;\quad P_2 = 1;\quad P_3 = 3x^4-6h_2x^2-12h_3x-h_2^2\\
+    P_4 &= 2x^6-10h_2x^4-40h_3x^3-10h_2^2x^2-8h_2h_3x-16h_3^2+2h_2^3\\
+   \intertext{\en{and for}\de{und für} $k\geq 1$:}
+   P_{4k+1} &= 16(x^3-h_2x-h_3)^2\cdot P_{2k+2}\cdot P_{2k}^3 - P_{2k-1}\cdot P_{2k+1}^3\\
+    P_{4k+2} &= P_{2k+1}\cdot \left( P_{2k+3}\cdot P_{2k}^2 - P_{2k-1}\cdot P_{2k+2}^2\right)\\
+    P_{4k+3} &= P_{2k+3}\cdot P_{2k+1}^3 - 16(x^3-h_2x-h_3)^2\cdot P_{2k}\cdot P_{2k+2}^3\\
+    P_{4k+4} &= P_{2k+2}\cdot \left( P_{2k+4}\cdot P_{2k+1}^2 - P_{2k}\cdot P_{2k+3}^2\right)
+\end{align*}
+\end{defi}
+
+\begin{thm}\label{\en{EN}propfmpm}
+\en{For any positive integer $m$, it holds}%
+\de{Für alle natürlichen $m\neq 0$ gilt}
+\begin{align*}
+    F_m(z) &= \cas{-\wp'(z) \cdot P_m(\wp(z))}{P_m(\wp(z))}
+\end{align*}
+\en{where $\wp(z)$ denotes the Weierstraß $\wp$-function of a lattice $L$ with $h_2=\frac 1 4 g_2(L)$ and $h_3 = \frac 1 4 g_3(L)$.}%
+\de{Hierbei bezeichne $\wp(z)$ die Weierstraß'sche $\wp$-Funktion eines Gitters $L$ mit $h_2=\frac 1 4 g_2(L)$ und $h_3 = \frac 1 4 g_3(L)$.}
+\end{thm}
+\begin{proof}
+\en{Throughout the proof, we will use the abbreviations $x=\wp(z)$, $h_2 = \frac 1 4 g_2(L)$ and $h_3 = \frac 1 4 g_3(L)$.
+First, we prove $m\leq 4$ as induction basis:}%
+\de{Während des gesamten Beweises nutzen wir die Abkürzungen $x=\wp(z)$, $h_2 = \frac 1 4 g_2(L)$ und $h_3 = \frac 1 4 g_3(L)$.
+Zunächst beweisen wir $m\leq 4$ als Induktionsanfang:}
+\begin{enumerate}[leftmargin=*, itemsep=1ex]
+    \item \en{From its definition in Lemma~\ref{\en{EN}lemdefifm}, we observe $F_1(z)=1$. Thus $F_1(z)=P_1(\wp(z))$.}%
+    \de{In der Definition in Lemma~\ref{\en{EN}lemdefifm} lesen wir $F_1(z)=1$ ab. Also gilt $F_1(z)=P_1(\wp(z))$.}
+    
+    \item \en{In Lemma~\ref{\en{EN}lemdefifm} we proved that
+    $F_2(z)=\frac{\sigma(2z)}{\sigma(z)^4}$ has a pole of order three at $z=0$ and three zeros at $z\in \DIV(2)$.
+    Prop.~\ref{\en{EN}zerowp} shows that the same is true for $\wp'(z)$, thus $\frac{F_2(z)}{\wp'(z)}$ is constant by the first Liouville theorem (Prop.~\ref{\en{EN}liouville1}).
+    Comparing the Laurent series at $z=0$ gives $F_2(z)=2z^{-3}+O(z^{-1})$ and $\wp'(z)=-2z^{-3} + O(z^{-1})$, thus $\frac{F_2(z)}{\wp'(z)}=-1$ and $F_2(z)=-\wp'(z)\cdot P_2(\wp(z))$.}%
+    \de{In Lemma~\ref{\en{EN}lemdefifm} haben wir bewiesen, dass
+    $F_2(z)=\frac{\sigma(2z)}{\sigma(z)^4}$ einen Pol dritter Ordnung bei $z=0$ and drei Nullstellen bei $z\in \DIV(2)$ hat.
+    Satz~\ref{\en{EN}zerowp} besagt, dass dies auch auf $\wp'(z)$ zutrifft, also ist $\frac{F_2(z)}{\wp'(z)}$ aufgrund des ersten Liouville'schen Satzes~\ref{\en{EN}liouville1} konstant.
+    Ein Vergleich der Laurentreihen um $z=0$ liefert $F_2(z)=2z^{-3}+O(z^{-1})$ und $\wp'(z)=-2z^{-3} + O(z^{-1})$, also $\frac{F_2(z)}{\wp'(z)}=-1$ und $F_2(z)=-\wp'(z)\cdot P_2(\wp(z))$.}
+    
+    \item \en{From Lemma~\ref{\en{EN}lemwpnz} with $n=2$ we obtain}%
+    \de{Aus Lemma~\ref{\en{EN}lemwpnz} folgt mit $n=2$:}
+    $\wp(2z)=\wp(z)-\frac{F_1(z)\cdot F_3(z)}{F_2(z)^2}$.
+    \en{Here we use $F_1(z)=1$ and $F_2(z)=-\wp'(z)$ and deduce}%
+    \de{Hier nutzen wir $F_1(z)=1$ und $F_2(z)=-\wp'(z)$ und erhalten:}
+    $$F_3(z)=\wp'(z)^2\cdot\left(\wp(z)-\wp(2z)\right)$$
+    \en{Here we use Lemma~\ref{\en{EN}lemwp2str} for $\wp(2z)$ and obtain}%
+    \de{Hier setzen wir $\wp(2z)$ aus Lemma~\ref{\en{EN}lemwp2str} ein:}
+    \begin{align*}
+        F_3(z) &= \wp'(z)^2\cdot\left(\wp(z)-\frac 1 4 \left(\frac{\wp''(z)}{\wp'(z)}\right)^2+ 2 \wp(z)\right)
+        = -\frac 1 4 \wp''(z)^2 + 3 \wp(z)\wp'(z)^2
+    \end{align*}
+    \en{Here we use the representation of $\wp''$ from Lemma~\ref{\en{EN}lemwp2str} and the algebraic differential equation from Prop.~\ref{\en{EN}dglP}:}%
+    \de{Mit der Darstellung von $\wp''$ aus Lemma~\ref{\en{EN}lemwp2str} und der algebraischen Differentialgleichung der $\wp$-Funktion in Satz~\ref{\en{EN}dglP} folgt:}
+    \begin{align*}
+        F_3(z)
+        &= -\frac 1 4 (6\wp(z)^2-2h_2)^2 + 3 \wp(z)\left(4\wp(z)^3-4h_2\wp(z)-4 h_3\right)
+    \end{align*}
+    \en{Using the abbreviation $x=\wp(z)$ yields}%
+    \de{Mit der Abkürzung $x=\wp(z)$ führt das auf}
+    \begin{align*}
+        F_3(z)
+        &= -\frac 1 4 (6x^2-2h_2)^2 + 3 x\left(4x^3-4h_2x-4 h_3\right)\\
+        &= -9x^4+6h_2x^2-h_2^2+12x^4-12 h_2 x^2- 12 h_3 x = P_3(x)=P_3(\wp(z))
+    \end{align*}
+    
+    \item \en{Again from the definition of the $F_m(z)$ in Lemma~\ref{\en{EN}lemdefifm} we obtain}%
+    \de{Wir nutzen wieder die Definition der $F_m(z)$ aus Lemma~\ref{\en{EN}lemdefifm} und erhalten}
+    $$F_4(z) = \frac{\sigma(4z)}{\sigma(z)^{16}}=\frac{\sigma(4z)}{\sigma(2z)^4}\cdot\left(\frac{\sigma(2z)}{\sigma(z)^4}\right)^4 = F_2(2z)\cdot F_2(z)^4$$
+    \en{Using $F_2(z)=-\wp'(z)$ we deduce}%
+    \de{Mit $F_2(z)=-\wp'(z)$ folgt}
+    $$F_4(z) = -\wp'(2z)\cdot\wp'(z)^4$$
+    \en{Next we write $\wp(2z)$ from Lemma~\ref{\en{EN}lemwp2str} only in terms of $x=\wp(z)$, $h_2 = \frac 1 4 g_2$ and $h_3 = \frac 1 4 g_3$:}%
+    \de{Als nächstes drücken wir $\wp(2z)$ aus Lemma~\ref{\en{EN}lemwp2str} nur mit Hilfe von  $x=\wp(z)$, $h_2 = \frac 1 4 g_2$ und $h_3 = \frac 1 4 g_3$ aus:}
+    \begin{align*}
+    \wp(2z) &= \frac{1}{4}\cdot\frac{(6x^2-2h_2)^2}{4x^3-4h_2x-4h_3}-2x
+    = \frac{9x^4-6h_2x^2+h_2^2}{4x^3-4h_2x-4h_3}-2x\\
+    &= \frac{9x^4-6h_2x^2+h_2^2-2x(4x^3-4h_2x-4h_3)}{4x^3-4h_2x-4h_3}\\
+    &= \frac{x^4+2h_2x^2+8h_3x+h_2^2}{4x^3-4h_2x-4h_3}=:f(x)
+    \end{align*}
+    \en{Deriving both sides with respect to $z$ yields $2\wp'(2z) = f'(x)\cdot\wp'(z)$, where}%
+    \de{Beide Seiten nach $z$ ableiten liefert $2\wp'(2z) = f'(x)\cdot\wp'(z)$, wobei}
+    \begin{align*}
+        f'(x) &= \frac{\left(\begin{aligned}(4x^3+4h_2x+8h_3)\cdot(4x^3-4h_2x-4h_3)\\-(x^4+2h_2x^2+8h_3x+h_2^2)\cdot(12x^2-4h_2)\end{aligned}\right)}{(4x^3-4h_2x-4h_3)^2}\\
+        &= \frac{4x^6-20h_2x^4-80h_3x^3-20h_2^2x^2-16h_2h_3x-32h_3^2+4h_2^3}{(4x^3-g_2x-g_3)^2}
+        = \frac{2 P_4(x)}{\wp'(z)^4}
+    \end{align*}
+    \en{This yields}\de{Das liefert}
+    $F_4(z) = -\wp'(2z)\cdot\wp'(z)^4 = - \frac 1 2 f'(x)\cdot\wp'(z)\cdot\wp'(z)^4 = -\wp'(z)\cdot P_4(x)$.
+\end{enumerate}
+\en{Now we have proven that the Proposition is true for $m\leq 4$.
+To prove it for any $m\geq 5$, we assume that it is correct for all numbers less then $m$, and we distinguish four cases:}%
+\de{Somit ist der Satz für $m\leq 4$ bewiesen.
+Um ihn für $m\geq 5$ zu beweisen, nehmen wir die Korrektheit für alle Zahlen kleiner $m$ an und unterscheiden vier Fälle:}
+\begin{enumerate}[leftmargin=*,itemsep=1ex]
+    \item \en{If $m=4k+1$ with an integer $k\geq 1$, then Lemma~\ref{\en{EN}lemfrekur} tells (using $n=2k$):}%
+    \de{Falls $m=4k+1$ ist mit natürlichem $k\geq 1$, liefert Lemma~\ref{\en{EN}lemfrekur} mit $n=2k$:}
+            \begin{align*}
+                F_{4k+1}(z) &= F_{2k+2}(z)\cdot F_{2k}(z)^3 - F_{2k-1}(z)\cdot F_{2k+1}(z)^3
+            \end{align*}
+            \en{Now, by induction, we get}\de{Aus der Induktionsvoraussetzung folgt:}
+            \begin{align*}
+                F_{4k+1}(z) &= -\wp'(z)P_{2k+2}(x)\cdot (-\wp'(z)P_{2k}(x))^3 - P_{2k-1}(x)\cdot P_{2k+1}(x)^3\\
+                        &= \wp'(z)^4\cdot P_{2k+2}(x)\cdot P_{2k}(x)^3 - P_{2k-1}(x)\cdot P_{2k+1}(x)^3
+            \end{align*}
+            \en{Using}\de{Mit} $\wp'(z)^2=4\wp(z)^3-g_2\wp(z)-g_3 = 4(x^3-h_2x-h_3)$ \en{yields}\de{folgt}
+            \begin{align*}
+                F_{4k+1}(z) &= 16(x^3-h_2x-h_3)^2\cdot P_{2k+2}\cdot P_{2k}^3 - P_{2k-1}\cdot P_{2k+1}^3 = P_{4k+1}
+            \end{align*}
+            \en{which proves the Proposition in this case.}%
+            \de{womit der Satz in diesem Fall bewiesen ist.}
+    \item \en{If $m=4k+2$ with an integer $k\geq 1$, then Lemma~\ref{\en{EN}lemfrekur} tells (using $n=2k+1$):}%
+    \de{Falls $m=4k+2$ mit natürlichem $k\geq 1$, liefert Lemma~\ref{\en{EN}lemfrekur} mit $n=2k+1$:}
+            \begin{align*}
+                F_{4k+2}\cdot F_2 &=  F_{2k+1}\cdot \left( F_{2k+3}\cdot F_{2k}^2 - F_{2k-1}\cdot F_{2k+2}^2\right)
+            \end{align*}
+            \en{Now, by induction, we get}\de{Aus der Induktionsvoraussetzung folgt:}
+            \begin{align*}
+                F_{4k+2}\cdot F_2 &=  P_{2k+1}\cdot \left( P_{2k+3}\cdot \wp'(z)^2 P_{2k}^2 - P_{2k-1}\cdot\wp'(z)^2 P_{2k+2}^2\right)
+            \end{align*}
+            \en{Dividing by $F_2=-\wp'(z)$ yields}\de{Hier dividieren wir durch $F_2=-\wp'(z)$ und erhalten:}
+            \begin{align*}
+                F_{4k+2} &=  -\wp'(z)\cdot P_{2k+1}\cdot \left( P_{2k+3}\cdot P_{2k}^2 - P_{2k-1}\cdot P_{2k+2}^2\right) = -\wp'(z)\cdot P_{4k+2}
+            \end{align*}
+            \en{Thus the Proposition is also true in this case.}\de{Somit ist der Satz auch in diesem Fall bewiesen.}
+    \item \en{If $m=4k+3$ with an integer $k\geq 1$, then Lemma~\ref{\en{EN}lemfrekur} tells (using $n=2k+1$):}%
+    \de{Falls $m=4k+3$ ist mit natürlichem $k\geq 1$, liefert Lemma~\ref{\en{EN}lemfrekur} mit $n=2k+1$:}
+            \begin{align*}
+                F_{4k+3} &= F_{2k+3}\cdot F_{2k+1}^3 - F_{2k}\cdot F_{2k+2}^3
+            \end{align*}
+           \en{Now, by induction, we get}\de{Aus der Induktionsvoraussetzung folgt:}
+            \begin{align*}
+                F_{4k+3} &= P_{2k+3}\cdot P_{2k+1}^3 - (-\wp'(z)P_{2k})\cdot(-\wp'(z) P_{2k+2})^3\\
+                        &= P_{2k+3}\cdot P_{2k+1}^3 - \wp'(z)^4 P_{2k}\cdot P_{2k+2}^3
+            \end{align*}
+            \en{Again,}\de{Mit} $\wp'(z)^2=4\wp(z)^3-g_2\wp(z)-g_3 = 4(x^3-h_2x-h_3)$ \en{yields}\de{folgt wiederum}
+             \begin{align*}
+                F_{4k+3} = P_{2k+3}\cdot P_{2k+1}^3 - 16(x^3-h_2x-h_3)^2 P_{2k}\cdot P_{2k+2}^3 = P_{4k+3}
+            \end{align*}
+             \en{which proves the Proposition in this case.}%
+            \de{womit der Satz auch in diesem Fall bewiesen ist.}
+    \item \en{If $m=4k+4$ with an integer $k\geq 1$, then Lemma~\ref{\en{EN}lemfrekur} tells (using $n=2k+2$):}%
+    \de{Falls $m=4k+4$ mit natürlichem $k\geq 1$, liefert Lemma~\ref{\en{EN}lemfrekur} mit $n=2k+2$:}
+            \begin{align*}
+                F_{4k+4}\cdot F_2 &=  F_{2k+2}\cdot \left( F_{2k+4}\cdot F_{2k+1}^2 - F_{2k}\cdot F_{2k+3}^2\right)
+            \end{align*}
+            \en{Now, by induction, we get}\de{Aus der Induktionsvoraussetzung folgt:}
+            \begin{align*}
+                F_{4k+4}\cdot F_2 &=  -\wp'(z) P_{2k+2}\cdot \left( -\wp'(z) P_{2k+4}\cdot P_{2k+1}^2 - (-\wp'(z)P_{2k})\cdot P_{2k+3}^2\right)
+            \end{align*}
+            \en{Dividing by $F_2=-\wp'(z)$ yields}\de{Hier dividieren wir durch $F_2=-\wp'(z)$ und erhalten:}
+            \begin{align*}
+                F_{4k+4} &=  -\wp'(z)\cdot P_{2k+2}\cdot \left( P_{2k+4}\cdot P_{2k+1}^2 - P_{2k}\cdot P_{2k+3}^2\right) = -\wp'(z)\cdot P_{4k+4}
+            \end{align*}
+            \en{Thus the Proposition is also true in this case.}\de{Somit ist der Satz auch in diesem Fall bewiesen.}
+\end{enumerate}
+\en{By induction, we have proven Prop.~\ref{\en{EN}propfmpm}.}%
+\de{Satz~\ref{\en{EN}propfmpm} ist also für alle natürlichen $m\neq 0$ per vollständiger Induktion bewiesen.}
+\end{proof}
+
+
+\begin{theo}\label{\en{EN}thmbaker}
+\en{For any positive integer $m$, it holds:}%
+\de{Für alle natürlichen $m\neq 0$ gilt}
+$$m^2\cdot\prod_{u\in \DIV(m)}\left(x-\wp(u)\right) = \cas{4\cdot (x^3-h_2x - h_3) \cdot P_m^2(x)}{P_m^2(x)}$$
+\end{theo}
+\begin{proof}
+\en{We will prove that this is true for every $x\in \mathbb C$:}%
+\de{Wir werden diese Aussage für alle $x\in \mathbb C$ beweisen:}
+\en{Given $x\in\mathbb C$. Then chose $z\in\mathbb C$ such that $\wp(z)=x$. This is possible, since the $\wp$-function takes on every value (apply the third Liouville theorem~\ref{\en{EN}liouville3} to $f(u):=\wp(u)-x$ for the given $x$ and chose $z$ as one of the zeros of $f(u)$).}%
+\de{Sei also ein beliebiges $x\in \mathbb C$ gegeben. Wählen dann ein $z\in\mathbb C$ mit $\wp(z)=x$. Das ist möglich, weil die $\wp$-Funktion jeden Wert annimmt (man wende den dritten Liouville'schen Satz~\ref{\en{EN}liouville3} auf $f(u):=\wp(u)-x$ an und wähle für $z$ eine der Nullstellen von $f(u)$).}
+\en{Then Prop.~\ref{\en{EN}propfmprod} tells us that the left hand side is equal to $F_m(z)^2$.
+Prop.~\ref{\en{EN}propfmpm} gives}%
+\de{Aus Satz~\ref{\en{EN}propfmprod} folgt, dass die linke Seite gleich $F_m(z)^2$ ist.
+Satz~\ref{\en{EN}propfmpm} liefert dann}
+$$F_m(z)^2 = \cas{(-\wp'(z))^2 \cdot P_m^2(\wp(z))}{P_m^2(\wp(z))}$$
+\en{Prop.~\ref{\en{EN}dglP} tells $(-\wp'(z))^2=4\wp(z)^3-g_2\wp(z)-g_3=4(x^3-h_2x-h_3)$, thus we have proven Thm.~\ref{\en{EN}thmbaker} for the given $x\in\mathbb C$.
+This proves the Theorem, because $x$ was chosen arbitrarily.}%
+\de{Satz~\ref{\en{EN}dglP} besagt $(-\wp'(z))^2=4\wp(z)^3-g_2\wp(z)-g_3=4(x^3-h_2x-h_3)$, also ist Thm.~\ref{\en{EN}thmbaker} für das gegebene $x\in\mathbb C$ und somit für alle $x$ bewiesen.}
+\end{proof}
+
+\begin{thm}\label{\en{EN}propindu}
+\en{For any positive integer $m$, it holds:}%
+\de{Für alle natürlichen $m\neq 0$ gilt}
+\begin{enumerate}
+    \item \en{$P_m$ is a polynomial in $x$, $h_2$ and $h_3$ with coefficients in $\mathbb Z$.}%
+    \de{$P_m$ ist ein Polynom in $x$, $h_2$ und $h_3$ mit Koeffizienten aus $\mathbb Z$.}\\[2ex]
+    \hspace*{-1.15cm}\en{Furthermore, when $P_m$ is regarded as a polynomial in $x$, it holds:}%
+    \de{Weiter gilt, wenn man $P_m$ als Polynom in $x$ betrachtet:}
+    \item \en{The degree of $P_m(x)$ is}\de{Der Grad von $P_m(x)$ ist} $d_m:=\cas{\frac{m^2-4}{2}}{\frac{m^2-1}{2}}$.
+    \item \en{The leading coefficient of $P_m(x)$ is $\pm l_m$ with}\de{Der Leitkoeffizient von $P_m(x)$ ist $\pm l_m$ mit} $l_m:=\cas{\frac{m}{2}}{m}$.
+    \item \en{The second highest coefficient of $P_m(x)$ is $0$.}%
+    \de{Der zweithöchste Koeffizient von $P_m(x)$ ist $0$.}
+\end{enumerate}
+\end{thm}
+\begin{proof}
+\begin{enumerate}[leftmargin=*,itemsep=0.5ex]
+    \item \en{Since the Definition~\ref{\en{EN}defipm} of $P_m$ only includes multiplication and summation, statement (1) is correct for all $m$ by induction over $m$.}%
+        \de{Da die Definition~\ref{\en{EN}defipm} der $P_m$ nur Multiplikationen und Additionen enthält, folgt Aussage (1) durch vollständige Induktion über $m$.}
+    \item \en{Lemma~\ref{\en{EN}lemmm} tells that there are $m^2-1$ values $u\in \DIV(m)$, thus the left-hand-side of Thm.~\ref{\en{EN}thmbaker} has the degree $m^2-1$. This proves statement (2).}%
+        \de{Lemma~\ref{\en{EN}lemmm} besagt, dass es $m^2-1$ Werte $u\in \DIV(m)$ gibt, also hat die linke Seite in Thm.~\ref{\en{EN}thmbaker} den Grad $m^2-1$. Hieraus folgt Aussage (2).}
+    \item \en{On the left-hand-side of Thm.~\ref{\en{EN}thmbaker}, we observe that the leading coefficient is $m^2$, thus the leading coefficient of $P_m(x)$ has to be either $l_m$ or $-l_m$.
+    It could be proven by induction over $m$ that it is indeed $l_m$, but for our means it's enough to prove statement (3) up to a factor of $\pm 1$.}%
+    \de{Auf der linken Seite von Thm.~\ref{\en{EN}thmbaker} erkennen wir den Leitkoeffizient $m^2$, also muss der Leitkoeffizient von $P_m(x)$ entweder $l_m$ oder $-l_m$ sein.
+    Man könnte per vollständiger Induktion beweisen, dass es tatsächlich $l_m$ ist, aber für unsere Zwecke ist es ausreichend, Aussage (3) bis auf einen Faktor von $\pm 1$ zu beweisen.}
+    \item \en{For proving (4) we use the fact that for any two polynomials $f(x)=\sum_{k=0}^{n} a_k x^k$ and $g(x)=\sum_{k=0}^{m} b_k x^k$ it holds:
+The second highest coefficient of $f(x)\cdot g(x)$ is given by $a_n\cdot b_{m-1}+a_{n-1}\cdot b_m$.
+This proves that if the second highest coefficients of the factors vanish, the second highest coefficient of the product also vanishes.
+Further we observe that in the recursive definition of the $P_m$, we only add or substract polynomials of the same degree (cf.~(3)), which proves (4) by induction.}%
+\de{Um (4) zu beweisen, nutzen wir die Tatsache, dass für zwei beliebige Polynome $f(x)=\sum_{k=0}^{n} a_k x^k$ und $g(x)=\sum_{k=0}^{m} b_k x^k$ gilt:
+Der zweithöchste Koeffizient von $f(x)\cdot g(x)$ ist $a_n\cdot b_{m-1}+a_{n-1}\cdot b_m$.
+Also: Wenn die zweithöchsten Koeffizienten der Faktoren Null sind, dann ist auch der zweithöchste Koeffizient des Produktes Null.
+Des weiteren bemerken wir, dass in der rekursiven Definition der $P_m$ nur Polynome gleichen Grades addiert oder subtrahiert werden (vgl.~(3)), woraus (4) per Induktion folgt.}
+\end{enumerate}\vspace*{-12pt}
+\end{proof}
+
+\begin{theo}\label{\en{EN}theowpsum}
+\en{For any positive integer $m$, the following sum of $m$-division-values vanishes:}%
+\de{Für alle natürlichen $m\neq 0$ verschwindet die folgende Summe von $m$-Teilungswerten:}
+$$\sum_{u\in \DIV(m)}\wp(u)=0$$
+\end{theo}
+\begin{proof}
+\en{Theorem~\ref{\en{EN}thmbaker} gives two equivalent representations of a polynomial in $x$.
+We multiply out the left hand side of Thm.~\ref{\en{EN}thmbaker} and obtain}%
+\de{Theorem~\ref{\en{EN}thmbaker} liefert zwei äquivalente Darstellungen eines Polynoms in $x$.
+Wir multiplizieren die linke Seite des Thm.~\ref{\en{EN}thmbaker} aus und erhalten}
+$$m^2\cdot x^{m^2-1} - \left(m^2\cdot\sum_{u\in \DIV(m)} \wp(u)\right)\cdot x^{m^2-2} + \sum_{k=0}^{m^2-3} a_k x^k$$
+\en{Now Prop.~\ref{\en{EN}propindu} (4) tells us that the second highest coefficient of the right hand side of Thm.~\ref{\en{EN}thmbaker} is zero -- thus the same coefficient on the left hand side also vanishes. This proves Thm.~\ref{\en{EN}theowpsum}.}%
+\de{Jetzt besagt Satz~\ref{\en{EN}propindu} (4), dass der zweithöchste Koeffizient auf der rechten Seite von Thm.~\ref{\en{EN}thmbaker} Null ist -- also muss dieser Koeffizient auch auf der linken Seite verschwinden. Dies beweist Thm.~\ref{\en{EN}theowpsum}.}
+\end{proof}
+
+
+\begin{theo}\label{\en{EN}theomwpu}
+\en{Given a lattice $L$, let $h_2:=\frac{1}{4}g_2(L)$ and $h_3:=\frac{1}{4}g_3(L)$.
+Then for any positive integer $m$ and for any $m$-division-point $u\in \DIV(m)$, the term}%
+\de{Sei $L$ ein Gitter, sei $h_2:=\frac{1}{4}g_2(L)$ und $h_3:=\frac{1}{4}g_3(L)$.
+Dann gilt für alle natürlichen $m\neq 0$ und für alle $m$-Teilungsstellen $u\in \DIV(m)$, dass}
+$$m\cdot\wp(u)$$
+\en{is an algebraic integer of~~$\mathbb Z[h_2;h_3]$.}%
+\de{ganzalgebraisch in $\mathbb Z[h_2;h_3]$ ist.}\\
+\en{Moreover, if $m$ is even, then $\frac{m}{2}\cdot\wp(u)$ is also an algebraic integer of~~$\mathbb Z[h_2;h_3]$.}%
+\de{Und falls $m$ gerade ist, ist $\frac{m}{2}\cdot\wp(u)$ ebenfalls ganzalgebraisch in $\mathbb Z[h_2;h_3]$.}
+\end{theo}
+\begin{proof}
+\en{Throughout this proof, we denote $\mathbb I := \mathbb Z[h_2;h_3]$.
+From Thm.~\ref{\en{EN}thmbaker} we know that the $\wp(u)$ with $u\in \DIV(m)$ are either among the zeros of $x^3-h_2x-h_3$ or among the zeros of $P_m(x)$.
+
+The zeros of $x^3-h_2x-h_3$ are algebraic integers of $\mathbb I$, so these $\wp(u)$ are algebraic integers of $\mathbb I$.
+Since $P_1=P_2=1$, it remains to check the zeros of $P_m(x)$ for $m\geq 3$.}%
+\de{Für diesen Beweis bezeichnen wir $\mathbb I := \mathbb Z[h_2;h_3]$.
+Aus Thm.~\ref{\en{EN}thmbaker} wissen wir, dass die $\wp(u)$ mit $u\in \DIV(m)$ entweder Nullstellen von $x^3-h_2x-h_3$ oder von $P_m(x)$ sind.
+
+Die Nullstellen von $x^3-h_2x-h_3$ sind ganzalgebraisch in $\mathbb I$, also sind diese $\wp(u)$ ganzalgebraisch in $\mathbb I$.
+Wegen $P_1=P_2=1$ müssen wir nur noch die Nullstellen von $P_m(x)$ für $m\geq 3$ prüfen.}
+
+\en{Again, we use the notation $d_m:=\cas{\frac{m^2-4}{2}}{\frac{m^2-1}{2}}$ for the degree of $P_m$ (as in Prop.~\ref{\en{EN}propindu}) and the notation $l_m:=\cas{\frac{m}{2}}{m}$.}%
+\de{Hier nutzen wir wieder die Notation $d_m:=\cas{\frac{m^2-4}{2}}{\frac{m^2-1}{2}}$ für den Grad von $P_m$ (vgl.~Satz~\ref{\en{EN}propindu}) und die Notation $l_m:=\cas{\frac{m}{2}}{m}$.}
+
+\en{Then we define the polynomial $\displaystyle h(x):=P_m\lk\frac{x}{l_m}\rk\cdot l_m^{d_m-1}$.
+From Prop.~\ref{\en{EN}propindu} (3) we know that the leading coefficient of $P_m(x)$ is either $l_m$ or $-l_m$. This leads to}%
+\de{Dann betrachten wir das Polynom $\displaystyle h(x):=P_m\lk\frac{x}{l_m}\rk\cdot l_m^{d_m-1}$.
+Da der Leitkoeffizient von $P_m(x)$ nach Satz~\ref{\en{EN}propindu} (3) entweder $l_m$ oder $-l_m$ ist, erhalten wir}
+\begin{align*}
+h(x) &= \pm l_m \cdot \left(\frac{x}{l_m}\right)^{d_m}\cdot \left(l_m\right)^{d_m-1} + \sum_{k=0}^{d_m-2}b_k \left(\frac{x}{l_m}\right)^{k}\cdot \left(l_m\right)^{d_m-1}\\
+&= \pm x^{d_m} + \sum_{k=0}^{d_m-2}b_k \cdot\left(l_m\right)^{d_m-1-k}\cdot x^k
+\end{align*}
+\en{where the $b_k$ are the coefficients of $P_m(x)$, for which Prop.~\ref{\en{EN}propindu}~(1) tells: $b_k\in\mathbb I$.}%
+\de{wobei $b_k$ die Koeffizienten von $P_m(x)$ sind, für die nach Satz~\ref{\en{EN}propindu} (1) gilt: $b_k\in\mathbb I$.}
+
+\en{This shows that $h$ is a monic polynomial in $x$ whose coefficients are in $\mathbb I$, so the zeros of $h(x)$ are algebraic integers of $\mathbb I$.
+But it holds: $$h(x)=0\quad\Longleftrightarrow\quad P_m\lk\frac x {l_m}\rk=0$$
+This proves that for all $\wp(u)$ which are zeros of $P_m(x)$, the term $l_m\cdot \wp(u)$ is an algebraic integer of $\mathbb I$.
+Altogether, we have proved Thm.~\ref{\en{EN}theomwpu} for all $u\in \DIV(m)$.}%
+\de{Dies zeigt, dass $h$ ein monisches Polynom in $x$ ist, dessen Koeffizienten in $\mathbb I$ sind -- also sind die Nullstellen von $h(x)$ ganzalgebraisch in $\mathbb I$.
+Aber es gilt: $$h(x)=0\quad\Longleftrightarrow\quad P_m\lk\frac x {l_m}\rk=0$$
+Hieraus folgt auch für alle $\wp(u)$, die Nullstellen von $P_m(x)$ sind, dass $l_m\cdot \wp(u)$ ganzalgebraisch in $\mathbb I$ ist.
+Insgesamt haben wir Thm.~\ref{\en{EN}theomwpu} also für alle $u\in \DIV(m)$ bewiesen.}
+\end{proof}

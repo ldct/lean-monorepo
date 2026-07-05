@@ -3,10 +3,6 @@ import Playground.RealIsometry.Dihedral
 
 open Matrix
 
-abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
-
-def IsExceptional (H : Subgroup SpaceIsometry) : Prop :=
-  ¬ IsCyclic H ∧ ¬ IsDihedral H ∧ Nat.card H ≠ 0
 
 /- ## Tetrahedral rotation group (A₄) as a subgroup of RealIsometry
 
@@ -24,25 +20,25 @@ Every element satisfies g² = 1 or g³ = 1, so the exponent divides 6.
 
 /-! ### Integer matrices and casting infrastructure -/
 
-abbrev IMAT3 := Matrix (Fin 3) (Fin 3) ℤ
+private abbrev IMAT3 := Matrix (Fin 3) (Fin 3) ℤ
 
-abbrev Matrix.toReal (M : IMAT3) : MAT3 := M.map (Int.castRingHom ℝ)
+private abbrev Matrix.toReal (M : IMAT3) : MAT3 := M.map (Int.castRingHom ℝ)
 
-lemma toReal_mul (A B : IMAT3) : (A * B).toReal = A.toReal * B.toReal := by
+private lemma toReal_mul (A B : IMAT3) : (A * B).toReal = A.toReal * B.toReal := by
   grind [Matrix.map_mul]
 
-lemma toReal_one : toReal 1 = (1 : MAT3) := by simp
+private lemma toReal_one : toReal 1 = (1 : MAT3) := by simp
 
-lemma toReal_pow (A : IMAT3) (n : ℕ) : toReal (A ^ n) = (toReal A) ^ n := by
+private lemma toReal_pow (A : IMAT3) (n : ℕ) : toReal (A ^ n) = (toReal A) ^ n := by
   induction n with
   | zero => simp [pow_zero]
   | succ n IH => rw [pow_succ, toReal_mul, IH, pow_succ]
 
-lemma toReal_injective : Function.Injective toReal := by
+private lemma toReal_injective : Function.Injective toReal := by
   apply Matrix.map_injective
   exact RingHom.injective_int _
 
-lemma toReal_transpose (A : IMAT3) : toReal A.transpose = (toReal A).transpose := by
+private lemma toReal_transpose (A : IMAT3) : toReal A.transpose = (toReal A).transpose := by
   ext i j; simp [toReal, map_apply, transpose_apply]
 
 /-! ### The 12 integer matrices of the tetrahedral rotation group -/
@@ -136,7 +132,7 @@ lemma a4Mat_injective : Function.Injective a4Mat := by
 
 /-! ### Constructing the SpaceIsometry subgroup -/
 
-lemma multiplication_eq_hom' (A : O3) : multiplication A = multiplicationHom A := rfl
+private lemma multiplication_eq_hom' (A : O3) : multiplication A = multiplicationHom A := rfl
 
 noncomputable def a4Elem (k : Fin 12) : SpaceIsometry :=
   multiplication ⟨a4Mat k, a4Mat_mem_O3 k⟩
@@ -180,7 +176,7 @@ lemma card_tetrahedralSubgroup : Nat.card tetrahedralSubgroup = 12 := by
 
 lemma multiplication_eq_hom (A : O3) : multiplication A = multiplicationHom A := rfl
 
-lemma multiplication_pow (A : O3) (n : ℕ) : multiplication A ^ n = multiplication (A ^ n) := by
+private lemma multiplication_pow (A : O3) (n : ℕ) : multiplication A ^ n = multiplication (A ^ n) := by
   simp only [multiplication_eq_hom, map_pow]
 
 private lemma a4Elem_pow_n_eq_one {i : Fin 12} {n : ℕ} (h : a4Mat i ^ n = 1) :
@@ -259,10 +255,5 @@ theorem SpaceIsometry.existsExceptional (n : ℕ) [NeZero n]
     : ∃ f : Subgroup SpaceIsometry, IsExceptional f :=
   ⟨tetrahedralSubgroup, tetrahedralSubgroup_isExceptional⟩
 
-theorem SpaceIsometry.existsExceptionalOfOrder24 (n : ℕ) [NeZero n]
-    : ∃ f : Subgroup SpaceIsometry, IsExceptional f ∧ Nat.card f = 24 := by
-  sorry
-
-theorem SpaceIsometry.existsExceptionalOfOrder60 (n : ℕ) [NeZero n]
-    : ∃ f : Subgroup SpaceIsometry, IsExceptional f ∧ Nat.card f = 60 := by
-  sorry
+-- `existsExceptionalOfOrder24` and `existsExceptionalOfOrder60` are proved in
+-- `Exceptional24.lean` and `Exceptional60.lean` respectively.

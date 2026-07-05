@@ -3,8 +3,8 @@ import Playground.RealIsometry.Action
 -- import Playground.RealIsometry.Basic  -- name collision
 import Playground.RealIsometry.Chapter_1_2
 import Playground.RealIsometry.Cyclic
--- TODO(v31 port): import Playground.RealIsometry.Dihedral
--- TODO(v31 port): import Playground.RealIsometry.Exceptional
--- TODO(v31 port): import Playground.RealIsometry.Exceptional24
--- TODO(v31 port): import Playground.RealIsometry.Exceptional60
+import Playground.RealIsometry.Dihedral
+import Playground.RealIsometry.Exceptional
+import Playground.RealIsometry.Exceptional24
+import Playground.RealIsometry.Exceptional60
 import Playground.RealIsometry.Frieze

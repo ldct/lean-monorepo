@@ -1,0 +1,456 @@
+\en{In this chapter, we determine some values of $s_2(\tau)$ and of $j(\tau):=1728J(\tau)$.
+For this we calculate \emph{approximations} as in Thm.~\ref{\en{EN}theonaeherJ} and \ref{\en{EN}theonaehers2} which we use to obtain the \emph{exact} values. We also prove the exactness of these values.
+Finally, we use them in the Main Theorem~\ref{\en{EN}hauptformel} and obtain eleven formulae for calculating $\pi$ -- one of them is the Chudnovsky formula.
+}%
+\de{In diesem Kapitel bestimmen wir einige Funktionswerte von $s_2(\tau)$ und von $j(\tau):=1728J(\tau)$.
+Dafür berechnen wir zunächst \emph{Näherungswerte} wie in Thm.~\ref{\en{EN}theonaeherJ} und \ref{\en{EN}theonaehers2}, mit Hilfe derer wir dann auf die \emph{exakten} Funktionswerte schließen und und ihre Exaktheit auch beweisen.
+Schließlich setzen wir diese Funktionswerte ins Haupttheorem~\ref{\en{EN}hauptformel} ein und erhalten elf Formeln zur Berechnung von $\pi$ -- eine davon ist die Chudnovsky-Formel.}
+
+\en{Our paper \cite{\en{EN}Milla2021} in the Ramanujan Journal is based on this chapter.}%
+\de{Unser Paper \cite{\en{EN}Milla2021} im Ramanujan Journal basiert auf diesem Kapitel.}
+\begin{defi}\label{\en{EN}defiCM}
+\begin{enumerate}[leftmargin=*]
+    \item \en{Those $\tau\in\mathbb H$ for which the elliptic curve associated with $L_\tau$ has complex multiplication are called "CM-points".
+They are those $\tau$ for which it exists $a\in\mathbb C - \mathbb Z$ such that $a\cdot L_\tau \subseteq L_\tau$.
+This yields $a\cdot 1\in L_\tau$ and $a\cdot\tau\in L_\tau$ -- or after some calculations:}%
+    \de{Diejenigen $\tau\in\mathbb H$, für die die zu $L_\tau$ gehörige elliptische Kurve eine komplexe Multiplikation hat, heißen \glqq CM-Punkte\grqq.
+Das sind diejenigen $\tau$, für die es eine Zahl $a\in\mathbb C - \mathbb Z$ gibt mit $a\cdot L_\tau \subseteq L_\tau$.
+Das bedeutet $a\cdot 1\in L_\tau$ und $a\cdot\tau\in L_\tau$ bzw.:}
+$$\text{CM} := \left\{~\tau\in\mathbb H~\left|~A+B\tau+C\tau^2=0;~(A,B,C)\in\mathbb Z^3;~\operatorname{\en{gcd}\de{ggT}}(A,B,C)=1~\right.\right\}$$
+\item \en{For each $\tau\in CM$, we call $D = B^2-4AC$ the "discriminant of $\tau$".}%
+\de{Für alle $\tau\in \text{CM}$ bezeichnen wir $D = B^2-4AC$ als \glqq Diskriminante von $\tau$\grqq.}
+\item \en{All CM-points $\tau$ for which the imaginary quadratic field $K=\mathbb Q(\tau)$ has the class number $h_K=1$ are called \glqq $\text{CM}_1$-points\grqq:}%
+\de{Alle CM-Punkte $\tau$, für die der imaginärquadratische Zahlkörper $K=\mathbb Q(\tau)$ die Klassenzahl $h_K=1$ hat, nennen wir auch \glqq $\text{CM}_1$-Punkte\grqq:}
+$$\text{CM}_1 := \left\{~\tau\in \text{CM}~\left|~K=\mathbb Q(\tau)\text{ \en{has class number}\de{hat die Klassenzahl} }h_K=1~\right.\right\}$$
+\end{enumerate}
+\end{defi}
+
+\begin{thm}\label{\en{EN}extjganzalgg}
+    \en{For all CM-points $\tau$, the value $j(\tau):=1728J(\tau)$ is an algebraic integer.
+    The degree of this algebraic integer is the class number of the imaginary quadratic field $\mathbb Q(\tau)$.}%
+    \de{Für alle CM-Punkte $\tau$ ist der Wert $j(\tau):=1728J(\tau)$ ganzalgebraisch.
+    Und der Grad dieser ganzalgebraischen Zahl ist gleich der Klassenzahl des imaginärquadratischen Zahlkörpers~$\mathbb Q(\tau)$.}
+\end{thm}
+\begin{proof}
+\en{In \cite[Thm.~II.4.3 (b)]{\en{EN}silverman1994advanced} it is proven that for all $\tau\in \text{CM}$ it holds: $j(\tau)=1728J(\tau)$ is an algebraic number whose degree is the class number of $\mathbb Q(\tau)$.
+And in \cite[Thm.~II.6.1]{\en{EN}silverman1994advanced} it is proven that these $j(\tau)$ are even algebraic integers.}%
+\de{In \cite[Thm.~II.4.3 (b)]{\en{EN}silverman1994advanced} wird bewiesen, dass der Wert von $j(\tau):=1728J(\tau)$ für alle $\tau\in \text{CM}$ eine algebraische Zahl ist, deren Grad der Klassenzahl von $\mathbb Q(\tau)$ entspricht.
+Und in \cite[Thm.~II.6.1]{\en{EN}silverman1994advanced} wird bewiesen, dass diese Werte $j(\tau)$ sogar ganzalgebraisch sind.}
+\end{proof}
+
+
+\begin{thm}\label{\en{EN}exts2rat}
+\en{For all CM-points $\tau$ which are not equivalent to $i$ under modular transformations (see Def.~\ref{\en{EN}defimodtau}), $s_2(\tau)$ lies in the field generated over $\mathbb Q$ by $j(\tau)= 1728 J(\tau)$.}%
+\de{Für alle CM-Punkte $\tau$, die zu $i$ nicht äquivalent unter Modultransformationen sind (siehe Def.~\ref{\en{EN}defimodtau}), liegt $s_2(\tau)$ in der Körper\-erwei\-terung $\mathbb Q\lk j(\tau)\rk=\mathbb Q\lk1728J(\tau)\rk$.}
+\end{thm}
+\begin{proof}
+\en{See \cite[Appendix~A1, Thm.~A1]{\en{EN}Masser1975}. Notation there: $\Psi(\tau)=\frac{3}{2}s_2(\tau)$.}%
+\de{Siehe \cite[Anhang A1, Thm.~A1]{\en{EN}Masser1975}. Notation dort: $\Psi(\tau)=\frac{3}{2}s_2(\tau)$.}\qedhere\\
+\en{\emph{Remark:} At $\tau=i$ it holds $E_6(i)=0=E_2^*(i)$ and $s_2(i)$ is undefined.}%
+\de{\emph{Bemerkung:} Bei $\tau=i$ gilt $E_6(i)=0=E_2^*(i)$ und $s_2(i)$ ist nicht definiert.}
+\end{proof}
+
+
+\begin{thm}\label{\en{EN}satztaun}
+\en{Let}\de{Es sei} $\mathcal H := \left\{ 3;4;7;8;11;12;16;19;27;28;43;67;163\right\}$
+\en{and}\de{und}
+$$\tau_N:=\begin{cases}\frac{0+i\sqrt{N}}{2}&\text{\en{if}\de{falls} }N\equiv 0 \mod 4\\ \frac{1+i\sqrt{N}}{2}&\text{\en{if}\de{falls} }N\equiv 3 \mod 4\end{cases}\qquad\text{\en{for}\de{für} }N\in\mathcal H$$
+\en{Then each of these $\tau_N$ with $N\in\mathcal H$ is a $\text{CM}_1$-point.}%
+\de{Dann ist jedes dieser $\tau_N$ mit $N\in\mathcal H$ ein $\text{CM}_1$-Punkt.}
+\end{thm}
+\begin{proof}
+\en{The class numbers $h_K$ of these $K=\mathbb Q(\tau_N)$ are determined in \cite[Ch.~1-2]{\en{EN}Buell1989}, and for all of them it holds $h_K=1$.
+ \emph{Remark:} One could even prove that each $\text{CM}_1$-point is equivalent to one of these $\tau_N$, but we don't need this for our proof.}%
+\de{Die Klassenzahlen $h_K$ dieser $K=\mathbb Q(\tau_N)$ werden z.B. in \cite[Kap.~1-2]{\en{EN}Buell1989} berechnet, bei allen ist $h_K=1$.
+\emph{Bemerkung:} Es gilt sogar, dass jeder $\text{CM}_1$-Punkt zu einem dieser $\tau_N$ äquivalent ist, aber das wird für unseren Beweis nicht benötigt.}
+\end{proof}
+
+
+\begin{thm}\label{\en{EN}satzklassenzahl}
+    \en{For all $\text{CM}_1$-points $\tau$, in particular for all $\tau_N$ with $N\in\mathcal H$, it holds $j(\tau)\in\mathbb Z$.
+    And for all $\text{CM}_1$-points $\tau$ which are not equivalent to $\tau_4=i$, it holds $s_2(\tau)\in\mathbb Q$.}%
+    \de{Für alle $\text{CM}_1$-Punkte $\tau$, also insbesondere für alle $\tau_N$ mit $N\in\mathcal H$, gilt $j(\tau)\in\mathbb Z$.    Und für alle $\text{CM}_1$-Punkte $\tau$, die nicht äquivalent zu $\tau_4=i$ sind, gilt $s_2(\tau)\in\mathbb Q$.}
+\end{thm}
+\begin{proof}
+\en{Prop.~\ref{\en{EN}extjganzalgg} tells that $j(\tau)$ is an algebraic integer of degree $1$ for all $\text{CM}_1$-points $\tau$, thus it holds $j(\tau)\in\mathbb Z$.
+This yields $\mathbb Q\lk j(\tau)\rk=\mathbb Q$ and Prop.~\ref{\en{EN}exts2rat} proves $s_2(\tau)\in\mathbb Q$ if this $\text{CM}_1$-point $\tau$ is not equivalent to $i$.}%
+\de{Satz \ref{\en{EN}extjganzalgg} besagt für $\text{CM}_1$-Punkte $\tau$, dass $j(\tau)$ ganzalgebraisch vom Grad $1$ ist, also muss $j(\tau)\in\mathbb Z$ gelten.
+Hieraus folgt $\mathbb Q\lk j(\tau)\rk=\mathbb Q$ und Satz \ref{\en{EN}exts2rat} liefert $s_2(\tau)\in\mathbb Q$, falls dieser $\text{CM}_1$-Punkt $\tau$ nicht äquivalent zu $i$ ist.}
+\end{proof}
+
+
+
+
+\begin{bem}\label{\en{EN}bemceulen}
+\en{Now we need some digits of $\pi$ to calculate approximate values of $j(\tau)$ and of $s_2(\tau)$ with sufficient precision.
+These digits mustn't be computed with the Chudnovsky algorithm (since we still have to prove it).
+
+Ludolph van Ceulen (1540--1610) used a regular $2^{62}$-gon to calculate the following $35$ digits of $\pi$.
+They have been published by his student Willebrord Snell \cite[p.~55]{\en{EN}snellius} in 1621:}%
+\de{Um jetzt hinreichend gute Näherungswerte für $j(\tau)$ und $s_2(\tau)$ zu berechnen, benötigen wir einige Stellen von $\pi$. Diese dürfen natürlich nicht mit der noch zu beweisenden Chudnovsky-Formel berechnet werden.
+
+Ludolph van Ceulen (1540--1610) berechnete mit Hilfe eines regelmäßigen $2^{62}$-Ecks 35~Stellen von $\pi$, veröffentlicht im Jahr 1621 von seinem Schüler Willebrord Snell \cite[S.~55]{\en{EN}snellius}:}
+$$\pi=3\ko14159~26535~89793~23846~26433~83279~50288\ldots$$
+\end{bem}
+
+\pagebreak
+
+\begin{thm}\label{\en{EN}jwert2}
+   \en{All values of $j(\tau)=1728J(\tau)$ given in Tab.~\ref{\en{EN}tabJwerte} are exact and correct.}%
+   \de{Alle Werte von $j(\tau)=1728J(\tau)$ in Tab.~\ref{\en{EN}tabJwerte} sind exakt und korrekt.}
+\end{thm}
+\begin{proof}\begin{itemize}[leftmargin=*]
+    \item \en{Prop.~\ref{\en{EN}satztaun} tells that all $\tau_N$ in Tab.~\ref{\en{EN}tabJwerte} are $\text{CM}_1$-points.}%
+    \de{Satz~\ref{\en{EN}satztaun} besagt, dass alle $\tau_N$ in Tab.~\ref{\en{EN}tabJwerte} $\text{CM}_1$-Punkte sind.}
+    \item \en{For these $\tau_N$, we calculate the approximations as in Thm.~\ref{\en{EN}theonaeherJ}:}%
+    \de{Für diese $\tau_N$ berechnen wir nun die Näherungswerte wie in Thm.~\ref{\en{EN}theonaeherJ} beschrieben:}
+    $$1728\tilde J(\tau) := \frac{\left(1 + 240\left( q + 9 q^2\right)\right)^3}{ q \cdot (1-q-q^2)^{24}}$$
+    \en{Here we use $q=e^{2\pi i \tau_N}=(-1)^N\cdot e^{-\pi\sqrt{N}}$ and 25 digits of $\pi$ (which we can take from Rem.~\ref{\en{EN}bemceulen}).
+    The results are given in Tab.~\ref{\en{EN}tabJwerte} (third column).}%
+    \de{Dabei setzen wir $q=e^{2\pi i \tau_N}=(-1)^N\cdot e^{-\pi\sqrt{N}}$ und 25 Stellen von $\pi$ ein (die wir z.B. aus Bem.~\ref{\en{EN}bemceulen} entnehmen).
+    Die Ergebnisse finden sich in Tab.~\ref{\en{EN}tabJwerte} (dritte Spalte).}
+    \item \en{For all $\tau_N$ in Tab.~\ref{\en{EN}tabJwerte} it holds $\im(\tau_N)>1\ko25$, thus Thm.~\ref{\en{EN}theonaeherJ} gives an error bound for the approximations: $|1728J(\tau)-1728\tilde J(\tau)|<  0\ko2 $.}%
+    \de{Für alle gelisteten $\tau_N$ gilt $\im(\tau_N)>1\ko25$, also besagt Thm.~\ref{\en{EN}theonaeherJ}, dass der Fehler der Näherungen $|1728J(\tau)-1728\tilde J(\tau)|<  0\ko2 $ ist.}
+    \item \en{Prop.~\ref{\en{EN}satzklassenzahl} tells that the unknown values of $j(\tau_N)=1728J(\tau_N)$ are integers.}%
+    \de{Satz~\ref{\en{EN}satzklassenzahl} besagt, dass die gesuchten Werte von $j(\tau_N)=1728J(\tau_N)$ ganzzahlig sind.}
+    \item \en{Thus $j(\tau)$ must have \emph{exactly} the values from Tab.~\ref{\en{EN}tabJwerte} (last column), because these are the only integers close enough to the approximations.}%
+    \de{Somit muss $j(\tau)$ \emph{genau} die Werte aus Tab.~\ref{\en{EN}tabJwerte} (letzte Spalte) annehmen, weil das die einzigen ganzen Zahlen sind, die nahe genug am Wert der Näherungen liegen.}\qedhere
+\end{itemize}\end{proof}
+
+\begin{table}[ht]\begin{center}\renewcommand{\arraystretch}{1.3}%
+    \begin{tabular}{c|>{\columncolor[gray]{0.9}}c|r|>{\columncolor[gray]{0.9}}r}
+    && \en{Approximation}\de{Näherungswert} (Thm.~\ref{\en{EN}theonaeherJ}) & \en{Exact value}\de{Exakter Wert}\\
+ $D=-N$ & $\tau_N$ & $1728\tilde J(\tau_N)$ & $j(\tau_N)=1728J(\tau_N)$\\
+\hline
+ $-8$ & $i\sqrt{2}$ & $7999\ko99959$&  $20^3$ \\
+ $-12$ & $i\sqrt{3}$ & $53999\ko99999$&  $2\cdot 30^3$  \\
+ $-16$ & $i\sqrt{4}$ & $287496\ko00000$&  $66^3$\\
+ $-28$ & $i\sqrt{7}$ & $16581375\ko00000$&  $255^3$\\
+\hline
+ $-7$ & $\frac{1+i\sqrt{7}}{2}$ & $-3375\ko00107$ & $-15^3$\\
+ $-11$ & $\frac{1+i\sqrt{11}}{2}$ & $-32768\ko00002$& $-32^3$ \\
+ $-19$ & $\frac{1+i\sqrt{19}}{2}$ & $-884736\ko00000$&  $-96^3$ \\
+ $-27$ & $\frac{1+i\sqrt{27}}{2}$ & $-12288000\ko00000$&  $-3\cdot 160^3$\\
+ $-43$ & $\frac{1+i\sqrt{43}}{2}$ & $-884736000\ko00000$&  $-960^3$  \\
+ $-67$ & $\frac{1+i\sqrt{67}}{2}$ & $-147197952000\ko00000$&  $-5280^3$\\
+ $-163$ & $\frac{1+i\sqrt{163}}{2}$ & $-262537412640768000\ko00000$&  $-640320^3$
+    \end{tabular}\end{center}\vspace*{6pt}\caption{\en{Calculation of $j(\tau)$ at some $\text{CM}_1$-points}\de{Berechnung von $j(\tau)$ bei einigen $\text{CM}_1$-Punkten}}\label{\en{EN}tabJwerte}\end{table}
+
+
+\begin{bem}
+\en{In fact, $\tau_3=\varrho=\frac{1+i\sqrt{3}}{2}$ and $\tau_4=i$ are also $\text{CM}_1$-points.
+But $E_4(\varrho)=0$ yields $J(\varrho)=0$ and $E_6(i)=0$ yields $J(i)=1$.
+By Prop.~\ref{\en{EN}satzkonv}, the hypergeometric sum in Thm.~\ref{\en{EN}hauptformel} converges only if $|J(\tau)|>1$.
+Thus $\tau_3$ and $\tau_4$ won't produce formulae for calculating $\pi$ and aren't listed in Tab.~\ref{\en{EN}tabJwerte}.}%
+\de{Eigentlich sind $\tau_3=\varrho=\frac{1+i\sqrt{3}}{2}$ und $\tau_4=i$ ebenfalls $\text{CM}_1$-Punkte.
+Aber aus $E_4(\varrho)=0$ folgt $J(\varrho)=0$ und aus $E_6(i)=0$ folgt $J(i)=1$, und nach Satz~\ref{\en{EN}satzkonv} konvergiert die hypergeometrische Summe in Thm.~\ref{\en{EN}hauptformel} nur, falls $|J(\tau)|>1$ ist.
+Deshalb liefern $\tau_3$ und $\tau_4$ keine Formeln zur Berechnung von $\pi$ und werden in Tab.~\ref{\en{EN}tabJwerte} nicht gelistet.}
+\end{bem}
+
+
+\begin{thm}\label{\en{EN}satzezweistern}
+\en{For all CM-points $\tau$, the following expressions are algebraic integers:}%
+\de{Für alle CM-Punkte $\tau$ sind die folgenden Ausdrücke ganzalgebraisch:}
+\begin{align*}
+    \sqrt{D}\cdot\frac{E_2^*(\tau)}{\eta^4(\tau)}\cdot(AC)^2
+    \qquad\text{\en{and}\de{und}}\qquad
+    \frac{E_4(\tau)}{\eta(\tau)^8}
+    \qquad\text{\en{and}\de{und}}\qquad
+    \frac{E_6(\tau)}{\eta(\tau)^{12}}~.
+\end{align*}
+\en{Here, $E_{4}(\tau)$ and $E_{6}(\tau)$ denote the normalized Eisenstein series from Thm.~\ref{\en{EN}fouriertheorem}; $\eta(\tau)$ denotes the Dedekind $\eta$-Function with $1728\eta^{24}:=E_4^3-E_6^2$ (no further properties of the $\eta$-function are needed); $E_2^*(\tau)$ is defined as in Def.~\ref{\en{EN}defis2}; $D=B^2-4AC$ is the discriminant of the quadratic equation $A+B\tau+C\tau^2=0$.}%
+\de{Dabei bezeichnen $E_{4}(\tau)$ und $E_{6}(\tau)$ die normierten Eisensteinreihen aus Thm.~\ref{\en{EN}fouriertheorem}; $\eta(\tau)$ bezeichne die Dedekind'sche $\eta$-Funktion mit $1728\eta^{24}:=E_4^3-E_6^2$ (weitere Eigenschaften der $\eta$-Funktion werden nicht benötigt); $E_2^*(\tau)$ ist wie in Def.~\ref{\en{EN}defis2} definiert; $D=B^2-4AC$ ist die Diskriminante der quadratischen Gleichung $A+B\tau+C\tau^2=0$.}
+\end{thm}
+\pagebreak
+\begin{proof} \en{From the definitions of $J(\tau)$ and $\eta(\tau)$ we get}%
+\de{Aus den Definitionen von $J(\tau)$ und $\eta(\tau)$ erhalten wir}
+\begin{align}
+    j(\tau)&=1728J(\tau)=\frac{1728 E_4^3}{E_4^3-E_6^2}=\frac{E_4(\tau)^3}{\eta(\tau)^{24}}=\left(\frac{E_4(\tau)}{\eta(\tau)^{8}}\right)^3\nonumber\\
+\intertext{\en{and}\de{und}}
+\label{\en{EN}eq101}j(\tau)-1728&=\frac{1728 E_4^3}{E_4^3-E_6^2}-1728\frac{E_4^3-E_6^2}{E_4^3-E_6^2}=\frac{E_6(\tau)^2}{\eta(\tau)^{24}}=\left(\frac{E_6(\tau)}{\eta(\tau)^{12}}\right)^2~.
+\end{align}
+\en{So $\frac{E_4(\tau)}{\eta(\tau)^8}$ is a zero of $P(X)=X^3-j(\tau)$ and $\frac{E_6(\tau)}{\eta(\tau)^{12}}$ is a zero of $Q(X)=X^2-j(\tau)+1728$.
+Since $j(\tau)$ is an algebraic integer (Prop.~\ref{\en{EN}extjganzalgg}), both terms $\left(\frac{E_4(\tau)}{\eta(\tau)^8}\right.$ and $\left.\frac{E_6(\tau)}{\eta(\tau)^{12}}\right)$ are algebraic integers.}%
+\de{Also ist $\frac{E_4(\tau)}{\eta(\tau)^8}$ eine Nullstelle von $P(X)=X^3-j(\tau)$ und $\frac{E_6(\tau)}{\eta(\tau)^{12}}$ ist eine Nullstelle von $Q(X)=X^2-j(\tau)+1728$.
+Weil nach Satz~\ref{\en{EN}extjganzalgg} $j(\tau)$ ganzalgebraisch ist, sind $\frac{E_4(\tau)}{\eta(\tau)^8}$ und $\frac{E_6(\tau)}{\eta(\tau)^{12}}$ ebenfalls ganzalgebraisch.}
+
+\en{It remains to prove that the first term is also an algebraic integer.
+A complete and self-contained proof for this can be found in Appendix~\ref{\en{EN}kapmult} (Thm.~\ref{\en{EN}theoezweisternrest}), which uses App.~\ref{\en{EN}kapdivi}.}%
+\de{Der vollständige Beweis, dass auch der erste Ausdruck ganzalgebraisch ist, folgt im Anhang~\ref{\en{EN}kapmult} (Thm.~\ref{\en{EN}theoezweisternrest}), welcher auf Anhang~\ref{\en{EN}kapdivi} aufbaut.}
+\end{proof}
+
+
+\begin{theo}\label{\en{EN}s2nenner}
+    \en{For $\text{CM}_1$-points $\tau$ which are not equivalent to $i$, if the class number of $\mathbb Q(\tau)$ is $1$ and if its minimal equation is $A+B\tau+C\tau^2=0$ with discriminant $D=B^2-4AC$,
+    then there is $c\in\mathbb Z$, so that
+    $$b := \sqrt{c\cdot D\cdot(j(\tau)-1728)}\cdot(AC)^2\in\mathbb Z.$$
+    And then 
+    $a := s_2(\tau)\cdot b\in\mathbb Z$
+    is also integer and we obtain a representation of $s_2(\tau)=a/b$ as the ratio of two integers.}%
+    \de{Für $\text{CM}_1$-Punkte $\tau$, die nicht äquivalent zu $i$ sind und bei denen $\mathbb Q(\tau)$ die Klassenzahl $1$ hat, gilt:
+    Wenn die Minimalgleichung $A+B\tau+C\tau^2=0$ mit Diskriminante $D=B^2-4AC$ ist,
+    dann gibt es $c\in\mathbb Z$, sodass
+    $$b := \sqrt{c\cdot D\cdot(j(\tau)-1728)}\cdot(AC)^2\in\mathbb Z$$
+    ganzzahlig ist. Außerdem ist dann auch
+    $a := s_2(\tau)\cdot b\in\mathbb Z$
+    ganzzahlig und wir erhalten eine explizite Darstellung von $s_2(\tau)=a/b$ als Verhältnis zweier ganzer Zahlen.}
+\end{theo}
+\begin{proof}
+
+\en{The integrality of $b$ follows from the integrality of $j(\tau)$ (Prop.~\ref{\en{EN}satzklassenzahl}) and the fact that $c$ can be chosen so that the radicand is a square -- for example $c=D\cdot(j(\tau)-1728)$.
+But it is possible to choose $c$ with much smaller absolute values, they are listed in Tab.~\ref{\en{EN}tabel7}.}%
+\de{Die Ganzzahligkeit von $b$ folgt aus der Ganzzahligkeit von $j(\tau)$ (Satz~\ref{\en{EN}satzklassenzahl}) und der Tatsache, dass man $c$ so wählen kann, dass der Radikand eine Quadratzahl wird -- das gilt z.B.~für $c=D\cdot(j(\tau)-1728)$, aber auch für betragsmäßig deutlich kleinere~$c$ (sie werden in Tab.~\ref{\en{EN}tabel7} aufgelistet).}
+
+\en{From its definition $a:=s_2(\tau)\cdot b$ we deduce that $a$ is the product of a rational number (Prop.~\ref{\en{EN}satzklassenzahl}) and an integer -- 
+thus $a$ must be \emph{rational} for all $\text{CM}_1$-points $\tau$ not equivalent to $i$.
+It remains to prove that these $a$ are even \emph{integral}.
+From~(\ref{\en{EN}eq101}) we obtain}%
+\de{Aus der Definition $a:=s_2(\tau)\cdot b$ folgt, dass $a$ als Produkt einer rationalen Zahl (Satz~\ref{\en{EN}satzklassenzahl}) mit einer ganzen Zahl selbst \emph{rational} sein muss, falls $\tau$ nicht äquivalent zu $i$ ist.
+Es fehlt noch zu zeigen, dass diese $a$ sogar \emph{ganze} Zahlen sind.
+Zunächst folgt aus~(\ref{\en{EN}eq101}):}
+$$\sqrt{j(\tau)-1728}=\pm\frac{E_6(\tau)}{\eta^{12}(\tau)}$$
+
+\en{We use this in the definition of $a$ and (using Def.~\ref{\en{EN}defis2}) we obtain:}%
+\de{Das setzen wir in die Definition für $a$ ein und erhalten mit Def.~\ref{\en{EN}defis2}:}
+\begin{align}
+    a :=&~s_2(\tau)\cdot b = s_2(\tau)\cdot \sqrt{c\cdot D\cdot(j(\tau)-1728)} \cdot(AC)^2\nonumber\\
+     =&~ \frac{E_4(\tau)}{E_6(\tau)}\cdot E^*_2(\tau)\cdot \sqrt{c\cdot D}\cdot \pm\frac{E_6(\tau)}{\eta^{12}(\tau)}\cdot(AC)^2\nonumber\\
+    =&~ \frac{E_4(\tau)}{\eta^8(\tau)}\cdot 
+    \frac{\sqrt{D}\cdot E^*_2(\tau)\cdot(AC)^2}{\eta^4(\tau)}
+    \cdot\pm\sqrt{c}\label{\en{EN}produ}
+\end{align}
+\en{Here we could reduce by $E_6(\tau)$, because Lemma~\ref{\en{EN}lemE6} tells $E_6(\tau)\neq 0$ for $\im(\tau)\geq 1\ko25$.}%
+\de{Hier durften wir wegen Lemma~\ref{\en{EN}lemE6} mit $E_6(\tau_N)\neq 0$ kürzen (beachte, dass für $N\geq 7$ gilt: $\im(\tau_N)\geq\frac{\sqrt{7}}{2}\geq 1\ko25$).}
+\begin{itemize}[leftmargin=*]
+\item \en{The first two factors in Eq.~(\ref{\en{EN}produ}) are algebraic integers because of Prop.~\ref{\en{EN}satzezweistern}.}%
+\de{Die ersten beiden Faktoren in Gl.~(\ref{\en{EN}produ}) sind nach Satz~\ref{\en{EN}satzezweistern} ganzalgebraisch.}
+\item \en{For the remaining factor $X=\pm\sqrt{c}$ it holds $X^2 = c$; it is thus an algebraic integer.}%
+\de{Für $X=\pm\sqrt{c}$ gilt $X^2 = c$; es ist also ebenfalls ganzalgebraisch.}
+\end{itemize}
+\en{This proves that $a$ is the product of algebraic integers, thus it is an algebraic integer as well.
+But we know already that $a\in\mathbb Q$ (if $\tau$ is not equivalent to $i$). The rational root theorem tells us that $a$ must be \emph{integral}.}%
+\de{$a$ ist also das Produkt ganzalgebraischer Zahlen und somit selbst ganz"-algebraisch.
+Weil wir bereits wissen, dass $a\in \mathbb Q$ ist (falls $\tau$ nicht äquivalent zu $i$ ist), folgt aus dem Satz über rationale Nullstellen, dass $a$ sogar eine \emph{ganze} Zahl ist.}\qedhere\\
+\en{\emph{Remark:} For $\tau_4=i$ we have $E_2^*(i)=0$ and we could define $a_4=0$ using Eq.~(\ref{\en{EN}produ}).}%
+\de{\emph{Bemerkung:} Für $\tau_4=i$ gilt $E_2^*(i)=0$ und wir könnten mit Gl.~(\ref{\en{EN}produ}) $a_4=0$ definieren.}
+\end{proof}
+
+
+
+\begin{table}[ht]\centering\vspace*{-4pt}
+\scalebox{0.88}{{\renewcommand{\arraystretch}{2.2}%
+\begin{tabular}{c|c|>{\columncolor[gray]{0.9}}c|c|c|c|>{\columncolor[gray]{0.9}}c}
+\multicolumn{3}{c|}{\en{Equation, Discriminant and Solution}\de{Gleichung, Diskriminante und Lösung}} & \multicolumn{3}{c|}{\en{Intermediate values from}\de{Hilfsgrößen aus} Thm.~\ref{\en{EN}s2nenner}} & \multicolumn{1}{c}{\en{Result}\de{Ergebnis}}\\
+\scalebox{.9}{$C\tau^2+B\tau+A=0$} & $-N$ & $\tau_N$  & $c_N$  & $b_N$ & $a_N$ & $s_2(\tau_N)$\\
+    \hline
+     %$\tau^2+1=0$ & $-4$ & $i$ & $1$\\
+     $\tau^2+2=0$ & $-8$ & $\sqrt{2}i$         & $-1$ & $896$ & $320$ & $\dsf{5}{14}$ \\
+     $\tau^2+3=0$ & $-12$ & $\sqrt{3}i$   & $-1$ & $7128$ & $3240$ & $\dsf{5}{11}$ \\
+     $\tau^2+4=0$ & $-16$ & $\sqrt{4}i$          & $-2$  & $48384$ & $25344$ & $\dsf{11}{21}$ \\
+     $\tau^2+7=0$ & $-28$ & $\sqrt{7}i$        & $-1$ & $1055754$ & $674730$ & $\dsf{85}{133}$ \\
+    \hline
+     %$\tau^2-\tau+1=0$ & $-3$ & $\frac{1+i\sqrt{3}}{2}=\varrho$ & $1$\\
+     $\tau^2-\tau+2=0$ & $-7$ & $\displaystyle\frac{1+i\sqrt{7}}{2}$         & $1$  & $756$ & $180$ & $\dsf{5}{21}$\\
+     $\tau^2-\tau+3=0$ & $-11$ & $\displaystyle\frac{1+i\sqrt{11}}{2}$        & $1$  & $5544$ & $2304$ & $\dsf{32}{77}$ \\
+     $\tau^2-\tau+5=0$ & $-19$ & $\displaystyle\frac{1+i\sqrt{19}}{2}$         & $1$ & $102600$ & $57600$ & $\dsf{32}{57}$\\
+     $\tau^2-\tau+7=0$ & $-27$ & $\displaystyle\frac{1+i\sqrt{27}}{2}$ & $1$ & $892584$ & $564480$  &  $\dsf{160}{253}$\\
+     $\tau^2-\tau+11=0$ & $-43$ & $\displaystyle\frac{1+i\sqrt{43}}{2}$       & $1$  & $23600808$ & $16727040$&  $\dsf{640}{903}$ \\
+     $\tau^2-\tau+17=0$ & $-67$ & $\displaystyle\frac{1+i\sqrt{67}}{2}$       & $1$ & $907582536$ & $695819520$ &  $\displaystyle\frac{33440}{43617}$\\
+     $\tau^2-\tau+41=0$ & $-163$ & $\displaystyle\frac{1+i\sqrt{163}}{2}$    & $1$ & $10996566783048$ & $9351571368960$ & $\displaystyle\frac{77265280}{90856689}$\\[1ex]
+\end{tabular}}
+}\vspace{6pt}
+\caption{\en{Calculation of $s_2(\tau)$ at some $\text{CM}_1$-points}\de{Berechnung von $s_2(\tau)$ bei einigen $\text{CM}_1$-Punkten}}\label{\en{EN}tabel7}\vspace*{-12pt}
+\end{table}
+
+
+\begin{thm}\label{\en{EN}satzhilfszahlen}
+    \en{All values of $s_2(\tau)$ given in Tab.~\ref{\en{EN}tabel7} are exact and correct.}%
+    \de{Alle Werte von $s_2(\tau)$ in Tab.~\ref{\en{EN}tabel7} sind exakt und korrekt.}
+\end{thm}
+\begin{proof}
+
+
+
+\begin{itemize}[leftmargin=*]
+    \item \en{In the first three columns of Tab.~\ref{\en{EN}tabel7} we can find some $\text{CM}_1$-points $\tau$ from Prop.~\ref{\en{EN}satztaun} and their quadratic equation and discriminant.}%
+    \de{Zunächst finden wir in Tab.~\ref{\en{EN}tabel7} einige $\text{CM}_1$-Punkte $\tau$ aus Satz~\ref{\en{EN}satztaun} und die zugehörige quadratische Gleichung mit ihrer Diskriminante.}
+    \pagebreak
+    \item \en{To calculate $b := \sqrt{c\cdot D\cdot(j(\tau)-1728)}\cdot(AC)^2$, we need the values of $j(\tau)$ from Tab.~\ref{\en{EN}tabJwerte} and we have to choose a suitable $c\in\mathbb Z$. Our choice of $c$ and the resulting values of $b$ are in Tab.~\ref{\en{EN}tabel7}.}%
+    \de{Um $b := \sqrt{c\cdot D\cdot(j(\tau)-1728)}\cdot(AC)^2$ zu berechnen, benötigen wir die Werte von $j(\tau)$ aus Tab.~\ref{\en{EN}tabJwerte} und müssen uns dann jeweils für ein passendes $c\in\mathbb Z$ entscheiden. Unsere Wahl von $c$ und die daraus folgenden Werte von $b$ sind in Tab.~\ref{\en{EN}tabel7} zu finden.}
+    \item \en{To calculate $a:=s_2(\tau)\cdot b$, we use the approximation from Thm.~\ref{\en{EN}theonaehers2}:}%
+    \de{Um jetzt $a:=s_2(\tau)\cdot b$ zu berechnen, nutzen wir die Näherung aus Thm.~\ref{\en{EN}theonaehers2}:}
+    $$\tilde s_2(\tau):=\frac{1+240 (q+9q^2)}{1 - 504 (q+33q^2)}\cdot\left(1 - 24  (q+3q^2) -\frac{3}{\pi \im(\tau)}\right).$$
+    \en{Since $q=e^{2\pi i \tau_N}=(-1)^N\cdot e^{-\pi\sqrt{N}}$, we need again 25 digits of $\pi$.
+    Using the approximations $\tilde s_2(\tau_N)$ we obtain $\tilde a_N:=\tilde s_2(\tau_N)\cdot b_N$ as an approximation for $a_N$:}%
+    \de{Wegen $q=e^{2\pi i \tau_N}=(-1)^N\cdot e^{-\pi\sqrt{N}}$ benötigen wir hier wieder 25 Stellen von $\pi$.
+    Mit den Näherungen $\tilde s_2(\tau_N)$ berechnen wir dann $\tilde a_N:=\tilde s_2(\tau_N)\cdot b_N$ als Näherung für $a_N$:}
+\begin{align*}
+\tilde s_2(\tau_{7})  &\approx 0\ko23809~56479~14958~22417 &&\Longrightarrow& 
+\tilde a_{7} &\approx&           180\ko00031\\[-0.2ex]
+\tilde s_2(\tau_{8})  &\approx 0\ko35714~27261~48252~57875 &&\Longrightarrow& 
+\tilde a_{8} &\approx&           319\ko99988\\[-0.2ex]
+\tilde s_2(\tau_{11}) &\approx 0\ko41558~44169~95050~54414 &&\Longrightarrow& 
+\tilde a_{11} &\approx&         2304\ko00001\\[-0.2ex]
+\tilde s_2(\tau_{12}) &\approx 0\ko45454~54541~52238~44453 &&\Longrightarrow& 
+\tilde a_{12} &\approx&         3239\ko00000\\[-0.2ex]
+\tilde s_2(\tau_{16}) &\approx 0\ko52380~95238~06641~89452 &&\Longrightarrow& 
+\tilde a_{16} &\approx&        25343\ko000\\[-0.2ex]
+\tilde s_2(\tau_{19}) &\approx 0\ko56140~35087~72034~50431 &&\Longrightarrow& 
+\tilde a_{19} &\approx&        57600\ko000\\[-0.2ex]
+\tilde s_2(\tau_{27}) &\approx 0\ko63241~10671~93675~93347 &&\Longrightarrow& 
+\tilde a_{27} &\approx&       564480\ko000\\[-0.2ex]
+\tilde s_2(\tau_{28}) &\approx 0\ko63909~77443~60902~23748 &&\Longrightarrow& 
+\tilde a_{28} &\approx&       674730\ko000\\[-0.2ex]
+\tilde s_2(\tau_{43}) &\approx 0\ko70874~86157~25359~91141 &&\Longrightarrow& 
+\tilde a_{43} &\approx&      16727040\ko000\\[-0.2ex]
+\tilde s_2(\tau_{67}) &\approx 0\ko76667~35447~18802~30185 &&\Longrightarrow& 
+\tilde a_{67} &\approx&     695819520\ko000\\[-0.2ex]
+\tilde s_2(\tau_{163})&\approx 0\ko85040~82731~87238~86141 &&\Longrightarrow&
+\tilde a_{163} &\approx& 9351571368960\ko000
+\end{align*}
+\en{Here we already recognize \emph{approximately} the values of $a_N$ from Tab.~\ref{\en{EN}tabel7}.}%
+\de{Hier erkennen wir bereits \emph{ungefähr} die Werte der $a_N$ aus Tab.~\ref{\en{EN}tabel7}.}
+
+
+
+
+\item \en{For $N\geq 7$ it holds $\im(\tau_N)=\sqrt{N}/2>1\ko25$ so we can use the error estimate of $\tilde s_2(\tau)$ from Thm.~\ref{\en{EN}theonaehers2} which yields:}%
+\de{Für $N\geq 7$ gilt $\im(\tau_N)=\sqrt{N}/2>1\ko25$ und wir können die Fehlerabschätzung für $\tilde s_2(\tau)$ aus Thm.~\ref{\en{EN}theonaehers2} nutzen:}
+\begin{align*}
+    |\tilde a_N - a_N| &=|\tilde s_2(\tau_N)-s_2(\tau_N)|\cdot |b_N| \leq 222000\cdot |q|^3\cdot |b_N|
+\end{align*}
+\en{From the values of $b_N$ given in Tab.~\ref{\en{EN}tabel7} we observe that $|b_N|\leq e^{3\cdot\sqrt{N}}$ for all these $N$. Further we have $|q|=e^{-2\pi\im(\tau_N)}=e^{-\pi\sqrt{N}}$ and $\pi>3+\frac{10}{71}$ (Lemma~\ref{\en{EN}archim-lem}):}%
+\de{An den bereits berechneten Werten der $b_N$ erkennen wir $|b_N|\leq e^{3\cdot\sqrt{N}}$ für alle diese $N$. Außerdem gilt $|q|=e^{-2\pi\im(\tau_N)}=e^{-\pi\sqrt{N}}$ und $\pi>3+\frac{10}{71}$ (Lemma~\ref{\en{EN}archim-lem}):}
+\begin{align*}
+    |\tilde a_N - a_N|&\leq 222000\cdot e^{-3\pi\sqrt{N}}\cdot e^{3\cdot\sqrt{N}}
+=222000\cdot e^{-3(\pi-1)\sqrt{N}}\\
+&\leq 222000\cdot e^{-3\cdot\left(2+\frac{10}{71}\right)\cdot\sqrt{7}} \leq 0\ko01
+\end{align*}
+
+\item
+\en{In Prop.~\ref{\en{EN}s2nenner} we have proved that the $a_N$ are integral. Thus the values of $a_N$ given in Tab.~\ref{\en{EN}tabel7} are \emph{exact}, because they are the only integers close enough to the approximations.}%
+\de{Aus der Ganzzahligkeit der $a_N$ in Thm.~\ref{\en{EN}s2nenner} folgt, dass $a_N$ \emph{exakt} die in Tab.~\ref{\en{EN}tabel7} angegebenen Werte hat, weil das die einzigen ganzen Zahlen sind, die hinreichend nahe an $\tilde a_N$ liegen.}
+\en{The values of $s_2(\tau)$ now follow by reducing the fraction $s_2(\tau_N)=a_N/b_N$.}%
+\de{Die Werte von $s_2(\tau)$ folgen schließlich aus $s_2(\tau_N)=a_N/b_N$.}\qedhere
+\end{itemize}
+\end{proof}
+
+
+
+\begin{theo}\label{\en{EN}theohud}
+\en{The "Chudnovsky formula" for calculating $\pi$ applies:}%
+\de{Es gilt die \glqq Chudnovsky-Formel\grqq~zur Berechnung von $\pi$:}
+\begin{align*}
+    \frac{\sqrt{640320^3}}{12 \cdot \pi} &= \sum_{n=0}^\infty\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{13591409 + 545140134\cdot n}{\left(-640320^3\right)^n}
+\end{align*}
+\en{It was published in 1988 by David and Gregroy Chudnovsky (see \cite[\en{eq.}\de{Gl.} (1.5)]{\en{EN}chud1988}).}%
+\de{Sie wurde 1988 von den Chudnovsky-Brüdern veröffentlicht (siehe \cite[\en{eq.}\de{Gl.} (1.5)]{\en{EN}chud1988}).}
+\end{theo}
+\begin{proof}
+\en{We use $\tau_{163}=\frac{1+i\sqrt{163}}{2}$ in the Main Theorem~\ref{\en{EN}hauptformel}. For this we use the values $j(\tau_{163})=1728J(\tau_{163})$ from Tab.~\ref{\en{EN}tabJwerte} and $s_2(\tau_{163})$ from Tab.~\ref{\en{EN}tabel7}:}
+\de{Wir setzen $\tau_{163}=\frac{1+i\sqrt{163}}{2}$ ins Haupttheorem~\ref{\en{EN}hauptformel} ein und verwenden die Werte von $j(\tau_{163})=1728J(\tau_{163})$ aus Tab.~\ref{\en{EN}tabJwerte} und die von $s_2(\tau_{163})$ aus Tab.~\ref{\en{EN}tabel7}:}
+\begin{align*}
+    \frac{1}{2\pi \im(\tau)}\sqrt{\frac{J(\tau)}{J(\tau)-1}} &= \sum_{n=0}^\infty \left( \frac{1-s_2(\tau)}{6} + n \right)\cdot \frac{(6n)!}{(3n)!(n!)^3}\cdot \frac{1}{\left(1728J(\tau)\right)^n}\\
+    \frac{1}{\pi\sqrt{163}}\cdot\sqrt{\frac{-1728J(\tau_{163})}{1728-1728J(\tau_{163})}} &=\sum_{n=0}^\infty\frac{(6n)!}{(3n)!(n!)^3}\cdot \frac{\left(1-s_2(\tau_{163})\right)/6 + n}{\left(1728J(\tau_{163})\right)^n}\\
+    \frac{1}{\pi\sqrt{163}}\cdot\sqrt{\frac{640320^3}{1728+640320^3}} &=\sum_{n=0}^\infty\frac{(6n)!}{(3n)!(n!)^3}\cdot \frac{\left(1-\frac{77265280}{90856689}\right)/{6} + n}{\left(-640320^3\right)^n}\\
+    \frac{\sqrt{640320^3}}{12\cdot\pi\cdot 545140134} &= %\left.
+    \sum_{n=0}^\infty\frac{(6n)!}{(3n)!(n!)^3}\cdot \frac{\frac{13591409}{545140134} + n}{\left(-640320^3\right)^n}
+\end{align*}
+\en{By multiplying this equation with $545140134$, we obtain the Chudnovsky formula.}%
+\de{Eine Multiplikation mit $545140134$ liefert nun die Chudnovsky-Formel.}
+\end{proof}
+
+\begin{theo}\label{\en{EN}14dezi}
+\en{If we use only the first $N$ terms of the Chudnovskys' series:}%
+\de{Wenn man in der Chudnovsky-Formel nur die ersten $N$ Summanden}
+$$\pi_N=\frac{\sqrt{640320^3}}{12}\,\left(\sum_{n=0}^{N-1} s_n\right)^{\hspace*{-3pt}-1\hspace*{3pt}} \text{\en{with}\de{mit}}\quad s_n=\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\,\frac{13591409 + 545140134 n}{\left(-640320^3\right)^n}$$
+\en{then for all $N\geq 1$ it holds}%
+\de{verwendet, gilt für alle $N\geq 1$ die Fehlerabschätzung}
+$$\left|\pi_N-\pi\right|<11\ko315\cdot \frac{53360^{-3N}}{\sqrt{N}}.$$
+\en{For $N\geq 129$ terms, this yields the weaker estimate $\left|\pi_N-\pi\right|<53360^{-3N}$ and we obtain on average $\log_{10}\lk53360^{3}\rk\approx14\ko1816$ decimal digits of $\pi$ per iteration.}%
+\de{Für $N\geq 129$ liefert das die etwas schwächere Abschätzung
+$\left|\pi_N-\pi\right|<53360^{-3N}$
+und man erhält durchschnittlich $\log_{10}\lk53360^{3}\rk\approx14\ko1816$ Dezimalen pro Summand.}
+\end{theo}
+\begin{proof}
+\en{We use Stirling's approximation (see \cite{\en{EN}Robbins}):}%
+\de{Wir verwenden zuerst die Stirling'sche Näherung (siehe z.B. \cite{\en{EN}Robbins}):}
+$$n!=\sqrt{2\pi n}\cdot\left(\frac{n}{e}\right)^n\cdot e^{r_n}\qquad\text{\en{with}\de{mit}}\qquad \frac{1}{12n+1}<r_n<\frac{1}{12n}.$$
+\en{This yields}\de{Daraus folgt nämlich}
+\begin{align*}
+    \frac{(6n)!}{(3n)!(n!)^3} &= \frac{\sqrt{2\pi\cdot 6n}\cdot\left(\frac{6n}{e}\right)^{6n}}{\sqrt{2\pi\cdot 3n}\cdot\left(\frac{3n}{e}\right)^{3n}\cdot\left(\sqrt{2\pi\cdot n}\cdot\left(\frac{n}{e}\right)^{n}\right)^3}\cdot\frac{e^{r_{6n}}}{e^{r_{3n}}\cdot e^{3\cdot r_{n}}}\\
+    &= \frac{\sqrt{2}\cdot\left(6^6/3^3\right)^n}{\left(\sqrt{2\pi n}\right)^{3}}\cdot e^{r_{6n}-r_{3n}-3r_{n}}= \frac{1728^n}{2(\pi n)^{3/2}}\cdot e^{-(3r_{n}+r_{3n}-r_{6n})}
+\end{align*}
+\en{with the following bound, valid for $n\geq 1$:}%
+\de{mit der für $n\geq 1$ gültigen Abschätzung:}
+\begin{align*}
+    3r_{n}+r_{3n}-r_{6n} &> \frac{3}{12n+1}+\frac{1}{12\cdot 3n +1}-\frac{1}{12\cdot 6n}\\
+    &> \frac{3}{12n+1}+\frac{1}{3\cdot(12n+1)}-\frac{1}{12\cdot 6n} = \frac{228 n - 1}{ 864 n^2 + 72 n} > \frac{13}{54 n}
+\end{align*}
+\en{The last step is equivalent to $(228n-1) 54n > 13(864 n^2 + 72 n)$ and  $90n(12n-11)>0$, which is valid for $n\geq 1$.}%
+\de{Die letzte Abschätzung ist dabei äquivalent zu $(228n-1)\cdot 54n > 13\cdot(864 n^2 + 72 n)$ bzw. zu $90n\cdot(12n-11)>0$, was für $n\geq 1$ erfüllt ist.}
+\en{Thus we have proven:}%
+\de{Somit ist Folgendes bewiesen:}
+$$\frac{(6n)!}{(3n)!(n!)^3}<\frac{12^{3n}}{2(\pi n)^{3/2}}\cdot e^{-\frac{13}{54 n}}.$$
+\en{With $A=13591409$ and $B=545140134$ we obtain:}%
+\de{Mit $A=13591409$ und $B=545140134$ erhalten wir weiter:}
+\begin{align*}
+    |s_n| &= \frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{A + B n}{640320^{3n}}
+    <\frac{12^{3n}}{2(\pi n)^{3/2}}\cdot e^{-\frac{13}{54 n}}\cdot\frac{B n\cdot\left(1+\frac{A}{Bn}\right)}{640320^{3n}}
+\end{align*}
+\en{Here we use $1+x\leq\exp(x)$ and $\frac{A}{Bn}<\frac{1}{40n}<\frac{13}{54 n}$:}%
+\de{Hier nutzen wir $1+x\leq\exp(x)$ und $\frac{A}{Bn}<\frac{1}{40n}<\frac{13}{54 n}$ und erhalten}
+\begin{align*}
+    |s_n| &<\frac{1}{\sqrt{n}\cdot 53360^{3n}}\cdot\frac{B}{2\pi^{3/2}}\cdot e^{-\frac{13}{54 n}}\cdot e^{\frac{A}{Bn}}<\frac{1}{\sqrt{n}\cdot 53360^{3n}}\cdot\frac{B}{2\pi^{3/2}}
+\end{align*}
+\en{Now we denote $C=\frac{12}{\sqrt{640320^3}}$. Since $\frac{1}{\pi} = C \cdot \sum_{n=0}^\infty s_n$ is an alternating series where $|s_n|$ decreases monotonously to zero, the error of $\frac{1}{\pi_N} = C \cdot \sum_{n=0}^{N-1} s_n$ is smaller than the next term's absolute value:}%
+\de{Nun schreiben wir $C=\frac{12}{\sqrt{640320^3}}$. Weil $\frac{1}{\pi} = C \cdot \sum_{n=0}^\infty s_n$ eine alternierende Reihe ist, bei der $|s_n|$ streng monoton gegen Null fällt, ist der Fehler von $\frac{1}{\pi_N} = C \cdot \sum_{n=0}^{N-1} s_n$ kleiner als der nächste Summand:}
+\begin{align*}
+    \left|\frac{1}{\pi}-\frac{1}{\pi_N}\right|=C\cdot\left|\sum_{k=0}^\infty s_k-\sum_{k=0}^{N-1} s_k\right|=C\cdot\left|\sum_{k=N}^\infty s_k\right|< C\cdot\left| s_{N} \right|.
+\end{align*}
+\en{With $\frac{1}{\pi}-\frac{1}{\pi_N}=\frac{\pi_N-\pi}{\pi~\pi_N}$ and $|\pi_N|<3\ko1416$ and $\pi>3\ko1415$ this yields:}%
+\de{Mit $\frac{1}{\pi}-\frac{1}{\pi_N}=\frac{\pi_N-\pi}{\pi~\pi_N}$ und $|\pi_N|<3\ko1416$ und $\pi>3\ko1415$ folgt:}\belowdisplayskip=-12pt
+\begin{align*}
+\left|\pi_N-\pi\right| &< \left|C~\pi~\pi_N~s_{N} \right| <\frac{C~\pi~\pi_N~B}{2\pi^{3/2}}\cdot\frac{53360^{-3N}}{\sqrt{N}}<11\ko315\cdot \frac{53360^{-3N}}{\sqrt{N}}.
+\end{align*}
+\end{proof}
+
+\begin{bem}
+\en{In a future paper, we will prove the sharper estimate}%
+\de{In einem weiteren Aufsatz beweisen wir die schärfere Abschätzung}
+$$\left|\pi_N-\pi\right|=53360^{-3N}\cdot\frac{A_0}{\sqrt{N}}\cdot\exp\left(-\frac{A_1}{N}-\frac{A_2}{N^2}+\frac{\delta_N}{N^3}\right)$$
+\en{with the error term $0.00690<\delta_N<0.00843$ and the coefficients}%
+\de{mit dem Fehlerterm $0.00690<\delta_N<0.00843$ und den Koeffizienten}
+\begin{align*}
+    A_0&=\frac{106720\cdot\sqrt{10005\pi}}{1672209},\\
+    A_1&=\frac{1781843197433}{7456754505816},\\
+    A_2&=\frac{1080096011925710088395}{3475199235000451148614116}.
+\end{align*}
+\end{bem}
+
+\pagebreak
+
+\begin{theo}\label{\en{EN}PiFormeln}
+\en{The following ten formulae for calculating $\pi$ apply:}%
+\de{Es gelten auch die folgenden zehn Formeln zur Berechnung von $\pi$:}
+{\begin{align*}
+\frac{\sqrt{15^3}}{3 \cdot\pi} &=  \sum_{n=0}^\infty\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{8 + 63\cdot n}{\left(-15^3\right)^n} & \text{\cite[\en{eq.}\de{Gl.} (1.4)]{\en{EN}chud1988}} && \left(\tau_{7}\right)\\
+\frac{\sqrt{20^3}}{8 \cdot\pi} &=  \sum_{n=0}^\infty\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{3 + 28\cdot n}{\left(20^3\right)^n} & \text{\cite[\en{p.}\de{S.} 187]{\en{EN}Borwein:1987:agm}} && \left(\tau_{8}\right)\\
+\frac{\sqrt{32^3}}{4 \cdot\pi} &=  \sum_{n=0}^\infty\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{15 + 154\cdot n}{\left(-32^3\right)^n} & \text{\cite[\en{eq.}\de{Gl.} (1.4)]{\en{EN}chud1988}} && \left(\tau_{11}\right)\\
+\frac{\sqrt{2\cdot 30^3}}{72 \cdot\pi} &=  \sum_{n=0}^\infty\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{1 + 11\cdot n}{\left(2\cdot 30^3\right)^n} & \text{\cite[\en{eq.}\de{Gl.} (33)]{\en{EN}rama1914}} && \left(\tau_{12}\right)\\
+\frac{\sqrt{2}\cdot\sqrt{66^3}}{48 \cdot\pi} &=  \sum_{n=0}^\infty\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{5 + 63\cdot n}{\left(66^3\right)^n} & \text{\cite[\en{p.}\de{S.} 187]{\en{EN}Borwein:1987:agm}} && \left(\tau_{16}\right)\\
+\frac{\sqrt{96^3}}{12 \cdot\pi} &=  \sum_{n=0}^\infty\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{25 + 342\cdot n}{\left(-96^3\right)^n} & \text{\cite[\en{eq.}\de{Gl.} (1.4)]{\en{EN}chud1988}} && \left(\tau_{19}\right)\\
+\frac{\sqrt{3\cdot160^3}}{36 \cdot \pi} &= \sum_{n=0}^\infty\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{31 + 506\cdot n}{\left(-3\cdot160^3\right)^n} & \text{\cite[\en{p.}\de{S.} 371]{\en{EN}Borwein1988}} && \left(\tau_{27}\right)\\
+\frac{\sqrt{255^3}}{ 162 \cdot\pi} &= \sum_{n=0}^\infty\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{8 + 133\cdot n}{\left(255^3\right)^n} & \text{\cite[\en{eq.}\de{Gl.} (34)]{\en{EN}rama1914}} && \left(\tau_{28}\right)\\
+\frac{\sqrt{960^3}}{36 \cdot \pi} &= \sum_{n=0}^\infty\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{263 + 5418\cdot n}{\left(-960^3\right)^n} & \text{\cite[\en{eq.}\de{Gl.} (1.4)]{\en{EN}chud1988}} && \left(\tau_{43}\right)\\
+\frac{\sqrt{5280^3}}{12 \cdot \pi} &= \sum_{n=0}^\infty\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{10177 + 261702\cdot n}{\left(-5280^3\right)^n} & \text{\cite[\en{eq.}\de{Gl.} (1.4)]{\en{EN}chud1988}} && \left(\tau_{67}\right)%\\
+%\frac{\sqrt{640320^3}}{12 \cdot \pi} &= \sum_{n=0}^\infty\frac{\left(6n\right)!}{\left(3n\right)!\left(n!\right)^3}\cdot\frac{13591409 + 545140134\cdot n}{\left(-640320^3\right)^n} & \text{\cite[\en{eq.}\de{Gl.} (1.5)]{\en{EN}chud1988}}  && \left(\tau_{163}\right)
+\end{align*}}
+\en{Here we also listed the first known publication by Ramanujan (1914: \cite{\en{EN}rama1914}), the Borwein brothers (1987: \cite{\en{EN}Borwein:1987:agm}; 1988: \cite{\en{EN}Borwein1988}) or the Chudnovsky brothers (1988: \cite{\en{EN}chud1988}); and the value we used for $\tau$.}%
+\de{Dabei ist jeweils noch die Erstveröffentlichung durch Ramanujan (1914: \cite{\en{EN}rama1914}), die Bor"-wein-Brüder (1987: \cite{\en{EN}Borwein:1987:agm}; 1988: \cite{\en{EN}Borwein1988}) oder die Chudnovsky-Brüder (1988: \cite{\en{EN}chud1988}) angegeben; und der Wert, der für $\tau$ eingesetzt wurde.}
+\end{theo}
+\begin{proof}
+\en{Use the values from Tab.~\ref{\en{EN}tabJwerte} and from Tab.~\ref{\en{EN}tabel7} in the Main Theorem~\ref{\en{EN}hauptformel}, as in the proof of Thm.~\ref{\en{EN}theohud}.}%
+\de{Setze (genau wie im Beweis von Thm.~\ref{\en{EN}theohud}) die Werte aus Tab.~\ref{\en{EN}tabJwerte} und aus Tab.~\ref{\en{EN}tabel7} ins Haupttheorem~\ref{\en{EN}hauptformel} ein.}
+\end{proof}
+

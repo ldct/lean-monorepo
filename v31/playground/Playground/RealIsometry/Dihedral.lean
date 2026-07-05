@@ -201,7 +201,7 @@ lemma dihedralToMat_injective (n : ℕ) [NeZero n] : Function.Injective (dihedra
       have := (by simpa [dihedralToMat] using hab : rotMatZMod n i = reflMat * rotMatZMod n j).symm
       exact absurd this (reflMat_mul_rotMat_ne_rotMat _ _)
   | sr i => cases b with
-    | r j => exact absurd (by simpa [dihedralToMat] using hab) (reflMat_mul_rotMat_ne_rotMat _ _)
+    | r j => exact absurd (by simpa [dihedralToMat, rotMatZMod] using hab) (reflMat_mul_rotMat_ne_rotMat _ _)
     | sr j =>
       simp only [dihedralToMat] at hab
       have hcancel : rotMatZMod n i = rotMatZMod n j := by
@@ -250,3 +250,12 @@ lemma dihedralToIsometry_injective (n : ℕ) [NeZero n] :
 theorem RealIsometry.hasDihedralSubgroup (n : ℕ) [NeZero n]
     : ∃ f : Subgroup SpaceIsometry, Nonempty (DihedralGroup n ≃* f) :=
   ⟨(dihedralToIsometry n).range, ⟨MonoidHom.ofInjective (dihedralToIsometry_injective n)⟩⟩
+
+/-! ## Exceptional subgroups -/
+
+/-- A group is dihedral if it is isomorphic to some `DihedralGroup n`. -/
+abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
+
+/-- A finite subgroup of `SpaceIsometry` is exceptional if it is neither cyclic nor dihedral. -/
+def IsExceptional (H : Subgroup SpaceIsometry) : Prop :=
+  ¬ IsCyclic H ∧ ¬ IsDihedral H ∧ Nat.card H ≠ 0

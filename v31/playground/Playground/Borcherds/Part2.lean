@@ -629,8 +629,7 @@ noncomputable def orderFourIso {G} [Borcherds.Group G] [Fintype G] (h : Nat.card
           have key : ∀ y : ZMod 2, y = 0 ∨ y = 1 := by decide
           rintro ⟨⟨y1⟩, ⟨y2⟩⟩
           rcases key y1 with rfl | rfl <;> rcases key y2 with rfl | rfl <;>
-            simp +decide [hg, ha1, hag, hag_ne1, hag_neg, hag_nea,
-              Prod.ext_iff, CyclicGroup.ext_iff, CyclicGroup.one_val]
+            simp +decide [hg, ha1, hag, hag_ne1, hag_neg, hag_nea]
       }
       map_mul x y := by
         simp only [Equiv.coe_fn_mk]
@@ -1074,7 +1073,8 @@ def s₃ : BSubgroup K4 := {
   inv_mem := by decide
 }
 
-example : IsIsomorphicToProductOfSubgroups K4 s₁ s₂ := by sorry
+-- proven below, after `K4.s12Iso` is constructed
+-- (`example : IsIsomorphicToProductOfSubgroups K4 s₁ s₂`)
 
 def HasTrivialIntersection (G) [Borcherds.Group G] (H₁ H₂ : BSubgroup G) : Prop :=
   H₁.carrier ∩ H₂.carrier = {1}
@@ -1268,9 +1268,13 @@ def K4.s12Iso : Borcherds.GroupIso ({ x // x ∈ s₁.carrier } × { x // x ∈ 
     <;> fin_cases x2 <;> simp at hx2
     <;> rfl
 
-example : IsIsomorphicToProductOfSubgroups' K4 s₁ s₂ := by
-  rw [IsIsomorphicToProductOfSubgroups']
-  sorry
+example : IsIsomorphicToProductOfSubgroups K4 s₁ s₂ := ⟨K4.s12Iso⟩
+
+example : IsIsomorphicToProductOfSubgroups' K4 s₁ s₂ :=
+  ⟨K4.s12Iso, by
+    rintro ⟨h₁, hh₁⟩ ⟨h₂, hh₂⟩
+    simp only [s₁, s₂] at hh₁ hh₂
+    fin_cases h₁ <;> simp at hh₁ <;> fin_cases h₂ <;> simp at hh₂ <;> rfl⟩
 
 theorem recognition_theorem (G) [Borcherds.Group G] (H₁ H₂ : BSubgroup G)
     : IsIsomorphicToProductOfSubgroups' G H₁ H₂ ↔

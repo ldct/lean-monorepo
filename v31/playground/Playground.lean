@@ -44,6 +44,7 @@ import Playground.OrderOf12
 import Playground.OrderOfSimproc
 import Playground.OrderOfSix
 -- import Playground.PermGeometry  -- name collision
+import Playground.Pi.All
 import Playground.PrimePlayground
 import Playground.ProdOfNZ
 import Playground.RDV
