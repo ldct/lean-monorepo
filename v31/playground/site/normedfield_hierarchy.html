@@ -125,6 +125,65 @@
   }
   #tooltip .more { margin-top: 3px; color: #aeb6c2; }
 
+
+  #pinned-panel {
+    position: fixed;
+    z-index: 900;
+    top: 76px;
+    right: 14px;
+    bottom: 42px;
+    width: min(560px, calc(100vw - 28px));
+    max-width: 46vw;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #5f6b7a;
+    border-radius: 12px;
+    background: rgba(29, 33, 40, .98);
+    color: #f3f4f6;
+    box-shadow: 0 14px 38px rgba(0,0,0,.5);
+    font: 12.5px/1.36 ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  }
+  #pinned-panel[hidden] { display: none; }
+  #pinned-panel .pin-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+    border-bottom: 1px solid #4b5563;
+    background: rgba(17, 24, 39, .72);
+    border-radius: 12px 12px 0 0;
+  }
+  #pinned-panel .pin-title { font-weight: 700; color: #fff; }
+  #pinned-panel .pin-hint { margin-left: auto; color: #aeb6c2; font-size: 11.5px; }
+  #pinned-panel button {
+    background: #3a3f47;
+    color: #f3f4f6;
+    border: 1px solid #5f6b7a;
+    border-radius: 7px;
+    padding: 2px 8px;
+    cursor: pointer;
+    font: 12px ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  #pinned-panel button:hover { background: #4b5563; }
+  #pinned-body { overflow: auto; padding: 10px 12px 14px; }
+  #pinned-body h2 { margin: 0 0 4px; font-size: 16px; line-height: 1.2; color: #fff; }
+  #pinned-body .meta { margin-bottom: 7px; color: #b7c0cc; font-size: 11.5px; }
+  #pinned-body .section-title { margin-top: 10px; margin-bottom: 4px; color: #dbeafe; font-weight: 700; }
+  #pinned-body .empty { color: #aeb6c2; font-style: italic; }
+  #pinned-body ul { margin: 4px 0 0 18px; padding: 0; }
+  #pinned-body li { margin: 4px 0; }
+  #pinned-body code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: 11.5px; color: #d8ecff; }
+  #pinned-body pre { white-space: pre-wrap; overflow-wrap: anywhere; margin: 2px 0 0; color: #e5e7eb; font: 11px/1.28 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+  #pinned-body .more { margin-top: 3px; color: #aeb6c2; }
+  .node[data-class-name].pinned path {
+    stroke: #f59e0b;
+    stroke-width: 2.8;
+    filter: drop-shadow(0 0 4px rgba(245,158,11,.9));
+  }
+  @media (max-width: 900px) {
+    #pinned-panel { left: 10px; right: 10px; width: auto; max-width: none; top: 88px; bottom: 52px; }
+  }
+
 </style>
 </head>
 <body>
@@ -1674,8 +1733,16 @@
   </div>
 </div>
 <div id="tooltip" role="tooltip" hidden></div>
+<aside id="pinned-panel" hidden aria-live="polite">
+  <div class="pin-head">
+    <span class="pin-title">Pinned class details</span>
+    <span class="pin-hint">click another node to replace</span>
+    <button id="pin-close" type="button" title="Close pinned details">close</button>
+  </div>
+  <div id="pinned-body"></div>
+</aside>
 <footer>
-  Scroll to zoom, drag to pan. Hover/focus a node to see Mathlib structure fields and what that class adds over its parents. Analogue of Fig. 1 in <em>The Lean Mathematical Library</em> (CPP&nbsp;'20), regenerated from <code>leanprover-community/mathlib4</code> source: <code>extends</code> closure from <code>NormedField</code> plus source-verified <code>instance</code> edges, transitively reduced.
+  Scroll to zoom, drag to pan. Hover/focus a node for a quick preview; click a node to pin its Mathlib structure fields in the side panel. Analogue of Fig. 1 in <em>The Lean Mathematical Library</em> (CPP&nbsp;'20), regenerated from <code>leanprover-community/mathlib4</code> source: <code>extends</code> closure from <code>NormedField</code> plus source-verified <code>instance</code> edges, transitively reduced.
 </footer>
 <script>
 (function () {
@@ -1683,6 +1750,9 @@
   const stage = document.getElementById('stage');
   const canvas = document.getElementById('canvas');
   const tooltip = document.getElementById('tooltip');
+  const pinnedPanel = document.getElementById('pinned-panel');
+  const pinnedBody = document.getElementById('pinned-body');
+  const pinClose = document.getElementById('pin-close');
   let scale = 1, tx = 0, ty = 0;
 
   function apply() {
@@ -1751,15 +1821,17 @@
     return `<li><code>${esc(f.name)}</code>${owner}<pre>${esc(f.type || f.proj || '')}</pre></li>`;
   }
   let currentTipName = '';
-  function renderTip(name) {
+  function renderTip(name, limit = 10) {
     const data = CLASS_DATA[name];
     currentTipName = name;
     if (!data) {
       return `<h2>${esc(name)}</h2><div class="empty">No structure metadata found in the imported Mathlib environment.</div>`;
     }
     const fields = (data.addedOverParents && data.addedOverParents.length ? data.addedOverParents : (data.ownFields || []));
-    const shown = fields.slice(0, 10).map(fieldLine).join('');
-    const more = fields.length > 10 ? `<div class="more">… ${fields.length - 10} more field${fields.length - 10 === 1 ? '' : 's'} omitted</div>` : '';
+    const shownFields = limit == null ? fields : fields.slice(0, limit);
+    const shown = shownFields.map(fieldLine).join('');
+    const omitted = limit == null ? 0 : Math.max(0, fields.length - limit);
+    const more = omitted ? `<div class="more">… ${omitted} more field${omitted === 1 ? '' : 's'} omitted</div>` : '';
     const parents = data.parents && data.parents.length ? `<ul>${data.parents.map(parentLine).join('')}</ul>` : '<div class="empty">none</div>';
     const fieldBlock = fields.length ? `<ul>${shown}</ul>${more}` : '<div class="empty">No fields to show beyond parents.</div>';
     const total = data.fieldCount ? ` · ${data.fieldCount} flattened field${data.fieldCount === 1 ? '' : 's'} total` : '';
@@ -1788,9 +1860,26 @@
     tooltip.hidden = true;
     document.querySelectorAll('.node.hover').forEach(n => n.classList.remove('hover'));
   }
+  function pinNode(node) {
+    const name = node.getAttribute('data-class-name');
+    pinnedBody.innerHTML = renderTip(name, null);
+    pinnedPanel.hidden = false;
+    document.querySelectorAll('.node.pinned').forEach(n => n.classList.remove('pinned'));
+    node.classList.add('pinned');
+    hideTip();
+  }
+  function closePinned() {
+    pinnedPanel.hidden = true;
+    pinnedBody.innerHTML = '';
+    document.querySelectorAll('.node.pinned').forEach(n => n.classList.remove('pinned'));
+  }
+  pinClose.addEventListener('click', closePinned);
+  window.addEventListener('keydown', e => { if (e.key === 'Escape') { hideTip(); closePinned(); } });
 
   document.querySelectorAll('.node[data-class-name]').forEach(node => {
-    node.addEventListener('pointerenter', e => showTipForNode(node, e.clientX, e.clientY));
+    node.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); pinNode(node); });
+    node.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pinNode(node); } });
+    node.addEventListener('pointerenter', e => { if (pinnedPanel.hidden) showTipForNode(node, e.clientX, e.clientY); });
     node.addEventListener('pointermove', e => { if (!tooltip.hidden) positionTip(e.clientX, e.clientY); });
     node.addEventListener('pointerleave', hideTip);
     node.addEventListener('focus', () => {
