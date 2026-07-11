@@ -1013,6 +1013,18 @@
   {
    "term": "↥unitInterval",
    "disp": "[0,1] ⊆ ℝ"
+  },
+  {
+   "term": "Function.End ℕ",
+   "disp": "Function.End ℕ"
+  },
+  {
+   "term": "Monoid.End ℕ",
+   "disp": "Monoid.End ℕ"
+  },
+  {
+   "term": "AddMonoid.End ℕ",
+   "disp": "AddMonoid.End ℕ"
   }
  ]
 }
