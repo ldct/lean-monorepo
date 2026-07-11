@@ -250,6 +250,9 @@
   .badge.law { background: #2b4a33; color: #a6e3b5; }
   .badge.default { background: #59431a; color: #f6d692; }
   .badge.autoproof { background: #4a2b4a; color: #e3b5e3; }
+  .badge.optional { background: transparent; border: 1px solid #4b5563; color: #9aa4b2; padding: 0 4px; }
+  #tooltip li.field-optional, #pinned-body li.field-optional { opacity: .68; }
+  #pinned-body li.field-optional:hover { opacity: 1; }
   .badge.mixin { background: #3d3a4f; color: #c9c2f0; }
   .badge.solidedge { background: #3a3f47; color: #d5dae2; }
   .badge.dashededge { background: #3a3f47; color: #d5dae2; }
@@ -2029,9 +2032,9 @@
   function docsUrl(n) {
     return `https://leanprover-community.github.io/mathlib4_docs/find/#doc/${encodeURIComponent(n)}`;
   }
-  function classSignature(data, name) {
-    const t = data.type;
-    if (!t) return '';
+  // Split a class type like `(X : Type u) → [TopologicalSpace X] → Prop` into
+  // its top-level binder telescope and result sort.
+  function splitTelescope(t) {
     const parts = [];
     let depth = 0, cur = '';
     for (let i = 0; i < t.length; i++) {
@@ -2043,10 +2046,15 @@
     }
     parts.push(cur);
     const result = parts.pop().trim();
+    return { binders: parts.map(p => p.trim()), result };
+  }
+  function classSignature(data, name) {
+    const t = data.type;
+    if (!t) return '';
+    const { binders: parts, result } = splitTelescope(t);
     const names = ['α', 'β', 'γ', 'δ'];
     let ni = 0, subject = '';
     const binders = parts.map(p => {
-      p = p.trim();
       if (p.startsWith('(')) {
         if (!subject) subject = p.slice(1).split(':')[0].trim();
         return p;
@@ -2069,13 +2077,93 @@
     const ex = fieldExtra(f);
     return !!(ex && (ex.default || ex.autoParam));
   }
+  // ---- "try it in the Lean playground" instance skeletons ----
+  // Some diagram nodes are labels for a Lean class applied to a fixed argument
+  // (see those entries' notes); a skeleton must use the real applied form.
+  const ALIAS_APPLIED = { NPow: 'Pow X ℕ', ZPow: 'Pow X ℤ', NSMul: 'SMul ℕ X', ZSMul: 'SMul ℤ X' };
+  const flatFieldsCache = {};
+  // Full leaf-field set of a class: union of ownFields over the class and all
+  // of its ancestors (via `parents`), parents-first depth-first so the order
+  // matches constructor intuition, deduped by field name. Mirrors the
+  // recursion in scripts/fix_added_over_parents.py.
+  function flatFields(name) {
+    if (name in flatFieldsCache) return flatFieldsCache[name];
+    const data = CLASS_DATA[name];
+    if (!data) return (flatFieldsCache[name] = null);
+    let ok = true;
+    const seen = new Set(), out = [];
+    (data.parents || []).forEach(p => {
+      const pf = flatFields(p.name);
+      if (!pf) { ok = false; return; }
+      pf.forEach(f => { if (!seen.has(f.name)) { seen.add(f.name); out.push(f); } });
+    });
+    (data.ownFields || []).forEach(f => { if (!seen.has(f.name)) { seen.add(f.name); out.push(f); } });
+    return (flatFieldsCache[name] = ok ? out : null);
+  }
+  // A ready-to-fill `instance : T X where` snippet listing every flattened
+  // field := sorry; defaulted/autoParam fields are included but marked
+  // optional. Instance-argument binders of the class type become hypothesis
+  // instances declared before the skeleton. Returns null when the data is
+  // incomplete (sanity-checked against fieldCount) or the node is an abbrev.
+  function instanceSkeleton(name) {
+    const data = CLASS_DATA[name];
+    if (!data || data.isAbbrev || !data.type) return null;
+    const fields = flatFields(name);
+    if (!fields || !fields.length || fields.length !== data.fieldCount) return null;
+    const vars = [], hyps = [];
+    let target;
+    if (ALIAS_APPLIED[name]) {
+      vars.push('X');
+      target = ALIAS_APPLIED[name];
+    } else {
+      const pool = ['X', 'Y', 'Z', 'W'];
+      splitTelescope(data.type).binders.forEach(b => {
+        if (b.startsWith('[')) {
+          let h = b.slice(1, -1).trim();
+          const m = h.match(/^([A-Za-z_][A-Za-z0-9_']*)\s*:\s*(.*)$/);
+          if (m) h = m[2];  // drop a binder name like `inst :`
+          hyps.push(h);
+        } else if (b.startsWith('(')) {
+          vars.push(b.slice(1).split(':')[0].trim());
+        } else {
+          vars.push(pool.find(v => !vars.includes(v)) || `X${vars.length}`);
+        }
+      });
+      if (!vars.length) return null;
+      target = [data.leanName || data.name || name, ...vars].join(' ');
+    }
+    const lines = ['import Mathlib', ''];
+    vars.forEach(v => lines.push(`axiom ${v} : Type  -- your own type goes here`));
+    lines.push('');
+    hyps.forEach(h => lines.push(`instance : ${h} := sorry`));
+    if (hyps.length) lines.push('');
+    lines.push(`instance : ${target} where`);
+    fields.forEach(f => {
+      const ex = fieldExtra(f);
+      let note = '';
+      if (ex && ex.default) note = `  -- optional, default: ${ex.default}`;
+      else if (ex && ex.autoParam) note = '  -- optional, auto-proved by a default tactic';
+      lines.push(`  ${f.name} := sorry${note}`);
+    });
+    return lines.join('\n') + '\n';
+  }
+  function playgroundUrl(name) {
+    const code = instanceSkeleton(name);
+    return code ? 'https://live.lean-lang.org/#code=' + encodeURIComponent(code) : null;
+  }
   function fieldBadges(f) {
     const ex = fieldExtra(f);
     if (!ex) return '';
-    let out = ex.isProp
-      ? ' <span class="badge law" title="Prop-valued: something you prove">law</span>'
-      : ' <span class="badge data" title="Data: something you supply">data</span>';
-    if (ex.default) out += ` <span class="badge default" title="Optional field with a default value; supply it only to get better definitional behaviour (forgetful-inheritance pattern)">default := ${esc(ex.default)}</span>`;
+    let out = '';
+    if (ex.default) {
+      out += ` <span class="badge optional" title="Has a default definition (${esc(ex.default)}) — not new data an instance must supply. Override it only to control definitional equality (forgetful-inheritance pattern, e.g. avoiding Module diamonds).">optional</span>`;
+    } else if (ex.autoParam) {
+      out += ' <span class="badge optional" title="Proved automatically by a default tactic — not an obligation an instance must discharge by hand. Write it only if the tactic fails.">optional</span>';
+    }
+    out += ex.isProp
+      ? ` <span class="badge law" title="${ex.autoParam ? 'Prop-valued; a default tactic proves it' : 'Prop-valued: something you prove'}">law</span>`
+      : ` <span class="badge data" title="${ex.default ? 'Data-valued; a default definition is provided' : 'Data: something you supply'}">data</span>`;
+    if (ex.default) out += ` <span class="badge default" title="The default definition; override only to get better definitional behaviour (forgetful-inheritance pattern)">default := ${esc(ex.default)}</span>`;
     if (ex.autoParam) out += ' <span class="badge autoproof" title="Proved automatically by a default tactic unless overridden">auto proof</span>';
     return out;
   }
@@ -2126,7 +2214,8 @@
   function fieldLine(f) {
     const owner = f.owner && f.owner !== currentTipName ? ` <span class="meta">from <code>${esc(f.owner)}</code></span>` : '';
     const doc = f.doc ? `<div class="field-doc">${mdDoc(f.doc)}</div>` : '';
-    return `<li><code>${esc(f.name)}</code>${fieldBadges(f)}${owner}${doc}${typeBlock(fieldTypeDisplay(f))}</li>`;
+    const cls = fieldIsOptional(f) ? ' class="field-optional"' : '';
+    return `<li${cls}><code>${esc(f.name)}</code>${fieldBadges(f)}${owner}${doc}${typeBlock(fieldTypeDisplay(f))}</li>`;
   }
   function classBadge(name) {
     const c = EX.classes && EX.classes[name];
@@ -2211,6 +2300,8 @@
     if (limit == null) {
       const sig = classSignature(data, name);
       metaParts.push(`<a href="${docsUrl(leanName)}"${sig ? ` title="${esc(sig)}"` : ''} target="_blank" rel="noopener">Mathlib docs ↗</a>`);
+      const play = playgroundUrl(name);
+      if (play) metaParts.push(`<a href="${play}" target="_blank" rel="noopener" title="Open the Lean playground pre-filled with an instance skeleton: every field an instance of this class requires">instance skeleton ↗</a>`);
     }
     const meta = metaParts.length ? `<div class="meta">${metaParts.join(' · ')}</div>` : '';
     const extras = `${minimalBlock(fields)}${examplesBlock(name, limit == null)}${limit == null ? buildersBlock(name, fields) : ''}`;
