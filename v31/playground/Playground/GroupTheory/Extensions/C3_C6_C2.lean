@@ -10,23 +10,16 @@ C6 is an extension of C2 by C3
 Key definitions
 - `C2_extension`: the extension of C2
 -/
-
 def f : C3 →* C6 := {
   toFun x := match (x.toAdd) with
   | 0 => (.ofAdd 0)
   | 1 => (.ofAdd 2)
   | 2 => (.ofAdd 4)
   map_one' := by decide
-  map_mul' x y := by
-    fin_cases x
-    <;> fin_cases y
-    <;> decide
+  map_mul' := by decide
 }
 
-lemma f_injective : Function.Injective f := by
-  intro a b h
-  fin_cases a <;> fin_cases b
-  <;> simp +decide at *
+lemma f_injective : Function.Injective f := by decide
 
 def g : C6 →* C2 := {
   toFun x := match (x.toAdd) with
@@ -37,11 +30,7 @@ def g : C6 →* C2 := {
   | 4 => (.ofAdd 0)
   | 5 => (.ofAdd 1)
   map_one' := by decide
-  map_mul' x y := by
-    simp only [toAdd_mul, ofAdd_zero]
-    fin_cases x
-    <;> fin_cases y
-    <;> simp +decide
+  map_mul' := by decide
 }
 
 lemma g_surjective : Function.Surjective g := by
@@ -58,25 +47,14 @@ def im_f : Subgroup C6 := {
 lemma f_im_eq_im_f : f.range = im_f := by
   ext x
   simp [f, im_f]
-  constructor
-  · rintro ⟨ a, ha ⟩
-    fin_cases a <;> simp_all
-  · rintro h
-    obtain rfl | rfl | rfl := h <;> decide
+  decide +revert
 
 lemma ker_g_eq_im_f : g.ker = im_f := by
   ext x
   simp [g, im_f]
-  constructor
-  · intro h
-    fin_cases x <;> simp_all
-    · left ; rfl
-    · right ; left ; rfl
-    · right ; right ; rfl
-  · rintro h
-    obtain rfl | rfl | rfl := h <;> decide
+  decide +revert
 
-def C3_extension : GroupExtension C3 C6 C2 := {
+def C3_C6_C2 : GroupExtension C3 C6 C2 := {
   inl := f
   rightHom := g
   inl_injective := f_injective
