@@ -160,6 +160,7 @@ set_option maxHeartbeats 0 in
     -- edges whose derivation is genuinely multi-hop in Mathlib; label the key instance
     let manualEdgeDecl : List (String × Name) :=
       [("MetricSpace->T2Space", `instT2SpaceOfR1SpaceOfT0Space),
+       ("EMetricSpace->T2Space", `instT2SpaceOfR1SpaceOfT0Space),
        ("PseudoEMetricSpace->FirstCountableTopology", `UniformSpace.firstCountableTopology)]
     let mut edgeJson : Array (String × Json) := #[]
     let mut unresolved : Array String := #[]

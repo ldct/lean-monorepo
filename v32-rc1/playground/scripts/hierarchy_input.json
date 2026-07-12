@@ -818,6 +818,41 @@
    "s": "MulZeroOneClass",
    "t": "MulZeroClass",
    "kind": "solid"
+  },
+  {
+   "s": "EMetricSpace",
+   "t": "T2Space",
+   "kind": "dashed",
+   "constraint": false
+  },
+  {
+   "s": "EuclideanDomain",
+   "t": "IsDomain",
+   "kind": "dashed"
+  },
+  {
+   "s": "GroupWithZero",
+   "t": "IsCancelMulZero",
+   "kind": "dashed",
+   "constraint": false
+  },
+  {
+   "s": "GroupWithZero",
+   "t": "NoZeroDivisors",
+   "kind": "dashed",
+   "constraint": false
+  },
+  {
+   "s": "DivisionRing",
+   "t": "IsPrincipalIdealRing",
+   "kind": "dashed",
+   "constraint": false
+  },
+  {
+   "s": "DivisionSemiring",
+   "t": "IsPrincipalIdealRing",
+   "kind": "dashed",
+   "constraint": false
   }
  ],
  "owners": [
@@ -979,6 +1014,10 @@
   {
    "term": "Polynomial ℝ",
    "disp": "ℝ[X]"
+  },
+  {
+   "term": "Polynomial ℤ",
+   "disp": "ℤ[X]"
   },
   {
    "term": "Matrix (Fin 2) (Fin 2) ℝ",
