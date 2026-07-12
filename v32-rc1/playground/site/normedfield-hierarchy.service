@@ -1,0 +1,15 @@
+[Unit]
+Description=NormedField hierarchy static site
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/exedev/lean-monorepo/v32-rc1/playground/site
+ExecStart=/usr/bin/python3 -m http.server 8000 --bind 0.0.0.0 --directory /home/exedev/lean-monorepo/v32-rc1/playground/site
+Restart=on-failure
+RestartSec=2
+User=exedev
+Group=exedev
+
+[Install]
+WantedBy=multi-user.target

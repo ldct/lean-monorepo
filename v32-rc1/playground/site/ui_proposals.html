@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proposals — mathematically smarter NormedField hierarchy</title>
+<style>
+  :root {
+    --bg: #22252a;
+    --panel: #2c3037;
+    --ink: #e8e6e1;
+    --muted: #9aa0a8;
+    --accent: #7fb3d5;
+    --line: #3a3f47;
+    --gold: #f0c674;
+    --green: #93d5a3;
+    --blue: #8fbce8;
+    --purple: #c39ae8;
+  }
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg); color: var(--ink); margin: 0;
+    font: 15px/1.55 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  }
+  header {
+    padding: 18px 22px 14px; border-bottom: 1px solid var(--line); background: var(--panel);
+  }
+  header h1 { margin: 0 0 4px; font-size: 20px; font-weight: 600; }
+  header .sub { color: var(--muted); font-size: 13px; }
+  header a { color: var(--accent); }
+  main { max-width: 900px; margin: 0 auto; padding: 20px 22px 60px; }
+  h2 {
+    font-size: 17px; margin: 38px 0 6px; color: #fff;
+    border-bottom: 1px solid var(--line); padding-bottom: 5px;
+  }
+  h2 .tag {
+    font: 11px ui-monospace, Menlo, monospace; color: var(--bg); border-radius: 4px;
+    padding: 1px 7px; vertical-align: 2px; margin-right: 8px;
+  }
+  .tag.accuracy { background: var(--gold); }
+  .tag.content { background: var(--green); }
+  .tag.interaction { background: var(--blue); }
+  h3 { font-size: 14px; margin: 18px 0 4px; color: var(--blue); font-weight: 600; }
+  p { margin: 8px 0; }
+  code, pre {
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    font-size: 13px; color: #d8ecff;
+  }
+  pre {
+    background: #1a1d21; border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 12px; overflow-x: auto; line-height: 1.4; font-size: 12.5px;
+  }
+  pre .cm { color: #7a8494; }
+  pre .kw { color: #c39ae8; }
+  pre .df { color: #f0c674; }
+  .why { color: var(--muted); font-size: 13.5px; }
+  .effort { font-size: 12.5px; color: var(--muted); font-style: italic; margin-top: 10px; }
+  .effort b { color: var(--ink); font-style: normal; }
+  a { color: var(--accent); }
+
+  /* mockup of the on-diagram tooltip */
+  .mock {
+    border: 1px solid #5f6b7a; border-radius: 10px; background: rgba(17,20,26,.9);
+    padding: 12px 14px; margin: 12px 0;
+    font: 12.5px/1.4 ui-sans-serif, system-ui, sans-serif;
+    box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  }
+  .mock .mk-title { font-size: 15px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+  .mock .mk-cap {
+    font: 10.5px ui-monospace, Menlo, monospace; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .06em; margin: 10px 0 4px;
+  }
+  .mock ul { margin: 2px 0 0 16px; padding: 0; }
+  .mock li { margin: 4px 0; }
+  .mock code { font-size: 11.5px; }
+  .badge {
+    display: inline-block; font: 10px ui-monospace, Menlo, monospace;
+    border-radius: 4px; padding: 0 5px; margin-left: 5px; vertical-align: 1px;
+  }
+  .badge.data { background: #274060; color: #a8d1f7; }
+  .badge.law { background: #2b4a33; color: #a6e3b5; }
+  .badge.default { background: #59431a; color: #f6d692; }
+  .badge.autoproof { background: #4a2b4a; color: #e3b5e3; }
+  .badge.diamond { background: #5a2233; color: #f7b8cd; }
+  .mock .dim { color: var(--muted); }
+  .witness { color: var(--green); }
+  .nonwitness { color: #e8927c; }
+  table { border-collapse: collapse; margin: 10px 0; font-size: 13px; }
+  th, td { border: 1px solid var(--line); padding: 4px 10px; text-align: left; }
+  th { background: #1a1d21; font-weight: 600; }
+  td code { font-size: 12px; }
+  .yes { color: var(--green); } .no { color: #e8927c; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Making the hierarchy diagram mathematically smarter</h1>
+  <div class="sub">Seven proposals for <a href="normedfield_hierarchy.html">normedfield_hierarchy.html</a> that surface Mathlib design knowledge rather than just structure syntax. Code snippets below are verified against the local mathlib4 checkout (v4.31.0 toolchain).</div>
+</header>
+<main>
+
+<h2 id="p1"><span class="tag accuracy">accuracy</span>1 · Mark default-valued fields — <code>npow</code> is not extra data</h2>
+<p>The tooltip for <code>Monoid</code> currently lists <code>npow</code>, <code>npow_zero</code>, <code>npow_succ</code> as if they were data an instance author must supply, on par with <code>one_mul</code>. They are not. In Mathlib’s actual definition every one of them has a <em>default value</em>:</p>
+<pre><span class="kw">class</span> Monoid (M : Type u) <span class="kw">extends</span> Semigroup M, MulOneClass M <span class="kw">where</span>
+  <span class="kw">protected</span> npow : ℕ → M → M <span class="df">:= npowRecAuto</span>          <span class="cm">-- n-fold product, the “natural definition”</span>
+  <span class="kw">protected</span> npow_zero : ∀ x, npow 0 x = 1 <span class="df">:= by intros; rfl</span>
+  <span class="kw">protected</span> npow_succ : ∀ (n : ℕ) (x), npow (n + 1) x = npow n x * x <span class="df">:= by intros; rfl</span></pre>
+<p class="why">Why the field exists at all: if <code>x ^ n</code> were <em>defined</em> as iterated multiplication, then for <code>ℝ</code> the monoid power and the native fast power would be different terms and definitional-equality diamonds would appear downstream. Storing <code>npow</code> as an overridable field with a default is Mathlib’s standard fix (same pattern: <code>nsmul</code>, <code>zpow</code>, <code>div := fun a b => a * b⁻¹</code>, <code>DivisionRing.nnratCast := NNRat.castRec</code>, …). Separately, <code>Monoid.toPow</code> is declared <code>@[default_instance high]</code> — which is probably what “default instance” was gesturing at; both facts are worth showing.</p>
+<h3>Mockup — Monoid tooltip, fields section</h3>
+<div class="mock">
+  <div class="mk-title">Monoid</div>
+  <div class="mk-cap">Adds over parents</div>
+  <ul>
+    <li><code>one_mul</code> <span class="badge law">law</span></li>
+    <li><code>mul_one</code> <span class="badge law">law</span></li>
+    <li><code>npow</code> <span class="badge data">data</span> <span class="badge default">default := npowRecAuto</span><br>
+        <span class="dim">optional; supply only to get better definitional behaviour (e.g. a fast native power)</span></li>
+    <li><code>npow_zero</code> <span class="badge law">law</span> <span class="badge autoproof">proof by rfl</span></li>
+    <li><code>npow_succ</code> <span class="badge law">law</span> <span class="badge autoproof">proof by rfl</span></li>
+  </ul>
+  <div class="mk-cap">Minimal instance</div>
+  <div>only <code>one_mul</code>, <code>mul_one</code> needed beyond <code>Semigroup</code> + <code>MulOneClass</code></div>
+</div>
+<p>The “minimal instance” line is the payoff: for every class, show which fields you actually have to write. For <code>PseudoMetricSpace</code> the honest answer is 3 fields out of 8 (see proposal 5).</p>
+<p class="effort"><b>Data needed:</b> per-field default status. Extractable in the generator with <code>Lean.getDefaultFnForField?</code> / by checking <code>structure</code> default-value declarations (<code>Monoid.npow._default</code> etc.); tactic-block defaults (<code>:= by intros; rfl</code>) are visible the same way. One extra boolean + pretty-printed default per field in <code>tooltip_data.json</code>.</p>
+
+<h2 id="p2"><span class="tag content">content</span>2 · Distinguish data from laws, mixins from structures</h2>
+<p>Two orthogonal distinctions that the diagram currently flattens:</p>
+<p><b>Field level.</b> Each field is either <em>data</em> (<code>norm : α → ℝ</code>, <code>npow</code>) or a <em>law</em> (a <code>Prop</code>, like <code>norm_mul</code>). Badge them, as in the mockup above — it makes “what structure am I carrying vs. what am I proving” visible at a glance. Checking is trivial in the generator: is the field’s type a <code>Prop</code>?</p>
+<p><b>Class level.</b> Prop-valued classes (<code>T2Space</code>, <code>Nontrivial</code>, <code>IsDomain</code>, <code>CompleteSpace</code>…) are <em>mixins</em>: they add no data, only a theorem about existing structure. Data-carrying classes (<code>Monoid</code>, <code>NormedField</code>…) are honest structures. Figure&nbsp;1 of the CPP&nbsp;’20 paper drew these with different node shapes; the diagram should too — e.g. rounded rectangles for data classes, ellipses (or a dashed border) for Prop mixins. The information is already in <code>CLASS_DATA[*].type</code> (it ends in <code>… → Prop</code>).</p>
+<h3>Mockup — NormedField tooltip with both badges</h3>
+<div class="mock">
+  <div class="mk-title">NormedField <span class="badge data">data class</span></div>
+  <div class="mk-cap">Adds over parents (Norm, Field, MetricSpace)</div>
+  <ul>
+    <li><code>dist_eq : dist x y = ‖-x + y‖</code> <span class="badge law">law</span> <span class="dim">— glues the metric to the norm</span></li>
+    <li><code>norm_mul : ‖a * b‖ = ‖a‖ * ‖b‖</code> <span class="badge law">law</span> <span class="dim">— the norm is multiplicative, not just submultiplicative</span></li>
+  </ul>
+</div>
+<p class="why">Read this way, <code>NormedField</code> is revealed as: <em>a field, a metric space, and a norm, plus two compatibility laws</em>. That is the actual mathematical content, and it is invisible in the current rendering.</p>
+<p class="effort"><b>Data needed:</b> one <code>isProp</code> boolean per field and per class; both are one-line checks in the generator.</p>
+
+<h2 id="p3"><span class="tag content">content</span>3 · Example types and separating witnesses</h2>
+<p>For a mathematician the fastest way to understand a class is an example — and the fastest way to understand an <em>edge</em> is a counterexample showing the inclusion is strict. Both can be computed mechanically: fix a roster of ~40 standard types and, in the generator, attempt <code>#synth C T</code> for every (class, type) pair. Embed the resulting boolean matrix (~4k bits) in the page.</p>
+<h3>Per-node: “examples” line, sharpest first</h3>
+<div class="mock">
+  <div class="mk-title">Monoid</div>
+  <div class="mk-cap">Examples (instances found in Mathlib)</div>
+  <div><span class="witness"><code>List α</code></span>, <span class="witness"><code>Matrix (Fin 2) (Fin 2) ℝ</code></span> <span class="dim">— go no higher in this diagram (not Comm, not Group, no zero¹)</span></div>
+  <div class="dim">also: ℕ, ℤ, ℝ, ℂ, Equiv.Perm (Fin 3), … (which are also stronger classes)</div>
+</div>
+<p class="why">¹ “Go no higher” = the type inhabits this class but none of the classes with an in-diagram edge into it. <code>List α</code> under <code>++</code> is the free monoid: associative with unit, non-commutative, no inverses, no zero — it <em>uniquely conforms</em> to <code>Monoid</code> among the drawn classes. That single example teaches more than the field list does.</p>
+<h3>Per-edge: strictness witnesses</h3>
+<p>Hovering the edge <code>Field → CommRing</code> (say) shows a type that is a <code>CommRing</code> but not a <code>Field</code>:</p>
+<table>
+  <tr><th>edge S → T</th><th>witness: T but not S</th></tr>
+  <tr><td><code>Field → CommRing</code></td><td><span class="yes"><code>ℤ</code></span> (no inverses), <span class="yes"><code>ZMod 6</code></span> (zero divisors)</td></tr>
+  <tr><td><code>Field → DivisionRing</code></td><td><span class="yes"><code>ℍ</code></span> quaternions (non-commutative)</td></tr>
+  <tr><td><code>CommMonoid → Monoid</code></td><td><span class="yes"><code>List α</code></span>, <span class="yes"><code>Equiv.Perm (Fin 3)</code></span></td></tr>
+  <tr><td><code>NormedField → Field</code></td><td><span class="no">none in roster</span> — no <em>canonical instance</em>; note this is about instances, not mathematics (any field admits the trivial norm)</td></tr>
+</table>
+<p class="why">The last row shows the honest caveat this feature must carry: instance search measures “does Mathlib declare it”, not “can it exist”. For Prop mixins that caveat disappears and witnesses are genuine counterexamples — Mathlib even ships a <code>Counterexamples/</code> library worth linking for hand-curated ones (e.g. T1-not-T2 needs a bespoke space like the cofinite topology, which no roster type will exhibit).</p>
+<p class="effort"><b>Data needed:</b> a Lean script that loops <code>Class × RosterType</code> and records instance-synthesis success (seconds of CPU; entirely mechanical). Bonus: it doubles as an empirical check of the diagram — every drawn edge S→T should satisfy “instances(S) ⊆ instances(T)” over the roster.</p>
+
+<h2 id="p4"><span class="tag content">content</span>4 · Give every edge its name</h2>
+<p>Every arrow in the diagram is backed by a real declaration, but the page keeps them anonymous. Solid edges are projections (<code>Monoid.toSemigroup</code> — already stored in <code>parents[].projection</code>, shown only in the node panel); dashed edges are instances with names, priorities, and docstrings:</p>
+<pre><span class="kw">instance</span> (priority := 100) T2Space.t1Space [T2Space X] : T1Space X := …
+<span class="cm">@[default_instance high]</span>
+<span class="kw">instance</span> Monoid.toPow {M : Type*} [Monoid M] : Pow M ℕ := ⟨fun x n ↦ Monoid.npow n x⟩</pre>
+<p>Make edges hoverable/clickable like nodes: show the declaration name, its priority (which explains instance-resolution order — a genuinely useful thing to see), the docstring, and a link to source / Mathlib docs. The existing incident-edge hover highlighting already proves the hit-targets work.</p>
+<p class="effort"><b>Data needed:</b> for dashed edges, the instance name found during generation (the generator already verified these against source, so it has them); add an <code>EDGE_DATA</code> map keyed by <code>"S->T"</code>. UI: reuse the existing tooltip machinery on <code>g.edge</code> elements, with fatter invisible hover strokes for clickability.</p>
+
+<h2 id="p5"><span class="tag content">content</span>5 · Explain the diamonds — forgetful-inheritance callouts</h2>
+<p>The subtlest design idea in this hierarchy is invisible in the picture: some solid edges carry <em>data with a default</em> precisely to keep competing paths definitionally equal. The canonical case is right in this diagram:</p>
+<pre><span class="kw">class</span> PseudoMetricSpace (α : Type u) <span class="kw">extends</span> Dist α <span class="kw">where</span>
+  dist_self, dist_comm, dist_triangle                    <span class="cm">-- the 3 fields you must give</span>
+  edist : α → α → ℝ≥0∞ <span class="df">:= fun x y => …</span>
+  toUniformSpace : UniformSpace α <span class="df">:= .ofDist dist …</span>     <span class="cm">-- ◇ data + default</span>
+  uniformity_dist : 𝓤 α = ⨅ ε &gt; 0, 𝓟 {…} <span class="df">:= by intros; rfl</span>
+  toBornology : Bornology α <span class="df">:= Bornology.ofDist dist …</span>  <span class="cm">-- ◇ data + default</span>
+  cobounded_sets : … <span class="df">:= by intros; rfl</span></pre>
+<p class="why">Why: <code>ℝ × ℝ</code> gets a uniformity from the product of uniform spaces <em>and</em> from its metric. If <code>toUniformSpace</code> were derived rather than stored, those two would be different terms and nothing typechecks across them. Storing it as an overridable field (with a propositional guard, <code>uniformity_dist</code>) makes the diamond commute definitionally. This is the “forgetful inheritance” pattern (Affeldt–Cohen–Kerjean–Mahboubi–Rouhling–Sakaguchi), discussed at length in the CPP ’20 paper the diagram is modelled on.</p>
+<p>Proposal: mark the affected <em>edges</em> (<code>PseudoMetricSpace → UniformSpace</code>, <code>→ Bornology</code>, <code>PseudoEMetricSpace → UniformSpace</code>, <code>SeminormedRing → PseudoMetricSpace</code>’s metric-vs-norm glue, <code>Monoid → NPow</code>, …) with a ◇ badge, and give them a shared explainer panel — one paragraph, shown for whichever ◇ edge is clicked, with the class-specific default spelled out. This turns the diagram into a teaching tool for the one idea every new Mathlib contributor trips over.</p>
+<p class="effort"><b>Data needed:</b> nothing new — the ◇ set is exactly “solid edge whose projection target is a data field with a default value”, which falls out of proposal 1’s extraction.</p>
+
+<h2 id="p6"><span class="tag content">content</span>6 · “How do I build one?” — constructors in the panel</h2>
+<p>The pinned panel says what a class <em>is</em> but not how instances are <em>made</em> in practice. Mathlib has strong conventions worth surfacing; for <code>NormedField</code> the real-world answers are:</p>
+<div class="mock">
+  <div class="mk-title">NormedField</div>
+  <div class="mk-cap">Ways to build an instance</div>
+  <ul>
+    <li><code>⟨dist_eq, norm_mul⟩</code> <span class="dim">directly, given Field + Norm + MetricSpace</span></li>
+    <li><code>NormedField.induced</code> <span class="dim">— pull back along an injective ring hom <code>f : R →+* S</code> into a NormedField</span></li>
+    <li><code>SubfieldClass</code> instance <span class="dim">— subfields inherit automatically (uses <code>.induced</code>)</span></li>
+  </ul>
+</div>
+<p class="why">Pullback constructors (<code>*.induced</code>, <code>Function.Injective.*</code>) are the workhorses of instance building and follow a naming convention, so they can be found mechanically: scan the environment for declarations whose result type is <code>C _</code> with hypotheses mentioning an injection or a hom. Even a curated list for the ~15 “headline” classes (NormedField, MetricSpace, UniformSpace, Field, Group…) would carry most of the value.</p>
+<p class="effort"><b>Data needed:</b> a generator pass over declarations returning each class (filter by naming convention <code>.induced</code>/<code>Injective.</code>/<code>.ofDist</code>-style), or a hand-curated YAML for headline classes. Rendered as one extra section in the pinned panel.</p>
+
+<h2 id="p7"><span class="tag interaction">interaction</span>7 · “Why is every X a Y?” — two-node path explanation</h2>
+<p>The relation highlighting added recently shows <em>that</em> everything green is derivable; the natural next question is <em>how</em>. Proposal: pin a node, then <kbd>shift</kbd>-click a second node in its cone. The page highlights the actual derivation path(s) and the panel lists the chain by name (using proposal 4’s edge names):</p>
+<div class="mock">
+  <div class="mk-title">NormedField ⇒ T2Space, because:</div>
+  <ul>
+    <li><code>NormedField.toMetricSpace</code> <span class="dim">(projection)</span></li>
+    <li><code>MetricSpace.toEMetricSpace</code> → <code>EMetricSpace.instT2Space</code> <span class="dim">(derived instances)</span></li>
+  </ul>
+  <div class="dim">2 of 3 drawn paths shown · shortest first</div>
+</div>
+<p class="why">This answers the question people actually bring to this diagram (“why does my normed field magically have a Hausdorff topology?”) and it exercises the mathematics of the picture rather than its geometry. Implementation is pure JS on the already-parsed edge adjacency: BFS all shortest paths, reuse the fade/highlight CSS, no new data (nicer with proposal 4’s names).</p>
+
+<h2 id="p8">Smaller ideas</h2>
+<p style="margin-top:2px">
+· Badge <code>abbrev</code> classes (the <code>isAbbrev</code> flag is already in the data, unused).<br>
+· Make <code>from <b>Semigroup</b></code> field-owner labels in the panel clickable → jump/pin that node.<br>
+· Search over docstrings, not just names (<code>“Hausdorff”</code> should find <code>T2Space</code>).<br>
+· Size or shade nodes by number of Mathlib instances (a decent proxy for importance; one count per class from the generator).<br>
+· A “minimal fields” count on each node face (<code>Monoid · 2</code>), from proposal 1’s data — makes the cheap classes visually cheap.
+</p>
+
+</main>
+</body>
+</html>
