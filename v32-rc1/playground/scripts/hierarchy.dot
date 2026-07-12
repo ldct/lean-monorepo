@@ -224,6 +224,7 @@ digraph mathlib {
   "Ring" -> "AddCommGroup";
   "Ring" -> "Semiring";
   "Ring" -> "AddGroupWithOne";
+  "Ring" -> "NonUnitalRing" [style=dashed, constraint=false];
   "AddSemigroup" -> "Add";
   "AddZeroClass" -> "AddZero";
   "AddGroup" -> "SubNegMonoid";

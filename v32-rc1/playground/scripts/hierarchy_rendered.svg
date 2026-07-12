@@ -71,6 +71,18 @@
 <path fill="#fff2cc" stroke="black" d="M4656,-704C4656,-704 4626,-704 4626,-704 4620,-704 4614,-698 4614,-692 4614,-692 4614,-680 4614,-680 4614,-674 4620,-668 4626,-668 4626,-668 4656,-668 4656,-668 4662,-668 4668,-674 4668,-680 4668,-680 4668,-692 4668,-692 4668,-698 4662,-704 4656,-704"/>
 <text xml:space="preserve" text-anchor="middle" x="4641" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">Ring</text>
 </g>
+<!-- NonUnitalRing -->
+<g id="node11" class="node" data-class-name="NonUnitalRing" tabindex="0" role="img" aria-label="NonUnitalRing">
+<title>NonUnitalRing</title>
+<path fill="#fff2cc" stroke="black" d="M4535.46,-704C4535.46,-704 4472.54,-704 4472.54,-704 4466.54,-704 4460.54,-698 4460.54,-692 4460.54,-692 4460.54,-680 4460.54,-680 4460.54,-674 4466.54,-668 4472.54,-668 4472.54,-668 4535.46,-668 4535.46,-668 4541.46,-668 4547.46,-674 4547.46,-680 4547.46,-680 4547.46,-692 4547.46,-692 4547.46,-698 4541.46,-704 4535.46,-704"/>
+<text xml:space="preserve" text-anchor="middle" x="4504" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">NonUnitalRing</text>
+</g>
+<!-- Ring&#45;&gt;NonUnitalRing -->
+<g id="edge101" class="edge">
+<title>Ring&#45;&gt;NonUnitalRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4613.72,-686C4593.83,-686 4573.94,-686 4554.06,-686"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4554.09,-684.25 4549.09,-686 4554.09,-687.75 4554.09,-684.25"/>
+</g>
 <!-- AddCommGroup -->
 <g id="node12" class="node" data-class-name="AddCommGroup" tabindex="0" role="img" aria-label="AddCommGroup">
 <title>AddCommGroup</title>
@@ -114,7 +126,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4753" y="-1066.7" font-family="Helvetica,sans-Serif" font-size="11.00">DivisionRing</text>
 </g>
 <!-- DivisionRing&#45;&gt;Ring -->
-<g id="edge140" class="edge">
+<g id="edge141" class="edge">
 <title>DivisionRing&#45;&gt;Ring</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4714.2,-1066C4698.15,-1062.81 4680.62,-1056.46 4669,-1044 4580.91,-949.51 4617.38,-773.2 4634.23,-710.15"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4635.85,-710.87 4635.48,-705.58 4632.48,-709.95 4635.85,-710.87"/>
@@ -126,7 +138,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4706" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">RatCast</text>
 </g>
 <!-- DivisionRing&#45;&gt;RatCast -->
-<g id="edge141" class="edge">
+<g id="edge142" class="edge">
 <title>DivisionRing&#45;&gt;RatCast</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4745.78,-1051.6C4744.8,-1049.07 4743.85,-1046.48 4743,-1044 4730.49,-1007.47 4718.67,-964.18 4711.89,-938.19"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4713.61,-937.86 4710.67,-933.45 4710.23,-938.73 4713.61,-937.86"/>
@@ -138,7 +150,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4801" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">DivisionSemiring</text>
 </g>
 <!-- DivisionRing&#45;&gt;DivisionSemiring -->
-<g id="edge142" class="edge">
+<g id="edge143" class="edge">
 <title>DivisionRing&#45;&gt;DivisionSemiring</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4758.41,-1051.63C4767.1,-1023.76 4784.16,-969.01 4793.85,-937.95"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4795.5,-938.52 4795.32,-933.22 4792.16,-937.48 4795.5,-938.52"/>
@@ -150,7 +162,7 @@
 <text xml:space="preserve" text-anchor="middle" x="5188" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsDomain</text>
 </g>
 <!-- DivisionRing&#45;&gt;IsDomain -->
-<g id="edge139" class="edge">
+<g id="edge140" class="edge">
 <title>DivisionRing&#45;&gt;IsDomain</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4791.86,-1069.01C4885.98,-1068.68 5120.46,-1065.67 5148,-1044 5180.17,-1018.69 5187.07,-967.9 5188.2,-938.16"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5189.94,-938.41 5188.33,-933.36 5186.44,-938.32 5189.94,-938.41"/>
@@ -162,7 +174,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4673" y="-838.7" font-family="Helvetica,sans-Serif" font-size="11.00">CommRing</text>
 </g>
 <!-- CommRing&#45;&gt;Ring -->
-<g id="edge114" class="edge">
+<g id="edge115" class="edge">
 <title>CommRing&#45;&gt;Ring</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4669.39,-823.63C4663.6,-795.76 4652.22,-741.01 4645.77,-709.95"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4647.52,-709.79 4644.79,-705.25 4644.1,-710.5 4647.52,-709.79"/>
@@ -174,7 +186,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4868" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">CommMonoid</text>
 </g>
 <!-- CommRing&#45;&gt;CommMonoid -->
-<g id="edge113" class="edge">
+<g id="edge114" class="edge">
 <title>CommRing&#45;&gt;CommMonoid</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4682.64,-823.7C4700.99,-790.64 4741.94,-716.04 4774,-652 4806.05,-587.97 4841.11,-510.97 4857.92,-473.58"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4859.31,-474.74 4859.76,-469.46 4856.12,-473.31 4859.31,-474.74"/>
@@ -186,7 +198,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4865" y="-1138.7" font-family="Helvetica,sans-Serif" font-size="11.00">Field</text>
 </g>
 <!-- Field&#45;&gt;DivisionRing -->
-<g id="edge119" class="edge">
+<g id="edge120" class="edge">
 <title>Field&#45;&gt;DivisionRing</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4837.6,-1123.88C4821.99,-1114.12 4802.33,-1101.83 4785.88,-1091.55"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4787.09,-1090.24 4781.92,-1089.08 4785.23,-1093.21 4787.09,-1090.24"/>
@@ -198,7 +210,7 @@
 <text xml:space="preserve" text-anchor="middle" x="5088" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">EuclideanDomain</text>
 </g>
 <!-- Field&#45;&gt;EuclideanDomain -->
-<g id="edge117" class="edge">
+<g id="edge118" class="edge">
 <title>Field&#45;&gt;EuclideanDomain</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4882.13,-1123.64C4922.26,-1082.97 5022.3,-981.58 5066.47,-936.82"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5067.7,-938.07 5069.96,-933.28 5065.21,-935.61 5067.7,-938.07"/>
@@ -210,16 +222,10 @@
 <text xml:space="preserve" text-anchor="middle" x="5274" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsLocalRing</text>
 </g>
 <!-- Field&#45;&gt;IsLocalRing -->
-<g id="edge118" class="edge">
+<g id="edge119" class="edge">
 <title>Field&#45;&gt;IsLocalRing</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4892.22,-1141.79C4958.59,-1142.2 5130.39,-1133.97 5228,-1044 5258.2,-1016.17 5268.59,-967.17 5272.15,-938.24"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5273.85,-938.75 5272.68,-933.59 5270.37,-938.36 5273.85,-938.75"/>
-</g>
-<!-- NonUnitalRing -->
-<g id="node11" class="node" data-class-name="NonUnitalRing" tabindex="0" role="img" aria-label="NonUnitalRing">
-<title>NonUnitalRing</title>
-<path fill="#fff2cc" stroke="black" d="M4535.46,-704C4535.46,-704 4472.54,-704 4472.54,-704 4466.54,-704 4460.54,-698 4460.54,-692 4460.54,-692 4460.54,-680 4460.54,-680 4460.54,-674 4466.54,-668 4472.54,-668 4472.54,-668 4535.46,-668 4535.46,-668 4541.46,-668 4547.46,-674 4547.46,-680 4547.46,-680 4547.46,-692 4547.46,-692 4547.46,-698 4541.46,-704 4535.46,-704"/>
-<text xml:space="preserve" text-anchor="middle" x="4504" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">NonUnitalRing</text>
 </g>
 <!-- NonUnitalNonAssocRing -->
 <g id="node19" class="node" data-class-name="NonUnitalNonAssocRing" tabindex="0" role="img" aria-label="NonUnitalNonAssocRing">
@@ -228,7 +234,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4504" y="-518.7" font-family="Helvetica,sans-Serif" font-size="11.00">NonUnitalNonAssocRing</text>
 </g>
 <!-- NonUnitalRing&#45;&gt;NonUnitalNonAssocRing -->
-<g id="edge128" class="edge">
+<g id="edge129" class="edge">
 <title>NonUnitalRing&#45;&gt;NonUnitalNonAssocRing</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4504,-667.66C4504,-638.31 4504,-578.82 4504,-546.01"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4505.75,-546.42 4504,-541.42 4502.25,-546.42 4505.75,-546.42"/>
@@ -240,7 +246,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4639" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">NonUnitalSemiring</text>
 </g>
 <!-- NonUnitalRing&#45;&gt;NonUnitalSemiring -->
-<g id="edge129" class="edge">
+<g id="edge130" class="edge">
 <title>NonUnitalRing&#45;&gt;NonUnitalSemiring</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4547.59,-674.37C4560.18,-669.41 4572.95,-662.25 4582,-652 4627.36,-600.65 4636.81,-515.64 4638.65,-474.61"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4640.4,-474.68 4638.84,-469.62 4636.9,-474.55 4640.4,-474.68"/>
@@ -354,7 +360,7 @@
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4883.42,-330.4 4881.95,-325.31 4879.92,-330.21 4883.42,-330.4"/>
 </g>
 <!-- SemigroupWithZero&#45;&gt;Semigroup -->
-<g id="edge115" class="edge">
+<g id="edge116" class="edge">
 <title>SemigroupWithZero&#45;&gt;Semigroup</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4783.43,-359.7C4786.76,-350.71 4790.89,-339.61 4794.49,-329.92"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4796.12,-330.54 4796.23,-325.24 4792.84,-329.32 4796.12,-330.54"/>
@@ -366,19 +372,19 @@
 <text xml:space="preserve" text-anchor="middle" x="4604" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">MulZeroClass</text>
 </g>
 <!-- SemigroupWithZero&#45;&gt;MulZeroClass -->
-<g id="edge116" class="edge">
+<g id="edge117" class="edge">
 <title>SemigroupWithZero&#45;&gt;MulZeroClass</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4733.79,-359.52C4708.95,-349.46 4677.69,-336.82 4652.07,-326.45"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4652.77,-324.85 4647.48,-324.59 4651.46,-328.09 4652.77,-324.85"/>
 </g>
 <!-- MulZeroOneClass&#45;&gt;MulOneClass -->
-<g id="edge146" class="edge">
+<g id="edge147" class="edge">
 <title>MulZeroOneClass&#45;&gt;MulOneClass</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4663.6,-359.7C4670.92,-350.37 4680.04,-338.77 4687.85,-328.83"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4689.1,-330.07 4690.81,-325.06 4686.35,-327.91 4689.1,-330.07"/>
 </g>
 <!-- MulZeroOneClass&#45;&gt;MulZeroClass -->
-<g id="edge147" class="edge">
+<g id="edge148" class="edge">
 <title>MulZeroOneClass&#45;&gt;MulZeroClass</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4638.63,-359.7C4632.56,-350.46 4625.02,-338.98 4618.53,-329.11"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4620.11,-328.33 4615.9,-325.12 4617.19,-330.26 4620.11,-328.33"/>
@@ -480,7 +486,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4284" y="-158.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddSemigroup</text>
 </g>
 <!-- AddMonoid&#45;&gt;AddSemigroup -->
-<g id="edge135" class="edge">
+<g id="edge136" class="edge">
 <title>AddMonoid&#45;&gt;AddSemigroup</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4351,-215.7C4338.81,-206.11 4323.55,-194.11 4310.68,-183.98"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4312.02,-182.81 4307.01,-181.1 4309.86,-185.56 4312.02,-182.81"/>
@@ -492,7 +498,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4373" y="-158.7" font-family="Helvetica,sans-Serif" font-size="11.00">NSMul</text>
 </g>
 <!-- AddMonoid&#45;&gt;NSMul -->
-<g id="edge134" class="edge">
+<g id="edge135" class="edge">
 <title>AddMonoid&#45;&gt;NSMul</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4373,-215.7C4373,-206.8 4373,-195.82 4373,-186.2"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4374.75,-186.32 4373,-181.32 4371.25,-186.32 4374.75,-186.32"/>
@@ -504,7 +510,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4461" y="-158.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddZeroClass</text>
 </g>
 <!-- AddMonoid&#45;&gt;AddZeroClass -->
-<g id="edge136" class="edge">
+<g id="edge137" class="edge">
 <title>AddMonoid&#45;&gt;AddZeroClass</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4394.75,-215.7C4406.81,-206.11 4421.89,-194.11 4434.62,-183.98"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4435.42,-185.58 4438.24,-181.1 4433.24,-182.84 4435.42,-185.58"/>
@@ -546,13 +552,13 @@
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4382.37,-396.99 4377.07,-396.82 4381.11,-400.25 4382.37,-396.99"/>
 </g>
 <!-- AddCommMonoidWithOne&#45;&gt;AddMonoidWithOne -->
-<g id="edge137" class="edge">
+<g id="edge138" class="edge">
 <title>AddCommMonoidWithOne&#45;&gt;AddMonoidWithOne</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4347.31,-359.7C4356.19,-350.29 4367.24,-338.56 4376.67,-328.56"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4377.89,-329.82 4380.04,-324.99 4375.34,-327.42 4377.89,-329.82"/>
 </g>
 <!-- AddCommMonoidWithOne&#45;&gt;AddCommMonoid -->
-<g id="edge138" class="edge">
+<g id="edge139" class="edge">
 <title>AddCommMonoidWithOne&#45;&gt;AddCommMonoid</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4315.92,-359.7C4307.72,-350.29 4297.5,-338.56 4288.79,-328.56"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4290.3,-327.64 4285.7,-325.02 4287.67,-329.94 4290.3,-327.64"/>
@@ -570,7 +576,7 @@
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4704.08,-258.21 4702.05,-253.31 4700.58,-258.4 4704.08,-258.21"/>
 </g>
 <!-- MulOne&#45;&gt;One -->
-<g id="edge109" class="edge">
+<g id="edge110" class="edge">
 <title>MulOne&#45;&gt;One</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4673.47,-220.32C4647.65,-208.43 4609.01,-190.63 4581.64,-178.03"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4582.69,-176.59 4577.42,-176.09 4581.23,-179.77 4582.69,-176.59"/>
@@ -582,7 +588,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4728" y="-158.7" font-family="Helvetica,sans-Serif" font-size="11.00">Mul</text>
 </g>
 <!-- MulOne&#45;&gt;Mul -->
-<g id="edge110" class="edge">
+<g id="edge111" class="edge">
 <title>MulOne&#45;&gt;Mul</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4707.67,-215.7C4711.17,-206.63 4715.5,-195.4 4719.26,-185.65"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4720.8,-186.53 4720.97,-181.23 4717.53,-185.27 4720.8,-186.53"/>
@@ -618,7 +624,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4411" y="-14.7" font-family="Helvetica,sans-Serif" font-size="11.00">Add</text>
 </g>
 <!-- AddSemigroup&#45;&gt;Add -->
-<g id="edge101" class="edge">
+<g id="edge102" class="edge">
 <title>AddSemigroup&#45;&gt;Add</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4299.57,-143.59C4322.84,-117.58 4366.61,-68.63 4391.82,-40.45"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4392.86,-41.91 4394.89,-37.01 4390.25,-39.57 4392.86,-41.91"/>
@@ -678,7 +684,7 @@
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4944.38,-401.13 4947.6,-396.92 4942.46,-398.2 4944.38,-401.13"/>
 </g>
 <!-- CommSemigroup&#45;&gt;Semigroup -->
-<g id="edge104" class="edge">
+<g id="edge105" class="edge">
 <title>CommSemigroup&#45;&gt;Semigroup</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4933.39,-359.58C4927.23,-357.03 4920.95,-354.44 4915,-352 4891.32,-342.31 4864.75,-331.63 4843.44,-323.1"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4844.27,-321.55 4838.98,-321.32 4842.97,-324.8 4844.27,-321.55"/>
@@ -690,7 +696,7 @@
 <text xml:space="preserve" text-anchor="middle" x="4975" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">CommMagma</text>
 </g>
 <!-- CommSemigroup&#45;&gt;CommMagma -->
-<g id="edge105" class="edge">
+<g id="edge106" class="edge">
 <title>CommSemigroup&#45;&gt;CommMagma</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4975,-359.7C4975,-350.8 4975,-339.82 4975,-330.2"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4976.75,-330.32 4975,-325.32 4973.25,-330.32 4976.75,-330.32"/>
@@ -762,13 +768,13 @@
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4554.06,-41.61 4550.6,-37.6 4550.8,-42.89 4554.06,-41.61"/>
 </g>
 <!-- AddCommMonoid&#45;&gt;AddMonoid -->
-<g id="edge112" class="edge">
+<g id="edge113" class="edge">
 <title>AddCommMonoid&#45;&gt;AddMonoid</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4295.73,-287.52C4309.97,-277.84 4327.75,-265.75 4342.66,-255.62"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4343.45,-257.2 4346.6,-252.94 4341.48,-254.3 4343.45,-257.2"/>
 </g>
 <!-- AddCommMonoid&#45;&gt;AddCommSemigroup -->
-<g id="edge111" class="edge">
+<g id="edge112" class="edge">
 <title>AddCommMonoid&#45;&gt;AddCommSemigroup</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4267.28,-287.7C4265.88,-278.8 4264.16,-267.82 4262.65,-258.2"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4264.38,-257.97 4261.88,-253.3 4260.92,-258.51 4264.38,-257.97"/>
@@ -780,49 +786,49 @@
 <text xml:space="preserve" text-anchor="middle" x="4097" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">SubNegMonoid</text>
 </g>
 <!-- AddGroup&#45;&gt;SubNegMonoid -->
-<g id="edge103" class="edge">
+<g id="edge104" class="edge">
 <title>AddGroup&#45;&gt;SubNegMonoid</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4097,-359.7C4097,-350.8 4097,-339.82 4097,-330.2"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4098.75,-330.32 4097,-325.32 4095.25,-330.32 4098.75,-330.32"/>
 </g>
 <!-- Semiring&#45;&gt;MonoidWithZero -->
-<g id="edge106" class="edge">
+<g id="edge107" class="edge">
 <title>Semiring&#45;&gt;MonoidWithZero</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4740.93,-503.7C4744.01,-494.71 4747.82,-483.61 4751.14,-473.92"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4752.78,-474.55 4752.74,-469.25 4749.47,-473.41 4752.78,-474.55"/>
 </g>
 <!-- Semiring&#45;&gt;NonAssocSemiring -->
-<g id="edge107" class="edge">
+<g id="edge108" class="edge">
 <title>Semiring&#45;&gt;NonAssocSemiring</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4707.17,-503.66C4701.93,-500.84 4696.39,-498.14 4691,-496 4642.1,-476.6 4626.98,-480.98 4576,-468 4575,-467.75 4574,-467.49 4572.99,-467.23"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4573.59,-465.58 4568.31,-466.03 4572.72,-468.97 4573.59,-465.58"/>
 </g>
 <!-- Semiring&#45;&gt;NonUnitalSemiring -->
-<g id="edge108" class="edge">
+<g id="edge109" class="edge">
 <title>Semiring&#45;&gt;NonUnitalSemiring</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4711.27,-503.7C4698.12,-494.11 4681.66,-482.11 4667.78,-471.98"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4668.84,-470.59 4663.77,-469.06 4666.78,-473.42 4668.84,-470.59"/>
 </g>
 <!-- AddGroupWithOne&#45;&gt;AddMonoidWithOne -->
-<g id="edge123" class="edge">
+<g id="edge124" class="edge">
 <title>AddGroupWithOne&#45;&gt;AddMonoidWithOne</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4224.42,-431.51C4224.69,-409.99 4228.46,-373.65 4249,-352 4252.19,-348.63 4295.07,-335.79 4333.86,-324.68"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4334.05,-326.44 4338.38,-323.38 4333.09,-323.08 4334.05,-326.44"/>
 </g>
 <!-- AddGroupWithOne&#45;&gt;IntCast -->
-<g id="edge124" class="edge">
+<g id="edge125" class="edge">
 <title>AddGroupWithOne&#45;&gt;IntCast</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4212.64,-431.7C4206.04,-422.46 4197.85,-410.98 4190.79,-401.11"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4192.25,-400.14 4187.92,-397.09 4189.4,-402.18 4192.25,-400.14"/>
 </g>
 <!-- AddGroupWithOne&#45;&gt;AddGroup -->
-<g id="edge125" class="edge">
+<g id="edge126" class="edge">
 <title>AddGroupWithOne&#45;&gt;AddGroup</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4193.03,-431.52C4175.03,-421.67 4152.47,-409.33 4133.74,-399.09"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4134.85,-397.71 4129.62,-396.84 4133.17,-400.78 4134.85,-397.71"/>
 </g>
 <!-- AddZeroClass&#45;&gt;AddZero -->
-<g id="edge102" class="edge">
+<g id="edge103" class="edge">
 <title>AddZeroClass&#45;&gt;AddZero</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4461,-143.7C4461,-134.8 4461,-123.82 4461,-114.2"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4462.75,-114.32 4461,-109.32 4459.25,-114.32 4462.75,-114.32"/>
@@ -834,19 +840,19 @@
 <text xml:space="preserve" text-anchor="middle" x="4801" y="-838.7" font-family="Helvetica,sans-Serif" font-size="11.00">NNRatCast</text>
 </g>
 <!-- SubNegMonoid&#45;&gt;AddMonoid -->
-<g id="edge133" class="edge">
+<g id="edge134" class="edge">
 <title>SubNegMonoid&#45;&gt;AddMonoid</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4143.29,-296.47C4190.49,-287.29 4265.59,-271.38 4329,-252 4329.75,-251.77 4330.5,-251.54 4331.26,-251.29"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4331.79,-252.96 4335.98,-249.73 4330.68,-249.64 4331.79,-252.96"/>
 </g>
 <!-- SubNegMonoid&#45;&gt;Sub -->
-<g id="edge130" class="edge">
+<g id="edge131" class="edge">
 <title>SubNegMonoid&#45;&gt;Sub</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4093.04,-287.7C4090.99,-278.71 4088.45,-267.61 4086.24,-257.92"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4088,-257.77 4085.18,-253.28 4084.59,-258.55 4088,-257.77"/>
 </g>
 <!-- SubNegMonoid&#45;&gt;Neg -->
-<g id="edge131" class="edge">
+<g id="edge132" class="edge">
 <title>SubNegMonoid&#45;&gt;Neg</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4110.84,-287.7C4118.3,-278.37 4127.58,-266.77 4135.53,-256.83"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4136.8,-258.05 4138.56,-253.05 4134.07,-255.86 4136.8,-258.05"/>
@@ -858,19 +864,19 @@
 <text xml:space="preserve" text-anchor="middle" x="4009" y="-230.7" font-family="Helvetica,sans-Serif" font-size="11.00">ZSMul</text>
 </g>
 <!-- SubNegMonoid&#45;&gt;ZSMul -->
-<g id="edge132" class="edge">
+<g id="edge133" class="edge">
 <title>SubNegMonoid&#45;&gt;ZSMul</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4075.25,-287.7C4063.19,-278.11 4048.11,-266.11 4035.38,-255.98"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4036.76,-254.84 4031.76,-253.1 4034.58,-257.58 4036.76,-254.84"/>
 </g>
 <!-- NonUnitalSemiring&#45;&gt;SemigroupWithZero -->
-<g id="edge127" class="edge">
+<g id="edge128" class="edge">
 <title>NonUnitalSemiring&#45;&gt;SemigroupWithZero</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4673.47,-431.52C4692.96,-421.63 4717.41,-409.23 4737.65,-398.96"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4738.22,-400.63 4741.89,-396.81 4736.64,-397.51 4738.22,-400.63"/>
 </g>
 <!-- NonUnitalSemiring&#45;&gt;NonUnitalNonAssocSemiring -->
-<g id="edge126" class="edge">
+<g id="edge127" class="edge">
 <title>NonUnitalSemiring&#45;&gt;NonUnitalNonAssocSemiring</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4604.53,-431.52C4585.04,-421.63 4560.59,-409.23 4540.35,-398.96"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4541.36,-397.51 4536.11,-396.81 4539.78,-400.63 4541.36,-397.51"/>
@@ -882,37 +888,37 @@
 <text xml:space="preserve" text-anchor="middle" x="4900" y="-838.7" font-family="Helvetica,sans-Serif" font-size="11.00">GroupWithZero</text>
 </g>
 <!-- GroupWithZero&#45;&gt;Nontrivial -->
-<g id="edge121" class="edge">
+<g id="edge122" class="edge">
 <title>GroupWithZero&#45;&gt;Nontrivial</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4941.83,-823.61C4944.83,-821.34 4947.61,-818.81 4950,-816 4975.96,-785.42 4985.09,-738.11 4988.29,-710.08"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4990.01,-710.43 4988.79,-705.27 4986.53,-710.06 4990.01,-710.43"/>
 </g>
 <!-- GroupWithZero&#45;&gt;MonoidWithZero -->
-<g id="edge120" class="edge">
+<g id="edge121" class="edge">
 <title>GroupWithZero&#45;&gt;MonoidWithZero</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4857.96,-823.78C4855,-821.47 4852.29,-818.89 4850,-816 4759.21,-701.44 4814.04,-636.59 4774,-496 4771.96,-488.82 4769.48,-481.09 4767.13,-474.09"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4768.86,-473.73 4765.59,-469.56 4765.54,-474.86 4768.86,-473.73"/>
 </g>
 <!-- GroupWithZero&#45;&gt;DivInvMonoid -->
-<g id="edge122" class="edge">
+<g id="edge123" class="edge">
 <title>GroupWithZero&#45;&gt;DivInvMonoid</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4900,-823.63C4900,-795.76 4900,-741.01 4900,-709.95"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4901.75,-710.28 4900,-705.28 4898.25,-710.28 4901.75,-710.28"/>
 </g>
 <!-- DivisionSemiring&#45;&gt;Semiring -->
-<g id="edge144" class="edge">
+<g id="edge145" class="edge">
 <title>DivisionSemiring&#45;&gt;Semiring</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4781.44,-895.87C4771.98,-886.34 4761.5,-873.66 4756,-860 4711.59,-749.8 4724.34,-602.84 4731.57,-546.42"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4733.3,-546.69 4732.22,-541.51 4729.83,-546.23 4733.3,-546.69"/>
 </g>
 <!-- DivisionSemiring&#45;&gt;NNRatCast -->
-<g id="edge143" class="edge">
+<g id="edge144" class="edge">
 <title>DivisionSemiring&#45;&gt;NNRatCast</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4801,-895.7C4801,-886.8 4801,-875.82 4801,-866.2"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4802.75,-866.32 4801,-861.32 4799.25,-866.32 4802.75,-866.32"/>
 </g>
 <!-- DivisionSemiring&#45;&gt;GroupWithZero -->
-<g id="edge145" class="edge">
+<g id="edge146" class="edge">
 <title>DivisionSemiring&#45;&gt;GroupWithZero</title>
 <path fill="none" stroke="#555555" stroke-width="0.8" d="M4825.73,-895.52C4839.41,-885.84 4856.51,-873.75 4870.84,-863.62"/>
 <polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4871.53,-865.28 4874.6,-860.96 4869.51,-862.42 4871.53,-865.28"/>

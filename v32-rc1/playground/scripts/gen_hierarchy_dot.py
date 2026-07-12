@@ -86,8 +86,15 @@ def main() -> None:
             out.append('  }')
 
     for e in edges:
-        attrs = ' [style=dashed]' if e["kind"] == "dashed" else ""
-        out.append(f'  "{e["s"]}" -> "{e["t"]}"{attrs};')
+        attrs = []
+        if e["kind"] == "dashed":
+            attrs.append("style=dashed")
+        if not e.get("constraint", True):
+            # drawn but excluded from rank assignment: for edges whose rank
+            # constraint would stretch the layout (e.g. Ring -> NonUnitalRing)
+            attrs.append("constraint=false")
+        suffix = f' [{", ".join(attrs)}]' if attrs else ""
+        out.append(f'  "{e["s"]}" -> "{e["t"]}"{suffix};')
 
     out.append('}')
     (HERE / "hierarchy.dot").write_text("\n".join(out) + "\n")
