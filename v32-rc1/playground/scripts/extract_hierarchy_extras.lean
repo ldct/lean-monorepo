@@ -3,7 +3,8 @@ Extracts extra hierarchy metadata for site/normedfield_hierarchy.html:
   * per-field: isProp (data vs law), default value, tactic-autoParam status  (proposals 1, 2)
   * per-class: isProp (mixin vs data class), instance matrix over a roster    (proposals 2, 3)
   * per-edge: backing declaration name, priority, docstring                   (proposal 4)
-  * per-class: constructor-style declarations (induced / Injective / of*)     (proposal 6)
+  * per-class: constructor-style declarations (induced / Injective / of*)
+    plus subobject-inheritance instances (Subgroup.toGroup, …)                (proposal 6)
 Input:  scripts/hierarchy_input.json  (nodes, edges, owners, roster)
 Output: site/hierarchy_extras.json
 Note:   since Mathlib PR #38036 (v4.32.0-rc1-patch1) NPow/ZPow/NSMul/ZSMul are
@@ -218,20 +219,40 @@ set_option maxHeartbeats 0 in
         else if last.length > 2 && last.startsWith "of" && ((last.toList.drop 2).headD 'a').isUpper then some 2
         else if (`Equiv).isPrefixOf n && n.components.length == 2 then some 3
         else if last == "mk'" then some 4
+        else if last.length > 2 && last.startsWith "to" && ((last.toList.drop 2).headD 'a').isUpper then some 5
         else none
       | _ => none
+    -- Rank 5 (provisional above) is kept only for subobject-inheritance
+    -- instances like `Subgroup.toCommGroup (H : Subgroup G) : CommGroup H`:
+    -- the name is `T.to<Class>` and some *explicit* binder has type headed by
+    -- `T` itself. Parent projections (`CommRing.toRing`) take the source class
+    -- instance-implicitly, so they never match. Unlike ranks 0-4 these ARE
+    -- instances — they apply automatically — but they answer "how is a
+    -- subgroup of an AddCommGroup an AddCommGroup?", so we list them.
+    let subobjectInherit (n : Name) (cls : Name) (binders : Array (BinderInfo × Expr)) : Bool :=
+      match n with
+      | .str p last =>
+        last == "to" ++ toString cls
+          && binders.any (fun (bi, t) =>
+            bi.isExplicit && match t.getAppFn with | .const b _ => b == p | _ => false)
+      | _ => false
     let mut ctorCandidates : Array (String × Nat × Name) := #[]  -- diagClass, rank, decl
     for (n, ci) in env.constants.toList do
       if n.isInternal then continue
       let some rank := interesting n | continue
       match ci with
       | .defnInfo _ | .thmInfo _ =>
-        let (_, body) := collectBinders ci.type #[]
+        let (binders, body) := collectBinders ci.type #[]
         let fn := body.getAppFn
         match fn with
         | .const c _ =>
           if let some diag := realToDiag.get? c then
-            if !(instState.instanceNames.contains n) then
+            let keep :=
+              if rank == 5 then
+                instState.instanceNames.contains n && subobjectInherit n c binders
+              else
+                !(instState.instanceNames.contains n)
+            if keep then
               ctorCandidates := ctorCandidates.push (diag, rank, n)
         | _ => pure ()
       | _ => pure ()
@@ -247,7 +268,7 @@ set_option maxHeartbeats 0 in
         (fun a b => a.1 < b.1 || (a.1 == b.1 && toString a.2 < toString b.2))
       let totalCtors := ctors.size
       let mut ctorArr : Array Json := #[]
-      for (_, n) in ctors.toSubarray 0 (min 10 ctors.size) do
+      for (rank, n) in ctors.toSubarray 0 (min 10 ctors.size) do
         let doc ← findDocString? env n
         let tyStr ← match env.find? n with
           | some ci => some <$> ppOneLine ci.type 220
@@ -255,7 +276,8 @@ set_option maxHeartbeats 0 in
         ctorArr := ctorArr.push (Json.mkObj
           [("name", Json.str (toString n)),
            ("doc", jStrOpt (doc.map (truncStr · 220))),
-           ("type", jStrOpt tyStr)])
+           ("type", jStrOpt tyStr),
+           ("auto", Json.bool (rank == 5))])
       classJson := classJson.push (cls, Json.mkObj
         [("isProp", Json.bool (classIsProp.getD cls false)),
          ("insts", Json.arr ((matrix.getD cls #[]).map (fun i => toJson i))),
