@@ -4,6 +4,9 @@ abbrev C2 := Multiplicative (ZMod 2)
 abbrev C3 := Multiplicative (ZMod 3)
 abbrev D3 := DihedralGroup 3
 
+#check CommSemigroup.toSemigroup
+#check CommSemigroup.toCommMagma
+
 /-!
 D3 is an extension of C2 by C3
 
