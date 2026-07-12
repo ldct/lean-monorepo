@@ -86,7 +86,7 @@
   #tooltip {
     position: fixed;
     z-index: 1000;
-    max-width: min(680px, calc(100vw - 28px));
+    max-width: min(520px, calc(100vw - 28px));
     max-height: min(560px, calc(100vh - 28px));
     overflow: auto;
     padding: 10px 12px;
@@ -150,6 +150,22 @@
   #tooltip .doc-code, #pinned-body .doc-code { margin: 4px 0; opacity: .92; }
 
   #tooltip .more { margin-top: 3px; color: #aeb6c2; }
+  #tooltip .doc.clamp {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
+    overflow: hidden;
+  }
+  #tooltip .tip-hint {
+    margin-top: 9px;
+    padding: 4px 8px;
+    border: 1px solid #3f4b5c;
+    border-radius: 6px;
+    background: rgba(127, 179, 213, .08);
+    color: #8fbce8;
+    font-size: 11px;
+    text-align: center;
+  }
 
 
   #pinned-panel {
@@ -2332,6 +2348,42 @@
     const extras = `${minimalBlock(fields)}${examplesBlock(name, limit == null)}${limit == null ? buildersBlock(name, fields) : ''}`;
     return `<h2>${displayName(data, name)}${classBadge(name)}</h2>${meta}${docBlock(data.doc)}${note}<div class="section-title">Direct parents</div>${parents}<div class="section-title">Adds over parents / fields</div>${fieldBlock}${extras}`;
   }
+  // Compact hover preview: just the docstring and the adds-over-parents field
+  // names, with a hint that clicking pins the full details.
+  function renderSummaryTip(name) {
+    const data = CLASS_DATA[name];
+    currentTipName = name;
+    const hint = '<div class="tip-hint">Click the node (or press Enter) to expand — parents, field details, examples, ways to build</div>';
+    if (!data) {
+      return `<h2>${esc(name)}</h2><div class="empty">No structure data for this class.</div>${hint}`;
+    }
+    const fields = data.addedOverParents || data.ownFields || [];
+    let budget = 16;  // total field names shown across the data/law groups
+    const names = list => {
+      const shown = list.slice(0, Math.max(0, budget));
+      budget -= list.length;
+      const more = list.length - shown.length;
+      return shown.map(f => `<code>${esc(f.name)}</code>`).join(', ')
+        + (more ? ` <span class="dimtext">… +${more} more</span>` : '');
+    };
+    let fieldsHtml;
+    if (!fields.length) {
+      fieldsHtml = '<div class="empty">nothing — no new fields beyond its parents</div>';
+    } else if (fields.some(f => fieldExtra(f))) {
+      const dataFs = fields.filter(f => { const ex = fieldExtra(f); return ex && !ex.isProp; });
+      const lawFs = fields.filter(f => { const ex = fieldExtra(f); return ex && ex.isProp; });
+      const rest = fields.filter(f => !fieldExtra(f));
+      const parts = [];
+      if (dataFs.length) parts.push(`<div><span class="badge data">data</span> ${names(dataFs)}</div>`);
+      if (lawFs.length) parts.push(`<div><span class="badge law">law</span> ${names(lawFs)}</div>`);
+      if (rest.length) parts.push(`<div>${names(rest)}</div>`);
+      fieldsHtml = parts.join('');
+    } else {
+      fieldsHtml = `<div>${names(fields)}</div>`;
+    }
+    return `<h2>${displayName(data, name)}${classBadge(name)}</h2>${docBlock(data.doc, 'doc clamp')}`
+      + `<div class="section-title">Adds over parents</div>${fieldsHtml}${hint}`;
+  }
   function positionTip(x, y) {
     const pad = 14;
     let left = x + pad, top = y + pad;
@@ -2345,7 +2397,7 @@
   }
   function showTipForNode(node, x, y) {
     const name = node.getAttribute('data-class-name');
-    tooltip.innerHTML = renderTip(name);
+    tooltip.innerHTML = renderSummaryTip(name);
     tooltip.hidden = false;
     node.classList.add('hover');
     positionTip(x, y);
