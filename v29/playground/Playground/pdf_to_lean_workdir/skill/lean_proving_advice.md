@@ -1139,7 +1139,7 @@ General-purpose tactics listed:
 
 ## 1.2 Constructor Variants (from Mathlib)
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Constructor.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/Constructor.html
 
 - **`constructor`** -- apply first matching constructor (may reorder goals)
 - **`fconstructor`** -- like constructor but preserves argument order exactly
@@ -1147,7 +1147,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Cons
 
 ## 1.3 Contrapose Tactic Details
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Contrapose.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/Contrapose.html
 
 - `contrapose` -- transforms `P -> Q` to `not Q -> not P`, or `P <-> Q` to `not P <-> not Q`
 - `contrapose!` -- contrapose then push_neg to simplify negated expressions
@@ -1157,7 +1157,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Cont
 
 ## 1.4 The choose Tactic (Skolemization)
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Choose.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/Choose.html
 
 - Converts `h : forall a, exists b, p a b` into `f : alpha -> beta` and `hf : forall a, p a (f a)`
 - `choose!` removes dependencies on propositional arguments when result type is nonempty
@@ -1166,7 +1166,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Choo
 
 ## 1.5 The set Tactic
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Set.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/Set.html
 
 - `set a := t with h` -- introduces `a := t`, adds `h : a = t`, replaces all occurrences of t with a
 - `set a := t with <- h` -- gives `h : t = a` (reversed)
@@ -1174,7 +1174,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Set.
 
 ## 1.6 The split_ifs Tactic
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/SplitIfs.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/SplitIfs.html
 
 - Decomposes goals containing if-then-else into separate branches
 - For `g (if p then x else y)`: creates goal with `h : p, g x` and goal with `h : not p, g y`
@@ -1184,7 +1184,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Spli
 
 ## 1.7 The have / let / suffices Tactics
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Have.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/Have.html
 
 - **`have h : t := e`** -- opaque (value forgotten, cannot unfold)
 - **`let x : t := e`** -- transparent (can unfold with simp, dsimp, unfold, subst)
@@ -1194,7 +1194,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Have
 
 ## 1.8 The abel Tactic
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Abel.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/Abel.html
 
 - Solves equations in additive commutative monoids and groups
 - Works as both tactic and conversion tactic
@@ -1210,7 +1210,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Abel
 
 ## 1.9 The field_simp Tactic
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/FieldSimp.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/FieldSimp.html
 
 - Normalizes expressions in (semi-)fields by rewriting to common denominator
 - Reduces to form `n / d` where neither contains division
@@ -1222,7 +1222,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Fiel
 
 ## 1.10 The interval_cases Tactic
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/IntervalCases.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/IntervalCases.html
 
 - Automates case analysis on variables constrained to finite intervals
 - Steps: (1) scan hypotheses for bounds, (2) auto-includes `0 <= n` for naturals, (3) calls fin_cases
@@ -1233,7 +1233,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Inte
 
 ## 1.11 The fin_cases Tactic
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/FinCases.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/FinCases.html
 
 - Exhaustive case analysis on finite types
 - Works with `Fintype A`, `Finset`, `Multiset`, `List` membership hypotheses
@@ -1245,7 +1245,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/FinC
 
 ## 1.12 The linear_combination Tactic
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/LinearCombination.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/LinearCombination.html
 
 - Proves (in)equality goals as linear combinations of hypotheses
 - `linear_combination e` where e uses +, -, *, / on hypothesis proofs
@@ -1260,7 +1260,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Line
 
 ## 1.13 The gcongr Tactic (Generalized Congruence)
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/GCongr/Core.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/GCongr/Core.html
 
 - Reduces relational goals between expressions with same structure into simpler subgoals
 - Pattern matching: identifies when LHS and RHS follow same function application pattern
@@ -1279,7 +1279,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/GCon
 
 ## 1.14 The bound Tactic
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Bound.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/Bound.html
 
 - Aesop wrapper for proving inequalities through recursive structural decomposition
 - Transitions between `0 <= x` and `x <= y` formats automatically
@@ -1293,8 +1293,8 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Boun
 
 ## 1.15 The zify / qify Tactics
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Zify.html,
-       https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Qify.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/Zify.html,
+       https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/Qify.html
 
 - **zify**: lifts Nat propositions to Int ("Int has well-behaved subtraction")
   - `zify` -- convert goal
@@ -1306,7 +1306,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Zify
 
 ## 1.16 The ext Tactic (Extensionality)
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Ext.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/Ext.html
 
 - Proves equality by showing objects behave identically
 - Uses `@[ext]`-tagged lemmas with prioritized, composable rules
@@ -1317,7 +1317,7 @@ Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Ext.
 
 ## 1.17 Polyrith Status Update
 
-Source: https://leanprover-community.github.io/mathlib4_docs/Mathlib/Tactic/Polyrith.html
+Source: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/Mathlib/Tactic/Polyrith.html
 
 - **polyrith is NO LONGER SUPPORTED** -- depended on external Sage server (shut down)
 - Alternative: use `grobner` tactic for polynomial reasoning via Grobner basis computation
@@ -1865,7 +1865,7 @@ divergence of harmonic series, Minkowski's theorem, Dirichlet's theorem.
 ## Official Documentation
 - Theorem Proving in Lean 4: https://lean-lang.org/theorem_proving_in_lean4/
 - Mathematics in Lean: https://leanprover-community.github.io/mathematics_in_lean/
-- Mathlib4 Docs: https://leanprover-community.github.io/mathlib4_docs/
+- Mathlib4 Docs: https://ldct.github.io/mathlib4-docs-pinned/v4.32.0-rc1-patch1/
 - Lean 4 Metaprogramming Book: https://leanprover-community.github.io/lean4-metaprogramming-book/
 
 ## Community Resources
