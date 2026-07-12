@@ -1,0 +1,1527 @@
+<svg width="6466pt" height="1464pt"
+ viewBox="0.00 0.00 6466.00 1464.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 1460)">
+<title>mathlib</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-1460 6462,-1460 6462,4 -4,4"/>
+<text xml:space="preserve" text-anchor="middle" x="3229" y="-1434" font-family="Helvetica,sans-Serif" font-size="20.00">The structure hierarchy underlying NormedField in Mathlib (leanprover&#45;community/mathlib4 v4.32.0&#45;rc1&#45;patch1).</text>
+<text xml:space="preserve" text-anchor="middle" x="3229" y="-1410" font-family="Helvetica,sans-Serif" font-size="20.00">An edge from S to T indicates that an instance of T can be derived from an instance of S.</text>
+<text xml:space="preserve" text-anchor="middle" x="3229" y="-1386" font-family="Helvetica,sans-Serif" font-size="20.00">Solid edges: `extends` parents / structure projections. &#160;Dashed edges: derived `instance`s.</text>
+<text xml:space="preserve" text-anchor="middle" x="3229" y="-1362" font-family="Helvetica,sans-Serif" font-size="20.00">Transitively derivable arrows and some arrows to the leaves (e.g. Distrib to Mul) are omitted for readability; per&#45;class parents and fields are in tooltip_data.json.</text>
+<g id="clust1" class="cluster">
+<title>cluster_legend</title>
+<path fill="none" stroke="#999999" d="M20,-660C20,-660 128,-660 128,-660 134,-660 140,-666 140,-672 140,-672 140,-1250.4 140,-1250.4 140,-1256.4 134,-1262.4 128,-1262.4 128,-1262.4 20,-1262.4 20,-1262.4 14,-1262.4 8,-1256.4 8,-1250.4 8,-1250.4 8,-672 8,-672 8,-666 14,-660 20,-660"/>
+<text xml:space="preserve" text-anchor="middle" x="74" y="-1247.6" font-family="Helvetica,sans-Serif" font-size="12.00">Legend</text>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_normed</title>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_ringth</title>
+</g>
+<g id="clust4" class="cluster">
+<title>cluster_topo</title>
+</g>
+<g id="clust5" class="cluster">
+<title>cluster_topoalg</title>
+</g>
+<!-- L1 -->
+<g id="node1" class="node">
+<title>L1</title>
+<path fill="#cfe2f3" stroke="black" d="M114.32,-1232C114.32,-1232 33.68,-1232 33.68,-1232 27.68,-1232 21.68,-1226 21.68,-1220 21.68,-1220 21.68,-1208 21.68,-1208 21.68,-1202 27.68,-1196 33.68,-1196 33.68,-1196 114.32,-1196 114.32,-1196 120.32,-1196 126.32,-1202 126.32,-1208 126.32,-1208 126.32,-1220 126.32,-1220 126.32,-1226 120.32,-1232 114.32,-1232"/>
+<text xml:space="preserve" text-anchor="middle" x="74" y="-1210.7" font-family="Helvetica,sans-Serif" font-size="11.00">normed structures</text>
+</g>
+<!-- L2 -->
+<g id="node2" class="node">
+<title>L2</title>
+<path fill="#d9ead3" stroke="black" d="M110.35,-1160C110.35,-1160 37.65,-1160 37.65,-1160 31.65,-1160 25.65,-1154 25.65,-1148 25.65,-1148 25.65,-1136 25.65,-1136 25.65,-1130 31.65,-1124 37.65,-1124 37.65,-1124 110.35,-1124 110.35,-1124 116.35,-1124 122.35,-1130 122.35,-1136 122.35,-1136 122.35,-1148 122.35,-1148 122.35,-1154 116.35,-1160 110.35,-1160"/>
+<text xml:space="preserve" text-anchor="middle" x="74" y="-1138.7" font-family="Helvetica,sans-Serif" font-size="11.00">metric / topology</text>
+</g>
+<!-- L1&#45;&gt;L2 -->
+<!-- L3 -->
+<g id="node3" class="node">
+<title>L3</title>
+<path fill="#d0e0e3" stroke="black" d="M116.17,-1088C116.17,-1088 31.83,-1088 31.83,-1088 25.83,-1088 19.83,-1082 19.83,-1076 19.83,-1076 19.83,-1064 19.83,-1064 19.83,-1058 25.83,-1052 31.83,-1052 31.83,-1052 116.17,-1052 116.17,-1052 122.17,-1052 128.17,-1058 128.17,-1064 128.17,-1064 128.17,-1076 128.17,-1076 128.17,-1082 122.17,-1088 116.17,-1088"/>
+<text xml:space="preserve" text-anchor="middle" x="74" y="-1066.7" font-family="Helvetica,sans-Serif" font-size="11.00">topological algebra</text>
+</g>
+<!-- L2&#45;&gt;L3 -->
+<!-- L4 -->
+<g id="node4" class="node">
+<title>L4</title>
+<path fill="#f4cccc" stroke="black" d="M117.38,-932C117.38,-932 30.62,-932 30.62,-932 24.62,-932 18.62,-926 18.62,-920 18.62,-920 18.62,-908 18.62,-908 18.62,-902 24.62,-896 30.62,-896 30.62,-896 117.38,-896 117.38,-896 123.38,-896 129.38,-902 129.38,-908 129.38,-908 129.38,-920 129.38,-920 129.38,-926 123.38,-932 117.38,-932"/>
+<text xml:space="preserve" text-anchor="middle" x="74" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">ring&#45;theoretic props</text>
+</g>
+<!-- L3&#45;&gt;L4 -->
+<!-- L5 -->
+<g id="node5" class="node">
+<title>L5</title>
+<path fill="#fff2cc" stroke="black" d="M116.47,-860C116.47,-860 31.53,-860 31.53,-860 25.53,-860 19.53,-854 19.53,-848 19.53,-848 19.53,-836 19.53,-836 19.53,-830 25.53,-824 31.53,-824 31.53,-824 116.47,-824 116.47,-824 122.47,-824 128.47,-830 128.47,-836 128.47,-836 128.47,-848 128.47,-848 128.47,-854 122.47,-860 116.47,-860"/>
+<text xml:space="preserve" text-anchor="middle" x="74" y="-838.7" font-family="Helvetica,sans-Serif" font-size="11.00">algebraic hierarchy</text>
+</g>
+<!-- L4&#45;&gt;L5 -->
+<!-- L6 -->
+<g id="node6" class="node">
+<title>L6</title>
+<path fill="#ffffff" stroke="black" d="M119.84,-704C119.84,-704 28.16,-704 28.16,-704 22.16,-704 16.16,-698 16.16,-692 16.16,-692 16.16,-680 16.16,-680 16.16,-674 22.16,-668 28.16,-668 28.16,-668 119.84,-668 119.84,-668 125.84,-668 131.84,-674 131.84,-680 131.84,-680 131.84,-692 131.84,-692 131.84,-698 125.84,-704 119.84,-704"/>
+<text xml:space="preserve" text-anchor="middle" x="74" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">notation / operations</text>
+</g>
+<!-- L5&#45;&gt;L6 -->
+<!-- Ring -->
+<g id="node7" class="node" data-class-name="Ring" tabindex="0" role="img" aria-label="Ring">
+<title>Ring</title>
+<path fill="#fff2cc" stroke="black" d="M4656,-704C4656,-704 4626,-704 4626,-704 4620,-704 4614,-698 4614,-692 4614,-692 4614,-680 4614,-680 4614,-674 4620,-668 4626,-668 4626,-668 4656,-668 4656,-668 4662,-668 4668,-674 4668,-680 4668,-680 4668,-692 4668,-692 4668,-698 4662,-704 4656,-704"/>
+<text xml:space="preserve" text-anchor="middle" x="4641" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">Ring</text>
+</g>
+<!-- AddCommGroup -->
+<g id="node12" class="node" data-class-name="AddCommGroup" tabindex="0" role="img" aria-label="AddCommGroup">
+<title>AddCommGroup</title>
+<path fill="#fff2cc" stroke="black" d="M4134.27,-468C4134.27,-468 4059.73,-468 4059.73,-468 4053.73,-468 4047.73,-462 4047.73,-456 4047.73,-456 4047.73,-444 4047.73,-444 4047.73,-438 4053.73,-432 4059.73,-432 4059.73,-432 4134.27,-432 4134.27,-432 4140.27,-432 4146.27,-438 4146.27,-444 4146.27,-444 4146.27,-456 4146.27,-456 4146.27,-462 4140.27,-468 4134.27,-468"/>
+<text xml:space="preserve" text-anchor="middle" x="4097" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddCommGroup</text>
+</g>
+<!-- Ring&#45;&gt;AddCommGroup -->
+<g id="edge98" class="edge">
+<title>Ring&#45;&gt;AddCommGroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4625.08,-667.84C4621.29,-663.01 4617.6,-657.55 4615,-652 4584.95,-587.82 4635.54,-542.43 4582,-496 4546.67,-465.36 4208.16,-475.51 4162,-468 4158.83,-467.49 4155.6,-466.88 4152.34,-466.22"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4152.92,-464.56 4147.66,-465.22 4152.19,-467.98 4152.92,-464.56"/>
+</g>
+<!-- Semiring -->
+<g id="node51" class="node" data-class-name="Semiring" tabindex="0" role="img" aria-label="Semiring">
+<title>Semiring</title>
+<path fill="#fff2cc" stroke="black" d="M4752.7,-540C4752.7,-540 4717.3,-540 4717.3,-540 4711.3,-540 4705.3,-534 4705.3,-528 4705.3,-528 4705.3,-516 4705.3,-516 4705.3,-510 4711.3,-504 4717.3,-504 4717.3,-504 4752.7,-504 4752.7,-504 4758.7,-504 4764.7,-510 4764.7,-516 4764.7,-516 4764.7,-528 4764.7,-528 4764.7,-534 4758.7,-540 4752.7,-540"/>
+<text xml:space="preserve" text-anchor="middle" x="4735" y="-518.7" font-family="Helvetica,sans-Serif" font-size="11.00">Semiring</text>
+</g>
+<!-- Ring&#45;&gt;Semiring -->
+<g id="edge99" class="edge">
+<title>Ring&#45;&gt;Semiring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4668.28,-671.54C4676.51,-666.38 4684.96,-659.82 4691,-652 4715.62,-620.15 4726.95,-573.66 4731.78,-546.05"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4733.47,-546.54 4732.57,-541.32 4730.02,-545.97 4733.47,-546.54"/>
+</g>
+<!-- AddGroupWithOne -->
+<g id="node52" class="node" data-class-name="AddGroupWithOne" tabindex="0" role="img" aria-label="AddGroupWithOne">
+<title>AddGroupWithOne</title>
+<path fill="#fff2cc" stroke="black" d="M4267.47,-468C4267.47,-468 4182.53,-468 4182.53,-468 4176.53,-468 4170.53,-462 4170.53,-456 4170.53,-456 4170.53,-444 4170.53,-444 4170.53,-438 4176.53,-432 4182.53,-432 4182.53,-432 4267.47,-432 4267.47,-432 4273.47,-432 4279.47,-438 4279.47,-444 4279.47,-444 4279.47,-456 4279.47,-456 4279.47,-462 4273.47,-468 4267.47,-468"/>
+<text xml:space="preserve" text-anchor="middle" x="4225" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddGroupWithOne</text>
+</g>
+<!-- Ring&#45;&gt;AddGroupWithOne -->
+<g id="edge100" class="edge">
+<title>Ring&#45;&gt;AddGroupWithOne</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4644.77,-667.64C4651.74,-630.29 4661.99,-541.98 4615,-496 4603.38,-484.63 4392.24,-465.19 4285.59,-456.04"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4286,-454.32 4280.87,-455.64 4285.7,-457.81 4286,-454.32"/>
+</g>
+<!-- DivisionRing -->
+<g id="node8" class="node" data-class-name="DivisionRing" tabindex="0" role="img" aria-label="DivisionRing">
+<title>DivisionRing</title>
+<path fill="#fff2cc" stroke="black" d="M4779.57,-1088C4779.57,-1088 4726.43,-1088 4726.43,-1088 4720.43,-1088 4714.43,-1082 4714.43,-1076 4714.43,-1076 4714.43,-1064 4714.43,-1064 4714.43,-1058 4720.43,-1052 4726.43,-1052 4726.43,-1052 4779.57,-1052 4779.57,-1052 4785.57,-1052 4791.57,-1058 4791.57,-1064 4791.57,-1064 4791.57,-1076 4791.57,-1076 4791.57,-1082 4785.57,-1088 4779.57,-1088"/>
+<text xml:space="preserve" text-anchor="middle" x="4753" y="-1066.7" font-family="Helvetica,sans-Serif" font-size="11.00">DivisionRing</text>
+</g>
+<!-- DivisionRing&#45;&gt;Ring -->
+<g id="edge140" class="edge">
+<title>DivisionRing&#45;&gt;Ring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4714.2,-1066C4698.15,-1062.81 4680.62,-1056.46 4669,-1044 4580.91,-949.51 4617.38,-773.2 4634.23,-710.15"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4635.85,-710.87 4635.48,-705.58 4632.48,-709.95 4635.85,-710.87"/>
+</g>
+<!-- RatCast -->
+<g id="node60" class="node" data-class-name="RatCast" tabindex="0" role="img" aria-label="RatCast">
+<title>RatCast</title>
+<path fill="#ffffff" stroke="black" d="M4721.87,-932C4721.87,-932 4690.13,-932 4690.13,-932 4684.13,-932 4678.13,-926 4678.13,-920 4678.13,-920 4678.13,-908 4678.13,-908 4678.13,-902 4684.13,-896 4690.13,-896 4690.13,-896 4721.87,-896 4721.87,-896 4727.87,-896 4733.87,-902 4733.87,-908 4733.87,-908 4733.87,-920 4733.87,-920 4733.87,-926 4727.87,-932 4721.87,-932"/>
+<text xml:space="preserve" text-anchor="middle" x="4706" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">RatCast</text>
+</g>
+<!-- DivisionRing&#45;&gt;RatCast -->
+<g id="edge141" class="edge">
+<title>DivisionRing&#45;&gt;RatCast</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4745.78,-1051.6C4744.8,-1049.07 4743.85,-1046.48 4743,-1044 4730.49,-1007.47 4718.67,-964.18 4711.89,-938.19"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4713.61,-937.86 4710.67,-933.45 4710.23,-938.73 4713.61,-937.86"/>
+</g>
+<!-- DivisionSemiring -->
+<g id="node62" class="node" data-class-name="DivisionSemiring" tabindex="0" role="img" aria-label="DivisionSemiring">
+<title>DivisionSemiring</title>
+<path fill="#fff2cc" stroke="black" d="M4837.96,-932C4837.96,-932 4764.04,-932 4764.04,-932 4758.04,-932 4752.04,-926 4752.04,-920 4752.04,-920 4752.04,-908 4752.04,-908 4752.04,-902 4758.04,-896 4764.04,-896 4764.04,-896 4837.96,-896 4837.96,-896 4843.96,-896 4849.96,-902 4849.96,-908 4849.96,-908 4849.96,-920 4849.96,-920 4849.96,-926 4843.96,-932 4837.96,-932"/>
+<text xml:space="preserve" text-anchor="middle" x="4801" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">DivisionSemiring</text>
+</g>
+<!-- DivisionRing&#45;&gt;DivisionSemiring -->
+<g id="edge142" class="edge">
+<title>DivisionRing&#45;&gt;DivisionSemiring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4758.41,-1051.63C4767.1,-1023.76 4784.16,-969.01 4793.85,-937.95"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4795.5,-938.52 4795.32,-933.22 4792.16,-937.48 4795.5,-938.52"/>
+</g>
+<!-- IsDomain -->
+<g id="node77" class="node" data-class-name="IsDomain" tabindex="0" role="img" aria-label="IsDomain">
+<title>IsDomain</title>
+<path fill="#f4cccc" stroke="black" d="M5207.23,-932C5207.23,-932 5168.77,-932 5168.77,-932 5162.77,-932 5156.77,-926 5156.77,-920 5156.77,-920 5156.77,-908 5156.77,-908 5156.77,-902 5162.77,-896 5168.77,-896 5168.77,-896 5207.23,-896 5207.23,-896 5213.23,-896 5219.23,-902 5219.23,-908 5219.23,-908 5219.23,-920 5219.23,-920 5219.23,-926 5213.23,-932 5207.23,-932"/>
+<text xml:space="preserve" text-anchor="middle" x="5188" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsDomain</text>
+</g>
+<!-- DivisionRing&#45;&gt;IsDomain -->
+<g id="edge139" class="edge">
+<title>DivisionRing&#45;&gt;IsDomain</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4791.86,-1069.01C4885.98,-1068.68 5120.46,-1065.67 5148,-1044 5180.17,-1018.69 5187.07,-967.9 5188.2,-938.16"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5189.94,-938.41 5188.33,-933.36 5186.44,-938.32 5189.94,-938.41"/>
+</g>
+<!-- CommRing -->
+<g id="node9" class="node" data-class-name="CommRing" tabindex="0" role="img" aria-label="CommRing">
+<title>CommRing</title>
+<path fill="#fff2cc" stroke="black" d="M4696.51,-860C4696.51,-860 4649.49,-860 4649.49,-860 4643.49,-860 4637.49,-854 4637.49,-848 4637.49,-848 4637.49,-836 4637.49,-836 4637.49,-830 4643.49,-824 4649.49,-824 4649.49,-824 4696.51,-824 4696.51,-824 4702.51,-824 4708.51,-830 4708.51,-836 4708.51,-836 4708.51,-848 4708.51,-848 4708.51,-854 4702.51,-860 4696.51,-860"/>
+<text xml:space="preserve" text-anchor="middle" x="4673" y="-838.7" font-family="Helvetica,sans-Serif" font-size="11.00">CommRing</text>
+</g>
+<!-- CommRing&#45;&gt;Ring -->
+<g id="edge114" class="edge">
+<title>CommRing&#45;&gt;Ring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4669.39,-823.63C4663.6,-795.76 4652.22,-741.01 4645.77,-709.95"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4647.52,-709.79 4644.79,-705.25 4644.1,-710.5 4647.52,-709.79"/>
+</g>
+<!-- CommMonoid -->
+<g id="node39" class="node" data-class-name="CommMonoid" tabindex="0" role="img" aria-label="CommMonoid">
+<title>CommMonoid</title>
+<path fill="#fff2cc" stroke="black" d="M4898.23,-468C4898.23,-468 4837.77,-468 4837.77,-468 4831.77,-468 4825.77,-462 4825.77,-456 4825.77,-456 4825.77,-444 4825.77,-444 4825.77,-438 4831.77,-432 4837.77,-432 4837.77,-432 4898.23,-432 4898.23,-432 4904.23,-432 4910.23,-438 4910.23,-444 4910.23,-444 4910.23,-456 4910.23,-456 4910.23,-462 4904.23,-468 4898.23,-468"/>
+<text xml:space="preserve" text-anchor="middle" x="4868" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">CommMonoid</text>
+</g>
+<!-- CommRing&#45;&gt;CommMonoid -->
+<g id="edge113" class="edge">
+<title>CommRing&#45;&gt;CommMonoid</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4682.64,-823.7C4700.99,-790.64 4741.94,-716.04 4774,-652 4806.05,-587.97 4841.11,-510.97 4857.92,-473.58"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4859.31,-474.74 4859.76,-469.46 4856.12,-473.31 4859.31,-474.74"/>
+</g>
+<!-- Field -->
+<g id="node10" class="node" data-class-name="Field" tabindex="0" role="img" aria-label="Field">
+<title>Field</title>
+<path fill="#fff2cc" stroke="black" d="M4880,-1160C4880,-1160 4850,-1160 4850,-1160 4844,-1160 4838,-1154 4838,-1148 4838,-1148 4838,-1136 4838,-1136 4838,-1130 4844,-1124 4850,-1124 4850,-1124 4880,-1124 4880,-1124 4886,-1124 4892,-1130 4892,-1136 4892,-1136 4892,-1148 4892,-1148 4892,-1154 4886,-1160 4880,-1160"/>
+<text xml:space="preserve" text-anchor="middle" x="4865" y="-1138.7" font-family="Helvetica,sans-Serif" font-size="11.00">Field</text>
+</g>
+<!-- Field&#45;&gt;DivisionRing -->
+<g id="edge119" class="edge">
+<title>Field&#45;&gt;DivisionRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4837.6,-1123.88C4821.99,-1114.12 4802.33,-1101.83 4785.88,-1091.55"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4787.09,-1090.24 4781.92,-1089.08 4785.23,-1093.21 4787.09,-1090.24"/>
+</g>
+<!-- EuclideanDomain -->
+<g id="node75" class="node" data-class-name="EuclideanDomain" tabindex="0" role="img" aria-label="EuclideanDomain">
+<title>EuclideanDomain</title>
+<path fill="#f4cccc" stroke="black" d="M5127.11,-932C5127.11,-932 5048.89,-932 5048.89,-932 5042.89,-932 5036.89,-926 5036.89,-920 5036.89,-920 5036.89,-908 5036.89,-908 5036.89,-902 5042.89,-896 5048.89,-896 5048.89,-896 5127.11,-896 5127.11,-896 5133.11,-896 5139.11,-902 5139.11,-908 5139.11,-908 5139.11,-920 5139.11,-920 5139.11,-926 5133.11,-932 5127.11,-932"/>
+<text xml:space="preserve" text-anchor="middle" x="5088" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">EuclideanDomain</text>
+</g>
+<!-- Field&#45;&gt;EuclideanDomain -->
+<g id="edge117" class="edge">
+<title>Field&#45;&gt;EuclideanDomain</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4882.13,-1123.64C4922.26,-1082.97 5022.3,-981.58 5066.47,-936.82"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5067.7,-938.07 5069.96,-933.28 5065.21,-935.61 5067.7,-938.07"/>
+</g>
+<!-- IsLocalRing -->
+<g id="node80" class="node" data-class-name="IsLocalRing" tabindex="0" role="img" aria-label="IsLocalRing">
+<title>IsLocalRing</title>
+<path fill="#f4cccc" stroke="black" d="M5298.74,-932C5298.74,-932 5249.26,-932 5249.26,-932 5243.26,-932 5237.26,-926 5237.26,-920 5237.26,-920 5237.26,-908 5237.26,-908 5237.26,-902 5243.26,-896 5249.26,-896 5249.26,-896 5298.74,-896 5298.74,-896 5304.74,-896 5310.74,-902 5310.74,-908 5310.74,-908 5310.74,-920 5310.74,-920 5310.74,-926 5304.74,-932 5298.74,-932"/>
+<text xml:space="preserve" text-anchor="middle" x="5274" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsLocalRing</text>
+</g>
+<!-- Field&#45;&gt;IsLocalRing -->
+<g id="edge118" class="edge">
+<title>Field&#45;&gt;IsLocalRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4892.22,-1141.79C4958.59,-1142.2 5130.39,-1133.97 5228,-1044 5258.2,-1016.17 5268.59,-967.17 5272.15,-938.24"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5273.85,-938.75 5272.68,-933.59 5270.37,-938.36 5273.85,-938.75"/>
+</g>
+<!-- NonUnitalRing -->
+<g id="node11" class="node" data-class-name="NonUnitalRing" tabindex="0" role="img" aria-label="NonUnitalRing">
+<title>NonUnitalRing</title>
+<path fill="#fff2cc" stroke="black" d="M4535.46,-704C4535.46,-704 4472.54,-704 4472.54,-704 4466.54,-704 4460.54,-698 4460.54,-692 4460.54,-692 4460.54,-680 4460.54,-680 4460.54,-674 4466.54,-668 4472.54,-668 4472.54,-668 4535.46,-668 4535.46,-668 4541.46,-668 4547.46,-674 4547.46,-680 4547.46,-680 4547.46,-692 4547.46,-692 4547.46,-698 4541.46,-704 4535.46,-704"/>
+<text xml:space="preserve" text-anchor="middle" x="4504" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">NonUnitalRing</text>
+</g>
+<!-- NonUnitalNonAssocRing -->
+<g id="node19" class="node" data-class-name="NonUnitalNonAssocRing" tabindex="0" role="img" aria-label="NonUnitalNonAssocRing">
+<title>NonUnitalNonAssocRing</title>
+<path fill="#fff2cc" stroke="black" d="M4560.53,-540C4560.53,-540 4447.47,-540 4447.47,-540 4441.47,-540 4435.47,-534 4435.47,-528 4435.47,-528 4435.47,-516 4435.47,-516 4435.47,-510 4441.47,-504 4447.47,-504 4447.47,-504 4560.53,-504 4560.53,-504 4566.53,-504 4572.53,-510 4572.53,-516 4572.53,-516 4572.53,-528 4572.53,-528 4572.53,-534 4566.53,-540 4560.53,-540"/>
+<text xml:space="preserve" text-anchor="middle" x="4504" y="-518.7" font-family="Helvetica,sans-Serif" font-size="11.00">NonUnitalNonAssocRing</text>
+</g>
+<!-- NonUnitalRing&#45;&gt;NonUnitalNonAssocRing -->
+<g id="edge128" class="edge">
+<title>NonUnitalRing&#45;&gt;NonUnitalNonAssocRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4504,-667.66C4504,-638.31 4504,-578.82 4504,-546.01"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4505.75,-546.42 4504,-541.42 4502.25,-546.42 4505.75,-546.42"/>
+</g>
+<!-- NonUnitalSemiring -->
+<g id="node58" class="node" data-class-name="NonUnitalSemiring" tabindex="0" role="img" aria-label="NonUnitalSemiring">
+<title>NonUnitalSemiring</title>
+<path fill="#fff2cc" stroke="black" d="M4680.85,-468C4680.85,-468 4597.15,-468 4597.15,-468 4591.15,-468 4585.15,-462 4585.15,-456 4585.15,-456 4585.15,-444 4585.15,-444 4585.15,-438 4591.15,-432 4597.15,-432 4597.15,-432 4680.85,-432 4680.85,-432 4686.85,-432 4692.85,-438 4692.85,-444 4692.85,-444 4692.85,-456 4692.85,-456 4692.85,-462 4686.85,-468 4680.85,-468"/>
+<text xml:space="preserve" text-anchor="middle" x="4639" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">NonUnitalSemiring</text>
+</g>
+<!-- NonUnitalRing&#45;&gt;NonUnitalSemiring -->
+<g id="edge129" class="edge">
+<title>NonUnitalRing&#45;&gt;NonUnitalSemiring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4547.59,-674.37C4560.18,-669.41 4572.95,-662.25 4582,-652 4627.36,-600.65 4636.81,-515.64 4638.65,-474.61"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4640.4,-474.68 4638.84,-469.62 4636.9,-474.55 4640.4,-474.68"/>
+</g>
+<!-- AddCommMonoid -->
+<g id="node49" class="node" data-class-name="AddCommMonoid" tabindex="0" role="img" aria-label="AddCommMonoid">
+<title>AddCommMonoid</title>
+<path fill="#fff2cc" stroke="black" d="M4310.02,-324C4310.02,-324 4229.98,-324 4229.98,-324 4223.98,-324 4217.98,-318 4217.98,-312 4217.98,-312 4217.98,-300 4217.98,-300 4217.98,-294 4223.98,-288 4229.98,-288 4229.98,-288 4310.02,-288 4310.02,-288 4316.02,-288 4322.02,-294 4322.02,-300 4322.02,-300 4322.02,-312 4322.02,-312 4322.02,-318 4316.02,-324 4310.02,-324"/>
+<text xml:space="preserve" text-anchor="middle" x="4270" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddCommMonoid</text>
+</g>
+<!-- AddCommGroup&#45;&gt;AddCommMonoid -->
+<g id="edge97" class="edge">
+<title>AddCommGroup&#45;&gt;AddCommMonoid</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4079.31,-431.71C4060.3,-411.04 4035.33,-376.21 4055,-352 4064.91,-339.8 4151.2,-324.66 4211.4,-315.41"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4211.63,-317.15 4216.31,-314.67 4211.1,-313.69 4211.63,-317.15"/>
+</g>
+<!-- AddGroup -->
+<g id="node50" class="node" data-class-name="AddGroup" tabindex="0" role="img" aria-label="AddGroup">
+<title>AddGroup</title>
+<path fill="#fff2cc" stroke="black" d="M4118.07,-396C4118.07,-396 4075.93,-396 4075.93,-396 4069.93,-396 4063.93,-390 4063.93,-384 4063.93,-384 4063.93,-372 4063.93,-372 4063.93,-366 4069.93,-360 4075.93,-360 4075.93,-360 4118.07,-360 4118.07,-360 4124.07,-360 4130.07,-366 4130.07,-372 4130.07,-372 4130.07,-384 4130.07,-384 4130.07,-390 4124.07,-396 4118.07,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="4097" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddGroup</text>
+</g>
+<!-- AddCommGroup&#45;&gt;AddGroup -->
+<g id="edge96" class="edge">
+<title>AddCommGroup&#45;&gt;AddGroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4097,-431.7C4097,-422.8 4097,-411.82 4097,-402.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4098.75,-402.32 4097,-397.32 4095.25,-402.32 4098.75,-402.32"/>
+</g>
+<!-- Nontrivial -->
+<g id="node13" class="node" data-class-name="Nontrivial" tabindex="0" role="img" aria-label="Nontrivial">
+<title>Nontrivial</title>
+<path fill="#ffffff" stroke="black" d="M5008.92,-704C5008.92,-704 4971.08,-704 4971.08,-704 4965.08,-704 4959.08,-698 4959.08,-692 4959.08,-692 4959.08,-680 4959.08,-680 4959.08,-674 4965.08,-668 4971.08,-668 4971.08,-668 5008.92,-668 5008.92,-668 5014.92,-668 5020.92,-674 5020.92,-680 5020.92,-680 5020.92,-692 5020.92,-692 5020.92,-698 5014.92,-704 5008.92,-704"/>
+<text xml:space="preserve" text-anchor="middle" x="4990" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">Nontrivial</text>
+</g>
+<!-- MonoidWithZero -->
+<g id="node14" class="node" data-class-name="MonoidWithZero" tabindex="0" role="img" aria-label="MonoidWithZero">
+<title>MonoidWithZero</title>
+<path fill="#fff2cc" stroke="black" d="M4795.35,-468C4795.35,-468 4722.65,-468 4722.65,-468 4716.65,-468 4710.65,-462 4710.65,-456 4710.65,-456 4710.65,-444 4710.65,-444 4710.65,-438 4716.65,-432 4722.65,-432 4722.65,-432 4795.35,-432 4795.35,-432 4801.35,-432 4807.35,-438 4807.35,-444 4807.35,-444 4807.35,-456 4807.35,-456 4807.35,-462 4801.35,-468 4795.35,-468"/>
+<text xml:space="preserve" text-anchor="middle" x="4759" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">MonoidWithZero</text>
+</g>
+<!-- Monoid -->
+<g id="node15" class="node" data-class-name="Monoid" tabindex="0" role="img" aria-label="Monoid">
+<title>Monoid</title>
+<path fill="#fff2cc" stroke="black" d="M4894,-396C4894,-396 4864,-396 4864,-396 4858,-396 4852,-390 4852,-384 4852,-384 4852,-372 4852,-372 4852,-366 4858,-360 4864,-360 4864,-360 4894,-360 4894,-360 4900,-360 4906,-366 4906,-372 4906,-372 4906,-384 4906,-384 4906,-390 4900,-396 4894,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="4879" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">Monoid</text>
+</g>
+<!-- MonoidWithZero&#45;&gt;Monoid -->
+<g id="edge65" class="edge">
+<title>MonoidWithZero&#45;&gt;Monoid</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4788.97,-431.52C4806.61,-421.23 4828.92,-408.21 4846.91,-397.72"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4847.38,-399.47 4850.82,-395.44 4845.62,-396.45 4847.38,-399.47"/>
+</g>
+<!-- SemigroupWithZero -->
+<g id="node16" class="node" data-class-name="SemigroupWithZero" tabindex="0" role="img" aria-label="SemigroupWithZero">
+<title>SemigroupWithZero</title>
+<path fill="#fff2cc" stroke="black" d="M4821.91,-396C4821.91,-396 4732.09,-396 4732.09,-396 4726.09,-396 4720.09,-390 4720.09,-384 4720.09,-384 4720.09,-372 4720.09,-372 4720.09,-366 4726.09,-360 4732.09,-360 4732.09,-360 4821.91,-360 4821.91,-360 4827.91,-360 4833.91,-366 4833.91,-372 4833.91,-372 4833.91,-384 4833.91,-384 4833.91,-390 4827.91,-396 4821.91,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="4777" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">SemigroupWithZero</text>
+</g>
+<!-- MonoidWithZero&#45;&gt;SemigroupWithZero -->
+<g id="edge66" class="edge">
+<title>MonoidWithZero&#45;&gt;SemigroupWithZero</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4763.45,-431.7C4765.76,-422.71 4768.61,-411.61 4771.11,-401.92"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4772.75,-402.56 4772.3,-397.28 4769.36,-401.68 4772.75,-402.56"/>
+</g>
+<!-- MulZeroOneClass -->
+<g id="node17" class="node" data-class-name="MulZeroOneClass" tabindex="0" role="img" aria-label="MulZeroOneClass">
+<title>MulZeroOneClass</title>
+<path fill="#fff2cc" stroke="black" d="M4690.32,-396C4690.32,-396 4609.68,-396 4609.68,-396 4603.68,-396 4597.68,-390 4597.68,-384 4597.68,-384 4597.68,-372 4597.68,-372 4597.68,-366 4603.68,-360 4609.68,-360 4609.68,-360 4690.32,-360 4690.32,-360 4696.32,-360 4702.32,-366 4702.32,-372 4702.32,-372 4702.32,-384 4702.32,-384 4702.32,-390 4696.32,-396 4690.32,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="4650" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">MulZeroOneClass</text>
+</g>
+<!-- MonoidWithZero&#45;&gt;MulZeroOneClass -->
+<g id="edge67" class="edge">
+<title>MonoidWithZero&#45;&gt;MulZeroOneClass</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4731.78,-431.52C4716.58,-421.75 4697.56,-409.54 4681.69,-399.35"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4683.05,-398.14 4677.9,-396.91 4681.16,-401.09 4683.05,-398.14"/>
+</g>
+<!-- MulOneClass -->
+<g id="node29" class="node" data-class-name="MulOneClass" tabindex="0" role="img" aria-label="MulOneClass">
+<title>MulOneClass</title>
+<path fill="#fff2cc" stroke="black" d="M4734.01,-324C4734.01,-324 4675.99,-324 4675.99,-324 4669.99,-324 4663.99,-318 4663.99,-312 4663.99,-312 4663.99,-300 4663.99,-300 4663.99,-294 4669.99,-288 4675.99,-288 4675.99,-288 4734.01,-288 4734.01,-288 4740.01,-288 4746.01,-294 4746.01,-300 4746.01,-300 4746.01,-312 4746.01,-312 4746.01,-318 4740.01,-324 4734.01,-324"/>
+<text xml:space="preserve" text-anchor="middle" x="4705" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">MulOneClass</text>
+</g>
+<!-- Monoid&#45;&gt;MulOneClass -->
+<g id="edge83" class="edge">
+<title>Monoid&#45;&gt;MulOneClass</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4855.98,-359.56C4851.79,-356.81 4847.36,-354.17 4843,-352 4838.68,-349.86 4790.25,-334.21 4751.96,-321.96"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4752.84,-320.4 4747.55,-320.54 4751.78,-323.73 4752.84,-320.4"/>
+</g>
+<!-- Semigroup -->
+<g id="node42" class="node" data-class-name="Semigroup" tabindex="0" role="img" aria-label="Semigroup">
+<title>Semigroup</title>
+<path fill="#fff2cc" stroke="black" d="M4825.6,-324C4825.6,-324 4780.4,-324 4780.4,-324 4774.4,-324 4768.4,-318 4768.4,-312 4768.4,-312 4768.4,-300 4768.4,-300 4768.4,-294 4774.4,-288 4780.4,-288 4780.4,-288 4825.6,-288 4825.6,-288 4831.6,-288 4837.6,-294 4837.6,-300 4837.6,-300 4837.6,-312 4837.6,-312 4837.6,-318 4831.6,-324 4825.6,-324"/>
+<text xml:space="preserve" text-anchor="middle" x="4803" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">Semigroup</text>
+</g>
+<!-- Monoid&#45;&gt;Semigroup -->
+<g id="edge84" class="edge">
+<title>Monoid&#45;&gt;Semigroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4860.21,-359.7C4849.98,-350.27 4837.23,-338.53 4826.36,-328.52"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4827.59,-327.27 4822.72,-325.17 4825.22,-329.84 4827.59,-327.27"/>
+</g>
+<!-- NPow -->
+<g id="node43" class="node" data-class-name="NPow" tabindex="0" role="img" aria-label="NPow">
+<title>NPow</title>
+<path fill="#ffffff" stroke="black" d="M4898,-324C4898,-324 4868,-324 4868,-324 4862,-324 4856,-318 4856,-312 4856,-312 4856,-300 4856,-300 4856,-294 4862,-288 4868,-288 4868,-288 4898,-288 4898,-288 4904,-288 4910,-294 4910,-300 4910,-300 4910,-312 4910,-312 4910,-318 4904,-324 4898,-324"/>
+<text xml:space="preserve" text-anchor="middle" x="4883" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">NPow</text>
+</g>
+<!-- Monoid&#45;&gt;NPow -->
+<g id="edge85" class="edge">
+<title>Monoid&#45;&gt;NPow</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4879.99,-359.7C4880.5,-350.8 4881.12,-339.82 4881.67,-330.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4883.42,-330.4 4881.95,-325.31 4879.92,-330.21 4883.42,-330.4"/>
+</g>
+<!-- SemigroupWithZero&#45;&gt;Semigroup -->
+<g id="edge115" class="edge">
+<title>SemigroupWithZero&#45;&gt;Semigroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4783.43,-359.7C4786.76,-350.71 4790.89,-339.61 4794.49,-329.92"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4796.12,-330.54 4796.23,-325.24 4792.84,-329.32 4796.12,-330.54"/>
+</g>
+<!-- MulZeroClass -->
+<g id="node48" class="node" data-class-name="MulZeroClass" tabindex="0" role="img" aria-label="MulZeroClass">
+<title>MulZeroClass</title>
+<path fill="#fff2cc" stroke="black" d="M4633.92,-324C4633.92,-324 4574.08,-324 4574.08,-324 4568.08,-324 4562.08,-318 4562.08,-312 4562.08,-312 4562.08,-300 4562.08,-300 4562.08,-294 4568.08,-288 4574.08,-288 4574.08,-288 4633.92,-288 4633.92,-288 4639.92,-288 4645.92,-294 4645.92,-300 4645.92,-300 4645.92,-312 4645.92,-312 4645.92,-318 4639.92,-324 4633.92,-324"/>
+<text xml:space="preserve" text-anchor="middle" x="4604" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">MulZeroClass</text>
+</g>
+<!-- SemigroupWithZero&#45;&gt;MulZeroClass -->
+<g id="edge116" class="edge">
+<title>SemigroupWithZero&#45;&gt;MulZeroClass</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4733.79,-359.52C4708.95,-349.46 4677.69,-336.82 4652.07,-326.45"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4652.77,-324.85 4647.48,-324.59 4651.46,-328.09 4652.77,-324.85"/>
+</g>
+<!-- MulZeroOneClass&#45;&gt;MulOneClass -->
+<g id="edge146" class="edge">
+<title>MulZeroOneClass&#45;&gt;MulOneClass</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4663.6,-359.7C4670.92,-350.37 4680.04,-338.77 4687.85,-328.83"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4689.1,-330.07 4690.81,-325.06 4686.35,-327.91 4689.1,-330.07"/>
+</g>
+<!-- MulZeroOneClass&#45;&gt;MulZeroClass -->
+<g id="edge147" class="edge">
+<title>MulZeroOneClass&#45;&gt;MulZeroClass</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4638.63,-359.7C4632.56,-350.46 4625.02,-338.98 4618.53,-329.11"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4620.11,-328.33 4615.9,-325.12 4617.19,-330.26 4620.11,-328.33"/>
+</g>
+<!-- ZPow -->
+<g id="node18" class="node" data-class-name="ZPow" tabindex="0" role="img" aria-label="ZPow">
+<title>ZPow</title>
+<path fill="#ffffff" stroke="black" d="M5053,-540C5053,-540 5023,-540 5023,-540 5017,-540 5011,-534 5011,-528 5011,-528 5011,-516 5011,-516 5011,-510 5017,-504 5023,-504 5023,-504 5053,-504 5053,-504 5059,-504 5065,-510 5065,-516 5065,-516 5065,-528 5065,-528 5065,-534 5059,-540 5053,-540"/>
+<text xml:space="preserve" text-anchor="middle" x="5038" y="-518.7" font-family="Helvetica,sans-Serif" font-size="11.00">ZPow</text>
+</g>
+<!-- NonUnitalNonAssocRing&#45;&gt;AddCommGroup -->
+<g id="edge69" class="edge">
+<title>NonUnitalNonAssocRing&#45;&gt;AddCommGroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4458.11,-503.53C4449.22,-500.64 4439.9,-497.96 4431,-496 4313.61,-470.14 4280.26,-489.49 4162,-468 4158.84,-467.43 4155.62,-466.78 4152.37,-466.08"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4152.95,-464.42 4147.69,-465.04 4152.19,-467.84 4152.95,-464.42"/>
+</g>
+<!-- NonUnitalNonAssocSemiring -->
+<g id="node20" class="node" data-class-name="NonUnitalNonAssocSemiring" tabindex="0" role="img" aria-label="NonUnitalNonAssocSemiring">
+<title>NonUnitalNonAssocSemiring</title>
+<path fill="#fff2cc" stroke="black" d="M4567.92,-396C4567.92,-396 4434.08,-396 4434.08,-396 4428.08,-396 4422.08,-390 4422.08,-384 4422.08,-384 4422.08,-372 4422.08,-372 4422.08,-366 4428.08,-360 4434.08,-360 4434.08,-360 4567.92,-360 4567.92,-360 4573.92,-360 4579.92,-366 4579.92,-372 4579.92,-372 4579.92,-384 4579.92,-384 4579.92,-390 4573.92,-396 4567.92,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="4501" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">NonUnitalNonAssocSemiring</text>
+</g>
+<!-- NonUnitalNonAssocRing&#45;&gt;NonUnitalNonAssocSemiring -->
+<g id="edge68" class="edge">
+<title>NonUnitalNonAssocRing&#45;&gt;NonUnitalNonAssocSemiring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4477.58,-503.58C4466.21,-494.48 4454.14,-482.26 4448,-468 4441.67,-453.3 4441.88,-446.78 4448,-432 4453.01,-419.91 4462.26,-409.14 4471.64,-400.52"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4472.74,-401.89 4475.34,-397.27 4470.43,-399.26 4472.74,-401.89"/>
+</g>
+<!-- Distrib -->
+<g id="node25" class="node" data-class-name="Distrib" tabindex="0" role="img" aria-label="Distrib">
+<title>Distrib</title>
+<path fill="#fff2cc" stroke="black" d="M4516,-324C4516,-324 4486,-324 4486,-324 4480,-324 4474,-318 4474,-312 4474,-312 4474,-300 4474,-300 4474,-294 4480,-288 4486,-288 4486,-288 4516,-288 4516,-288 4522,-288 4528,-294 4528,-300 4528,-300 4528,-312 4528,-312 4528,-318 4522,-324 4516,-324"/>
+<text xml:space="preserve" text-anchor="middle" x="4501" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">Distrib</text>
+</g>
+<!-- NonUnitalNonAssocSemiring&#45;&gt;Distrib -->
+<g id="edge93" class="edge">
+<title>NonUnitalNonAssocSemiring&#45;&gt;Distrib</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4501,-359.7C4501,-350.8 4501,-339.82 4501,-330.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4502.75,-330.32 4501,-325.32 4499.25,-330.32 4502.75,-330.32"/>
+</g>
+<!-- NonUnitalNonAssocSemiring&#45;&gt;MulZeroClass -->
+<g id="edge94" class="edge">
+<title>NonUnitalNonAssocSemiring&#45;&gt;MulZeroClass</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4526.73,-359.52C4540.97,-349.84 4558.75,-337.75 4573.66,-327.62"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4574.45,-329.2 4577.6,-324.94 4572.48,-326.3 4574.45,-329.2"/>
+</g>
+<!-- NonUnitalNonAssocSemiring&#45;&gt;AddCommMonoid -->
+<g id="edge95" class="edge">
+<title>NonUnitalNonAssocSemiring&#45;&gt;AddCommMonoid</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4443.3,-359.52C4408.04,-348.83 4363.09,-335.21 4327.81,-324.52"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4328.68,-322.95 4323.39,-323.18 4327.67,-326.3 4328.68,-322.95"/>
+</g>
+<!-- AddMonoidWithOne -->
+<g id="node21" class="node" data-class-name="AddMonoidWithOne" tabindex="0" role="img" aria-label="AddMonoidWithOne">
+<title>AddMonoidWithOne</title>
+<path fill="#fff2cc" stroke="black" d="M4442.22,-324C4442.22,-324 4351.78,-324 4351.78,-324 4345.78,-324 4339.78,-318 4339.78,-312 4339.78,-312 4339.78,-300 4339.78,-300 4339.78,-294 4345.78,-288 4351.78,-288 4351.78,-288 4442.22,-288 4442.22,-288 4448.22,-288 4454.22,-294 4454.22,-300 4454.22,-300 4454.22,-312 4454.22,-312 4454.22,-318 4448.22,-324 4442.22,-324"/>
+<text xml:space="preserve" text-anchor="middle" x="4397" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddMonoidWithOne</text>
+</g>
+<!-- NatCast -->
+<g id="node22" class="node" data-class-name="NatCast" tabindex="0" role="img" aria-label="NatCast">
+<title>NatCast</title>
+<path fill="#ffffff" stroke="black" d="M4470.87,-252C4470.87,-252 4439.13,-252 4439.13,-252 4433.13,-252 4427.13,-246 4427.13,-240 4427.13,-240 4427.13,-228 4427.13,-228 4427.13,-222 4433.13,-216 4439.13,-216 4439.13,-216 4470.87,-216 4470.87,-216 4476.87,-216 4482.87,-222 4482.87,-228 4482.87,-228 4482.87,-240 4482.87,-240 4482.87,-246 4476.87,-252 4470.87,-252"/>
+<text xml:space="preserve" text-anchor="middle" x="4455" y="-230.7" font-family="Helvetica,sans-Serif" font-size="11.00">NatCast</text>
+</g>
+<!-- AddMonoidWithOne&#45;&gt;NatCast -->
+<g id="edge70" class="edge">
+<title>AddMonoidWithOne&#45;&gt;NatCast</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4411.34,-287.7C4419.06,-278.37 4428.67,-266.77 4436.91,-256.83"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4438.21,-258 4440.06,-253.04 4435.52,-255.77 4438.21,-258"/>
+</g>
+<!-- One -->
+<g id="node23" class="node" data-class-name="One" tabindex="0" role="img" aria-label="One">
+<title>One</title>
+<path fill="#ffffff" stroke="black" d="M4564,-180C4564,-180 4534,-180 4534,-180 4528,-180 4522,-174 4522,-168 4522,-168 4522,-156 4522,-156 4522,-150 4528,-144 4534,-144 4534,-144 4564,-144 4564,-144 4570,-144 4576,-150 4576,-156 4576,-156 4576,-168 4576,-168 4576,-174 4570,-180 4564,-180"/>
+<text xml:space="preserve" text-anchor="middle" x="4549" y="-158.7" font-family="Helvetica,sans-Serif" font-size="11.00">One</text>
+</g>
+<!-- AddMonoidWithOne&#45;&gt;One -->
+<g id="edge71" class="edge">
+<title>AddMonoidWithOne&#45;&gt;One</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4438.26,-287.55C4456.13,-278.67 4476.46,-266.63 4492,-252 4512.4,-232.81 4528.74,-204.86 4538.6,-185.42"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4540.01,-186.52 4540.67,-181.26 4536.88,-184.96 4540.01,-186.52"/>
+</g>
+<!-- AddMonoid -->
+<g id="node24" class="node" data-class-name="AddMonoid" tabindex="0" role="img" aria-label="AddMonoid">
+<title>AddMonoid</title>
+<path fill="#fff2cc" stroke="black" d="M4396.82,-252C4396.82,-252 4349.18,-252 4349.18,-252 4343.18,-252 4337.18,-246 4337.18,-240 4337.18,-240 4337.18,-228 4337.18,-228 4337.18,-222 4343.18,-216 4349.18,-216 4349.18,-216 4396.82,-216 4396.82,-216 4402.82,-216 4408.82,-222 4408.82,-228 4408.82,-228 4408.82,-240 4408.82,-240 4408.82,-246 4402.82,-252 4396.82,-252"/>
+<text xml:space="preserve" text-anchor="middle" x="4373" y="-230.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddMonoid</text>
+</g>
+<!-- AddMonoidWithOne&#45;&gt;AddMonoid -->
+<g id="edge72" class="edge">
+<title>AddMonoidWithOne&#45;&gt;AddMonoid</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4391.07,-287.7C4387.99,-278.71 4384.18,-267.61 4380.86,-257.92"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4382.53,-257.41 4379.26,-253.25 4379.22,-258.55 4382.53,-257.41"/>
+</g>
+<!-- AddSemigroup -->
+<g id="node33" class="node" data-class-name="AddSemigroup" tabindex="0" role="img" aria-label="AddSemigroup">
+<title>AddSemigroup</title>
+<path fill="#fff2cc" stroke="black" d="M4316.38,-180C4316.38,-180 4251.62,-180 4251.62,-180 4245.62,-180 4239.62,-174 4239.62,-168 4239.62,-168 4239.62,-156 4239.62,-156 4239.62,-150 4245.62,-144 4251.62,-144 4251.62,-144 4316.38,-144 4316.38,-144 4322.38,-144 4328.38,-150 4328.38,-156 4328.38,-156 4328.38,-168 4328.38,-168 4328.38,-174 4322.38,-180 4316.38,-180"/>
+<text xml:space="preserve" text-anchor="middle" x="4284" y="-158.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddSemigroup</text>
+</g>
+<!-- AddMonoid&#45;&gt;AddSemigroup -->
+<g id="edge135" class="edge">
+<title>AddMonoid&#45;&gt;AddSemigroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4351,-215.7C4338.81,-206.11 4323.55,-194.11 4310.68,-183.98"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4312.02,-182.81 4307.01,-181.1 4309.86,-185.56 4312.02,-182.81"/>
+</g>
+<!-- NSMul -->
+<g id="node53" class="node" data-class-name="NSMul" tabindex="0" role="img" aria-label="NSMul">
+<title>NSMul</title>
+<path fill="#ffffff" stroke="black" d="M4388,-180C4388,-180 4358,-180 4358,-180 4352,-180 4346,-174 4346,-168 4346,-168 4346,-156 4346,-156 4346,-150 4352,-144 4358,-144 4358,-144 4388,-144 4388,-144 4394,-144 4400,-150 4400,-156 4400,-156 4400,-168 4400,-168 4400,-174 4394,-180 4388,-180"/>
+<text xml:space="preserve" text-anchor="middle" x="4373" y="-158.7" font-family="Helvetica,sans-Serif" font-size="11.00">NSMul</text>
+</g>
+<!-- AddMonoid&#45;&gt;NSMul -->
+<g id="edge134" class="edge">
+<title>AddMonoid&#45;&gt;NSMul</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4373,-215.7C4373,-206.8 4373,-195.82 4373,-186.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4374.75,-186.32 4373,-181.32 4371.25,-186.32 4374.75,-186.32"/>
+</g>
+<!-- AddZeroClass -->
+<g id="node54" class="node" data-class-name="AddZeroClass" tabindex="0" role="img" aria-label="AddZeroClass">
+<title>AddZeroClass</title>
+<path fill="#fff2cc" stroke="black" d="M4491.85,-180C4491.85,-180 4430.15,-180 4430.15,-180 4424.15,-180 4418.15,-174 4418.15,-168 4418.15,-168 4418.15,-156 4418.15,-156 4418.15,-150 4424.15,-144 4430.15,-144 4430.15,-144 4491.85,-144 4491.85,-144 4497.85,-144 4503.85,-150 4503.85,-156 4503.85,-156 4503.85,-168 4503.85,-168 4503.85,-174 4497.85,-180 4491.85,-180"/>
+<text xml:space="preserve" text-anchor="middle" x="4461" y="-158.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddZeroClass</text>
+</g>
+<!-- AddMonoid&#45;&gt;AddZeroClass -->
+<g id="edge136" class="edge">
+<title>AddMonoid&#45;&gt;AddZeroClass</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4394.75,-215.7C4406.81,-206.11 4421.89,-194.11 4434.62,-183.98"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4435.42,-185.58 4438.24,-181.1 4433.24,-182.84 4435.42,-185.58"/>
+</g>
+<!-- Sub -->
+<g id="node26" class="node" data-class-name="Sub" tabindex="0" role="img" aria-label="Sub">
+<title>Sub</title>
+<path fill="#ffffff" stroke="black" d="M4096,-252C4096,-252 4066,-252 4066,-252 4060,-252 4054,-246 4054,-240 4054,-240 4054,-228 4054,-228 4054,-222 4060,-216 4066,-216 4066,-216 4096,-216 4096,-216 4102,-216 4108,-222 4108,-228 4108,-228 4108,-240 4108,-240 4108,-246 4102,-252 4096,-252"/>
+<text xml:space="preserve" text-anchor="middle" x="4081" y="-230.7" font-family="Helvetica,sans-Serif" font-size="11.00">Sub</text>
+</g>
+<!-- NonAssocSemiring -->
+<g id="node27" class="node" data-class-name="NonAssocSemiring" tabindex="0" role="img" aria-label="NonAssocSemiring">
+<title>NonAssocSemiring</title>
+<path fill="#fff2cc" stroke="black" d="M4554.77,-468C4554.77,-468 4469.23,-468 4469.23,-468 4463.23,-468 4457.23,-462 4457.23,-456 4457.23,-456 4457.23,-444 4457.23,-444 4457.23,-438 4463.23,-432 4469.23,-432 4469.23,-432 4554.77,-432 4554.77,-432 4560.77,-432 4566.77,-438 4566.77,-444 4566.77,-444 4566.77,-456 4566.77,-456 4566.77,-462 4560.77,-468 4554.77,-468"/>
+<text xml:space="preserve" text-anchor="middle" x="4512" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">NonAssocSemiring</text>
+</g>
+<!-- NonAssocSemiring&#45;&gt;MulZeroOneClass -->
+<g id="edge75" class="edge">
+<title>NonAssocSemiring&#45;&gt;MulZeroOneClass</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4546.47,-431.52C4565.96,-421.63 4590.41,-409.23 4610.65,-398.96"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4611.22,-400.63 4614.89,-396.81 4609.64,-397.51 4611.22,-400.63"/>
+</g>
+<!-- NonAssocSemiring&#45;&gt;NonUnitalNonAssocSemiring -->
+<g id="edge73" class="edge">
+<title>NonAssocSemiring&#45;&gt;NonUnitalNonAssocSemiring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4509.28,-431.7C4507.88,-422.8 4506.16,-411.82 4504.65,-402.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4506.38,-401.97 4503.88,-397.3 4502.92,-402.51 4506.38,-401.97"/>
+</g>
+<!-- AddCommMonoidWithOne -->
+<g id="node28" class="node" data-class-name="AddCommMonoidWithOne" tabindex="0" role="img" aria-label="AddCommMonoidWithOne">
+<title>AddCommMonoidWithOne</title>
+<path fill="#fff2cc" stroke="black" d="M4392.41,-396C4392.41,-396 4269.59,-396 4269.59,-396 4263.59,-396 4257.59,-390 4257.59,-384 4257.59,-384 4257.59,-372 4257.59,-372 4257.59,-366 4263.59,-360 4269.59,-360 4269.59,-360 4392.41,-360 4392.41,-360 4398.41,-360 4404.41,-366 4404.41,-372 4404.41,-372 4404.41,-384 4404.41,-384 4404.41,-390 4398.41,-396 4392.41,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="4331" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddCommMonoidWithOne</text>
+</g>
+<!-- NonAssocSemiring&#45;&gt;AddCommMonoidWithOne -->
+<g id="edge74" class="edge">
+<title>NonAssocSemiring&#45;&gt;AddCommMonoidWithOne</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4466.79,-431.52C4440.89,-421.5 4408.31,-408.9 4381.56,-398.55"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4382.37,-396.99 4377.07,-396.82 4381.11,-400.25 4382.37,-396.99"/>
+</g>
+<!-- AddCommMonoidWithOne&#45;&gt;AddMonoidWithOne -->
+<g id="edge137" class="edge">
+<title>AddCommMonoidWithOne&#45;&gt;AddMonoidWithOne</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4347.31,-359.7C4356.19,-350.29 4367.24,-338.56 4376.67,-328.56"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4377.89,-329.82 4380.04,-324.99 4375.34,-327.42 4377.89,-329.82"/>
+</g>
+<!-- AddCommMonoidWithOne&#45;&gt;AddCommMonoid -->
+<g id="edge138" class="edge">
+<title>AddCommMonoidWithOne&#45;&gt;AddCommMonoid</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4315.92,-359.7C4307.72,-350.29 4297.5,-338.56 4288.79,-328.56"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4290.3,-327.64 4285.7,-325.02 4287.67,-329.94 4290.3,-327.64"/>
+</g>
+<!-- MulOne -->
+<g id="node30" class="node" data-class-name="MulOne" tabindex="0" role="img" aria-label="MulOne">
+<title>MulOne</title>
+<path fill="#fff2cc" stroke="black" d="M4716.26,-252C4716.26,-252 4685.74,-252 4685.74,-252 4679.74,-252 4673.74,-246 4673.74,-240 4673.74,-240 4673.74,-228 4673.74,-228 4673.74,-222 4679.74,-216 4685.74,-216 4685.74,-216 4716.26,-216 4716.26,-216 4722.26,-216 4728.26,-222 4728.26,-228 4728.26,-228 4728.26,-240 4728.26,-240 4728.26,-246 4722.26,-252 4716.26,-252"/>
+<text xml:space="preserve" text-anchor="middle" x="4701" y="-230.7" font-family="Helvetica,sans-Serif" font-size="11.00">MulOne</text>
+</g>
+<!-- MulOneClass&#45;&gt;MulOne -->
+<g id="edge76" class="edge">
+<title>MulOneClass&#45;&gt;MulOne</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4704.01,-287.7C4703.5,-278.8 4702.88,-267.82 4702.33,-258.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4704.08,-258.21 4702.05,-253.31 4700.58,-258.4 4704.08,-258.21"/>
+</g>
+<!-- MulOne&#45;&gt;One -->
+<g id="edge109" class="edge">
+<title>MulOne&#45;&gt;One</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4673.47,-220.32C4647.65,-208.43 4609.01,-190.63 4581.64,-178.03"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4582.69,-176.59 4577.42,-176.09 4581.23,-179.77 4582.69,-176.59"/>
+</g>
+<!-- Mul -->
+<g id="node46" class="node" data-class-name="Mul" tabindex="0" role="img" aria-label="Mul">
+<title>Mul</title>
+<path fill="#ffffff" stroke="black" d="M4743,-180C4743,-180 4713,-180 4713,-180 4707,-180 4701,-174 4701,-168 4701,-168 4701,-156 4701,-156 4701,-150 4707,-144 4713,-144 4713,-144 4743,-144 4743,-144 4749,-144 4755,-150 4755,-156 4755,-156 4755,-168 4755,-168 4755,-174 4749,-180 4743,-180"/>
+<text xml:space="preserve" text-anchor="middle" x="4728" y="-158.7" font-family="Helvetica,sans-Serif" font-size="11.00">Mul</text>
+</g>
+<!-- MulOne&#45;&gt;Mul -->
+<g id="edge110" class="edge">
+<title>MulOne&#45;&gt;Mul</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4707.67,-215.7C4711.17,-206.63 4715.5,-195.4 4719.26,-185.65"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4720.8,-186.53 4720.97,-181.23 4717.53,-185.27 4720.8,-186.53"/>
+</g>
+<!-- AddCommSemigroup -->
+<g id="node31" class="node" data-class-name="AddCommSemigroup" tabindex="0" role="img" aria-label="AddCommSemigroup">
+<title>AddCommSemigroup</title>
+<path fill="#fff2cc" stroke="black" d="M4307.58,-252C4307.58,-252 4210.42,-252 4210.42,-252 4204.42,-252 4198.42,-246 4198.42,-240 4198.42,-240 4198.42,-228 4198.42,-228 4198.42,-222 4204.42,-216 4210.42,-216 4210.42,-216 4307.58,-216 4307.58,-216 4313.58,-216 4319.58,-222 4319.58,-228 4319.58,-228 4319.58,-240 4319.58,-240 4319.58,-246 4313.58,-252 4307.58,-252"/>
+<text xml:space="preserve" text-anchor="middle" x="4259" y="-230.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddCommSemigroup</text>
+</g>
+<!-- AddCommMagma -->
+<g id="node32" class="node" data-class-name="AddCommMagma" tabindex="0" role="img" aria-label="AddCommMagma">
+<title>AddCommMagma</title>
+<path fill="#fff2cc" stroke="black" d="M4209.32,-180C4209.32,-180 4128.68,-180 4128.68,-180 4122.68,-180 4116.68,-174 4116.68,-168 4116.68,-168 4116.68,-156 4116.68,-156 4116.68,-150 4122.68,-144 4128.68,-144 4128.68,-144 4209.32,-144 4209.32,-144 4215.32,-144 4221.32,-150 4221.32,-156 4221.32,-156 4221.32,-168 4221.32,-168 4221.32,-174 4215.32,-180 4209.32,-180"/>
+<text xml:space="preserve" text-anchor="middle" x="4169" y="-158.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddCommMagma</text>
+</g>
+<!-- AddCommSemigroup&#45;&gt;AddCommMagma -->
+<g id="edge77" class="edge">
+<title>AddCommSemigroup&#45;&gt;AddCommMagma</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4236.75,-215.7C4224.42,-206.11 4209,-194.11 4195.98,-183.98"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4197.28,-182.78 4192.26,-181.09 4195.13,-185.54 4197.28,-182.78"/>
+</g>
+<!-- AddCommSemigroup&#45;&gt;AddSemigroup -->
+<g id="edge78" class="edge">
+<title>AddCommSemigroup&#45;&gt;AddSemigroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4265.18,-215.7C4268.39,-206.71 4272.35,-195.61 4275.81,-185.92"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4277.45,-186.54 4277.48,-181.24 4274.15,-185.36 4277.45,-186.54"/>
+</g>
+<!-- Add -->
+<g id="node36" class="node" data-class-name="Add" tabindex="0" role="img" aria-label="Add">
+<title>Add</title>
+<path fill="#ffffff" stroke="black" d="M4426,-36C4426,-36 4396,-36 4396,-36 4390,-36 4384,-30 4384,-24 4384,-24 4384,-12 4384,-12 4384,-6 4390,0 4396,0 4396,0 4426,0 4426,0 4432,0 4438,-6 4438,-12 4438,-12 4438,-24 4438,-24 4438,-30 4432,-36 4426,-36"/>
+<text xml:space="preserve" text-anchor="middle" x="4411" y="-14.7" font-family="Helvetica,sans-Serif" font-size="11.00">Add</text>
+</g>
+<!-- AddSemigroup&#45;&gt;Add -->
+<g id="edge101" class="edge">
+<title>AddSemigroup&#45;&gt;Add</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4299.57,-143.59C4322.84,-117.58 4366.61,-68.63 4391.82,-40.45"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4392.86,-41.91 4394.89,-37.01 4390.25,-39.57 4392.86,-41.91"/>
+</g>
+<!-- AddZero -->
+<g id="node34" class="node" data-class-name="AddZero" tabindex="0" role="img" aria-label="AddZero">
+<title>AddZero</title>
+<path fill="#fff2cc" stroke="black" d="M4478.09,-108C4478.09,-108 4443.91,-108 4443.91,-108 4437.91,-108 4431.91,-102 4431.91,-96 4431.91,-96 4431.91,-84 4431.91,-84 4431.91,-78 4437.91,-72 4443.91,-72 4443.91,-72 4478.09,-72 4478.09,-72 4484.09,-72 4490.09,-78 4490.09,-84 4490.09,-84 4490.09,-96 4490.09,-96 4490.09,-102 4484.09,-108 4478.09,-108"/>
+<text xml:space="preserve" text-anchor="middle" x="4461" y="-86.7" font-family="Helvetica,sans-Serif" font-size="11.00">AddZero</text>
+</g>
+<!-- Zero -->
+<g id="node35" class="node" data-class-name="Zero" tabindex="0" role="img" aria-label="Zero">
+<title>Zero</title>
+<path fill="#ffffff" stroke="black" d="M4558,-36C4558,-36 4528,-36 4528,-36 4522,-36 4516,-30 4516,-24 4516,-24 4516,-12 4516,-12 4516,-6 4522,0 4528,0 4528,0 4558,0 4558,0 4564,0 4570,-6 4570,-12 4570,-12 4570,-24 4570,-24 4570,-30 4564,-36 4558,-36"/>
+<text xml:space="preserve" text-anchor="middle" x="4543" y="-14.7" font-family="Helvetica,sans-Serif" font-size="11.00">Zero</text>
+</g>
+<!-- AddZero&#45;&gt;Zero -->
+<g id="edge79" class="edge">
+<title>AddZero&#45;&gt;Zero</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4481.27,-71.7C4492.41,-62.19 4506.31,-50.32 4518.11,-40.25"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4519.09,-41.71 4521.76,-37.13 4516.82,-39.05 4519.09,-41.71"/>
+</g>
+<!-- AddZero&#45;&gt;Add -->
+<g id="edge80" class="edge">
+<title>AddZero&#45;&gt;Add</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4448.64,-71.7C4442.04,-62.46 4433.85,-50.98 4426.79,-41.11"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4428.25,-40.14 4423.92,-37.09 4425.4,-42.18 4428.25,-40.14"/>
+</g>
+<!-- IntCast -->
+<g id="node37" class="node" data-class-name="IntCast" tabindex="0" role="img" aria-label="IntCast">
+<title>IntCast</title>
+<path fill="#ffffff" stroke="black" d="M4190,-396C4190,-396 4160,-396 4160,-396 4154,-396 4148,-390 4148,-384 4148,-384 4148,-372 4148,-372 4148,-366 4154,-360 4160,-360 4160,-360 4190,-360 4190,-360 4196,-360 4202,-366 4202,-372 4202,-372 4202,-384 4202,-384 4202,-390 4196,-396 4190,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="4175" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">IntCast</text>
+</g>
+<!-- Inv -->
+<g id="node38" class="node" data-class-name="Inv" tabindex="0" role="img" aria-label="Inv">
+<title>Inv</title>
+<path fill="#ffffff" stroke="black" d="M5125,-540C5125,-540 5095,-540 5095,-540 5089,-540 5083,-534 5083,-528 5083,-528 5083,-516 5083,-516 5083,-510 5089,-504 5095,-504 5095,-504 5125,-504 5125,-504 5131,-504 5137,-510 5137,-516 5137,-516 5137,-528 5137,-528 5137,-534 5131,-540 5125,-540"/>
+<text xml:space="preserve" text-anchor="middle" x="5110" y="-518.7" font-family="Helvetica,sans-Serif" font-size="11.00">Inv</text>
+</g>
+<!-- CommMonoid&#45;&gt;Monoid -->
+<g id="edge81" class="edge">
+<title>CommMonoid&#45;&gt;Monoid</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4870.72,-431.7C4872.12,-422.8 4873.84,-411.82 4875.35,-402.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4877.08,-402.51 4876.12,-397.3 4873.62,-401.97 4877.08,-402.51"/>
+</g>
+<!-- CommSemigroup -->
+<g id="node40" class="node" data-class-name="CommSemigroup" tabindex="0" role="img" aria-label="CommSemigroup">
+<title>CommSemigroup</title>
+<path fill="#fff2cc" stroke="black" d="M5013.79,-396C5013.79,-396 4936.21,-396 4936.21,-396 4930.21,-396 4924.21,-390 4924.21,-384 4924.21,-384 4924.21,-372 4924.21,-372 4924.21,-366 4930.21,-360 4936.21,-360 4936.21,-360 5013.79,-360 5013.79,-360 5019.79,-360 5025.79,-366 5025.79,-372 5025.79,-372 5025.79,-384 5025.79,-384 5025.79,-390 5019.79,-396 5013.79,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="4975" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">CommSemigroup</text>
+</g>
+<!-- CommMonoid&#45;&gt;CommSemigroup -->
+<g id="edge82" class="edge">
+<title>CommMonoid&#45;&gt;CommSemigroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4894.72,-431.52C4909.52,-421.84 4927.99,-409.75 4943.49,-399.62"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4944.38,-401.13 4947.6,-396.92 4942.46,-398.2 4944.38,-401.13"/>
+</g>
+<!-- CommSemigroup&#45;&gt;Semigroup -->
+<g id="edge104" class="edge">
+<title>CommSemigroup&#45;&gt;Semigroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4933.39,-359.58C4927.23,-357.03 4920.95,-354.44 4915,-352 4891.32,-342.31 4864.75,-331.63 4843.44,-323.1"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4844.27,-321.55 4838.98,-321.32 4842.97,-324.8 4844.27,-321.55"/>
+</g>
+<!-- CommMagma -->
+<g id="node57" class="node" data-class-name="CommMagma" tabindex="0" role="img" aria-label="CommMagma">
+<title>CommMagma</title>
+<path fill="#fff2cc" stroke="black" d="M5005.53,-324C5005.53,-324 4944.47,-324 4944.47,-324 4938.47,-324 4932.47,-318 4932.47,-312 4932.47,-312 4932.47,-300 4932.47,-300 4932.47,-294 4938.47,-288 4944.47,-288 4944.47,-288 5005.53,-288 5005.53,-288 5011.53,-288 5017.53,-294 5017.53,-300 5017.53,-300 5017.53,-312 5017.53,-312 5017.53,-318 5011.53,-324 5005.53,-324"/>
+<text xml:space="preserve" text-anchor="middle" x="4975" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">CommMagma</text>
+</g>
+<!-- CommSemigroup&#45;&gt;CommMagma -->
+<g id="edge105" class="edge">
+<title>CommSemigroup&#45;&gt;CommMagma</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4975,-359.7C4975,-350.8 4975,-339.82 4975,-330.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4976.75,-330.32 4975,-325.32 4973.25,-330.32 4976.75,-330.32"/>
+</g>
+<!-- Neg -->
+<g id="node41" class="node" data-class-name="Neg" tabindex="0" role="img" aria-label="Neg">
+<title>Neg</title>
+<path fill="#ffffff" stroke="black" d="M4168,-252C4168,-252 4138,-252 4138,-252 4132,-252 4126,-246 4126,-240 4126,-240 4126,-228 4126,-228 4126,-222 4132,-216 4138,-216 4138,-216 4168,-216 4168,-216 4174,-216 4180,-222 4180,-228 4180,-228 4180,-240 4180,-240 4180,-246 4174,-252 4168,-252"/>
+<text xml:space="preserve" text-anchor="middle" x="4153" y="-230.7" font-family="Helvetica,sans-Serif" font-size="11.00">Neg</text>
+</g>
+<!-- Semigroup&#45;&gt;Mul -->
+<g id="edge90" class="edge">
+<title>Semigroup&#45;&gt;Mul</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4793.8,-287.59C4780.24,-261.9 4754.85,-213.83 4739.88,-185.5"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4741.49,-184.79 4737.6,-181.18 4738.39,-186.42 4741.49,-184.79"/>
+</g>
+<!-- Dvd -->
+<g id="node47" class="node" data-class-name="Dvd" tabindex="0" role="img" aria-label="Dvd">
+<title>Dvd</title>
+<path fill="#ffffff" stroke="black" d="M4826,-252C4826,-252 4796,-252 4796,-252 4790,-252 4784,-246 4784,-240 4784,-240 4784,-228 4784,-228 4784,-222 4790,-216 4796,-216 4796,-216 4826,-216 4826,-216 4832,-216 4838,-222 4838,-228 4838,-228 4838,-240 4838,-240 4838,-246 4832,-252 4826,-252"/>
+<text xml:space="preserve" text-anchor="middle" x="4811" y="-230.7" font-family="Helvetica,sans-Serif" font-size="11.00">Dvd</text>
+</g>
+<!-- Semigroup&#45;&gt;Dvd -->
+<g id="edge91" class="edge">
+<title>Semigroup&#45;&gt;Dvd</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4804.98,-287.7C4805.99,-278.8 4807.25,-267.82 4808.35,-258.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4810.08,-258.47 4808.91,-253.31 4806.6,-258.08 4810.08,-258.47"/>
+</g>
+<!-- DivInvMonoid -->
+<g id="node44" class="node" data-class-name="DivInvMonoid" tabindex="0" role="img" aria-label="DivInvMonoid">
+<title>DivInvMonoid</title>
+<path fill="#fff2cc" stroke="black" d="M4929.32,-704C4929.32,-704 4870.68,-704 4870.68,-704 4864.68,-704 4858.68,-698 4858.68,-692 4858.68,-692 4858.68,-680 4858.68,-680 4858.68,-674 4864.68,-668 4870.68,-668 4870.68,-668 4929.32,-668 4929.32,-668 4935.32,-668 4941.32,-674 4941.32,-680 4941.32,-680 4941.32,-692 4941.32,-692 4941.32,-698 4935.32,-704 4929.32,-704"/>
+<text xml:space="preserve" text-anchor="middle" x="4900" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">DivInvMonoid</text>
+</g>
+<!-- DivInvMonoid&#45;&gt;Monoid -->
+<g id="edge88" class="edge">
+<title>DivInvMonoid&#45;&gt;Monoid</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4903.04,-667.68C4911.49,-618.01 4933.69,-475.85 4919,-432 4915.23,-420.75 4908.03,-409.98 4900.76,-401.12"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4902.1,-399.99 4897.52,-397.32 4899.43,-402.26 4902.1,-399.99"/>
+</g>
+<!-- DivInvMonoid&#45;&gt;ZPow -->
+<g id="edge86" class="edge">
+<title>DivInvMonoid&#45;&gt;ZPow</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4931.12,-667.59C4937.24,-664.7 4943.71,-662 4950,-660 4972.28,-652.91 4984.51,-667.52 5002,-652 5032.2,-625.21 5038,-575.41 5038.6,-546.14"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5040.34,-546.45 5038.64,-541.43 5036.84,-546.42 5040.34,-546.45"/>
+</g>
+<!-- DivInvMonoid&#45;&gt;Inv -->
+<g id="edge87" class="edge">
+<title>DivInvMonoid&#45;&gt;Inv</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4930.17,-667.52C4936.54,-664.52 4943.35,-661.8 4950,-660 4963.33,-656.4 5063.28,-660.7 5074,-652 5105.52,-626.43 5110.79,-575.74 5110.96,-546.08"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5112.71,-546.29 5110.93,-541.3 5109.21,-546.31 5112.71,-546.29"/>
+</g>
+<!-- Div -->
+<g id="node45" class="node" data-class-name="Div" tabindex="0" role="img" aria-label="Div">
+<title>Div</title>
+<path fill="#ffffff" stroke="black" d="M4981,-540C4981,-540 4951,-540 4951,-540 4945,-540 4939,-534 4939,-528 4939,-528 4939,-516 4939,-516 4939,-510 4945,-504 4951,-504 4951,-504 4981,-504 4981,-504 4987,-504 4993,-510 4993,-516 4993,-516 4993,-528 4993,-528 4993,-534 4987,-540 4981,-540"/>
+<text xml:space="preserve" text-anchor="middle" x="4966" y="-518.7" font-family="Helvetica,sans-Serif" font-size="11.00">Div</text>
+</g>
+<!-- DivInvMonoid&#45;&gt;Div -->
+<g id="edge89" class="edge">
+<title>DivInvMonoid&#45;&gt;Div</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4914.93,-667.59C4918.58,-662.76 4922.22,-657.36 4925,-652 4943.01,-617.23 4954.95,-573.07 4961.09,-546.47"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4962.79,-546.87 4962.18,-541.61 4959.38,-546.1 4962.79,-546.87"/>
+</g>
+<!-- MulZeroClass&#45;&gt;Zero -->
+<g id="edge92" class="edge">
+<title>MulZeroClass&#45;&gt;Zero</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4603.14,-287.88C4601.4,-258.26 4596.59,-195.63 4585,-144 4576.83,-107.6 4562.05,-66.9 4552.38,-42.12"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4554.06,-41.61 4550.6,-37.6 4550.8,-42.89 4554.06,-41.61"/>
+</g>
+<!-- AddCommMonoid&#45;&gt;AddMonoid -->
+<g id="edge112" class="edge">
+<title>AddCommMonoid&#45;&gt;AddMonoid</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4295.73,-287.52C4309.97,-277.84 4327.75,-265.75 4342.66,-255.62"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4343.45,-257.2 4346.6,-252.94 4341.48,-254.3 4343.45,-257.2"/>
+</g>
+<!-- AddCommMonoid&#45;&gt;AddCommSemigroup -->
+<g id="edge111" class="edge">
+<title>AddCommMonoid&#45;&gt;AddCommSemigroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4267.28,-287.7C4265.88,-278.8 4264.16,-267.82 4262.65,-258.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4264.38,-257.97 4261.88,-253.3 4260.92,-258.51 4264.38,-257.97"/>
+</g>
+<!-- SubNegMonoid -->
+<g id="node56" class="node" data-class-name="SubNegMonoid" tabindex="0" role="img" aria-label="SubNegMonoid">
+<title>SubNegMonoid</title>
+<path fill="#fff2cc" stroke="black" d="M4130.91,-324C4130.91,-324 4063.09,-324 4063.09,-324 4057.09,-324 4051.09,-318 4051.09,-312 4051.09,-312 4051.09,-300 4051.09,-300 4051.09,-294 4057.09,-288 4063.09,-288 4063.09,-288 4130.91,-288 4130.91,-288 4136.91,-288 4142.91,-294 4142.91,-300 4142.91,-300 4142.91,-312 4142.91,-312 4142.91,-318 4136.91,-324 4130.91,-324"/>
+<text xml:space="preserve" text-anchor="middle" x="4097" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">SubNegMonoid</text>
+</g>
+<!-- AddGroup&#45;&gt;SubNegMonoid -->
+<g id="edge103" class="edge">
+<title>AddGroup&#45;&gt;SubNegMonoid</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4097,-359.7C4097,-350.8 4097,-339.82 4097,-330.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4098.75,-330.32 4097,-325.32 4095.25,-330.32 4098.75,-330.32"/>
+</g>
+<!-- Semiring&#45;&gt;MonoidWithZero -->
+<g id="edge106" class="edge">
+<title>Semiring&#45;&gt;MonoidWithZero</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4740.93,-503.7C4744.01,-494.71 4747.82,-483.61 4751.14,-473.92"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4752.78,-474.55 4752.74,-469.25 4749.47,-473.41 4752.78,-474.55"/>
+</g>
+<!-- Semiring&#45;&gt;NonAssocSemiring -->
+<g id="edge107" class="edge">
+<title>Semiring&#45;&gt;NonAssocSemiring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4707.17,-503.66C4701.93,-500.84 4696.39,-498.14 4691,-496 4642.1,-476.6 4626.98,-480.98 4576,-468 4575,-467.75 4574,-467.49 4572.99,-467.23"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4573.59,-465.58 4568.31,-466.03 4572.72,-468.97 4573.59,-465.58"/>
+</g>
+<!-- Semiring&#45;&gt;NonUnitalSemiring -->
+<g id="edge108" class="edge">
+<title>Semiring&#45;&gt;NonUnitalSemiring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4711.27,-503.7C4698.12,-494.11 4681.66,-482.11 4667.78,-471.98"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4668.84,-470.59 4663.77,-469.06 4666.78,-473.42 4668.84,-470.59"/>
+</g>
+<!-- AddGroupWithOne&#45;&gt;AddMonoidWithOne -->
+<g id="edge123" class="edge">
+<title>AddGroupWithOne&#45;&gt;AddMonoidWithOne</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4224.42,-431.51C4224.69,-409.99 4228.46,-373.65 4249,-352 4252.19,-348.63 4295.07,-335.79 4333.86,-324.68"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4334.05,-326.44 4338.38,-323.38 4333.09,-323.08 4334.05,-326.44"/>
+</g>
+<!-- AddGroupWithOne&#45;&gt;IntCast -->
+<g id="edge124" class="edge">
+<title>AddGroupWithOne&#45;&gt;IntCast</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4212.64,-431.7C4206.04,-422.46 4197.85,-410.98 4190.79,-401.11"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4192.25,-400.14 4187.92,-397.09 4189.4,-402.18 4192.25,-400.14"/>
+</g>
+<!-- AddGroupWithOne&#45;&gt;AddGroup -->
+<g id="edge125" class="edge">
+<title>AddGroupWithOne&#45;&gt;AddGroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4193.03,-431.52C4175.03,-421.67 4152.47,-409.33 4133.74,-399.09"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4134.85,-397.71 4129.62,-396.84 4133.17,-400.78 4134.85,-397.71"/>
+</g>
+<!-- AddZeroClass&#45;&gt;AddZero -->
+<g id="edge102" class="edge">
+<title>AddZeroClass&#45;&gt;AddZero</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4461,-143.7C4461,-134.8 4461,-123.82 4461,-114.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4462.75,-114.32 4461,-109.32 4459.25,-114.32 4462.75,-114.32"/>
+</g>
+<!-- NNRatCast -->
+<g id="node55" class="node" data-class-name="NNRatCast" tabindex="0" role="img" aria-label="NNRatCast">
+<title>NNRatCast</title>
+<path fill="#ffffff" stroke="black" d="M4824.81,-860C4824.81,-860 4777.19,-860 4777.19,-860 4771.19,-860 4765.19,-854 4765.19,-848 4765.19,-848 4765.19,-836 4765.19,-836 4765.19,-830 4771.19,-824 4777.19,-824 4777.19,-824 4824.81,-824 4824.81,-824 4830.81,-824 4836.81,-830 4836.81,-836 4836.81,-836 4836.81,-848 4836.81,-848 4836.81,-854 4830.81,-860 4824.81,-860"/>
+<text xml:space="preserve" text-anchor="middle" x="4801" y="-838.7" font-family="Helvetica,sans-Serif" font-size="11.00">NNRatCast</text>
+</g>
+<!-- SubNegMonoid&#45;&gt;AddMonoid -->
+<g id="edge133" class="edge">
+<title>SubNegMonoid&#45;&gt;AddMonoid</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4143.29,-296.47C4190.49,-287.29 4265.59,-271.38 4329,-252 4329.75,-251.77 4330.5,-251.54 4331.26,-251.29"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4331.79,-252.96 4335.98,-249.73 4330.68,-249.64 4331.79,-252.96"/>
+</g>
+<!-- SubNegMonoid&#45;&gt;Sub -->
+<g id="edge130" class="edge">
+<title>SubNegMonoid&#45;&gt;Sub</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4093.04,-287.7C4090.99,-278.71 4088.45,-267.61 4086.24,-257.92"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4088,-257.77 4085.18,-253.28 4084.59,-258.55 4088,-257.77"/>
+</g>
+<!-- SubNegMonoid&#45;&gt;Neg -->
+<g id="edge131" class="edge">
+<title>SubNegMonoid&#45;&gt;Neg</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4110.84,-287.7C4118.3,-278.37 4127.58,-266.77 4135.53,-256.83"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4136.8,-258.05 4138.56,-253.05 4134.07,-255.86 4136.8,-258.05"/>
+</g>
+<!-- ZSMul -->
+<g id="node59" class="node" data-class-name="ZSMul" tabindex="0" role="img" aria-label="ZSMul">
+<title>ZSMul</title>
+<path fill="#ffffff" stroke="black" d="M4024,-252C4024,-252 3994,-252 3994,-252 3988,-252 3982,-246 3982,-240 3982,-240 3982,-228 3982,-228 3982,-222 3988,-216 3994,-216 3994,-216 4024,-216 4024,-216 4030,-216 4036,-222 4036,-228 4036,-228 4036,-240 4036,-240 4036,-246 4030,-252 4024,-252"/>
+<text xml:space="preserve" text-anchor="middle" x="4009" y="-230.7" font-family="Helvetica,sans-Serif" font-size="11.00">ZSMul</text>
+</g>
+<!-- SubNegMonoid&#45;&gt;ZSMul -->
+<g id="edge132" class="edge">
+<title>SubNegMonoid&#45;&gt;ZSMul</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4075.25,-287.7C4063.19,-278.11 4048.11,-266.11 4035.38,-255.98"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4036.76,-254.84 4031.76,-253.1 4034.58,-257.58 4036.76,-254.84"/>
+</g>
+<!-- NonUnitalSemiring&#45;&gt;SemigroupWithZero -->
+<g id="edge127" class="edge">
+<title>NonUnitalSemiring&#45;&gt;SemigroupWithZero</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4673.47,-431.52C4692.96,-421.63 4717.41,-409.23 4737.65,-398.96"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4738.22,-400.63 4741.89,-396.81 4736.64,-397.51 4738.22,-400.63"/>
+</g>
+<!-- NonUnitalSemiring&#45;&gt;NonUnitalNonAssocSemiring -->
+<g id="edge126" class="edge">
+<title>NonUnitalSemiring&#45;&gt;NonUnitalNonAssocSemiring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4604.53,-431.52C4585.04,-421.63 4560.59,-409.23 4540.35,-398.96"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4541.36,-397.51 4536.11,-396.81 4539.78,-400.63 4541.36,-397.51"/>
+</g>
+<!-- GroupWithZero -->
+<g id="node61" class="node" data-class-name="GroupWithZero" tabindex="0" role="img" aria-label="GroupWithZero">
+<title>GroupWithZero</title>
+<path fill="#fff2cc" stroke="black" d="M4933.59,-860C4933.59,-860 4866.41,-860 4866.41,-860 4860.41,-860 4854.41,-854 4854.41,-848 4854.41,-848 4854.41,-836 4854.41,-836 4854.41,-830 4860.41,-824 4866.41,-824 4866.41,-824 4933.59,-824 4933.59,-824 4939.59,-824 4945.59,-830 4945.59,-836 4945.59,-836 4945.59,-848 4945.59,-848 4945.59,-854 4939.59,-860 4933.59,-860"/>
+<text xml:space="preserve" text-anchor="middle" x="4900" y="-838.7" font-family="Helvetica,sans-Serif" font-size="11.00">GroupWithZero</text>
+</g>
+<!-- GroupWithZero&#45;&gt;Nontrivial -->
+<g id="edge121" class="edge">
+<title>GroupWithZero&#45;&gt;Nontrivial</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4941.83,-823.61C4944.83,-821.34 4947.61,-818.81 4950,-816 4975.96,-785.42 4985.09,-738.11 4988.29,-710.08"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4990.01,-710.43 4988.79,-705.27 4986.53,-710.06 4990.01,-710.43"/>
+</g>
+<!-- GroupWithZero&#45;&gt;MonoidWithZero -->
+<g id="edge120" class="edge">
+<title>GroupWithZero&#45;&gt;MonoidWithZero</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4857.96,-823.78C4855,-821.47 4852.29,-818.89 4850,-816 4759.21,-701.44 4814.04,-636.59 4774,-496 4771.96,-488.82 4769.48,-481.09 4767.13,-474.09"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4768.86,-473.73 4765.59,-469.56 4765.54,-474.86 4768.86,-473.73"/>
+</g>
+<!-- GroupWithZero&#45;&gt;DivInvMonoid -->
+<g id="edge122" class="edge">
+<title>GroupWithZero&#45;&gt;DivInvMonoid</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4900,-823.63C4900,-795.76 4900,-741.01 4900,-709.95"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4901.75,-710.28 4900,-705.28 4898.25,-710.28 4901.75,-710.28"/>
+</g>
+<!-- DivisionSemiring&#45;&gt;Semiring -->
+<g id="edge144" class="edge">
+<title>DivisionSemiring&#45;&gt;Semiring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4781.44,-895.87C4771.98,-886.34 4761.5,-873.66 4756,-860 4711.59,-749.8 4724.34,-602.84 4731.57,-546.42"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4733.3,-546.69 4732.22,-541.51 4729.83,-546.23 4733.3,-546.69"/>
+</g>
+<!-- DivisionSemiring&#45;&gt;NNRatCast -->
+<g id="edge143" class="edge">
+<title>DivisionSemiring&#45;&gt;NNRatCast</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4801,-895.7C4801,-886.8 4801,-875.82 4801,-866.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4802.75,-866.32 4801,-861.32 4799.25,-866.32 4802.75,-866.32"/>
+</g>
+<!-- DivisionSemiring&#45;&gt;GroupWithZero -->
+<g id="edge145" class="edge">
+<title>DivisionSemiring&#45;&gt;GroupWithZero</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4825.73,-895.52C4839.41,-885.84 4856.51,-873.75 4870.84,-863.62"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4871.53,-865.28 4874.6,-860.96 4869.51,-862.42 4871.53,-865.28"/>
+</g>
+<!-- NormedRing -->
+<g id="node63" class="node" data-class-name="NormedRing" tabindex="0" role="img" aria-label="NormedRing">
+<title>NormedRing</title>
+<path fill="#cfe2f3" stroke="black" d="M4360.87,-1088C4360.87,-1088 4307.13,-1088 4307.13,-1088 4301.13,-1088 4295.13,-1082 4295.13,-1076 4295.13,-1076 4295.13,-1064 4295.13,-1064 4295.13,-1058 4301.13,-1052 4307.13,-1052 4307.13,-1052 4360.87,-1052 4360.87,-1052 4366.87,-1052 4372.87,-1058 4372.87,-1064 4372.87,-1064 4372.87,-1076 4372.87,-1076 4372.87,-1082 4366.87,-1088 4360.87,-1088"/>
+<text xml:space="preserve" text-anchor="middle" x="4334" y="-1066.7" font-family="Helvetica,sans-Serif" font-size="11.00">NormedRing</text>
+</g>
+<!-- SeminormedRing -->
+<g id="node64" class="node" data-class-name="SeminormedRing" tabindex="0" role="img" aria-label="SeminormedRing">
+<title>SeminormedRing</title>
+<path fill="#cfe2f3" stroke="black" d="M4372.49,-932C4372.49,-932 4295.51,-932 4295.51,-932 4289.51,-932 4283.51,-926 4283.51,-920 4283.51,-920 4283.51,-908 4283.51,-908 4283.51,-902 4289.51,-896 4295.51,-896 4295.51,-896 4372.49,-896 4372.49,-896 4378.49,-896 4384.49,-902 4384.49,-908 4384.49,-908 4384.49,-920 4384.49,-920 4384.49,-926 4378.49,-932 4372.49,-932"/>
+<text xml:space="preserve" text-anchor="middle" x="4334" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">SeminormedRing</text>
+</g>
+<!-- NormedRing&#45;&gt;SeminormedRing -->
+<g id="edge31" class="edge">
+<title>NormedRing&#45;&gt;SeminormedRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4334,-1051.63C4334,-1023.76 4334,-969.01 4334,-937.95"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4335.75,-938.28 4334,-933.28 4332.25,-938.28 4335.75,-938.28"/>
+</g>
+<!-- NonUnitalNormedRing -->
+<g id="node65" class="node" data-class-name="NonUnitalNormedRing" tabindex="0" role="img" aria-label="NonUnitalNormedRing">
+<title>NonUnitalNormedRing</title>
+<path fill="#cfe2f3" stroke="black" d="M3785.02,-932C3785.02,-932 3682.98,-932 3682.98,-932 3676.98,-932 3670.98,-926 3670.98,-920 3670.98,-920 3670.98,-908 3670.98,-908 3670.98,-902 3676.98,-896 3682.98,-896 3682.98,-896 3785.02,-896 3785.02,-896 3791.02,-896 3797.02,-902 3797.02,-908 3797.02,-908 3797.02,-920 3797.02,-920 3797.02,-926 3791.02,-932 3785.02,-932"/>
+<text xml:space="preserve" text-anchor="middle" x="3734" y="-910.7" font-family="Helvetica,sans-Serif" font-size="11.00">NonUnitalNormedRing</text>
+</g>
+<!-- NormedRing&#45;&gt;NonUnitalNormedRing -->
+<g id="edge32" class="edge">
+<title>NormedRing&#45;&gt;NonUnitalNormedRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4294.81,-1054.77C4291.84,-1053.8 4288.88,-1052.86 4286,-1052 4114.3,-1000.42 3908.48,-953.09 3803.31,-929.93"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="3803.9,-928.27 3798.64,-928.9 3803.15,-931.68 3803.9,-928.27"/>
+</g>
+<!-- SeminormedRing&#45;&gt;Ring -->
+<g id="edge34" class="edge">
+<title>SeminormedRing&#45;&gt;Ring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4384.8,-899.92C4432.98,-885.56 4505.34,-858.68 4556,-816 4591.38,-786.19 4617.68,-737.98 4631.06,-709.71"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4632.53,-710.7 4633.06,-705.43 4629.36,-709.22 4632.53,-710.7"/>
+</g>
+<!-- NonUnitalSeminormedRing -->
+<g id="node66" class="node" data-class-name="NonUnitalSeminormedRing" tabindex="0" role="img" aria-label="NonUnitalSeminormedRing">
+<title>NonUnitalSeminormedRing</title>
+<path fill="#cfe2f3" stroke="black" d="M3796.64,-860C3796.64,-860 3671.36,-860 3671.36,-860 3665.36,-860 3659.36,-854 3659.36,-848 3659.36,-848 3659.36,-836 3659.36,-836 3659.36,-830 3665.36,-824 3671.36,-824 3671.36,-824 3796.64,-824 3796.64,-824 3802.64,-824 3808.64,-830 3808.64,-836 3808.64,-836 3808.64,-848 3808.64,-848 3808.64,-854 3802.64,-860 3796.64,-860"/>
+<text xml:space="preserve" text-anchor="middle" x="3734" y="-838.7" font-family="Helvetica,sans-Serif" font-size="11.00">NonUnitalSeminormedRing</text>
+</g>
+<!-- SeminormedRing&#45;&gt;NonUnitalSeminormedRing -->
+<g id="edge33" class="edge">
+<title>SeminormedRing&#45;&gt;NonUnitalSeminormedRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4283.1,-907.06C4178.93,-894.91 3940.66,-867.11 3815,-852.45"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="3815.48,-850.74 3810.31,-851.9 3815.07,-854.22 3815.48,-850.74"/>
+</g>
+<!-- NonUnitalNormedRing&#45;&gt;NonUnitalSeminormedRing -->
+<g id="edge50" class="edge">
+<title>NonUnitalNormedRing&#45;&gt;NonUnitalSeminormedRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M3734,-895.7C3734,-886.8 3734,-875.82 3734,-866.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="3735.75,-866.32 3734,-861.32 3732.25,-866.32 3735.75,-866.32"/>
+</g>
+<!-- NormedAddCommGroup -->
+<g id="node72" class="node" data-class-name="NormedAddCommGroup" tabindex="0" role="img" aria-label="NormedAddCommGroup">
+<title>NormedAddCommGroup</title>
+<path fill="#cfe2f3" stroke="black" d="M3390.83,-860C3390.83,-860 3277.17,-860 3277.17,-860 3271.17,-860 3265.17,-854 3265.17,-848 3265.17,-848 3265.17,-836 3265.17,-836 3265.17,-830 3271.17,-824 3277.17,-824 3277.17,-824 3390.83,-824 3390.83,-824 3396.83,-824 3402.83,-830 3402.83,-836 3402.83,-836 3402.83,-848 3402.83,-848 3402.83,-854 3396.83,-860 3390.83,-860"/>
+<text xml:space="preserve" text-anchor="middle" x="3334" y="-838.7" font-family="Helvetica,sans-Serif" font-size="11.00">NormedAddCommGroup</text>
+</g>
+<!-- NonUnitalNormedRing&#45;&gt;NormedAddCommGroup -->
+<g id="edge49" class="edge">
+<title>NonUnitalNormedRing&#45;&gt;NormedAddCommGroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M3670.62,-901.91C3599.55,-889.47 3484.41,-869.32 3408.94,-856.11"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="3409.54,-854.44 3404.32,-855.31 3408.94,-857.89 3409.54,-854.44"/>
+</g>
+<!-- NonUnitalSeminormedRing&#45;&gt;NonUnitalRing -->
+<g id="edge48" class="edge">
+<title>NonUnitalSeminormedRing&#45;&gt;NonUnitalRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M3808.84,-840.27C3983.41,-838.3 4404.79,-831.92 4431,-816 4469.76,-792.45 4489.75,-740.18 4498.45,-709.9"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4500.07,-710.61 4499.71,-705.32 4496.69,-709.67 4500.07,-710.61"/>
+</g>
+<!-- SeminormedAddCommGroup -->
+<g id="node73" class="node" data-class-name="SeminormedAddCommGroup" tabindex="0" role="img" aria-label="SeminormedAddCommGroup">
+<title>SeminormedAddCommGroup</title>
+<path fill="#cfe2f3" stroke="black" d="M3402.45,-704C3402.45,-704 3265.55,-704 3265.55,-704 3259.55,-704 3253.55,-698 3253.55,-692 3253.55,-692 3253.55,-680 3253.55,-680 3253.55,-674 3259.55,-668 3265.55,-668 3265.55,-668 3402.45,-668 3402.45,-668 3408.45,-668 3414.45,-674 3414.45,-680 3414.45,-680 3414.45,-692 3414.45,-692 3414.45,-698 3408.45,-704 3402.45,-704"/>
+<text xml:space="preserve" text-anchor="middle" x="3334" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">SeminormedAddCommGroup</text>
+</g>
+<!-- NonUnitalSeminormedRing&#45;&gt;SeminormedAddCommGroup -->
+<g id="edge47" class="edge">
+<title>NonUnitalSeminormedRing&#45;&gt;SeminormedAddCommGroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M3688.89,-823.63C3613.77,-794.71 3463.53,-736.87 3384.79,-706.56"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="3385.67,-705.02 3380.38,-704.86 3384.42,-708.29 3385.67,-705.02"/>
+</g>
+<!-- IsTopologicalRing -->
+<g id="node105" class="node" data-class-name="IsTopologicalRing" tabindex="0" role="img" aria-label="IsTopologicalRing">
+<title>IsTopologicalRing</title>
+<path fill="#d0e0e3" stroke="black" d="M2846.72,-540C2846.72,-540 2767.28,-540 2767.28,-540 2761.28,-540 2755.28,-534 2755.28,-528 2755.28,-528 2755.28,-516 2755.28,-516 2755.28,-510 2761.28,-504 2767.28,-504 2767.28,-504 2846.72,-504 2846.72,-504 2852.72,-504 2858.72,-510 2858.72,-516 2858.72,-516 2858.72,-528 2858.72,-528 2858.72,-534 2852.72,-540 2846.72,-540"/>
+<text xml:space="preserve" text-anchor="middle" x="2807" y="-518.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsTopologicalRing</text>
+</g>
+<!-- NonUnitalSeminormedRing&#45;&gt;IsTopologicalRing -->
+<g id="edge46" class="edge">
+<title>NonUnitalSeminormedRing&#45;&gt;IsTopologicalRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M3658.86,-836.93C3593.6,-833.42 3496.56,-828.26 3412,-824 3374.89,-822.13 3281.19,-824.42 3245,-816 3066.63,-774.5 2998.17,-779.8 2867,-652 2836.61,-622.39 2819.99,-574.43 2812.34,-546.08"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="2814.11,-545.91 2811.15,-541.52 2810.72,-546.8 2814.11,-545.91"/>
+</g>
+<!-- NormedDivisionRing -->
+<g id="node67" class="node" data-class-name="NormedDivisionRing" tabindex="0" role="img" aria-label="NormedDivisionRing">
+<title>NormedDivisionRing</title>
+<path fill="#cfe2f3" stroke="black" d="M4279.13,-1160C4279.13,-1160 4186.87,-1160 4186.87,-1160 4180.87,-1160 4174.87,-1154 4174.87,-1148 4174.87,-1148 4174.87,-1136 4174.87,-1136 4174.87,-1130 4180.87,-1124 4186.87,-1124 4186.87,-1124 4279.13,-1124 4279.13,-1124 4285.13,-1124 4291.13,-1130 4291.13,-1136 4291.13,-1136 4291.13,-1148 4291.13,-1148 4291.13,-1154 4285.13,-1160 4279.13,-1160"/>
+<text xml:space="preserve" text-anchor="middle" x="4233" y="-1138.7" font-family="Helvetica,sans-Serif" font-size="11.00">NormedDivisionRing</text>
+</g>
+<!-- NormedDivisionRing&#45;&gt;DivisionRing -->
+<g id="edge38" class="edge">
+<title>NormedDivisionRing&#45;&gt;DivisionRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4291.37,-1125.71C4294.28,-1125.1 4297.17,-1124.52 4300,-1124 4448.28,-1096.64 4626.62,-1080.66 4708.25,-1074.26"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4707.9,-1076.05 4712.75,-1073.91 4707.63,-1072.56 4707.9,-1076.05"/>
+</g>
+<!-- NormedDivisionRing&#45;&gt;NormedRing -->
+<g id="edge35" class="edge">
+<title>NormedDivisionRing&#45;&gt;NormedRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4258.23,-1123.52C4272.19,-1113.84 4289.63,-1101.75 4304.25,-1091.62"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4304.99,-1093.24 4308.1,-1088.95 4302.99,-1090.36 4304.99,-1093.24"/>
+</g>
+<!-- NormOneClass -->
+<g id="node68" class="node" data-class-name="NormOneClass" tabindex="0" role="img" aria-label="NormOneClass">
+<title>NormOneClass</title>
+<path fill="#cfe2f3" stroke="black" d="M4158.59,-1088C4158.59,-1088 4091.41,-1088 4091.41,-1088 4085.41,-1088 4079.41,-1082 4079.41,-1076 4079.41,-1076 4079.41,-1064 4079.41,-1064 4079.41,-1058 4085.41,-1052 4091.41,-1052 4091.41,-1052 4158.59,-1052 4158.59,-1052 4164.59,-1052 4170.59,-1058 4170.59,-1064 4170.59,-1064 4170.59,-1076 4170.59,-1076 4170.59,-1082 4164.59,-1088 4158.59,-1088"/>
+<text xml:space="preserve" text-anchor="middle" x="4125" y="-1066.7" font-family="Helvetica,sans-Serif" font-size="11.00">NormOneClass</text>
+</g>
+<!-- NormedDivisionRing&#45;&gt;NormOneClass -->
+<g id="edge36" class="edge">
+<title>NormedDivisionRing&#45;&gt;NormOneClass</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4206.03,-1123.52C4191.09,-1113.84 4172.45,-1101.75 4156.81,-1091.62"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4157.79,-1090.17 4152.65,-1088.92 4155.89,-1093.11 4157.79,-1090.17"/>
+</g>
+<!-- NormMulClass -->
+<g id="node69" class="node" data-class-name="NormMulClass" tabindex="0" role="img" aria-label="NormMulClass">
+<title>NormMulClass</title>
+<path fill="#cfe2f3" stroke="black" d="M4265.06,-1088C4265.06,-1088 4200.94,-1088 4200.94,-1088 4194.94,-1088 4188.94,-1082 4188.94,-1076 4188.94,-1076 4188.94,-1064 4188.94,-1064 4188.94,-1058 4194.94,-1052 4200.94,-1052 4200.94,-1052 4265.06,-1052 4265.06,-1052 4271.06,-1052 4277.06,-1058 4277.06,-1064 4277.06,-1064 4277.06,-1076 4277.06,-1076 4277.06,-1082 4271.06,-1088 4265.06,-1088"/>
+<text xml:space="preserve" text-anchor="middle" x="4233" y="-1066.7" font-family="Helvetica,sans-Serif" font-size="11.00">NormMulClass</text>
+</g>
+<!-- NormedDivisionRing&#45;&gt;NormMulClass -->
+<g id="edge37" class="edge">
+<title>NormedDivisionRing&#45;&gt;NormMulClass</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4233,-1123.7C4233,-1114.8 4233,-1103.82 4233,-1094.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4234.75,-1094.32 4233,-1089.32 4231.25,-1094.32 4234.75,-1094.32"/>
+</g>
+<!-- NormedCommRing -->
+<g id="node70" class="node" data-class-name="NormedCommRing" tabindex="0" role="img" aria-label="NormedCommRing">
+<title>NormedCommRing</title>
+<path fill="#cfe2f3" stroke="black" d="M4407.07,-1160C4407.07,-1160 4320.93,-1160 4320.93,-1160 4314.93,-1160 4308.93,-1154 4308.93,-1148 4308.93,-1148 4308.93,-1136 4308.93,-1136 4308.93,-1130 4314.93,-1124 4320.93,-1124 4320.93,-1124 4407.07,-1124 4407.07,-1124 4413.07,-1124 4419.07,-1130 4419.07,-1136 4419.07,-1136 4419.07,-1148 4419.07,-1148 4419.07,-1154 4413.07,-1160 4407.07,-1160"/>
+<text xml:space="preserve" text-anchor="middle" x="4364" y="-1138.7" font-family="Helvetica,sans-Serif" font-size="11.00">NormedCommRing</text>
+</g>
+<!-- NormedCommRing&#45;&gt;CommRing -->
+<g id="edge40" class="edge">
+<title>NormedCommRing&#45;&gt;CommRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4381.95,-1123.69C4435.18,-1072.36 4592.08,-921.04 4650.63,-864.57"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4651.75,-865.93 4654.13,-861.2 4649.32,-863.41 4651.75,-865.93"/>
+</g>
+<!-- NormedCommRing&#45;&gt;NormedRing -->
+<g id="edge39" class="edge">
+<title>NormedCommRing&#45;&gt;NormedRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4356.58,-1123.7C4352.7,-1114.63 4347.89,-1103.4 4343.71,-1093.65"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4345.39,-1093.12 4341.81,-1089.22 4342.17,-1094.5 4345.39,-1093.12"/>
+</g>
+<!-- NormedField -->
+<g id="node71" class="node" data-class-name="NormedField" tabindex="0" role="img" aria-label="NormedField">
+<title>NormedField</title>
+<path fill="#cfe2f3" stroke="black" d="M4391.48,-1232C4391.48,-1232 4336.52,-1232 4336.52,-1232 4330.52,-1232 4324.52,-1226 4324.52,-1220 4324.52,-1220 4324.52,-1208 4324.52,-1208 4324.52,-1202 4330.52,-1196 4336.52,-1196 4336.52,-1196 4391.48,-1196 4391.48,-1196 4397.48,-1196 4403.48,-1202 4403.48,-1208 4403.48,-1208 4403.48,-1220 4403.48,-1220 4403.48,-1226 4397.48,-1232 4391.48,-1232"/>
+<text xml:space="preserve" text-anchor="middle" x="4364" y="-1210.7" font-family="Helvetica,sans-Serif" font-size="11.00">NormedField</text>
+</g>
+<!-- NormedField&#45;&gt;Field -->
+<g id="edge43" class="edge">
+<title>NormedField&#45;&gt;Field</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M4403.73,-1207.45C4499.66,-1194.05 4742.56,-1160.11 4831.61,-1147.67"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4831.59,-1149.43 4836.3,-1147.01 4831.11,-1145.97 4831.59,-1149.43"/>
+</g>
+<!-- NormedField&#45;&gt;NormedDivisionRing -->
+<g id="edge41" class="edge">
+<title>NormedField&#45;&gt;NormedDivisionRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4331.28,-1195.52C4312.85,-1185.67 4289.77,-1173.33 4270.6,-1163.09"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4271.6,-1161.64 4266.37,-1160.83 4269.95,-1164.73 4271.6,-1161.64"/>
+</g>
+<!-- NormedField&#45;&gt;NormedCommRing -->
+<g id="edge42" class="edge">
+<title>NormedField&#45;&gt;NormedCommRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M4364,-1195.7C4364,-1186.8 4364,-1175.82 4364,-1166.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4365.75,-1166.32 4364,-1161.32 4362.25,-1166.32 4365.75,-1166.32"/>
+</g>
+<!-- NormedAddCommGroup&#45;&gt;SeminormedAddCommGroup -->
+<g id="edge45" class="edge">
+<title>NormedAddCommGroup&#45;&gt;SeminormedAddCommGroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M3334,-823.63C3334,-795.76 3334,-741.01 3334,-709.95"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="3335.75,-710.28 3334,-705.28 3332.25,-710.28 3335.75,-710.28"/>
+</g>
+<!-- MetricSpace -->
+<g id="node99" class="node" data-class-name="MetricSpace" tabindex="0" role="img" aria-label="MetricSpace">
+<title>MetricSpace</title>
+<path fill="#d9ead3" stroke="black" d="M1425.57,-704C1425.57,-704 1372.43,-704 1372.43,-704 1366.43,-704 1360.43,-698 1360.43,-692 1360.43,-692 1360.43,-680 1360.43,-680 1360.43,-674 1366.43,-668 1372.43,-668 1372.43,-668 1425.57,-668 1425.57,-668 1431.57,-668 1437.57,-674 1437.57,-680 1437.57,-680 1437.57,-692 1437.57,-692 1437.57,-698 1431.57,-704 1425.57,-704"/>
+<text xml:space="preserve" text-anchor="middle" x="1399" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">MetricSpace</text>
+</g>
+<!-- NormedAddCommGroup&#45;&gt;MetricSpace -->
+<g id="edge44" class="edge">
+<title>NormedAddCommGroup&#45;&gt;MetricSpace</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M3264.68,-835.88C3197.51,-830.9 3092.76,-823.07 3002,-816 2384.49,-767.9 1633.45,-706.29 1444.02,-690.71"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1444.38,-688.98 1439.26,-690.32 1444.1,-692.47 1444.38,-688.98"/>
+</g>
+<!-- SeminormedAddCommGroup&#45;&gt;AddCommGroup -->
+<g id="edge54" class="edge">
+<title>SeminormedAddCommGroup&#45;&gt;AddCommGroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M3391.04,-667.51C3533.16,-623.92 3901.7,-510.9 4041.82,-467.92"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4042.09,-469.67 4046.36,-466.53 4041.07,-466.32 4042.09,-469.67"/>
+</g>
+<!-- Norm -->
+<g id="node74" class="node" data-class-name="Norm" tabindex="0" role="img" aria-label="Norm">
+<title>Norm</title>
+<path fill="#cfe2f3" stroke="black" d="M3349,-540C3349,-540 3319,-540 3319,-540 3313,-540 3307,-534 3307,-528 3307,-528 3307,-516 3307,-516 3307,-510 3313,-504 3319,-504 3319,-504 3349,-504 3349,-504 3355,-504 3361,-510 3361,-516 3361,-516 3361,-528 3361,-528 3361,-534 3355,-540 3349,-540"/>
+<text xml:space="preserve" text-anchor="middle" x="3334" y="-518.7" font-family="Helvetica,sans-Serif" font-size="11.00">Norm</text>
+</g>
+<!-- SeminormedAddCommGroup&#45;&gt;Norm -->
+<g id="edge53" class="edge">
+<title>SeminormedAddCommGroup&#45;&gt;Norm</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M3334,-667.66C3334,-638.31 3334,-578.82 3334,-546.01"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="3335.75,-546.42 3334,-541.42 3332.25,-546.42 3335.75,-546.42"/>
+</g>
+<!-- PseudoMetricSpace -->
+<g id="node100" class="node" data-class-name="PseudoMetricSpace" tabindex="0" role="img" aria-label="PseudoMetricSpace">
+<title>PseudoMetricSpace</title>
+<path fill="#d9ead3" stroke="black" d="M1503.22,-540C1503.22,-540 1412.78,-540 1412.78,-540 1406.78,-540 1400.78,-534 1400.78,-528 1400.78,-528 1400.78,-516 1400.78,-516 1400.78,-510 1406.78,-504 1412.78,-504 1412.78,-504 1503.22,-504 1503.22,-504 1509.22,-504 1515.22,-510 1515.22,-516 1515.22,-516 1515.22,-528 1515.22,-528 1515.22,-534 1509.22,-540 1503.22,-540"/>
+<text xml:space="preserve" text-anchor="middle" x="1458" y="-518.7" font-family="Helvetica,sans-Serif" font-size="11.00">PseudoMetricSpace</text>
+</g>
+<!-- SeminormedAddCommGroup&#45;&gt;PseudoMetricSpace -->
+<g id="edge51" class="edge">
+<title>SeminormedAddCommGroup&#45;&gt;PseudoMetricSpace</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M3253.14,-685.28C2917.78,-686.23 1650.1,-687.43 1573,-652 1524.55,-629.74 1487.95,-576.22 1470.09,-545.56"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1471.79,-545 1467.78,-541.54 1468.75,-546.74 1471.79,-545"/>
+</g>
+<!-- IsUniformAddGroup -->
+<g id="node107" class="node" data-class-name="IsUniformAddGroup" tabindex="0" role="img" aria-label="IsUniformAddGroup">
+<title>IsUniformAddGroup</title>
+<path fill="#d0e0e3" stroke="black" d="M2977.6,-540C2977.6,-540 2888.4,-540 2888.4,-540 2882.4,-540 2876.4,-534 2876.4,-528 2876.4,-528 2876.4,-516 2876.4,-516 2876.4,-510 2882.4,-504 2888.4,-504 2888.4,-504 2977.6,-504 2977.6,-504 2983.6,-504 2989.6,-510 2989.6,-516 2989.6,-516 2989.6,-528 2989.6,-528 2989.6,-534 2983.6,-540 2977.6,-540"/>
+<text xml:space="preserve" text-anchor="middle" x="2933" y="-518.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsUniformAddGroup</text>
+</g>
+<!-- SeminormedAddCommGroup&#45;&gt;IsUniformAddGroup -->
+<g id="edge52" class="edge">
+<title>SeminormedAddCommGroup&#45;&gt;IsUniformAddGroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M3253.15,-678.88C3158.24,-671.4 3012.34,-658.91 3002,-652 2964.99,-627.25 2946.31,-575.9 2938.21,-545.99"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="2939.99,-545.88 2937.04,-541.48 2936.6,-546.76 2939.99,-545.88"/>
+</g>
+<!-- EuclideanDomain&#45;&gt;CommRing -->
+<g id="edge57" class="edge">
+<title>EuclideanDomain&#45;&gt;CommRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M5036.41,-905.48C4971.02,-895.78 4854.91,-878.02 4756,-860 4742.57,-857.55 4727.97,-854.65 4714.82,-851.94"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4715.32,-850.25 4710.07,-850.95 4714.61,-853.68 4715.32,-850.25"/>
+</g>
+<!-- EuclideanDomain&#45;&gt;Nontrivial -->
+<g id="edge56" class="edge">
+<title>EuclideanDomain&#45;&gt;Nontrivial</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M5039.84,-895.73C5023.77,-887.47 5007.55,-875.84 4998,-860 4969.68,-813.02 4977.67,-745.13 4984.59,-710"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4986.24,-710.68 4985.53,-705.43 4982.81,-709.98 4986.24,-710.68"/>
+</g>
+<!-- IsPrincipalIdealRing -->
+<g id="node76" class="node" data-class-name="IsPrincipalIdealRing" tabindex="0" role="img" aria-label="IsPrincipalIdealRing">
+<title>IsPrincipalIdealRing</title>
+<path fill="#f4cccc" stroke="black" d="M5179.61,-860C5179.61,-860 5090.39,-860 5090.39,-860 5084.39,-860 5078.39,-854 5078.39,-848 5078.39,-848 5078.39,-836 5078.39,-836 5078.39,-830 5084.39,-824 5090.39,-824 5090.39,-824 5179.61,-824 5179.61,-824 5185.61,-824 5191.61,-830 5191.61,-836 5191.61,-836 5191.61,-848 5191.61,-848 5191.61,-854 5185.61,-860 5179.61,-860"/>
+<text xml:space="preserve" text-anchor="middle" x="5135" y="-838.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsPrincipalIdealRing</text>
+</g>
+<!-- EuclideanDomain&#45;&gt;IsPrincipalIdealRing -->
+<g id="edge55" class="edge">
+<title>EuclideanDomain&#45;&gt;IsPrincipalIdealRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M5099.62,-895.7C5105.82,-886.46 5113.52,-874.98 5120.16,-865.11"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5121.51,-866.24 5122.84,-861.11 5118.6,-864.29 5121.51,-866.24"/>
+</g>
+<!-- IsNoetherianRing -->
+<g id="node81" class="node" data-class-name="IsNoetherianRing" tabindex="0" role="img" aria-label="IsNoetherianRing">
+<title>IsNoetherianRing</title>
+<path fill="#f4cccc" stroke="black" d="M5173.5,-704C5173.5,-704 5096.5,-704 5096.5,-704 5090.5,-704 5084.5,-698 5084.5,-692 5084.5,-692 5084.5,-680 5084.5,-680 5084.5,-674 5090.5,-668 5096.5,-668 5096.5,-668 5173.5,-668 5173.5,-668 5179.5,-668 5185.5,-674 5185.5,-680 5185.5,-680 5185.5,-692 5185.5,-692 5185.5,-698 5179.5,-704 5173.5,-704"/>
+<text xml:space="preserve" text-anchor="middle" x="5135" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsNoetherianRing</text>
+</g>
+<!-- IsPrincipalIdealRing&#45;&gt;IsNoetherianRing -->
+<g id="edge62" class="edge">
+<title>IsPrincipalIdealRing&#45;&gt;IsNoetherianRing</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M5135,-823.63C5135,-795.76 5135,-741.01 5135,-709.95"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5136.75,-710.28 5135,-705.28 5133.25,-710.28 5136.75,-710.28"/>
+</g>
+<!-- IsDomain&#45;&gt;Nontrivial -->
+<g id="edge60" class="edge">
+<title>IsDomain&#45;&gt;Nontrivial</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M5156.67,-899.36C5153.75,-898.19 5150.83,-897.05 5148,-896 5099,-877.76 5072.01,-897.9 5036,-860 4996.54,-818.47 4990.06,-747.05 4989.52,-710.32"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4991.27,-710.5 4989.49,-705.51 4987.77,-710.53 4991.27,-710.5"/>
+</g>
+<!-- NoZeroDivisors -->
+<g id="node78" class="node" data-class-name="NoZeroDivisors" tabindex="0" role="img" aria-label="NoZeroDivisors">
+<title>NoZeroDivisors</title>
+<path fill="#f4cccc" stroke="black" d="M5289.9,-860C5289.9,-860 5222.1,-860 5222.1,-860 5216.1,-860 5210.1,-854 5210.1,-848 5210.1,-848 5210.1,-836 5210.1,-836 5210.1,-830 5216.1,-824 5222.1,-824 5222.1,-824 5289.9,-824 5289.9,-824 5295.9,-824 5301.9,-830 5301.9,-836 5301.9,-836 5301.9,-848 5301.9,-848 5301.9,-854 5295.9,-860 5289.9,-860"/>
+<text xml:space="preserve" text-anchor="middle" x="5256" y="-838.7" font-family="Helvetica,sans-Serif" font-size="11.00">NoZeroDivisors</text>
+</g>
+<!-- IsDomain&#45;&gt;NoZeroDivisors -->
+<g id="edge58" class="edge">
+<title>IsDomain&#45;&gt;NoZeroDivisors</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M5204.81,-895.7C5214.03,-886.2 5225.54,-874.35 5235.32,-864.29"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5236.31,-865.78 5238.54,-860.97 5233.8,-863.34 5236.31,-865.78"/>
+</g>
+<!-- IsCancelMulZero -->
+<g id="node79" class="node" data-class-name="IsCancelMulZero" tabindex="0" role="img" aria-label="IsCancelMulZero">
+<title>IsCancelMulZero</title>
+<path fill="#f4cccc" stroke="black" d="M5406.57,-860C5406.57,-860 5331.43,-860 5331.43,-860 5325.43,-860 5319.43,-854 5319.43,-848 5319.43,-848 5319.43,-836 5319.43,-836 5319.43,-830 5325.43,-824 5331.43,-824 5331.43,-824 5406.57,-824 5406.57,-824 5412.57,-824 5418.57,-830 5418.57,-836 5418.57,-836 5418.57,-848 5418.57,-848 5418.57,-854 5412.57,-860 5406.57,-860"/>
+<text xml:space="preserve" text-anchor="middle" x="5369" y="-838.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsCancelMulZero</text>
+</g>
+<!-- IsDomain&#45;&gt;IsCancelMulZero -->
+<g id="edge59" class="edge">
+<title>IsDomain&#45;&gt;IsCancelMulZero</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M5219.39,-899.51C5222.29,-898.31 5225.2,-897.12 5228,-896 5256.79,-884.48 5289.15,-872.26 5315.61,-862.46"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5315.94,-864.2 5320.03,-860.83 5314.73,-860.92 5315.94,-864.2"/>
+</g>
+<!-- IsLeftCancelMulZero -->
+<g id="node82" class="node" data-class-name="IsLeftCancelMulZero" tabindex="0" role="img" aria-label="IsLeftCancelMulZero">
+<title>IsLeftCancelMulZero</title>
+<path fill="#f4cccc" stroke="black" d="M5361.74,-704C5361.74,-704 5268.26,-704 5268.26,-704 5262.26,-704 5256.26,-698 5256.26,-692 5256.26,-692 5256.26,-680 5256.26,-680 5256.26,-674 5262.26,-668 5268.26,-668 5268.26,-668 5361.74,-668 5361.74,-668 5367.74,-668 5373.74,-674 5373.74,-680 5373.74,-680 5373.74,-692 5373.74,-692 5373.74,-698 5367.74,-704 5361.74,-704"/>
+<text xml:space="preserve" text-anchor="middle" x="5315" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsLeftCancelMulZero</text>
+</g>
+<!-- IsCancelMulZero&#45;&gt;IsLeftCancelMulZero -->
+<g id="edge63" class="edge">
+<title>IsCancelMulZero&#45;&gt;IsLeftCancelMulZero</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M5362.91,-823.63C5353.1,-795.64 5333.78,-740.56 5322.91,-709.56"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5324.69,-709.35 5321.39,-705.21 5321.39,-710.51 5324.69,-709.35"/>
+</g>
+<!-- IsRightCancelMulZero -->
+<g id="node83" class="node" data-class-name="IsRightCancelMulZero" tabindex="0" role="img" aria-label="IsRightCancelMulZero">
+<title>IsRightCancelMulZero</title>
+<path fill="#f4cccc" stroke="black" d="M5504.41,-704C5504.41,-704 5403.59,-704 5403.59,-704 5397.59,-704 5391.59,-698 5391.59,-692 5391.59,-692 5391.59,-680 5391.59,-680 5391.59,-674 5397.59,-668 5403.59,-668 5403.59,-668 5504.41,-668 5504.41,-668 5510.41,-668 5516.41,-674 5516.41,-680 5516.41,-680 5516.41,-692 5516.41,-692 5516.41,-698 5510.41,-704 5504.41,-704"/>
+<text xml:space="preserve" text-anchor="middle" x="5454" y="-682.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsRightCancelMulZero</text>
+</g>
+<!-- IsCancelMulZero&#45;&gt;IsRightCancelMulZero -->
+<g id="edge64" class="edge">
+<title>IsCancelMulZero&#45;&gt;IsRightCancelMulZero</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M5378.81,-823.53C5380.22,-821 5381.65,-818.44 5383,-816 5403.74,-778.65 5427.66,-735.09 5441.77,-709.35"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="5443.17,-710.42 5444.04,-705.19 5440.1,-708.74 5443.17,-710.42"/>
+</g>
+<!-- IsLocalRing&#45;&gt;Nontrivial -->
+<g id="edge61" class="edge">
+<title>IsLocalRing&#45;&gt;Nontrivial</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M5236.98,-898.84C5233.96,-897.83 5230.94,-896.87 5228,-896 5158.54,-875.4 5131.67,-896.36 5069,-860 5050.23,-849.11 5052.19,-838.46 5036,-824 5031.49,-819.97 5028.43,-820.98 5025,-816 5002.72,-783.67 4994.6,-737.72 4991.66,-710.28"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="4993.43,-710.4 4991.19,-705.59 4989.94,-710.74 4993.43,-710.4"/>
+</g>
+<!-- T2Space -->
+<g id="node84" class="node" data-class-name="T2Space" tabindex="0" role="img" aria-label="T2Space">
+<title>T2Space</title>
+<path fill="#d9ead3" stroke="black" d="M1252.01,-540C1252.01,-540 1215.99,-540 1215.99,-540 1209.99,-540 1203.99,-534 1203.99,-528 1203.99,-528 1203.99,-516 1203.99,-516 1203.99,-510 1209.99,-504 1215.99,-504 1215.99,-504 1252.01,-504 1252.01,-504 1258.01,-504 1264.01,-510 1264.01,-516 1264.01,-516 1264.01,-528 1264.01,-528 1264.01,-534 1258.01,-540 1252.01,-540"/>
+<text xml:space="preserve" text-anchor="middle" x="1234" y="-518.7" font-family="Helvetica,sans-Serif" font-size="11.00">T2Space</text>
+</g>
+<!-- T1Space -->
+<g id="node85" class="node" data-class-name="T1Space" tabindex="0" role="img" aria-label="T1Space">
+<title>T1Space</title>
+<path fill="#d9ead3" stroke="black" d="M1206.01,-468C1206.01,-468 1169.99,-468 1169.99,-468 1163.99,-468 1157.99,-462 1157.99,-456 1157.99,-456 1157.99,-444 1157.99,-444 1157.99,-438 1163.99,-432 1169.99,-432 1169.99,-432 1206.01,-432 1206.01,-432 1212.01,-432 1218.01,-438 1218.01,-444 1218.01,-444 1218.01,-456 1218.01,-456 1218.01,-462 1212.01,-468 1206.01,-468"/>
+<text xml:space="preserve" text-anchor="middle" x="1188" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">T1Space</text>
+</g>
+<!-- T2Space&#45;&gt;T1Space -->
+<g id="edge6" class="edge">
+<title>T2Space&#45;&gt;T1Space</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1222.63,-503.7C1216.56,-494.46 1209.02,-482.98 1202.53,-473.11"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1204.11,-472.33 1199.9,-469.12 1201.19,-474.26 1204.11,-472.33"/>
+</g>
+<!-- T0Space -->
+<g id="node98" class="node" data-class-name="T0Space" tabindex="0" role="img" aria-label="T0Space">
+<title>T0Space</title>
+<path fill="#d9ead3" stroke="black" d="M1167.01,-396C1167.01,-396 1130.99,-396 1130.99,-396 1124.99,-396 1118.99,-390 1118.99,-384 1118.99,-384 1118.99,-372 1118.99,-372 1118.99,-366 1124.99,-360 1130.99,-360 1130.99,-360 1167.01,-360 1167.01,-360 1173.01,-360 1179.01,-366 1179.01,-372 1179.01,-372 1179.01,-384 1179.01,-384 1179.01,-390 1173.01,-396 1167.01,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="1149" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">T0Space</text>
+</g>
+<!-- T1Space&#45;&gt;T0Space -->
+<g id="edge15" class="edge">
+<title>T1Space&#45;&gt;T0Space</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1178.36,-431.7C1173.26,-422.54 1166.94,-411.19 1161.47,-401.38"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1163.08,-400.68 1159.12,-397.16 1160.02,-402.38 1163.08,-400.68"/>
+</g>
+<!-- CompletelyRegularSpace -->
+<g id="node86" class="node" data-class-name="CompletelyRegularSpace" tabindex="0" role="img" aria-label="CompletelyRegularSpace">
+<title>CompletelyRegularSpace</title>
+<path fill="#d9ead3" stroke="black" d="M1549.37,-324C1549.37,-324 1432.63,-324 1432.63,-324 1426.63,-324 1420.63,-318 1420.63,-312 1420.63,-312 1420.63,-300 1420.63,-300 1420.63,-294 1426.63,-288 1432.63,-288 1432.63,-288 1549.37,-288 1549.37,-288 1555.37,-288 1561.37,-294 1561.37,-300 1561.37,-300 1561.37,-312 1561.37,-312 1561.37,-318 1555.37,-324 1549.37,-324"/>
+<text xml:space="preserve" text-anchor="middle" x="1491" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">CompletelyRegularSpace</text>
+</g>
+<!-- RegularSpace -->
+<g id="node87" class="node" data-class-name="RegularSpace" tabindex="0" role="img" aria-label="RegularSpace">
+<title>RegularSpace</title>
+<path fill="#d9ead3" stroke="black" d="M1521.86,-252C1521.86,-252 1460.14,-252 1460.14,-252 1454.14,-252 1448.14,-246 1448.14,-240 1448.14,-240 1448.14,-228 1448.14,-228 1448.14,-222 1454.14,-216 1460.14,-216 1460.14,-216 1521.86,-216 1521.86,-216 1527.86,-216 1533.86,-222 1533.86,-228 1533.86,-228 1533.86,-240 1533.86,-240 1533.86,-246 1527.86,-252 1521.86,-252"/>
+<text xml:space="preserve" text-anchor="middle" x="1491" y="-230.7" font-family="Helvetica,sans-Serif" font-size="11.00">RegularSpace</text>
+</g>
+<!-- CompletelyRegularSpace&#45;&gt;RegularSpace -->
+<g id="edge7" class="edge">
+<title>CompletelyRegularSpace&#45;&gt;RegularSpace</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1491,-287.7C1491,-278.8 1491,-267.82 1491,-258.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1492.75,-258.32 1491,-253.32 1489.25,-258.32 1492.75,-258.32"/>
+</g>
+<!-- PseudoEMetricSpace -->
+<g id="node88" class="node" data-class-name="PseudoEMetricSpace" tabindex="0" role="img" aria-label="PseudoEMetricSpace">
+<title>PseudoEMetricSpace</title>
+<path fill="#d9ead3" stroke="black" d="M1392.89,-468C1392.89,-468 1295.11,-468 1295.11,-468 1289.11,-468 1283.11,-462 1283.11,-456 1283.11,-456 1283.11,-444 1283.11,-444 1283.11,-438 1289.11,-432 1295.11,-432 1295.11,-432 1392.89,-432 1392.89,-432 1398.89,-432 1404.89,-438 1404.89,-444 1404.89,-444 1404.89,-456 1404.89,-456 1404.89,-462 1398.89,-468 1392.89,-468"/>
+<text xml:space="preserve" text-anchor="middle" x="1344" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">PseudoEMetricSpace</text>
+</g>
+<!-- FirstCountableTopology -->
+<g id="node89" class="node" data-class-name="FirstCountableTopology" tabindex="0" role="img" aria-label="FirstCountableTopology">
+<title>FirstCountableTopology</title>
+<path fill="#d9ead3" stroke="black" d="M1317.39,-396C1317.39,-396 1208.61,-396 1208.61,-396 1202.61,-396 1196.61,-390 1196.61,-384 1196.61,-384 1196.61,-372 1196.61,-372 1196.61,-366 1202.61,-360 1208.61,-360 1208.61,-360 1317.39,-360 1317.39,-360 1323.39,-360 1329.39,-366 1329.39,-372 1329.39,-372 1329.39,-384 1329.39,-384 1329.39,-390 1323.39,-396 1317.39,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="1263" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">FirstCountableTopology</text>
+</g>
+<!-- PseudoEMetricSpace&#45;&gt;FirstCountableTopology -->
+<g id="edge8" class="edge">
+<title>PseudoEMetricSpace&#45;&gt;FirstCountableTopology</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1323.98,-431.7C1312.98,-422.19 1299.24,-410.32 1287.59,-400.25"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1288.92,-399.08 1283.99,-397.14 1286.63,-401.73 1288.92,-399.08"/>
+</g>
+<!-- EDist -->
+<g id="node90" class="node" data-class-name="EDist" tabindex="0" role="img" aria-label="EDist">
+<title>EDist</title>
+<path fill="#d9ead3" stroke="black" d="M1389,-396C1389,-396 1359,-396 1359,-396 1353,-396 1347,-390 1347,-384 1347,-384 1347,-372 1347,-372 1347,-366 1353,-360 1359,-360 1359,-360 1389,-360 1389,-360 1395,-360 1401,-366 1401,-372 1401,-372 1401,-384 1401,-384 1401,-390 1395,-396 1389,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="1374" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">EDist</text>
+</g>
+<!-- PseudoEMetricSpace&#45;&gt;EDist -->
+<g id="edge9" class="edge">
+<title>PseudoEMetricSpace&#45;&gt;EDist</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M1351.42,-431.7C1355.3,-422.63 1360.11,-411.4 1364.29,-401.65"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1365.83,-402.5 1366.19,-397.22 1362.61,-401.12 1365.83,-402.5"/>
+</g>
+<!-- UniformSpace -->
+<g id="node91" class="node" data-class-name="UniformSpace" tabindex="0" role="img" aria-label="UniformSpace">
+<title>UniformSpace</title>
+<path fill="#d9ead3" stroke="black" d="M1492.85,-396C1492.85,-396 1431.15,-396 1431.15,-396 1425.15,-396 1419.15,-390 1419.15,-384 1419.15,-384 1419.15,-372 1419.15,-372 1419.15,-366 1425.15,-360 1431.15,-360 1431.15,-360 1492.85,-360 1492.85,-360 1498.85,-360 1504.85,-366 1504.85,-372 1504.85,-372 1504.85,-384 1504.85,-384 1504.85,-390 1498.85,-396 1492.85,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="1462" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">UniformSpace</text>
+</g>
+<!-- PseudoEMetricSpace&#45;&gt;UniformSpace -->
+<g id="edge10" class="edge">
+<title>PseudoEMetricSpace&#45;&gt;UniformSpace</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1373.47,-431.52C1389.93,-421.75 1410.51,-409.54 1427.69,-399.35"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1428.45,-400.93 1431.86,-396.88 1426.67,-397.92 1428.45,-400.93"/>
+</g>
+<!-- FrechetUrysohnSpace -->
+<g id="node94" class="node" data-class-name="FrechetUrysohnSpace" tabindex="0" role="img" aria-label="FrechetUrysohnSpace">
+<title>FrechetUrysohnSpace</title>
+<path fill="#d9ead3" stroke="black" d="M1269.72,-324C1269.72,-324 1168.28,-324 1168.28,-324 1162.28,-324 1156.28,-318 1156.28,-312 1156.28,-312 1156.28,-300 1156.28,-300 1156.28,-294 1162.28,-288 1168.28,-288 1168.28,-288 1269.72,-288 1269.72,-288 1275.72,-288 1281.72,-294 1281.72,-300 1281.72,-300 1281.72,-312 1281.72,-312 1281.72,-318 1275.72,-324 1269.72,-324"/>
+<text xml:space="preserve" text-anchor="middle" x="1219" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">FrechetUrysohnSpace</text>
+</g>
+<!-- FirstCountableTopology&#45;&gt;FrechetUrysohnSpace -->
+<g id="edge11" class="edge">
+<title>FirstCountableTopology&#45;&gt;FrechetUrysohnSpace</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1252.12,-359.7C1246.32,-350.46 1239.1,-338.98 1232.89,-329.11"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1234.54,-328.43 1230.4,-325.13 1231.57,-330.29 1234.54,-328.43"/>
+</g>
+<!-- UniformSpace&#45;&gt;CompletelyRegularSpace -->
+<g id="edge22" class="edge">
+<title>UniformSpace&#45;&gt;CompletelyRegularSpace</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1469.17,-359.7C1472.93,-350.63 1477.58,-339.4 1481.62,-329.65"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1483.15,-330.51 1483.45,-325.22 1479.92,-329.17 1483.15,-330.51"/>
+</g>
+<!-- TopologicalSpace -->
+<g id="node93" class="node" data-class-name="TopologicalSpace" tabindex="0" role="img" aria-label="TopologicalSpace">
+<title>TopologicalSpace</title>
+<path fill="#d9ead3" stroke="black" d="M1390.72,-324C1390.72,-324 1311.28,-324 1311.28,-324 1305.28,-324 1299.28,-318 1299.28,-312 1299.28,-312 1299.28,-300 1299.28,-300 1299.28,-294 1305.28,-288 1311.28,-288 1311.28,-288 1390.72,-288 1390.72,-288 1396.72,-288 1402.72,-294 1402.72,-300 1402.72,-300 1402.72,-312 1402.72,-312 1402.72,-318 1396.72,-324 1390.72,-324"/>
+<text xml:space="preserve" text-anchor="middle" x="1351" y="-302.7" font-family="Helvetica,sans-Serif" font-size="11.00">TopologicalSpace</text>
+</g>
+<!-- UniformSpace&#45;&gt;TopologicalSpace -->
+<g id="edge23" class="edge">
+<title>UniformSpace&#45;&gt;TopologicalSpace</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M1434.28,-359.52C1418.8,-349.75 1399.43,-337.54 1383.27,-327.35"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1384.56,-326.09 1379.39,-324.91 1382.69,-329.05 1384.56,-326.09"/>
+</g>
+<!-- Dist -->
+<g id="node92" class="node" data-class-name="Dist" tabindex="0" role="img" aria-label="Dist">
+<title>Dist</title>
+<path fill="#d9ead3" stroke="black" d="M1549,-468C1549,-468 1519,-468 1519,-468 1513,-468 1507,-462 1507,-456 1507,-456 1507,-444 1507,-444 1507,-438 1513,-432 1519,-432 1519,-432 1549,-432 1549,-432 1555,-432 1561,-438 1561,-444 1561,-444 1561,-456 1561,-456 1561,-462 1555,-468 1549,-468"/>
+<text xml:space="preserve" text-anchor="middle" x="1534" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">Dist</text>
+</g>
+<!-- SequentialSpace -->
+<g id="node95" class="node" data-class-name="SequentialSpace" tabindex="0" role="img" aria-label="SequentialSpace">
+<title>SequentialSpace</title>
+<path fill="#d9ead3" stroke="black" d="M1256.59,-252C1256.59,-252 1181.41,-252 1181.41,-252 1175.41,-252 1169.41,-246 1169.41,-240 1169.41,-240 1169.41,-228 1169.41,-228 1169.41,-222 1175.41,-216 1181.41,-216 1181.41,-216 1256.59,-216 1256.59,-216 1262.59,-216 1268.59,-222 1268.59,-228 1268.59,-228 1268.59,-240 1268.59,-240 1268.59,-246 1262.59,-252 1256.59,-252"/>
+<text xml:space="preserve" text-anchor="middle" x="1219" y="-230.7" font-family="Helvetica,sans-Serif" font-size="11.00">SequentialSpace</text>
+</g>
+<!-- FrechetUrysohnSpace&#45;&gt;SequentialSpace -->
+<g id="edge12" class="edge">
+<title>FrechetUrysohnSpace&#45;&gt;SequentialSpace</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1219,-287.7C1219,-278.8 1219,-267.82 1219,-258.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1220.75,-258.32 1219,-253.32 1217.25,-258.32 1220.75,-258.32"/>
+</g>
+<!-- Bornology -->
+<g id="node96" class="node" data-class-name="Bornology" tabindex="0" role="img" aria-label="Bornology">
+<title>Bornology</title>
+<path fill="#d9ead3" stroke="black" d="M1476.77,-468C1476.77,-468 1435.23,-468 1435.23,-468 1429.23,-468 1423.23,-462 1423.23,-456 1423.23,-456 1423.23,-444 1423.23,-444 1423.23,-438 1429.23,-432 1435.23,-432 1435.23,-432 1476.77,-432 1476.77,-432 1482.77,-432 1488.77,-438 1488.77,-444 1488.77,-444 1488.77,-456 1488.77,-456 1488.77,-462 1482.77,-468 1476.77,-468"/>
+<text xml:space="preserve" text-anchor="middle" x="1456" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">Bornology</text>
+</g>
+<!-- EMetricSpace -->
+<g id="node97" class="node" data-class-name="EMetricSpace" tabindex="0" role="img" aria-label="EMetricSpace">
+<title>EMetricSpace</title>
+<path fill="#d9ead3" stroke="black" d="M1371.24,-540C1371.24,-540 1310.76,-540 1310.76,-540 1304.76,-540 1298.76,-534 1298.76,-528 1298.76,-528 1298.76,-516 1298.76,-516 1298.76,-510 1304.76,-504 1310.76,-504 1310.76,-504 1371.24,-504 1371.24,-504 1377.24,-504 1383.24,-510 1383.24,-516 1383.24,-516 1383.24,-528 1383.24,-528 1383.24,-534 1377.24,-540 1371.24,-540"/>
+<text xml:space="preserve" text-anchor="middle" x="1341" y="-518.7" font-family="Helvetica,sans-Serif" font-size="11.00">EMetricSpace</text>
+</g>
+<!-- EMetricSpace&#45;&gt;PseudoEMetricSpace -->
+<g id="edge13" class="edge">
+<title>EMetricSpace&#45;&gt;PseudoEMetricSpace</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M1341.74,-503.7C1342.12,-494.8 1342.59,-483.82 1343.01,-474.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1344.75,-474.38 1343.22,-469.31 1341.25,-474.23 1344.75,-474.38"/>
+</g>
+<!-- EMetricSpace&#45;&gt;T0Space -->
+<g id="edge14" class="edge">
+<title>EMetricSpace&#45;&gt;T0Space</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1319.32,-503.79C1291.51,-481.78 1244.75,-444.94 1227,-432 1212.04,-421.09 1195.07,-409.48 1180.79,-399.91"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1181.79,-398.48 1176.66,-397.15 1179.85,-401.39 1181.79,-398.48"/>
+</g>
+<!-- MetricSpace&#45;&gt;T2Space -->
+<g id="edge16" class="edge">
+<title>MetricSpace&#45;&gt;T2Space</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1359.99,-681.36C1337.22,-677.4 1309.27,-669.16 1290,-652 1258.51,-623.95 1244.02,-575.03 1237.93,-546.17"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1239.69,-546.07 1236.99,-541.52 1236.26,-546.77 1239.69,-546.07"/>
+</g>
+<!-- MetricSpace&#45;&gt;EMetricSpace -->
+<g id="edge17" class="edge">
+<title>MetricSpace&#45;&gt;EMetricSpace</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1392.79,-667.66C1382.28,-638.31 1360.99,-578.82 1349.24,-546.01"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1350.9,-545.47 1347.57,-541.35 1347.61,-546.65 1350.9,-545.47"/>
+</g>
+<!-- MetricSpace&#45;&gt;PseudoMetricSpace -->
+<g id="edge18" class="edge">
+<title>MetricSpace&#45;&gt;PseudoMetricSpace</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M1405.31,-667.66C1416,-638.31 1437.67,-578.82 1449.62,-546.01"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1451.25,-546.65 1451.32,-541.35 1447.96,-545.45 1451.25,-546.65"/>
+</g>
+<!-- PseudoMetricSpace&#45;&gt;PseudoEMetricSpace -->
+<g id="edge19" class="edge">
+<title>PseudoMetricSpace&#45;&gt;PseudoEMetricSpace</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1429.53,-503.52C1413.63,-493.75 1393.74,-481.54 1377.15,-471.35"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1378.32,-470.02 1373.14,-468.89 1376.49,-473 1378.32,-470.02"/>
+</g>
+<!-- PseudoMetricSpace&#45;&gt;Dist -->
+<g id="edge20" class="edge">
+<title>PseudoMetricSpace&#45;&gt;Dist</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M1476.79,-503.7C1487.02,-494.27 1499.77,-482.53 1510.64,-472.52"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1511.78,-473.84 1514.28,-469.17 1509.41,-471.27 1511.78,-473.84"/>
+</g>
+<!-- PseudoMetricSpace&#45;&gt;Bornology -->
+<g id="edge21" class="edge">
+<title>PseudoMetricSpace&#45;&gt;Bornology</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M1457.51,-503.7C1457.25,-494.8 1456.94,-483.82 1456.66,-474.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="1458.42,-474.26 1456.52,-469.31 1454.92,-474.36 1458.42,-474.26"/>
+</g>
+<!-- ContinuousMul -->
+<g id="node101" class="node" data-class-name="ContinuousMul" tabindex="0" role="img" aria-label="ContinuousMul">
+<title>ContinuousMul</title>
+<path fill="#d0e0e3" stroke="black" d="M2739.69,-396C2739.69,-396 2674.31,-396 2674.31,-396 2668.31,-396 2662.31,-390 2662.31,-384 2662.31,-384 2662.31,-372 2662.31,-372 2662.31,-366 2668.31,-360 2674.31,-360 2674.31,-360 2739.69,-360 2739.69,-360 2745.69,-360 2751.69,-366 2751.69,-372 2751.69,-372 2751.69,-384 2751.69,-384 2751.69,-390 2745.69,-396 2739.69,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="2707" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">ContinuousMul</text>
+</g>
+<!-- IsTopologicalAddGroup -->
+<g id="node102" class="node" data-class-name="IsTopologicalAddGroup" tabindex="0" role="img" aria-label="IsTopologicalAddGroup">
+<title>IsTopologicalAddGroup</title>
+<path fill="#d0e0e3" stroke="black" d="M2978.48,-468C2978.48,-468 2871.52,-468 2871.52,-468 2865.52,-468 2859.52,-462 2859.52,-456 2859.52,-456 2859.52,-444 2859.52,-444 2859.52,-438 2865.52,-432 2871.52,-432 2871.52,-432 2978.48,-432 2978.48,-432 2984.48,-432 2990.48,-438 2990.48,-444 2990.48,-444 2990.48,-456 2990.48,-456 2990.48,-462 2984.48,-468 2978.48,-468"/>
+<text xml:space="preserve" text-anchor="middle" x="2925" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsTopologicalAddGroup</text>
+</g>
+<!-- ContinuousAdd -->
+<g id="node103" class="node" data-class-name="ContinuousAdd" tabindex="0" role="img" aria-label="ContinuousAdd">
+<title>ContinuousAdd</title>
+<path fill="#d0e0e3" stroke="black" d="M2848.61,-396C2848.61,-396 2781.39,-396 2781.39,-396 2775.39,-396 2769.39,-390 2769.39,-384 2769.39,-384 2769.39,-372 2769.39,-372 2769.39,-366 2775.39,-360 2781.39,-360 2781.39,-360 2848.61,-360 2848.61,-360 2854.61,-360 2860.61,-366 2860.61,-372 2860.61,-372 2860.61,-384 2860.61,-384 2860.61,-390 2854.61,-396 2848.61,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="2815" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">ContinuousAdd</text>
+</g>
+<!-- IsTopologicalAddGroup&#45;&gt;ContinuousAdd -->
+<g id="edge24" class="edge">
+<title>IsTopologicalAddGroup&#45;&gt;ContinuousAdd</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M2897.53,-431.52C2882.19,-421.75 2863,-409.54 2846.98,-399.35"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="2848.3,-398.12 2843.15,-396.91 2846.42,-401.07 2848.3,-398.12"/>
+</g>
+<!-- ContinuousNeg -->
+<g id="node104" class="node" data-class-name="ContinuousNeg" tabindex="0" role="img" aria-label="ContinuousNeg">
+<title>ContinuousNeg</title>
+<path fill="#d0e0e3" stroke="black" d="M2958.91,-396C2958.91,-396 2891.09,-396 2891.09,-396 2885.09,-396 2879.09,-390 2879.09,-384 2879.09,-384 2879.09,-372 2879.09,-372 2879.09,-366 2885.09,-360 2891.09,-360 2891.09,-360 2958.91,-360 2958.91,-360 2964.91,-360 2970.91,-366 2970.91,-372 2970.91,-372 2970.91,-384 2970.91,-384 2970.91,-390 2964.91,-396 2958.91,-396"/>
+<text xml:space="preserve" text-anchor="middle" x="2925" y="-374.7" font-family="Helvetica,sans-Serif" font-size="11.00">ContinuousNeg</text>
+</g>
+<!-- IsTopologicalAddGroup&#45;&gt;ContinuousNeg -->
+<g id="edge25" class="edge">
+<title>IsTopologicalAddGroup&#45;&gt;ContinuousNeg</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M2925,-431.7C2925,-422.8 2925,-411.82 2925,-402.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="2926.75,-402.32 2925,-397.32 2923.25,-402.32 2926.75,-402.32"/>
+</g>
+<!-- IsTopologicalRing&#45;&gt;ContinuousNeg -->
+<g id="edge26" class="edge">
+<title>IsTopologicalRing&#45;&gt;ContinuousNeg</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M2815,-503.69C2826.27,-479.51 2845.98,-437.91 2851,-432 2861.57,-419.56 2875.65,-408.53 2888.7,-399.8"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="2889.59,-401.31 2892.82,-397.11 2887.67,-398.38 2889.59,-401.31"/>
+</g>
+<!-- IsTopologicalSemiring -->
+<g id="node106" class="node" data-class-name="IsTopologicalSemiring" tabindex="0" role="img" aria-label="IsTopologicalSemiring">
+<title>IsTopologicalSemiring</title>
+<path fill="#d0e0e3" stroke="black" d="M2810.11,-468C2810.11,-468 2709.89,-468 2709.89,-468 2703.89,-468 2697.89,-462 2697.89,-456 2697.89,-456 2697.89,-444 2697.89,-444 2697.89,-438 2703.89,-432 2709.89,-432 2709.89,-432 2810.11,-432 2810.11,-432 2816.11,-432 2822.11,-438 2822.11,-444 2822.11,-444 2822.11,-456 2822.11,-456 2822.11,-462 2816.11,-468 2810.11,-468"/>
+<text xml:space="preserve" text-anchor="middle" x="2760" y="-446.7" font-family="Helvetica,sans-Serif" font-size="11.00">IsTopologicalSemiring</text>
+</g>
+<!-- IsTopologicalRing&#45;&gt;IsTopologicalSemiring -->
+<g id="edge27" class="edge">
+<title>IsTopologicalRing&#45;&gt;IsTopologicalSemiring</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M2795.38,-503.7C2789.18,-494.46 2781.48,-482.98 2774.84,-473.11"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="2776.4,-472.29 2772.16,-469.11 2773.49,-474.24 2776.4,-472.29"/>
+</g>
+<!-- IsTopologicalSemiring&#45;&gt;ContinuousMul -->
+<g id="edge28" class="edge">
+<title>IsTopologicalSemiring&#45;&gt;ContinuousMul</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M2746.9,-431.7C2739.84,-422.37 2731.06,-410.77 2723.53,-400.83"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="2725.09,-400 2720.68,-397.07 2722.3,-402.11 2725.09,-400"/>
+</g>
+<!-- IsTopologicalSemiring&#45;&gt;ContinuousAdd -->
+<g id="edge29" class="edge">
+<title>IsTopologicalSemiring&#45;&gt;ContinuousAdd</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" d="M2773.6,-431.7C2780.92,-422.37 2790.04,-410.77 2797.85,-400.83"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="2799.1,-402.07 2800.81,-397.06 2796.35,-399.91 2799.1,-402.07"/>
+</g>
+<!-- IsUniformAddGroup&#45;&gt;IsTopologicalAddGroup -->
+<g id="edge30" class="edge">
+<title>IsUniformAddGroup&#45;&gt;IsTopologicalAddGroup</title>
+<path fill="none" stroke="#555555" stroke-width="0.8" stroke-dasharray="5,2" d="M2931.02,-503.7C2930.01,-494.8 2928.75,-483.82 2927.65,-474.2"/>
+<polygon fill="#555555" stroke="#555555" stroke-width="0.8" points="2929.4,-474.08 2927.09,-469.31 2925.92,-474.47 2929.4,-474.08"/>
+</g>
+</g>
+</svg>
