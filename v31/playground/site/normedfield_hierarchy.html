@@ -250,7 +250,6 @@
   .badge.law { background: #2b4a33; color: #a6e3b5; }
   .badge.default { background: #59431a; color: #f6d692; }
   .badge.autoproof { background: #4a2b4a; color: #e3b5e3; }
-  .badge.optional { background: transparent; border: 1px solid #4b5563; color: #9aa4b2; padding: 0 4px; }
   .badge.determined { background: transparent; border: 1px solid #38596b; color: #9cc3d6; padding: 0 4px; }
   #tooltip li.field-optional, #pinned-body li.field-optional { opacity: .68; }
   #pinned-body li.field-optional:hover { opacity: 1; }
@@ -2193,19 +2192,14 @@
     const ex = fieldExtra(f);
     if (!ex) return '';
     let out = '';
-    if (ex.default) {
-      out += ` <span class="badge optional" title="Has a default definition (${esc(ex.default)}) — not new data an instance must supply. Override it only to control definitional equality (forgetful-inheritance pattern, e.g. avoiding Module diamonds).">optional</span>`;
-    } else if (ex.autoParam) {
-      out += ' <span class="badge optional" title="Proved automatically by a default tactic — not an obligation an instance must discharge by hand. Write it only if the tactic fails.">optional</span>';
-    }
     out += ex.isProp
       ? ` <span class="badge law" title="${ex.autoParam ? 'Prop-valued; a default tactic proves it' : 'Prop-valued: something you prove'}">law</span>`
       : ` <span class="badge data" title="${ex.default ? 'Data-valued; a default definition is provided' : 'Data: something you supply'}">data</span>`;
     if (!ex.isProp && fieldIsDetermined(f, currentTipName)) {
       out += ' <span class="badge determined" title="Value forced by the laws — any two implementations are propositionally equal. You choose only its definitional form (forgetful-inheritance pattern; e.g. keep the recursive default unless diamonds with an existing operation are possible).">determined</span>';
     }
-    if (ex.default) out += ` <span class="badge default" title="The default definition; override only to get better definitional behaviour (forgetful-inheritance pattern)">default := ${esc(ex.default)}</span>`;
-    if (ex.autoParam) out += ' <span class="badge autoproof" title="Proved automatically by a default tactic unless overridden">auto proof</span>';
+    if (ex.default) out += ` <span class="badge default" title="Has a default definition — not new data an instance must supply. Override it only to control definitional equality (forgetful-inheritance pattern, e.g. avoiding Module diamonds).">default := ${esc(ex.default)}</span>`;
+    if (ex.autoParam) out += ' <span class="badge autoproof" title="Proved automatically by a default tactic — not an obligation an instance must discharge by hand. Write it only if the tactic fails.">auto proof</span>';
     return out;
   }
   function matchGroup(s, i) {
