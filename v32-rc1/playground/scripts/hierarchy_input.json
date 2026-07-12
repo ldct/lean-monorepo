@@ -919,6 +919,10 @@
    "disp": "ℕ+"
   },
   {
+   "term": "↥(NonUnitalSubsemiring.closure ({2} : Set ℕ))",
+   "disp": "2ℕ"
+  },
+  {
    "term": "ℤ",
    "disp": "ℤ"
   },
@@ -993,6 +997,10 @@
   {
    "term": "ℕ → ℝ",
    "disp": "ℕ → ℝ"
+  },
+  {
+   "term": "ZeroAtInftyContinuousMap ℝ ℝ",
+   "disp": "C₀(ℝ, ℝ)"
   },
   {
    "term": "Padic 3",
