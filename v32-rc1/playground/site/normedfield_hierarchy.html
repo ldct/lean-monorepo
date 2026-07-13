@@ -2577,6 +2577,28 @@
     const sSet = instSet(s);
     return instSet(t).filter(i => !sSet.includes(i));
   }
+  // ---- "strictness" link — the Lean playground pre-filled with a proof-by-error
+  // that the edge s → t is strict at roster witness i: the weaker class t
+  // compiles green, the stronger class s is a deliberate instance-synthesis
+  // error (the red squiggle IS the demonstration). Templated client-side per
+  // (edge × witness), like instanceSkeleton.
+  function strictnessUrl(s, t, i) {
+    const r = EX.roster[i];
+    const code = [
+      'import Mathlib',
+      '',
+      `-- ${r.disp}: an instance of ${t}, but not of ${s}.`,
+      `abbrev W := ${r.term}`,
+      '',
+      `-- ✓ succeeds — ${r.disp} is an instance of ${t}:`,
+      `example : ${t} W := inferInstance`,
+      '',
+      `-- ✗ fails — ${r.disp} is not an instance of ${s} (Lean-live shows this line in red):`,
+      `example : ${s} W := inferInstance`,
+      ''
+    ].join('\n');
+    return 'https://live.lean-lang.org/#code=' + encodeURIComponent(code);
+  }
   function renderEdgeTip(s, t, kindGuess, full) {
     const info = (EX.edges && EX.edges[s + '->' + t]) || { kind: kindGuess };
     const kindTxt = info.kind === 'solid'
@@ -2596,7 +2618,7 @@
     if (w) {
       html += `<div class="section-title" title="Roster types that are ${esc(t)} but not ${esc(s)}: the inclusion is strict">Strictness witnesses — <code>${esc(t)}</code> but not <code>${esc(s)}</code></div>`;
       html += w.length
-        ? `<div><span class="witness">${w.map(i => `<code>${esc(EX.roster[i].disp)}</code>`).join(', ')}</span></div>`
+        ? `<div><span class="witness">${w.map(i => `<code>${esc(EX.roster[i].disp)}</code> <a href="${strictnessUrl(s, t, i)}" target="_blank" rel="noopener" title="Open the Lean playground with a proof-by-error: ${esc(EX.roster[i].disp)} is a ${esc(t)} (compiles) but not a ${esc(s)} (deliberate red error)">strictness ↗</a>`).join(', ')}</span></div>`
         : `<div class="empty">none in the roster</div>`;
       if (!(EX.classes[s] && EX.classes[s].isProp)) {
         html += `<div class="caveat">measured by declared instances, not mathematical possibility — a witness may still admit a non-canonical ${esc(s)} structure</div>`;
