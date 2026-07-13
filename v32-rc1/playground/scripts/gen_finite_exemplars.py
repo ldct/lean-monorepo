@@ -355,6 +355,60 @@ example (a b : Cap) : a + b = b + a := add_comm a b
 example (a : Cap) : 0 + a = a := zero_add a
 """)
 
+E["AddGroup"] = ("AD3", r"""import Mathlib
+/-- The dihedral group `D₃` written additively: `+` has inverses but does NOT commute. -/
+structure AD3 where
+  rot : Fin 3
+  flip : Bool
+deriving DecidableEq, Fintype, Repr
+def ad3add (x y : AD3) : AD3 :=
+  ⟨x.rot + (if x.flip then -y.rot else y.rot), xor x.flip y.flip⟩
+def ad3neg (x : AD3) : AD3 :=
+  ⟨if x.flip then x.rot else -x.rot, x.flip⟩
+instance : Add AD3 := ⟨ad3add⟩
+instance : Zero AD3 := ⟨⟨0, false⟩⟩
+instance : Neg AD3 := ⟨ad3neg⟩
+instance : AddGroup AD3 where
+  add_assoc := by decide
+  zero_add := by decide
+  add_zero := by decide
+  neg_add_cancel := by decide
+  nsmul := nsmulRec
+  zsmul := zsmulRec
+
+-- `AddGroup`: `+` has an inverse `-`, so subtraction works — but need not commute:
+#eval (⟨1, true⟩ : AD3) - ⟨2, false⟩
+example (x : AD3) : -x + x = 0 := neg_add_cancel x
+""")
+
+E["AddGroupWithOne"] = ("Z3", r"""import Mathlib
+/-- `ℤ/3` as an additive group with a `1` and `ℕ`/`ℤ`-casts `n ↦ n • 1` — no `*`. -/
+inductive Z3 | z | o | t
+  deriving DecidableEq, Fintype, Repr
+open Z3
+def z3add : Z3 → Z3 → Z3
+  | z, y => y | x, z => x
+  | o, o => t | o, t => z
+  | t, o => z | t, t => o
+def z3neg : Z3 → Z3 | z => z | o => t | t => o
+instance : Add Z3 := ⟨z3add⟩
+instance : Zero Z3 := ⟨z⟩
+instance : Neg Z3 := ⟨z3neg⟩
+instance : AddGroupWithOne Z3 where
+  one := o
+  add_assoc := by decide
+  zero_add := by decide
+  add_zero := by decide
+  neg_add_cancel := by decide
+  nsmul := nsmulRec
+  zsmul := zsmulRec
+
+-- `AddGroupWithOne`: `0`, `1`, `+`, `-` and integer casts `n ↦ n • 1` (no multiplication):
+#eval (1 : Z3) + 1
+example : ((3 : ℤ) : Z3) = 0 := by decide
+example : ((2 : ℤ) : Z3) = -1 := by decide
+""")
+
 E["AddCommGroup"] = ("C3", r"""import Mathlib
 /-- The cyclic group `C₃` written additively. -/
 inductive C3 | z | a | b

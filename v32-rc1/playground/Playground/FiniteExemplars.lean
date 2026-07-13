@@ -40,7 +40,9 @@ Part III — additive
   ARPS   AddCommMagma         ⊣ associativity                 (RPS, written additively)
   AKonst AddCommSemigroup     ⊣ has no zero                   (a+b = k, additively)
   Cap    AddCommMonoid        ⊣ negation                      (saturating {0,1,2})
+  AD3    AddGroup, non-abelian ⊣ commutativity                (dihedral D₃, additively)
   C3     AddCommGroup                                          (cyclic C₃)
+  Z3     AddGroupWithOne      ⊣ (has no multiplication)       (ℤ/3: +, −, 1, ℤ-casts)
 
 Part IV — distributive: semirings, rings, fields
   BSemi  CommSemiring         ⊣ additive negation             (Boolean semiring ∨,∧)
@@ -407,6 +409,35 @@ instance : AddCommMonoid Cap where
 
 example : ¬ ∃ y : Cap, Cap.c1 + y = 0 := by decide  -- ⊣ `1` has no negative (not AddGroup)
 
+/-! ### AD3 — a non-abelian `AddGroup`: the dihedral group `D₃`, written additively
+
+The additive rendering of the `D3` group from Part I — `+` has inverses but does
+not commute. (Additive notation for a non-abelian group is unconventional, but
+`AddGroup` genuinely does not assume commutativity.) -/
+
+structure AD3 where
+  rot : Fin 3
+  flip : Bool
+deriving DecidableEq, Fintype, Repr
+
+private def ad3add (x y : AD3) : AD3 :=
+  ⟨x.rot + (if x.flip then -y.rot else y.rot), xor x.flip y.flip⟩
+private def ad3neg (x : AD3) : AD3 :=
+  ⟨if x.flip then x.rot else -x.rot, x.flip⟩
+instance : Add AD3 := ⟨ad3add⟩
+instance : Zero AD3 := ⟨⟨0, false⟩⟩
+instance : Neg AD3 := ⟨ad3neg⟩
+
+instance : AddGroup AD3 where
+  add_assoc := by decide
+  zero_add := by decide
+  add_zero := by decide
+  neg_add_cancel := by decide
+  nsmul := nsmulRec
+  zsmul := zsmulRec
+
+example : ¬ ∀ x y : AD3, x + y = y + x := by decide  -- ⊣ non-abelian
+
 /-! ### C3 — `AddCommGroup`: the cyclic group `C₃` (written additively) -/
 
 inductive C3 | z | a | b
@@ -431,6 +462,40 @@ instance : AddCommGroup C3 where
   neg_add_cancel := by decide
   nsmul := nsmulRec
   zsmul := zsmulRec
+
+/-! ### Z3 — `AddGroupWithOne`: `ℤ/3` as `+`, `−`, a `1`, and `ℕ`/`ℤ`-casts (no `*`)
+
+The additive backbone of a ring: an additive group with a distinguished `1` and
+the resulting `ℕ`/`ℤ`-casts `n ↦ n • 1` — but *no* multiplication.  The cast laws
+range over all of `ℕ`/`ℤ`, so they are not `decide`-able; they hold by the
+recursive `Nat.unaryCast`/`Int.castDef` defaults, leaving only the finite
+additive-group axioms for `decide`. -/
+
+inductive Z3 | z | o | t
+deriving DecidableEq, Fintype, Repr
+open Z3 in
+private def z3add : Z3 → Z3 → Z3
+  | z, y => y | x, z => x
+  | o, o => t | o, t => z
+  | t, o => z | t, t => o
+open Z3 in
+private def z3neg : Z3 → Z3 | z => z | o => t | t => o
+instance : Add Z3 := ⟨z3add⟩
+instance : Zero Z3 := ⟨Z3.z⟩
+instance : Neg Z3 := ⟨z3neg⟩
+
+instance : AddGroupWithOne Z3 where
+  one := Z3.o
+  add_assoc := by decide
+  zero_add := by decide
+  add_zero := by decide
+  neg_add_cancel := by decide
+  nsmul := nsmulRec
+  zsmul := zsmulRec
+
+-- concrete casts still evaluate, so `decide` checks them (`3 = 0`, `2 = -1` in ℤ/3):
+example : ((3 : ℤ) : Z3) = 0 := by decide
+example : ((2 : ℤ) : Z3) = -1 := by decide
 
 /-! ## Part IV — distributive structures: semirings, rings, fields -/
 
