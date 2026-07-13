@@ -2358,7 +2358,7 @@
     const rest = insts.filter(i => !sharp.includes(i));
     let html = title;
     if (sharp.length) {
-      html += `<div><span class="witness">${sharp.map(i => `<code>${esc(EX.roster[i].disp)}</code> <a href="${sharpExampleUrl(name, i)}" target="_blank" rel="noopener" title="Open the Lean playground with a compiling check that ${esc(EX.roster[i].disp)} is an instance of ${esc(name)} (no stronger drawn class applies)">instance ↗</a>`).join(', ')}</span> <span class="dimtext">— go no higher: no drawn incoming class applies</span></div>`;
+      html += `<div><span class="witness">${sharp.map(i => `<code>${esc(EX.roster[i].disp)}</code> <a href="${sharpExampleUrl(name, i)}" target="_blank" rel="noopener" title="Open the Lean playground with a compiling check that ${esc(EX.roster[i].disp)} is an instance of ${esc(name)} (no stronger drawn class applies)">↗</a>`).join(', ')}</span> <span class="dimtext">— go no higher: no drawn incoming class applies</span></div>`;
       if (rest.length) {
         html += `<details class="examples-details"><summary>${rest.length} example${rest.length === 1 ? '' : 's'} via higher classes</summary><div class="dimtext">${rest.map(i => esc(EX.roster[i].disp)).join(', ')}</div></details>`;
       }
@@ -2608,7 +2608,7 @@
     const code = [
       'import Mathlib',
       '',
-      `-- ${r.disp} is an instance of ${name} (and of nothing stronger in the hierarchy).`,
+      `-- ${r.disp} is an instance of ${name}.`,
       `abbrev W := ${r.term}`,
       '',
       // noncomputable: harmless when unneeded, required when the instance is
@@ -2637,7 +2637,7 @@
     if (w) {
       html += `<div class="section-title" title="Roster types that are ${esc(t)} but not ${esc(s)}: the inclusion is strict">Strictness witnesses — <code>${esc(t)}</code> but not <code>${esc(s)}</code></div>`;
       html += w.length
-        ? `<div><span class="witness">${w.map(i => `<code>${esc(EX.roster[i].disp)}</code> <a href="${strictnessUrl(s, t, i)}" target="_blank" rel="noopener" title="Open the Lean playground with a proof-by-error: ${esc(EX.roster[i].disp)} is a ${esc(t)} (compiles) but not a ${esc(s)} (deliberate red error)">strictness ↗</a>`).join(', ')}</span></div>`
+        ? `<div><span class="witness">${w.map(i => `<code>${esc(EX.roster[i].disp)}</code> <a href="${strictnessUrl(s, t, i)}" target="_blank" rel="noopener" title="Open the Lean playground with a proof-by-error: ${esc(EX.roster[i].disp)} is a ${esc(t)} (compiles) but not a ${esc(s)} (deliberate red error)">↗</a>`).join(', ')}</span></div>`
         : `<div class="empty">none in the roster</div>`;
       if (!(EX.classes[s] && EX.classes[s].isProp)) {
         html += `<div class="caveat">measured by declared instances, not mathematical possibility — a witness may still admit a non-canonical ${esc(s)} structure</div>`;
