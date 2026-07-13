@@ -1,0 +1,90 @@
+{
+ "Mul": {
+  "disp": "Mag2",
+  "code": "import Mathlib\n/-- A bare magma: a set with `*` and no laws (material nonimplication `a ∧ ¬b`). -/\ninductive Mag2 | ff | tt\n  deriving DecidableEq, Fintype, Repr\nopen Mag2\ndef mag2mul : Mag2 → Mag2 → Mag2\n  | tt, ff => tt\n  | _,  _  => ff\ninstance : Mul Mag2 := ⟨mag2mul⟩\n\n-- `Mul` gives you `*` and nothing else — not even commutativity:\n#eval tt * ff\nexample : tt * ff ≠ ff * tt := by decide\n"
+ },
+ "CommMagma": {
+  "disp": "RPS",
+  "code": "import Mathlib\n/-- Rock–Paper–Scissors: `a * b` is the winner. Commutative, but NOT associative. -/\ninductive RPS | rock | paper | scissors\n  deriving DecidableEq, Fintype, Repr\nopen RPS\ndef rpsMul : RPS → RPS → RPS\n  | rock, scissors => rock     | scissors, rock => rock\n  | paper, rock     => paper    | rock, paper     => paper\n  | scissors, paper => scissors | paper, scissors => scissors\n  | a, _ => a\ninstance : Mul RPS := ⟨rpsMul⟩\ninstance : CommMagma RPS where\n  mul_comm := by decide\n\n-- `CommMagma` gives a commutative `*`:\n#eval rock * paper\nexample (a b : RPS) : a * b = b * a := mul_comm a b\n"
+ },
+ "Semigroup": {
+  "disp": "LProj",
+  "code": "import Mathlib\n/-- Left projection `a * b = a`: associative, but not commutative. -/\ninductive LProj | x0 | x1\n  deriving DecidableEq, Fintype, Repr\ninstance : Mul LProj := ⟨fun a _ => a⟩\ninstance : Semigroup LProj where\n  mul_assoc := by decide\n\n-- `Semigroup` gives associativity, so you may drop parentheses:\nexample (a b c : LProj) : a * b * c = a * (b * c) := mul_assoc a b c\n"
+ },
+ "CommSemigroup": {
+  "disp": "Konst",
+  "code": "import Mathlib\n/-- The constant operation `a * b = k0`: associative and commutative, no identity. -/\ninductive Konst | k0 | k1\n  deriving DecidableEq, Fintype, Repr\ninstance : Mul Konst := ⟨fun _ _ => Konst.k0⟩\ninstance : CommSemigroup Konst where\n  mul_assoc := by decide\n  mul_comm := by decide\n\n-- `CommSemigroup` gives both associativity and commutativity:\nexample (a b : Konst) : a * b = b * a := mul_comm a b\nexample (a b c : Konst) : a * b * c = a * (b * c) := mul_assoc a b c\n"
+ },
+ "MulOneClass": {
+  "disp": "RPSU",
+  "code": "import Mathlib\n/-- Rock–Paper–Scissors with an adjoined unit `u`: has `1`, still not associative. -/\ninductive RPSU | u | rr | pp | ss\n  deriving DecidableEq, Fintype, Repr\nopen RPSU\ndef rpsuMul : RPSU → RPSU → RPSU\n  | u, y => y\n  | x, u => x\n  | rr, ss => rr | ss, rr => rr\n  | pp, rr => pp | rr, pp => pp\n  | ss, pp => ss | pp, ss => ss\n  | x, _ => x\ninstance : Mul RPSU := ⟨rpsuMul⟩\ninstance : One RPSU := ⟨u⟩\ninstance : MulOneClass RPSU where\n  one_mul := by decide\n  mul_one := by decide\n\n-- `MulOneClass` gives a two-sided identity `1`:\n#eval (1 : RPSU) * rr\nexample (a : RPSU) : 1 * a = a := one_mul a\nexample (a : RPSU) : a * 1 = a := mul_one a\n"
+ },
+ "Monoid": {
+  "disp": "M3",
+  "code": "import Mathlib\n/-- `{e, a, b}` with `a`, `b` left zeros: an associative monoid, non-commutative. -/\ninductive M3 | e | a | b\n  deriving DecidableEq, Fintype, Repr\nopen M3\ndef m3mul : M3 → M3 → M3\n  | e, y => y\n  | x, e => x\n  | a, _ => a\n  | b, _ => b\ninstance : Mul M3 := ⟨m3mul⟩\ninstance : One M3 := ⟨e⟩\ninstance : Monoid M3 where\n  mul_assoc := by decide\n  one_mul := by decide\n  mul_one := by decide\n  npow := npowRec\n\n-- `Monoid` = associativity + `1`, so powers `a ^ n` are defined:\n#eval a ^ 3\nexample (x : M3) : x ^ 2 = x * x := pow_two x\n"
+ },
+ "CommMonoid": {
+  "disp": "AndM",
+  "code": "import Mathlib\n/-- `({⊥,⊤}, ∧)`: a commutative monoid with identity `⊤`; `⊥` has no inverse. -/\ninductive AndM | ff | tt\n  deriving DecidableEq, Fintype, Repr\nopen AndM\ndef andMul : AndM → AndM → AndM\n  | tt, y => y\n  | x, tt => x\n  | ff, ff => ff\ninstance : Mul AndM := ⟨andMul⟩\ninstance : One AndM := ⟨tt⟩\ninstance : CommMonoid AndM where\n  mul_assoc := by decide\n  one_mul := by decide\n  mul_one := by decide\n  mul_comm := by decide\n  npow := npowRec\n\n-- `CommMonoid`: a commutative, associative `*` with `1`:\n#eval ff * tt\nexample (a b : AndM) : a * b = b * a := mul_comm a b\n"
+ },
+ "DivInvMonoid": {
+  "disp": "DIM",
+  "code": "import Mathlib\n/-- A monoid with a formal `⁻¹ := id` (no inverse law): a `DivInvMonoid`, not a group. -/\ninductive DIM | ff | tt\n  deriving DecidableEq, Fintype, Repr\nopen DIM\ndef dimMul : DIM → DIM → DIM\n  | tt, y => y\n  | x, tt => x\n  | ff, ff => ff\ninstance : Mul DIM := ⟨dimMul⟩\ninstance : One DIM := ⟨tt⟩\ninstance : Inv DIM := ⟨id⟩\ninstance : DivInvMonoid DIM where\n  mul_assoc := by decide\n  one_mul := by decide\n  mul_one := by decide\n  npow := npowRec\n  zpow := zpowRec\n\n-- `DivInvMonoid` provides `⁻¹`, `/` and `zpow`, with `a / b = a * b⁻¹`:\n#eval tt / ff\nexample (a b : DIM) : a / b = a * b⁻¹ := div_eq_mul_inv a b\n"
+ },
+ "MulZeroClass": {
+  "disp": "RPS0",
+  "code": "import Mathlib\n/-- Rock–Paper–Scissors with an absorbing `0`: `0` annihilates `*`, still not associative. -/\ninductive RPS0 | zero | rock | paper | scissors\n  deriving DecidableEq, Fintype, Repr\nopen RPS0\ndef rps0mul : RPS0 → RPS0 → RPS0\n  | zero, _ => zero | _, zero => zero\n  | rock, scissors => rock | scissors, rock => rock\n  | paper, rock => paper | rock, paper => paper\n  | scissors, paper => scissors | paper, scissors => scissors\n  | x, _ => x\ninstance : Mul RPS0 := ⟨rps0mul⟩\ninstance : Zero RPS0 := ⟨zero⟩\ninstance : MulZeroClass RPS0 where\n  zero_mul := by decide\n  mul_zero := by decide\n\n-- `MulZeroClass`: `0` is absorbing on both sides:\n#eval (0 : RPS0) * rock\nexample (a : RPS0) : 0 * a = 0 := zero_mul a\nexample (a : RPS0) : a * 0 = 0 := mul_zero a\n"
+ },
+ "MulZeroOneClass": {
+  "disp": "RPSZ",
+  "code": "import Mathlib\n/-- Rock–Paper–Scissors with both a `0` and a `1`: still not associative. -/\ninductive RPSZ | zero | u | rock | paper | scissors\n  deriving DecidableEq, Fintype, Repr\nopen RPSZ\ndef rpszmul : RPSZ → RPSZ → RPSZ\n  | zero, _ => zero | _, zero => zero\n  | u, y => y | x, u => x\n  | rock, scissors => rock | scissors, rock => rock\n  | paper, rock => paper | rock, paper => paper\n  | scissors, paper => scissors | paper, scissors => scissors\n  | x, _ => x\ninstance : Mul RPSZ := ⟨rpszmul⟩\ninstance : Zero RPSZ := ⟨zero⟩\ninstance : One RPSZ := ⟨u⟩\ninstance : MulZeroOneClass RPSZ where\n  zero_mul := by decide\n  mul_zero := by decide\n  one_mul := by decide\n  mul_one := by decide\n\n-- `MulZeroOneClass` has both an absorbing `0` and an identity `1`:\n#eval (0 : RPSZ) * rock\n#eval (1 : RPSZ) * rock\nexample (a : RPSZ) : 0 * a = 0 := zero_mul a\nexample (a : RPSZ) : 1 * a = a := one_mul a\n"
+ },
+ "SemigroupWithZero": {
+  "disp": "LProj0",
+  "code": "import Mathlib\n/-- Left projection with an absorbing `0`: associative with `0`, but no identity. -/\ninductive LProj0 | zero | a | b\n  deriving DecidableEq, Fintype, Repr\nopen LProj0\ndef lp0mul : LProj0 → LProj0 → LProj0\n  | zero, _ => zero | _, zero => zero\n  | x, _ => x\ninstance : Mul LProj0 := ⟨lp0mul⟩\ninstance : Zero LProj0 := ⟨zero⟩\ninstance : SemigroupWithZero LProj0 where\n  mul_assoc := by decide\n  zero_mul := by decide\n  mul_zero := by decide\n\n-- `SemigroupWithZero`: associative, with an absorbing `0`:\n#eval (0 : LProj0) * a\nexample (x y z : LProj0) : x * y * z = x * (y * z) := mul_assoc x y z\nexample (x : LProj0) : 0 * x = 0 := zero_mul x\n"
+ },
+ "MonoidWithZero": {
+  "disp": "Nilp",
+  "code": "import Mathlib\n/-- The nilpotent monoid `{0, 1, n}` with `n * n = 0`: `n ≠ 0` has no inverse. -/\ninductive Nilp | zero | one | n\n  deriving DecidableEq, Fintype, Repr\nopen Nilp\ndef nilpMul : Nilp → Nilp → Nilp\n  | zero, _ => zero | _, zero => zero\n  | one, y => y | x, one => x\n  | n, n => zero\ninstance : Mul Nilp := ⟨nilpMul⟩\ninstance : Zero Nilp := ⟨zero⟩\ninstance : One Nilp := ⟨one⟩\ninstance : MonoidWithZero Nilp where\n  mul_assoc := by decide\n  one_mul := by decide\n  mul_one := by decide\n  zero_mul := by decide\n  mul_zero := by decide\n  npow := npowRec\n\n-- `MonoidWithZero`: a monoid whose `0` absorbs; note `n` is nilpotent:\n#eval n * n\nexample (x : Nilp) : 1 * x = x := one_mul x\nexample (x : Nilp) : x * 0 = 0 := mul_zero x\n"
+ },
+ "GroupWithZero": {
+  "disp": "GZ",
+  "code": "import Mathlib\n/-- `0` adjoined to the cyclic group `C₃`: every nonzero element is a unit. -/\ninductive GZ | zero | one | g | g2\n  deriving DecidableEq, Fintype, Repr\nopen GZ\ndef gzMul : GZ → GZ → GZ\n  | zero, _ => zero | _, zero => zero\n  | one, y => y | x, one => x\n  | g, g => g2 | g, g2 => one\n  | g2, g => one | g2, g2 => g\ndef gzInv : GZ → GZ | zero => zero | one => one | g => g2 | g2 => g\ninstance : Mul GZ := ⟨gzMul⟩\ninstance : Zero GZ := ⟨zero⟩\ninstance : One GZ := ⟨one⟩\ninstance : Inv GZ := ⟨gzInv⟩\ninstance : GroupWithZero GZ where\n  mul_assoc := by decide\n  one_mul := by decide\n  mul_one := by decide\n  zero_mul := by decide\n  mul_zero := by decide\n  inv_zero := by decide\n  mul_inv_cancel := by decide\n  exists_pair_ne := ⟨zero, one, by decide⟩\n  npow := npowRec\n  zpow := zpowRec\n\n-- `GroupWithZero`: every nonzero element has a multiplicative inverse:\n#eval g * g⁻¹\nexample (x : GZ) (h : x ≠ 0) : x * x⁻¹ = 1 := mul_inv_cancel₀ h\n"
+ },
+ "AddCommMagma": {
+  "disp": "ARPS",
+  "code": "import Mathlib\n/-- Rock–Paper–Scissors written additively: `+` is commutative, but NOT associative. -/\ninductive ARPS | a0 | a1 | a2\n  deriving DecidableEq, Fintype, Repr\nopen ARPS\ndef arpsAdd : ARPS → ARPS → ARPS\n  | a0, a2 => a0 | a2, a0 => a0\n  | a1, a0 => a1 | a0, a1 => a1\n  | a2, a1 => a2 | a1, a2 => a2\n  | x, _ => x\ninstance : Add ARPS := ⟨arpsAdd⟩\ninstance : AddCommMagma ARPS where\n  add_comm := by decide\n\n-- `AddCommMagma` gives a commutative `+`:\n#eval a0 + a2\nexample (a b : ARPS) : a + b = b + a := add_comm a b\n"
+ },
+ "AddCommSemigroup": {
+  "disp": "AKonst",
+  "code": "import Mathlib\n/-- The constant operation `a + b = k0`: associative and commutative, but no zero. -/\ninductive AKonst | k0 | k1\n  deriving DecidableEq, Fintype, Repr\ninstance : Add AKonst := ⟨fun _ _ => AKonst.k0⟩\ninstance : AddCommSemigroup AKonst where\n  add_assoc := by decide\n  add_comm := by decide\n\n-- `AddCommSemigroup` gives both associativity and commutativity of `+`:\nexample (a b : AKonst) : a + b = b + a := add_comm a b\nexample (a b c : AKonst) : a + b + c = a + (b + c) := add_assoc a b c\n"
+ },
+ "AddCommMonoid": {
+  "disp": "Cap",
+  "code": "import Mathlib\n/-- A saturating counter `{0,1,2}` with `a + b = min (a + b) 2`: no negatives. -/\ninductive Cap | c0 | c1 | c2\n  deriving DecidableEq, Fintype, Repr\nopen Cap\ndef capAdd : Cap → Cap → Cap\n  | c0, y => y | x, c0 => x\n  | _, _ => c2\ninstance : Add Cap := ⟨capAdd⟩\ninstance : Zero Cap := ⟨c0⟩\ninstance : AddCommMonoid Cap where\n  add_assoc := by decide\n  zero_add := by decide\n  add_zero := by decide\n  add_comm := by decide\n  nsmul := nsmulRec\n\n-- `AddCommMonoid`: a commutative, associative `+` with `0`:\n#eval c1 + c2\nexample (a b : Cap) : a + b = b + a := add_comm a b\nexample (a : Cap) : 0 + a = a := zero_add a\n"
+ },
+ "AddCommGroup": {
+  "disp": "C3",
+  "code": "import Mathlib\n/-- The cyclic group `C₃` written additively. -/\ninductive C3 | z | a | b\n  deriving DecidableEq, Fintype, Repr\nopen C3\ndef c3add : C3 → C3 → C3\n  | z, y => y\n  | x, z => x\n  | a, a => b | a, b => z\n  | b, a => z | b, b => a\ndef c3neg : C3 → C3 | z => z | a => b | b => a\ninstance : Add C3 := ⟨c3add⟩\ninstance : Zero C3 := ⟨z⟩\ninstance : Neg C3 := ⟨c3neg⟩\ninstance : AddCommGroup C3 where\n  add_assoc := by decide\n  zero_add := by decide\n  add_zero := by decide\n  add_comm := by decide\n  neg_add_cancel := by decide\n  nsmul := nsmulRec\n  zsmul := zsmulRec\n\n-- `AddCommGroup`: `+` has inverses, so subtraction works:\n#eval a - b\nexample (x : C3) : -x + x = 0 := neg_add_cancel x\nexample (a b : C3) : a - b = a + -b := sub_eq_add_neg a b\n"
+ },
+ "CommSemiring": {
+  "disp": "BSemi",
+  "code": "import Mathlib\n/-- The Boolean semiring `(∨, ∧)`: distributive, but `⊤` has no additive inverse. -/\ninductive BSemi | bot | top\n  deriving DecidableEq, Fintype, Repr\nopen BSemi\ndef bAdd : BSemi → BSemi → BSemi\n  | bot, y => y\n  | x, bot => x\n  | top, top => top\ndef bMul : BSemi → BSemi → BSemi\n  | top, y => y\n  | x, top => x\n  | bot, bot => bot\ninstance : Add BSemi := ⟨bAdd⟩\ninstance : Mul BSemi := ⟨bMul⟩\ninstance : Zero BSemi := ⟨bot⟩\ninstance : One BSemi := ⟨top⟩\ninstance : CommSemiring BSemi where\n  add_assoc := by decide\n  zero_add := by decide\n  add_zero := by decide\n  add_comm := by decide\n  left_distrib := by decide\n  right_distrib := by decide\n  zero_mul := by decide\n  mul_zero := by decide\n  mul_assoc := by decide\n  one_mul := by decide\n  mul_one := by decide\n  mul_comm := by decide\n  nsmul := nsmulRec\n  npow := npowRec\n\n-- `CommSemiring`: `*` distributes over `+`, and both are commutative:\n#eval top * (bot + top)\nexample (a b c : BSemi) : a * (b + c) = a * b + a * c := left_distrib a b c\n"
+ },
+ "NonUnitalCommRing": {
+  "disp": "Z2m",
+  "code": "import Mathlib\n/-- `ℤ/2` additively, with the zero multiplication `x * y = 0`: a ring with no `1`. -/\ninductive Z2m | zero | e\n  deriving DecidableEq, Fintype, Repr\nopen Z2m\ndef z2add : Z2m → Z2m → Z2m\n  | zero, y => y | x, zero => x | e, e => zero\ninstance : Add Z2m := ⟨z2add⟩\ninstance : Mul Z2m := ⟨fun _ _ => zero⟩\ninstance : Zero Z2m := ⟨zero⟩\ninstance : Neg Z2m := ⟨id⟩\ninstance : NonUnitalCommRing Z2m where\n  add_assoc := by decide\n  zero_add := by decide\n  add_zero := by decide\n  add_comm := by decide\n  neg_add_cancel := by decide\n  left_distrib := by decide\n  right_distrib := by decide\n  zero_mul := by decide\n  mul_zero := by decide\n  mul_assoc := by decide\n  mul_comm := by decide\n  nsmul := nsmulRec\n  zsmul := zsmulRec\n\n-- `NonUnitalCommRing`: an additive group with a distributive, commutative `*` (no `1`):\n#eval e * e\nexample (a b : Z2m) : a * b = b * a := mul_comm a b\nexample (a : Z2m) : -a + a = 0 := neg_add_cancel a\n"
+ },
+ "Ring": {
+  "disp": "UT",
+  "code": "import Mathlib\n/-- Upper-triangular `2×2` matrices over `𝔽₂`: `⟨a,b,d⟩ = [[a,b],[0,d]]`. Non-commutative. -/\nstructure UT where\n  a : Bool\n  b : Bool\n  d : Bool\nderiving DecidableEq, Fintype, Repr\ninstance : Add UT := ⟨fun x y => ⟨xor x.a y.a, xor x.b y.b, xor x.d y.d⟩⟩\ninstance : Mul UT := ⟨fun x y => ⟨x.a && y.a, xor (x.a && y.b) (x.b && y.d), x.d && y.d⟩⟩\ninstance : Zero UT := ⟨⟨false, false, false⟩⟩\ninstance : One UT := ⟨⟨true, false, true⟩⟩\ninstance : Neg UT := ⟨id⟩\ninstance : Ring UT where\n  add_assoc := by decide\n  zero_add := by decide\n  add_zero := by decide\n  add_comm := by decide\n  neg_add_cancel := by decide\n  left_distrib := by decide\n  right_distrib := by decide\n  zero_mul := by decide\n  mul_zero := by decide\n  mul_assoc := by decide\n  one_mul := by decide\n  mul_one := by decide\n  nsmul := nsmulRec\n  zsmul := zsmulRec\n\n-- `Ring`: associative `*` distributing over an additive group (order matters here):\n#eval (⟨true, true, false⟩ : UT) * ⟨false, false, true⟩\nexample (a b c : UT) : a * (b + c) = a * b + a * c := left_distrib a b c\nexample (a b c : UT) : a * b * c = a * (b * c) := mul_assoc a b c\n"
+ },
+ "CommRing": {
+  "disp": "Z4",
+  "code": "import Mathlib\n/-- `ℤ/4` from scratch: a commutative ring with zero divisors (`2 * 2 = 0`). -/\nstructure Z4 where val : Fin 4\nderiving DecidableEq, Fintype, Repr\ninstance : Add Z4 := ⟨fun x y => ⟨x.val + y.val⟩⟩\ninstance : Mul Z4 := ⟨fun x y => ⟨x.val * y.val⟩⟩\ninstance : Zero Z4 := ⟨⟨0⟩⟩\ninstance : One Z4 := ⟨⟨1⟩⟩\ninstance : Neg Z4 := ⟨fun x => ⟨-x.val⟩⟩\ninstance : CommRing Z4 where\n  add_assoc := by decide\n  zero_add := by decide\n  add_zero := by decide\n  add_comm := by decide\n  neg_add_cancel := by decide\n  left_distrib := by decide\n  right_distrib := by decide\n  zero_mul := by decide\n  mul_zero := by decide\n  mul_assoc := by decide\n  one_mul := by decide\n  mul_one := by decide\n  mul_comm := by decide\n  nsmul := nsmulRec\n  zsmul := zsmulRec\n\n-- `CommRing`: a commutative ring — full arithmetic with `+`, `-`, `*`:\n#eval (⟨2⟩ : Z4) * ⟨3⟩\nexample (a b : Z4) : a * b = b * a := mul_comm a b\nexample (a b : Z4) : a - b = a + -b := sub_eq_add_neg a b\n"
+ },
+ "Field": {
+  "disp": "GF2",
+  "code": "import Mathlib\n/-- The two-element field `𝔽₂ = ({0,1}, ⊕, ∧)`. -/\ninductive GF2 | o | l\n  deriving DecidableEq, Fintype, Repr\nopen GF2\ndef gf2add : GF2 → GF2 → GF2 | o, y => y | x, o => x | l, l => o\ndef gf2mul : GF2 → GF2 → GF2 | l, l => l | _, _ => o\ninstance : Add GF2 := ⟨gf2add⟩\ninstance : Mul GF2 := ⟨gf2mul⟩\ninstance : Zero GF2 := ⟨o⟩\ninstance : One GF2 := ⟨l⟩\ninstance : Neg GF2 := ⟨id⟩\ninstance : Inv GF2 := ⟨id⟩\ninstance : CommRing GF2 where\n  add_assoc := by decide\n  zero_add := by decide\n  add_zero := by decide\n  add_comm := by decide\n  neg_add_cancel := by decide\n  left_distrib := by decide\n  right_distrib := by decide\n  zero_mul := by decide\n  mul_zero := by decide\n  mul_assoc := by decide\n  one_mul := by decide\n  mul_one := by decide\n  mul_comm := by decide\n  nsmul := nsmulRec\n  zsmul := zsmulRec\nnoncomputable instance : Field GF2 := by\n  refine { (inferInstance : CommRing GF2) with\n    inv := fun x => x⁻¹,\n    exists_pair_ne := ⟨o, l, by decide⟩,\n    mul_inv_cancel := ?_, inv_zero := by decide,\n    nnqsmul := _, qsmul := _ }\n  decide\n\n-- `Field`: every nonzero element is invertible:\nexample (x : GF2) (h : x ≠ 0) : x * x⁻¹ = 1 := mul_inv_cancel₀ h\n"
+ }
+}

@@ -52,6 +52,24 @@ standard types used for examples and strictness witnesses lives in
 5. **Inject**: `python3 scripts/inject_extras.py` inlines the JSON into the
    page (`EXTRA_DATA`). Idempotent.
 
+## Finite-example playground links (`finite example ↗`)
+
+Alongside the `instance skeleton ↗` link, a node's tooltip may offer a
+`finite example ↗` link opening `live.lean-lang.org` on a **small finite type
+that is an instance of exactly that class and nothing higher** — every law
+proved by `by decide`, with a short usage example touching only that class's
+API. The full curated zoo lives (and is source-verified) in
+`Playground/FiniteExemplars.lean`; the per-node playground snippets are a
+separate, self-contained curation:
+
+1. **Author/verify** the snippets in `scripts/gen_finite_exemplars.py`, then
+   `python3 scripts/gen_finite_exemplars.py` → `site/finite_exemplars.json`.
+2. **Compile-check** every snippet standalone (as it will appear on lean-live):
+   `bash scripts/check_finite_exemplars.sh` (expects all `PASS`).
+3. **Inject**: `python3 scripts/inject_finite_exemplars.py` inlines the JSON
+   into the page (`FINITE_EX`). Idempotent. The link renders only for the ~20
+   nodes that have a curated exemplar.
+
 ## Layout caveat: the page's SVG is not the pipeline's SVG
 
 The inline SVG in `site/normedfield_hierarchy.html` (2403×941pt) is the
