@@ -2358,7 +2358,7 @@
     const rest = insts.filter(i => !sharp.includes(i));
     let html = title;
     if (sharp.length) {
-      html += `<div><span class="witness">${sharp.map(i => `<code>${esc(EX.roster[i].disp)}</code>`).join(', ')}</span> <span class="dimtext">— go no higher: no drawn incoming class applies</span></div>`;
+      html += `<div><span class="witness">${sharp.map(i => `<code>${esc(EX.roster[i].disp)}</code> <a href="${sharpExampleUrl(name, i)}" target="_blank" rel="noopener" title="Open the Lean playground with a compiling check that ${esc(EX.roster[i].disp)} is an instance of ${esc(name)} (no stronger drawn class applies)">instance ↗</a>`).join(', ')}</span> <span class="dimtext">— go no higher: no drawn incoming class applies</span></div>`;
       if (rest.length) {
         html += `<details class="examples-details"><summary>${rest.length} example${rest.length === 1 ? '' : 's'} via higher classes</summary><div class="dimtext">${rest.map(i => esc(EX.roster[i].disp)).join(', ')}</div></details>`;
       }
@@ -2595,6 +2595,25 @@
       '',
       `-- ✗ fails — ${r.disp} is not an instance of ${s} (Lean-live shows this line in red):`,
       `example : ${s} W := inferInstance`,
+      ''
+    ].join('\n');
+    return 'https://live.lean-lang.org/#code=' + encodeURIComponent(code);
+  }
+  // ---- "instance" link — the Lean playground pre-filled with a success-only
+  // check that sharp roster example i is an instance of the node's class:
+  // `inferInstance` compiles green, no deliberate error. Templated client-side
+  // per (class × example), like strictnessUrl.
+  function sharpExampleUrl(name, i) {
+    const r = EX.roster[i];
+    const code = [
+      'import Mathlib',
+      '',
+      `-- ${r.disp} is an instance of ${name} (and of nothing stronger in the hierarchy).`,
+      `abbrev W := ${r.term}`,
+      '',
+      // noncomputable: harmless when unneeded, required when the instance is
+      // noncomputable data (e.g. Field ℝ) — `example` would otherwise fail to compile.
+      `noncomputable example : ${name} W := inferInstance`,
       ''
     ].join('\n');
     return 'https://live.lean-lang.org/#code=' + encodeURIComponent(code);
