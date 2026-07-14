@@ -1,7 +1,13 @@
 import Mathlib
 
 
+-- Namespaced to avoid a root-level clash with `RealIsometry.Dihedral.IsDihedral`
+-- (both folders are aggregated into the root `Playground` library). `open` keeps
+-- the unqualified uses below working, without re-exporting the name.
+namespace DihedralQuotients
 abbrev IsDihedral (G : Type*) [Group G] : Prop := ∃ n : ℕ, Nonempty (DihedralGroup n ≃* G)
+end DihedralQuotients
+open DihedralQuotients
 
 noncomputable section AristotleLemmas
 

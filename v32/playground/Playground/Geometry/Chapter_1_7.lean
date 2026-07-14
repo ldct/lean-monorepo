@@ -398,7 +398,7 @@ example {G} [Group G] [DecidableEq G] [Fintype G] (H : Subgroup G)
       exact ⟨ Equiv.ofBijective ( fun g => ⟨ g • a, by
         exact ⟨g, rfl⟩ ⟩ ) ⟨ by
         intro g₁ g₂ h
-        have : g₁ • a = g₂ • a := by simpa using h
+        have : g₁ • a = g₂ • a := congrArg Subtype.val h
         change (g₁ : G) * a = (g₂ : G) * a at this
         exact SetCoe.ext (mul_right_cancel this), by
         rintro ⟨ b, ⟨ g, hg ⟩  ⟩

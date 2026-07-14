@@ -97,6 +97,7 @@ example : GeneratesAdditvely (5 : ZMod 48) := by
 
 -- Exercise 3, p60
 -- Find all generators for Z/48Z
+set_option maxRecDepth 2000 in
 example : Nat.card { g : ZMod 48 | GeneratesAdditvely g } = 16 := by
   unfold GeneratesAdditvely; norm_num [ Nat.card_eq_fintype_card ] ;
   have h_set : {g : ZMod 48 | ∀ h : ZMod 48, ∃ n : ℤ, (n : ZMod 48) * g = h} =
@@ -115,7 +116,7 @@ example : Nat.card { g : ZMod 48 | GeneratesAdditvely g } = 16 := by
 
   convert Nat.card_eq_finsetCard _;
   any_goals exact Finset.filter ( fun x => IsUnit x ) ( Finset.univ : Finset ( ZMod 48 ) );
-  · rw [ Set.ext_iff ] at h_set ; aesop;
+  · rw [ h_set, ← Set.fintypeCard_eq_ncard, Nat.card_eq_fintype_card ]; rfl
   · decide +kernel
 
 

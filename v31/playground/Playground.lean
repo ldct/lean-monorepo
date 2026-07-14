@@ -1,29 +1,19 @@
 import Playground.AbsArith
 import Playground.AddOrderOf1
 import Playground.AddOrderOf1_aristotle
-import Playground.Analysis.All
-import Playground.AoC.All
 import Playground.Basic
-import Playground.Borcherds.All
 import Playground.CPolynomial
-import Playground.Numerics.All
 import Playground.Combi1
 import Playground.ComplexExamples
-import Playground.Determinant.All
 import Playground.DihedralCenter
 import Playground.DummitAndFooteExamples
-import Playground.EnumeratingTypes.Enumerations
 import Playground.Enumerations
 import Playground.Equiv
 import Playground.FastDecide
 import Playground.Fib
 import Playground.FibZ
-import Playground.FinsetInterval
 import Playground.FracPartIntegral
 import Playground.FunctionalTheorems
-import Playground.GaussianIntegers.All
-import Playground.Geometry.All
-import Playground.GroupTheory.All
 import Playground.HM_Geometry
 import Playground.IdealSumCarrier
 import Playground.IdealSumCarrier_aristotle
@@ -31,9 +21,7 @@ import Playground.IrregularityOfDistribution
 import Playground.Jensen
 import Playground.KernelTCO
 import Playground.LADRDW
-import Playground.LinearAlgebra.LinearAlgebra
 import Playground.ListsTest
-import Playground.MetricSpaces.All
 -- import Playground.MissingTactics  -- name collision
 import Playground.MyPolynomial
 import Playground.NZisSpan
@@ -44,19 +32,15 @@ import Playground.OrderOf12
 import Playground.OrderOfSimproc
 import Playground.OrderOfSix
 -- import Playground.PermGeometry  -- name collision
-import Playground.Pi.All
 import Playground.PrimePlayground
 import Playground.ProdOfNZ
 import Playground.RDV
 import Playground.RangeFilter
-import Playground.Rational.All
-import Playground.RealIsometry.All
 import Playground.Ring0eq1
 import Playground.SMOQ2
 import Playground.Stern
 import Playground.SumOfNZ
 import Playground.TendsTo
-import Playground.Topology.TopSpace
 import Playground.UnitsQeq
 import Playground.VecConsSimproc
 import Playground.VecConsSimprocTest
@@ -64,7 +48,7 @@ import Playground.ZMod'
 import Playground.ZModnZ
 import Playground.abc436_a
 import Playground.abs
-import Playground.cancellation
+-- import Playground.cancellation  -- depends on Playground.Analysis.Cancel, moved to v32
 import Playground.decide_experiment
 import Playground.inv_question
 -- import Playground.matchMatLitToVec  -- name collision

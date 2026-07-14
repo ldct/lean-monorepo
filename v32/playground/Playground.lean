@@ -1,1 +1,15 @@
 import Playground.Basic
+import Playground.Analysis.All
+import Playground.AoC.All
+import Playground.Borcherds.All
+import Playground.Determinant.All
+import Playground.EnumeratingTypes.Enumerations
+import Playground.GaussianIntegers.All
+import Playground.Geometry.All
+import Playground.GroupTheory.All
+import Playground.LinearAlgebra.LinearAlgebra
+import Playground.MetricSpaces.All
+import Playground.Numerics.All
+import Playground.Rational.All
+import Playground.RealIsometry.All
+import Playground.Topology.TopSpace
