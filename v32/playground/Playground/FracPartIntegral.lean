@@ -90,7 +90,7 @@ lemma integral_piece (n : ℕ) (hn : 1 ≤ n) :
     have : 0 < x := lt_of_lt_of_le h_inv1_pos hx.1
     exact this.ne'
   have h_intble2 : IntervalIntegrable (fun _ : ℝ => (n : ℝ)) MeasureTheory.volume
-      (1 / ((n : ℝ) + 1)) (1 / (n : ℝ)) := intervalIntegral.intervalIntegrable_const
+      (1 / ((n : ℝ) + 1)) (1 / (n : ℝ)) := intervalIntegrable_const
   rw [intervalIntegral.integral_sub h_intble1 h_intble2, h_int_inv, h_int_const]
   -- Now simplify: log((1/n)/(1/(n+1))) = log((n+1)/n) and the constant part.
   have h1 : (1 / (n : ℝ)) / (1 / ((n : ℝ) + 1)) = ((n : ℝ) + 1) / (n : ℝ) := by
