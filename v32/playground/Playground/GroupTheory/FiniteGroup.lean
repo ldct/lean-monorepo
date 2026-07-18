@@ -16,6 +16,11 @@ class Group (G : Type*) [DecidableEq G] extends Mul G, One G, Inv G where
 
 attribute [simp] Group.one_mul Group.mul_one Group.inv_mul_cancel Group.mul_inv_cancel
 
+structure BSubgroup (G : Type*) [DecidableEq G] [Group G] where
+  carrier : Finset G
+  one_mem : 1 ∈ carrier
+  mul_mem : ∀ x y : G, x ∈ carrier → y ∈ carrier → x * y ∈ carrier
+  inv_mem : ∀ x : G, x ∈ carrier → x⁻¹ ∈ carrier
 
 
 end FiniteGroup
