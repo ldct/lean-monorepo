@@ -10,5 +10,6 @@ import Playground.GroupTheory.Dih4
 import Playground.GroupTheory.Dih6
 import Playground.GroupTheory.Dih6Subgroups
 import Playground.GroupTheory.DihActions
+import Playground.GroupTheory.FiniteGroup
 import Playground.GroupTheory.NormalizerOfRotations
 import Playground.GroupTheory.Theorems
