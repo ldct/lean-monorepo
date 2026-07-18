@@ -463,6 +463,41 @@ instance : Fact (IsNormal even) := ⟨even_normal⟩
 #eval LeftCoset.of ⟨1⟩ even * LeftCoset.of ⟨1⟩ even
 
 end C4
+
+namespace Dihedral4
+
+abbrev D4 := DihedralGroup 4
+
+unsafe instance : Repr D4 where
+  reprPrec g _ :=
+    match g with
+    | .r i => Std.Format.text s!"r {i.val}"
+    | .sr i => Std.Format.text s!"sr {i.val}"
+
+instance : Group D4 where
+  mul_assoc := mul_assoc
+  one_mul := one_mul
+  mul_one := mul_one
+  inv_mul_cancel := inv_mul_cancel
+  mul_inv_cancel := mul_inv_cancel
+
+/-- The rotation subgroup of the dihedral group of order eight. -/
+def rotations : BSubgroup D4 where
+  carrier := {DihedralGroup.r 0, DihedralGroup.r 1, DihedralGroup.r 2, DihedralGroup.r 3}
+  one_mem := by native_decide
+  mul_mem := by native_decide
+  inv_mem := by native_decide
+
+theorem rotations_normal : IsNormal rotations := by
+  intro g
+  fin_cases g <;> native_decide
+
+instance : Fact (IsNormal rotations) := ⟨rotations_normal⟩
+
+#eval (DihedralGroup.sr 0 : D4) * LeftCoset.of (DihedralGroup.r 0) rotations
+#eval LeftCoset.of (DihedralGroup.sr 0) rotations * LeftCoset.of (DihedralGroup.sr 0) rotations
+
+end Dihedral4
 end Examples
 
 end FiniteGroup
