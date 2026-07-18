@@ -484,6 +484,8 @@ structure GroupHom (G H : Type*) [Group G] [Group H] where
   toFun : G → H
   map_mul : ∀ x y : G, toFun (x * y) = toFun x * toFun y
 
+notation:100 G " →* " H => GroupHom G H
+
 /- Proposition 1.1 - Homomorphism preserves the identity element -/
 lemma GroupHom.map_one {G H} [Group G] [Group H] (φ : GroupHom G H) : φ.toFun (1 : G) = 1 := by
   have h₁ := calc
@@ -493,7 +495,7 @@ lemma GroupHom.map_one {G H} [Group G] [Group H] (φ : GroupHom G H) : φ.toFun 
   exact this.symm
 
 /- Proposition 1.1 - Homomorphism preserves inverses -/
-lemma GroupHome.map_inv {G H} [Group G] [Group H] (φ : GroupHom G H) (x : G) : φ.toFun (x⁻¹) = (φ.toFun x)⁻¹ := by
+lemma GroupHom.map_inv {G H} [Group G] [Group H] (φ : GroupHom G H) (x : G) : φ.toFun (x⁻¹) = (φ.toFun x)⁻¹ := by
   have h₁ := calc
     1 = φ.toFun 1 := by rw [GroupHom.map_one]
     _ = φ.toFun (x * x⁻¹) := by simp
@@ -507,5 +509,23 @@ structure GroupIso (G H : Type*) [Group G] [Group H] where
   map_mul : ∀ x y : G, toEquiv (x * y) = toEquiv x * toEquiv y
   map_one : toEquiv (1 : G) = 1
   map_inv : ∀ x : G, toEquiv (x⁻¹) = (toEquiv x)⁻¹
+
+notation:100 G " ≅* " H => GroupIso G H
+
+def GroupIso.toGroupHom {G H} [Group G] [Group H] (φ : G ≅* H) : G →* H where
+  toFun := φ.toEquiv.toFun
+  map_mul := φ.map_mul
+
+noncomputable def GroupHom.toEquiv {G H} [Group G] [Group H] (φ : G →* H) (h : Function.Bijective φ.toFun): G ≃ H where
+  toFun := φ.toFun
+  invFun := Function.surjInv h.surjective
+  left_inv := Function.leftInverse_surjInv h
+  right_inv := Function.rightInverse_surjInv h.surjective
+
+noncomputable def GroupHom.toGroupIso {G H} [Group G] [Group H] (φ : G →* H) (h : Function.Bijective φ.toFun) : G ≅* H where
+  toEquiv := φ.toEquiv h
+  map_mul := φ.map_mul
+  map_one := φ.map_one
+  map_inv := φ.map_inv
 
 end Borcherds
