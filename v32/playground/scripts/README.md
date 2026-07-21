@@ -1,7 +1,18 @@
 # NormedField hierarchy figure: how it's made
 
-`site/normedfield_hierarchy.html` shows the typeclass hierarchy underlying
-`NormedField` in Mathlib (pinned at v4.32.0-rc1-patch1), an analogue of Fig. 1
+- [Staging expanded NormedField graph](../site/normedfield_hierarchy_staging.html)
+  is generated only from `*_staging*` artifacts. Run
+  `python3 scripts/make_hierarchy_staging.py` to recompute its node set from
+  the pinned v4.32 environment, recursively closing the commit-5597505 staging
+  seed under every direct `extends` parent and every direct unary instance
+  `[Source α] → Target α`. Names containing `Lean.Grind` are excluded. The
+  staging graph retains every direct parent and unary implication without
+  transitive reduction, plus the production curated dashed implications.
+  Verify with `python3 scripts/verify_hierarchy_staging.py`. Production input,
+  metadata, SVG, and HTML are not output targets of this staging pipeline.
+
+The production `site/normedfield_hierarchy.html` shows the typeclass hierarchy
+underlying `NormedField` in Mathlib (pinned at v4.32.0), an analogue of Fig. 1
 of *The Lean Mathematical Library* (CPP '20).
 
 ## The drawing is hand-curated, not auto-discovered

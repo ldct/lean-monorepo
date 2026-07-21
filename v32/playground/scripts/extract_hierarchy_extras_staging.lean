@@ -24,6 +24,7 @@ structure EdgeIn where
   s : String
   t : String
   kind : String
+  decl : Option String := none
   deriving FromJson
 
 structure InputSpec where
@@ -167,32 +168,47 @@ set_option maxHeartbeats 0 in
     for e in spec.edges do
       let realS := e.s.toName
       let realT := e.t.toName
+      -- Prefer an explicit declaration recorded by the v4.32 unary discovery.
+      let mut decl : Option Name := e.decl.map String.toName
+      if decl.isSome then
+        if let some d := decl then
+          unless env.contains d do decl := none
       -- 1. direct projection S.toT
       let projName : Name := Name.str e.s.toName ("to" ++ e.t)
-      let mut decl : Option Name := none
-      if let some (_, d) := manualEdgeDecl.find? (·.1 == s!"{e.s}->{e.t}") then
-        decl := some d
-      else if env.contains projName then
-        decl := some projName
-      else
-        -- 2. instance-table search: result matches T, some inst-binder matches S
-        let mut best : Option (Name × Nat) := none  -- name, score
-        for (n, _, ty) in instInfos do
-          let (binders, body) := collectBinders ty #[]
-          unless matchesClass realT body do continue
-          let instBinders := binders.filter (fun (bi, _) => bi == .instImplicit)
-          unless instBinders.any (fun (_, t) => matchesClass realS t) do continue
-          let score := instBinders.size * 1000 + (toString n).length
-          match best with
-          | some (_, s) => if score < s then best := some (n, score)
-          | none => best := some (n, score)
-        decl := best.map (·.1)
+      if decl.isNone then
+        if let some (_, d) := manualEdgeDecl.find? (·.1 == s!"{e.s}->{e.t}") then
+          decl := some d
+        else if env.contains projName then
+          decl := some projName
+        else
+          -- 2. instance-table search: result matches T, some inst-binder matches S
+          let mut best : Option (Name × Nat) := none  -- name, score
+          for (n, _, ty) in instInfos do
+            let (binders, body) := collectBinders ty #[]
+            unless matchesClass realT body do continue
+            let instBinders := binders.filter (fun (bi, _) => bi == .instImplicit)
+            unless instBinders.any (fun (_, t) => matchesClass realS t) do continue
+            let score := instBinders.size * 1000 + (toString n).length
+            match best with
+            | some (_, s) => if score < s then best := some (n, score)
+            | none => best := some (n, score)
+          decl := best.map (·.1)
       match decl with
       | none =>
         unresolved := unresolved.push s!"{e.s}->{e.t}"
         edgeJson := edgeJson.push (s!"{e.s}->{e.t}", Json.mkObj
           [("kind", Json.str e.kind), ("decl", Json.null)])
       | some d =>
+        -- Explicit declarations from discovery must really have the advertised
+        -- direct source and target.  This guards against stale/manual backing
+        -- names while allowing retained curated multi-hop edges below.
+        if e.decl.isSome then
+          let some ci := env.find? d | unreachable!
+          let (binders, body) := collectBinders ci.type #[]
+          let sourceOk := binders.any (fun (bi, t) =>
+            bi == .instImplicit && matchesClass realS t)
+          unless sourceOk && matchesClass realT body do
+            unresolved := unresolved.push s!"{e.s}->{e.t} (bad explicit decl {d})"
         let prio := instState.instanceNames.find? d |>.map (·.priority)
         let doc ← findDocString? env d
         let tyStr ← match env.find? d with

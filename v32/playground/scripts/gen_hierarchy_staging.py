@@ -11,10 +11,10 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 MATHLIB_PIN = "v4.32.0 · commit 81a5d257"
 CAPTIONS = [
-    f"STAGING REVIEW — expanded structural hierarchy underlying NormedField in Mathlib ({MATHLIB_PIN}).",
+    f"STAGING REVIEW — unary-instance closure of the NormedField hierarchy in Mathlib ({MATHLIB_PIN}).",
     "An edge from S to T indicates that an instance of T can be derived from an instance of S.",
-    "Solid edges: every direct `extends` parent in the selected set.  Dashed edges: curated/canonical derived `instance`s.",
-    "The staging node set is closed recursively under direct parents; transitive direct-parent arrows are intentionally retained.",
+    "Solid edges: every direct `extends` parent.  Dashed edges: retained curated implications plus every direct unary `[S α] → T α` instance.",
+    "The node set is recursively closed under both relations; names containing `Lean.Grind` are intentionally excluded; no transitive reduction.",
 ]
 CATEGORIES = {
     "normed": ("#cfe2f3", "normed structures"),
