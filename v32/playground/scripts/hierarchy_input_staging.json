@@ -1,0 +1,1497 @@
+{
+ "nodes": [
+  "T2Space",
+  "T1Space",
+  "CompletelyRegularSpace",
+  "RegularSpace",
+  "PseudoEMetricSpace",
+  "FirstCountableTopology",
+  "EDist",
+  "UniformSpace",
+  "Dist",
+  "TopologicalSpace",
+  "FrechetUrysohnSpace",
+  "SequentialSpace",
+  "Bornology",
+  "EMetricSpace",
+  "T0Space",
+  "MetricSpace",
+  "PseudoMetricSpace",
+  "ContinuousMul",
+  "IsTopologicalAddGroup",
+  "ContinuousAdd",
+  "ContinuousNeg",
+  "IsTopologicalRing",
+  "IsTopologicalSemiring",
+  "IsUniformAddGroup",
+  "NormedRing",
+  "SeminormedRing",
+  "NonUnitalNormedRing",
+  "NonUnitalSeminormedRing",
+  "Ring",
+  "NormedDivisionRing",
+  "NormOneClass",
+  "NormMulClass",
+  "DivisionRing",
+  "NormedCommRing",
+  "CommRing",
+  "NormedField",
+  "Field",
+  "NormedAddCommGroup",
+  "SeminormedAddCommGroup",
+  "NonUnitalRing",
+  "Norm",
+  "AddCommGroup",
+  "EuclideanDomain",
+  "IsPrincipalIdealRing",
+  "Nontrivial",
+  "IsDomain",
+  "NoZeroDivisors",
+  "IsCancelMulZero",
+  "IsLocalRing",
+  "IsNoetherianRing",
+  "IsLeftCancelMulZero",
+  "IsRightCancelMulZero",
+  "MonoidWithZero",
+  "Monoid",
+  "SemigroupWithZero",
+  "MulZeroOneClass",
+  "ZPow",
+  "NonUnitalNonAssocRing",
+  "NonUnitalNonAssocSemiring",
+  "AddMonoidWithOne",
+  "NatCast",
+  "One",
+  "AddMonoid",
+  "Distrib",
+  "Sub",
+  "NonAssocSemiring",
+  "AddCommMonoidWithOne",
+  "MulOneClass",
+  "MulOne",
+  "AddCommSemigroup",
+  "AddCommMagma",
+  "AddSemigroup",
+  "AddZero",
+  "Zero",
+  "Add",
+  "IntCast",
+  "Inv",
+  "CommMonoid",
+  "CommSemigroup",
+  "Neg",
+  "Semigroup",
+  "NPow",
+  "DivInvMonoid",
+  "Div",
+  "Mul",
+  "Dvd",
+  "MulZeroClass",
+  "AddCommMonoid",
+  "AddGroup",
+  "Semiring",
+  "AddGroupWithOne",
+  "NSMul",
+  "AddZeroClass",
+  "NNRatCast",
+  "SubNegMonoid",
+  "CommMagma",
+  "NonUnitalSemiring",
+  "ZSMul",
+  "RatCast",
+  "GroupWithZero",
+  "DivisionSemiring",
+  "AddCommGroupWithOne",
+  "CommSemiring",
+  "DivisionMonoid",
+  "InvolutiveInv",
+  "LeftDistribClass",
+  "NonAssocCommRing",
+  "NonAssocCommSemiring",
+  "NonAssocRing",
+  "NonUnitalCommRing",
+  "NonUnitalNonAssocCommRing",
+  "NonUnitalNonAssocCommSemiring",
+  "RightDistribClass",
+  "NonUnitalNormedCommRing",
+  "NormedAddGroup",
+  "SeminormedAddGroup",
+  "SeminormedCommRing"
+ ],
+ "edges": [
+  {
+   "s": "PseudoEMetricSpace",
+   "t": "EDist",
+   "kind": "solid"
+  },
+  {
+   "s": "UniformSpace",
+   "t": "TopologicalSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "EMetricSpace",
+   "t": "PseudoEMetricSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "MetricSpace",
+   "t": "PseudoMetricSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "PseudoMetricSpace",
+   "t": "Dist",
+   "kind": "solid"
+  },
+  {
+   "s": "IsTopologicalAddGroup",
+   "t": "ContinuousAdd",
+   "kind": "solid"
+  },
+  {
+   "s": "IsTopologicalAddGroup",
+   "t": "ContinuousNeg",
+   "kind": "solid"
+  },
+  {
+   "s": "IsTopologicalRing",
+   "t": "ContinuousNeg",
+   "kind": "solid"
+  },
+  {
+   "s": "IsTopologicalRing",
+   "t": "IsTopologicalSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "IsTopologicalSemiring",
+   "t": "ContinuousMul",
+   "kind": "solid"
+  },
+  {
+   "s": "IsTopologicalSemiring",
+   "t": "ContinuousAdd",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedRing",
+   "t": "MetricSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedRing",
+   "t": "Ring",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedRing",
+   "t": "Norm",
+   "kind": "solid"
+  },
+  {
+   "s": "SeminormedRing",
+   "t": "PseudoMetricSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "SeminormedRing",
+   "t": "Ring",
+   "kind": "solid"
+  },
+  {
+   "s": "SeminormedRing",
+   "t": "Norm",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNormedRing",
+   "t": "MetricSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNormedRing",
+   "t": "NonUnitalRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNormedRing",
+   "t": "Norm",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalSeminormedRing",
+   "t": "PseudoMetricSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalSeminormedRing",
+   "t": "NonUnitalRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalSeminormedRing",
+   "t": "Norm",
+   "kind": "solid"
+  },
+  {
+   "s": "Ring",
+   "t": "AddCommGroup",
+   "kind": "solid"
+  },
+  {
+   "s": "Ring",
+   "t": "Semiring",
+   "kind": "solid"
+  },
+  {
+   "s": "Ring",
+   "t": "AddGroupWithOne",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedDivisionRing",
+   "t": "MetricSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedDivisionRing",
+   "t": "DivisionRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedDivisionRing",
+   "t": "Norm",
+   "kind": "solid"
+  },
+  {
+   "s": "DivisionRing",
+   "t": "Ring",
+   "kind": "solid"
+  },
+  {
+   "s": "DivisionRing",
+   "t": "Nontrivial",
+   "kind": "solid"
+  },
+  {
+   "s": "DivisionRing",
+   "t": "DivInvMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "DivisionRing",
+   "t": "NNRatCast",
+   "kind": "solid"
+  },
+  {
+   "s": "DivisionRing",
+   "t": "RatCast",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedCommRing",
+   "t": "NormedRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedCommRing",
+   "t": "CommRing",
+   "kind": "solid"
+  },
+  {
+   "s": "CommRing",
+   "t": "Ring",
+   "kind": "solid"
+  },
+  {
+   "s": "CommRing",
+   "t": "CommMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedField",
+   "t": "MetricSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedField",
+   "t": "Field",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedField",
+   "t": "Norm",
+   "kind": "solid"
+  },
+  {
+   "s": "Field",
+   "t": "DivisionRing",
+   "kind": "solid"
+  },
+  {
+   "s": "Field",
+   "t": "CommRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedAddCommGroup",
+   "t": "MetricSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedAddCommGroup",
+   "t": "Norm",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedAddCommGroup",
+   "t": "AddCommGroup",
+   "kind": "solid"
+  },
+  {
+   "s": "SeminormedAddCommGroup",
+   "t": "PseudoMetricSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "SeminormedAddCommGroup",
+   "t": "Norm",
+   "kind": "solid"
+  },
+  {
+   "s": "SeminormedAddCommGroup",
+   "t": "AddCommGroup",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalRing",
+   "t": "NonUnitalNonAssocRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalRing",
+   "t": "NonUnitalSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "AddCommGroup",
+   "t": "AddCommMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "AddCommGroup",
+   "t": "AddGroup",
+   "kind": "solid"
+  },
+  {
+   "s": "EuclideanDomain",
+   "t": "CommRing",
+   "kind": "solid"
+  },
+  {
+   "s": "EuclideanDomain",
+   "t": "Nontrivial",
+   "kind": "solid"
+  },
+  {
+   "s": "IsDomain",
+   "t": "Nontrivial",
+   "kind": "solid"
+  },
+  {
+   "s": "IsDomain",
+   "t": "IsCancelMulZero",
+   "kind": "solid"
+  },
+  {
+   "s": "IsCancelMulZero",
+   "t": "IsLeftCancelMulZero",
+   "kind": "solid"
+  },
+  {
+   "s": "IsCancelMulZero",
+   "t": "IsRightCancelMulZero",
+   "kind": "solid"
+  },
+  {
+   "s": "IsLocalRing",
+   "t": "Nontrivial",
+   "kind": "solid"
+  },
+  {
+   "s": "MonoidWithZero",
+   "t": "Monoid",
+   "kind": "solid"
+  },
+  {
+   "s": "MonoidWithZero",
+   "t": "SemigroupWithZero",
+   "kind": "solid"
+  },
+  {
+   "s": "MonoidWithZero",
+   "t": "MulZeroOneClass",
+   "kind": "solid"
+  },
+  {
+   "s": "Monoid",
+   "t": "MulOneClass",
+   "kind": "solid"
+  },
+  {
+   "s": "Monoid",
+   "t": "Semigroup",
+   "kind": "solid"
+  },
+  {
+   "s": "Monoid",
+   "t": "NPow",
+   "kind": "solid"
+  },
+  {
+   "s": "SemigroupWithZero",
+   "t": "Semigroup",
+   "kind": "solid"
+  },
+  {
+   "s": "SemigroupWithZero",
+   "t": "MulZeroClass",
+   "kind": "solid"
+  },
+  {
+   "s": "MulZeroOneClass",
+   "t": "MulOneClass",
+   "kind": "solid"
+  },
+  {
+   "s": "MulZeroOneClass",
+   "t": "MulZeroClass",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNonAssocRing",
+   "t": "AddCommGroup",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNonAssocRing",
+   "t": "NonUnitalNonAssocSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNonAssocSemiring",
+   "t": "Distrib",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNonAssocSemiring",
+   "t": "MulZeroClass",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNonAssocSemiring",
+   "t": "AddCommMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "AddMonoidWithOne",
+   "t": "NatCast",
+   "kind": "solid"
+  },
+  {
+   "s": "AddMonoidWithOne",
+   "t": "One",
+   "kind": "solid"
+  },
+  {
+   "s": "AddMonoidWithOne",
+   "t": "AddMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "AddMonoid",
+   "t": "AddSemigroup",
+   "kind": "solid"
+  },
+  {
+   "s": "AddMonoid",
+   "t": "NSMul",
+   "kind": "solid"
+  },
+  {
+   "s": "AddMonoid",
+   "t": "AddZeroClass",
+   "kind": "solid"
+  },
+  {
+   "s": "Distrib",
+   "t": "Add",
+   "kind": "solid"
+  },
+  {
+   "s": "Distrib",
+   "t": "Mul",
+   "kind": "solid"
+  },
+  {
+   "s": "NonAssocSemiring",
+   "t": "MulZeroOneClass",
+   "kind": "solid"
+  },
+  {
+   "s": "NonAssocSemiring",
+   "t": "NonUnitalNonAssocSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "NonAssocSemiring",
+   "t": "AddCommMonoidWithOne",
+   "kind": "solid"
+  },
+  {
+   "s": "AddCommMonoidWithOne",
+   "t": "AddMonoidWithOne",
+   "kind": "solid"
+  },
+  {
+   "s": "AddCommMonoidWithOne",
+   "t": "AddCommMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "MulOneClass",
+   "t": "MulOne",
+   "kind": "solid"
+  },
+  {
+   "s": "MulOne",
+   "t": "One",
+   "kind": "solid"
+  },
+  {
+   "s": "MulOne",
+   "t": "Mul",
+   "kind": "solid"
+  },
+  {
+   "s": "AddCommSemigroup",
+   "t": "AddCommMagma",
+   "kind": "solid"
+  },
+  {
+   "s": "AddCommSemigroup",
+   "t": "AddSemigroup",
+   "kind": "solid"
+  },
+  {
+   "s": "AddCommMagma",
+   "t": "Add",
+   "kind": "solid"
+  },
+  {
+   "s": "AddSemigroup",
+   "t": "Add",
+   "kind": "solid"
+  },
+  {
+   "s": "AddZero",
+   "t": "Zero",
+   "kind": "solid"
+  },
+  {
+   "s": "AddZero",
+   "t": "Add",
+   "kind": "solid"
+  },
+  {
+   "s": "CommMonoid",
+   "t": "Monoid",
+   "kind": "solid"
+  },
+  {
+   "s": "CommMonoid",
+   "t": "CommSemigroup",
+   "kind": "solid"
+  },
+  {
+   "s": "CommSemigroup",
+   "t": "Semigroup",
+   "kind": "solid"
+  },
+  {
+   "s": "CommSemigroup",
+   "t": "CommMagma",
+   "kind": "solid"
+  },
+  {
+   "s": "Semigroup",
+   "t": "Mul",
+   "kind": "solid"
+  },
+  {
+   "s": "DivInvMonoid",
+   "t": "Monoid",
+   "kind": "solid"
+  },
+  {
+   "s": "DivInvMonoid",
+   "t": "ZPow",
+   "kind": "solid"
+  },
+  {
+   "s": "DivInvMonoid",
+   "t": "Inv",
+   "kind": "solid"
+  },
+  {
+   "s": "DivInvMonoid",
+   "t": "Div",
+   "kind": "solid"
+  },
+  {
+   "s": "MulZeroClass",
+   "t": "Zero",
+   "kind": "solid"
+  },
+  {
+   "s": "MulZeroClass",
+   "t": "Mul",
+   "kind": "solid"
+  },
+  {
+   "s": "AddCommMonoid",
+   "t": "AddMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "AddCommMonoid",
+   "t": "AddCommSemigroup",
+   "kind": "solid"
+  },
+  {
+   "s": "AddGroup",
+   "t": "SubNegMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "Semiring",
+   "t": "MonoidWithZero",
+   "kind": "solid"
+  },
+  {
+   "s": "Semiring",
+   "t": "NonAssocSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "Semiring",
+   "t": "AddCommMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "Semiring",
+   "t": "NonUnitalSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "AddGroupWithOne",
+   "t": "AddMonoidWithOne",
+   "kind": "solid"
+  },
+  {
+   "s": "AddGroupWithOne",
+   "t": "IntCast",
+   "kind": "solid"
+  },
+  {
+   "s": "AddGroupWithOne",
+   "t": "AddGroup",
+   "kind": "solid"
+  },
+  {
+   "s": "AddZeroClass",
+   "t": "AddZero",
+   "kind": "solid"
+  },
+  {
+   "s": "SubNegMonoid",
+   "t": "AddMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "SubNegMonoid",
+   "t": "Sub",
+   "kind": "solid"
+  },
+  {
+   "s": "SubNegMonoid",
+   "t": "Neg",
+   "kind": "solid"
+  },
+  {
+   "s": "SubNegMonoid",
+   "t": "ZSMul",
+   "kind": "solid"
+  },
+  {
+   "s": "CommMagma",
+   "t": "Mul",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalSemiring",
+   "t": "SemigroupWithZero",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalSemiring",
+   "t": "NonUnitalNonAssocSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "GroupWithZero",
+   "t": "Nontrivial",
+   "kind": "solid"
+  },
+  {
+   "s": "GroupWithZero",
+   "t": "MonoidWithZero",
+   "kind": "solid"
+  },
+  {
+   "s": "GroupWithZero",
+   "t": "DivInvMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "DivisionSemiring",
+   "t": "Semiring",
+   "kind": "solid"
+  },
+  {
+   "s": "DivisionSemiring",
+   "t": "NNRatCast",
+   "kind": "solid"
+  },
+  {
+   "s": "DivisionSemiring",
+   "t": "GroupWithZero",
+   "kind": "solid"
+  },
+  {
+   "s": "AddCommGroupWithOne",
+   "t": "AddCommGroup",
+   "kind": "solid"
+  },
+  {
+   "s": "AddCommGroupWithOne",
+   "t": "AddCommMonoidWithOne",
+   "kind": "solid"
+  },
+  {
+   "s": "AddCommGroupWithOne",
+   "t": "AddGroupWithOne",
+   "kind": "solid"
+  },
+  {
+   "s": "CommSemiring",
+   "t": "CommMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "CommSemiring",
+   "t": "Semiring",
+   "kind": "solid"
+  },
+  {
+   "s": "DivisionMonoid",
+   "t": "DivInvMonoid",
+   "kind": "solid"
+  },
+  {
+   "s": "DivisionMonoid",
+   "t": "InvolutiveInv",
+   "kind": "solid"
+  },
+  {
+   "s": "InvolutiveInv",
+   "t": "Inv",
+   "kind": "solid"
+  },
+  {
+   "s": "NonAssocCommRing",
+   "t": "NonAssocCommSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "NonAssocCommRing",
+   "t": "NonAssocRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NonAssocCommRing",
+   "t": "NonUnitalNonAssocCommRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NonAssocCommSemiring",
+   "t": "NonAssocSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "NonAssocCommSemiring",
+   "t": "NonUnitalNonAssocCommSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "NonAssocRing",
+   "t": "NonUnitalNonAssocRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NonAssocRing",
+   "t": "NonAssocSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "NonAssocRing",
+   "t": "AddCommGroupWithOne",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalCommRing",
+   "t": "NonUnitalRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalCommRing",
+   "t": "NonUnitalNonAssocCommRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNonAssocCommRing",
+   "t": "NonUnitalNonAssocRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNonAssocCommRing",
+   "t": "NonUnitalNonAssocCommSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNonAssocCommSemiring",
+   "t": "NonUnitalNonAssocSemiring",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNonAssocCommSemiring",
+   "t": "CommMagma",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNormedCommRing",
+   "t": "NonUnitalNormedRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NonUnitalNormedCommRing",
+   "t": "NonUnitalCommRing",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedAddGroup",
+   "t": "MetricSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedAddGroup",
+   "t": "Norm",
+   "kind": "solid"
+  },
+  {
+   "s": "NormedAddGroup",
+   "t": "AddGroup",
+   "kind": "solid"
+  },
+  {
+   "s": "SeminormedAddGroup",
+   "t": "PseudoMetricSpace",
+   "kind": "solid"
+  },
+  {
+   "s": "SeminormedAddGroup",
+   "t": "Norm",
+   "kind": "solid"
+  },
+  {
+   "s": "SeminormedAddGroup",
+   "t": "AddGroup",
+   "kind": "solid"
+  },
+  {
+   "s": "SeminormedCommRing",
+   "t": "SeminormedRing",
+   "kind": "solid"
+  },
+  {
+   "s": "SeminormedCommRing",
+   "t": "CommRing",
+   "kind": "solid"
+  },
+  {
+   "s": "T2Space",
+   "t": "T1Space",
+   "kind": "dashed"
+  },
+  {
+   "s": "CompletelyRegularSpace",
+   "t": "RegularSpace",
+   "kind": "dashed"
+  },
+  {
+   "s": "PseudoEMetricSpace",
+   "t": "FirstCountableTopology",
+   "kind": "dashed"
+  },
+  {
+   "s": "PseudoEMetricSpace",
+   "t": "UniformSpace",
+   "kind": "dashed"
+  },
+  {
+   "s": "FirstCountableTopology",
+   "t": "FrechetUrysohnSpace",
+   "kind": "dashed"
+  },
+  {
+   "s": "FrechetUrysohnSpace",
+   "t": "SequentialSpace",
+   "kind": "dashed"
+  },
+  {
+   "s": "EMetricSpace",
+   "t": "T0Space",
+   "kind": "dashed"
+  },
+  {
+   "s": "T1Space",
+   "t": "T0Space",
+   "kind": "dashed"
+  },
+  {
+   "s": "MetricSpace",
+   "t": "T2Space",
+   "kind": "dashed"
+  },
+  {
+   "s": "MetricSpace",
+   "t": "EMetricSpace",
+   "kind": "dashed"
+  },
+  {
+   "s": "PseudoMetricSpace",
+   "t": "PseudoEMetricSpace",
+   "kind": "dashed"
+  },
+  {
+   "s": "PseudoMetricSpace",
+   "t": "Bornology",
+   "kind": "dashed"
+  },
+  {
+   "s": "UniformSpace",
+   "t": "CompletelyRegularSpace",
+   "kind": "dashed"
+  },
+  {
+   "s": "IsUniformAddGroup",
+   "t": "IsTopologicalAddGroup",
+   "kind": "dashed"
+  },
+  {
+   "s": "NormedRing",
+   "t": "SeminormedRing",
+   "kind": "dashed"
+  },
+  {
+   "s": "NormedRing",
+   "t": "NonUnitalNormedRing",
+   "kind": "dashed"
+  },
+  {
+   "s": "SeminormedRing",
+   "t": "NonUnitalSeminormedRing",
+   "kind": "dashed"
+  },
+  {
+   "s": "NormedDivisionRing",
+   "t": "NormedRing",
+   "kind": "dashed"
+  },
+  {
+   "s": "NormedDivisionRing",
+   "t": "NormOneClass",
+   "kind": "dashed"
+  },
+  {
+   "s": "NormedDivisionRing",
+   "t": "NormMulClass",
+   "kind": "dashed"
+  },
+  {
+   "s": "NormedField",
+   "t": "NormedDivisionRing",
+   "kind": "dashed"
+  },
+  {
+   "s": "NormedField",
+   "t": "NormedCommRing",
+   "kind": "dashed"
+  },
+  {
+   "s": "NormedAddCommGroup",
+   "t": "SeminormedAddCommGroup",
+   "kind": "dashed"
+  },
+  {
+   "s": "NonUnitalSeminormedRing",
+   "t": "IsTopologicalRing",
+   "kind": "dashed"
+  },
+  {
+   "s": "NonUnitalSeminormedRing",
+   "t": "SeminormedAddCommGroup",
+   "kind": "dashed"
+  },
+  {
+   "s": "NonUnitalNormedRing",
+   "t": "NormedAddCommGroup",
+   "kind": "dashed"
+  },
+  {
+   "s": "NonUnitalNormedRing",
+   "t": "NonUnitalSeminormedRing",
+   "kind": "dashed"
+  },
+  {
+   "s": "SeminormedAddCommGroup",
+   "t": "IsUniformAddGroup",
+   "kind": "dashed"
+  },
+  {
+   "s": "EuclideanDomain",
+   "t": "IsPrincipalIdealRing",
+   "kind": "dashed"
+  },
+  {
+   "s": "IsDomain",
+   "t": "NoZeroDivisors",
+   "kind": "dashed"
+  },
+  {
+   "s": "IsPrincipalIdealRing",
+   "t": "IsNoetherianRing",
+   "kind": "dashed"
+  },
+  {
+   "s": "Semigroup",
+   "t": "Dvd",
+   "kind": "dashed"
+  },
+  {
+   "s": "Ring",
+   "t": "NonUnitalRing",
+   "kind": "dashed",
+   "constraint": false
+  },
+  {
+   "s": "Field",
+   "t": "EuclideanDomain",
+   "kind": "dashed"
+  },
+  {
+   "s": "Field",
+   "t": "IsLocalRing",
+   "kind": "dashed"
+  },
+  {
+   "s": "DivisionRing",
+   "t": "IsDomain",
+   "kind": "dashed"
+  },
+  {
+   "s": "DivisionRing",
+   "t": "DivisionSemiring",
+   "kind": "dashed"
+  },
+  {
+   "s": "EMetricSpace",
+   "t": "T2Space",
+   "kind": "dashed",
+   "constraint": false
+  },
+  {
+   "s": "EuclideanDomain",
+   "t": "IsDomain",
+   "kind": "dashed"
+  },
+  {
+   "s": "GroupWithZero",
+   "t": "IsCancelMulZero",
+   "kind": "dashed",
+   "constraint": false
+  },
+  {
+   "s": "GroupWithZero",
+   "t": "NoZeroDivisors",
+   "kind": "dashed",
+   "constraint": false
+  },
+  {
+   "s": "DivisionRing",
+   "t": "IsPrincipalIdealRing",
+   "kind": "dashed",
+   "constraint": false
+  },
+  {
+   "s": "DivisionSemiring",
+   "t": "IsPrincipalIdealRing",
+   "kind": "dashed",
+   "constraint": false
+  },
+  {
+   "s": "Ring",
+   "t": "NonAssocRing",
+   "kind": "dashed",
+   "decl": "Ring.toNonAssocRing"
+  },
+  {
+   "s": "NormedCommRing",
+   "t": "NonUnitalNormedCommRing",
+   "kind": "dashed",
+   "decl": "NormedCommRing.toNonUnitalNormedCommRing"
+  },
+  {
+   "s": "NormedCommRing",
+   "t": "SeminormedCommRing",
+   "kind": "dashed",
+   "decl": "NormedCommRing.toSeminormedCommRing"
+  },
+  {
+   "s": "CommRing",
+   "t": "AddCommGroupWithOne",
+   "kind": "dashed",
+   "decl": "CommRing.toAddCommGroupWithOne"
+  },
+  {
+   "s": "CommRing",
+   "t": "CommSemiring",
+   "kind": "dashed",
+   "decl": "CommRing.toCommSemiring"
+  },
+  {
+   "s": "CommRing",
+   "t": "NonAssocCommRing",
+   "kind": "dashed",
+   "decl": "CommRing.toNonAssocCommRing"
+  },
+  {
+   "s": "CommRing",
+   "t": "NonUnitalCommRing",
+   "kind": "dashed",
+   "decl": "CommRing.toNonUnitalCommRing"
+  },
+  {
+   "s": "NormedAddCommGroup",
+   "t": "NormedAddGroup",
+   "kind": "dashed",
+   "decl": "NormedAddCommGroup.toNormedAddGroup"
+  },
+  {
+   "s": "SeminormedAddCommGroup",
+   "t": "SeminormedAddGroup",
+   "kind": "dashed",
+   "decl": "SeminormedAddCommGroup.toSeminormedAddGroup"
+  },
+  {
+   "s": "Distrib",
+   "t": "LeftDistribClass",
+   "kind": "dashed",
+   "decl": "Distrib.leftDistribClass"
+  },
+  {
+   "s": "Distrib",
+   "t": "RightDistribClass",
+   "kind": "dashed",
+   "decl": "Distrib.rightDistribClass"
+  },
+  {
+   "s": "GroupWithZero",
+   "t": "DivisionMonoid",
+   "kind": "dashed",
+   "decl": "GroupWithZero.toDivisionMonoid"
+  },
+  {
+   "s": "CommSemiring",
+   "t": "NonAssocCommSemiring",
+   "kind": "dashed",
+   "decl": "CommSemiring.toNonAssocCommSemiring"
+  },
+  {
+   "s": "NormedAddGroup",
+   "t": "SeminormedAddGroup",
+   "kind": "dashed",
+   "decl": "NormedAddGroup.toSeminormedAddGroup"
+  }
+ ],
+ "owners": [
+  "T2Space",
+  "T1Space",
+  "CompletelyRegularSpace",
+  "RegularSpace",
+  "PseudoEMetricSpace",
+  "FirstCountableTopology",
+  "EDist",
+  "UniformSpace",
+  "Dist",
+  "TopologicalSpace",
+  "FrechetUrysohnSpace",
+  "SequentialSpace",
+  "Bornology",
+  "EMetricSpace",
+  "T0Space",
+  "MetricSpace",
+  "PseudoMetricSpace",
+  "ContinuousMul",
+  "IsTopologicalAddGroup",
+  "ContinuousAdd",
+  "ContinuousNeg",
+  "IsTopologicalRing",
+  "IsTopologicalSemiring",
+  "IsUniformAddGroup",
+  "NormedRing",
+  "SeminormedRing",
+  "NonUnitalNormedRing",
+  "NonUnitalSeminormedRing",
+  "Ring",
+  "NormedDivisionRing",
+  "NormOneClass",
+  "NormMulClass",
+  "DivisionRing",
+  "NormedCommRing",
+  "CommRing",
+  "NormedField",
+  "Field",
+  "NormedAddCommGroup",
+  "SeminormedAddCommGroup",
+  "NonUnitalRing",
+  "Norm",
+  "AddCommGroup",
+  "EuclideanDomain",
+  "IsPrincipalIdealRing",
+  "Nontrivial",
+  "IsDomain",
+  "NoZeroDivisors",
+  "IsCancelMulZero",
+  "IsLocalRing",
+  "IsNoetherianRing",
+  "IsLeftCancelMulZero",
+  "IsRightCancelMulZero",
+  "MonoidWithZero",
+  "Monoid",
+  "SemigroupWithZero",
+  "MulZeroOneClass",
+  "ZPow",
+  "NonUnitalNonAssocRing",
+  "NonUnitalNonAssocSemiring",
+  "AddMonoidWithOne",
+  "NatCast",
+  "One",
+  "AddMonoid",
+  "Distrib",
+  "Sub",
+  "NonAssocSemiring",
+  "AddCommMonoidWithOne",
+  "MulOneClass",
+  "MulOne",
+  "AddCommSemigroup",
+  "AddCommMagma",
+  "AddSemigroup",
+  "AddZero",
+  "Zero",
+  "Add",
+  "IntCast",
+  "Inv",
+  "CommMonoid",
+  "CommSemigroup",
+  "Neg",
+  "Semigroup",
+  "NPow",
+  "DivInvMonoid",
+  "Div",
+  "Mul",
+  "Dvd",
+  "MulZeroClass",
+  "AddCommMonoid",
+  "AddGroup",
+  "Semiring",
+  "AddGroupWithOne",
+  "NSMul",
+  "AddZeroClass",
+  "NNRatCast",
+  "SubNegMonoid",
+  "CommMagma",
+  "NonUnitalSemiring",
+  "ZSMul",
+  "RatCast",
+  "GroupWithZero",
+  "DivisionSemiring",
+  "AddCommGroupWithOne",
+  "CommSemiring",
+  "DivisionMonoid",
+  "InvolutiveInv",
+  "LeftDistribClass",
+  "NonAssocCommRing",
+  "NonAssocCommSemiring",
+  "NonAssocRing",
+  "NonUnitalCommRing",
+  "NonUnitalNonAssocCommRing",
+  "NonUnitalNonAssocCommSemiring",
+  "RightDistribClass",
+  "NonUnitalNormedCommRing",
+  "NormedAddGroup",
+  "SeminormedAddGroup",
+  "SeminormedCommRing"
+ ],
+ "roster": [
+  {
+   "term": "ℕ",
+   "disp": "ℕ"
+  },
+  {
+   "term": "ℕ+",
+   "disp": "ℕ+"
+  },
+  {
+   "term": "↥(NonUnitalSubsemiring.closure ({2} : Set ℕ))",
+   "disp": "2ℕ"
+  },
+  {
+   "term": "ℤ",
+   "disp": "ℤ"
+  },
+  {
+   "term": "ℚ",
+   "disp": "ℚ"
+  },
+  {
+   "term": "ℝ",
+   "disp": "ℝ"
+  },
+  {
+   "term": "ℂ",
+   "disp": "ℂ"
+  },
+  {
+   "term": "NNReal",
+   "disp": "ℝ≥0"
+  },
+  {
+   "term": "ENNReal",
+   "disp": "ℝ≥0∞"
+  },
+  {
+   "term": "Bool",
+   "disp": "Bool"
+  },
+  {
+   "term": "Unit",
+   "disp": "Unit"
+  },
+  {
+   "term": "ZMod 3",
+   "disp": "ZMod 3"
+  },
+  {
+   "term": "ZMod 6",
+   "disp": "ZMod 6"
+  },
+  {
+   "term": "GaussianInt",
+   "disp": "ℤ[i]"
+  },
+  {
+   "term": "Quaternion ℝ",
+   "disp": "ℍ"
+  },
+  {
+   "term": "Polynomial ℝ",
+   "disp": "ℝ[X]"
+  },
+  {
+   "term": "Polynomial ℤ",
+   "disp": "ℤ[X]"
+  },
+  {
+   "term": "Matrix (Fin 2) (Fin 2) ℝ",
+   "disp": "Matrix (Fin 2) (Fin 2) ℝ"
+  },
+  {
+   "term": "FreeMonoid ℕ",
+   "disp": "FreeMonoid ℕ"
+  },
+  {
+   "term": "Multiset ℕ",
+   "disp": "Multiset ℕ"
+  },
+  {
+   "term": "Equiv.Perm (Fin 3)",
+   "disp": "Equiv.Perm (Fin 3)"
+  },
+  {
+   "term": "ℝ × ℝ",
+   "disp": "ℝ × ℝ"
+  },
+  {
+   "term": "ℕ → ℝ",
+   "disp": "ℕ → ℝ"
+  },
+  {
+   "term": "ZeroAtInftyContinuousMap ℝ ℝ",
+   "disp": "C₀(ℝ, ℝ)"
+  },
+  {
+   "term": "Padic 3",
+   "disp": "ℚ_[3]"
+  },
+  {
+   "term": "PadicInt 3",
+   "disp": "ℤ_[3]"
+  },
+  {
+   "term": "String",
+   "disp": "String"
+  },
+  {
+   "term": "CofiniteTopology ℕ",
+   "disp": "CofiniteTopology ℕ"
+  },
+  {
+   "term": "↥unitInterval",
+   "disp": "[0,1] ⊆ ℝ"
+  },
+  {
+   "term": "Function.End ℕ",
+   "disp": "Function.End ℕ"
+  },
+  {
+   "term": "Monoid.End ℕ",
+   "disp": "Monoid.End ℕ"
+  },
+  {
+   "term": "AddMonoid.End ℕ",
+   "disp": "AddMonoid.End ℕ"
+  }
+ ]
+}
