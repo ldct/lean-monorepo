@@ -516,16 +516,43 @@ def GroupIso.toGroupHom {G H} [Group G] [Group H] (φ : G ≅* H) : G →* H whe
   toFun := φ.toEquiv.toFun
   map_mul := φ.map_mul
 
+def GroupIso.inv {G H} [Group G] [Group H] (φ : G ≅* H) : H ≅* G where
+  toEquiv := φ.toEquiv.symm
+  map_mul := by
+    intro y1 y2
+    obtain ⟨ x1, hx1 ⟩ := φ.toEquiv.surjective y1
+    obtain ⟨ x2, hx2 ⟩ := φ.toEquiv.surjective y2
+    rw [← hx1]
+    rw [← hx2]
+    rw [← φ.map_mul]
+    simp
+  map_one := by
+    rw [← φ.map_one]
+    simp
+  map_inv := by
+    intro y
+    obtain ⟨ x, hx ⟩ := φ.toEquiv.surjective y
+    rw [← hx]
+    rw [← φ.map_inv x]
+    simp
+
+/-
+Upgrade `→*` to a `≃` provided the underlying function is bijective.
+-/
 noncomputable def GroupHom.toEquiv {G H} [Group G] [Group H] (φ : G →* H) (h : Function.Bijective φ.toFun): G ≃ H where
   toFun := φ.toFun
   invFun := Function.surjInv h.surjective
   left_inv := Function.leftInverse_surjInv h
   right_inv := Function.rightInverse_surjInv h.surjective
 
+/-
+Upgrade `→*` to a `≅*` provided the underlying function is bijective.
+-/
 noncomputable def GroupHom.toGroupIso {G H} [Group G] [Group H] (φ : G →* H) (h : Function.Bijective φ.toFun) : G ≅* H where
   toEquiv := φ.toEquiv h
   map_mul := φ.map_mul
   map_one := φ.map_one
   map_inv := φ.map_inv
+
 
 end Borcherds

@@ -38,7 +38,7 @@ def trivialIso {G} [Group G] [Fintype G] (h : Nat.card G = 1) : GroupIso G Trivi
   map_inv x := by ext
 
 /- Definition 1.3 - Subgroups-/
-structure BSubgroup (G : Type*) [Group G] where
+@[ext] structure BSubgroup (G : Type*) [Group G] where
   carrier : Set G
   one_mem : 1 ∈ carrier
   mul_mem : ∀ x y : G, x ∈ carrier → y ∈ carrier → x * y ∈ carrier
