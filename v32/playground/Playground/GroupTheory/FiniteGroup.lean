@@ -441,21 +441,21 @@ instance : Inv C4 where
   inv a := ⟨-a.val⟩
 
 instance : Group C4 where
-  mul_assoc := by native_decide
-  one_mul := by native_decide
-  mul_one := by native_decide
-  inv_mul_cancel := by native_decide
-  mul_inv_cancel := by native_decide
+  mul_assoc := by decide
+  one_mul := by decide
+  mul_one := by decide
+  inv_mul_cancel := by decide
+  mul_inv_cancel := by decide
 
 def even : BSubgroup C4 where
   carrier := ({⟨0⟩, ⟨2⟩} : Finset C4)
-  one_mem := by native_decide
-  mul_mem := by native_decide
-  inv_mem := by native_decide
+  one_mem := by decide
+  mul_mem := by decide
+  inv_mem := by decide
 
 theorem even_normal : IsNormal even := by
   intro g
-  fin_cases g <;> native_decide
+  fin_cases g <;> decide
 
 instance : Fact (IsNormal even) := ⟨even_normal⟩
 

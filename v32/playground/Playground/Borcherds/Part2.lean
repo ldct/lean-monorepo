@@ -96,6 +96,104 @@ def SameLeftCoset {G} [Group G] (H : BSubgroup G) : Setoid G where
 instance {G} [Borcherds.Group G] : HasQuotient G (BSubgroup G) where
   Quotient H := Quotient (SameLeftCoset H)
 
+section LeftCoset
+
+lemma Group.mul_left_injective {G} [Group G] (a : G) : Function.Injective (fun x : G => a * x) := by
+  intro x y h
+  grind [Group.left_cancel]
+
+-- The set gH
+def lcoset {G} [Group G] (g : G) (H : BSubgroup G) : Set G :=
+  H.carrier.image (fun h => g * h)
+
+lemma mem_lcoset {G} [Group G] {g x : G} {H : BSubgroup G} :
+    x ∈ lcoset g H ↔ ∃ h ∈ H.carrier, g * h = x := by
+  simp only [lcoset, Set.mem_image]
+
+lemma mem_lcoset_self {G} [Group G] (g : G) (H : BSubgroup G) : g ∈ lcoset g H :=
+  mem_lcoset.mpr ⟨1, H.one_mem, Group.mul_one g⟩
+
+lemma Group.card_lcoset {G} [Group G] (g : G) (H : BSubgroup G) : (lcoset g H).ncard = H.carrier.ncard := by
+  apply Set.ncard_image_of_injective
+  exact mul_left_injective g
+
+/-- A coset is determined by any of its elements. -/
+lemma lcoset_eq_of_mem {G} [Group G] {H : BSubgroup G} {g x : G} (hx : x ∈ lcoset g H) :
+    lcoset x H = lcoset g H := by
+  obtain ⟨h, hh, rfl⟩ := mem_lcoset.mp hx
+  ext y
+  simp only [mem_lcoset]
+  constructor
+  · rintro ⟨h', hh', rfl⟩
+    exact ⟨h * h', H.mul_mem _ _ hh hh', (Group.mul_assoc g h h').symm⟩
+  · rintro ⟨h', hh', rfl⟩
+    refine ⟨h⁻¹ * h', H.mul_mem _ _ (H.inv_mem _ hh) hh', ?_⟩
+    rw [Group.mul_assoc g h, ← Group.mul_assoc h h⁻¹, Group.mul_inv_cancel, Group.one_mul]
+
+structure LeftCoset {G} [Group G] (H : BSubgroup G) where
+  carrier : Set G
+  is_coset : ∃ g, carrier = lcoset g H
+
+namespace LeftCoset
+
+def of {G} [Group G] (g : G) (H : BSubgroup G) : LeftCoset H :=
+  ⟨lcoset g H, ⟨g, rfl⟩⟩
+
+@[ext] theorem ext {G} [Group G] {H : BSubgroup G} {C D : LeftCoset H}
+    (h : C.carrier = D.carrier) : C = D := by
+  cases C
+  cases D
+  cases h
+  rfl
+
+-- The product of `g` and `aH` is a coset
+instance {G} [Group G] {H : BSubgroup G} : HMul G (LeftCoset H) (LeftCoset H) where
+  hMul g C :=
+    { carrier := C.carrier.image (fun x => g * x)
+      is_coset := by
+        obtain ⟨a, ha⟩ := C.is_coset
+        refine ⟨g * a, ?_⟩
+        rw [ha, lcoset, Set.image_image]
+        apply Set.image_congr
+        intro x _
+        exact (Group.mul_assoc g a x).symm }
+
+lemma hMul_of {G} [Group G] (g a : G) (H : BSubgroup G) :
+    g * LeftCoset.of a H = LeftCoset.of (g * a) H := by
+  apply LeftCoset.ext
+  change (lcoset a H).image (fun x => g * x) = lcoset (g * a) H
+  rw [lcoset, Set.image_image]
+  apply Set.image_congr
+  intro x _
+  exact (Group.mul_assoc g a x).symm
+
+lemma card_carrier {G} [Group G] {H : BSubgroup G} (C : LeftCoset H) : C.carrier.ncard = H.carrier.ncard := by
+  obtain ⟨g, hg⟩ := C.is_coset
+  rw [hg, Group.card_lcoset]
+
+lemma of_eq_iff_mem {G} [Group G] {H : BSubgroup G} {x : G} {C : LeftCoset H} :
+    LeftCoset.of x H = C ↔ x ∈ C.carrier := by
+  obtain ⟨g, hg⟩ := C.is_coset
+  constructor
+  · rintro rfl
+    exact mem_lcoset_self x H
+  · intro hx
+    apply LeftCoset.ext
+    show lcoset x H = C.carrier
+    rw [hg] at hx ⊢
+    exact lcoset_eq_of_mem hx
+
+lemma of_eq_of {G} [Group G] {H : BSubgroup G} {a b : G} : LeftCoset.of a H = LeftCoset.of b H ↔ a⁻¹ * b ∈ H.carrier := by
+  sorry
+
+
+def IsNormal {G} [Group G] (H : BSubgroup G) : Prop :=
+  ∀ g h, h ∈ H.carrier → g * h * g⁻¹ ∈ H.carrier
+
+end LeftCoset
+
+end LeftCoset
+
 section Lagrange
 
 variable {G : Type*} [Group G] (H : BSubgroup G) (g : G)
@@ -181,9 +279,31 @@ theorem BSubgroup.card_eq_card_quotient_mul_card_carrier [Finite G] :
   rw [← Nat.card_prod]
   exact Nat.card_congr (BSubgroup.groupEquivQuotientProdSubtype H)
 
+/-- **Lagrange** via the coset partition: `|G| = (number of cosets) · |H|`.
+    Shorter than the quotient route above: the fibers of `x ↦ LeftCoset.of x H`
+    are literally the coset carriers, and `card_carrier` counts each of them. -/
+theorem BSubgroup.card_eq_card_leftCoset_mul_card [Finite G] :
+    Nat.card G = Nat.card (LeftCoset H) * H.carrier.ncard := by
+  classical
+  have : Finite (LeftCoset H) :=
+    Finite.of_injective LeftCoset.carrier fun C D h => LeftCoset.ext h
+  cases nonempty_fintype (LeftCoset H)
+  calc Nat.card G
+      = Nat.card (Σ C : LeftCoset H, {x // LeftCoset.of x H = C}) :=
+        Nat.card_congr (Equiv.sigmaFiberEquiv fun x => LeftCoset.of x H).symm
+    _ = ∑ C : LeftCoset H, Nat.card {x // LeftCoset.of x H = C} := Nat.card_sigma
+    _ = ∑ C : LeftCoset H, C.carrier.ncard := by
+        refine Finset.sum_congr rfl fun C _ => ?_
+        rw [← Nat.card_coe_set_eq]
+        exact Nat.card_congr (Equiv.subtypeEquivRight fun x => LeftCoset.of_eq_iff_mem)
+    _ = ∑ _C : LeftCoset H, H.carrier.ncard :=
+        Finset.sum_congr rfl fun C _ => LeftCoset.card_carrier C
+    _ = Nat.card (LeftCoset H) * H.carrier.ncard := by
+        rw [Finset.sum_const, Finset.card_univ, Nat.card_eq_fintype_card, smul_eq_mul]
+
 theorem BSubgroup.card_carrier_dvd_card [Finite G] :
   Set.ncard H.carrier ∣ Nat.card G := by
-  rw [BSubgroup.card_eq_card_quotient_mul_card_carrier H]
+  rw [BSubgroup.card_eq_card_leftCoset_mul_card H]
   exact dvd_mul_left _ _
 
 end Lagrange
