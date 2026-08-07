@@ -228,17 +228,10 @@ noncomputable def generator (S : AddSubgroup ℤ) : ℕ := (subgroup_is_multiple
 lemma generator_spec (S : AddSubgroup ℤ) : S = ℤ(generator S) := (subgroup_is_multiple_of S).choose_spec
 
 lemma generator_eq_iff (S : AddSubgroup ℤ) (a : ℕ) : generator S = a ↔ S = ℤ(a) := by
-  constructor
-  · intro ha
-    subst ha
-    exact generator_spec S
-  · intro ha
-    rw [ha]
-    clear ha
-    clear S
-    have := generator_spec ℤ(a)
-    simp at this
-    grind
+  grind [multiplesOf_inj, generator_spec]
+
+lemma generator_mem (S : AddSubgroup ℤ) : ↑(generator S) ∈ S.carrier := by
+  grind [mem_multiplesOf_self, generator_spec]
 
 /- Definition 2.3.3 -/
 def Sum (a b : ℤ) : AddSubgroup ℤ where
