@@ -1,21 +1,6 @@
-import Mathlib
-
-/-
-https://web.ma.utexas.edu/users/vandyke/notes/250a_notes/main.pdf
--/
-
-variable {α : Type*}
+import Playground.Artin.Chapter_2_2_defs
 
 namespace Artin
-
-class Group (G : Type*) extends Mul G, One G, Inv G where
-  mul_assoc : ∀ a b c : G, (a * b) * c = a * (b * c)
-  one_mul : ∀ a : G, 1 * a = a
-  mul_one : ∀ a : G, a * 1 = a
-  inv_mul_cancel : ∀ a : G, a⁻¹ * a = 1
-  mul_inv_cancel : ∀ a : G, a * a⁻¹ = 1
-
-attribute [simp] Group.one_mul Group.mul_one Group.inv_mul_cancel Group.mul_inv_cancel
 
 /- Example 2.2.2 -/
 @[ext]
@@ -23,6 +8,8 @@ public structure NonZeroReal : Type where
   val : ℝ
   ne_zero : val ≠ 0
 instance : Mul NonZeroReal where mul := fun a b => ⟨a.val * b.val, by simp [NonZeroReal.ne_zero]⟩
+
+#check PNat
 lemma NonZeroReal.val_mul (a b : NonZeroReal) : (a * b).val = a.val * b.val := rfl
 instance : One NonZeroReal where one := ⟨1, by simp⟩
 lemma NonZeroReal.val_one : (1 : NonZeroReal).val = 1 := rfl
@@ -80,18 +67,6 @@ noncomputable instance NonZeroComplex.Group : Group NonZeroComplex where
     ext ; simp ; grind
 
 
-/- Proposition 2.2.3 -/
-lemma Group.left_cancel {G} [Group G] (a b c : G) (h : a * b = a * c) : b = c := by
-  have := congr(a⁻¹ * $h)
-  rw [← mul_assoc, ← mul_assoc] at this
-  simp_all
-
-/- Proposition 2.2.3 -/
-lemma Group.right_cancel {G} [Group G] (a b c : G) (h : b * a = c * a) : b = c := by
-  have := congr($h * a⁻¹)
-  rw [mul_assoc, mul_assoc] at this
-  simp_all
-
 /- Example 2.2.4 -/
 instance (n : ℕ) : Group (GL (Fin n) ℝ) where
   mul_assoc := mul_assoc
@@ -125,8 +100,8 @@ namespace S3
 instance : Mul S3 where mul a b := ⟨a.val * b.val⟩
 instance : One S3 where one := ⟨1⟩
 instance : Inv S3 where inv a := ⟨a.val⁻¹⟩
-instance : HPow S3 ℕ S3 where hPow a n := ⟨a.val ^ n⟩
-instance : HPow S3 ℤ S3 where hPow a n := ⟨a.val ^ n⟩
+instance instHPowNat : HPow S3 ℕ S3 where hPow a n := ⟨a.val ^ n⟩
+instance instHPowInt : HPow S3 ℤ S3 where hPow a n := ⟨a.val ^ n⟩
 
 @[simp] lemma val_mul (a b : S3) : (a * b).val = a.val * b.val := rfl
 @[simp] lemma val_one : (1 : S3).val = 1 := rfl
@@ -160,16 +135,6 @@ unsafe instance : Repr S3 := ⟨fun w p => reprPrec w.val p⟩
 #eval x * y = y * x
 
 end S3
-
-/- Definition 2.2.9 -/
-@[ext] structure Subgroup (G : Type*) [Group G] where
-  carrier : Set G
-  one_mem : 1 ∈ carrier
-  mul_mem : ∀ x y : G, x ∈ carrier → y ∈ carrier → x * y ∈ carrier
-  inv_mem : ∀ x : G, x ∈ carrier → x⁻¹ ∈ carrier
-
-instance {G : Type*} [Group G] : CoeSort (Subgroup G) (Type _) where
-  coe H := { x : G // x ∈ H.carrier }
 
 /- Example 2.2.10.a, the subgroup of complex numbers with modulus 1 -/
 def NonZeroComplex.circleGroup : Subgroup NonZeroComplex where

@@ -1,4 +1,4 @@
-import Playground.Artin.Chapter_2_2
+import Playground.Artin.Chapter_2_2_examples
 
 namespace Artin
 

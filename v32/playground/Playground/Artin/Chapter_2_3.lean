@@ -1,4 +1,4 @@
-import Playground.Artin.Chapter_2_2
+import Playground.Artin.Chapter_2_2_extras
 
 namespace Artin
 
@@ -41,23 +41,25 @@ def MultiplesOf (a : ℕ) : AddSubgroup ℤ where
     obtain ⟨n, rfl⟩ := hx
     use -n
     grind
+notation "ℤ("n")" => MultiplesOf n
 
-notation "ℤ(" n ")" => MultiplesOf n
-
-@[simp] lemma mem_MultiplesOf_iff (a b : ℕ) : ↑a ∈ ℤ(b).carrier ↔ b ∣ a := by
+@[simp] lemma zmem_multiplesOf_iff (a : ℤ) (b : ℕ) : a ∈ ℤ(b).carrier ↔ ↑b ∣ a := by
   constructor
   · rintro h
     rw [MultiplesOf] at h
     simp only [Set.mem_setOf_eq] at h
     obtain ⟨ k, hk ⟩ := h
-    zify
-    rw [hk]
-    simp
+    use k
+    grind
   · rintro h
-    have : ∃ k, a = k * b := exists_eq_mul_left_of_dvd h
-    obtain ⟨ k, rfl ⟩ := this
     rw [MultiplesOf]
-    simp
+    simp only [Set.mem_setOf_eq]
+    obtain ⟨ k, rfl ⟩ := h
+    use k
+    grind
+
+@[simp] lemma mem_MultiplesOf_iff (a b : ℕ) : ↑a ∈ ℤ(b).carrier ↔ b ∣ a := by
+  exact_mod_cast zmem_multiplesOf_iff (↑a) b
 
 @[simp] lemma mem_multiplesOf_self (a : ℕ) : ↑a ∈ ℤ(a).carrier := by simp
 
@@ -83,7 +85,7 @@ lemma AddGroup.right_cancel {G : Type*} [AddGroup G] (a b d : G) (h : a + d = b 
   rw [add_assoc, add_assoc] at this
   simp_all
 
-lemma AddGroup.neg_zero {G : Type*} [AddGroup G] : -(0 : G) = 0 := by
+@[simp] lemma AddGroup.neg_zero {G : Type*} [AddGroup G] : -(0 : G) = 0 := by
   have h : (-0 : G) + 0 = 0 + 0 := by
     rw [AddGroup.neg_add]
     simp
@@ -94,12 +96,23 @@ def AddGroup.bot {G : Type*} [AddGroup G] : AddSubgroup G where
   carrier := {0}
   zero_mem := by simp
   add_mem := by simp
-  neg_mem := by
-    simp [AddGroup.neg_zero]
+  neg_mem := by simp
+
+def AddGroup.top {G : Type*} [AddGroup G] : AddSubgroup G where
+  carrier := Set.univ
+  zero_mem := by simp
+  add_mem := by simp
+  neg_mem := by simp
+
+@[simp] lemma mem_top_iff {G : Type*} [AddGroup G] (i : G) : i ∈ AddGroup.top.carrier ↔ True := by rfl
+
+@[simp] lemma Z1_top : ℤ(1) = AddGroup.top := by
+  ext i
+  simp
 
 @[simp]
 theorem mem_bot_iff {G : Type*} [AddGroup G] (i : G) : i ∈ AddGroup.bot.carrier ↔ i = 0 := by
-  simp only [AddGroup.bot, Set.mem_singleton_iff]
+  simp [AddGroup.bot]
 
 theorem bot_is_subset (H : AddSubgroup ℤ) (i : ℤ)
 : i ∈ AddGroup.bot.carrier → i ∈ H.carrier := by
@@ -229,6 +242,9 @@ lemma generator_spec (S : AddSubgroup ℤ) : S = ℤ(generator S) := (subgroup_i
 
 lemma generator_eq_iff (S : AddSubgroup ℤ) (a : ℕ) : generator S = a ↔ S = ℤ(a) := by
   grind [multiplesOf_inj, generator_spec]
+
+lemma generator_eq_one (S : AddSubgroup ℤ) : generator S = 1 ↔ S = AddGroup.top := by
+  simp [generator_eq_iff, Z1_top]
 
 lemma generator_mem (S : AddSubgroup ℤ) : ↑(generator S) ∈ S.carrier := by
   grind [mem_multiplesOf_self, generator_spec]
