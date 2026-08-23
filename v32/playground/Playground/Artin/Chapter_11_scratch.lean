@@ -9,7 +9,7 @@ theorem five_add_sqrt_six_mem :  √6 ∈ ℚ⟮γ⟯ := by
   rw [show √6 = (γ ^ 2 - 5) / 2 by sqrt_ring]
   aesop
 
-theorem sqrt_six_mul_gamma_mem : √2 ∈ ℚ⟮γ⟯ := by
+theorem sqrt_two_mem : √2 ∈ ℚ⟮γ⟯ := by
   have h1 :  √6 * (√2 + √3) ∈ ℚ⟮γ⟯ := by
     apply mul_mem
     · exact five_add_sqrt_six_mem

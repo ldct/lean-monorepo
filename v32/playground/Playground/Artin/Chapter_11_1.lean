@@ -1,8 +1,7 @@
 import Mathlib
+import Playground.Artin.SqrtRing
 
 variable {α : Type*}
-
--- LOL this is actually dummit and foote
 
 namespace Artin
 
@@ -93,6 +92,12 @@ lemma Unit.inv_inv {R : Type*} [CRing R] (a : Unit R) : (a⁻¹)⁻¹ = a := rfl
 instance : Membership R (Subring R) where
   mem J r := r ∈ J.carrier
 
+-- instance : Membership ℝ (Subring ℂ) where
+--   mem J r := (r : ℂ) ∈ J
+
+@[grind norm] lemma Subring.mem_carrier (x : R) (S : Subring R) :
+    (x ∈ S) ↔ x ∈ S.carrier := by rfl
+
 /- The intersection of a collection of subrings of a commutative ring is a subring -/
 def IndexedIntersection
     {R} [CRing R] (𝒞 : Set (Subring R)) : Subring R where
@@ -102,29 +107,49 @@ def IndexedIntersection
   add_mem := by grind [Set.mem_iInter, Subring.add_mem]
   mul_mem := by grind [Set.mem_iInter, Subring.mul_mem]
 
-def containsRationals (J : Subring ℂ) : Prop := ∀ q : ℚ, ↑q ∈ J
-
-def QAdjoin (c : ℂ) : Subring ℂ := IndexedIntersection { J | c ∈ J ∧ containsRationals J }
-
+def QAdjoin (c : ℂ) : Subring ℂ := IndexedIntersection { J | c ∈ J ∧ ∀ q : ℚ, ↑q ∈ J }
 notation "ℚ[" c "]" => QAdjoin c
 
 lemma QAdjoin.adjoin_mem (c : ℂ) : c ∈ (ℚ[c]) := by
-  change c ∈ ℚ[c].carrier
+  grind [QAdjoin, IndexedIntersection, Set.mem_iInter]
+
+lemma QAdjoin.rat_mem (q : ℚ) : ↑q ∈ (ℚ[c]) := by
+  change ↑q ∈ ℚ[c].carrier
   simp [QAdjoin, IndexedIntersection, Set.mem_iInter]
-  intro J hJ _
-  exact hJ
+  grind
 
-lemma QAdjoin.sum_mem (z₁ z₂ : ℂ) (h₁ : z₁ ∈ (ℚ[c]).carrier) (h₂ : z₂ ∈ (ℚ[c]).carrier) : z₁ + z₂ ∈ (ℚ[c]).carrier := by
+lemma QAdjoin.add_mem (c z₁ z₂ : ℂ) (h₁ : z₁ ∈ ℚ[c]) (h₂ : z₂ ∈ ℚ[c]) : z₁ + z₂ ∈ ℚ[c] := by
   grind [QAdjoin, IndexedIntersection, Set.mem_iInter]
 
-lemma QAdjoin.sum_mem' (z₁ z₂ : ℂ) (h₁ : z₁ ∈ (ℚ[c])) (h₂ : z₂ ∈ (ℚ[c])) : z₁ + z₂ ∈ (ℚ[c]) := by
+lemma QAdjoin.neg_mem (z : ℂ) (h : z ∈ (ℚ[c])) : -z ∈ (ℚ[c]) := by
   grind [QAdjoin, IndexedIntersection, Set.mem_iInter]
 
+lemma QAdjoin.sub_mem (z₁ z₂ : ℂ) (h₁ : z₁ ∈ (ℚ[c])) (h₂ : z₂ ∈ (ℚ[c])) : z₁ - z₂ ∈ (ℚ[c]) := by
+  rw [show z₁ - z₂ = z₁ + (-z₂) by ring]
+  grind [add_mem, neg_mem]
 
+lemma QAdjoin.mul_mem (z₁ z₂ : ℂ) (h₁ : z₁ ∈ (ℚ[c])) (h₂ : z₂ ∈ (ℚ[c])) : z₁ * z₂ ∈ (ℚ[c]) := by
+  grind [QAdjoin, IndexedIntersection, Set.mem_iInter]
 
+lemma helper (z : ℂ) (q : ℚ) : z / q = z * (q⁻¹ : ℚ) := by
+  norm_num
+  field_simp
 
+lemma QAdjoin.divq_mem (z : ℂ) (q : ℚ) (h : z ∈ (ℚ[c])) : z / q ∈ (ℚ[c]) := by
+  rw [helper]
+  grind [mul_mem, rat_mem]
 
+noncomputable abbrev γ : ℝ := √2 + √3
 
+theorem QAdjoin.five_add_sqrt_six_mem : ↑√6 ∈ ℚ[γ] := by
+  have hγ : ↑γ ∈ ℚ[γ] := QAdjoin.adjoin_mem γ
+  rw [show √6 = (γ ^ 2 - 5) / 2 by sqrt_ring]
+  norm_num
+  apply divq_mem
+  apply sub_mem
+  · rw [show ((√2 : ℂ) + √3) ^ 2 = (↑√2 + ↑√3) * (↑√2 + ↑√3) by field_simp]
+    grind [mul_mem, adjoin_mem, rat_mem]
+  apply rat_mem
 
 end CRing
 
