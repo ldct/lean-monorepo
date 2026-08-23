@@ -19,7 +19,7 @@ def IndexedIntersection
     exact H.mul_mem (ha H hH) (hb H hH)
   one_mem' := by
     rw [Set.mem_iInter]
-    simp
+    simp?
   inv_mem' := by
     intro a ha
     rw [Set.mem_iInter] at *

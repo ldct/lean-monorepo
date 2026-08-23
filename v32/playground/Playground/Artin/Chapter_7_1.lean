@@ -84,10 +84,8 @@ instance : Mul (Unit R) where
     val := a.val * b.val,
     inv := b.inv * a.inv,
 
-    mul_inv_val := by
-      rw [show a.val * b.val * (b.inv * a.inv) = a.val * (b.val * b.inv) * a.inv by sorry]
-      simp [a.val_inv, b.val_inv],
     mul_inv_val := by sorry,
+    inv_mul_val := by sorry,
   }
 
 structure ZeroDivisor (R : Type*) [Ring R] where

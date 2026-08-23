@@ -90,6 +90,9 @@ lemma Unit.inv_inv {R : Type*} [CRing R] (a : Unit R) : (a⁻¹)⁻¹ = a := rfl
   add_mem : ∀ x y : R, x ∈ carrier → y ∈ carrier → x + y ∈ carrier
   mul_mem : ∀ x y : R, x ∈ carrier → y ∈ carrier → x * y ∈ carrier
 
+instance : Membership R (Subring R) where
+  mem J r := r ∈ J.carrier
+
 /- The intersection of a collection of subrings of a commutative ring is a subring -/
 def IndexedIntersection
     {R} [CRing R] (𝒞 : Set (Subring R)) : Subring R where
@@ -98,6 +101,30 @@ def IndexedIntersection
   neg_mem := by grind [Set.mem_iInter, Subring.neg_mem]
   add_mem := by grind [Set.mem_iInter, Subring.add_mem]
   mul_mem := by grind [Set.mem_iInter, Subring.mul_mem]
+
+def containsRationals (J : Subring ℂ) : Prop := ∀ q : ℚ, ↑q ∈ J
+
+def QAdjoin (c : ℂ) : Subring ℂ := IndexedIntersection { J | c ∈ J ∧ containsRationals J }
+
+notation "ℚ[" c "]" => QAdjoin c
+
+lemma QAdjoin.adjoin_mem (c : ℂ) : c ∈ (ℚ[c]) := by
+  change c ∈ ℚ[c].carrier
+  simp [QAdjoin, IndexedIntersection, Set.mem_iInter]
+  intro J hJ _
+  exact hJ
+
+lemma QAdjoin.sum_mem (z₁ z₂ : ℂ) (h₁ : z₁ ∈ (ℚ[c]).carrier) (h₂ : z₂ ∈ (ℚ[c]).carrier) : z₁ + z₂ ∈ (ℚ[c]).carrier := by
+  grind [QAdjoin, IndexedIntersection, Set.mem_iInter]
+
+lemma QAdjoin.sum_mem' (z₁ z₂ : ℂ) (h₁ : z₁ ∈ (ℚ[c])) (h₂ : z₂ ∈ (ℚ[c])) : z₁ + z₂ ∈ (ℚ[c]) := by
+  grind [QAdjoin, IndexedIntersection, Set.mem_iInter]
+
+
+
+
+
+
 
 end CRing
 
