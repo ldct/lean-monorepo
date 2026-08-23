@@ -196,12 +196,10 @@ theorem QAdjoin.sqrt_two_mem : ↑√2 ∈ ℚ[γ] := by
   exact h3
 
 def ZAdjoin (c : ℂ) : Subring ℂ := IndexedIntersection { J | c ∈ J }
-notation "ℤ[" c "]" => QAdjoin c
+notation "ℤ[" c "]" => ZAdjoin c
 
-lemma ZAdjoin.adjoin_mem (c : ℂ) : c ∈ ℚ[c] := by
-  grind [QAdjoin, Set.mem_iInter]
-
-
+lemma ZAdjoin.adjoin_mem (c : ℂ) : c ∈ ℤ[c] := by
+  grind [ZAdjoin, Set.mem_iInter]
 
 
 end Subring
