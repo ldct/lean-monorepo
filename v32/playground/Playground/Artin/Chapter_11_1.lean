@@ -83,6 +83,21 @@ instance : Inv (Unit R) where
 lemma Unit.val_inv {R : Type*} [CRing R] (a : Unit R) : (a⁻¹).val = a.inv := rfl
 lemma Unit.inv_inv {R : Type*} [CRing R] (a : Unit R) : (a⁻¹)⁻¹ = a := rfl
 
+@[ext] structure Subring (R : Type*) [CRing R] where
+  carrier : Set R
+  one_mem : 1 ∈ carrier
+  neg_mem : ∀ x : R, x ∈ carrier → -x ∈ carrier
+  add_mem : ∀ x y : R, x ∈ carrier → y ∈ carrier → x + y ∈ carrier
+  mul_mem : ∀ x y : R, x ∈ carrier → y ∈ carrier → x * y ∈ carrier
+
+/- The intersection of a collection of subrings of a commutative ring is a subring -/
+def IndexedIntersection
+    {R} [CRing R] (𝒞 : Set (Subring R)) : Subring R where
+  carrier := ⋂ (H ∈ 𝒞), H.carrier
+  one_mem := by simp [Set.mem_iInter, Subring.one_mem]
+  neg_mem := by grind [Set.mem_iInter, Subring.neg_mem]
+  add_mem := by grind [Set.mem_iInter, Subring.add_mem]
+  mul_mem := by grind [Set.mem_iInter, Subring.mul_mem]
 
 end CRing
 
