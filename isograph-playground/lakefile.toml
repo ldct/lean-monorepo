@@ -1,0 +1,16 @@
+name = "isograph_playground"
+version = "0.1.0"
+defaultTargets = ["IsoGraphPlayground"]
+
+[leanOptions]
+autoImplicit = false
+relaxedAutoImplicit = false
+
+[[require]]
+name = "isograph"
+git = "https://github.com/Timeroot/IsoGraph"
+rev = "main"
+
+[[lean_lib]]
+name = "IsoGraphPlayground"
+

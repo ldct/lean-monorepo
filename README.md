@@ -7,6 +7,12 @@ This repository is a grab bag of Lean-related materials. The directory layout is
 - `informal/`: PDF papers and notes referenced while exploring Lean topics.
 - `tutorials/`: Notes, markdown write-ups, and tutorial materials (Simons/FPV folders and misc. Lean notes).
 
+## IsoGraph
+
+- `isograph-playground/`: Lean 4.33.1 playground backed by
+  [Timeroot/IsoGraph](https://github.com/Timeroot/IsoGraph), with a small
+  compile-checked example.
+
 ## Advent of Code
 
 - `v19/LeanGT/AoC/`: Advent of Code solutions and parsing utilities (`day1.lean`, `day2.lean`, `Parsers.lean`, etc.).
