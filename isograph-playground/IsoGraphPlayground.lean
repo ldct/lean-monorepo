@@ -1,4 +1,6 @@
 import IsoGraph
+import IsoGraphPlayground.LongestCycle
+import IsoGraphPlayground.LongestPath
 import IsoGraphPlayground.Subgraphs
 
 example : IsoGraph.lineGraph (IsoGraph.bipartite 3 3) = IsoGraph.rook 3 3 := by

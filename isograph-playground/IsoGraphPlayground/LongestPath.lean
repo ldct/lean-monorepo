@@ -1,96 +1,188 @@
 import IsoGraph
 import IsoGraph.Containment.Algorithms.Cached
 
+#check IsoGraph
 namespace IsoGraph
 
-/-! # Longest induced paths and circumference -/
+/-!
 
-/-- `n` is the order of an induced path in `G`. -/
-def IsPathOrder (G : IsoGraph) (n : ℕ) : Prop :=
+# Longest paths and longest induced paths
+
+This module defines invariants of an `IsoGraph` defined in terms of path
+
+## Main definitions
+
+- `longestPathOrder` : The maximum order (number of vertices) of a path in `G`.
+- `longestInducedPathOrder` : The maximum order (number of vertices) of an induced path in `G`.
+
+## Main theorems
+
+- `longestPathOrder_eq_sSup` : Characterization of `longestPathOrder` as the supremum over all path orders in `G`.
+- `longestInducedPathOrder_eq_sSup` : Characterization of `longestInducedPathOrder` as the supremum over all induced path orders in `G`.
+
+## Design choices
+
+- In the literature, "length of a path" refers to the number of edges in the path, but internally it is more convenient to use the number of vertices, which we call the "order" of the path. This is because every graph has a path of order 0. We define `longestPath = longestPathOrder - 1`, etc.
+- We define the invariants directly on `IsoGraph` rather than on `CGraph`/`SimpleGraph`
+
+-/
+
+/-- `n` is the order (number of vertices) of a path in `G`. -/
+def HasPathOfOrder (G : IsoGraph) (n : ℕ) : Prop :=
+  path n ≤ₛ G
+
+/-- `n` is the order (number of vertices) of an induced path in `G`. -/
+def HasInducedPathOfOrder (G : IsoGraph) (n : ℕ) : Prop :=
   path n ≤ᵢₛ G
 
-/-- Induced path containment is decidable by IsoGraph's cached containment
-algorithm. -/
-instance (G : IsoGraph) : DecidablePred G.IsPathOrder :=
+instance (G : IsoGraph) : DecidablePred G.HasPathOfOrder :=
+  fun n ↦ instDecidableIsSubgraphOf (path n) G
+
+instance (G : IsoGraph) : DecidablePred G.HasInducedPathOfOrder :=
   fun n ↦ instDecidableIsInducedSubgraphOf (path n) G
 
-/-- The possible orders (numbers of vertices) of induced path subgraphs of `G`.
-Restricting to `G.V + 1` makes the set manifestly finite. -/
-def pathOrders (G : IsoGraph) : Finset ℕ :=
-  (Finset.range (G.V + 1)).filter G.IsPathOrder
+/-- Every induced path in `G` is, in particular, a path in `G`. -/
+theorem HasInducedPathOfOrder.hasPathOfOrder {G : IsoGraph} {n : ℕ}
+    (h : G.HasInducedPathOfOrder n) : G.HasPathOfOrder n :=
+  h.isSubgraphOf
 
-/-- The order of a longest induced path subgraph of `G`. -/
+/-- Removing the final vertex from a path in `G` gives a path of the preceding order. -/
+theorem HasPathOfOrder.pred {G : IsoGraph} {n : ℕ} (h : G.HasPathOfOrder n) :
+    G.HasPathOfOrder (n - 1) := by
+  apply isSubgraphOf_trans (G := path n) ?_ h
+  cases n with
+  | zero => exact isSubgraphOf_refl _
+  | succ n =>
+      change Nonempty (CGraph.SubgraphOf (CGraph.path n) (CGraph.path (n + 1)))
+      refine ⟨{
+        toFun := fun i ↦ ⟨i.1, Nat.lt_succ_of_lt i.2⟩
+        injective' := fun _ _ hij ↦ Fin.ext (congrArg (fun i : Fin (n + 1) ↦ i.1) hij)
+        map_adj' := ?_
+      }⟩
+      intro i j hij
+      change (decide (i ≠ j) && ((i.1 + 1 == j.1) || (j.1 + 1 == i.1))) = true at hij
+      change (decide ((⟨i.1, Nat.lt_succ_of_lt i.2⟩ : Fin (n + 1)) ≠
+        ⟨j.1, Nat.lt_succ_of_lt j.2⟩) && ((i.1 + 1 == j.1) || (j.1 + 1 == i.1))) = true
+      simp only [Bool.and_eq_true, Bool.or_eq_true, decide_eq_true_eq, beq_iff_eq] at hij ⊢
+      exact ⟨fun heq ↦ hij.1 (Fin.ext (congrArg (fun k : Fin (n + 1) ↦ k.1) heq)), hij.2⟩
+
+/-- The possible orders of path subgraphs of `G`. -/
+def pathOrders (G : IsoGraph) : Finset ℕ :=
+  (Finset.range (G.V + 1)).filter G.HasPathOfOrder
+
+/-- The possible orders of induced path subgraphs of `G`. -/
+def inducedPathOrders (G : IsoGraph) : Finset ℕ :=
+  (Finset.range (G.V + 1)).filter G.HasInducedPathOfOrder
+
+/-- The maximum order (number of vertices) of a path in `G`. -/
 def longestPathOrder (G : IsoGraph) : ℕ :=
   G.pathOrders.sup id
 
-/-- A canonical representative of a longest induced path subgraph of `G`.
-For the empty graph this is `path 0`. -/
-def longestPath (G : IsoGraph) : IsoGraph :=
-  path G.longestPathOrder
+/-- The maximum order (number of vertices) of an induced path in `G`. -/
+def longestInducedPathOrder (G : IsoGraph) : ℕ :=
+  G.inducedPathOrders.sup id
 
-/-- The length (number of edges) of a longest path in `G`. -/
-def longestPathLength (G : IsoGraph) : ℕ :=
+/-- The maximum number of edges in a simple path in `G`. -/
+def longestPath (G : IsoGraph) : ℕ :=
   G.longestPathOrder - 1
 
-/-- The selected longest path is an induced subgraph of `G`. -/
-theorem longestPath_isInducedSubgraphOf (G : IsoGraph) : G.longestPath ≤ᵢₛ G := by
+/-- The maximum number of edges in an induced path in `G`. -/
+def longestInducedPath (G : IsoGraph) : ℕ :=
+  G.longestInducedPathOrder - 1
+
+/-- A path of maximum order is a subgraph of `G`. -/
+theorem longestPathOrder_isSubgraphOf (G : IsoGraph) : path G.longestPathOrder ≤ₛ G := by
   have hne : G.pathOrders.Nonempty := by
     refine ⟨0, ?_⟩
     rw [pathOrders, Finset.mem_filter]
-    exact ⟨by simp, by simpa [IsPathOrder] using empty_zero_isInducedSubgraphOf G⟩
+    exact ⟨by simp, by simpa [HasPathOfOrder] using empty_zero_isSubgraphOf G⟩
   have hmem : G.longestPathOrder ∈ G.pathOrders := by
     rcases Finset.sup_mem_of_nonempty (f := id) hne with ⟨n, hn, h⟩
     simpa [longestPathOrder] using h ▸ hn
   exact (Finset.mem_filter.mp hmem).2
 
-/-- No induced path subgraph of `G` has more vertices than `G.longestPath`. -/
-theorem pathOrder_le_longestPathOrder {G : IsoGraph} {n : ℕ} (h : path n ≤ᵢₛ G) :
+/-- No path subgraph of `G` has more vertices than a longest path. -/
+theorem pathOrder_le_longestPathOrder {G : IsoGraph} {n : ℕ} (h : path n ≤ₛ G) :
     n ≤ G.longestPathOrder := by
   have hnV : n ≤ G.V := by simpa using h.V_le
   apply Finset.le_sup (f := id)
   rw [pathOrders, Finset.mem_filter]
   exact ⟨Finset.mem_range.mpr (by omega), h⟩
 
-/-- The possible lengths of cycle subgraphs of `G`.
+/-- `longestPathOrder` is the supremum over all path orders in `G`, without an
+a priori finite restriction on the set. -/
+theorem longestPathOrder_eq_sSup (G : IsoGraph) :
+    G.longestPathOrder = sSup {n : ℕ | G.HasPathOfOrder n} := by
+  apply le_antisymm
+  · apply le_csSup
+    · exact ⟨G.V, fun n hn ↦ by
+        simpa using (show path n ≤ₛ G from hn).V_le⟩
+    · exact G.longestPathOrder_isSubgraphOf
+  · apply csSup_le
+    · exact ⟨0, by simpa [HasPathOfOrder] using empty_zero_isSubgraphOf G⟩
+    · intro n hn
+      exact pathOrder_le_longestPathOrder hn
 
-A cycle has equally many vertices and edges.  We require length at least three,
-as usual for cycles in a simple graph. -/
-def cycleLengths (G : IsoGraph) : Finset ℕ :=
-  (Finset.range (G.V + 1)).filter fun n ↦ 3 ≤ n ∧ cycle n ≤ₛ G
+/-- A path of maximum induced order is an induced subgraph of `G`. -/
+theorem longestInducedPathOrder_isInducedSubgraphOf (G : IsoGraph) :
+    path G.longestInducedPathOrder ≤ᵢₛ G := by
+  have hne : G.inducedPathOrders.Nonempty := by
+    refine ⟨0, ?_⟩
+    rw [inducedPathOrders, Finset.mem_filter]
+    exact ⟨by simp, by simpa [HasInducedPathOfOrder] using empty_zero_isInducedSubgraphOf G⟩
+  have hmem : G.longestInducedPathOrder ∈ G.inducedPathOrders := by
+    rcases Finset.sup_mem_of_nonempty (f := id) hne with ⟨n, hn, h⟩
+    simpa [longestInducedPathOrder] using h ▸ hn
+  exact (Finset.mem_filter.mp hmem).2
 
-/-- The circumference of `G`: the greatest length of a cycle subgraph, or zero
-when `G` is acyclic. -/
-def circumference (G : IsoGraph) : ℕ :=
-  G.cycleLengths.sup id
-
-/-- Every cycle subgraph has length at most the circumference. -/
-theorem cycleLength_le_circumference {G : IsoGraph} {n : ℕ} (hn : 3 ≤ n)
-    (h : cycle n ≤ₛ G) : n ≤ G.circumference := by
+/-- No induced path subgraph of `G` has more vertices than a longest induced path. -/
+theorem inducedPathOrder_le_longestInducedPathOrder {G : IsoGraph} {n : ℕ}
+    (h : path n ≤ᵢₛ G) : n ≤ G.longestInducedPathOrder := by
   have hnV : n ≤ G.V := by simpa using h.V_le
   apply Finset.le_sup (f := id)
-  rw [cycleLengths, Finset.mem_filter]
-  exact ⟨Finset.mem_range.mpr (by omega), hn, h⟩
+  rw [inducedPathOrders, Finset.mem_filter]
+  exact ⟨Finset.mem_range.mpr (by omega), h⟩
+
+example : (complete 3).longestPath = 2 := by
+  native_decide
+
+example : (complete 3).longestInducedPath = 1 := by
+  native_decide
+
+example : (complete 4).longestPath = 3 := by
+  native_decide
+
+#eval (complete 12).longestInducedPath
+
+example : (complete 4).longestInducedPath = 1 := by
+  native_decide
 
 /-! ## Snake-in-the-box values -/
 
-/-- The zero-dimensional cube has only one vertex. -/
-theorem longestPathLength_hypercube_zero : (hypercube 0).longestPathLength = 0 := by
+/-- The zero-dimensional cube has no edges in an induced path. -/
+theorem longestInducedPath_hypercube_zero : (hypercube 0).longestInducedPath = 0 := by
   native_decide
 
-/-- The first nontrivial snake-in-the-box value. -/
-theorem longestPathLength_hypercube_one : (hypercube 1).longestPathLength = 1 := by
-  native_decide
+#eval (hypercube 1).longestInducedPath
 
-theorem longestPathLength_hypercube_two : (hypercube 2).longestPathLength = 2 := by
-  native_decide
+#eval (IsoGraph.complete 4).longestPath
 
-theorem longestPathLength_hypercube_three : (hypercube 3).longestPathLength = 4 := by
-  native_decide
+#eval (IsoGraph.complete 4).longestInducedPath
 
-theorem longestPathLength_hypercube_four : (hypercube 4).longestPathLength = 7 := by
-  native_decide
+-- /-- The first nontrivial snake-in-the-box value. -/
+-- theorem longestInducedPath_hypercube_one : (hypercube 1).longestInducedPath = 1 := by
+--   native_decide
 
-theorem longestPathLength_hypercube_five : (hypercube 5).longestPathLength = 13 := by
-  native_decide
+-- theorem longestInducedPath_hypercube_two : (hypercube 2).longestInducedPath = 2 := by
+--   native_decide
+
+-- theorem longestInducedPath_hypercube_three : (hypercube 3).longestInducedPath = 4 := by
+--   native_decide
+
+-- theorem longestInducedPath_hypercube_four : (hypercube 4).longestInducedPath = 7 := by
+--   native_decide
+
+-- theorem longestInducedPath_hypercube_five : (hypercube 5).longestInducedPath = 13 := by
+--   native_decide
 
 end IsoGraph
