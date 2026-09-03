@@ -163,12 +163,6 @@ example : (complete 4).longestInducedPath = 1 := by
 theorem longestInducedPath_hypercube_zero : (hypercube 0).longestInducedPath = 0 := by
   native_decide
 
-#eval (hypercube 1).longestInducedPath
-
-#eval (IsoGraph.complete 4).longestPath
-
-#eval (IsoGraph.complete 4).longestInducedPath
-
 -- /-- The first nontrivial snake-in-the-box value. -/
 -- theorem longestInducedPath_hypercube_one : (hypercube 1).longestInducedPath = 1 := by
 --   native_decide
