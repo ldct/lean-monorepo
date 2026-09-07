@@ -11,6 +11,8 @@ onboarding, authentication, and local verification instructions.
   for the same result. In review as of 2026-09-07; check the link for its
   current status.
 - [Source paper](https://arxiv.org/abs/1610.04020v2), Section 1, Theorem 1.
+  [Local TeX source](1610.04020v2.tex), downloaded unchanged from
+  [arXiv v2](https://arxiv.org/src/1610.04020v2) (original filename: `Final-arxiv.tex`).
 
 ## Degree-decomposition sketch (2026-09-07)
 
