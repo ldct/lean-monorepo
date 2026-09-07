@@ -1,5 +1,8 @@
 import Playground.Artin.Chapter_11_1
 
+-- Exercise 11.1.3
+-- Headline result - (√2 : ℂ) ∉ ℤ[γ]
+
 noncomputable abbrev γ : ℝ := √2 + √3
 
 private noncomputable def coords (a b c d : ℤ) : ℂ :=

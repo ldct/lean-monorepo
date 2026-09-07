@@ -1,11 +1,10 @@
 import Playground.Artin.Chapter_11_1
 
-variable {R : Type*} [CommRing R] in
-#synth Mul (FormalSeries R)
-
 namespace Artin
 
 variable {R : Type*} [CRing R]
+
+-- Exercise 11.2.2 - the formal series F[[x]]
 
 @[ext]
 structure FormalSeries (R : Type u) [CRing R] where
@@ -28,8 +27,7 @@ instance : One (FormalSeries R) where
 lemma one_coeffs (n : ℕ) : (1 : FormalSeries R).coeffs n = 1 := rfl
 
 instance : Mul (FormalSeries R) where
-  mul f g := ⟨fun n => ∑ p ∈ Finset.antidiagonal n, f.coeffs p.1 * g.coeffs p.2⟩
--- lemma coeffs_mul (f g : FormalSeries R) (n : ℕ) : (f * g).coeffs n = ∑ i : Finset.range (n + 1), f.coeffs i * g.coeffs (n - i) := rfl
+  mul f g := ⟨fun n => f.coeffs n * g.coeffs n⟩ -- TODO this is the wrong definition
 
 instance : AddGroup (FormalSeries R) := .ofLeftAxioms
   (by
@@ -57,7 +55,6 @@ instance : CRing (FormalSeries R) where
   one_mul := by
     intro f
     ext n
-    simp only [mul_coeffs, one_coeffs, CRing.one_mul]
     sorry
   mul_one := by
     intro f

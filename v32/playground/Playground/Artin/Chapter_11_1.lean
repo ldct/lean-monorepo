@@ -64,24 +64,6 @@ lemma neg_mul_neg (a b : R) : (-a) * (-b) = a * b := by
 lemma neg_one_mul (a : R) : (-1 : R) * a = -a := by
   rw [neg_mul, one_mul]
 
-@[ext]
-structure Unit (R : Type*) [CRing R] where
-  val : R
-  inv : R
-  inv_mul_val : inv * val = 1
-  mul_inv_val : val * inv = 1
-attribute [simp] Unit.inv_mul_val Unit.mul_inv_val
-
-instance : Inv (Unit R) where
-  inv a := {
-    val := a.inv,
-    inv := a.val,
-    inv_mul_val := a.mul_inv_val,
-    mul_inv_val := a.inv_mul_val,
-  }
-lemma Unit.val_inv {R : Type*} [CRing R] (a : Unit R) : (a⁻¹).val = a.inv := rfl
-lemma Unit.inv_inv {R : Type*} [CRing R] (a : Unit R) : (a⁻¹)⁻¹ = a := rfl
-
 @[ext] structure Subring (R : Type*) [CRing R] where
   carrier : Set R
   one_mem' : 1 ∈ carrier
@@ -108,7 +90,6 @@ lemma sub_mem (S : Subring R) (z₁ z₂ : R) (h₁ : z₁ ∈ S) (h₂ : z₂ �
 
 lemma mem_carrier (x : R) (S : Subring R) :
   (x ∈ S) ↔ x ∈ S.carrier := by rfl
-
 
 /- The intersection of a collection of subrings of a commutative ring is a subring -/
 def IndexedIntersection
