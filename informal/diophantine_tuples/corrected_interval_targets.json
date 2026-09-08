@@ -1,0 +1,65 @@
+{
+  "problems": [
+    {
+      "formal_statement": "theorem diophantine_degree_ge_two_case_one_quintuple (a b c n : Nat) (f : Fin 5 → Nat) (ht : Triple a b c)\n    (hn : 2 ≤ n) (hd : HasDegree a b c n)\n    (hq : Quintuple f) (ho : Ordered f) (ha : f 0 = a) (hb : f 1 = b) (hc : f 2 = c)\n    (hglob : a * c < 67700000000000000000000000) (hlo : 4*a*b < c) (hhi : c ^ 2 ≤ 16 * a * b ^ 3) : False := by sorry",
+      "natural_language_statement": "Let $a<b<c$ be an ordered Diophantine triple of degree at least two that extends to an ordered Diophantine quintuple $f$ with $f_0=a$, $f_1=b$, $f_2=c$. Assume the global bound $ac<6.77\\cdot 10^{25}$ and the interval hypothesis $$4ab<c\\le 4a^{1/2}b^{3/2}\\quad\\text{(squared: }c^2\\le 16ab^3\\text{)}.$$ Then no such configuration exists. This is Case I of the five-interval split in the proof of Theorem 9; it is eliminated by its own candidate-generation argument and finite computation. Formalization note: degree is the finite descent relation `HasDegree`, and the quintuple extension is witnessed by explicit `Quintuple` and `Ordered` hypotheses with `f 0 = a`, `f 1 = b`, `f 2 = c`.",
+      "preamble": "import Definitions.Def_diophantine_descent\nset_option autoImplicit false\nopen DiophantineDescent",
+      "source": "Bo He, Alain Togbé, Volker Ziegler, There is no Diophantine quintuple, arXiv:1610.04020v2, https://arxiv.org/abs/1610.04020v2; Section 9, proof of Theorem 9 (five-interval split).",
+      "theorem_name": "diophantine_degree_ge_two_case_one_quintuple",
+      "theorem_title": "Exclusion of degree at least two — Theorem 9, case I",
+      "tags": [
+        "number-theory",
+        "diophantine-equations"
+      ]
+    },
+    {
+      "formal_statement": "theorem diophantine_degree_ge_two_case_two_quintuple (a b c n : Nat) (f : Fin 5 → Nat) (ht : Triple a b c)\n    (hn : 2 ≤ n) (hd : HasDegree a b c n)\n    (hq : Quintuple f) (ho : Ordered f) (ha : f 0 = a) (hb : f 1 = b) (hc : f 2 = c)\n    (hglob : a * c < 67700000000000000000000000) (hlo : 16 * a * b ^ 3 < c ^ 2) (hhi : c ≤ 4 * a * b ^ 2) : False := by sorry",
+      "natural_language_statement": "Let $a<b<c$ be an ordered Diophantine triple of degree at least two that extends to an ordered Diophantine quintuple $f$ with $f_0=a$, $f_1=b$, $f_2=c$. Assume the global bound $ac<6.77\\cdot 10^{25}$ and the interval hypothesis $$4a^{1/2}b^{3/2}<c\\le 4ab^2\\quad\\text{(squared lower bound }c^2>16ab^3\\text{)}.$$ Then no such configuration exists. This is Case II of the five-interval split in the proof of Theorem 9; it is eliminated by its own candidate-generation argument and finite computation. Formalization note: degree is the finite descent relation `HasDegree`, and the quintuple extension is witnessed by explicit `Quintuple` and `Ordered` hypotheses with `f 0 = a`, `f 1 = b`, `f 2 = c`.",
+      "preamble": "import Definitions.Def_diophantine_descent\nset_option autoImplicit false\nopen DiophantineDescent",
+      "source": "Bo He, Alain Togbé, Volker Ziegler, There is no Diophantine quintuple, arXiv:1610.04020v2, https://arxiv.org/abs/1610.04020v2; Section 9, proof of Theorem 9 (five-interval split).",
+      "theorem_name": "diophantine_degree_ge_two_case_two_quintuple",
+      "theorem_title": "Exclusion of degree at least two — Theorem 9, case II",
+      "tags": [
+        "number-theory",
+        "diophantine-equations"
+      ]
+    },
+    {
+      "formal_statement": "theorem diophantine_degree_ge_two_case_three_quintuple (a b c n : Nat) (f : Fin 5 → Nat) (ht : Triple a b c)\n    (hn : 2 ≤ n) (hd : HasDegree a b c n)\n    (hq : Quintuple f) (ho : Ordered f) (ha : f 0 = a) (hb : f 1 = b) (hc : f 2 = c)\n    (hglob : a * c < 67700000000000000000000000) (hlo : 4 * a * b ^ 2 < c) (hhi : c ^ 2 ≤ 16 * a ^ 3 * b ^ 5) : False := by sorry",
+      "natural_language_statement": "Let $a<b<c$ be an ordered Diophantine triple of degree at least two that extends to an ordered Diophantine quintuple $f$ with $f_0=a$, $f_1=b$, $f_2=c$. Assume the global bound $ac<6.77\\cdot 10^{25}$ and the corrected interval hypothesis $$4ab^2<c\\le 4a^{3/2}b^{5/2}\\quad\\text{(squared: }c^2\\le 16a^3b^5\\text{)}.$$ The squared upper bound $c^2\\le 16a^3b^5$ follows the detailed Case III proof under label `thm:deg2` ($c\\le 4a^{3/2}b^{5/2}$) and closes the gap left by the inconsistent summary exponent. Then no such configuration exists. This is Case III of the five-interval split in the proof of Theorem 9. Formalization note: degree is the finite descent relation `HasDegree`, and the quintuple extension is witnessed by explicit `Quintuple` and `Ordered` hypotheses with `f 0 = a`, `f 1 = b`, `f 2 = c`.",
+      "preamble": "import Definitions.Def_diophantine_descent\nset_option autoImplicit false\nopen DiophantineDescent",
+      "source": "Bo He, Alain Togbé, Volker Ziegler, There is no Diophantine quintuple, arXiv:1610.04020v2, https://arxiv.org/abs/1610.04020v2; Section 9, proof of Theorem 9 (five-interval split, detailed Case III under label thm:deg2).",
+      "theorem_name": "diophantine_degree_ge_two_case_three_quintuple",
+      "theorem_title": "Exclusion of degree at least two — Theorem 9, case III",
+      "tags": [
+        "number-theory",
+        "diophantine-equations"
+      ]
+    },
+    {
+      "formal_statement": "theorem diophantine_degree_ge_two_case_four_quintuple (a b c n : Nat) (f : Fin 5 → Nat) (ht : Triple a b c)\n    (hn : 2 ≤ n) (hd : HasDegree a b c n)\n    (hq : Quintuple f) (ho : Ordered f) (ha : f 0 = a) (hb : f 1 = b) (hc : f 2 = c)\n    (hglob : a * c < 67700000000000000000000000) (hlo : 16 * a ^ 3 * b ^ 5 < c ^ 2) (hhi : c ≤ 4 * a ^ 2 * b ^ 3) : False := by sorry",
+      "natural_language_statement": "Let $a<b<c$ be an ordered Diophantine triple of degree at least two that extends to an ordered Diophantine quintuple $f$ with $f_0=a$, $f_1=b$, $f_2=c$. Assume the global bound $ac<6.77\\cdot 10^{25}$ and the interval hypothesis $$4a^{3/2}b^{5/2}<c\\le 4a^2b^3\\quad\\text{(squared lower bound }c^2>16a^3b^5\\text{)}.$$ Then no such configuration exists. This is Case IV of the five-interval split in the proof of Theorem 9; it is eliminated by its own candidate-generation argument and finite computation. Formalization note: degree is the finite descent relation `HasDegree`, and the quintuple extension is witnessed by explicit `Quintuple` and `Ordered` hypotheses with `f 0 = a`, `f 1 = b`, `f 2 = c`.",
+      "preamble": "import Definitions.Def_diophantine_descent\nset_option autoImplicit false\nopen DiophantineDescent",
+      "source": "Bo He, Alain Togbé, Volker Ziegler, There is no Diophantine quintuple, arXiv:1610.04020v2, https://arxiv.org/abs/1610.04020v2; Section 9, proof of Theorem 9 (five-interval split).",
+      "theorem_name": "diophantine_degree_ge_two_case_four_quintuple",
+      "theorem_title": "Exclusion of degree at least two — Theorem 9, case IV",
+      "tags": [
+        "number-theory",
+        "diophantine-equations"
+      ]
+    },
+    {
+      "formal_statement": "theorem diophantine_degree_ge_two_case_five_quintuple (a b c n : Nat) (f : Fin 5 → Nat) (ht : Triple a b c)\n    (hn : 2 ≤ n) (hd : HasDegree a b c n)\n    (hq : Quintuple f) (ho : Ordered f) (ha : f 0 = a) (hb : f 1 = b) (hc : f 2 = c)\n    (hglob : a * c < 67700000000000000000000000) (hlo : 4 * a ^ 2 * b ^ 3 < c) (hhi : a * c * 20 < 3609 * b ^ 3) : False := by sorry",
+      "natural_language_statement": "Let $a<b<c$ be an ordered Diophantine triple of degree at least two that extends to an ordered Diophantine quintuple $f$ with $f_0=a$, $f_1=b$, $f_2=c$. Assume the global bound $ac<6.77\\cdot 10^{25}$ and the interval hypothesis $$4a^2b^3<c<180.45\\,b^3/a\\quad\\text{(as }20ac<3609b^3\\text{)}.$$ Then no such configuration exists. This is Case V of the five-interval split in the proof of Theorem 9; it is eliminated by its own candidate-generation argument and finite computation. Formalization note: degree is the finite descent relation `HasDegree`, and the quintuple extension is witnessed by explicit `Quintuple` and `Ordered` hypotheses with `f 0 = a`, `f 1 = b`, `f 2 = c`.",
+      "preamble": "import Definitions.Def_diophantine_descent\nset_option autoImplicit false\nopen DiophantineDescent",
+      "source": "Bo He, Alain Togbé, Volker Ziegler, There is no Diophantine quintuple, arXiv:1610.04020v2, https://arxiv.org/abs/1610.04020v2; Section 9, proof of Theorem 9 (five-interval split).",
+      "theorem_name": "diophantine_degree_ge_two_case_five_quintuple",
+      "theorem_title": "Exclusion of degree at least two — Theorem 9, case V",
+      "tags": [
+        "number-theory",
+        "diophantine-equations"
+      ]
+    }
+  ],
+  "env": "0df444a360eaa60ab8c11dca51a86af692955474"
+}

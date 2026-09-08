@@ -1,0 +1,6 @@
+build/
+lake-packages/
+lakefile.olean
+.lake/
+_slides/
+.DS_Store

@@ -1,0 +1,29 @@
+{
+  "problems": [
+    {
+      "formal_statement": "theorem diophantine_triple_non_euler_lower_bound (a b c : Nat)\n    (ht : Triple a b c) (hne : ¬ Euler a b c) : 4 * a * b < c := by sorry",
+      "natural_language_statement": "Let $a<b<c$ be a Diophantine triple that is not an Euler triple. Then $$c > 4ab.$$ This is the non-Euler case of the gap lemma for Diophantine triples: an Euler triple has the form $c = a+b+2r$ with $r^2 = ab+1$, while every other triple jumps past $4ab$. It supplies the outer lower bound of the five-interval split in the proof that no triple of degree at least two extends to a quintuple. Formalization note: triples, Euler triples, and degree are the project's `Triple`, `Euler`, and `HasDegree` predicates; degree at least two implies the non-Euler hypothesis, which is established separately, so this target isolates exactly the number-theoretic gap step.",
+      "preamble": "import Definitions.Def_diophantine_descent\nset_option autoImplicit false\nopen DiophantineDescent",
+      "source": "Bo He, Alain Togbe, Volker Ziegler, There is no Diophantine quintuple, arXiv:1610.04020v2, https://arxiv.org/abs/1610.04020v2; Lemma lem:Jones (preliminaries, restatement of Lemma 4 of Jones 1978: a triple with a<b<c satisfies c = a+b+2r or c > 4ab), applied in the proof of Theorem 9 (thm:deg2): since deg(a,b,c) >= 2 the triple is not Euler, hence c > 4ab. The remark after the lemma notes Jones' original statement differs slightly (c > 4c'ab with c' = 0 iff c = a+b+-2r).",
+      "tags": [
+        "number-theory",
+        "diophantine-equations"
+      ],
+      "theorem_name": "diophantine_triple_non_euler_lower_bound",
+      "theorem_title": "Gap bound for non-Euler triples (Jones lemma)"
+    },
+    {
+      "formal_statement": "theorem diophantine_quintuple_acb_upper_bound (f : Fin 5 → Nat)\n    (hq : Quintuple f) (ho : Ordered f) : f 0 * f 2 * 20 < 3609 * f 1 ^ 3 := by sorry",
+      "natural_language_statement": "Let $a<b<c<d<e$ be a Diophantine quintuple. Then $$20ac<3609b^3,\\qquad\\text{equivalently }ac<180.45b^3.$$ This is a uniform bound on the three smallest entries, with no degree hypothesis. Together with the non-Euler gap bound it gives the outer range for the five cases in Theorem 9. The source proves it by comparing $d>4abc$ with $d<721.8b^4$. Formalization note: $a=f_0$, $b=f_1$, and $c=f_2$, where `Quintuple f` and `Ordered f` express the ordered quintuple hypotheses.",
+      "preamble": "import Definitions.Def_diophantine_descent\nset_option autoImplicit false\nopen DiophantineDescent",
+      "source": "Bo He, Alain Togbé, Volker Ziegler, There is no Diophantine quintuple, arXiv:1610.04020v2, https://arxiv.org/abs/1610.04020v2; Section 3, Lemma labelled lem:acb and its proof. The proof applies Lemma lem:cb to the irregular quadruple {a,b,d,e}, using b>3a from lem:b3a, and compares its bound d<721.8b^4 with d=d_+(a,b,c)>4abc from Fujita regularity and lem:d+ieq.",
+      "tags": [
+        "number-theory",
+        "diophantine-equations"
+      ],
+      "theorem_name": "diophantine_quintuple_acb_upper_bound",
+      "theorem_title": "Quintuple range upper bound (ac < 180.45 b^3)"
+    }
+  ],
+  "env": "0df444a360eaa60ab8c11dca51a86af692955474"
+}

@@ -1,0 +1,303 @@
+/* ── Radix slides — bold, confident palette ── */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --primary: #312e81;       /* deep indigo — authority */
+  --accent: #7c3aed;        /* electric violet — energy */
+  --accent-warm: #dc2626;   /* bold red — urgency, revolution */
+  --text-dark: #0f172a;     /* near-black — maximum contrast */
+  --text-muted: #475569;
+  --bg-code: #fafafa;
+  --border-code: #e2e8f0;
+}
+
+/* ── Base typography ── */
+.reveal {
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 300;
+  font-size: 4.0vh;
+  color: var(--text-dark);
+}
+
+.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+  text-transform: none;
+  font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+  color: var(--primary);
+}
+
+.reveal .slides section {
+  text-align: left;
+  padding: 2vh 3vw;
+  box-sizing: border-box;
+  width: 100vw;
+  height: 100vh;
+}
+
+/* ── Slide header (logo + line) ── */
+.slide-header {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 0.5em;
+}
+.slide-header img {
+  height: 5vh;
+  flex-shrink: 0;
+}
+.slide-header::after {
+  content: '';
+  flex: 1;
+  height: 1.5px;
+  background: var(--accent);
+}
+
+/* ── Content slides ── */
+.reveal h2 {
+  font-size: 1.3em;
+  font-weight: 700;
+  margin: 0 0 0.5em 0;
+  color: var(--primary);
+}
+
+.reveal ul {
+  font-size: 0.9em;
+  font-weight: 300;
+  line-height: 1.7;
+  margin: 0;
+  padding-left: 1.2em;
+}
+.reveal ul li {
+  margin-bottom: 0.25em;
+}
+
+.reveal p {
+  font-size: 0.9em;
+  font-weight: 300;
+  line-height: 1.6;
+  margin: 0.4em 0;
+}
+
+.reveal strong {
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.reveal a {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── Code blocks (non-Lean) ── */
+.reveal pre {
+  font-size: 0.68em;
+  width: 100%;
+  margin: 0.4em 0;
+  box-shadow: none;
+  border: 1px solid var(--border-code);
+  border-radius: 6px;
+  background: var(--bg-code);
+}
+.reveal pre code {
+  padding: 0.8em 1em;
+  max-height: 70vh;
+  background: var(--bg-code);
+}
+
+/* ── Inline code ── */
+.reveal code {
+  font-size: 0.9em;
+  background: #f1f5f9;
+  padding: 0.1em 0.3em;
+  border-radius: 3px;
+}
+.reveal pre code {
+  background: var(--bg-code);
+  padding: 0.8em 1em;
+}
+
+/* ── Accent ── */
+.accent {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* ── Key-value highlight boxes ── */
+.key-box {
+  background: #eef2ff;
+  border: 1px solid #c7d2fe;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  padding: 0.6em 1em;
+  margin: 0.4em 0;
+  font-size: 0.85em;
+}
+.key-box strong {
+  color: var(--primary);
+}
+
+/* ── Section break slides ── */
+.section-break {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.section-break h2 {
+  color: #ffffff !important;
+  font-size: 2em;
+  font-weight: 400;
+}
+.section-break p {
+  color: rgba(255,255,255,0.85);
+  font-size: 1em;
+}
+
+/* ── Two-column layout ── */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5em;
+  align-items: start;
+}
+.two-col.wide-left {
+  grid-template-columns: 3fr 2fr;
+}
+.two-col.wide-right {
+  grid-template-columns: 2fr 3fr;
+}
+
+/* ── Blockquotes ── */
+.reveal blockquote {
+  font-size: 0.7em;
+  border-left: 4px solid var(--accent);
+  padding: 0.3em 0.8em;
+  margin: 0.5em 0;
+  background: #f5f3ff;
+  border-radius: 0 6px 6px 0;
+}
+
+/* ── Dark background slides (title, section breaks) ── */
+/* Center content vertically on dark slides */
+.reveal section[data-background-color="#312e81"] {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: center;
+}
+.reveal section[data-background-color="#312e81"] h2 {
+  color: #ffffff !important;
+  font-size: 2em;
+  font-weight: 400;
+}
+.reveal section[data-background-color="#312e81"] p,
+.reveal section[data-background-color="#312e81"] li {
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.1em;
+}
+.reveal section[data-background-color="#312e81"] em {
+  color: #c4b5fd;
+}
+.reveal section[data-background-color="#312e81"] strong {
+  color: #ffffff;
+}
+.reveal section[data-background-color="#312e81"] code {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+/* ═══════════════════════════════════════════════
+   Lean code: bold, high-contrast syntax colors
+   ═══════════════════════════════════════════════ */
+
+.reveal,
+.reveal section,
+.reveal section.slide-light-bg {
+  --verso-code-keyword-color: #be185d;    /* bold pink — unconventional, stands out */
+  --verso-code-const-color: #1d4ed8;      /* strong blue — functions/constants pop */
+  --verso-code-var-color: #0f766e;        /* deep teal — grounded, readable */
+  --verso-code-color: #1e293b;
+  --verso-code-font-family: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace;
+  --verso-info-indicator-color: var(--accent);
+  --verso-code-keyword-weight: 700;
+}
+
+/* ── Lean code block appearance ── */
+.reveal code.hl.lean.block {
+  background: var(--bg-code);
+  border: 1px solid var(--border-code);
+  border-radius: 6px;
+  box-shadow: none;
+  padding: 0.8em 1em;
+  font-size: 0.5em;
+  line-height: 1.55;
+  width: 95%;
+  max-width: 95%;
+  text-align: left;
+}
+
+/* ── Code panel: show Verso info panel alongside code ── */
+.code-with-panel {
+  border: 1px solid var(--border-code);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: none;
+}
+.code-with-panel > code.hl.lean.block {
+  border: none;
+  border-radius: 6px 0 0 6px;
+  background: var(--bg-code);
+}
+.code-with-panel > .panel-cell {
+  background: #f8fafc;
+  border-left: 1px solid var(--border-code);
+}
+.code-with-panel > .info-panel,
+.code-with-panel .info-panel {
+  font-size: 0.45em;
+  color: var(--text-dark);
+}
+
+/* ── Inline Lean code ── */
+.reveal code.hl.lean.inline {
+  background: #f1f5f9;
+  border-radius: 3px;
+  padding: 0.1em 0.3em;
+  font-size: 0.85em;
+}
+
+/* ── #eval output ── */
+.command-output.information {
+  background: #eef2ff;
+  border-color: var(--accent);
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+/* ── Soften wavy underlines on info diagnostics ── */
+.reveal .hl.lean .has-info.information .token:not(.tactic-state):not(.tactic-state *),
+.reveal .hl.lean .has-info.information .inter-text:not(.tactic-state):not(.tactic-state *) {
+  text-decoration-color: rgba(124, 58, 237, 0.35);
+}
+
+/* ── Keyword: bold and colored ── */
+.hl.lean .keyword {
+  font-weight: 700 !important;
+}
+
+/* ── Variable: no italic, clean ── */
+.hl.lean .var {
+  font-style: normal !important;
+}
+
+/* ── Re-enable Verso hover popups (suppressed by slides-highlight.css) ── */
+.hl.lean .hover-container {
+  display: block;
+}
+
+/* ── Hide the hstack --- separator rendered as text ── */
+.reveal .r-hstack > hr,
+.reveal .r-hstack > p:empty {
+  display: none;
+}
