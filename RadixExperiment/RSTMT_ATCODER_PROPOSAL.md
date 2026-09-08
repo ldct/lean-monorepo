@@ -1,5 +1,7 @@
 **Proposal: directly submittable RStmt programs for AtCoder benchmarks**
 
+Implementation status: the seven milestones below are implemented. See the [README milestone report](README.md#proposal-milestone-status), [whole-program refinement](Radix/Benchmarks/ABC177CRefinement.lean), and [reproducibility command](scripts/check_abc177c.py). The remaining shared trust boundaries, including native evaluation for concrete parsing certificates, are documented in the README. The proposal text below is retained as the original design handoff.
+
 Prepared 2026-09-08. This is a design proposal, supported by local experiments. It does not implement the proposed language changes or establish a verified C++ backend.
 
 This document is the implementation handoff. Its required deliverable is the revised language infrastructure and one completed benchmark, ABC177 C. The final milestone list defines completion. Examples of other problems explain design choices or possible future work; they are not additional implementation tasks. The design and the checked algebra below are self-contained and do not depend on the preceding conversation or temporary experiment files.

@@ -45,6 +45,13 @@ reduce concrete cases automatically. -/
   | .neg, .uint64 n => some (.uint64 (0 - n))
   | _, _ => none
 
+/-- C++ logical operators skip the right operand when the left decides the result. -/
+@[simp] def BinOp.evalLazy (op : BinOp) (vl : Value) (right : Option Value) : Option Value :=
+  match op, vl with
+  | .and, .bool false => some (.bool false)
+  | .or, .bool true => some (.bool true)
+  | _, _ => right.bind (op.eval vl)
+
 /-- Evaluate an expression in a program state. Function calls are not handled
 here — they require the statement-level evaluator. -/
 def Expr.eval (σ : PState) : Expr → Option Value
@@ -52,8 +59,7 @@ def Expr.eval (σ : PState) : Expr → Option Value
   | .var x => σ.getVar x
   | .binop op l r => do
     let vl ← l.eval σ
-    let vr ← r.eval σ
-    op.eval vl vr
+    op.evalLazy vl (r.eval σ)
   | .unop op e => do
     let v ← e.eval σ
     op.eval v

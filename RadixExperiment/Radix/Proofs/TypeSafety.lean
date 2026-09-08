@@ -120,9 +120,17 @@ theorem Expr.preservation (Γ : TyEnv) (sigs : FunSigs) (σ : PState)
     simp only [bind, Option.bind] at heval
     cases hvl : Expr.eval σ l <;> simp [hvl] at heval
     rename_i vl
-    cases hvr : Expr.eval σ r <;> simp [hvr] at heval
-    rename_i vr
-    exact BinOp.eval_preserves_type (ihl tl vl htl hvl) (ihr tr vr htr hvr) hty heval
+    have hl := ihl tl vl htl hvl
+    split at heval
+    · cases tl <;> simp only [Value.hasType] at hl
+      cases tr <;> simp at hty
+      cases hty; cases heval; trivial
+    · cases tl <;> simp only [Value.hasType] at hl
+      cases tr <;> simp at hty
+      cases hty; cases heval; trivial
+    · cases hvr : Expr.eval σ r <;> simp [hvr] at heval
+      rename_i vr
+      exact BinOp.eval_preserves_type hl (ihr tr vr htr hvr) hty heval
   | unop op e ih =>
     simp only [Expr.typeOf] at hty
     simp only [bind, Option.bind] at hty
@@ -194,7 +202,7 @@ theorem Expr.preservation (Γ : TyEnv) (sigs : FunSigs) (σ : PState)
 The theorem "a well-typed expression always evaluates to some value" does
 not hold for Radix as formulated. Counter-examples:
 - `e / 0` is well-typed (`uint64`) but `eval` returns `none`
-- `arr[i]` may fail if `i` is out of bounds or `arr` has been freed
+- `arr[i]` may fail if `i` is out of bounds
 - `s[i]` may fail if `i ≥ s.length`
 
 A correct formulation would require a totality judgment or strengthened

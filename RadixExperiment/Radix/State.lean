@@ -32,6 +32,9 @@ structure PState where
   frames : List Frame := [{}]
   heap : Heap := {}
   funs : HashMap String FunDecl := {}
+  input : ByteArray := {}
+  cursor : Nat := 0
+  output : ByteArray := {}
   deriving Inhabited
 
 namespace PState
@@ -64,9 +67,9 @@ def lookupFun (σ : PState) (name : String) : Option FunDecl :=
 
 /-- Build the initial state from a program: empty frame, empty heap,
 function table populated from the program's declarations. -/
-def initFromProgram (p : Program) : PState :=
+def initFromProgram (p : Program) (input : ByteArray := {}) : PState :=
   let funs := p.funs.foldl (init := ({}:HashMap String FunDecl)) fun m fd => m.insert fd.name fd
-  { frames := [{}], heap := {}, funs }
+  { frames := [{}], heap := {}, funs, input }
 
 end PState
 end Radix

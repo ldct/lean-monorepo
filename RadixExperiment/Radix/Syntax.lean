@@ -14,7 +14,7 @@ Two syntax quotations are provided:
 - `` `[RExpr| ...] `` for expressions: arithmetic, comparisons, booleans,
   string append, array indexing (`arr[i]`), and variable references.
 - `` `[RStmt| ...] `` for statements: assignment, `let` declarations,
-  `let ... := new T[n]` allocation, `if/else`, `while`, `free(...)`,
+  `let ... := new T[n]` allocation, `if/else`, `while`,
   array write, function calls, and `return`.
 
 Array length and string operations use helper macros `arrLen(...)`,
@@ -116,12 +116,7 @@ macro_rules
   | `(`[RStmt| $f:ident($args:term,*);]) => do
     let name := f.getId.toString
     let argExprs ← args.getElems.mapM fun a => `(`[RExpr| $a])
-    if name == "free" then
-      match argExprs with
-      | #[e] => `(Stmt.free $e)
-      | _ => Lean.Macro.throwError "free takes exactly one argument"
-    else
-      `(Stmt.callStmt $(Lean.quote name) [$[$argExprs],*])
+    `(Stmt.callStmt $(Lean.quote name) [$[$argExprs],*])
   | `(`[RStmt| return $e:term;]) =>
     `(Stmt.ret `[RExpr| $e])
   | `(`[RStmt| $arr:ident[$idx:term] := $val:term;]) =>

@@ -1,0 +1,38 @@
+{
+  "kind": "local measurements, not AtCoder verdicts",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Users/xuanji/Downloads/Xcode_265.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+  "flags": [
+    "-std=c++20",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror"
+  ],
+  "proof_builds_run": true,
+  "frontend_correspondence": {
+    "kind": "local C++/Lean frontend regression checks, not a compiler proof",
+    "cases": 10,
+    "proof_build_run": false,
+    "compiler": "Apple clang version 21.0.0 (clang-2100.1.1.101)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: /Users/xuanji/Downloads/Xcode_265.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin",
+    "flags": [
+      "-std=c++20",
+      "-O2",
+      "-Wall",
+      "-Wextra"
+    ],
+    "warnings": 1,
+    "test_sha256": "87469f26144a5fe633cc3470136708e0bcf416f998d0ebdc6fe3ed3e81a5570c",
+    "prelude_sha256": "78bd8a94b5a22a3fecbdef1e90ab8e55dc98f762abe842465161a3989945af3c"
+  },
+  "sha256": {
+    "runtime/radix_io.hpp": "78bd8a94b5a22a3fecbdef1e90ab8e55dc98f762abe842465161a3989945af3c",
+    "benchmarks/abc177c/reference.cpp": "f2a63ba14d4e6de82bddccc7736a2f52cef11c09430d63812400d5e4b425102b",
+    "benchmarks/abc177c/optimized.cpp": "2a1ffbbd3547622b78c3f6239bb9daab7ead4cfe6b67127f249d60dde2ea668c"
+  },
+  "optimized_max_seconds": 0.02961720898747444,
+  "reference_max_timeout_seconds": 2.0,
+  "small_valid_cases_per_program": 208,
+  "invalid_cases_per_program": 15,
+  "runtime_contract_probes": "passed"
+}

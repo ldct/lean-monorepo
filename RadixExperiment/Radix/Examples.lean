@@ -135,7 +135,6 @@ def sumOfSquares := `[RStmt|
     sum := sum + arr[i];
     i := i + 1;
   }
-  free(arr);
 ]
 
 #eval! run sumOfSquares "sum"

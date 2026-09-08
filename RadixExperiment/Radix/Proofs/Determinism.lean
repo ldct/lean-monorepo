@@ -40,9 +40,9 @@ theorem BigStep.det (h₁ : BigStep σ s r₁) (h₂ : BigStep σ s r₂) : r₁
   | whileFalse hc₁ => cases h₂ with
     | whileTrue hc₂ _ _ => grind
     | whileReturn hc₂ _ => grind
+    | whileReject hc₂ _ => grind
     | whileFalse _ => rfl
   | alloc hsz₁ ha₁ hs₁ => cases h₂ with | alloc => grind
-  | free he₁ hf₁ => cases h₂ with | free => grind
   | arrSet harr₁ hidx₁ hval₁ hw₁ => cases h₂ with | arrSet => grind
   | ret he₁ => cases h₂ with | ret => grind
   | block _ ihb => cases h₂ with | block hb₂ => exact ihb hb₂
@@ -50,20 +50,42 @@ theorem BigStep.det (h₁ : BigStep σ s r₁) (h₂ : BigStep σ s r₂) : r₁
     cases h₂ with
     | seqNormal hs₁' hs₂' => cases ih₁ hs₁'; exact ih₂ hs₂'
     | seqReturn hs₁' => cases ih₁ hs₁'
+    | seqReject hs₁' => cases ih₁ hs₁'
   | seqReturn hs₁ ih₁ =>
     cases h₂ with
     | seqNormal hs₁' _ => cases ih₁ hs₁'
     | seqReturn hs₁' => exact ih₁ hs₁'
+    | seqReject hs₁' => cases ih₁ hs₁'
+  | seqReject hs₁ ih₁ =>
+    cases h₂ with
+    | seqNormal hs₁' _ => cases ih₁ hs₁'
+    | seqReturn hs₁' => cases ih₁ hs₁'
+    | seqReject hs₁' => exact ih₁ hs₁'
   | whileTrue hc hb hw ihb ihw =>
     cases h₂ with
     | whileTrue _ hb₂ hw₂ => cases ihb hb₂; exact ihw hw₂
     | whileReturn _ hb₂ => cases ihb hb₂
+    | whileReject _ hb₂ => cases ihb hb₂
     | whileFalse hc₂ => grind
   | whileReturn hc hb ihb =>
     cases h₂ with
     | whileTrue _ hb₂ _ => cases ihb hb₂
     | whileReturn _ hb₂ => exact ihb hb₂
+    | whileReject _ hb₂ => cases ihb hb₂
     | whileFalse hc₂ => grind
+  | whileReject hc hb ihb =>
+    cases h₂ with
+    | whileTrue _ hb₂ _ => cases ihb hb₂
+    | whileReturn _ hb₂ => cases ihb hb₂
+    | whileReject _ hb₂ => exact ihb hb₂
+    | whileFalse hc₂ => grind
+  | reject => cases h₂; rfl
+  | readU64 hr hs => cases h₂ <;> grind
+  | readReject hr => cases h₂ <;> grind
+  | writeU64 he => cases h₂ <;> grind
+  | writeText => cases h₂; rfl
+  | expectEof he => cases h₂ <;> grind
+  | eofReject he => cases h₂ <;> grind
   | callStmt hlook hargs hparams hframe hbody hpop ihbody =>
     cases h₂ with
     | callStmt hlook₂ hargs₂ hparams₂ hframe₂ hbody₂ hpop₂ =>

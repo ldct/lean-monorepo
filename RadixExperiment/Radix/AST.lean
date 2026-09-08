@@ -84,7 +84,7 @@ inductive Expr where
 
 /-! ## Statements -/
 
-/-- Statements perform effects: variable mutation, heap allocation/free,
+/-- Statements perform effects: variable mutation, persistent heap allocation, byte I/O, rejection,
 control flow, and function calls. `scope` is the frame-isolated form used
 by the inliner -- it pushes a fresh frame with bound parameters, runs the
 body, then pops the frame. -/
@@ -96,7 +96,11 @@ inductive Stmt where
   | while : Expr → Stmt → Stmt
   | decl : String → Ty → Expr → Stmt
   | alloc : String → Ty → Expr → Stmt
-  | free : Expr → Stmt
+  | reject
+  | readU64 : String → Stmt
+  | writeU64 : Expr → Stmt
+  | writeText : String → Stmt
+  | expectEof
   | arrSet : Expr → Expr → Expr → Stmt
   | ret : Expr → Stmt
   | block : List Stmt → Stmt

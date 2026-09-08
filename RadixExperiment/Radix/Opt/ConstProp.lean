@@ -49,6 +49,11 @@ mutual
 Also applies constant folding after substitution. -/
 def Stmt.constProp (m : ConstMap) : Stmt → Stmt × ConstMap
   | .skip => (.skip, m)
+  | .reject => (.reject, m)
+  | .readU64 x => (.readU64 x, {})
+  | .writeU64 e => (.writeU64 (e.constProp m), m)
+  | .writeText t => (.writeText t, m)
+  | .expectEof => (.expectEof, m)
   | .assign x e =>
     let e' := (Expr.constProp m e).constFold
     match e' with
@@ -83,7 +88,6 @@ def Stmt.constProp (m : ConstMap) : Stmt → Stmt × ConstMap
   | .alloc x ty sz =>
     let sz' := (Expr.constProp m sz).constFold
     (.alloc x ty sz', m.erase x)
-  | .free e => (.free (Expr.constProp m e), m)
   | .arrSet arr idx val =>
     (.arrSet (Expr.constProp m arr) (Expr.constProp m idx) (Expr.constProp m val), m)
   | .ret e => (.ret ((Expr.constProp m e).constFold), m)
@@ -150,7 +154,7 @@ private theorem PState.getVar_setVar_ne {σ σ' : PState} {x y : String} {v : Va
 
 private theorem PState.getVar_mk_eq_getVar (σ : PState) (h' : Heap) (fns : Std.HashMap String FunDecl)
     (x : String) :
-    (PState.mk σ.frames h' fns).getVar x = σ.getVar x := by
+    ({σ with heap := h', funs := fns}).getVar x = σ.getVar x := by
   unfold PState.getVar PState.currentFrame; rfl
 
 /-! ## Expression Constant Propagation Correctness -/
@@ -309,6 +313,10 @@ theorem Stmt.constProp_correct' (m : ConstMap) (h : BigStep σ s r) (hm : m.agre
     simp only [Stmt.constProp]
     have ⟨hbs₁, _⟩ := ih₁ m hm
     exact ⟨BigStep.seqReturn hbs₁, fun _ h => by cases h⟩
+  | seqReject h₁ ih₁ =>
+    simp only [Stmt.constProp]
+    have ⟨hbs₁, _⟩ := ih₁ m hm
+    exact ⟨BigStep.seqReject hbs₁, fun _ h => by cases h⟩
   | ifTrue hc ht ih =>
     rename_i σ₀ _t _r c _f
     simp only [Stmt.constProp]
@@ -322,7 +330,7 @@ theorem Stmt.constProp_correct' (m : ConstMap) (h : BigStep σ s r) (hm : m.agre
     · have ⟨hbs, _⟩ := ih m hm
       constructor
       · exact BigStep.ifTrue hc' hbs
-      · intro σ' heq; cases heq; exact ConstMap.agrees_empty _
+      · intro σ' _; exact ConstMap.agrees_empty _
   | ifFalse hc hf ih =>
     rename_i σ₀ _f _r c _t
     simp only [Stmt.constProp]
@@ -336,7 +344,7 @@ theorem Stmt.constProp_correct' (m : ConstMap) (h : BigStep σ s r) (hm : m.agre
     · have ⟨hbs, _⟩ := ih m hm
       constructor
       · exact BigStep.ifFalse hc' hbs
-      · intro σ' heq; cases heq; exact ConstMap.agrees_empty _
+      · intro σ' _; exact ConstMap.agrees_empty _
   | @whileTrue σ₁ b σ₂ e r hc hb hw ihb ihw =>
     simp only [Stmt.constProp]
     have hem₁ := ConstMap.agrees_empty σ₁
@@ -346,7 +354,7 @@ theorem Stmt.constProp_correct' (m : ConstMap) (h : BigStep σ s r) (hm : m.agre
     constructor
     · exact BigStep.whileTrue
         (by rw [Expr.eval_constFold, Expr.constProp_eval {} _ _ hem₁]; exact hc) hbs_b hbs_w
-    · intro σ' heq; cases heq; exact ConstMap.agrees_empty _
+    · intro σ' _; exact ConstMap.agrees_empty _
   | @whileReturn σ₁ b e v σ₂ hc hb ihb =>
     simp only [Stmt.constProp]
     have hem := ConstMap.agrees_empty σ₁
@@ -355,12 +363,20 @@ theorem Stmt.constProp_correct' (m : ConstMap) (h : BigStep σ s r) (hm : m.agre
     · exact BigStep.whileReturn
         (by rw [Expr.eval_constFold, Expr.constProp_eval {} _ _ hem]; exact hc) hbs_b
     · intro σ' heq; cases heq
+  | @whileReject σ₁ b e σ₂ hc hb ihb =>
+    simp only [Stmt.constProp]
+    have hem := ConstMap.agrees_empty σ₁
+    have ⟨hbs_b, _⟩ := ihb {} hem
+    constructor
+    · exact BigStep.whileReject
+        (by rw [Expr.eval_constFold, Expr.constProp_eval {} _ _ hem]; exact hc) hbs_b
+    · intro σ' heq; cases heq
   | whileFalse hc =>
     simp only [Stmt.constProp]
     constructor
     · exact BigStep.whileFalse
         (by rw [Expr.eval_constFold, Expr.constProp_eval {} _ _ (ConstMap.agrees_empty _)]; exact hc)
-    · intro σ' heq; cases heq; exact ConstMap.agrees_empty _
+    · intro σ' _; exact ConstMap.agrees_empty _
   | alloc hsz ha hs =>
     simp only [Stmt.constProp]
     constructor
@@ -369,11 +385,28 @@ theorem Stmt.constProp_correct' (m : ConstMap) (h : BigStep σ s r) (hm : m.agre
     · intro σ'' heq; cases heq
       exact agrees_after_erase m _ _ _ hm
         (fun z hz => by
-          rw [PState.getVar_setVar_ne hs hz, PState.getVar_mk_eq_getVar])
-  | free he hf =>
+          have h := PState.getVar_setVar_ne hs hz; exact h)
+  | reject  =>
     simp only [Stmt.constProp]
-    exact ⟨BigStep.free (by rw [Expr.constProp_eval m _ _ hm]; exact he) hf,
-           fun σ' heq => by cases heq; exact hm⟩
+    exact ⟨BigStep.reject, fun _ h => by cases h⟩
+  | readU64 hr hs =>
+    simp only [Stmt.constProp]
+    exact ⟨BigStep.readU64 hr hs, fun _ h => by cases h; exact ConstMap.agrees_empty _⟩
+  | readReject hr =>
+    simp only [Stmt.constProp]
+    exact ⟨BigStep.readReject hr, fun _ h => by cases h⟩
+  | writeU64 he =>
+    simp only [Stmt.constProp]
+    exact ⟨BigStep.writeU64 (by rw [Expr.constProp_eval m _ _ hm]; exact he), fun _ h => by cases h; exact hm⟩
+  | writeText  =>
+    simp only [Stmt.constProp]
+    exact ⟨BigStep.writeText, fun _ h => by cases h; exact hm⟩
+  | expectEof he =>
+    simp only [Stmt.constProp]
+    exact ⟨BigStep.expectEof he, fun _ h => by cases h; exact hm⟩
+  | eofReject he =>
+    simp only [Stmt.constProp]
+    exact ⟨BigStep.eofReject he, fun _ h => by cases h⟩
   | arrSet harr hidx hval hw =>
     simp only [Stmt.constProp]
     exact ⟨BigStep.arrSet
@@ -399,7 +432,7 @@ theorem Stmt.constProp_correct' (m : ConstMap) (h : BigStep σ s r) (hm : m.agre
     · exact BigStep.callStmt hlook
         (by rw [Expr.constPropFoldList_mapM_eval m _ _ hm]; exact hargs)
         hparams hframe hbody hpop
-    · intro σ' heq; cases heq; exact ConstMap.agrees_empty _
+    · intro σ' _; exact ConstMap.agrees_empty _
   | scope hargs hlen hframe hbody hpop ih_body =>
     simp only [Stmt.constProp]
     constructor
@@ -408,7 +441,7 @@ theorem Stmt.constProp_correct' (m : ConstMap) (h : BigStep σ s r) (hm : m.agre
         hlen hframe
         ((ih_body {} (ConstMap.agrees_empty _)).1)
         hpop
-    · intro σ' heq; cases heq; exact ConstMap.agrees_empty _
+    · intro σ' _; exact ConstMap.agrees_empty _
 
 /-- Constant propagation preserves big-step semantics. -/
 theorem Stmt.constPropagation_correct (h : BigStep σ s r) :

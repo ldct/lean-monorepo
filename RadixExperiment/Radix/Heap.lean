@@ -11,10 +11,10 @@ import Std.Data.HashMap
 
 A simple bump-allocator heap mapping addresses to `Array Value`. Each `alloc`
 returns a fresh address (monotonically increasing `nextAddr`). The heap does
-not reuse freed addresses, which simplifies the memory safety proofs
-(`no_use_after_free`, `no_double_free` in `Radix.Proofs.MemorySafety`).
+deallocate storage. `Radix.Proofs.MemorySafety` proves that execution preserves
+existing allocation lengths, assuming the bump counter is initially fresh.
 
-All heap operations (`read`, `write`, `free`) return `Option` to model failures
+Heap reads and writes return `Option` to model failures
 (invalid address, out-of-bounds index) explicitly.
 -/
 
@@ -33,12 +33,6 @@ namespace Heap
 def alloc (h : Heap) (vals : Array Value) : Addr × Heap :=
   let a := h.nextAddr
   (a, { store := h.store.insert a vals, nextAddr := a + 1 })
-
-def free (h : Heap) (a : Addr) : Option Heap :=
-  if h.store.contains a then
-    some { h with store := h.store.erase a }
-  else
-    none
 
 def lookup (h : Heap) (a : Addr) : Option (Array Value) :=
   h.store.get? a

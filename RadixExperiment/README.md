@@ -1,161 +1,151 @@
 # RadixExperiment
 
-Radix is a verified embedded DSL built entirely by 10 AI agents (all Claude) in a single weekend.
-This repository contains the Radix source code and a [Verso](https://github.com/leanprover/verso)-based slide deck
-presenting the results: **"Lean for AI, AI for Lean"**.
+Radix is an imperative language with Lean big-step semantics, a fuel-limited
+interpreter, and five proved optimizer passes. This repository also contains a
+Verso slide deck about its development.
 
-## What Radix demonstrates
+See [RSTMT_DESIGN.md](RSTMT_DESIGN.md) for the implemented language design,
+execution model, proof architecture, and trust boundaries.
 
-- **Zero `sorry`** — 52 theorems, all complete
-- 5 verified compiler optimizations (constant folding, dead code elimination, copy propagation, constant propagation, inlining)
-- Big-step semantics (16 rules) with determinism proof
-- Interpreter correctness — sound and complete w.r.t. relational semantics
-- Linear ownership typing with soundness proof (644-line invariant preservation)
-- 27 modules, ~7,400 lines of Lean
+The AtCoder work adds a checked C++ subset and standalone ABC177 C sources.
+The complete ABC177 C theorem is
+`Radix.Benchmarks.ABC177C.refinement : Refines reference optimized`.
+It relates the programs parsed from the exact standalone source files, including
+validation, allocation, computation, and output. The optimized running-sum loop
+replaces the reference's quadratic pair enumeration.
 
-Zero lines were written by a human. The agents had full autonomy.
+## Build and reproduce
 
-## Examples
+Use the pinned Lean toolchain (`lean-toolchain`).
 
-Radix programs are written using concrete syntax macros (`[RStmt|...]`) that Lean elaborates and type-checks:
-
-```lean
-def factorial := `[RStmt|
-  n := 12;
-  result := 1;
-  while (n > 0) {
-    result := result * n;
-    n := n - 1;
-  }
-]
-
-#eval! run factorial "result"
--- 479001600
-```
-
-Heap-allocated arrays with manual memory management:
-
-```lean
-def sumOfSquares := `[RStmt|
-  let arr := new uint64[][10];
-  i := 0;
-  while (i < 10) {
-    arr[i] := (i + 1) * (i + 1);
-    i := i + 1;
-  }
-  sum := 0;
-  i := 0;
-  while (i < 10) {
-    sum := sum + arr[i];
-    i := i + 1;
-  }
-  free(arr);
-]
-
-#eval! run sumOfSquares "sum"
--- 385
-```
-
-Function definitions with heap communication between caller and callee:
-
-```lean
-def zeroArray : Program := {
-  funs := [
-    { name := "zeroOut"
-      params := [("a", .array .uint64), ("n", .uint64)]
-      retTy := .unit
-      body := `[RStmt|
-        i := 0;
-        while (i < n) {
-          a[i] := 0;
-          i := i + 1;
-        }
-      ]
-    }
-  ]
-  main := `[RStmt|
-    let arr := new uint64[][3];
-    arr[0] := 10; arr[1] := 20; arr[2] := 30;
-    zeroOut(arr, 3);
-    val := arr[0];
-  ]
-}
-
-#eval! runProg zeroArray "val"
--- 0 (was 10 before the function call)
-```
-
-## Key theorems
-
-**Determinism** — same state + same statement implies identical result:
-
-```lean
-theorem BigStep.det (h₁ : BigStep σ s r₁) (h₂ : BigStep σ s r₂) : r₁ = r₂
-```
-
-**Interpreter correctness** — a fuel-based interpreter proved equivalent to the relational semantics in both directions:
-
-```lean
--- Completeness: BigStep implies interp succeeds
-theorem Stmt.interp_complete (h : BigStep σ s r) :
-    ∃ fuel, s.interp fuel σ = (.ok r.retVal, r.state)
-
--- Soundness: interp success implies BigStep
-theorem Stmt.interp_sound (h : s.interp fuel σ = (.ok rv, σ')) :
-    BigStep σ s (toStmtResult rv σ')
-```
-
-**Verified optimizations** — each compiler pass preserves semantics:
-
-```lean
-theorem Stmt.constFold_correct (h : BigStep σ s r) : BigStep σ s.constFold r
-theorem Stmt.deadCodeElim_correct (h : BigStep σ s r) : BigStep σ s.deadCodeElim r
-theorem Stmt.copyProp_correct (h : BigStep σ s r) : BigStep σ s.copyPropagation r
-theorem Stmt.constPropagation_correct (h : BigStep σ s r) : BigStep σ s.constPropagation r
-theorem Stmt.inline_correct (h : BigStep σ s r) (hfuns : σ.funs = funs) :
-    ∀ depth, BigStep σ (s.inline funs depth) r
-```
-
-**Linear ownership soundness** — the three-part invariant (heap well-formedness, liveness, distinctness) is preserved through execution:
-
-```lean
-theorem LinearOk.soundness
-    (hlin : LinearOk O s O')
-    (hstep : BigStep σ s (.normal σ'))
-    (hinv : OwnershipInv σ O)
-    (hwt : WellTypedFuns σ.funs) :
-    OwnershipInv σ' O'
-```
-
-Every owned variable holds a live, distinct heap address:
-
-```lean
-theorem LinearOk.live_access
-    (hlin : LinearOk O s O')
-    (hstep : BigStep σ s (.normal σ'))
-    (hinv : OwnershipInv σ O)
-    (hwt : WellTypedFuns σ.funs)
-    (hx : x ∈ O') :
-    ∃ a, σ'.getVar x = some (.addr a) ∧ σ'.heap.lookup a ≠ none
-```
-
-## Repository structure
-
-- `Radix/` — the DSL: AST, semantics, type checker, interpreter, optimizations, proofs, syntax macros
-- `Slides.lean` — slide content (Verso markup with embedded Lean)
-- `Main.lean` — build entry point and HTML post-processing
-- `static/` — custom CSS and assets for the slide deck
-
-## Building
-
-Requires [Lean 4](https://lean-lang.org) and [Lake](https://github.com/leanprover/lean4/tree/master/src/lake).
-
-```bash
+```sh
+lake build Radix
 lake build
-.lake/build/bin/radix-slides
-# Output goes to _out/
+python3 scripts/check_abc177c.py --report benchmarks/abc177c/local-results.json
 ```
+
+The script builds both Lean targets, compiles the exact standalone sources with
+`clang++ -std=c++20 -O2 -Wall -Wextra -Werror`, checks official samples,
+200 deterministic randomized instances, boundary and malformed inputs, and the
+shared runtime's scanner and rejection behavior. It checks a maximum-size
+optimized run against an independent Python exact-integer oracle and times the
+reference with a two-second timeout. Set `CXX` to select another compiler;
+`--native-only` skips the proof builds. Reports record platform, compiler,
+source/prelude SHA-256 identities, and whether proof builds ran. Measurements
+are local evidence, not AtCoder verdicts.
+
+The submitted artifact is [benchmarks/abc177c/optimized.cpp](benchmarks/abc177c/optimized.cpp).
+Both it and [the quadratic reference](benchmarks/abc177c/reference.cpp) embed
+[runtime/radix_io.hpp](runtime/radix_io.hpp) verbatim and need no external header.
+They retain identical validation and allocate one input array.
+The samples and constraints are from
+[ABC177 C — Sum of product of pairs](https://atcoder.jp/contests/abc177/tasks/abc177_c?lang=en).
+
+## Execution contract
+
+`Radix.Proofs.Refinement` defines the common, fuel-free interface:
+
+```lean
+def Refines (reference optimized : Program) : Prop :=
+  ∀ input output,
+    RunsSuccessfully reference input output →
+    RunsSuccessfully optimized input output
+```
+
+Successful execution starts with the program's own function table, empty locals
+and heap, the supplied input bytes, and empty output. It must terminate normally
+or return normally, with the complete final output. Rejection, runtime faults,
+and divergence impose no obligation on the optimized program. The reference's
+executable validation determines its domain; there is no problem-specific
+predicate in this interface. Generic reflexivity, transitivity, and output
+uniqueness are proved.
+
+`StmtResult` distinguishes normal completion, return, and rejection.
+`InterpError` distinguishes explicit rejection, runtime faults, and fuel
+exhaustion. Streams are shared across calls. Output produced before rejection
+remains an observable prefix, but does not constitute a successful answer.
+Logical `&&` and `||` short-circuit even when the skipped operand would fault.
+
+Arrays are ordinary aliases to persistent heap allocations. There is no
+linearity checker or deallocation operation. `BigStep.heap_persistent` proves
+that existing allocations retain their lengths and remain present across
+execution, assuming the initial bump allocator is well formed. Standard initial
+states satisfy that condition. Reads and writes still check array bounds.
+
+The fixed scanner accepts ASCII decimal unsigned tokens up to `2^64-1`, with
+optional leading zeros, and whitespace bytes 9–13 and 32. It rejects signs,
+overflow, missing or malformed tokens. Reads consume the first trailing
+whitespace byte. `expect_eof()` accepts only remaining whitespace; the unsigned
+printer uses canonical decimal formatting. Literal writes control separators.
+
+## Checked source and trust boundaries
+
+[Radix/Frontend/Cpp.lean](Radix/Frontend/Cpp.lean) accepts the exact known prelude,
+`void solve()` in the supported subset, and the fixed
+`int main() { solve(); return 0; }` wrapper. Its dedicated grammar checks
+C++ precedence, initialized declarations, exact types, lexical scopes, array
+aliases, and reserved helper names. Local declarations lower to unique internal
+IDs and execute each time control reaches them. Unsupported C++ syntax is
+rejected. Source integer literals require `ULL`; octal literals are excluded.
+
+[Radix/Benchmarks/ABC177C.lean](Radix/Benchmarks/ABC177C.lean) embeds the actual
+standalone files and exposes parsing equations for them. Lake tracks both
+source files and the runtime header as byte-sensitive input dependencies, so
+changes invalidate proof builds. Source locals use `[a-z][a-z0-9]*`, excluding
+reserved keywords and macro names, to avoid C++ header macro collisions.
+There are no alternate algorithm bodies
+selected by preprocessing. Editing the prelude requires updating both embedded
+copies; a mismatch fails parsing and native checks.
+
+The parser's agreement with C++ and the shared native runtime contract are
+trusted. Concrete parsing certificates use Lean's native decision procedure,
+which introduces per-certificate `native_decide` axioms trusting compiled Lean
+evaluation. This is confined to source parsing. The whole-program refinement
+proof itself uses only `propext`, `Classical.choice`, and `Quot.sound`.
+The reproducibility command prints the axiom dependencies even on cached builds. These boundaries must not
+be mistaken for a verified C++ compiler or an independent target simulation.
+Native execution additionally relies on the compiler, standard library,
+allocator, OS, and hardware, with adequate resources and working byte transport.
+Logical allocation persistence does not prove a native memory limit.
+
+## Proofs and layout
+
+- `Radix/AST.lean`, `State.lean`, `Heap.lean`, `Eval/`: language and execution.
+- `Radix/Proofs/`: determinism, interpreter correctness, expression type
+  preservation, allocation persistence, refinement, and total-correctness rules.
+- `Radix/Opt/`: constant folding, dead-code elimination, copy propagation,
+  constant propagation, and inlining, with preservation proofs.
+- `Radix/Frontend/`: authoritative C++ source parsing and checking.
+- `Radix/Benchmarks/`: source artifacts, pair-sum algebra, and machine proof work.
+- `Radix/Tests/`: executable language and optimizer regressions.
+- `Slides.lean`, `Main.lean`, `static/`: the presentation; run
+  `.lake/build/bin/radix-slides` to generate `_out/`.
+
+Internal `[RStmt| ...]` quotations remain useful for tests and slide examples.
+They are not the source of the benchmark parsing evidence. Expression type
+preservation is not a general progress theorem: well-typed expressions can
+still fault on division by zero or invalid array indices.
 
 ## License
 
 Apache-2.0
+
+## Proposal milestone status
+
+All seven required milestones are implemented:
+
+| Milestone | Result |
+| --- | --- |
+| 1. Remove linearity and deallocation | Persistent allocations, length-preservation proof, aliasing tests |
+| 2. Execution and refinement | Distinct outcomes, short-circuiting, determinism, interpreter correspondence, generic refinement |
+| 3. Shared I/O | Logical byte streams, checked scanner/printer, standalone native prelude, contract regressions |
+| 4. C++ frontend | Dedicated typed grammar, lexical name resolution, exact source/prelude parsing certificates |
+| 5. Executable ABC177 C | Validating quadratic reference and linear submission, native and interpreter sample checks |
+| 6. Whole-program proof | `ABC177CRefinement.refinement`, including input validation, finite loops, bounds, and full output |
+| 7. Packaging and validation | Both Lake builds, axiom audit, native differential/oracle checks, maximum-size timing and source identities |
+
+`python3 scripts/check_cpp_frontend.py` separately runs the frontend's Lean and
+native correspondence regressions. The main reproducibility command also runs
+the native side, using snippets extracted directly from the Lean test file.
+These tests supplement the shared parser trust boundary; they are not a C++
+semantics proof. No AtCoder submission or verdict is claimed.

@@ -33,13 +33,13 @@ mutual
 /-- Rough measure of statement size for inlining heuristics. -/
 def Stmt.size : Stmt → Nat
   | .skip => 0
+  | .reject | .expectEof | .readU64 _ | .writeU64 _ | .writeText _ => 1
   | .assign _ _ => 1
   | .seq s₁ s₂ => s₁.size + s₂.size
   | .ite _ t f => 1 + t.size + f.size
   | .while _ b => 1 + b.size
   | .decl _ _ _ => 1
   | .alloc _ _ _ => 1
-  | .free _ => 1
   | .arrSet _ _ _ => 1
   | .ret _ => 1
   | .block stmts => Stmt.sizeList stmts
@@ -57,7 +57,8 @@ def inlineThreshold : Nat := 10
 mutual
 /-- Check if a statement contains a call to a specific function (prevent recursive inlining). -/
 def Stmt.containsCall (name : String) : Stmt → Bool
-  | .skip | .assign _ _ | .decl _ _ _ | .alloc _ _ _ | .free _
+  | .reject | .expectEof | .readU64 _ | .writeU64 _ | .writeText _
+  | .skip | .assign _ _ | .decl _ _ _ | .alloc _ _ _
   | .arrSet _ _ _ | .ret _ => false
   | .seq s₁ s₂ => s₁.containsCall name || s₂.containsCall name
   | .ite _ t f => t.containsCall name || f.containsCall name
@@ -92,6 +93,11 @@ mutual
 /-- Substitute parameter names with argument expressions in a statement body. -/
 def Stmt.substParams (params : List String) (args : List Expr) : Stmt → Stmt
   | .skip => .skip
+  | .reject => .reject
+  | .expectEof => .expectEof
+  | .readU64 x => .readU64 x
+  | .writeU64 e => .writeU64 (e.substVars params args)
+  | .writeText t => .writeText t
   | .assign x e => .assign x (Expr.substVars params args e)
   | .seq s₁ s₂ => .seq (s₁.substParams params args) (s₂.substParams params args)
   | .ite c t f => .ite (Expr.substVars params args c)
@@ -99,7 +105,6 @@ def Stmt.substParams (params : List String) (args : List Expr) : Stmt → Stmt
   | .while c b => .while (Expr.substVars params args c) (b.substParams params args)
   | .decl x ty e => .decl x ty (Expr.substVars params args e)
   | .alloc x ty sz => .alloc x ty (Expr.substVars params args sz)
-  | .free e => .free (Expr.substVars params args e)
   | .arrSet a i v => .arrSet (Expr.substVars params args a) (Expr.substVars params args i)
       (Expr.substVars params args v)
   | .ret e => .ret (Expr.substVars params args e)
@@ -119,13 +124,17 @@ mutual
     and the statement decreases structurally in all other cases. -/
 def Stmt.inline (funs : HashMap String FunDecl) (depth : Nat) : Stmt → Stmt
   | .skip => .skip
+  | .reject => .reject
+  | .expectEof => .expectEof
+  | .readU64 x => .readU64 x
+  | .writeU64 e => .writeU64 e
+  | .writeText t => .writeText t
   | .assign x e => .assign x e
   | .seq s₁ s₂ => .seq (s₁.inline funs depth) (s₂.inline funs depth)
   | .ite c t f => .ite c (t.inline funs depth) (f.inline funs depth)
   | .while c b => .while c (b.inline funs depth)
   | .decl x ty e => .decl x ty e
   | .alloc x ty sz => .alloc x ty sz
-  | .free e => .free e
   | .arrSet a i v => .arrSet a i v
   | .ret e => .ret e
   | .block stmts => .block (Stmt.inlineList funs depth stmts)
@@ -171,7 +180,7 @@ theorem Stmt.inlineList_eq_map (funs : HashMap String FunDecl) (depth : Nat) (st
 -- Helper: PState.funs is preserved by updateCurrentFrame
 private theorem PState.updateCurrentFrame_funs {σ : PState} {f : Frame → Frame} {σ' : PState}
     (h : σ.updateCurrentFrame f = some σ') : σ'.funs = σ.funs := by
-  cases σ with | mk frames heap funs =>
+  cases σ with | mk frames heap funs input cursor output =>
   unfold PState.updateCurrentFrame at h
   cases frames with
   | nil => exact absurd h nofun
@@ -183,7 +192,7 @@ private theorem PState.setVar_funs {σ : PState} {x : String} {v : Value} {σ' :
 
 private theorem PState.popFrame_funs {σ : PState} {fr : Frame} {σ' : PState}
     (h : σ.popFrame = some (fr, σ')) : σ'.funs = σ.funs := by
-  cases σ with | mk frames heap funs =>
+  cases σ with | mk frames heap funs input cursor output =>
   unfold PState.popFrame at h
   cases frames with
   | nil => exact absurd h nofun
@@ -200,23 +209,26 @@ theorem BigStep.funs_preserved (h : BigStep σ s r) : r.state.funs = σ.funs := 
   | seqNormal _ _ ih₁ ih₂ =>
     simp only [StmtResult.state] at ih₁; rw [ih₂, ih₁]
   | seqReturn _ ih₁ => exact ih₁
+  | seqReject _ ih₁ => exact ih₁
   | ifTrue _ _ ih => exact ih
   | ifFalse _ _ ih => exact ih
   | whileTrue _ _ _ ihb ihw =>
     simp only [StmtResult.state] at ihb; rw [ihw, ihb]
   | whileReturn _ _ ih => exact ih
+  | whileReject _ _ ih => exact ih
   | whileFalse _ => rfl
   | alloc _ _ hs => have h := PState.setVar_funs hs; exact h
-  | free _ _ => rfl
+  | reject | readReject _ | writeU64 _ | writeText | expectEof _ | eofReject _ => rfl
+  | readU64 _ hs => have h := PState.setVar_funs hs; exact h
   | arrSet _ _ _ _ => rfl
   | ret _ => rfl
   | block _ ih => exact ih
   | callStmt _ _ _ _ _ hpop ih_body =>
-    simp only [StmtResult.state]
-    rw [PState.popFrame_funs hpop, ih_body]; rfl
+    have hp := PState.popFrame_funs hpop
+    cases ‹StmtResult› <;> simp_all [StmtResult.afterCall, StmtResult.state, PState.pushFrame]
   | scope _ _ _ _ hpop ih_body =>
-    simp only [StmtResult.state]
-    rw [PState.popFrame_funs hpop, ih_body]; rfl
+    have hp := PState.popFrame_funs hpop
+    cases ‹StmtResult› <;> simp_all [StmtResult.afterCall, StmtResult.state, PState.pushFrame]
 
 /-- Inlining preserves big-step semantics at any inlining depth.
 The `hfuns` hypothesis ties the static function table to the runtime one. -/
@@ -232,6 +244,8 @@ theorem Stmt.inline_correct {funs : HashMap String FunDecl}
     exact .seqNormal (ih₁ hfuns depth) (ih₂ ((BigStep.funs_preserved h₁).trans hfuns) depth)
   | seqReturn h₁ ih₁ =>
     intro depth; simp only [Stmt.inline]; exact .seqReturn (ih₁ hfuns depth)
+  | seqReject h₁ ih₁ =>
+    intro depth; simp only [Stmt.inline]; exact .seqReject (ih₁ hfuns depth)
   | ifTrue hc ht ih =>
     intro depth; simp only [Stmt.inline]; exact .ifTrue hc (ih hfuns depth)
   | ifFalse hc hf ih =>
@@ -243,12 +257,26 @@ theorem Stmt.inline_correct {funs : HashMap String FunDecl}
     exact .whileTrue hc (ihb hfuns depth) (ihw' depth)
   | whileReturn hc hb ih =>
     intro depth; simp only [Stmt.inline]; exact .whileReturn hc (ih hfuns depth)
+  | whileReject hc hb ih =>
+    intro depth; simp only [Stmt.inline]; exact .whileReject hc (ih hfuns depth)
   | whileFalse hc =>
     intro; simp only [Stmt.inline]; exact .whileFalse hc
   | alloc hsz ha hs =>
     intro; simp only [Stmt.inline]; exact .alloc hsz ha hs
-  | free he hf =>
-    intro; simp only [Stmt.inline]; exact .free he hf
+  | reject  =>
+    intro; simp only [Stmt.inline]; exact .reject
+  | readU64 hr hs =>
+    intro; simp only [Stmt.inline]; exact .readU64 hr hs
+  | readReject hr =>
+    intro; simp only [Stmt.inline]; exact .readReject hr
+  | writeU64 he =>
+    intro; simp only [Stmt.inline]; exact .writeU64 he
+  | writeText  =>
+    intro; simp only [Stmt.inline]; exact .writeText
+  | expectEof he =>
+    intro; simp only [Stmt.inline]; exact .expectEof he
+  | eofReject he =>
+    intro; simp only [Stmt.inline]; exact .eofReject he
   | arrSet harr hidx hval hw =>
     intro; simp only [Stmt.inline]; exact .arrSet harr hidx hval hw
   | ret he =>

@@ -8,7 +8,7 @@ import Radix.Syntax
 
 /-! # Array Tests
 
-Allocation, indexing, modification, free.
+Allocation, indexing, modification, and shared aliases.
 -/
 
 namespace Radix.Tests
@@ -19,8 +19,7 @@ def test_array_basic :=
   let set0 := Stmt.arrSet (Expr.var "arr") (Expr.lit (Value.uint64 0)) (Expr.lit (Value.uint64 42))
   let set1 := Stmt.arrSet (Expr.var "arr") (Expr.lit (Value.uint64 1)) (Expr.lit (Value.uint64 99))
   let read := Stmt.assign "val" (Expr.arrGet (Expr.var "arr") (Expr.lit (Value.uint64 0)))
-  let free := Stmt.free (Expr.var "arr")
-  alloc ;; set0 ;; set1 ;; read ;; free
+  alloc ;; set0 ;; set1 ;; read
 
 private def getResult (s : Stmt) (x : String) : Option Value :=
   match s.run with
@@ -53,15 +52,14 @@ def arraySumProgram : Program := {
           let body := readJ ;; addElem ;; incJ
           let cond := Expr.binop BinOp.lt (Expr.var "j") (Expr.var "n")
           init1 ;; init2 ;; Stmt.while cond body
-        let free := Stmt.free (Expr.var "arr")
-        alloc ;; fill ;; sumLoop ;; free }
+        alloc ;; fill ;; sumLoop }
   ]
   main := `[RStmt| arraySum(10); ]
 }
 
 #guard (arraySumProgram.run 10000).isOk
 
--- Bubble sort (simplified — just tests alloc/fill/free cycle)
+-- Bubble sort (simplified — just tests allocation and filling)
 def bubbleSortProgram : Program := {
   funs := [
     { name := "bubbleSort"
@@ -76,8 +74,7 @@ def bubbleSortProgram : Program := {
             k := k + 1;
           }
         ]
-        let free := Stmt.free (Expr.var "arr")
-        alloc ;; fill ;; free }
+        alloc ;; fill }
   ]
   main := `[RStmt| bubbleSort(5); ]
 }
@@ -90,8 +87,7 @@ def bubbleSortProgram : Program := {
 def test_zero_alloc :=
   let alloc := Stmt.alloc "arr" Ty.uint64 (Expr.lit (Value.uint64 0))
   let len := Stmt.assign "n" (Expr.arrLen (Expr.var "arr"))
-  let free := Stmt.free (Expr.var "arr")
-  alloc ;; len ;; free
+  alloc ;; len
 
 #guard getResult test_zero_alloc "n" == some (Value.uint64 0)
 
@@ -99,8 +95,7 @@ def test_zero_alloc :=
 def test_array_len :=
   let alloc := Stmt.alloc "arr" Ty.uint64 (Expr.lit (Value.uint64 7))
   let len := Stmt.assign "n" (Expr.arrLen (Expr.var "arr"))
-  let free := Stmt.free (Expr.var "arr")
-  alloc ;; len ;; free
+  alloc ;; len
 
 #guard getResult test_array_len "n" == some (Value.uint64 7)
 
@@ -125,35 +120,9 @@ def test_boundary_read :=
   let alloc := Stmt.alloc "arr" Ty.uint64 (Expr.lit (Value.uint64 3))
   let set := Stmt.arrSet (Expr.var "arr") (Expr.lit (Value.uint64 2)) (Expr.lit (Value.uint64 77))
   let read := Stmt.assign "val" (Expr.arrGet (Expr.var "arr") (Expr.lit (Value.uint64 2)))
-  let free := Stmt.free (Expr.var "arr")
-  alloc ;; set ;; read ;; free
+  alloc ;; set ;; read
 
 #guard getResult test_boundary_read "val" == some (Value.uint64 77)
-
--- Free invalid address produces error
-def test_free_invalid :=
-  Stmt.free (Expr.lit (Value.addr 9999))
-
-#guard (test_free_invalid.run).isOk == false
-
--- Double free produces error
-def test_double_free :=
-  let alloc := Stmt.alloc "arr" Ty.uint64 (Expr.lit (Value.uint64 2))
-  let free1 := Stmt.free (Expr.var "arr")
-  let free2 := Stmt.free (Expr.var "arr")
-  alloc ;; free1 ;; free2
-
-#guard (test_double_free.run).isOk == false
-
--- Read after free produces error
-def test_read_after_free :=
-  let alloc := Stmt.alloc "arr" Ty.uint64 (Expr.lit (Value.uint64 2))
-  let set := Stmt.arrSet (Expr.var "arr") (Expr.lit (Value.uint64 0)) (Expr.lit (Value.uint64 42))
-  let free := Stmt.free (Expr.var "arr")
-  let read := Stmt.assign "val" (Expr.arrGet (Expr.var "arr") (Expr.lit (Value.uint64 0)))
-  alloc ;; set ;; free ;; read
-
-#guard (test_read_after_free.run).isOk == false
 
 -- Multiple arrays can coexist
 def test_multi_array :=
@@ -163,9 +132,7 @@ def test_multi_array :=
   let set_b := Stmt.arrSet (Expr.var "b") (Expr.lit (Value.uint64 0)) (Expr.lit (Value.uint64 20))
   let read_a := Stmt.assign "va" (Expr.arrGet (Expr.var "a") (Expr.lit (Value.uint64 0)))
   let read_b := Stmt.assign "vb" (Expr.arrGet (Expr.var "b") (Expr.lit (Value.uint64 0)))
-  let free_a := Stmt.free (Expr.var "a")
-  let free_b := Stmt.free (Expr.var "b")
-  alloc1 ;; alloc2 ;; set_a ;; set_b ;; read_a ;; read_b ;; free_a ;; free_b
+  alloc1 ;; alloc2 ;; set_a ;; set_b ;; read_a ;; read_b
 
 #guard getResult test_multi_array "va" == some (Value.uint64 10)
 #guard getResult test_multi_array "vb" == some (Value.uint64 20)
@@ -174,9 +141,17 @@ def test_multi_array :=
 def test_zero_init :=
   let alloc := Stmt.alloc "arr" Ty.uint64 (Expr.lit (Value.uint64 3))
   let read := Stmt.assign "val" (Expr.arrGet (Expr.var "arr") (Expr.lit (Value.uint64 1)))
-  let free := Stmt.free (Expr.var "arr")
-  alloc ;; read ;; free
+  alloc ;; read
 
 #guard getResult test_zero_init "val" == some (Value.uint64 0)
+
+-- Copies share the same allocation and observe each other's writes.
+def test_array_alias :=
+  Stmt.alloc "a" Ty.uint64 (.lit (.uint64 1)) ;;
+  Stmt.assign "b" (.var "a") ;;
+  Stmt.arrSet (.var "b") (.lit (.uint64 0)) (.lit (.uint64 73)) ;;
+  Stmt.assign "observed" (.arrGet (.var "a") (.lit (.uint64 0)))
+
+#guard getResult test_array_alias "observed" == some (.uint64 73)
 
 end Radix.Tests

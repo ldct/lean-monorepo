@@ -39,14 +39,14 @@ def Expr.readVarsList (es : List Expr) : List String :=
 mutual
 /-- Collect variables that are read in a statement. -/
 def Stmt.readVars : Stmt → List String
-  | .skip => []
+  | .skip | .reject | .expectEof | .readU64 _ | .writeText _ => []
+  | .writeU64 e => e.readVars
   | .assign _ e => Expr.readVars e
   | .seq s₁ s₂ => s₁.readVars ++ s₂.readVars
   | .ite c t f => Expr.readVars c ++ t.readVars ++ f.readVars
   | .while c b => Expr.readVars c ++ b.readVars
   | .decl _ _ e => Expr.readVars e
   | .alloc _ _ sz => Expr.readVars sz
-  | .free e => Expr.readVars e
   | .arrSet a i v => Expr.readVars a ++ Expr.readVars i ++ Expr.readVars v
   | .ret e => Expr.readVars e
   | .block stmts => Stmt.readVarsList stmts
@@ -62,6 +62,11 @@ mutual
 /-- Dead code elimination pass. -/
 def Stmt.deadCodeElim : Stmt → Stmt
   | .skip => .skip
+  | .reject => .reject
+  | .readU64 x => .readU64 x
+  | .writeU64 e => .writeU64 e
+  | .writeText t => .writeText t
+  | .expectEof => .expectEof
   | .assign x e => .assign x e
   | .seq s₁ s₂ =>
     match s₁.deadCodeElim with
@@ -84,7 +89,6 @@ def Stmt.deadCodeElim : Stmt → Stmt
     | _ => .while c b.deadCodeElim
   | .decl x ty e => .decl x ty e
   | .alloc x ty sz => .alloc x ty sz
-  | .free e => .free e
   | .arrSet a i v => .arrSet a i v
   | .ret e => .ret e
   | .block stmts => .block (Stmt.deadCodeElimList stmts)
@@ -112,6 +116,7 @@ private theorem dce_seq_to_seq_dce (h : BigStep σ (Stmt.deadCodeElim (a ;; b)) 
       cases r with
       | normal σ' => exact BigStep.seqNormal h BigStep.skip
       | returned v σ' => exact BigStep.seqReturn h
+      | rejected σ' => exact BigStep.seqReject h
     next => exact h
 
 private theorem BigStep.foldl_seq_mono (xs : List Stmt)
@@ -127,6 +132,7 @@ private theorem BigStep.foldl_seq_mono (xs : List Stmt)
       cases h' with
       | seqNormal h₁ h₂ => exact BigStep.seqNormal (hab σ' _ h₁) h₂
       | seqReturn h₁ => exact BigStep.seqReturn (hab σ' _ h₁)
+      | seqReject h₁ => exact BigStep.seqReject (hab σ' _ h₁)
     · exact h
 
 private theorem dce_foldl_gen (acc : Stmt) (stmts : List Stmt) (σ : PState) (r : StmtResult)
@@ -168,6 +174,14 @@ theorem Stmt.deadCodeElim_correct (h : BigStep σ s r) : BigStep σ s.deadCodeEl
       split
       next => exact ih₁
       next => exact BigStep.seqReturn ih₁
+  | seqReject h₁ ih₁ =>
+    simp only [Stmt.deadCodeElim]
+    split
+    next heq => rw [heq] at ih₁; cases ih₁
+    next =>
+      split
+      next => exact ih₁
+      next => exact BigStep.seqReject ih₁
   | ifTrue hc _ ih =>
     simp only [Stmt.deadCodeElim]
     split
@@ -194,13 +208,38 @@ theorem Stmt.deadCodeElim_correct (h : BigStep σ s r) : BigStep σ s.deadCodeEl
     split
     · simp_all [Expr.eval]
     · exact BigStep.whileReturn hc ihb
+  | whileReject hc _ ihb =>
+    simp only [Stmt.deadCodeElim]
+    split
+    · simp_all [Expr.eval]
+    · exact BigStep.whileReject hc ihb
   | whileFalse hc =>
     simp only [Stmt.deadCodeElim]
     split
     · exact BigStep.skip
     · exact BigStep.whileFalse hc
   | alloc hsz ha hs => exact BigStep.alloc hsz ha hs
-  | free he hf => exact BigStep.free he hf
+  | reject  =>
+    simp only [Stmt.deadCodeElim]
+    exact BigStep.reject
+  | readU64 hr hs =>
+    simp only [Stmt.deadCodeElim]
+    exact BigStep.readU64 hr hs
+  | readReject hr =>
+    simp only [Stmt.deadCodeElim]
+    exact BigStep.readReject hr
+  | writeU64 he =>
+    simp only [Stmt.deadCodeElim]
+    exact BigStep.writeU64 he
+  | writeText  =>
+    simp only [Stmt.deadCodeElim]
+    exact BigStep.writeText
+  | expectEof he =>
+    simp only [Stmt.deadCodeElim]
+    exact BigStep.expectEof he
+  | eofReject he =>
+    simp only [Stmt.deadCodeElim]
+    exact BigStep.eofReject he
   | arrSet harr hidx hval hw => exact BigStep.arrSet harr hidx hval hw
   | ret he => exact BigStep.ret he
   | block _ ih =>

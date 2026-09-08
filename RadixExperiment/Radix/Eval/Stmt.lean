@@ -5,6 +5,7 @@ Authors: Leonardo de Moura
 -/
 
 import Radix.Eval.Expr
+import Radix.Eval.IO
 
 /-! # Radix Big-Step Semantics
 
@@ -16,28 +17,35 @@ The `BigStep.det` theorem (`Radix.Proofs.Determinism`) shows that this relation
 is deterministic, so the original and optimized programs are observationally
 equivalent.
 
-The semantics uses `StmtResult` to distinguish normal completion from early
-return. The `seqReturn` rule short-circuits: if the first statement in a
+The semantics uses `StmtResult` to distinguish normal completion, early
+return, and explicit rejection. The `seqReturn` rule short-circuits: if the first statement in a
 sequence returns, the second is never executed.
 -/
 
 namespace Radix
 
-/-- Result of executing a statement: either normal completion or a return. -/
+/-- Result of executing a statement: normal completion, ordinary return, or rejection. -/
 inductive StmtResult where
   | normal : PState → StmtResult
   | returned : Value → PState → StmtResult
+  | rejected : PState → StmtResult
 
 /-- Extract the state from a result. -/
 def StmtResult.state : StmtResult → PState
   | .normal σ => σ
   | .returned _ σ => σ
+  | .rejected σ => σ
+
+def StmtResult.afterCall (r : StmtResult) (σ : PState) : StmtResult :=
+  match r with
+  | .rejected _ => .rejected σ
+  | _ => .normal σ
 
 /-- Big-step operational semantics for Radix statements.
 
 Notation: `⟨sigma, s⟩ ⇓ r` means statement `s` in state `sigma` produces
-result `r`. The relation is deterministic (`BigStep.det`) and total for
-well-typed, terminating programs. -/
+result `r`. The relation is deterministic (`BigStep.det`). Faults have no derivation;
+well-typed expressions can still fault, so typing alone does not imply progress. -/
 inductive BigStep : PState → Stmt → StmtResult → Prop where
   | skip :
     BigStep σ .skip (.normal σ)
@@ -54,6 +62,9 @@ inductive BigStep : PState → Stmt → StmtResult → Prop where
   | seqReturn (h₁ : BigStep σ₁ s₁ (.returned v σ₂)) :
     BigStep σ₁ (s₁ ;; s₂) (.returned v σ₂)
 
+  | seqReject (h₁ : BigStep σ₁ s₁ (.rejected σ₂)) :
+    BigStep σ₁ (s₁ ;; s₂) (.rejected σ₂)
+
   | ifTrue (hc : e.eval σ = some (.bool true)) (ht : BigStep σ t r) :
     BigStep σ (.ite e t f) r
 
@@ -69,16 +80,38 @@ inductive BigStep : PState → Stmt → StmtResult → Prop where
       (hb : BigStep σ₁ b (.returned v σ₂)) :
     BigStep σ₁ (.while e b) (.returned v σ₂)
 
+  | whileReject (hc : e.eval σ₁ = some (.bool true))
+      (hb : BigStep σ₁ b (.rejected σ₂)) :
+    BigStep σ₁ (.while e b) (.rejected σ₂)
+
   | whileFalse (hc : e.eval σ = some (.bool false)) :
     BigStep σ (.while e b) (.normal σ)
 
   | alloc (hsz : szExpr.eval σ = some (.uint64 sz))
       (ha : σ.heap.alloc (Array.replicate sz.toNat (.uint64 0)) = (a, heap'))
-      (hs : (PState.mk σ.frames heap' σ.funs).setVar x (.addr a) = some σ') :
+      (hs : { σ with heap := heap' }.setVar x (.addr a) = some σ') :
     BigStep σ (.alloc x _ty szExpr) (.normal σ')
 
-  | free (he : e.eval σ = some (.addr a)) (hf : σ.heap.free a = some heap') :
-    BigStep σ (.free e) (.normal { σ with heap := heap' })
+  | reject : BigStep σ .reject (.rejected σ)
+
+  | readU64 (hr : ByteIO.readU64 σ.input σ.cursor = (some n, cursor))
+      (hs : ({ σ with cursor }).setVar x (.uint64 n) = some σ') :
+    BigStep σ (.readU64 x) (.normal σ')
+
+  | readReject (hr : ByteIO.readU64 σ.input σ.cursor = (none, cursor)) :
+    BigStep σ (.readU64 x) (.rejected { σ with cursor })
+
+  | writeU64 (he : e.eval σ = some (.uint64 n)) :
+    BigStep σ (.writeU64 e) (.normal { σ with output := σ.output ++ ByteIO.writeU64 n })
+
+  | writeText :
+    BigStep σ (.writeText text) (.normal { σ with output := σ.output ++ text.toUTF8 })
+
+  | expectEof (he : ByteIO.skipWhitespace σ.input σ.cursor = σ.input.size) :
+    BigStep σ .expectEof (.normal { σ with cursor := σ.input.size })
+
+  | eofReject (he : ByteIO.skipWhitespace σ.input σ.cursor ≠ σ.input.size) :
+    BigStep σ .expectEof (.rejected { σ with cursor := ByteIO.skipWhitespace σ.input σ.cursor })
 
   | arrSet (harr : arr.eval σ = some (.addr a))
       (hidx : idx.eval σ = some (.uint64 i))
@@ -98,14 +131,14 @@ inductive BigStep : PState → Stmt → StmtResult → Prop where
       (hframe : frame = { env := (fd.params.zip vs).foldl (fun env (p, v) => env.set p.1 v) Env.empty })
       (hbody : BigStep (σ.pushFrame frame) fd.body bodyResult)
       (hpop : bodyResult.state.popFrame = some (fr, σ')) :
-    BigStep σ (.callStmt name args) (.normal σ')
+    BigStep σ (.callStmt name args) (bodyResult.afterCall σ')
 
   | scope (hargs : args.mapM (Expr.eval σ) = some vs)
       (hlen : params.length = vs.length)
       (hframe : frame = { env := (params.zip vs).foldl (fun env (p, v) => env.set p.1 v) Env.empty })
       (hbody : BigStep (σ.pushFrame frame) body bodyResult)
       (hpop : bodyResult.state.popFrame = some (fr, σ')) :
-    BigStep σ (.scope params args body) (.normal σ')
+    BigStep σ (.scope params args body) (bodyResult.afterCall σ')
 
 set_option quotPrecheck false in
 notation:60 "⟨" σ ", " s "⟩" " ⇓ " r:60 => BigStep σ s r

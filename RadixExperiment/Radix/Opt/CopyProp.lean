@@ -48,6 +48,11 @@ mutual
 and an updated copy map. -/
 def Stmt.copyProp (m : CopyMap) : Stmt → Stmt × CopyMap
   | .skip => (.skip, m)
+  | .reject => (.reject, m)
+  | .readU64 x => (.readU64 x, {})
+  | .writeU64 e => (.writeU64 (e.copyProp m), m)
+  | .writeText t => (.writeText t, m)
+  | .expectEof => (.expectEof, m)
   | .assign x (.var y) =>
     let y' := m.get? y |>.getD y
     (.assign x (.var y'), m.insert x y' |>.erase y |> fun m' =>
@@ -77,7 +82,6 @@ def Stmt.copyProp (m : CopyMap) : Stmt → Stmt × CopyMap
     let sz' := Expr.copyProp m sz
     let m' := m.erase x |>.filter fun _ v => v != x
     (.alloc x ty sz', m')
-  | .free e => (.free (Expr.copyProp m e), m)
   | .arrSet arr idx val =>
     (.arrSet (Expr.copyProp m arr) (Expr.copyProp m idx) (Expr.copyProp m val), m)
   | .ret e => (.ret (Expr.copyProp m e), m)
@@ -301,18 +305,22 @@ theorem Stmt.copyProp_correct' (m : CopyMap) (h : BigStep σ s r) (hm : m.agrees
     simp only [Stmt.copyProp]
     have ⟨hbs₁, _⟩ := ih₁ m hm
     exact ⟨BigStep.seqReturn hbs₁, fun _ h => by cases h⟩
+  | seqReject h₁ ih₁ =>
+    simp only [Stmt.copyProp]
+    have ⟨hbs₁, _⟩ := ih₁ m hm
+    exact ⟨BigStep.seqReject hbs₁, fun _ h => by cases h⟩
   | ifTrue hc _ ih =>
     simp only [Stmt.copyProp]
     have ⟨hbs, _⟩ := ih m hm
     constructor
     · exact BigStep.ifTrue (by rw [Expr.copyProp_eval m _ _ hm]; exact hc) hbs
-    · intro σ' heq; cases heq; exact CopyMap.agrees_empty _
+    · intro σ' _; exact CopyMap.agrees_empty _
   | ifFalse hc _ ih =>
     simp only [Stmt.copyProp]
     have ⟨hbs, _⟩ := ih m hm
     constructor
     · exact BigStep.ifFalse (by rw [Expr.copyProp_eval m _ _ hm]; exact hc) hbs
-    · intro σ' heq; cases heq; exact CopyMap.agrees_empty _
+    · intro σ' _; exact CopyMap.agrees_empty _
   | @whileTrue σ₁ b σ₂ e r hc hb hw ihb ihw =>
     simp only [Stmt.copyProp]
     have hem₁ := CopyMap.agrees_empty σ₁
@@ -322,7 +330,7 @@ theorem Stmt.copyProp_correct' (m : CopyMap) (h : BigStep σ s r) (hm : m.agrees
     constructor
     · exact BigStep.whileTrue
         (by rw [Expr.copyProp_eval {} _ _ hem₁]; exact hc) hbs_b hbs_w
-    · intro σ' heq; cases heq; exact CopyMap.agrees_empty _
+    · intro σ' _; exact CopyMap.agrees_empty _
   | @whileReturn σ₁ b e v σ₂ hc hb ihb =>
     simp only [Stmt.copyProp]
     have hem := CopyMap.agrees_empty σ₁
@@ -331,12 +339,20 @@ theorem Stmt.copyProp_correct' (m : CopyMap) (h : BigStep σ s r) (hm : m.agrees
     · exact BigStep.whileReturn
         (by rw [Expr.copyProp_eval {} _ _ hem]; exact hc) hbs_b
     · intro σ' heq; cases heq
+  | @whileReject σ₁ b e σ₂ hc hb ihb =>
+    simp only [Stmt.copyProp]
+    have hem := CopyMap.agrees_empty σ₁
+    have ⟨hbs_b, _⟩ := ihb {} hem
+    constructor
+    · exact BigStep.whileReject
+        (by rw [Expr.copyProp_eval {} _ _ hem]; exact hc) hbs_b
+    · intro σ' heq; cases heq
   | whileFalse hc =>
     simp only [Stmt.copyProp]
     constructor
     · exact BigStep.whileFalse
         (by rw [Expr.copyProp_eval {} _ _ (CopyMap.agrees_empty _)]; exact hc)
-    · intro σ' heq; cases heq; exact CopyMap.agrees_empty _
+    · intro σ' _; exact CopyMap.agrees_empty _
   | alloc hsz ha hs =>
     simp only [Stmt.copyProp]
     constructor
@@ -346,10 +362,27 @@ theorem Stmt.copyProp_correct' (m : CopyMap) (h : BigStep σ s r) (hm : m.agrees
       -- getVar on the modified state equals getVar on σ✝ (only frames matter)
       exact agrees_after_erase_filter m _ _ _ hm
         (fun z hz => by have := PState.getVar_setVar_ne hs hz; exact this)
-  | free he hf =>
+  | reject  =>
     simp only [Stmt.copyProp]
-    exact ⟨BigStep.free (by rw [Expr.copyProp_eval m _ _ hm]; exact he) hf,
-           fun σ' heq => by cases heq; exact hm⟩
+    exact ⟨BigStep.reject, fun _ h => by cases h⟩
+  | readU64 hr hs =>
+    simp only [Stmt.copyProp]
+    exact ⟨BigStep.readU64 hr hs, fun _ h => by cases h; exact CopyMap.agrees_empty _⟩
+  | readReject hr =>
+    simp only [Stmt.copyProp]
+    exact ⟨BigStep.readReject hr, fun _ h => by cases h⟩
+  | writeU64 he =>
+    simp only [Stmt.copyProp]
+    exact ⟨BigStep.writeU64 (by rw [Expr.copyProp_eval m _ _ hm]; exact he), fun _ h => by cases h; exact hm⟩
+  | writeText  =>
+    simp only [Stmt.copyProp]
+    exact ⟨BigStep.writeText, fun _ h => by cases h; exact hm⟩
+  | expectEof he =>
+    simp only [Stmt.copyProp]
+    exact ⟨BigStep.expectEof he, fun _ h => by cases h; exact hm⟩
+  | eofReject he =>
+    simp only [Stmt.copyProp]
+    exact ⟨BigStep.eofReject he, fun _ h => by cases h⟩
   | arrSet harr hidx hval hw =>
     simp only [Stmt.copyProp]
     exact ⟨BigStep.arrSet
@@ -375,7 +408,7 @@ theorem Stmt.copyProp_correct' (m : CopyMap) (h : BigStep σ s r) (hm : m.agrees
     · exact BigStep.callStmt hlook
         (by rw [Expr.copyPropList_mapM_eval m _ _ hm]; exact hargs)
         hparams hframe hbody hpop
-    · intro σ' heq; cases heq; exact CopyMap.agrees_empty _
+    · intro σ' _; exact CopyMap.agrees_empty _
   | scope hargs hlen hframe hbody hpop ih_body =>
     simp only [Stmt.copyProp]
     constructor
@@ -384,7 +417,7 @@ theorem Stmt.copyProp_correct' (m : CopyMap) (h : BigStep σ s r) (hm : m.agrees
         hlen hframe
         ((ih_body {} (CopyMap.agrees_empty _)).1)
         hpop
-    · intro σ' heq; cases heq; exact CopyMap.agrees_empty _
+    · intro σ' _; exact CopyMap.agrees_empty _
 
 /-- Copy propagation preserves big-step semantics. -/
 theorem Stmt.copyProp_correct (h : BigStep σ s r) :

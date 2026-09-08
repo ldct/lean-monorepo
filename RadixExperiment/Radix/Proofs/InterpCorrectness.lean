@@ -30,6 +30,12 @@ namespace Radix
 @[simp] def StmtResult.retVal : StmtResult → Option Value
   | .normal _ => none
   | .returned v _ => some v
+  | .rejected _ => none
+
+@[simp] def StmtResult.outcome : StmtResult → Except InterpError (Option Value)
+  | .normal _ => .ok none
+  | .returned v _ => .ok (some v)
+  | .rejected _ => .error .rejected
 
 @[simp] theorem evalExpr_ok {e : Expr} {σ : PState} {v : Value}
     (h : e.eval σ = some v) : evalExpr e σ = .ok v := by
@@ -77,7 +83,7 @@ theorem mkFrame_ok {params : List (String × Ty)} {vs : List Value} {frame : Fra
 @[simp] theorem andThen_ok_some {v : Value} {σ' : PState} {k : PState → InterpResult} :
     andThen (.ok (some v), σ') k = (.ok (some v), σ') := rfl
 
-@[simp] theorem andThen_error {e : String} {σ' : PState} {k : PState → InterpResult} :
+@[simp] theorem andThen_error {e : InterpError} {σ' : PState} {k : PState → InterpResult} :
     andThen (.error e, σ') k = (.error e, σ') := rfl
 
 @[simp] theorem evalExpr_ok' {e : Expr} {σ : PState} {v : Value}
@@ -125,96 +131,34 @@ theorem mkFrame_ok' {params : List (String × Ty)} {vs : List Value} {frame : Fr
 
 /-! ## Fuel monotonicity -/
 
-/-- If `interp` succeeds with fuel `n`, it succeeds with the same result with
-any `m ≥ n`. -/
-theorem Stmt.interp_fuel_mono {n m : Nat} (h : n ≤ m)
-    {s : Stmt} {σ σ' : PState} {rv : Option Value}
-    (hok : s.interp n σ = (.ok rv, σ')) :
-    s.interp m σ = (.ok rv, σ') := by
-  induction n generalizing m s σ σ' rv with
-  | zero => simp [Stmt.interp] at hok
+ theorem Stmt.interp_mono {n m : Nat} (hle : n ≤ m)
+    {s : Stmt} {σ σ' : PState} {out : Except InterpError (Option Value)}
+    (hterm : out ≠ .error .fuelExhausted)
+    (h : s.interp n σ = (out, σ')) : s.interp m σ = (out, σ') := by
+  induction n generalizing m s σ σ' out with
+  | zero => simp [Stmt.interp] at h; grind
   | succ n ih =>
-    obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_le h
+    obtain ⟨m, rfl⟩ := Nat.exists_eq_add_of_le hle
     simp only [Nat.succ_add]
-    unfold Stmt.interp at hok ⊢
-    split at hok
-    · -- skip
-      exact hok
-    · -- assign
-      simp_all
-    · -- decl
-      simp_all
-    · -- seq
-      rename_i s₁ s₂
-      simp only [andThen] at hok ⊢
-      split at hok
-      · rename_i σ₂ h₁
-        rw [ih (Nat.le_add_right n m) h₁]
-        exact ih (Nat.le_add_right n m) hok
-      · rename_i v σ₂ h₁
-        rw [ih (Nat.le_add_right n m) h₁]
-        exact hok
-      · simp at hok
-    · -- ite
-      split at hok <;> simp_all
-      · exact ih (Nat.le_add_right n m) hok
-      · exact ih (Nat.le_add_right n m) hok
-    · -- while
-      split at hok <;> simp_all
-      · simp only [andThen] at hok ⊢
-        split at hok
-        · rename_i σ₂ hb
-          rw [ih (Nat.le_add_right n m) hb]
-          exact ih (Nat.le_add_right n m) hok
-        · rename_i v σ₂ hb
-          rw [ih (Nat.le_add_right n m) hb]
-          exact hok
-        · simp at hok
-    · -- alloc
-      split at hok <;> simp_all
-    · -- free
-      split at hok <;> simp_all
-    · -- arrSet
-      split at hok <;> simp_all
-    · -- ret
-      split at hok <;> simp_all
-    · -- block
-      exact ih (Nat.le_add_right n m) hok
-    · -- callStmt
-      rename_i name args
-      simp only [] at hok ⊢
-      split at hok
-      · exact hok
-      · rename_i fd hlook
-        split at hok
-        · exact hok
-        · rename_i vs hargs
-          split at hok
-          · exact hok
-          · rename_i frame hmk
-            match hb : Stmt.interp n fd.body (σ.pushFrame frame) with
-            | (.error msg, σ₂) =>
-              rw [hb] at hok; simp at hok
-            | (.ok rv₂, σ₂) =>
-              rw [ih (Nat.le_add_right n m) hb]
-              rw [hb] at hok
-              exact hok
-    · -- scope
-      rename_i params args₂ body
-      simp only [] at hok ⊢
-      split at hok
-      · exact hok
-      · rename_i vs hargs
-        split at hok
-        · exact hok
-        · rename_i frame hmk
-          match hb : Stmt.interp n body (σ.pushFrame frame) with
-          | (.error msg, σ₂) =>
-            rw [hb] at hok; simp at hok
-          | (.ok rv₂, σ₂) =>
-            rw [ih (Nat.le_add_right n m) hb]
-            rw [hb] at hok
-            exact hok
+    have ih := @ih (n + m) (Nat.le_add_right n m)
+    cases s <;> simp only [Stmt.interp] at h ⊢
+    all_goals
+      try simp only [andThen] at h ⊢
+      repeat' (split at h <;> (try simp_all))
+      all_goals try simp_all
+      all_goals try
+        have hm := ih (out := .error .rejected) (by simp) (by assumption)
+        simp_all
+      all_goals grind only
+
+
+theorem Stmt.interp_fuel_mono {n m : Nat} (hle : n ≤ m)
+    {s : Stmt} {σ σ' : PState} {rv : Option Value}
+    (h : s.interp n σ = (.ok rv, σ')) : s.interp m σ = (.ok rv, σ') :=
+  interp_mono hle (by simp) h
+
+@[simp] theorem StmtResult.outcome_not_fuel (r : StmtResult) :
+    r.outcome ≠ .error .fuelExhausted := by cases r <;> simp
 
 /-! ## Completeness -/
 
@@ -223,35 +167,35 @@ corresponding result. -/
 theorem Stmt.interp_complete
     {σ : PState} {s : Stmt} {r : StmtResult}
     (h : BigStep σ s r) :
-    ∃ fuel : Nat, s.interp fuel σ = (.ok r.retVal, r.state) := by
+    ∃ fuel : Nat, s.interp fuel σ = (r.outcome, r.state) := by
   induction h with
   | skip =>
     refine ⟨1, ?_⟩
     unfold Stmt.interp
-    simp [StmtResult.retVal, StmtResult.state]
+    simp [StmtResult.outcome, StmtResult.state]
 
   | assign he hs =>
     refine ⟨1, ?_⟩
     unfold Stmt.interp
-    simp [StmtResult.retVal, StmtResult.state, evalExpr, he, hs]
+    simp [StmtResult.outcome, StmtResult.state, evalExpr, he, hs]
 
   | decl he hs =>
     refine ⟨1, ?_⟩
     unfold Stmt.interp
-    simp [StmtResult.retVal, StmtResult.state, evalExpr, he, hs]
+    simp [StmtResult.outcome, StmtResult.state, evalExpr, he, hs]
 
   | seqNormal h₁ h₂ ih₁ ih₂ =>
     obtain ⟨n₁, hn₁⟩ := ih₁
     obtain ⟨n₂, hn₂⟩ := ih₂
-    simp only [StmtResult.retVal, StmtResult.state] at hn₁
+    simp only [StmtResult.outcome, StmtResult.state] at hn₁
     refine ⟨max n₁ n₂ + 1, ?_⟩
     unfold Stmt.interp; simp only [andThen]
-    rw [interp_fuel_mono (Nat.le_max_left n₁ n₂) hn₁]
-    exact interp_fuel_mono (Nat.le_max_right n₁ n₂) hn₂
+    rw [interp_mono (Nat.le_max_left n₁ n₂) (by simp) hn₁]
+    exact interp_mono (Nat.le_max_right n₁ n₂) (StmtResult.outcome_not_fuel _) hn₂
 
   | seqReturn h₁ ih₁ =>
     obtain ⟨n₁, hn₁⟩ := ih₁
-    simp only [StmtResult.retVal, StmtResult.state] at hn₁ ⊢
+    simp only [StmtResult.outcome, StmtResult.state] at hn₁ ⊢
     refine ⟨n₁ + 1, ?_⟩
     unfold Stmt.interp; simp only [andThen]
     rw [interp_fuel_mono (Nat.le_refl n₁) hn₁]
@@ -271,16 +215,16 @@ theorem Stmt.interp_complete
   | whileTrue hc hb hw ihb ihw =>
     obtain ⟨nb, hnb⟩ := ihb
     obtain ⟨nw, hnw⟩ := ihw
-    simp only [StmtResult.retVal, StmtResult.state] at hnb
+    simp only [StmtResult.outcome, StmtResult.state] at hnb
     refine ⟨max nb nw + 1, ?_⟩
     unfold Stmt.interp
     simp only [evalExpr, hc, andThen]
     rw [interp_fuel_mono (Nat.le_max_left nb nw) hnb]
-    exact interp_fuel_mono (Nat.le_max_right nb nw) hnw
+    exact interp_mono (Nat.le_max_right nb nw) (StmtResult.outcome_not_fuel _) hnw
 
   | whileReturn hc hb ihb =>
     obtain ⟨nb, hnb⟩ := ihb
-    simp only [StmtResult.retVal, StmtResult.state] at hnb ⊢
+    simp only [StmtResult.outcome, StmtResult.state] at hnb ⊢
     refine ⟨nb + 1, ?_⟩
     unfold Stmt.interp
     simp only [evalExpr, hc, andThen]
@@ -289,45 +233,58 @@ theorem Stmt.interp_complete
   | whileFalse hc =>
     refine ⟨1, ?_⟩
     unfold Stmt.interp
-    simp [StmtResult.retVal, StmtResult.state, evalExpr, hc]
+    simp [StmtResult.outcome, StmtResult.state, evalExpr, hc]
 
   | alloc hsz ha hs =>
     refine ⟨1, ?_⟩
     unfold Stmt.interp
-    simp [StmtResult.retVal, StmtResult.state, evalExpr, hsz, ha, hs]
+    simp [StmtResult.outcome, StmtResult.state, evalExpr, hsz, ha, hs]
 
-  | free he hf =>
-    refine ⟨1, ?_⟩
-    unfold Stmt.interp
-    simp [StmtResult.retVal, StmtResult.state, evalExpr, he, hf]
+  | reject => exact ⟨1, by simp [Stmt.interp, StmtResult.state]⟩
+  | readU64 hr hs =>
+    exact ⟨1, by simp [Stmt.interp, hr, hs, StmtResult.state]⟩
+  | readReject hr =>
+    exact ⟨1, by simp [Stmt.interp, hr, StmtResult.state]⟩
+  | writeU64 he =>
+    exact ⟨1, by simp [Stmt.interp, evalExpr, he, StmtResult.state]⟩
+  | writeText => exact ⟨1, by simp [Stmt.interp, StmtResult.state]⟩
+  | expectEof he => exact ⟨1, by simp [Stmt.interp, he, StmtResult.state]⟩
+  | eofReject he => exact ⟨1, by simp [Stmt.interp, he, StmtResult.state]⟩
+  | seqReject h ih =>
+    obtain ⟨n, hn⟩ := ih
+    exact ⟨n + 1, by simp [Stmt.interp, hn, andThen, StmtResult.state]⟩
+  | whileReject hc h ih =>
+    obtain ⟨n, hn⟩ := ih
+    exact ⟨n + 1, by simp [Stmt.interp, evalExpr, hc, hn, andThen, StmtResult.state]⟩
 
   | arrSet harr hidx hval hw =>
     refine ⟨1, ?_⟩
     unfold Stmt.interp
-    simp [StmtResult.retVal, StmtResult.state, evalExpr, harr, hidx, hval, hw]
+    simp [StmtResult.outcome, StmtResult.state, evalExpr, harr, hidx, hval, hw]
 
   | ret he =>
     refine ⟨1, ?_⟩
     unfold Stmt.interp
-    simp [StmtResult.retVal, StmtResult.state, evalExpr, he]
+    simp [StmtResult.outcome, StmtResult.state, evalExpr, he]
 
   | block hb ihb =>
     obtain ⟨n, hn⟩ := ihb
     exact ⟨n + 1, by unfold Stmt.interp; exact hn⟩
 
-  | callStmt hlook hargs hparams hframe hbody hpop ihbody =>
+  | @callStmt fd vs frame bodyResult fr σ' σ name args hlook hargs hparams hframe hbody hpop ihbody =>
     obtain ⟨nb, hnb⟩ := ihbody
     refine ⟨nb + 1, ?_⟩
     unfold Stmt.interp; simp only [hlook, evalArgs_ok hargs, mkFrame_ok hparams hframe]
-    rw [interp_fuel_mono (Nat.le_refl nb) hnb]
-    simp_all [StmtResult.state]
+    rw [hnb]
+    cases bodyResult <;> simp_all [StmtResult.state, StmtResult.afterCall]
 
-  | scope hargs hlen hframe hbody hpop ihbody =>
+  | @scope vs frame body bodyResult fr σ' σ params args hargs hlen hframe hbody hpop ihbody =>
     obtain ⟨nb, hnb⟩ := ihbody
     refine ⟨nb + 1, ?_⟩
     unfold Stmt.interp; simp only [evalArgs_ok hargs, mkFrame_ok hlen hframe]
-    rw [interp_fuel_mono (Nat.le_refl nb) hnb]
-    simp_all [StmtResult.state]
+    rw [hnb]
+    cases bodyResult <;> simp_all [StmtResult.state, StmtResult.afterCall]
+
 
 /-! ## Soundness -/
 
@@ -417,16 +374,33 @@ theorem Stmt.interp_sound {fuel : Nat} {s : Stmt} {σ σ' : PState} {rv : Option
           exact .alloc (evalExpr_ok' hsz) rfl hs
         · simp at h
       · simp at h
-    | .free e =>
+    | .reject => simp at h
+    | .readU64 x =>
       simp only [] at h
       split at h
       · simp at h
-      · rename_i a he
+      · rename_i n hr
         split at h
-        · rename_i heap' hf
+        · rename_i σ₂ hs
           simp at h; obtain ⟨rfl, rfl⟩ := h
-          exact .free (evalExpr_ok' he) hf
+          exact .readU64 (by cases hh : ByteIO.readU64 σ.input σ.cursor; simp_all) hs
         · simp at h
+    | .writeU64 e =>
+      simp only [] at h
+      split at h
+      · rename_i n he
+        simp at h; obtain ⟨rfl, rfl⟩ := h
+        exact .writeU64 (evalExpr_ok' he)
+      · simp at h
+    | .writeText text =>
+      simp at h; obtain ⟨rfl, rfl⟩ := h
+      exact .writeText
+    | .expectEof =>
+      simp only [] at h
+      split at h
+      · rename_i he
+        simp at h; obtain ⟨rfl, rfl⟩ := h
+        simpa [he] using (BigStep.expectEof (σ := σ) he)
       · simp at h
     | .arrSet arr idx val =>
       simp only [] at h
@@ -460,7 +434,7 @@ theorem Stmt.interp_sound {fuel : Nat} {s : Stmt} {σ σ' : PState} {rv : Option
             obtain ⟨hlen, hframe⟩ := mkFrame_ok' hmk
             match hbody : Stmt.interp n fd.body (σ.pushFrame frame) with
             | (.error msg, σ₂) =>
-              rw [hbody] at h; simp at h
+              rw [hbody] at h; simp only [] at h; split at h <;> simp_all
             | (.ok rv₂, σ₂) =>
               rw [hbody] at h
               match hpop : σ₂.popFrame with
@@ -468,7 +442,8 @@ theorem Stmt.interp_sound {fuel : Nat} {s : Stmt} {σ σ' : PState} {rv : Option
                 simp [hpop] at h; obtain ⟨rfl, rfl⟩ := h
                 have hpop' : (toStmtResult rv₂ σ₂).state.popFrame = some (fr, σ₃) := by
                   cases rv₂ <;> exact hpop
-                exact .callStmt hlook (evalArgs_ok' hargs) hlen hframe (ih hbody) hpop'
+                have hb := BigStep.callStmt hlook (evalArgs_ok' hargs) hlen hframe (ih hbody) hpop'
+                cases rv₂ <;> exact hb
               | none =>
                 simp [hpop] at h
     | .scope params args body =>
@@ -482,7 +457,7 @@ theorem Stmt.interp_sound {fuel : Nat} {s : Stmt} {σ σ' : PState} {rv : Option
           obtain ⟨hlen, hframe⟩ := mkFrame_ok' hmk
           match hbody : Stmt.interp n body (σ.pushFrame frame) with
           | (.error msg, σ₂) =>
-            rw [hbody] at h; simp at h
+            rw [hbody] at h; simp only [] at h; split at h <;> simp_all
           | (.ok rv₂, σ₂) =>
             rw [hbody] at h
             match hpop : σ₂.popFrame with
@@ -490,8 +465,10 @@ theorem Stmt.interp_sound {fuel : Nat} {s : Stmt} {σ σ' : PState} {rv : Option
               simp [hpop] at h; obtain ⟨rfl, rfl⟩ := h
               have hpop' : (toStmtResult rv₂ σ₂).state.popFrame = some (fr, σ₃) := by
                 cases rv₂ <;> exact hpop
-              exact .scope (evalArgs_ok' hargs) hlen hframe (ih hbody) hpop'
+              have hb := BigStep.scope (evalArgs_ok' hargs) hlen hframe (ih hbody) hpop'
+              cases rv₂ <;> exact hb
             | none =>
               simp [hpop] at h
+
 
 end Radix

@@ -35,9 +35,12 @@ import Radix.Proofs.Determinism
 import Radix.Proofs.TypeSafety
 import Radix.Proofs.MemorySafety
 import Radix.Proofs.InterpCorrectness
+import Radix.Proofs.Hoare
+import Radix.Proofs.Refinement
+import Radix.Proofs.RejectionSoundness
+import Radix.Proofs.ControlFlow
+import Radix.Proofs.BlockComposition
 
--- Linear ownership typing
-import Radix.Linear
 
 -- Examples
 import Radix.Examples
@@ -48,20 +51,24 @@ import Radix.Tests.Functions
 import Radix.Tests.Arrays
 import Radix.Tests.Strings
 import Radix.Tests.Opt
-import Radix.Tests.Linear
+import Radix.Tests.IO
+import Radix.Tests.Cpp
+import Radix.Tests.CppCorrespondence
+
+-- Exact-source benchmark and its whole-program refinement proof
+import Radix.Benchmarks.ABC177CRefinement
 
 /-! # Radix: A Verified Embedded Imperative DSL
 
 Radix is an imperative DSL embedded in Lean 4 with:
 - **Types**: `uint64`, `bool`, `string`, `unit`, heap-allocated `array α`
 - **Control flow**: `if/else`, `while`, `return`, function calls with frame isolation
-- **Dynamic memory**: `alloc`, `free`, bounds-checked array access
+- **Dynamic memory**: persistent `alloc`, bounds-checked array access
 - **Two semantics**: relational big-step (`BigStep`) and executable fuel-based (`Stmt.interp`)
 - **Verified optimizations**: constant folding, dead code elimination, copy propagation,
   constant propagation, function inlining -- each with a mechanized proof that it
   preserves big-step semantics
-- **Formal properties**: determinism, type preservation, memory safety (no use-after-free,
-  no double-free), linear ownership typing with soundness proof
+- **Formal properties**: determinism, type preservation, bounds-checked memory access and persistent allocations
 - **Concrete syntax**: `\`[RExpr| ...]` and `\`[RStmt| ...]` macros for natural notation
 
 The architecture follows a classic compiler pipeline: AST -> type check -> optimize -> interpret.

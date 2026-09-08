@@ -466,4 +466,46 @@ def test_cf_scope_args :=
   | Stmt.scope _ [Expr.lit (Value.uint64 3)] _ => true
   | _ => false
 
+/-! ## Stream effects and short-circuit regressions -/
+
+private def streamProgram : Stmt :=
+  .assign "x" (.lit (.uint64 7)) ;;
+  .assign "y" (.var "x") ;;
+  .readU64 "x" ;;
+  .writeU64 (.var "x") ;;
+  .writeText ":" ;;
+  .writeU64 (.var "y") ;;
+  .expectEof
+
+private def emits (s : Stmt) (expected : String) : Bool :=
+  let (result, state) := s.interp 100 { input := "42 ".toUTF8 }
+  result.isOk && state.output == expected.toUTF8 && state.cursor == 3
+
+#guard emits streamProgram "42:7"
+#guard emits streamProgram.constFold "42:7"
+#guard emits streamProgram.constPropagation "42:7"
+#guard emits streamProgram.copyPropagation "42:7"
+#guard emits streamProgram.deadCodeElim "42:7"
+
+private def failingBool : Expr :=
+  .binop .eq (.binop .div (.lit (.uint64 1)) (.lit (.uint64 0))) (.lit (.uint64 0))
+
+#guard (Expr.binop .and (.lit (.bool false)) failingBool).constFold.eval {} == some (.bool false)
+#guard (Expr.binop .or (.lit (.bool true)) failingBool).constFold.eval {} == some (.bool true)
+
+private def inlineRejected : Bool :=
+  let fd : FunDecl :=
+    { name := "stop"
+      params := List.nil
+      retTy := Ty.unit
+      body := Stmt.writeText "prefix" ;; Stmt.reject }
+  let funs := ({} : Std.HashMap String FunDecl).insert "stop" fd
+  let s := (.callStmt "stop" List.nil ;; .writeText "unreachable").inline funs 1
+  let (result, state) := s.interp 100 { funs }
+  match result with
+  | .error .rejected => state.output == "prefix".toUTF8
+  | _ => false
+
+#guard inlineRejected
+
 end Radix.Tests

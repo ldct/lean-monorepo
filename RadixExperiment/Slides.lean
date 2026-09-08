@@ -29,12 +29,12 @@ Lean FRO | March 2026
 
 10 AI agents built a *verified embedded DSL* with proved optimizations in *a single weekend*.
 
-- Zero `sorry` — 52 theorems, all complete
+- Kernel-checked semantic and optimization proofs without `sorry`
 - 5 verified compiler optimizations
 - Determinism, type safety, memory safety — all proved
-- Linear ownership typing with soundness proof
+- Persistent allocations with ordinary array aliases
 - Interpreter correctness — sound and complete
-- 27 modules, ~7,400 lines of Lean
+- Explicit rejection, byte I/O, and a checked C++ subset frontend
 
 # Lessons Learned
 
@@ -52,7 +52,7 @@ Lean FRO | March 2026
 open Radix
 ```
 
-Agents write Radix using concrete syntax macros. Verso elaborates every line:
+Internal examples use Radix quotation macros. Verso elaborates every line. Benchmark proofs instead use the exact standalone C++ source files:
 
 ```lean
 def slideBubbleSort := `[RStmt|
@@ -78,13 +78,14 @@ def slideBubbleSort := `[RStmt|
 ]
 ```
 
-# Big-Step Semantics — 16 Rules
+# Big-Step Semantics — Explicit Outcomes
 
 ```lean
 -- Big-step: ⟨σ, s⟩ ⇓ r
--- 16 rules: skip, assign, decl, seqNormal, seqReturn,
--- ifTrue, ifFalse, whileTrue, whileReturn, whileFalse,
--- alloc, free, arrSet, ret, block, callStmt, scope
+-- Normal completion, return, and rejection are distinct.
+-- Sequences and loops propagate early return and rejection.
+-- Calls share heap and streams.
+-- Rejection crosses call boundaries.
 example : BigStep σ .skip (.normal σ) :=
   BigStep.skip
 example (he : e.eval σ = some v)
@@ -106,7 +107,7 @@ example (hc : e.eval σ₁ = some (.bool true))
 
 ```lean
 -- Same state + same statement → same result
--- 80-line proof by induction on h₁
+-- Proof by induction on h₁
 -- grind closes equational contradictions
 example (h₁ : BigStep σ s r₁)
     (h₂ : BigStep σ s r₂) : r₁ = r₂ :=
@@ -120,10 +121,10 @@ In the real proof: `cases h₂ with | assign => grind` handles equational cases.
 A fuel-based interpreter (`Stmt.interp`) proved equivalent to the relational semantics in both directions:
 
 ```lean
--- Completeness: BigStep implies interp succeeds
+-- Completeness includes all three statement outcomes.
 example (h : BigStep σ s r) :
     ∃ fuel, s.interp fuel σ =
-      (.ok r.retVal, r.state) :=
+      (r.outcome, r.state) :=
   Stmt.interp_complete h
 -- Soundness: interp success implies BigStep
 example (h : s.interp fuel σ = (.ok rv, σ')) :
@@ -131,7 +132,7 @@ example (h : s.interp fuel σ = (.ok rv, σ')) :
   Stmt.interp_sound h
 ```
 
-The relational semantics is the spec. The interpreter is the implementation. These two theorems say they agree exactly.
+The relational semantics has no fuel. The interpreter distinguishes successful completion, explicit rejection, runtime faults, and inconclusive fuel exhaustion. Soundness and completeness connect complete executions.
 
 # Verified Optimizations — 5 Passes, 0 Sorry
 
@@ -163,44 +164,11 @@ example (h : BigStep σ s r) (hf : σ.funs = funs) :
 
 *Inline:* rewrites `callStmt` into `scope` (frame-isolated body), bounded depth, non-recursive only. Proves function table invariant preserved through execution.
 
-# Linear Ownership — Soundness
+# Persistent Allocations
 
-```lean
--- LinearOk O s O' : owned-set O → stmt s → owned-set O'
--- 13 rules. Key ones:
-example : LinearOk O .skip O :=
-  LinearOk.skip
-example (h : x ∉ O) :
-    LinearOk O (.alloc x ty sz) (O.insert x) :=
-  LinearOk.alloc h
-example (h : x ∈ O) :
-    LinearOk O (.free (.var x)) (O.erase x) :=
-  LinearOk.free h
-example (h₁ : LinearOk O s₁ O')
-    (h₂ : LinearOk O' s₂ O'') :
-    LinearOk O (s₁ ;; s₂) O'' :=
-  LinearOk.seq h₁ h₂
-```
+Arrays remain allocated until the execution ends. Copying an array reference preserves its identity, and aliases observe shared writes. Array access remains bounds checked.
 
-# Linear Ownership — The Real Invariant
-
-The soundness proof (644 lines) maintains `OwnershipInv` — a three-part invariant:
-
-- *(1) Heap well-formed:* all stored addresses < `nextAddr`
-- *(2) Liveness:* every owned variable holds a live heap address
-- *(3) Distinctness:* different owned variables hold different addresses
-
-```lean
--- Soundness: OwnershipInv preserved through execution
-example (hlin : LinearOk O s O')
-    (hstep : BigStep σ s (.normal σ'))
-    (hinv : OwnershipInv σ O)
-    (hwt : WellTypedFuns σ.funs) :
-    OwnershipInv σ' O' :=
-  LinearOk.soundness hlin hstep hinv hwt
-```
-
-Proved by induction on BigStep — every rule preserves all three parts. The `alloc` case uses `Heap.alloc_fresh` for distinctness. The `free` case uses `Heap.free_preserves_ne`.
+There is no deallocation or ownership checker in the source language.
 
 # The 10 Agents
 

@@ -103,6 +103,21 @@ private theorem UnaryOp.resultTag_sound (op : UnaryOp) (v r : Value) (tag : ValT
   cases op <;> cases v <;> simp [UnaryOp.eval, UnaryOp.resultTag, Value.tag] at htag heval ⊢ <;>
     subst_vars <;> rfl
 
+private theorem BinOp.resultTag_lazy_sound (op : BinOp) (vl v : Value)
+    (rhs : Option Value) (tr tag : ValTag)
+    (htag : op.resultTag vl.tag tr = some tag)
+    (hr : ∀ vr, rhs = some vr → vr.tag = tr)
+    (heval : op.evalLazy vl rhs = some v) : v.tag = tag := by
+  unfold BinOp.evalLazy at heval
+  split at heval
+  · cases tr <;> simp_all [BinOp.resultTag, Value.tag] <;> subst_vars <;> rfl
+  · cases tr <;> simp_all [BinOp.resultTag, Value.tag] <;> subst_vars <;> rfl
+  · cases rhs with
+    | none => simp at heval
+    | some vr =>
+      simp only [Option.bind_some] at heval
+      exact BinOp.resultTag_sound op vl vr v tag (by rw [hr vr rfl]; exact htag) heval
+
 theorem Expr.inferTag_sound : ∀ (e : Expr) (σ : PState) (tag : ValTag) (v : Value),
     e.inferTag = some tag → e.eval σ = some v → v.tag = tag
   | .lit _, _, _, v, htag, heval => by
@@ -117,19 +132,16 @@ theorem Expr.inferTag_sound : ∀ (e : Expr) (σ : PState) (tag : ValTag) (v : V
       cases htr : r.inferTag with
       | none => simp
       | some tr =>
-        simp; intro hrt
+        intro hrt
         simp only [Expr.eval] at heval
-        revert heval
         cases hl : l.eval σ with
-        | none => simp
+        | none => simp [hl] at heval
         | some vl =>
-          cases hr : r.eval σ with
-          | none => simp
-          | some vr =>
-            simp; intro hev
-            exact BinOp.resultTag_sound op vl vr v tag
-              (by rw [inferTag_sound l σ tl vl htl hl,
-                      inferTag_sound r σ tr vr htr hr]; exact hrt) hev
+          simp only [hl, bind, Option.bind_some] at heval
+          apply BinOp.resultTag_lazy_sound op vl v (r.eval σ) tr tag
+          · rw [inferTag_sound l σ tl vl htl hl]; exact hrt
+          · intro vr hr; exact inferTag_sound r σ tr vr htr hr
+          · exact heval
   | .unop op e, σ, tag, v, htag, heval => by
     unfold inferTag at htag
     revert htag
@@ -223,8 +235,9 @@ for `+`, `1` for `*`, `true` for `&&`, `false` for `||`, `""` for `++`),
 and `Expr.inferTag` confirms the other operand has the correct type tag,
 simplify to the other operand.
 
-Note: absorb rules (`e * 0 → 0`, `false && e → false`, `true || e → true`)
-are intentionally omitted because they are unsound when `e.eval σ = none`. -/
+The arithmetic absorb rule `e * 0 → 0` is intentionally omitted because
+it changes failure behavior. Short-circuit boolean absorb rules are valid,
+but this pass conservatively retains them. -/
 def BinOp.simplify : BinOp → Expr → Expr → Expr
   -- Pure constant folding (both literals)
   | .add, .lit (.uint64 a), .lit (.uint64 b) => .lit (.uint64 (a + b))
@@ -287,6 +300,11 @@ def Expr.constFoldList (es : List Expr) : List Expr :=
 mutual
 def Stmt.constFold : Stmt → Stmt
   | .skip => .skip
+  | .reject => .reject
+  | .readU64 x => .readU64 x
+  | .writeU64 e => .writeU64 e.constFold
+  | .writeText t => .writeText t
+  | .expectEof => .expectEof
   | .assign x e => .assign x (Expr.constFold e)
   | .seq s₁ s₂ => .seq s₁.constFold s₂.constFold
   | .ite c t f =>
@@ -300,7 +318,6 @@ def Stmt.constFold : Stmt → Stmt
     | c' => .while c' b.constFold
   | .decl x ty e => .decl x ty (Expr.constFold e)
   | .alloc x ty sz => .alloc x ty (Expr.constFold sz)
-  | .free e => .free (Expr.constFold e)
   | .arrSet arr idx val =>
     .arrSet (Expr.constFold arr) (Expr.constFold idx) (Expr.constFold val)
   | .ret e => .ret (Expr.constFold e)
@@ -342,24 +359,24 @@ private theorem mul_one_left (e : Expr) (σ : PState) (htag : e.inferTag = some 
   obtain ⟨n, rfl⟩ := eval_uint64_of_inferTag e σ v htag hev; simp [BinOp.eval]
 
 private theorem and_true_left (e : Expr) (σ : PState) (htag : e.inferTag = some .bool) :
-    e.eval σ = (e.eval σ).bind (fun vr => BinOp.eval .and (.bool true) vr) := by
+    e.eval σ = BinOp.evalLazy .and (.bool true) (e.eval σ) := by
   cases hev : e.eval σ with | none => simp | some v =>
-  obtain ⟨b, rfl⟩ := eval_bool_of_inferTag e σ v htag hev; simp [BinOp.eval]
+  obtain ⟨b, rfl⟩ := eval_bool_of_inferTag e σ v htag hev; cases b <;> simp [BinOp.eval]
 
 private theorem and_true_right (e : Expr) (σ : PState) (htag : e.inferTag = some .bool) :
-    e.eval σ = (e.eval σ).bind (fun vl => BinOp.eval .and vl (.bool true)) := by
+    e.eval σ = (e.eval σ).bind (fun vl => BinOp.evalLazy .and vl (some (.bool true))) := by
   cases hev : e.eval σ with | none => simp | some v =>
-  obtain ⟨b, rfl⟩ := eval_bool_of_inferTag e σ v htag hev; simp [BinOp.eval]
+  obtain ⟨b, rfl⟩ := eval_bool_of_inferTag e σ v htag hev; cases b <;> simp [BinOp.eval]
 
 private theorem or_false_left (e : Expr) (σ : PState) (htag : e.inferTag = some .bool) :
-    e.eval σ = (e.eval σ).bind (fun vr => BinOp.eval .or (.bool false) vr) := by
+    e.eval σ = BinOp.evalLazy .or (.bool false) (e.eval σ) := by
   cases hev : e.eval σ with | none => simp | some v =>
-  obtain ⟨b, rfl⟩ := eval_bool_of_inferTag e σ v htag hev; simp [BinOp.eval]
+  obtain ⟨b, rfl⟩ := eval_bool_of_inferTag e σ v htag hev; cases b <;> simp [BinOp.eval]
 
 private theorem or_false_right (e : Expr) (σ : PState) (htag : e.inferTag = some .bool) :
-    e.eval σ = (e.eval σ).bind (fun vl => BinOp.eval .or vl (.bool false)) := by
+    e.eval σ = (e.eval σ).bind (fun vl => BinOp.evalLazy .or vl (some (.bool false))) := by
   cases hev : e.eval σ with | none => simp | some v =>
-  obtain ⟨b, rfl⟩ := eval_bool_of_inferTag e σ v htag hev; simp [BinOp.eval]
+  obtain ⟨b, rfl⟩ := eval_bool_of_inferTag e σ v htag hev; cases b <;> simp [BinOp.eval]
 
 private theorem strAppend_empty_right (e : Expr) (σ : PState) (htag : e.inferTag = some .str) :
     e.eval σ = (e.eval σ).bind (fun vl => BinOp.eval .strAppend vl (.str "")) := by
@@ -379,7 +396,7 @@ private theorem strAppend_empty_left (e : Expr) (σ : PState) (htag : e.inferTag
   split
   -- Each branch: either a constant folding case (closed by simp), a fallthrough
   -- (closed by rfl/simp), or an identity case with if-then-else.
-  <;> first | (simp_all [Expr.eval, BinOp.eval]; done) | skip
+  <;> first | (simp_all [Expr.eval, BinOp.eval]; done) | (rename_i a b; cases a <;> cases b <;> rfl) | skip
   -- Remaining: identity cases with `if inferTag ... then ... else ...`
   all_goals (
     split
@@ -470,6 +487,8 @@ theorem Stmt.constFold_correct (h : BigStep σ s r) : BigStep σ s.constFold r :
     simp only [Stmt.constFold]; exact BigStep.seqNormal ih₁ ih₂
   | seqReturn _ ih₁ =>
     simp only [Stmt.constFold]; exact BigStep.seqReturn ih₁
+  | seqReject _ ih₁ =>
+    simp only [Stmt.constFold]; exact BigStep.seqReject ih₁
   | ifTrue hc _ ih =>
     simp only [Stmt.constFold]
     have hc' := hc; rw [← Expr.eval_constFold] at hc'
@@ -496,6 +515,12 @@ theorem Stmt.constFold_correct (h : BigStep σ s r) : BigStep σ s.constFold r :
     split
     · next heq => rw [heq, Expr.eval] at hc'; cases hc'
     · exact BigStep.whileReturn hc' ihb
+  | whileReject hc _ ihb =>
+    simp only [Stmt.constFold]
+    have hc' := hc; rw [← Expr.eval_constFold] at hc'
+    split
+    · next heq => rw [heq, Expr.eval] at hc'; cases hc'
+    · exact BigStep.whileReject hc' ihb
   | whileFalse hc =>
     simp only [Stmt.constFold]
     have hc' := hc; rw [← Expr.eval_constFold] at hc'
@@ -505,9 +530,27 @@ theorem Stmt.constFold_correct (h : BigStep σ s r) : BigStep σ s.constFold r :
   | alloc hsz ha hs =>
     simp only [Stmt.constFold]
     exact BigStep.alloc (by simp [Expr.eval_constFold, hsz]) ha hs
-  | free he hf =>
+  | reject  =>
     simp only [Stmt.constFold]
-    exact BigStep.free (by simp [Expr.eval_constFold, he]) hf
+    exact BigStep.reject
+  | readU64 hr hs =>
+    simp only [Stmt.constFold]
+    exact BigStep.readU64 hr hs
+  | readReject hr =>
+    simp only [Stmt.constFold]
+    exact BigStep.readReject hr
+  | writeU64 he =>
+    simp only [Stmt.constFold]
+    exact BigStep.writeU64 (by simp [Expr.eval_constFold, he])
+  | writeText  =>
+    simp only [Stmt.constFold]
+    exact BigStep.writeText
+  | expectEof he =>
+    simp only [Stmt.constFold]
+    exact BigStep.expectEof he
+  | eofReject he =>
+    simp only [Stmt.constFold]
+    exact BigStep.eofReject he
   | arrSet harr hidx hval hw =>
     simp only [Stmt.constFold]
     exact BigStep.arrSet
