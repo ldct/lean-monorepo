@@ -1,0 +1,528 @@
+{
+  "machine": "macOS-26.5.2-arm64-arm-64bit",
+  "processor": "Apple M5 Max",
+  "memory_bytes": 68719476736,
+  "repeat": 5,
+  "cases": {
+    "import": {
+      "runs": {
+        "stock": [
+          {
+            "wall_s": 8.290969750000002,
+            "cpu_s": 3.7574889999999996,
+            "maxrss_bytes": 5689802752
+          },
+          {
+            "wall_s": 8.522674834,
+            "cpu_s": 3.850899,
+            "maxrss_bytes": 5690163200
+          },
+          {
+            "wall_s": 7.465807791999993,
+            "cpu_s": 3.650791,
+            "maxrss_bytes": 5690638336
+          },
+          {
+            "wall_s": 9.966281832999996,
+            "cpu_s": 4.083257,
+            "maxrss_bytes": 5688950784
+          },
+          {
+            "wall_s": 7.488022833000002,
+            "cpu_s": 3.6735429999999996,
+            "maxrss_bytes": 5689868288
+          }
+        ],
+        "optimized": [
+          {
+            "wall_s": 3.4492486249999956,
+            "cpu_s": 2.585095,
+            "maxrss_bytes": 1706590208
+          },
+          {
+            "wall_s": 2.937967958999998,
+            "cpu_s": 2.520689,
+            "maxrss_bytes": 1705967616
+          },
+          {
+            "wall_s": 2.9914554589999938,
+            "cpu_s": 2.53271,
+            "maxrss_bytes": 1706049536
+          },
+          {
+            "wall_s": 2.9618414170000023,
+            "cpu_s": 2.5304770000000003,
+            "maxrss_bytes": 1706639360
+          },
+          {
+            "wall_s": 3.018939791000008,
+            "cpu_s": 2.586036,
+            "maxrss_bytes": 1706573824
+          }
+        ],
+        "optimized-disabled": [
+          {
+            "wall_s": 8.226939666999996,
+            "cpu_s": 3.801335,
+            "maxrss_bytes": 5291786240
+          },
+          {
+            "wall_s": 7.750895708000002,
+            "cpu_s": 3.7923590000000003,
+            "maxrss_bytes": 5292818432
+          },
+          {
+            "wall_s": 8.835488458,
+            "cpu_s": 3.932117,
+            "maxrss_bytes": 5291950080
+          },
+          {
+            "wall_s": 7.717279292000001,
+            "cpu_s": 3.721242,
+            "maxrss_bytes": 5291999232
+          },
+          {
+            "wall_s": 8.610579915999992,
+            "cpu_s": 3.924371,
+            "maxrss_bytes": 5292228608
+          }
+        ]
+      },
+      "medians": {
+        "stock": {
+          "wall_s": 8.290969750000002,
+          "cpu_s": 3.7574889999999996,
+          "maxrss_bytes": 5689868288
+        },
+        "optimized": {
+          "wall_s": 2.9914554589999938,
+          "cpu_s": 2.53271,
+          "maxrss_bytes": 1706573824
+        },
+        "optimized-disabled": {
+          "wall_s": 8.226939666999996,
+          "cpu_s": 3.801335,
+          "maxrss_bytes": 5291999232
+        }
+      },
+      "diagnostics_identical": true
+    },
+    "exact": {
+      "runs": {
+        "stock": [
+          {
+            "wall_s": 13.513016499999992,
+            "cpu_s": 37.319779000000004,
+            "maxrss_bytes": 7908474880
+          },
+          {
+            "wall_s": 13.671309916999974,
+            "cpu_s": 41.707173,
+            "maxrss_bytes": 7906312192
+          },
+          {
+            "wall_s": 11.665096667,
+            "cpu_s": 42.471016000000006,
+            "maxrss_bytes": 7868923904
+          },
+          {
+            "wall_s": 14.281565416999968,
+            "cpu_s": 42.923737,
+            "maxrss_bytes": 7907966976
+          },
+          {
+            "wall_s": 12.317073999999991,
+            "cpu_s": 36.255319,
+            "maxrss_bytes": 7907295232
+          }
+        ],
+        "optimized": [
+          {
+            "wall_s": 5.204047875000015,
+            "cpu_s": 21.498192,
+            "maxrss_bytes": 2555428864
+          },
+          {
+            "wall_s": 4.730541750000015,
+            "cpu_s": 20.468921,
+            "maxrss_bytes": 2761555968
+          },
+          {
+            "wall_s": 5.3865963750000105,
+            "cpu_s": 21.085144,
+            "maxrss_bytes": 2761850880
+          },
+          {
+            "wall_s": 4.6062697080000135,
+            "cpu_s": 19.59189,
+            "maxrss_bytes": 2762276864
+          },
+          {
+            "wall_s": 5.355840000000001,
+            "cpu_s": 21.136199,
+            "maxrss_bytes": 2761981952
+          }
+        ],
+        "optimized-disabled": [
+          {
+            "wall_s": 11.878368792000003,
+            "cpu_s": 34.375952,
+            "maxrss_bytes": 7567130624
+          },
+          {
+            "wall_s": 11.512138167000018,
+            "cpu_s": 36.895696,
+            "maxrss_bytes": 7565000704
+          },
+          {
+            "wall_s": 11.932974458000018,
+            "cpu_s": 34.621597,
+            "maxrss_bytes": 7565754368
+          },
+          {
+            "wall_s": 11.439116458,
+            "cpu_s": 37.878704,
+            "maxrss_bytes": 7564869632
+          },
+          {
+            "wall_s": 12.187751708999997,
+            "cpu_s": 35.737906,
+            "maxrss_bytes": 7566213120
+          }
+        ]
+      },
+      "medians": {
+        "stock": {
+          "wall_s": 13.513016499999992,
+          "cpu_s": 41.707173,
+          "maxrss_bytes": 7907295232
+        },
+        "optimized": {
+          "wall_s": 5.204047875000015,
+          "cpu_s": 21.085144,
+          "maxrss_bytes": 2761850880
+        },
+        "optimized-disabled": {
+          "wall_s": 11.878368792000003,
+          "cpu_s": 35.737906,
+          "maxrss_bytes": 7565754368
+        }
+      },
+      "diagnostics_identical": true
+    },
+    "scratch": {
+      "runs": {
+        "stock": [
+          {
+            "wall_s": 11.509085333999963,
+            "cpu_s": 4.842023,
+            "maxrss_bytes": 5661982720
+          },
+          {
+            "wall_s": 10.434782208000001,
+            "cpu_s": 4.054676,
+            "maxrss_bytes": 5709135872
+          },
+          {
+            "wall_s": 7.54123870899997,
+            "cpu_s": 3.7683329999999997,
+            "maxrss_bytes": 5711822848
+          },
+          {
+            "wall_s": 10.170068707999974,
+            "cpu_s": 4.126167000000001,
+            "maxrss_bytes": 5709824000
+          },
+          {
+            "wall_s": 7.437858875000018,
+            "cpu_s": 3.623444,
+            "maxrss_bytes": 5710905344
+          }
+        ],
+        "optimized": [
+          {
+            "wall_s": 4.879695874999982,
+            "cpu_s": 3.0826,
+            "maxrss_bytes": 1752285184
+          },
+          {
+            "wall_s": 2.9187511250000284,
+            "cpu_s": 2.527666,
+            "maxrss_bytes": 1750827008
+          },
+          {
+            "wall_s": 3.475066874999982,
+            "cpu_s": 2.5600199999999997,
+            "maxrss_bytes": 1751252992
+          },
+          {
+            "wall_s": 2.8828885830000104,
+            "cpu_s": 2.47501,
+            "maxrss_bytes": 1751203840
+          },
+          {
+            "wall_s": 4.268246750000003,
+            "cpu_s": 2.809843,
+            "maxrss_bytes": 1749876736
+          }
+        ],
+        "optimized-disabled": [
+          {
+            "wall_s": 9.169671084000015,
+            "cpu_s": 4.217213,
+            "maxrss_bytes": 5315067904
+          },
+          {
+            "wall_s": 7.695175249999977,
+            "cpu_s": 3.741606,
+            "maxrss_bytes": 5315018752
+          },
+          {
+            "wall_s": 9.066258290999997,
+            "cpu_s": 3.9074679999999997,
+            "maxrss_bytes": 5314265088
+          },
+          {
+            "wall_s": 7.721734667000021,
+            "cpu_s": 3.803397,
+            "maxrss_bytes": 5314691072
+          },
+          {
+            "wall_s": 9.923556415999997,
+            "cpu_s": 4.081836,
+            "maxrss_bytes": 5314887680
+          }
+        ]
+      },
+      "medians": {
+        "stock": {
+          "wall_s": 10.170068707999974,
+          "cpu_s": 4.054676,
+          "maxrss_bytes": 5709824000
+        },
+        "optimized": {
+          "wall_s": 3.475066874999982,
+          "cpu_s": 2.5600199999999997,
+          "maxrss_bytes": 1751203840
+        },
+        "optimized-disabled": {
+          "wall_s": 9.066258290999997,
+          "cpu_s": 3.9074679999999997,
+          "maxrss_bytes": 5314887680
+        }
+      },
+      "diagnostics_identical": true
+    },
+    "tactics": {
+      "runs": {
+        "stock": [
+          {
+            "wall_s": 13.541401667000002,
+            "cpu_s": 8.462038,
+            "maxrss_bytes": 5832622080
+          },
+          {
+            "wall_s": 13.866607040999952,
+            "cpu_s": 8.501947,
+            "maxrss_bytes": 5831671808
+          },
+          {
+            "wall_s": 10.840957416000037,
+            "cpu_s": 8.068738,
+            "maxrss_bytes": 5829263360
+          },
+          {
+            "wall_s": 16.013032207999913,
+            "cpu_s": 8.930579,
+            "maxrss_bytes": 5831852032
+          },
+          {
+            "wall_s": 10.807313334000014,
+            "cpu_s": 7.988388,
+            "maxrss_bytes": 5830164480
+          }
+        ],
+        "optimized": [
+          {
+            "wall_s": 7.81683445799996,
+            "cpu_s": 7.959721,
+            "maxrss_bytes": 1692073984
+          },
+          {
+            "wall_s": 7.350662334000049,
+            "cpu_s": 7.974444,
+            "maxrss_bytes": 1876787200
+          },
+          {
+            "wall_s": 8.169280583000045,
+            "cpu_s": 8.110116999999999,
+            "maxrss_bytes": 1876606976
+          },
+          {
+            "wall_s": 7.537244417000011,
+            "cpu_s": 8.164093,
+            "maxrss_bytes": 1870020608
+          },
+          {
+            "wall_s": 8.465382458000022,
+            "cpu_s": 8.277242,
+            "maxrss_bytes": 1842511872
+          }
+        ],
+        "optimized-disabled": [
+          {
+            "wall_s": 12.651053292000029,
+            "cpu_s": 8.551288,
+            "maxrss_bytes": 5433540608
+          },
+          {
+            "wall_s": 11.201483209000003,
+            "cpu_s": 8.297312,
+            "maxrss_bytes": 5430444032
+          },
+          {
+            "wall_s": 12.316827582999963,
+            "cpu_s": 8.547733000000001,
+            "maxrss_bytes": 5432754176
+          },
+          {
+            "wall_s": 13.899757083000054,
+            "cpu_s": 10.001601999999998,
+            "maxrss_bytes": 5430165504
+          },
+          {
+            "wall_s": 12.32773858400003,
+            "cpu_s": 8.531239,
+            "maxrss_bytes": 5433573376
+          }
+        ]
+      },
+      "medians": {
+        "stock": {
+          "wall_s": 13.541401667000002,
+          "cpu_s": 8.462038,
+          "maxrss_bytes": 5831671808
+        },
+        "optimized": {
+          "wall_s": 7.81683445799996,
+          "cpu_s": 8.110116999999999,
+          "maxrss_bytes": 1870020608
+        },
+        "optimized-disabled": {
+          "wall_s": 12.32773858400003,
+          "cpu_s": 8.547733000000001,
+          "maxrss_bytes": 5432754176
+        }
+      },
+      "diagnostics_identical": true
+    },
+    "module": {
+      "runs": {
+        "stock": [
+          {
+            "wall_s": 5.38996874999998,
+            "cpu_s": 2.7305669999999997,
+            "maxrss_bytes": 3277144064
+          },
+          {
+            "wall_s": 5.370018334000065,
+            "cpu_s": 2.720583,
+            "maxrss_bytes": 3277209600
+          },
+          {
+            "wall_s": 5.466792833999989,
+            "cpu_s": 2.7822240000000003,
+            "maxrss_bytes": 3277471744
+          },
+          {
+            "wall_s": 5.344588916000021,
+            "cpu_s": 2.754119,
+            "maxrss_bytes": 3276996608
+          },
+          {
+            "wall_s": 5.34231125000008,
+            "cpu_s": 2.722206,
+            "maxrss_bytes": 3276324864
+          }
+        ],
+        "optimized": [
+          {
+            "wall_s": 3.502999749999958,
+            "cpu_s": 2.518623,
+            "maxrss_bytes": 1960689664
+          },
+          {
+            "wall_s": 3.4755381249999573,
+            "cpu_s": 2.47229,
+            "maxrss_bytes": 1961017344
+          },
+          {
+            "wall_s": 3.46780145799994,
+            "cpu_s": 2.460914,
+            "maxrss_bytes": 1960984576
+          },
+          {
+            "wall_s": 3.4888550000000578,
+            "cpu_s": 2.511253,
+            "maxrss_bytes": 1960902656
+          },
+          {
+            "wall_s": 3.4921592919999966,
+            "cpu_s": 2.505753,
+            "maxrss_bytes": 1960050688
+          }
+        ],
+        "optimized-disabled": [
+          {
+            "wall_s": 3.142496334000043,
+            "cpu_s": 2.099433,
+            "maxrss_bytes": 2609823744
+          },
+          {
+            "wall_s": 3.1056439589999627,
+            "cpu_s": 2.078626,
+            "maxrss_bytes": 2610462720
+          },
+          {
+            "wall_s": 3.1309158330000173,
+            "cpu_s": 2.089701,
+            "maxrss_bytes": 2610528256
+          },
+          {
+            "wall_s": 3.147889125000006,
+            "cpu_s": 2.118064,
+            "maxrss_bytes": 2609659904
+          },
+          {
+            "wall_s": 3.1463777080000455,
+            "cpu_s": 2.101679,
+            "maxrss_bytes": 2610429952
+          }
+        ]
+      },
+      "medians": {
+        "stock": {
+          "wall_s": 5.370018334000065,
+          "cpu_s": 2.7305669999999997,
+          "maxrss_bytes": 3277144064
+        },
+        "optimized": {
+          "wall_s": 3.4888550000000578,
+          "cpu_s": 2.505753,
+          "maxrss_bytes": 1960902656
+        },
+        "optimized-disabled": {
+          "wall_s": 3.142496334000043,
+          "cpu_s": 2.099433,
+          "maxrss_bytes": 2610429952
+        }
+      },
+      "diagnostics_identical": true
+    }
+  },
+  "toolchains": {
+    "stock": "/Users/xuanji/.elan/toolchains/leanprover--lean4---v4.33.1/bin/lean",
+    "optimized": "/Users/xuanji/gits/lean-monorepo/v4.33.1-optimized/playground/.lake/toolchains/lean4/build/release/stage2/bin/lean",
+    "optimized-disabled": "/Users/xuanji/gits/lean-monorepo/v4.33.1-optimized/playground/.lake/toolchains/lean4/build/release/stage2/bin/lean"
+  }
+}

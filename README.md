@@ -13,6 +13,12 @@ This repository is a grab bag of Lean-related materials. The directory layout is
   [Timeroot/IsoGraph](https://github.com/Timeroot/IsoGraph), with a small
   compile-checked example.
 
+## Optimized Lean 4.33.1
+
+- [`v4.33.1-optimized/playground/`](v4.33.1-optimized/playground/): patched Lean
+  with the standard Mathlib v4.33.1 cache, a checked scratch file, and reproducible
+  performance comparisons. See its README for setup and measurements.
+
 ## Advent of Code
 
 - `v19/LeanGT/AoC/`: Advent of Code solutions and parsing utilities (`day1.lean`, `day2.lean`, `Parsers.lean`, etc.).
