@@ -1,14 +1,16 @@
 import Mathlib.NumberTheory.LSeries.Positivity
 import Mathlib.Analysis.Complex.TaylorSeries
+import Mathlib.Analysis.SpecialFunctions.Exponential
 import Mathlib.Topology.Algebra.InfiniteSum.Real
 import Mathlib.Tactic
 
 /-!
-# Positivity and analytic continuation of Dirichlet series
+# Landau's singularity theorem for nonnegative Dirichlet series
 
-This module develops the positivity argument used in Landau's theorem on the
-singularity at a finite abscissa of convergence. It is independent of Robin's
-theorems and of the still-incomplete target in `v32/Lagarias.lean`.
+This module proves that a Dirichlet series with nonnegative real coefficients
+cannot have a holomorphic continuation through its finite abscissa of absolute
+convergence. It is independent of Robin's theorems and of the still-incomplete
+target in `v32/Lagarias.lean`.
 
 The Tonelli step converts summability of nonnegative logarithmic moments and
 of their exponential generating series into convergence further to the left.
@@ -41,7 +43,8 @@ theorem summable_weighted_exp_of_moments {w x : ℕ → ℝ}
     calc
       (∑' k : ℕ, F (k, n)) = w n * ∑' k : ℕ, x n ^ k / (k.factorial : ℝ) := by
         simp only [F, mul_div_assoc, tsum_mul_left]
-      _ = w n * Real.exp (x n) := by rw [(Real.hasSum_exp (x n)).tsum_eq]
+      _ = w n * Real.exp (x n) := by
+        rw [Real.exp_eq_exp_ℝ, (NormedSpace.expSeries_div_hasSum_exp (x n)).tsum_eq]
   simpa only [heq] using hrows
 
 /-- Natural-number logarithms, including `log 0 = 0`, are nonnegative. -/
@@ -164,5 +167,43 @@ theorem summable_of_holomorphic_continuation {f : ℕ → ℂ} (hf : 0 ≤ f)
   have hexp := summable_weighted_exp_of_moments (fun n => norm_nonneg _)
     (fun n => mul_nonneg hr (log_nat_nonneg n)) hm hpower
   exact summable_norm_iff.mp (hexp.congr fun n => (norm_term_shift f s r n).symm)
+
+/-- Landau's theorem: the finite abscissa of convergence is a singularity.
+
+`F` is allowed to be an arbitrary proposed continuation. Agreement is required
+only on the portion of its disc lying strictly to the right of the abscissa.
+-/
+theorem no_holomorphic_extension_at_abscissa {f : ℕ → ℂ} (hf : 0 ≤ f)
+    {a : ℝ} (ha : LSeries.abscissaOfAbsConv f = (a : EReal))
+    {F : ℂ → ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (hF : DifferentiableOn ℂ F (Metric.ball (a : ℂ) δ))
+    (heq : ∀ z ∈ Metric.ball (a : ℂ) δ, a < z.re → F z = LSeries f z) : False := by
+  let s : ℝ := a + δ / 4
+  have has : a < s := by dsimp [s]; linarith
+  have hsc : dist (s : ℂ) (a : ℂ) = δ / 4 := by
+    rw [dist_eq_norm, ← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
+    have hdiff : s - a = δ / 4 := by dsimp [s]; ring
+    rw [hdiff, abs_of_nonneg (by positivity : 0 ≤ δ / 4)]
+  have hsBall : (s : ℂ) ∈ Metric.ball (a : ℂ) δ := by
+    rw [Metric.mem_ball, hsc]
+    linarith
+  have hsub : Metric.ball (s : ℂ) (δ / 2) ⊆ Metric.ball (a : ℂ) δ :=
+    Metric.ball_subset_ball' (by rw [hsc]; linarith)
+  have heq' : F =ᶠ[𝓝 (s : ℂ)] LSeries f := by
+    have hb : ∀ᶠ z in 𝓝 (s : ℂ), z ∈ Metric.ball (a : ℂ) δ :=
+      Metric.isOpen_ball.mem_nhds hsBall
+    have hr : ∀ᶠ z : ℂ in 𝓝 (s : ℂ), a < z.re :=
+      (isOpen_lt continuous_const Complex.continuous_re).mem_nhds has
+    filter_upwards [hb, hr] with z hzb hzr using heq z hzb hzr
+  have hsabs : LSeries.abscissaOfAbsConv f < (s : EReal) := by
+    rw [ha]
+    exact_mod_cast has
+  have hconv := summable_of_holomorphic_continuation hf
+    (s := s) (r := δ / 3) (R := δ / 2) hsabs (by positivity) (by linarith)
+    (hF.mono hsub) heq'
+  have hbound := hconv.abscissaOfAbsConv_le
+  rw [ha, Complex.ofReal_re] at hbound
+  have hleft : s - δ / 3 < a := by dsimp [s]; linarith
+  exact (not_le_of_gt hleft) (by exact_mod_cast hbound)
 
 end LeanEval.NumberTheory.Lagarias.Landau
