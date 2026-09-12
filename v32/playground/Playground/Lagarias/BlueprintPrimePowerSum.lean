@@ -22,7 +22,7 @@ lemma sum_prime_powers_by_base {A : Type*} [AddCommMonoid A] (f : ℕ → A) (n 
   rw [sum_sigma']
   apply sum_bij (fun pk _ => pk.1 ^ pk.2)
   · rintro ⟨p, k⟩ hpk
-    change p ∈ Nat.primesLE n ∧ (1 ≤ k ∧ k ≤ Nat.log p n) at hpk
+    simp only [mem_sigma, mem_Icc] at hpk
     obtain ⟨hp, hk1, hklog⟩ := hpk
     have hprime := Nat.prime_of_mem_primesLE hp
     have hn0 : n ≠ 0 := by
@@ -33,12 +33,11 @@ lemma sum_prime_powers_by_base {A : Type*} [AddCommMonoid A] (f : ℕ → A) (n 
     constructor
     · exact mem_Icc.mpr ⟨Nat.one_le_pow k p hprime.pos,
         Nat.pow_le_of_le_log hn0 hklog⟩
-    · exact (isPrimePow_nat_iff _).mpr ⟨p, k, hprime, by omega, rfl⟩
+    · exact (isPrimePow_nat_iff _).mpr ⟨p, k, hprime, hk1, rfl⟩
   · rintro ⟨p, k⟩ hp ⟨q, j⟩ hq heq
-    change p ∈ Nat.primesLE n ∧ (1 ≤ k ∧ k ≤ Nat.log p n) at hp
-    change q ∈ Nat.primesLE n ∧ (1 ≤ j ∧ j ≤ Nat.log q n) at hq
-    have hkp : k ≠ 0 := by omega
-    have hjp : j ≠ 0 := by omega
+    simp only [mem_sigma, mem_Icc] at hp hq
+    have hkp : k ≠ 0 := Nat.ne_of_gt hp.2.1
+    have hjp : j ≠ 0 := Nat.ne_of_gt hq.2.1
     obtain ⟨rfl, rfl⟩ := (Nat.prime_of_mem_primesLE hp.1).pow_inj'
       (Nat.prime_of_mem_primesLE hq.1) hkp hjp heq
     rfl
@@ -47,8 +46,8 @@ lemma sum_prime_powers_by_base {A : Type*} [AddCommMonoid A] (f : ℕ → A) (n 
     obtain ⟨p, k, hp, hk, rfl⟩ := (isPrimePow_nat_iff _).mp hmpow
     obtain ⟨hmpos, hmle⟩ := mem_Icc.mp hmrange
     have hpn : p ≤ n := (Nat.le_of_dvd (by omega) (dvd_pow_self p hk.ne')).trans hmle
-    refine ⟨⟨p, k⟩, mem_sigma.mpr ⟨?_, mem_Icc.mpr ⟨by omega, ?_⟩⟩, rfl⟩
-    · exact Nat.mem_primesLE.mpr ⟨hp, hpn⟩
+    refine ⟨⟨p, k⟩, mem_sigma.mpr ⟨?_, mem_Icc.mpr ⟨hk, ?_⟩⟩, rfl⟩
+    · exact Nat.mem_primesLE.mpr ⟨hpn, hp⟩
     · exact Nat.le_log_of_pow_le hp.one_lt hmle
   · intro pk hpk
     rfl
