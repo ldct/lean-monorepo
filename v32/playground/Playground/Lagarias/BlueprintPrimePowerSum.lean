@@ -22,25 +22,29 @@ lemma sum_prime_powers_by_base {A : Type*} [AddCommMonoid A] (f : ℕ → A) (n 
   rw [sum_sigma']
   apply sum_bij (fun pk _ => pk.1 ^ pk.2)
   · rintro ⟨p, k⟩ hpk
-    obtain ⟨hp, hk⟩ := mem_sigma.mp hpk
-    obtain ⟨hk1, hklog⟩ := mem_Icc.mp hk
+    change p ∈ Nat.primesLE n ∧ (1 ≤ k ∧ k ≤ Nat.log p n) at hpk
+    obtain ⟨hp, hk1, hklog⟩ := hpk
     have hprime := Nat.prime_of_mem_primesLE hp
+    have hn0 : n ≠ 0 := by
+      have := Nat.le_of_mem_primesLE hp
+      have := hprime.pos
+      omega
     apply mem_filter.mpr
     constructor
     · exact mem_Icc.mpr ⟨Nat.one_le_pow k p hprime.pos,
-        Nat.pow_le_of_le_log (by omega) hklog⟩
-    · exact isPrimePow_nat_iff.mpr ⟨p, k, hprime, by omega, rfl⟩
+        Nat.pow_le_of_le_log hn0 hklog⟩
+    · exact (isPrimePow_nat_iff _).mpr ⟨p, k, hprime, by omega, rfl⟩
   · rintro ⟨p, k⟩ hp ⟨q, j⟩ hq heq
-    obtain ⟨hpp, hkk⟩ := mem_sigma.mp hp
-    obtain ⟨hqq, hjj⟩ := mem_sigma.mp hq
-    have hkp : k ≠ 0 := by have := (mem_Icc.mp hkk).1; omega
-    have hjp : j ≠ 0 := by have := (mem_Icc.mp hjj).1; omega
-    obtain ⟨rfl, rfl⟩ := (Nat.prime_of_mem_primesLE hpp).pow_inj'
-      (Nat.prime_of_mem_primesLE hqq) hkp hjp heq
+    change p ∈ Nat.primesLE n ∧ (1 ≤ k ∧ k ≤ Nat.log p n) at hp
+    change q ∈ Nat.primesLE n ∧ (1 ≤ j ∧ j ≤ Nat.log q n) at hq
+    have hkp : k ≠ 0 := by omega
+    have hjp : j ≠ 0 := by omega
+    obtain ⟨rfl, rfl⟩ := (Nat.prime_of_mem_primesLE hp.1).pow_inj'
+      (Nat.prime_of_mem_primesLE hq.1) hkp hjp heq
     rfl
   · intro m hm
     obtain ⟨hmrange, hmpow⟩ := mem_filter.mp hm
-    obtain ⟨p, k, hp, hk, rfl⟩ := isPrimePow_nat_iff.mp hmpow
+    obtain ⟨p, k, hp, hk, rfl⟩ := (isPrimePow_nat_iff _).mp hmpow
     obtain ⟨hmpos, hmle⟩ := mem_Icc.mp hmrange
     have hpn : p ≤ n := (Nat.le_of_dvd (by omega) (dvd_pow_self p hk.ne')).trans hmle
     refine ⟨⟨p, k⟩, mem_sigma.mpr ⟨?_, mem_Icc.mpr ⟨by omega, ?_⟩⟩, rfl⟩
@@ -73,8 +77,7 @@ lemma sum_vonMangoldt_mul_eq_sum_prime_powers (f : ℕ → ℝ) (n : ℕ) :
 
 lemma primeLogPartial_eq_sum_Icc (p : ℝ) (a : ℕ) :
     primeLogPartial p a = ∑ k ∈ Icc 1 a, p⁻¹ ^ k / (k : ℝ) := by
-  unfold primeLogPartial logPartial logTerm
-  simp_rw [← Nat.cast_one, ← Nat.cast_add]
+  simp only [primeLogPartial, logPartial, logTerm, ← Nat.cast_add_one]
   rw [Finset.range_eq_Ico, Finset.sum_Ico_add' (fun k : ℕ => p⁻¹ ^ k / (k : ℝ)) 0 a (c := 1)]
   simp only [Nat.zero_add, Finset.Ico_add_one_right_eq_Icc]
 
@@ -99,11 +102,7 @@ theorem B_eq_sum_vonMangoldt (x : ℝ) :
   field_simp
 
 lemma B_eq_sum_Ioc_vonMangoldt (x : ℝ) :
-    B x = ∑ m ∈ Ioc 0 ⌊x⌋₊, Λ m / ((m : ℝ) * Real.log (m : ℝ)) := by
-  rw [B_eq_sum_vonMangoldt]
-  congr 1
-  ext m
-  simp only [mem_Icc, mem_Ioc]
-  omega
+    B x = ∑ m ∈ Ioc 0 ⌊x⌋₊, Λ m / ((m : ℝ) * Real.log (m : ℝ)) :=
+  B_eq_sum_vonMangoldt x
 
 end LeanEval.NumberTheory.Lagarias.Blueprint
