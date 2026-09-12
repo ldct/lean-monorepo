@@ -82,7 +82,9 @@ theorem rhs_le_robinBound_add_error {n : ℕ} (hn : 27 ≤ n) :
     _ = robinBound n + (t + 1) + e * x / t + e * (u + 1 / t) := by
       dsimp [robinBound, x, t, e, u]
       ring
-    _ ≤ robinBound n + 7 * x / t := by nlinarith
+    _ ≤ robinBound n + (x / t) + 3 * (x / t) + 3 * (x / t) := by
+      linarith only [hbudget, hterm, hextra']
+    _ = robinBound n + 7 * x / t := by ring
     _ = robinBound n + 7 * (n : ℝ) / Real.log (n : ℝ) := rfl
 
 end LeanEval.NumberTheory.Lagarias
