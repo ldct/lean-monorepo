@@ -38,9 +38,25 @@ jobs:
         working-directory: v32/playground
         run: |
           audit_file="$(mktemp ./LagariasLandauAuditXXXXXX.lean)"
-          trap 'rm -f "$audit_file"' EXIT
-          for module in Playground.Lagarias.LandauMGF Playground.Lagarias.LandauZeta Playground.Lagarias.LandauPoles; do
-            lake build "$module"
+          log_file="$(mktemp ./LagariasLandauLogXXXXXX.txt)"
+          trap 'rm -f "$audit_file" "$log_file"' EXIT
+          report_annotation() {
+            local message
+            message="$(tail -c 16000 "$log_file")"
+            message="${message//'%'/'%25'}"
+            message="${message//$'\r'/'%0D'}"
+            message="${message//$'\n'/'%0A'}"
+            printf '::%s title=%s::%s\n' "$1" "$2" "$message"
+          }
+          failures=0
+          for module in Playground.Lagarias.LandauMGF Playground.Lagarias.LandauZeta Playground.Lagarias.LandauContinuation Playground.Lagarias.LandauPoles; do
+            if ! lake build "$module" > "$log_file" 2>&1; then
+              cat "$log_file"
+              report_annotation error "Lean compilation: $module"
+              failures=1
+              continue
+            fi
+            cat "$log_file"
             printf 'import %s\n' "$module" > "$audit_file"
             cat >> "$audit_file" <<'LEAN'
           import Lean.Util.CollectAxioms
@@ -59,5 +75,13 @@ jobs:
                 throwError "{name} depends on forbidden axioms: {forbidden}"
             logInfo m!"Audited {declarations.length} Landau declarations with only standard axioms."
           LEAN
-            lake env lean "$audit_file"
+            if lake env lean "$audit_file" > "$log_file" 2>&1; then
+              cat "$log_file"
+              report_annotation notice "Axiom audit: $module"
+            else
+              cat "$log_file"
+              report_annotation error "Axiom audit: $module"
+              failures=1
+            fi
           done
+          exit "$failures"
