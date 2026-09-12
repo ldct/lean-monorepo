@@ -57,7 +57,7 @@ lemma B_le_one_add_log {x : ℝ} (hx : 1 ≤ x) : B x ≤ 1 + Real.log x := by
   have hn : 0 < ⌊x⌋₊ := Nat.floor_pos.mpr hx
   have hlog : Real.log (⌊x⌋₊ : ℝ) ≤ Real.log x :=
     Real.log_le_log (by exact_mod_cast hn) (Nat.floor_le (zero_le_one.trans hx))
-  exact (B_le_harmonic x).trans ((harmonic_le_one_add_log ⌊x⌋₊).trans (add_le_add_left hlog 1))
+  exact (B_le_harmonic x).trans ((harmonic_le_one_add_log ⌊x⌋₊).trans (add_le_add le_rfl hlog))
 
 @[fun_prop] lemma measurable_B : Measurable B := by
   have heq : B = (fun N : ℕ => ∑ n ∈ Icc 1 N, primeLogCoeff n) ∘ Nat.floor :=
