@@ -15,7 +15,7 @@ namespace LeanEval.NumberTheory.Lagarias.Blueprint
 
 open Complex Set
 
-abbrev XiZero := Complex.Hadamard.divisorZeroIndex₀ Complex.riemannXi (Set.univ : Set ℂ)
+noncomputable abbrev XiZero := Complex.Hadamard.divisorZeroIndex₀ Complex.riemannXi (Set.univ : Set ℂ)
 
 abbrev xiZero (i : XiZero) : ℂ := Complex.Hadamard.divisorZeroIndex₀_val i
 
@@ -33,7 +33,7 @@ lemma xiZero_is_zero (i : XiZero) : Complex.riemannXi (xiZero i) = 0 := by
   have ha : AnalyticOnNhd ℂ Complex.riemannXi (Set.univ : Set ℂ) :=
     fun z _ => Complex.differentiable_riemannXi.analyticAt z
   have hdiv : MeromorphicOn.divisor Complex.riemannXi (Set.univ : Set ℂ) (xiZero i) = 0 := by
-    rw [ha.divisor_apply (Set.mem_univ _),
+    rw [MeromorphicOn.AnalyticOnNhd.divisor_apply ha (Set.mem_univ _),
       (Complex.differentiable_riemannXi.analyticAt (xiZero i)).analyticOrderAt_eq_zero.mpr hne]
     simp
   exact Complex.Hadamard.divisorZeroIndex₀_val_mem_divisor_support i hdiv
@@ -100,12 +100,9 @@ lemma xiZero_not_trivial (i : XiZero) :
     ¬∃ n : ℕ, xiZero i = -2 * (n + 1) := by
   rintro ⟨n, hn⟩
   have hnonneg := (xi_zero_re_mem_strip (xiZero_is_zero i)).1
-  have hre := congrArg Complex.re hn
-  simp only [Complex.mul_re, Complex.neg_re, Complex.ofNat_re, Complex.add_re,
-    Complex.natCast_re, Complex.one_re, Complex.neg_im, Complex.ofNat_im,
-    Complex.add_im, Complex.natCast_im, Complex.one_im, neg_zero, zero_mul,
-    sub_zero] at hre
-  nlinarith [Nat.cast_nonneg (R := ℝ) n]
+  have hre : (xiZero i).re = -2 * ((n : ℝ) + 1) := by
+    simpa using congrArg Complex.re hn
+  nlinarith [Nat.cast_nonneg (α := ℝ) n]
 
 /-- This hypothesis is exactly Mathlib's Riemann hypothesis, with its original
 exclusion of trivial zeros, rather than a bespoke assumption about the index. -/
