@@ -6,6 +6,7 @@ on:
       - '.github/workflows/lagarias-landau.yml'
       - 'v32/playground/Playground/Lagarias/Landau*.lean'
       - 'v32/playground/Playground/Lagarias/Blueprint*.lean'
+      - 'v32/playground/PrimeNumberTheoremAnd/**'
       - 'v32/playground/lean-toolchain'
       - 'v32/playground/lakefile.toml'
       - 'v32/playground/lake-manifest.json'
@@ -36,6 +37,13 @@ jobs:
           test: 'false'
           lint: 'false'
           use-mathlib-cache: 'true'
+      - name: Restore previously built proof objects
+        uses: actions/cache/restore@v5
+        with:
+          path: v32/playground/.lake/build
+          key: lagarias-proofs-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('v32/playground/lean-toolchain', 'v32/playground/lake-manifest.json', 'v32/playground/PrimeNumberTheoremAnd/SOURCE_PROVENANCE.json') }}-${{ github.run_id }}
+          restore-keys: |
+            lagarias-proofs-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('v32/playground/lean-toolchain', 'v32/playground/lake-manifest.json', 'v32/playground/PrimeNumberTheoremAnd/SOURCE_PROVENANCE.json') }}-
       - name: Build and audit each blueprint milestone transitively
         id: verify
         working-directory: v32/playground
@@ -53,7 +61,7 @@ jobs:
             rm -f "$audit_file" "$log_file" "$report"
           }
           trap finish EXIT
-          printf '## Blueprint prerequisite verification\n\nCommit `%s`, run `%s`.\n\nThese checks do not prove the final RH equivalence.\n' \
+          printf '## Blueprint prerequisite verification\n\nCommit `%s`, run `%s`.\n\nThese checks do not prove the final RH equivalence. Lake validates source hashes before reusing cached proof objects; every milestone is audited again.\n' \
             "$GITHUB_SHA" "$GITHUB_RUN_ID" > "$report"
           append_report() {
             printf '\n### %s: %s\n\n```text\n' "$1" "$2" >> "$report"
@@ -100,6 +108,12 @@ jobs:
             fi
           done
           exit "$failures"
+      - name: Save checked build products for the next iteration
+        if: always() && !cancelled()
+        uses: actions/cache/save@v5
+        with:
+          path: v32/playground/.lake/build
+          key: lagarias-proofs-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('v32/playground/lean-toolchain', 'v32/playground/lake-manifest.json', 'v32/playground/PrimeNumberTheoremAnd/SOURCE_PROVENANCE.json') }}-${{ github.run_id }}
   diagnostics:
     name: Compact blueprint diagnostics
     needs: analytic-prerequisites
