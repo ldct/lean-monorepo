@@ -17,7 +17,7 @@ open Complex Set
 
 noncomputable abbrev XiZero := Complex.Hadamard.divisorZeroIndex₀ Complex.riemannXi (Set.univ : Set ℂ)
 
-abbrev xiZero (i : XiZero) : ℂ := Complex.Hadamard.divisorZeroIndex₀_val i
+noncomputable abbrev xiZero (i : XiZero) : ℂ := Complex.Hadamard.divisorZeroIndex₀_val i
 
 lemma xi_one : Complex.riemannXi 1 = 1 / 2 := by
   calc
