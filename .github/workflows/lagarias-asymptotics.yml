@@ -1,4 +1,4 @@
-name: Lagarias asymptotic helper
+name: Lagarias arithmetic and asymptotics
 
 # Independent feedback while the finite certificate checker is developed.
 # The full-project helper audit and final-target gate remain separate checks.
@@ -13,6 +13,8 @@ on:
       - 'v32/playground/Playground/Lagarias/PrimePower.lean'
       - 'v32/playground/Playground/Lagarias/PrimeThreshold.lean'
       - 'v32/playground/Playground/Lagarias/CAConstruction.lean'
+      - 'v32/playground/Playground/Lagarias/EulerProduct.lean'
+      - 'v32/playground/Playground/Lagarias/Arithmetic.lean'
 
 permissions:
   contents: read
@@ -33,7 +35,7 @@ jobs:
           lake-package-directory: v32/playground
           auto-config: 'false'
           build: 'true'
-          build-args: Playground.Lagarias.RobinBridge Playground.Lagarias.CAConstruction
+          build-args: Playground.Lagarias.RobinBridge Playground.Lagarias.Arithmetic
           test: 'false'
           lint: 'false'
           use-mathlib-cache: 'true'
@@ -45,7 +47,7 @@ jobs:
           trap 'rm -f "$audit"' EXIT
           cat > "$audit" <<'LEAN'
           import Playground.Lagarias.RobinBridge
-          import Playground.Lagarias.CAConstruction
+          import Playground.Lagarias.Arithmetic
           import Lean.Util.CollectAxioms
           open Lean Elab Command in
           run_cmd do
