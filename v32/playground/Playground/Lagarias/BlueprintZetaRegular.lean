@@ -1,14 +1,13 @@
 import Playground.Lagarias.BlueprintZetaReal
-import PrimeNumberTheoremAnd.Mathlib.Analysis.SpecialFunctions.CompletedXi
-import Mathlib.Analysis.SpecialFunctions.Gamma.Beta
+import Mathlib.NumberTheory.Harmonic.ZetaAsymp
 
 /-!
 # The removable point of the prime-error continuation
 
-The pole-removed zeta function is defined by an entire completed-zeta
-expression, not by assigning the product `(s-1) * zeta s` its incorrect
-junk value at one. Its value there is proved from the residue theorem.
-The logarithmic derivative then gives a genuinely analytic representative
+Mathlib already proves that the pole-removed function `riemannZeta₁` is
+entire, equals `(s-1) zeta(s)` away from one, and has value one there.
+We reuse that theorem rather than recompute the gamma-factor extension.
+Its logarithmic derivative supplies a genuinely analytic representative
 of the prime-error continuation at `s=0`.
 -/
 
@@ -17,44 +16,16 @@ namespace LeanEval.NumberTheory.Lagarias.Blueprint
 open Filter Set
 open scoped Topology
 
-/-- The entire extension of `(s-1) zeta(s)`. -/
-noncomputable def regularizedZeta (s : ℂ) : ℂ :=
-  Complex.riemannXi s /
-    ((Real.pi : ℂ) ^ (-s / 2) * Complex.Gamma (s / 2 + 1))
+/-- The genuine entire extension, not the product's junk value at the pole. -/
+noncomputable def regularizedZeta : ℂ → ℂ := riemannZeta₁
 
-lemma differentiable_regularizedZeta : Differentiable ℂ regularizedZeta := by
-  have hp : (Real.pi : ℂ) ≠ 0 := by exact_mod_cast Real.pi_ne_zero
-  have hpow : Differentiable ℂ (fun s : ℂ => (Real.pi : ℂ) ^ (-s / 2)) := by
-    fun_prop (disch := assumption)
-  have hgamma : Differentiable ℂ (fun s : ℂ => (Complex.Gamma (s / 2 + 1))⁻¹) :=
-    Complex.differentiable_one_div_Gamma.comp (by fun_prop)
-  have hfun : regularizedZeta = fun s : ℂ => Complex.riemannXi s *
-      (((Real.pi : ℂ) ^ (-s / 2))⁻¹ * (Complex.Gamma (s / 2 + 1))⁻¹) := by
-    funext s
-    simp only [regularizedZeta, div_eq_mul_inv, mul_inv]
-  rw [hfun]
-  exact Complex.differentiable_riemannXi.mul ((hpow.inv (fun s => Complex.cpow_ne_zero hp _)).mul hgamma)
+lemma differentiable_regularizedZeta : Differentiable ℂ regularizedZeta :=
+  differentiable_riemannZeta₁
 
 lemma regularizedZeta_eq_mul_zeta {s : ℂ} (hs : s ≠ 1) :
-    regularizedZeta s = (s - 1) * riemannZeta s := by
-  have hs' : 1 - s ≠ 0 := sub_ne_zero.mpr hs.symm
-  have hnum : s * (s - 1) * completedRiemannZeta₀ s + 1 =
-      (s - 1) * (s * completedRiemannZeta₀ s - 1 - s / (1 - s)) := by
-    field_simp
-    ring
-  rw [regularizedZeta, Complex.riemannXi, riemannZeta_eq_mul_completedRiemannZeta₀, hnum]
-  simp only [div_eq_mul_inv, mul_inv]
-  ring
+    regularizedZeta s = (s - 1) * riemannZeta s := riemannZeta₁_of_ne hs
 
-/-- The residue fixes the value of the entire extension at the removed pole. -/
-lemma regularizedZeta_one : regularizedZeta 1 = 1 := by
-  have hc : Tendsto regularizedZeta (𝓝[≠] (1 : ℂ)) (𝓝 (regularizedZeta 1)) :=
-    (differentiable_regularizedZeta.continuous.tendsto 1).mono_left nhdsWithin_le_nhds
-  have hr : Tendsto regularizedZeta (𝓝[≠] (1 : ℂ)) (𝓝 1) := by
-    apply riemannZeta_residue_one.congr'
-    filter_upwards [self_mem_nhdsWithin] with s hs
-    exact (regularizedZeta_eq_mul_zeta hs).symm
-  exact tendsto_nhds_unique hc hr
+lemma regularizedZeta_one : regularizedZeta 1 = 1 := riemannZeta₁_one
 
 /-- The entire extension of `s * zeta(s+1)`. -/
 noncomputable def zetaPoleRemoved (s : ℂ) : ℂ := regularizedZeta (s + 1)
@@ -84,13 +55,14 @@ lemma hasDerivAt_zetaPoleRemoved {s : ℂ} (hs : s ≠ 0) :
   filter_upwards [eventually_ne_nhds hs] with z hz
   exact zetaPoleRemoved_eq hz
 
-/-- The analytically regularized prime-error transform before the finite cutoff is subtracted. -/
+/-- The regularized prime-error transform before subtracting the finite cutoff. -/
 noncomputable def QRegular (s : ℂ) : ℂ := -(logDeriv zetaPoleRemoved s + 1) / (s + 1)
 
 lemma QRegular_eq_psiErrorContinuation {s : ℂ} (hs : s ≠ 0)
     (hs1 : s + 1 ≠ 0) (hz : riemannZeta (s + 1) ≠ 0) :
     QRegular s = Landau.psiErrorContinuation (s + 1) := by
   unfold QRegular logDeriv Landau.psiErrorContinuation
+  simp only [Pi.div_apply]
   rw [(hasDerivAt_zetaPoleRemoved hs).deriv, zetaPoleRemoved_eq hs]
   simp only [add_sub_cancel_right]
   field_simp
