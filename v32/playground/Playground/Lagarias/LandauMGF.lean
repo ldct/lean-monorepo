@@ -56,7 +56,7 @@ theorem integrable_exp_of_holomorphic_continuation (hX : ∀ a, 0 ≤ X a)
         r ^ k * ∫ a, Real.exp (s * X a) * X a ^ k ∂μ := by
     rw [← integral_const_mul]
     apply integral_congr_ae
-    exact ae_of_all _ fun a => by rw [mul_pow]; ring
+    exact ae_of_all _ fun a => by dsimp only; rw [mul_pow]; ring
   have hcoeff (k : ℕ) :
       ‖(k.factorial : ℂ)⁻¹ • (((s + r : ℝ) : ℂ) - (s : ℂ)) ^ k •
         iteratedDeriv k F (s : ℂ)‖ =
@@ -71,7 +71,7 @@ theorem integrable_exp_of_holomorphic_continuation (hX : ∀ a, 0 ≤ X a)
   have hm (k : ℕ) : Integrable (fun a => Real.exp (s * X a) * (r * X a) ^ k) μ := by
     have h := (integrable_pow_mul_exp_of_mem_interior_integrableExpSet hs k).const_mul (r ^ k)
     apply h.congr
-    exact ae_of_all _ fun a => by rw [mul_pow]; ring
+    exact ae_of_all _ fun a => by dsimp only; rw [mul_pow]; ring
   have hweighted := integrable_weighted_exp_of_moments
     (fun a => (Real.exp_pos (s * X a)).le) (fun a => mul_nonneg hr (hX a)) hm hpower
   simpa only [← Real.exp_add, ← add_mul] using hweighted
@@ -112,5 +112,37 @@ theorem no_holomorphic_extension_at_integrability_boundary (hX : ∀ a, 0 ≤ X 
     (s := s) (r := δ / 3) (R := δ / 2) hs (by positivity) (by linarith)
     (hF.mono hsub) heq'
   exact habove (s + δ / 3) (by dsimp [s]; linarith) hconv
+
+/-- For a nonnegative measurable argument, exponential integrability is downward closed. -/
+lemma integrable_exp_of_le (hXm : AEMeasurable X μ) (hX : ∀ a, 0 ≤ X a)
+    {s t : ℝ} (hst : s ≤ t) (ht : t ∈ integrableExpSet X μ) :
+    s ∈ integrableExpSet X μ := by
+  change Integrable (fun a => Real.exp (s * X a)) μ
+  have ht' : Integrable (fun a => Real.exp (t * X a)) μ := ht
+  apply ht'.mono' (Real.measurable_exp.comp_aemeasurable (hXm.const_mul s)).aestronglyMeasurable
+  exact ae_of_all _ fun a => by
+    dsimp only
+    rw [Real.norm_of_nonneg (Real.exp_pos _).le]
+    exact Real.exp_le_exp.mpr (mul_le_mul_of_nonneg_right hst (hX a))
+
+/-- The convergence boundary is an actual singularity, with no separate boundary
+hypotheses: it is defined as the supremum of the nonempty, bounded convergence set. -/
+theorem no_holomorphic_extension_at_sSup (hXm : AEMeasurable X μ)
+    (hX : ∀ a, 0 ≤ X a) (hne : (integrableExpSet X μ).Nonempty)
+    (hbdd : BddAbove (integrableExpSet X μ)) {F : ℂ → ℂ} {δ : ℝ} (hδ : 0 < δ)
+    (hF : DifferentiableOn ℂ F (Metric.ball ((sSup (integrableExpSet X μ) : ℝ) : ℂ) δ))
+    (heq : ∀ z ∈ Metric.ball ((sSup (integrableExpSet X μ) : ℝ) : ℂ) δ,
+      z.re < sSup (integrableExpSet X μ) → F z = complexMGF X μ z) : False := by
+  apply no_holomorphic_extension_at_integrability_boundary hX
+    (b := sSup (integrableExpSet X μ)) ?_ ?_ hδ hF heq
+  · intro t ht
+    by_contra hnot
+    have hub : ∀ u ∈ integrableExpSet X μ, u ≤ t := by
+      intro u hu
+      by_contra hlt
+      exact hnot (integrable_exp_of_le hXm hX (lt_of_not_ge hlt).le hu)
+    exact (not_le_of_gt ht) (csSup_le hne hub)
+  · intro t ht hmem
+    exact (not_le_of_gt ht) (le_csSup hbdd hmem)
 
 end LeanEval.NumberTheory.Lagarias.Landau
