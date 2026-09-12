@@ -9,6 +9,7 @@ on:
       - '.github/workflows/lagarias-asymptotics.yml'
       - 'v32/playground/Playground/Lagarias/Asymptotics.lean'
       - 'v32/playground/Playground/Lagarias/RobinBridge.lean'
+      - 'v32/playground/Playground/Lagarias/ColossallyAbundant.lean'
 
 permissions:
   contents: read
@@ -19,7 +20,7 @@ concurrency:
 
 jobs:
   asymptotics:
-    name: Bounds and conditional Robin bridge (not RH equivalence)
+    name: Arithmetic and conditional Robin bridge (not RH equivalence)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -29,11 +30,11 @@ jobs:
           lake-package-directory: v32/playground
           auto-config: 'false'
           build: 'true'
-          build-args: Playground.Lagarias.RobinBridge
+          build-args: Playground.Lagarias.RobinBridge Playground.Lagarias.ColossallyAbundant
           test: 'false'
           lint: 'false'
           use-mathlib-cache: 'true'
-      - name: Audit the entire conditional bridge dependency closure
+      - name: Audit all declarations in the arithmetic and conditional bridge closure
         working-directory: v32/playground
         run: |
           set -euo pipefail
@@ -41,6 +42,7 @@ jobs:
           trap 'rm -f "$audit"' EXIT
           cat > "$audit" <<'LEAN'
           import Playground.Lagarias.RobinBridge
+          import Playground.Lagarias.ColossallyAbundant
           import Lean.Util.CollectAxioms
           open Lean Elab Command in
           run_cmd do
@@ -55,6 +57,6 @@ jobs:
               let forbidden := axioms.filter fun axiomName => !allowed.contains axiomName
               unless forbidden.isEmpty do
                 throwError "{name} depends on forbidden axioms: {forbidden}"
-            logInfo m!"Audited {declarations.length} declarations in the conditional bridge closure."
+            logInfo m!"Audited {declarations.length} declarations in the arithmetic and conditional bridge closure."
           LEAN
           lake env lean "$audit"
