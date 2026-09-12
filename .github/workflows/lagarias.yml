@@ -7,6 +7,7 @@ on:
       - 'v32/Lagarias.lean'
       - 'v32/LAGARIAS.md'
       - 'v32/playground/Playground/Lagarias/**'
+      - 'v32/playground/verify_lagarias.sh'
       - 'v32/playground/lean-toolchain'
       - 'v32/playground/lakefile.toml'
       - 'v32/playground/lake-manifest.json'
@@ -26,13 +27,13 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Build isolated helper module
+      - name: Build isolated helper modules
         uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596
         with:
           lake-package-directory: v32/playground
           auto-config: 'false'
           build: 'true'
-          build-args: Playground.Lagarias.Bounds
+          build-args: Playground.Lagarias.HarmonicBounds
           test: 'false'
           lint: 'false'
           use-mathlib-cache: 'true'
