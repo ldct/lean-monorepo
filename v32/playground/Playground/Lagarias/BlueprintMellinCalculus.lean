@@ -51,10 +51,9 @@ lemma locallyIntegrableOn_mellinCutoff {a C r : ℝ} (ha : 1 ≤ a) (hC : 0 ≤ 
     {f : ℝ → ℂ} (hf : Measurable f) (hbound : ∀ x : ℝ, a < x → ‖f x‖ ≤ C * x ^ r) :
     LocallyIntegrableOn (mellinCutoff a f) (Ioi 0) := by
   have hc : Continuous (fun x : ℝ => C * (max a x) ^ r) := by
-    rw [continuous_iff_continuousAt]
-    intro x
-    have hmax : max a x ≠ 0 := (zero_lt_one.trans_le (ha.trans (le_max_left _ _))).ne'
-    fun_prop (disch := assumption)
+    have hm : Continuous (fun x : ℝ => max a x) := continuous_const.max continuous_id
+    exact (hm.rpow_const (fun x => Or.inl
+      (zero_lt_one.trans_le (ha.trans (le_max_left a x))).ne')).const_mul C
   apply (hc.continuousOn.locallyIntegrableOn measurableSet_Ioi).mono
     (measurable_mellinCutoff hf).aestronglyMeasurable
   filter_upwards with x
