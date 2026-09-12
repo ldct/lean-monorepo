@@ -43,6 +43,7 @@ lemma integral_log_substitution {E : Type*} [NormedAddCommGroup E] [NormedSpace 
   rw [hc]
   apply setIntegral_congr_fun measurableSet_Ioi
   intro x hx
+  change x⁻¹ • f (Real.log x) = |x⁻¹| • f (Real.log x)
   rw [abs_of_pos (inv_pos.mpr (ha.trans hx))]
 
 lemma integrable_log_substitution_iff {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
@@ -55,6 +56,7 @@ lemma integrable_log_substitution_iff {E : Type*} [NormedAddCommGroup E] [Normed
     integrableOn_image_iff_integrableOn_abs_deriv_smul measurableSet_Ioi hder (log_injOn_Ioi ha)]
   apply integrableOn_congr_fun _ measurableSet_Ioi
   intro x hx
+  change x⁻¹ • f (Real.log x) = |x⁻¹| • f (Real.log x)
   rw [abs_of_pos (inv_pos.mpr (ha.trans hx))]
 
 lemma integrableOn_log_mul_exp_neg :
@@ -71,6 +73,7 @@ lemma integrableOn_log_mul_exp_neg :
   · have hmajor := (integrableOn_exp_mul_Ioi (by norm_num : (-1 / 2 : ℝ) < 0) 1).const_mul (2 : ℝ)
     apply hmajor.mono' (by fun_prop)
     filter_upwards [self_mem_ae_restrict measurableSet_Ioi] with t ht
+    change 1 < t at ht
     have ht0 : 0 < t := by linarith
     have hlog := Real.log_le_sub_one_of_pos ht0
     have he := Real.add_one_le_exp (t / 2)
@@ -78,7 +81,7 @@ lemma integrableOn_log_mul_exp_neg :
     have hbound := mul_le_mul_of_nonneg_right hfirst (Real.exp_pos (-t)).le
     have heq : (2 * Real.exp (t / 2)) * Real.exp (-t) = 2 * Real.exp ((-1 / 2) * t) := by
       rw [mul_assoc, ← Real.exp_add]
-      congr 1
+      congr 2
       ring
     rw [heq] at hbound
     simpa only [norm_mul, Real.norm_of_nonneg (Real.log_nonneg ht.le),
@@ -106,14 +109,15 @@ lemma scaled_log_exp_identity {v t : ℝ} (hv : 0 < v) (ht : 0 < t) :
     (Real.log (v * t) - Real.log v) * Real.exp (-(v * t)) =
       Real.log t * Real.exp (-v * t) := by
   rw [Real.log_mul hv.ne' ht.ne']
-  congr 1 <;> ring
+  simp only [add_sub_cancel_left, neg_mul]
 
 lemma integrableOn_log_mul_exp_scaled {v : ℝ} (hv : 0 < v) :
     IntegrableOn (fun t : ℝ => Real.log t * Real.exp (-v * t)) (Ioi 0) := by
   let F : ℝ → ℝ := fun u => (Real.log u - Real.log v) * Real.exp (-u)
   have hF : IntegrableOn F (Ioi 0) := by
-    have h := integrableOn_log_mul_exp_neg.sub ((integrableOn_exp_neg_Ioi 0).const_mul (Real.log v))
-    simpa only [F, sub_mul] using h
+    have hh := integrableOn_log_mul_exp_neg.sub ((integrableOn_exp_neg_Ioi 0).const_mul (Real.log v))
+    change IntegrableOn (fun u => Real.log u * Real.exp (-u) - Real.log v * Real.exp (-u)) (Ioi 0) at hh
+    simpa only [F, sub_mul] using hh
   have hcomp := (integrableOn_Ioi_comp_mul_left_iff F 0 hv).mpr (by simpa using hF)
   apply hcomp.congr
   filter_upwards [self_mem_ae_restrict measurableSet_Ioi] with t ht
