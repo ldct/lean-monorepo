@@ -1,0 +1,61 @@
+name: Lagarias offline development bootstrap
+
+# Temporary bootstrap for the formalization branch. This runs only when this
+# workflow itself changes, not for every proof commit. The archive contains
+# public toolchain/package files only: no Git metadata, credentials, or home.
+on:
+  push:
+    branches: ['codex/lagarias-formalization']
+    paths: ['.github/workflows/lagarias-bootstrap.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596
+        with:
+          lake-package-directory: v32/playground
+          auto-config: 'false'
+          build: 'false'
+          test: 'false'
+          lint: 'false'
+          use-mathlib-cache: 'true'
+          use-github-cache: 'false'
+      - name: Prepare public runtime and source files
+        working-directory: v32/playground
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/lagarias-environment"
+          mkdir -p "$root/toolchain" "$root/project"
+          toolchain="$(dirname "$(dirname "$(elan which lean)")")"
+          rsync -a --exclude='*.a' --exclude='*.o' --exclude='*.c' \
+            --exclude='src' "$toolchain/" "$root/toolchain/"
+          rsync -a --exclude='.git' --exclude='node_modules' \
+            --exclude='*.a' --exclude='*.o' --exclude='*.c' \
+            --exclude='build/ir' --exclude='build/bin' \
+            ./ "$root/project/"
+          cp ../Lagarias.lean "$root/Lagarias.lean"
+          cp ../LAGARIAS.md "$root/LAGARIAS.md"
+          # Relative package roots make this archive relocatable. The Lean
+          # interpreter can use LEAN_PATH without cloning Git dependencies.
+          find "$root/project/.lake/packages" -path '*/.lake/build/lib/lean' \
+            -type d | sed "s|$root/project/||" | sort > "$root/package-paths.txt"
+          du -sh "$root/toolchain" "$root/project"
+          tar -C "$RUNNER_TEMP" -I 'zstd -T2 -6' \
+            -cf "$RUNNER_TEMP/lagarias-environment.tar.zst" lagarias-environment
+          ls -lh "$RUNNER_TEMP/lagarias-environment.tar.zst"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lagarias-environment-lean-4.32.0
+          path: ${{ runner.temp }}/lagarias-environment.tar.zst
+          compression-level: 0
+          retention-days: 1
+          if-no-files-found: error
