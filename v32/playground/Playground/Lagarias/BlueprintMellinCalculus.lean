@@ -1,5 +1,6 @@
 import Mathlib.Analysis.MellinTransform
 import Mathlib.Analysis.SpecialFunctions.ImproperIntegrals
+import Mathlib.Analysis.Complex.CauchyIntegral
 
 /-!
 # Calculus for truncated Mellin transforms
@@ -59,9 +60,13 @@ lemma locallyIntegrableOn_mellinCutoff {a C r : ℝ} (ha : 1 ≤ a) (hC : 0 ≤ 
   filter_upwards with x
   by_cases hx : a < x
   · have hx0 : 0 ≤ x := le_trans (by linarith : 0 ≤ a) hx.le
-    simpa only [mellinCutoff, indicator_of_mem hx, max_eq_right hx.le,
-      Real.norm_of_nonneg (mul_nonneg hC (Real.rpow_nonneg hx0 r))] using hbound x hx
-  · simp only [mellinCutoff, indicator_of_notMem hx, norm_zero]
+    have heq : mellinCutoff a f x = f x := by simp [mellinCutoff, hx]
+    change ‖mellinCutoff a f x‖ ≤ ‖C * (max a x) ^ r‖
+    rw [heq, max_eq_right hx.le, Real.norm_of_nonneg (mul_nonneg hC (Real.rpow_nonneg hx0 r))]
+    exact hbound x hx
+  · have heq : mellinCutoff a f x = 0 := by simp [mellinCutoff, hx]
+    change ‖mellinCutoff a f x‖ ≤ ‖C * (max a x) ^ r‖
+    rw [heq, norm_zero]
     exact norm_nonneg _
 
 lemma mellinCutoff_isBigO_atTop {a C r : ℝ} (ha : 1 ≤ a)
@@ -70,14 +75,14 @@ lemma mellinCutoff_isBigO_atTop {a C r : ℝ} (ha : 1 ≤ a)
   apply Asymptotics.IsBigO.of_bound C
   filter_upwards [eventually_gt_atTop a] with x hx
   have hx0 : 0 ≤ x := le_trans (by linarith : 0 ≤ a) hx.le
-  simpa only [mellinCutoff, indicator_of_mem hx, Real.norm_of_nonneg (Real.rpow_nonneg hx0 r)]
-    using hbound x hx
+  have heq : mellinCutoff a f x = f x := by simp [mellinCutoff, hx]
+  rw [heq, Real.norm_of_nonneg (Real.rpow_nonneg hx0 r)]
+  exact hbound x hx
 
 lemma mellinCutoff_isBigO_atZero {a : ℝ} (ha : 0 < a) (f : ℝ → ℂ) (b : ℝ) :
     mellinCutoff a f =O[𝓝[>] 0] (fun x : ℝ => x ^ (-b)) := by
   apply Asymptotics.IsBigO.of_bound 0
-  have hsmall : ∀ᶠ x : ℝ in 𝓝[>] 0, x < a :=
-    (Iio_mem_nhds ha : Iio a ∈ 𝓝 (0 : ℝ)).filter_mono nhdsWithin_le_nhds
+  have hsmall : ∀ᶠ x : ℝ in 𝓝[>] 0, x < a := nhdsWithin_le_nhds (Iio_mem_nhds ha)
   filter_upwards [hsmall] with x hx
   simp [mellinCutoff, not_lt_of_ge hx.le]
 
@@ -100,8 +105,8 @@ theorem hasDerivAt_truncatedMellin {a C r : ℝ} (ha : 1 ≤ a) (hC : 0 ≤ C)
     (mellinCutoff_isBigO_atZero (by linarith : 0 < a) f (-s.re - 1))
     (by simp only [Complex.neg_re]; linarith)
   rw [logWeight_mellinCutoff] at hm
-  simpa only [truncatedMellin, Function.comp_def, mul_neg_one] using
-    hm.2.comp s (hasDerivAt_neg' s)
+  convert! hm.2.comp s (hasDerivAt_neg' s) using 1 <;>
+    simp only [truncatedMellin, Function.comp_def, mul_neg_one]
 
 /-- The defining integral is analytic throughout its convergence half-plane. -/
 theorem analyticAt_truncatedMellin {a C r : ℝ} (ha : 1 ≤ a) (hC : 0 ≤ C)
@@ -109,7 +114,7 @@ theorem analyticAt_truncatedMellin {a C r : ℝ} (ha : 1 ≤ a) (hC : 0 ≤ C)
     {s : ℂ} (hs : r < s.re) : AnalyticAt ℂ (truncatedMellin a f) s := by
   have hd : DifferentiableOn ℂ (truncatedMellin a f) {z : ℂ | r < z.re} :=
     fun z hz => (hasDerivAt_truncatedMellin ha hC hf hbound hz).differentiableAt.differentiableWithinAt
-  exact hd.analyticOnNhd (isOpen_lt continuous_const Complex.continuous_re) s hs
+  exact hd.analyticAt ((isOpen_lt continuous_const Complex.continuous_re).mem_nhds hs)
 
 lemma logWeight_bound {a C r ε : ℝ} (ha : 1 ≤ a) (hC : 0 ≤ C) (hε : 0 < ε)
     {f : ℝ → ℂ} (hbound : ∀ x : ℝ, a < x → ‖f x‖ ≤ C * x ^ r) :
@@ -140,7 +145,7 @@ theorem hasDerivAt_deriv_truncatedMellin {a C r : ℝ} (ha : 1 ≤ a) (hC : 0 �
     (s := s) (by dsimp [ε]; linarith)
   have hneg : HasDerivAt (fun z : ℂ => -truncatedMellin a (logWeight f) z)
       (truncatedMellin a (logWeight (logWeight f)) s) s := by
-    simpa only [neg_neg] using hlog.neg
+    convert! hlog.neg using 1 <;> simp only [neg_neg]
   apply hneg.congr_of_eventuallyEq
   filter_upwards [(isOpen_lt continuous_const Complex.continuous_re).mem_nhds hs] with z hz
   exact (hasDerivAt_truncatedMellin ha hC hf hbound hz).deriv
