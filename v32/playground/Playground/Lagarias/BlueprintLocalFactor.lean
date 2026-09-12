@@ -53,14 +53,16 @@ lemma logTail_le_geometric {q : ℝ} (hq0 : 0 ≤ q) (hq1 : q < 1) (a : ℕ) :
       calc
         q ^ (i + a + 1) / ((↑(i + a) : ℝ) + 1) ≤
             q ^ (i + a + 1) / ((a : ℝ) + 1) := by
-          gcongr
-          · positivity
-          · exact_mod_cast (Nat.le_add_left a i)
+          apply div_le_div_of_nonneg_left (pow_nonneg hq0 _) (by positivity)
+          push_cast
+          linarith [Nat.cast_nonneg (R := ℝ) i]
         _ = (q ^ (a + 1) / ((a : ℝ) + 1)) * q ^ i := by
           rw [show i + a + 1 = (a + 1) + i by omega, pow_add]
           ring
     _ = (q ^ (a + 1) / ((a : ℝ) + 1)) * (1 - q)⁻¹ := hgeom.tsum_eq
-    _ = q ^ (a + 1) / (((a : ℝ) + 1) * (1 - q)) := by ring
+    _ = q ^ (a + 1) / (((a : ℝ) + 1) * (1 - q)) := by
+      simp only [div_eq_mul_inv, mul_inv_rev]
+      ring
 
 lemma logTail_le_pow {q : ℝ} (hq0 : 0 ≤ q) (hqhalf : q ≤ 1 / 2) {a : ℕ} (ha : 1 ≤ a) :
     logTail q a ≤ q ^ (a + 1) := by
@@ -81,7 +83,7 @@ lemma neg_log_one_sub_le_two_mul {u : ℝ} (hu0 : 0 ≤ u) (hu : u ≤ 1 / 2) :
   rw [Real.log_inv] at ht
   calc
     -Real.log (1 - u) ≤ (1 - u)⁻¹ - 1 := ht
-    _ = u / (1 - u) := by field_simp; ring
+    _ = u / (1 - u) := by field_simp <;> ring
     _ ≤ 2 * u := (div_le_iff₀ hpos).mpr (by nlinarith)
 
 /-- `b_p(a)` in the manuscript. -/
