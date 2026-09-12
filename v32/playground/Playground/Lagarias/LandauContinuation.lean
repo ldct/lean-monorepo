@@ -76,13 +76,13 @@ theorem integrableExpSet_of_analytic_real_continuation
   intro t ht
   by_contra hnot
   have hne : (integrableExpSet X μ).Nonempty := ⟨s, interior_subset hs⟩
-  have hbdd : BddAbove (integrableExpSet X μ) := by
-    refine ⟨t, ?_⟩
+  have hub : ∀ u ∈ integrableExpSet X μ, u ≤ t := by
     intro u hu
     by_contra hlt
     exact hnot (integrable_exp_of_le hXm hX (lt_of_not_ge hlt).le hu)
+  have hbdd : BddAbove (integrableExpSet X μ) := ⟨t, hub⟩
   let b := sSup (integrableExpSet X μ)
-  have hbt : b ≤ t := csSup_le hne hbdd.choose_spec
+  have hbt : b ≤ t := csSup_le hne hub
   have hbβ : b < β := hbt.trans_lt ht
   have hint := interior_integrableExpSet_eq_Iio_sSup hXm hX hne hbdd
   have hsb : s < b := by simpa only [hint, mem_Iio] using hs
