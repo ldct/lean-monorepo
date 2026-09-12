@@ -90,7 +90,7 @@ lemma integrableOn_mul_cpow_of_linear_bound {f : ℝ → ℂ} (hfm : Measurable 
   apply hmajor.mono' (hfm.aestronglyMeasurable.mul (hk.aestronglyMeasurable measurableSet_Ioi))
   apply (ae_restrict_iff' measurableSet_Ioi).2
   exact ae_of_all _ fun x hx => by
-    dsimp only
+    change ‖f x * (x : ℂ) ^ (-(s + 1))‖ ≤ C * x ^ (-s.re)
     have hx0 : 0 < x := zero_lt_one.trans hx
     rw [norm_mul, Complex.norm_cpow_eq_rpow_re_of_pos hx0]
     simp only [Complex.neg_re, Complex.add_re, Complex.one_re]
@@ -108,6 +108,7 @@ lemma integrableOn_psiMellin {s : ℂ} (hs : 1 < s.re) :
     (Complex.continuous_ofReal.measurable.comp Chebyshev.psi_mono.measurable)
     (C := Real.log 4 + 4) ?_ hs
   intro x hx
+  change ‖(Chebyshev.psi x : ℂ)‖ ≤ (Real.log 4 + 4) * x
   rw [Complex.norm_real, Real.norm_of_nonneg (Chebyshev.psi_nonneg x)]
   exact Chebyshev.psi_le_const_mul_self (by linarith)
 
@@ -134,7 +135,8 @@ lemma integrableOn_psiErrorMellin {s : ℂ} (hs : 1 < s.re) :
   apply ((integrableOn_psiMellin hs).sub hmain).congr
   apply (ae_restrict_iff' measurableSet_Ioi).2
   exact ae_of_all _ fun x hx => by
-    dsimp only
+    change (Chebyshev.psi x : ℂ) * (x : ℂ) ^ (-(s + 1)) - (x : ℂ) ^ (-s) =
+      ((Chebyshev.psi x - x : ℝ) : ℂ) * (x : ℂ) ^ (-(s + 1))
     rw [← mul_cpow_kernel (zero_lt_one.trans hx) s]
     push_cast
     ring
@@ -149,6 +151,8 @@ theorem psiErrorMellin_eq_logDeriv_zeta {s : ℂ} (hs : 1 < s.re) :
       rw [psiErrorMellin, psiMellin, ← integral_sub (integrableOn_psiMellin hs) hmain]
       apply setIntegral_congr_fun measurableSet_Ioi
       intro x hx
+      change ((Chebyshev.psi x - x : ℝ) : ℂ) * (x : ℂ) ^ (-(s + 1)) =
+        (Chebyshev.psi x : ℂ) * (x : ℂ) ^ (-(s + 1)) - (x : ℂ) ^ (-s)
       rw [← mul_cpow_kernel (zero_lt_one.trans hx) s]
       push_cast
       ring
