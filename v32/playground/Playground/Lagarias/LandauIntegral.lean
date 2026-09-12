@@ -41,7 +41,7 @@ theorem integrable_of_nonneg_series {F : ℕ → α → ℝ} {g : α → ℝ}
       have hsum : HasSum (fun k => F k a) 0 := by
         simpa [ha] using (hasSum_zero : HasSum (fun _ : ℕ => (0 : ℝ)) 0)
       exact (hFg a).unique hsum
-    exact (integrable_zero : Integrable (fun _ : α => (0 : ℝ)) μ).congr hgz.symm
+    exact (integrable_zero α ℝ μ).congr hgz.symm
   · by_contra hnot
     exact hg (integral_undef hnot)
 
