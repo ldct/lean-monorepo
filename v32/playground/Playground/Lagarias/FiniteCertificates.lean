@@ -46,8 +46,8 @@ lemma expLower_le (h : ℚ) (k : ℕ) (hh : 0 ≤ h) :
 lemma log_lower_of_power {b h : ℚ} (m : ℕ) (hb : 0 < b) (hpow : b ^ m ≤ h) :
     (((m : ℚ) * (1 - 1 / b) : ℚ) : ℝ) ≤ Real.log (h : ℝ) := by
   have hbR : 0 < (b : ℝ) := by exact_mod_cast hb
-  have h := Real.log_le_sub_one_of_pos (inv_pos.mpr hbR)
-  rw [Real.log_inv] at h
+  have hlogInv := Real.log_le_sub_one_of_pos (inv_pos.mpr hbR)
+  rw [Real.log_inv] at hlogInv
   have hbase : 1 - 1 / (b : ℝ) ≤ Real.log (b : ℝ) := by
     simp only [one_div]
     linarith
@@ -71,7 +71,7 @@ lemma rationalCertificate_sound {n k m : ℕ} {h b : ℚ}
     (log_lower_of_power m hb hpow).trans
       (Real.log_le_log (by exact_mod_cast hh) hHR)
   have hp := mul_le_mul he hlog (by exact_mod_cast hl) (Real.exp_pos _).le
-  simpa only [bound, Rat.cast_add, Rat.cast_mul] using add_le_add hHR hp
+  simpa only [bound, rhs, Rat.cast_add, Rat.cast_mul] using add_le_add hHR hp
 
 lemma bound_mono {a b : ℕ} (ha : 0 < a) (hab : a ≤ b) : bound a ≤ bound b := by
   have hH := harmonic_monotone_real hab
