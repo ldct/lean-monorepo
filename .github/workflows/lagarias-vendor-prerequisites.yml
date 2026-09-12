@@ -1,0 +1,169 @@
+name: Lagarias pinned analytic source import
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/lagarias-vendor-prerequisites.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lagarias-vendor-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prepare:
+    if: >-
+      github.event_name == 'pull_request' &&
+      github.event.pull_request.number == 7 &&
+      github.event.pull_request.head.repo.full_name == 'ldct/lean-monorepo' &&
+      github.event.pull_request.head.ref == 'codex/lagarias-formalization'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      needed: ${{ steps.need.outputs.needed }}
+      base: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Remove credentials before compiling external proof sources
+        run: git config --local --unset-all http.https://github.com/.extraheader || true
+      - name: Check whether the source snapshot is already present
+        id: need
+        run: |
+          if test -f v32/playground/PrimeNumberTheoremAnd/SOURCE_PROVENANCE.json; then
+            echo 'needed=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'needed=true' >> "$GITHUB_OUTPUT"
+          fi
+      - name: Prepare the unchanged pinned toolchain
+        if: steps.need.outputs.needed == 'true'
+        uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596
+        with:
+          lake-package-directory: v32/playground
+          auto-config: 'false'
+          build: 'false'
+          test: 'false'
+          lint: 'false'
+          use-mathlib-cache: 'true'
+      - name: Compile and transitively audit the exact upstream closure
+        if: steps.need.outputs.needed == 'true'
+        working-directory: v32/playground
+        run: python3 blueprint/probe_hadamard.py
+      - name: Package only verified sources, provenance, and the Apache license
+        if: steps.need.outputs.needed == 'true'
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib, re, tarfile, urllib.request
+          package = pathlib.Path('v32/playground')
+          root = package / 'PrimeNumberTheoremAnd'
+          revision = 'a5154676af9aa3095150ee410cdda80555aa0642'
+          hashes = json.loads((package / 'hadamard-probe-manifest.json').read_text())
+          if len(hashes) != 61:
+              raise RuntimeError('Unexpected proof-source closure size')
+          sources = []
+          for module, digest in hashes.items():
+              if not re.fullmatch(r'PrimeNumberTheoremAnd\.[A-Za-z0-9_.]+', module):
+                  raise RuntimeError('Unexpected module path')
+              source = package.joinpath(*module.split('.')).with_suffix('.lean')
+              if source.is_symlink() or hashlib.sha256(source.read_bytes()).hexdigest() != digest:
+                  raise RuntimeError(f'Source changed after verification: {module}')
+              sources.append(source)
+          with urllib.request.urlopen(f'https://raw.githubusercontent.com/AlexKontorovich/PrimeNumberTheoremAnd/{revision}/LICENSE', timeout=60) as response:
+              license_bytes = response.read()
+          if b'Apache License' not in license_bytes or b'Version 2.0' not in license_bytes:
+              raise RuntimeError('Unexpected upstream license')
+          (root / 'LICENSE').write_bytes(license_bytes)
+          provenance = {
+              'repository': 'https://github.com/AlexKontorovich/PrimeNumberTheoremAnd',
+              'revision': revision,
+              'license': 'Apache-2.0; original per-file copyright and author notices retained',
+              'modifications': 'None. Original source bytes are preserved.',
+              'compiled_with': 'Lean 4.32.0 and the project Mathlib 4.32.0 pin',
+              'purpose': 'Hadamard factorization and zeta analytic prerequisites for the Lagarias manuscript',
+              'sha256_by_module': hashes,
+          }
+          (root / 'SOURCE_PROVENANCE.json').write_text(json.dumps(provenance, indent=2) + '\n')
+          (root / 'VERIFICATION.md').write_text((package / 'hadamard-probe-report.md').read_text())
+          sources.extend([root / 'LICENSE', root / 'SOURCE_PROVENANCE.json', root / 'VERIFICATION.md'])
+          with tarfile.open('lagarias-analytic-sources.tar', 'w') as archive:
+              for source in sorted(sources):
+                  archive.add(source, arcname=str(source), recursive=False)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: steps.need.outputs.needed == 'true'
+        with:
+          name: lagarias-analytic-sources
+          path: lagarias-analytic-sources.tar
+          retention-days: 7
+  publish:
+    needs: prepare
+    if: needs.prepare.outputs.needed == 'true'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.prepare.outputs.base }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: lagarias-analytic-sources
+          path: /tmp/lagarias-analytic-import
+      - name: Validate and install the source-only snapshot
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib, tarfile
+          prefix = 'v32/playground/PrimeNumberTheoremAnd/'
+          with tarfile.open('/tmp/lagarias-analytic-import/lagarias-analytic-sources.tar') as archive:
+              members = archive.getmembers()
+              for member in members:
+                  name = pathlib.PurePosixPath(member.name)
+                  if not member.isfile() or not member.name.startswith(prefix) or '..' in name.parts:
+                      raise RuntimeError('Unexpected artifact entry')
+                  target = pathlib.Path(member.name)
+                  if target.exists():
+                      raise RuntimeError(f'Refusing to overwrite existing source: {target}')
+              for member in members:
+                  target = pathlib.Path(member.name)
+                  target.parent.mkdir(parents=True, exist_ok=True)
+                  target.write_bytes(archive.extractfile(member).read())
+          root = pathlib.Path(prefix)
+          provenance = json.loads((root / 'SOURCE_PROVENANCE.json').read_text())
+          if provenance['revision'] != 'a5154676af9aa3095150ee410cdda80555aa0642':
+              raise RuntimeError('Revision mismatch')
+          hashes = provenance['sha256_by_module']
+          if len(hashes) != 61:
+              raise RuntimeError('Closure size mismatch')
+          for module, digest in hashes.items():
+              path = pathlib.Path('v32/playground').joinpath(*module.split('.')).with_suffix('.lean')
+              if hashlib.sha256(path.read_bytes()).hexdigest() != digest:
+                  raise RuntimeError(f'Hash mismatch: {module}')
+          lakefile = pathlib.Path('v32/playground/lakefile.toml')
+          text = lakefile.read_text()
+          if 'name = "PrimeNumberTheoremAnd"' in text:
+              raise RuntimeError('Library already declared')
+          lakefile.write_text(text.rstrip() + '\n\n# Minimal pinned analytic prerequisites; see SOURCE_PROVENANCE.json.\n[[lean_lib]]\nname = "PrimeNumberTheoremAnd"\n')
+          PY
+      - name: Commit only this snapshot to the requested PR branch
+        env:
+          EXPECTED_HEAD: ${{ needs.prepare.outputs.base }}
+        run: |
+          branch='codex/lagarias-formalization'
+          actual="$(git ls-remote origin "refs/heads/$branch" | cut -f1)"
+          test "$actual" = "$EXPECTED_HEAD" || { echo 'Branch changed; refusing to overwrite concurrent work.'; exit 1; }
+          git add -- v32/playground/PrimeNumberTheoremAnd v32/playground/lakefile.toml
+          python3 - <<'PY'
+          import subprocess
+          paths = subprocess.check_output(['git', 'diff', '--cached', '--name-only', '-z']).decode().split('\0')
+          for path in filter(None, paths):
+              if path != 'v32/playground/lakefile.toml' and not path.startswith('v32/playground/PrimeNumberTheoremAnd/'):
+                  raise RuntimeError(f'Unexpected staged path: {path}')
+          PY
+          git -c user.name='github-actions[bot]' -c user.email='41898282+github-actions[bot]@users.noreply.github.com' \
+            commit -m 'feat: vendor 61 compiled analytic prerequisites with provenance and axiom-audit results'
+          git push origin "HEAD:refs/heads/$branch"
