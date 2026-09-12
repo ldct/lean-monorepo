@@ -1,0 +1,57 @@
+name: v32 compile check
+
+on:
+  push:
+    branches:
+      - build-check/v32-20260912-5aa9baac
+
+permissions:
+  contents: read
+
+jobs:
+  build-v32:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        shell: bash
+        working-directory: v32/playground
+    steps:
+      - name: Check out the source revision under test
+        uses: actions/checkout@v4
+        with:
+          ref: 5aa9baac8c6139cb7defbe7eba5ad4176e9853e8
+          persist-credentials: false
+      - name: Install elan
+        run: |
+          set -euo pipefail
+          curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -o "$RUNNER_TEMP/elan-init.sh"
+          sh "$RUNNER_TEMP/elan-init.sh" -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Report source and pinned Lean version
+        run: |
+          set -euo pipefail
+          git rev-parse HEAD
+          cat lean-toolchain
+          lake --version
+          lean --version
+      - name: Fetch the pinned Mathlib cache
+        id: cache
+        run: |
+          set -euo pipefail
+          lake exe cache get 2>&1 | tee "$RUNNER_TEMP/v32-cache.log"
+      - name: Build the v32 project
+        id: build
+        run: |
+          set -euo pipefail
+          lake build 2>&1 | tee "$RUNNER_TEMP/v32-build.log"
+      - name: Upload build logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v32-compile-check-logs
+          path: |
+            ${{ runner.temp }}/v32-cache.log
+            ${{ runner.temp }}/v32-build.log
+          if-no-files-found: ignore
+          retention-days: 7
