@@ -50,6 +50,7 @@ theorem analyticAt_positiveMellin_of_convergence {a β : ℝ} (ha : 1 ≤ a)
     simp only [Complex.sub_re, Complex.neg_re, Complex.one_re]
     linarith
   exact (analyticAt_positivePowerIntegral_of_convergence ha hw hpower harg).comp
+    (f := fun z : ℂ => -z - 1) (x := s)
     (show AnalyticAt ℂ (fun z : ℂ => -z - 1) s by fun_prop)
 
 /-- Landau's principle upgrades real-axis continuation to genuine convergence
@@ -72,7 +73,8 @@ theorem mellin_integrable_of_real_axis_germs {a : ℝ} (ha : 1 ≤ a)
     have hF := hreal (-t - 1) (by linarith)
     have harg : ((-t - 1 : ℝ) : ℂ) = -(t : ℂ) - 1 := by push_cast; rfl
     rw [harg] at hF
-    exact hF.comp (show AnalyticAt ℂ (fun z : ℂ => -z - 1) (t : ℂ) by fun_prop)
+    exact hF.comp (f := fun z : ℂ => -z - 1) (x := (t : ℂ))
+      (show AnalyticAt ℂ (fun z : ℂ => -z - 1) (t : ℂ) by fun_prop)
   have hGeq : ∀ z : ℂ, z.re < -c - 1 → G z = positivePowerIntegral a w z := by
     intro z hz
     have hz' : c < (-z - 1).re := by
