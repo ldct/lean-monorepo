@@ -55,6 +55,7 @@ theorem riemannZeta_re_neg_half_to_one {t : ℝ} (ht : 1 / 2 < t) (ht1 : t < 1) 
   simp only [Complex.sub_re, Complex.add_re, Complex.one_re, Complex.ofReal_re,
     Complex.mul_re, Complex.ofReal_im, zero_mul, sub_zero] at hre
   have he : 1 + 1 / (t - 1) = t / (t - 1) := by
+    have hden : t - 1 ≠ 0 := sub_ne_zero.mpr ht1.ne
     field_simp
     ring
   have hneg : 1 + 1 / (t - 1) < 0 := by
