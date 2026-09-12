@@ -30,7 +30,7 @@ jobs:
           lake-package-directory: v32/playground
           auto-config: 'false'
           build: 'true'
-          build-args: Playground.Lagarias.Landau
+          build-args: Playground.Lagarias.LandauIntegral
           test: 'false'
           lint: 'false'
           use-mathlib-cache: 'true'
@@ -40,7 +40,7 @@ jobs:
           audit_file="$(mktemp ./LagariasLandauAuditXXXXXX.lean)"
           trap 'rm -f "$audit_file"' EXIT
           cat > "$audit_file" <<'LEAN'
-          import Playground.Lagarias.Landau
+          import Playground.Lagarias.LandauIntegral
           import Lean.Util.CollectAxioms
           open Lean Elab Command in
           run_cmd do
