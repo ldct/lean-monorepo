@@ -29,7 +29,7 @@ lemma primePowerMap_injective : Function.Injective primePowerMap := by
   have hpow : (p : ℕ) ^ (k + 1) = (q : ℕ) ^ (j + 1) := congrArg Subtype.val heq
   obtain ⟨hp, hk⟩ := p.prop.pow_inj' q.prop (Nat.succ_ne_zero _) (Nat.succ_ne_zero _) hpow
   have hp' : p = q := Subtype.ext hp
-  have hk' : k = j := Nat.add_right_cancel hk
+  have hk' : k = j := Nat.succ.inj hk
   cases hp'
   cases hk'
   rfl
@@ -102,7 +102,8 @@ lemma logZetaTerm_tsum_eq_prime_sum {s : ℝ} (hs : 1 < s) :
     intro n hn
     by_contra hnot
     exact hn (by simp [logZetaTerm, ArithmeticFunction.vonMangoldt_eq_zero_iff.mpr hnot])
-  have hsub : Summable (fun n : {n : ℕ // IsPrimePow n} => logZetaTerm s n) := hsummable.subtype
+  have hsub : Summable (fun n : {n : ℕ // IsPrimePow n} => logZetaTerm s n) :=
+    hsummable.subtype IsPrimePow
   have hprod : Summable (fun pk : Nat.Primes × ℕ => logZetaTerm s (primePowerEquiv pk)) :=
     hsub.comp_injective primePowerEquiv.injective
   calc
