@@ -50,7 +50,9 @@ jobs:
             printf '\n```\n' >> "$report"
           }
           failures=0
-          for module in Playground.Lagarias.LandauMGF Playground.Lagarias.LandauZeta Playground.Lagarias.LandauContinuation Playground.Lagarias.LandauPoles; do
+          for source in Playground/Lagarias/Landau*.lean; do
+            module="Playground.Lagarias.${source##*/}"
+            module="${module%.lean}"
             if ! lake build "$module" > "$log_file" 2>&1; then
               cat "$log_file"
               append_report "$module" 'compilation failed'
