@@ -121,6 +121,7 @@ lemma integrable_exp_of_le (hXm : AEMeasurable X μ) (hX : ∀ a, 0 ≤ X a)
   have ht' : Integrable (fun a => Real.exp (t * X a)) μ := ht
   apply ht'.mono' (Real.measurable_exp.comp_aemeasurable (hXm.const_mul s)).aestronglyMeasurable
   exact ae_of_all _ fun a => by
+    change ‖Real.exp (s * X a)‖ ≤ Real.exp (t * X a)
     rw [Real.norm_of_nonneg (Real.exp_pos _).le]
     exact Real.exp_le_exp.mpr (mul_le_mul_of_nonneg_right hst (hX a))
 
