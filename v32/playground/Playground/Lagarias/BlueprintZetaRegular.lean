@@ -23,7 +23,8 @@ lemma differentiable_regularizedZeta : Differentiable ℂ regularizedZeta :=
   differentiable_riemannZeta₁
 
 lemma regularizedZeta_eq_mul_zeta {s : ℂ} (hs : s ≠ 1) :
-    regularizedZeta s = (s - 1) * riemannZeta s := riemannZeta₁_of_ne hs
+    regularizedZeta s = (s - 1) * riemannZeta s := by
+  simp [regularizedZeta, riemannZeta₁, hs]
 
 lemma regularizedZeta_one : regularizedZeta 1 = 1 := riemannZeta₁_one
 
