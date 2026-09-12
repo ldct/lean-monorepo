@@ -30,7 +30,9 @@ lemma eventually_psi_eq_right {x : ℝ} (hx : 0 ≤ x) :
 lemma continuousWithinAt_psi_right {x : ℝ} (hx : 0 ≤ x) :
     ContinuousWithinAt Chebyshev.psi (Ici x) x := by
   change Tendsto Chebyshev.psi (𝓝[≥] x) (𝓝 (Chebyshev.psi x))
-  exact tendsto_const_nhds.congr' (eventually_psi_eq_right hx).symm
+  apply tendsto_const_nhds.congr'
+  filter_upwards [eventually_psi_eq_right hx] with y hy
+  exact hy.symm
 
 @[fun_prop] lemma measurable_w : Measurable w := by
   unfold w
