@@ -1,0 +1,67 @@
+name: Lagarias Hadamard compatibility probe
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/lagarias-hadamard-probe.yml'
+      - 'v32/playground/blueprint/probe_hadamard.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lagarias-hadamard-probe-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  probe:
+    name: Pinned upstream source probe (not a proof of the target)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      report: ${{ steps.probe.outputs.report }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Prepare unchanged Lean 4.32.0 and Mathlib
+        uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596
+        with:
+          lake-package-directory: v32/playground
+          auto-config: 'false'
+          build: 'false'
+          test: 'false'
+          lint: 'false'
+          use-mathlib-cache: 'true'
+      - name: Compile the minimal source closure and audit capstones
+        id: probe
+        working-directory: v32/playground
+        run: |
+          finish() {
+            if test -f hadamard-probe-report.md; then
+              cat hadamard-probe-report.md >> "$GITHUB_STEP_SUMMARY"
+              {
+                echo 'report<<LAGARIAS_HADAMARD_PROBE_END'
+                cat hadamard-probe-report.md
+                echo 'LAGARIAS_HADAMARD_PROBE_END'
+              } >> "$GITHUB_OUTPUT"
+            fi
+          }
+          trap finish EXIT
+          python3 blueprint/probe_hadamard.py
+  diagnostics:
+    name: Compact Hadamard probe diagnostics
+    needs: probe
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Print probe report
+        env:
+          REPORT: ${{ needs.probe.outputs.report }}
+          RESULT: ${{ needs.probe.result }}
+        run: |
+          printf '%s\n' "$REPORT"
+          printf '\nProbe job result: %s\n' "$RESULT"
+          test -n "$REPORT"
