@@ -28,15 +28,31 @@ lemma w_pos {x : ℝ} (hx : 1 < x) : 0 < w x := by
 lemma hasDerivAt_g {x : ℝ} (hx : 1 < x) : HasDerivAt g (h x) x := by
   have hx0 : x ≠ 0 := (zero_lt_one.trans hx).ne'
   have hl0 : Real.log x ≠ 0 := (Real.log_pos hx).ne'
-  simpa [g, h, div_eq_mul_inv, mul_inv_rev, mul_comm] using
+  change HasDerivAt (fun y : ℝ => Real.log (Real.log y)) (h x) x
+  have hd : HasDerivAt (fun y : ℝ => Real.log (Real.log y)) (x⁻¹ / Real.log x) x :=
     (Real.hasDerivAt_log hx0).log hl0
+  have heq : h x = x⁻¹ / Real.log x := by
+    unfold h
+    simp [div_eq_mul_inv, mul_inv_rev, mul_comm]
+  rw [heq]
+  exact hd
 
 lemma hasDerivAt_h {x : ℝ} (hx : 1 < x) : HasDerivAt h (-w x) x := by
   have hx0 : x ≠ 0 := (zero_lt_one.trans hx).ne'
   have hl0 : Real.log x ≠ 0 := (Real.log_pos hx).ne'
-  simpa [h, w, Pi.mul_apply, mul_pow, hx0, neg_div, neg_add, add_comm] using
-    (hasDerivAt_const x (1 : ℝ)).div
-      ((hasDerivAt_id x).mul (Real.hasDerivAt_log hx0)) (mul_ne_zero hx0 hl0)
+  change HasDerivAt (fun y : ℝ => 1 / (y * Real.log y)) (-w x) x
+  have hd := (hasDerivAt_const x (1 : ℝ)).div
+    ((hasDerivAt_id x).mul (Real.hasDerivAt_log hx0)) (mul_ne_zero hx0 hl0)
+  change HasDerivAt (fun y : ℝ => 1 / (y * Real.log y))
+    ((0 * (x * Real.log x) - 1 * (1 * Real.log x + x * x⁻¹)) /
+      (x * Real.log x) ^ 2) x at hd
+  have heq : -w x = (0 * (x * Real.log x) - 1 * (1 * Real.log x + x * x⁻¹)) /
+      (x * Real.log x) ^ 2 := by
+    unfold w
+    field_simp
+    ring
+  rw [heq]
+  exact hd
 
 lemma h_strictAntiOn : StrictAntiOn h (Set.Ioi 1) := by
   intro x hx y hy hxy
