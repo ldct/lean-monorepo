@@ -55,7 +55,7 @@ lemma logTail_le_geometric {q : ℝ} (hq0 : 0 ≤ q) (hq1 : q < 1) (a : ℕ) :
             q ^ (i + a + 1) / ((a : ℝ) + 1) := by
           apply div_le_div_of_nonneg_left (pow_nonneg hq0 _) (by positivity)
           push_cast
-          linarith [Nat.cast_nonneg (R := ℝ) i]
+          linarith [Nat.cast_nonneg (α := ℝ) i]
         _ = (q ^ (a + 1) / ((a : ℝ) + 1)) * q ^ i := by
           rw [show i + a + 1 = (a + 1) + i by omega, pow_add]
           ring
