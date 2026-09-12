@@ -103,8 +103,7 @@ lemma intervalIntegrable_h {x : ℝ} (hx : 2 ≤ x) : IntervalIntegrable h volum
   apply ContinuousOn.intervalIntegrable
   intro t ht
   rw [Set.uIcc_of_le hx] at ht
-  exact (hasDerivAt_g (by linarith [ht.1] : 1 < t)).deriv
-    ▸ (hasDerivAt_h (by linarith [ht.1] : 1 < t)).continuousAt.continuousWithinAt
+  exact (hasDerivAt_h (by linarith [ht.1] : 1 < t)).continuousAt.continuousWithinAt
 
 lemma integral_h {x : ℝ} (hx : 2 ≤ x) : (∫ t : ℝ in 2..x, h t) = g x - g 2 := by
   apply intervalIntegral.integral_eq_sub_of_hasDerivAt _ (intervalIntegrable_h hx)
@@ -147,6 +146,7 @@ theorem secondError_eq {x : ℝ} (hx : 2 ≤ x) :
   have hAx : A x / Real.log x = 1 + firstError x / Real.log x := by
     unfold firstError
     field_simp
+    ring
   rw [hAx]
   linarith only [htail]
 
