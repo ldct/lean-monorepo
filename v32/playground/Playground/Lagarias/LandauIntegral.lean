@@ -34,13 +34,14 @@ theorem integrable_of_nonneg_series {F : ℕ → α → ℝ} {g : α → ℝ}
       apply le_antisymm _ (integral_nonneg (hF0 k))
       calc
         (∫ a, F k a ∂μ) ≤ ∑' j, ∫ a, F j a ∂μ :=
-          le_tsum hFs k (fun j _ => integral_nonneg (hF0 j))
+          hFs.le_tsum k (fun j _ => integral_nonneg (hF0 j))
         _ = 0 := heq.trans hg
     have hgz : g =ᵐ[μ] 0 := by
       filter_upwards [ae_all_iff.mpr hzero] with a ha
-      have hsum : HasSum (fun k => F k a) 0 := by simpa [ha] using (hasSum_zero : HasSum (fun _ : ℕ => (0 : ℝ)) 0)
+      have hsum : HasSum (fun k => F k a) 0 := by
+        simpa [ha] using (hasSum_zero : HasSum (fun _ : ℕ => (0 : ℝ)) 0)
       exact (hFg a).unique hsum
-    exact integrable_zero.congr hgz.symm
+    exact (integrable_zero : Integrable (fun _ : α => (0 : ℝ)) μ).congr hgz.symm
   · by_contra hnot
     exact hg (integral_undef hnot)
 
