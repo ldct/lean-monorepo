@@ -1,10 +1,10 @@
-import Playground.Lagarias.Bounds
+import Playground.Lagarias.HarmonicBounds
 import Lean.Util.CollectAxioms
 
 /-!
 Audit every declaration in the helper namespace, not just a selected theorem.
 The final RH equivalence is deliberately not included: it is still incomplete.
-Run this file explicitly after building `Playground.Lagarias.Bounds`.
+Run this file explicitly after building `Playground.Lagarias.HarmonicBounds`.
 -/
 
 open Lean Elab Command in
