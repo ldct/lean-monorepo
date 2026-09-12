@@ -10,6 +10,7 @@ on:
       - 'v32/playground/Playground/Lagarias/Asymptotics.lean'
       - 'v32/playground/Playground/Lagarias/RobinBridge.lean'
       - 'v32/playground/Playground/Lagarias/ColossallyAbundant.lean'
+      - 'v32/playground/Playground/Lagarias/PrimePower.lean'
 
 permissions:
   contents: read
@@ -30,7 +31,7 @@ jobs:
           lake-package-directory: v32/playground
           auto-config: 'false'
           build: 'true'
-          build-args: Playground.Lagarias.RobinBridge Playground.Lagarias.ColossallyAbundant
+          build-args: Playground.Lagarias.RobinBridge Playground.Lagarias.PrimePower
           test: 'false'
           lint: 'false'
           use-mathlib-cache: 'true'
@@ -42,7 +43,7 @@ jobs:
           trap 'rm -f "$audit"' EXIT
           cat > "$audit" <<'LEAN'
           import Playground.Lagarias.RobinBridge
-          import Playground.Lagarias.ColossallyAbundant
+          import Playground.Lagarias.PrimePower
           import Lean.Util.CollectAxioms
           open Lean Elab Command in
           run_cmd do
