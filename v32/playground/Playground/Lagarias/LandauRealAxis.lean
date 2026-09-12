@@ -17,7 +17,7 @@ The identity theorem propagates germs along the connected real interval.
 namespace LeanEval.NumberTheory.Lagarias.Landau
 
 open MeasureTheory ProbabilityTheory Filter Set
-open scoped Topology
+open scoped Topology NNReal
 
 variable {α : Type*} [MeasurableSpace α] {μ : Measure α} {X : α → ℝ}
 
@@ -55,7 +55,7 @@ theorem integrableExpSet_of_real_axis_germs
     exact (hMGF (u : ℂ) (by simpa using hu)).meromorphicAt
   have hgerm (u : ℝ) (hu : u < b) : F =ᶠ[𝓝 (u : ℂ)] complexMGF X μ := by
     apply (ContinuousAt.eventuallyEq_nhds_iff_eventuallyEq_nhdsNE
-      (hreal u (hu.trans hbβ)).continuousAt (hMGF (u : ℂ) (by simpa using hu)).continuousAt).mpr
+      (hreal u (hu.trans hbβ)).continuousAt (hMGF (u : ℂ) (by simpa using hu)).continuousAt).mp
     exact meromorphic_germ_eq_of_preconnected hFaxis hGaxis haxis
       ⟨s, hsb, rfl⟩ ⟨u, hu, rfl⟩ (heq.filter_mono nhdsWithin_le_nhds)
   obtain ⟨δ, hδ, hA⟩ := Metric.mem_nhds_iff.mp (hreal b hbβ).eventually_analyticAt
