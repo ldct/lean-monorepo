@@ -66,10 +66,10 @@ lemma sqrt_ge_two {x : ℝ} (hx : 4 ≤ x) : 2 ≤ Real.sqrt x := by
 
 /-- The small-prime part of the correction, bounded by counting integers. -/
 lemma small_prime_correction_le {x : ℝ} (hx : 4 ≤ x) :
-    (∑ p ∈ (Nat.primesLE ⌊x⌋₊).filter (fun p => (p : ℝ) ≤ Real.sqrt x),
+    (∑ p ∈ (Nat.primesLE ⌊x⌋₊).filter (fun p : ℕ => (p : ℝ) ≤ Real.sqrt x),
       (p : ℝ)⁻¹ ^ (K p x + 1)) ≤ 1 / Real.sqrt x := by
   classical
-  let S := (Nat.primesLE ⌊x⌋₊).filter (fun p => (p : ℝ) ≤ Real.sqrt x)
+  let S := (Nat.primesLE ⌊x⌋₊).filter (fun p : ℕ => (p : ℝ) ≤ Real.sqrt x)
   have hx0 : 0 < x := by linarith
   have hs0 : 0 < Real.sqrt x := by linarith [sqrt_ge_two hx]
   have hsub : S ⊆ Finset.Ioc 0 ⌊Real.sqrt x⌋₊ := by
@@ -79,8 +79,9 @@ lemma small_prime_correction_le {x : ℝ} (hx : 4 ≤ x) :
       (Nat.le_floor_iff (Real.sqrt_nonneg x)).mpr hp'.2⟩
   have hcard : S.card ≤ ⌊Real.sqrt x⌋₊ := by
     simpa using Finset.card_le_card hsub
+  have hcardCast : (S.card : ℝ) ≤ (⌊Real.sqrt x⌋₊ : ℕ) := by exact_mod_cast hcard
   have hcardR : (S.card : ℝ) ≤ Real.sqrt x :=
-    (by exact_mod_cast hcard).trans (Nat.floor_le (Real.sqrt_nonneg x))
+    hcardCast.trans (Nat.floor_le (Real.sqrt_nonneg x))
   calc
     (∑ p ∈ S, (p : ℝ)⁻¹ ^ (K p x + 1)) ≤ ∑ _p ∈ S, (1 / x) := by
       apply Finset.sum_le_sum
@@ -89,21 +90,23 @@ lemma small_prime_correction_le {x : ℝ} (hx : 4 ≤ x) :
     _ = (S.card : ℝ) / x := by simp [div_eq_mul_inv]
     _ ≤ Real.sqrt x / x := div_le_div_of_nonneg_right hcardR hx0.le
     _ = 1 / Real.sqrt x := by
-      rw [← Real.sq_sqrt hx0.le]
-      field_simp
+      apply (div_eq_div_iff hx0.ne' hs0.ne').mpr
+      nlinarith [Real.sq_sqrt hx0.le]
 
 /-- The large-prime part is dominated by all reciprocal squares above sqrt(x). -/
 lemma large_prime_correction_le {x : ℝ} (hx : 4 ≤ x) :
-    (∑ p ∈ (Nat.primesLE ⌊x⌋₊).filter (fun p => ¬(p : ℝ) ≤ Real.sqrt x),
+    (∑ p ∈ (Nat.primesLE ⌊x⌋₊).filter (fun p : ℕ => ¬(p : ℝ) ≤ Real.sqrt x),
       (p : ℝ)⁻¹ ^ (K p x + 1)) ≤ 2 / Real.sqrt x := by
   classical
-  let S := (Nat.primesLE ⌊x⌋₊).filter (fun p => ¬(p : ℝ) ≤ Real.sqrt x)
+  let S := (Nat.primesLE ⌊x⌋₊).filter (fun p : ℕ => ¬(p : ℝ) ≤ Real.sqrt x)
   let m : ℕ := ⌊Real.sqrt x⌋₊
   have hs2 := sqrt_ge_two hx
   have hs0 : 0 < Real.sqrt x := by linarith
   have hm : 0 < m := by
     apply Nat.lt_of_lt_of_le (by norm_num : 0 < 1)
-    exact (Nat.le_floor_iff (Real.sqrt_nonneg x)).mpr (by linarith)
+    apply (Nat.le_floor_iff (Real.sqrt_nonneg x)).mpr
+    norm_num
+    linarith
   have hmR : (0 : ℝ) < m := by exact_mod_cast hm
   have hhalf : Real.sqrt x / 2 ≤ (m : ℝ) := by
     have ht := Nat.lt_floor_add_one (Real.sqrt x)
@@ -123,7 +126,7 @@ lemma large_prime_correction_le {x : ℝ} (hx : 4 ≤ x) :
       exact inv_pow_K_succ_le_inv_sq (Finset.mem_filter.mp hp).1
     _ ≤ ∑ p ∈ Finset.Ioc m (max m ⌊x⌋₊), ((p : ℝ) ^ 2)⁻¹ :=
       Finset.sum_le_sum_of_subset_of_nonneg hsub (fun p _ _ => by positivity)
-    _ ≤ (m : ℝ)⁻¹ - (max m ⌊x⌋₊ : ℕ)⁻¹ :=
+    _ ≤ (m : ℝ)⁻¹ - ((max m ⌊x⌋₊ : ℕ) : ℝ)⁻¹ :=
       sum_Ioc_inv_sq_le_sub (Nat.ne_of_gt hm) (le_max_left _ _)
     _ ≤ (m : ℝ)⁻¹ := sub_le_self _ (by positivity)
     _ ≤ 2 / Real.sqrt x := by
@@ -134,10 +137,10 @@ lemma large_prime_correction_le {x : ℝ} (hx : 4 ≤ x) :
 theorem sum_prime_power_correction_le {x : ℝ} (hx : 4 ≤ x) :
     (∑ p ∈ Nat.primesLE ⌊x⌋₊, (p : ℝ)⁻¹ ^ (K p x + 1)) ≤ 3 / Real.sqrt x := by
   classical
-  rw [← Finset.sum_filter_add_sum_filter_not _ (fun p => (p : ℝ) ≤ Real.sqrt x)]
-  have hs := small_prime_correction_le hx
-  have hl := large_prime_correction_le hx
-  linarith
+  rw [← Finset.sum_filter_add_sum_filter_not (Nat.primesLE ⌊x⌋₊)
+    (fun p : ℕ => (p : ℝ) ≤ Real.sqrt x) (fun p => (p : ℝ)⁻¹ ^ (K p x + 1))]
+  exact (add_le_add (small_prime_correction_le hx) (large_prime_correction_le hx)).trans_eq
+    (by ring)
 
 /-- The exact finite identity preceding Lemma 9.1. -/
 lemma log_sigma_lcmSeq_eq (x : ℝ) :
@@ -171,7 +174,13 @@ theorem log_sigma_lcmSeq_ge {x : ℝ} (hx : 4 ≤ x) :
     apply Finset.sum_le_sum
     intro p hp
     exact primeLogLoss_le_two_mul (by exact_mod_cast (Nat.prime_of_mem_primesLE hp).two_le) _
-  have hsum := sum_prime_power_correction_le hx
+  have hfinal : (∑ p ∈ Nat.primesLE ⌊x⌋₊, primeLogLoss (p : ℝ) (K p x)) ≤
+      6 / Real.sqrt x := by
+    calc
+      _ ≤ 2 * ∑ p ∈ Nat.primesLE ⌊x⌋₊, (p : ℝ)⁻¹ ^ (K p x + 1) := hloss
+      _ ≤ 2 * (3 / Real.sqrt x) :=
+        mul_le_mul_of_nonneg_left (sum_prime_power_correction_le hx) (by norm_num)
+      _ = 6 / Real.sqrt x := by ring
   linarith
 
 end LeanEval.NumberTheory.Lagarias.Blueprint
