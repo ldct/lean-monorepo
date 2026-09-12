@@ -29,17 +29,19 @@ lemma hasDerivAt_g {x : ℝ} (hx : 1 < x) : HasDerivAt g (h x) x := by
   have hx0 : x ≠ 0 := (zero_lt_one.trans hx).ne'
   have hl0 : Real.log x ≠ 0 := (Real.log_pos hx).ne'
   convert (Real.hasDerivAt_log hx0).log hl0 using 1 <;>
-    dsimp only [g, h] <;> field_simp <;> ring
+    simp [g, h, div_eq_mul_inv, mul_inv_rev, mul_comm]
 
 lemma hasDerivAt_h {x : ℝ} (hx : 1 < x) : HasDerivAt h (-w x) x := by
   have hx0 : x ≠ 0 := (zero_lt_one.trans hx).ne'
   have hl0 : Real.log x ≠ 0 := (Real.log_pos hx).ne'
   convert (hasDerivAt_const x (1 : ℝ)).div
     ((hasDerivAt_id x).mul (Real.hasDerivAt_log hx0)) (mul_ne_zero hx0 hl0) using 1 <;>
-    dsimp only [h, w] <;> field_simp <;> ring
+    simp [h, w, Pi.mul_apply, mul_pow, hx0]
 
 lemma h_strictAntiOn : StrictAntiOn h (Set.Ioi 1) := by
   intro x hx y hy hxy
+  change 1 < x at hx
+  change 1 < y at hy
   have hx0 := zero_lt_one.trans hx
   have hlogx := Real.log_pos hx
   have hlogxy := Real.log_lt_log hx0 hxy
@@ -53,7 +55,7 @@ lemma log_le_tangent {x y : ℝ} (hx : 0 < x) (hy : 0 < y) :
     Real.log y ≤ Real.log x + (y - x) / x := by
   have ht := Real.log_le_sub_one_of_pos (div_pos hy hx)
   rw [Real.log_div hy.ne' hx.ne'] at ht
-  have heq : y / x - 1 = (y - x) / x := by field_simp; ring
+  have heq : y / x - 1 = (y - x) / x := by field_simp <;> ring
   rw [heq] at ht
   linarith
 
@@ -68,12 +70,10 @@ lemma g_le_tangent {x y : ℝ} (hx : 1 < x) (hy : 1 < y) :
   calc
     Real.log (Real.log y) ≤ Real.log (Real.log x) +
         (Real.log y - Real.log x) / Real.log x := hsecond
-    _ ≤ Real.log (Real.log x) + ((y - x) / x) / Real.log x := by
-      apply add_le_add_left
-      exact div_le_div_of_nonneg_right (by linarith only [hfirst]) hlogx.le
+    _ ≤ Real.log (Real.log x) + ((y - x) / x) / Real.log x :=
+      add_le_add le_rfl (div_le_div_of_nonneg_right (by linarith only [hfirst]) hlogx.le)
     _ = Real.log (Real.log x) + 1 / (x * Real.log x) * (y - x) := by
-      field_simp
-      ring
+      field_simp <;> ring
 
 lemma rhs_pos {n : ℕ} (hn : 0 < n) : 0 < rhs n := by
   have ht := rhs_mono (by norm_num : 0 < (1 : ℕ)) (show 1 ≤ n by omega)
@@ -99,8 +99,7 @@ theorem log_rhs_div_le {n : ℕ} (hn : 3 ≤ n) :
   have hupper := div_le_div_of_nonneg_right (rhs_le_robinBound_add_sixteen hn) hnR.le
   have hrewrite : (robinBound n + 16 * (n : ℝ) / L) / (n : ℝ) = A + 16 / L := by
     dsimp [robinBound, A, T, L]
-    field_simp
-    ring
+    field_simp <;> ring
   change rhs n / (n : ℝ) ≤ (robinBound n + 16 * (n : ℝ) / L) / (n : ℝ) at hupper
   rw [hrewrite] at hupper
   have hlog := log_le_tangent hA0 (div_pos (rhs_pos hn0) hnR)
@@ -110,9 +109,8 @@ theorem log_rhs_div_le {n : ℕ} (hn : 3 ≤ n) :
   change Real.log (rhs n / (n : ℝ)) ≤ Real.eulerMascheroniConstant + g L + 16 / (L * T)
   calc
     Real.log (rhs n / (n : ℝ)) ≤ Real.log A + (rhs n / (n : ℝ) - A) / A := hlog
-    _ ≤ Real.log A + (16 / L) / A := by
-      apply add_le_add_left
-      exact div_le_div_of_nonneg_right (by linarith only [hupper]) hA0.le
+    _ ≤ Real.log A + (16 / L) / A :=
+      add_le_add le_rfl (div_le_div_of_nonneg_right (by linarith only [hupper]) hA0.le)
     _ ≤ Real.log A + (16 / L) / T := by
       gcongr
     _ = Real.eulerMascheroniConstant + g L + 16 / (L * T) := by rw [hlogA, div_div]
