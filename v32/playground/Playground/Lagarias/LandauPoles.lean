@@ -30,7 +30,7 @@ lemma order_logDeriv_eq_neg_one {f : ℂ → ℂ} {z : ℂ} (hf : MeromorphicAt 
   change meromorphicOrderAt (deriv f / f) z = _
   rw [meromorphicOrderAt_div hf.deriv hf, hderiv, ← hn]
   norm_cast
-  ring
+  omega
 
 /-- A nonvanishing analytic factor and an analytic summand cannot cancel that pole. -/
 lemma order_weighted_logDeriv_add {f a b : ℂ → ℂ} {z : ℂ}
