@@ -18,10 +18,15 @@ jobs:
         working-directory: v32/playground
     steps:
       - name: Check out the source revision under test
-        uses: actions/checkout@v4
-        with:
-          ref: 5aa9baac8c6139cb7defbe7eba5ad4176e9853e8
-          persist-credentials: false
+        working-directory: ${{ github.workspace }}
+        run: |
+          set -euo pipefail
+          # A plain public checkout avoids traversing unrelated broken submodule entries.
+          git init .
+          git remote add origin https://github.com/ldct/lean-monorepo.git
+          git fetch --depth=1 origin 5aa9baac8c6139cb7defbe7eba5ad4176e9853e8
+          git checkout --detach FETCH_HEAD
+          test "$(git rev-parse HEAD)" = 5aa9baac8c6139cb7defbe7eba5ad4176e9853e8
       - name: Install elan
         run: |
           set -euo pipefail
@@ -45,6 +50,11 @@ jobs:
         run: |
           set -euo pipefail
           lake build 2>&1 | tee "$RUNNER_TEMP/v32-build.log"
+      - name: Check standalone v32 Lagarias file
+        if: ${{ !cancelled() && steps.cache.outcome == 'success' }}
+        run: |
+          set -euo pipefail
+          lake env lean ../Lagarias.lean 2>&1 | tee "$RUNNER_TEMP/v32-lagarias.log"
       - name: Upload build logs
         if: always()
         uses: actions/upload-artifact@v4
@@ -53,5 +63,6 @@ jobs:
           path: |
             ${{ runner.temp }}/v32-cache.log
             ${{ runner.temp }}/v32-build.log
+            ${{ runner.temp }}/v32-lagarias.log
           if-no-files-found: ignore
           retention-days: 7
