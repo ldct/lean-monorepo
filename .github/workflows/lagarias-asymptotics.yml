@@ -1,13 +1,14 @@
 name: Lagarias asymptotic helper
 
-# Independent feedback for this workstream while shared harmonic and finite
-# modules are being developed. The full-project helper audit is still required.
+# Independent feedback while the finite certificate checker is developed.
+# The full-project helper audit and final-target gate remain separate checks.
 on:
   push:
     branches: ['codex/lagarias-formalization']
     paths:
       - '.github/workflows/lagarias-asymptotics.yml'
       - 'v32/playground/Playground/Lagarias/Asymptotics.lean'
+      - 'v32/playground/Playground/Lagarias/RobinBridge.lean'
 
 permissions:
   contents: read
@@ -18,7 +19,7 @@ concurrency:
 
 jobs:
   asymptotics:
-    name: Asymptotic helper only (not RH equivalence)
+    name: Bounds and conditional Robin bridge (not RH equivalence)
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -28,18 +29,18 @@ jobs:
           lake-package-directory: v32/playground
           auto-config: 'false'
           build: 'true'
-          build-args: Playground.Lagarias.Asymptotics
+          build-args: Playground.Lagarias.RobinBridge
           test: 'false'
           lint: 'false'
           use-mathlib-cache: 'true'
-      - name: Audit the asymptotic helper's transitive axioms
+      - name: Audit the entire conditional bridge dependency closure
         working-directory: v32/playground
         run: |
           set -euo pipefail
           audit=$(mktemp ./LagariasAsymptoticsAudit_XXXXXX.lean)
           trap 'rm -f "$audit"' EXIT
           cat > "$audit" <<'LEAN'
-          import Playground.Lagarias.Asymptotics
+          import Playground.Lagarias.RobinBridge
           import Lean.Util.CollectAxioms
           open Lean Elab Command in
           run_cmd do
@@ -47,13 +48,13 @@ jobs:
             let root := `LeanEval.NumberTheory.Lagarias
             let declarations := env.constants.toList.filter fun entry => root.isPrefixOf entry.1
             if declarations.isEmpty then
-              throwError "No asymptotic helper declarations found"
+              throwError "No helper declarations found"
             let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
             for (name, _) in declarations do
               let axioms ← Lean.collectAxioms name
               let forbidden := axioms.filter fun axiomName => !allowed.contains axiomName
               unless forbidden.isEmpty do
                 throwError "{name} depends on forbidden axioms: {forbidden}"
-            logInfo m!"Audited {declarations.length} asymptotic helper declarations."
+            logInfo m!"Audited {declarations.length} declarations in the conditional bridge closure."
           LEAN
           lake env lean "$audit"
