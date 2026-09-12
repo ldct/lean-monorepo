@@ -59,6 +59,7 @@ lemma truncatedMellin_congr {a : ℝ} (ha : 0 ≤ a) {f g : ℝ → ℂ}
   rw [truncatedMellin_eq_integral ha, truncatedMellin_eq_integral ha]
   apply setIntegral_congr_fun measurableSet_Ioi
   intro x hx
+  change f x * (x : ℂ) ^ (-s - 1) = g x * (x : ℂ) ^ (-s - 1)
   rw [hfg hx]
 
 lemma truncatedMellin_add {a : ℝ} (ha : 0 ≤ a) {f g : ℝ → ℂ} {s : ℂ}
@@ -82,6 +83,7 @@ lemma truncatedMellin_ofReal {a : ℝ} (ha : 0 ≤ a) (f : ℝ → ℝ) (v : ℝ
   apply setIntegral_congr_fun measurableSet_Ioi
   intro x hx
   have hx0 : 0 ≤ x := ha.trans (le_of_lt hx)
+  change (f x : ℂ) * (x : ℂ) ^ (-(v : ℂ) - 1) = ((f x * x ^ (-v - 1) : ℝ) : ℂ)
   rw [Complex.ofReal_mul, Complex.ofReal_cpow hx0]
   push_cast
   rfl
