@@ -2,6 +2,7 @@ import Playground.Lagarias.BlueprintLocalFactor
 import Mathlib.NumberTheory.EulerProduct.DirichletLSeries
 import Mathlib.NumberTheory.LSeries.Dirichlet
 import Mathlib.Analysis.SpecialFunctions.Log.Summable
+import Mathlib.Data.Nat.Prime.Int
 
 /-!
 # The logarithm of zeta and the prime-power coefficients
@@ -18,6 +19,31 @@ namespace LeanEval.NumberTheory.Lagarias.Blueprint
 open Finset
 open scoped ArithmeticFunction.vonMangoldt
 
+/-- Prime powers, with the positive exponent represented as k+1. -/
+def primePowerMap (pk : Nat.Primes × ℕ) : {n : ℕ // IsPrimePow n} :=
+  ⟨(pk.1 : ℕ) ^ (pk.2 + 1), (isPrimePow_nat_iff _).mpr
+    ⟨pk.1, pk.2 + 1, pk.1.prop, Nat.succ_pos _, rfl⟩⟩
+
+lemma primePowerMap_injective : Function.Injective primePowerMap := by
+  rintro ⟨p, k⟩ ⟨q, j⟩ heq
+  have hpow : (p : ℕ) ^ (k + 1) = (q : ℕ) ^ (j + 1) := congrArg Subtype.val heq
+  obtain ⟨hp, hk⟩ := p.prop.pow_inj' q.prop (Nat.succ_ne_zero _) (Nat.succ_ne_zero _) hpow
+  have hp' : p = q := Subtype.ext hp
+  have hk' : k = j := Nat.add_right_cancel hk
+  cases hp'
+  cases hk'
+  rfl
+
+lemma primePowerMap_surjective : Function.Surjective primePowerMap := by
+  intro n
+  obtain ⟨p, k, hp, hk, heq⟩ := (isPrimePow_nat_iff n.val).mp n.prop
+  refine ⟨(⟨p, hp⟩, k - 1), Subtype.ext ?_⟩
+  change p ^ (k - 1 + 1) = n.val
+  simpa only [Nat.sub_add_cancel hk] using heq
+
+noncomputable def primePowerEquiv : Nat.Primes × ℕ ≃ {n : ℕ // IsPrimePow n} :=
+  Equiv.ofBijective primePowerMap ⟨primePowerMap_injective, primePowerMap_surjective⟩
+
 noncomputable def logZetaTerm (s : ℝ) (n : ℕ) : ℝ :=
   Λ n / ((n : ℝ) ^ s * Real.log (n : ℝ))
 
@@ -29,6 +55,7 @@ lemma logZetaTerm_nonneg (s : ℝ) (n : ℕ) : 0 ≤ logZetaTerm s n := by
 lemma logZetaTerm_le (s : ℝ) (n : ℕ) : logZetaTerm s n ≤ 1 / (n : ℝ) ^ s := by
   rcases Nat.eq_zero_or_pos n with rfl | hn
   · simp [logZetaTerm]
+    positivity
   by_cases h1 : n = 1
   · simp [h1, logZetaTerm]
   have hn1 : (1 : ℝ) < n := by exact_mod_cast (show 1 < n by omega)
@@ -65,6 +92,7 @@ lemma logZetaTerm_prime_pow (s : ℝ) (p : Nat.Primes) (k : ℕ) :
     ring
   rw [heq, Real.rpow_neg (pow_nonneg hp0.le _)]
   field_simp
+  simp
 
 lemma logZetaTerm_tsum_eq_prime_sum {s : ℝ} (hs : 1 < s) :
     (∑' n : ℕ, logZetaTerm s n) =
@@ -74,12 +102,16 @@ lemma logZetaTerm_tsum_eq_prime_sum {s : ℝ} (hs : 1 < s) :
     intro n hn
     by_contra hnot
     exact hn (by simp [logZetaTerm, ArithmeticFunction.vonMangoldt_eq_zero_iff.mpr hnot])
+  have hsub : Summable (fun n : {n : ℕ // IsPrimePow n} => logZetaTerm s n) := hsummable.subtype
+  have hprod : Summable (fun pk : Nat.Primes × ℕ => logZetaTerm s (primePowerEquiv pk)) :=
+    hsub.comp_injective primePowerEquiv.injective
   calc
     (∑' n : ℕ, logZetaTerm s n) =
         ∑' n : {n : ℕ // IsPrimePow n}, logZetaTerm s n :=
       (tsum_subtype_eq_of_support_subset hsupport).symm
-    _ = ∑' (p : Nat.Primes) (k : ℕ), logZetaTerm s (p ^ (k + 1)) :=
-      (tsum_primes_pow_eq hsummable.subtype).symm
+    _ = ∑' pk : Nat.Primes × ℕ, logZetaTerm s (primePowerEquiv pk) :=
+      (Equiv.tsum_eq primePowerEquiv (fun n => logZetaTerm s n)).symm
+    _ = ∑' (p : Nat.Primes) (k : ℕ), logZetaTerm s (p ^ (k + 1)) := hprod.tsum_prod
     _ = ∑' p : Nat.Primes, -Real.log (1 - (p : ℝ) ^ (-s)) := by
       apply tsum_congr
       intro p
@@ -110,12 +142,15 @@ theorem log_zeta_eq_tsum {s : ℝ} (hs : 1 < s) :
       ((1 - (p : ℝ) ^ (-s) : ℝ) : ℂ) by push_cast; rfl,
       ← Complex.ofReal_log (sub_nonneg.mpr hq1.le), Complex.ofReal_neg]
   have hsum : (∑' p : Nat.Primes, -Complex.log (1 - (p : ℂ) ^ (-(s : ℂ)))) = (T : ℂ) := by
-    rw [T, Complex.ofReal_tsum]
+    change (∑' p : Nat.Primes, -Complex.log (1 - (p : ℂ) ^ (-(s : ℂ)))) =
+      ((∑' p : Nat.Primes, -Real.log (1 - (p : ℝ) ^ (-s)) : ℝ) : ℂ)
+    rw [Complex.ofReal_tsum]
     exact tsum_congr hterm
   have hEuler := riemannZeta_eulerProduct_exp_log (s := (s : ℂ)) (by simpa using hs)
-  rw [hsum, Complex.exp_ofReal] at hEuler
+  rw [hsum] at hEuler
   have hre : Real.exp T = (riemannZeta (s : ℂ)).re := by
-    simpa using congrArg Complex.re hEuler
+    simpa only [Complex.exp_re, Complex.ofReal_re, Complex.ofReal_im, Real.cos_zero, mul_one]
+      using congrArg Complex.re hEuler
   rw [← hre, Real.log_exp]
   exact (logZetaTerm_tsum_eq_prime_sum hs).symm
 
