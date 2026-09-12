@@ -60,7 +60,7 @@ lemma logFactorialSum_nat_ge {n : ℕ} (hn : 1 ≤ n) :
   have hmono : MonotoneOn Real.log (Set.Icc (1 : ℝ) (n : ℝ)) := by
     intro x hx y hy hxy
     exact Real.log_le_log (by linarith [hx.1]) hxy
-  have hint := MonotoneOn.integral_le_sum_Ico hn hmono
+  have hint := MonotoneOn.integral_le_sum_Ico (f := Real.log) hn (by simpa using hmono)
   have hsum : logFactorialSum (n : ℝ) = ∑ k ∈ Ico 1 n, Real.log ((k + 1 : ℕ) : ℝ) := by
     unfold logFactorialSum
     rw [Nat.floor_natCast]
@@ -94,8 +94,7 @@ lemma A_nat_ge {n : ℕ} (hn : 1 ≤ n) : Real.log (n : ℝ) - 1 ≤ A (n : ℝ)
   have hn0 : (0 : ℝ) < n := by exact_mod_cast (show 0 < n by omega)
   have hle := (logFactorialSum_nat_ge hn).trans
     (logFactorialSum_le_mul_A hn0.le)
-  apply (mul_le_mul_left hn0).mp
-  nlinarith only [hle]
+  nlinarith only [hle, hn0]
 
 lemma firstError_ge {x : ℝ} (hx : 2 ≤ x) : -2 ≤ firstError x := by
   let n : ℕ := ⌊x⌋₊
@@ -116,8 +115,7 @@ lemma firstError_le {x : ℝ} (hx : 1 ≤ x) : firstError x ≤ Real.log 4 + 4 :
   have hle := (mul_A_le_logFactorialSum_add_psi (x := x)).trans
     (add_le_add (logFactorialSum_le hx) (Chebyshev.psi_le_const_mul_self hx0.le))
   have hA : A x ≤ Real.log x + Real.log 4 + 4 := by
-    apply (mul_le_mul_left hx0).mp
-    nlinarith only [hle]
+    nlinarith only [hle, hx0]
   unfold firstError
   linarith
 
