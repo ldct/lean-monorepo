@@ -30,6 +30,7 @@ lemma uIcc_subset_Ioi_one {a b : ℝ} (ha : 2 ≤ a) (hb : 2 ≤ b) :
     Set.uIcc a b ⊆ Set.Ioi 1 := by
   intro x hx
   have hx2 : 2 ≤ x := (le_min ha hb).trans hx.1
+  change 1 < x
   linarith
 
 lemma intervalIntegrable_psi_w {a b : ℝ} (ha : 2 ≤ a) (hb : 2 ≤ b) :
@@ -39,7 +40,7 @@ lemma intervalIntegrable_psi_w {a b : ℝ} (ha : 2 ≤ a) (hb : 2 ≤ b) :
 
 lemma intervalIntegrable_x_w {a b : ℝ} (ha : 2 ≤ a) (hb : 2 ≤ b) :
     IntervalIntegrable (fun t : ℝ => t * w t) volume a b :=
-  continuous_id.intervalIntegrable.mul_continuousOn
+  (continuous_id.intervalIntegrable a b).mul_continuousOn
     (continuousOn_w.mono (uIcc_subset_Ioi_one ha hb))
 
 lemma intervalIntegrable_R_w {a b : ℝ} (ha : 2 ≤ a) (hb : 2 ≤ b) :
@@ -64,7 +65,9 @@ theorem B_eq_abel_h {x : ℝ} (hx : 2 ≤ x) :
     exact (hasDerivAt_h (by linarith [ht.1])).differentiableAt
   have hInt : IntegrableOn (deriv h) (Set.Icc 2 x) := by
     have hc : ContinuousOn (fun t : ℝ => -w t) (Set.Icc 2 x) :=
-      (continuousOn_w.mono (by intro t ht; linarith [ht.1])).neg
+      (continuousOn_w.mono (by
+        intro t ht
+        exact lt_of_lt_of_le (by norm_num : (1 : ℝ) < 2) ht.1)).neg
     apply hc.integrableOn_Icc.congr_fun _ measurableSet_Icc
     intro t ht
     exact (hasDerivAt_h (by linarith [ht.1])).deriv.symm
@@ -86,10 +89,11 @@ theorem B_eq_abel_h {x : ℝ} (hx : 2 ≤ x) :
 
 lemma hasDerivAt_g_sub_xh {x : ℝ} (hx : 1 < x) :
     HasDerivAt (fun t : ℝ => g t - t * h t) (x * w x) x := by
-  have hd := (hasDerivAt_g hx).sub ((hasDerivAt_id x).mul (hasDerivAt_h hx))
-  have heq : h x - (1 * h x + x * (-w x)) = x * w x := by ring
-  rw [heq] at hd
-  exact hd
+  have hd : HasDerivAt (fun t : ℝ => g t - t * h t)
+      (h x - (1 * h x + x * (-w x))) x := by
+    simpa only [Pi.sub_apply, Pi.mul_apply, id_eq] using
+      (hasDerivAt_g hx).sub ((hasDerivAt_id x).mul (hasDerivAt_h hx))
+  convert hd using 1 <;> ring
 
 lemma integral_x_w {x : ℝ} (hx : 2 ≤ x) :
     (∫ t : ℝ in 2..x, t * w t) = (g x - x * h x) - (g 2 - 2 * h 2) := by
@@ -111,8 +115,9 @@ theorem J_eq_sub_integral {x : ℝ} (hx : 2 ≤ x) :
   have hR : (∫ t : ℝ in 2..x, R t * w t) =
       (∫ t : ℝ in 2..x, Chebyshev.psi t * w t) - ∫ t : ℝ in 2..x, t * w t := by
     simpa only [R, sub_mul] using hsub
-  unfold J R
+  unfold J
   rw [hab, hab2, hR, hi]
+  unfold R
   ring
 
 /-- The exact finite-interval smoothing identity of Lemma 3.3. -/
