@@ -41,6 +41,7 @@ lemma integrableOn_firstError_kernel {x : ℝ} (hx : 2 ≤ x) :
   filter_upwards [self_mem_ae_restrict measurableSet_Ioi] with t ht
   have ht2 : 2 ≤ t := hx.trans ht.le
   have hk : 0 ≤ mertensKernel t := mertensKernel_nonneg (by linarith)
+  change ‖firstError t * mertensKernel t‖ ≤ 7 * mertensKernel t
   rw [norm_mul, Real.norm_eq_abs, Real.norm_of_nonneg hk]
   exact mul_le_mul_of_nonneg_right (abs_firstError_le_seven ht2) hk
 
@@ -50,12 +51,13 @@ lemma abs_integral_firstError_kernel_le {x : ℝ} (hx : 2 ≤ x) :
   have hbound : ∀ᵐ t : ℝ ∂volume.restrict (Set.Ioi x),
       ‖firstError t * mertensKernel t‖ ≤ 7 * mertensKernel t := by
     filter_upwards [self_mem_ae_restrict measurableSet_Ioi] with t ht
-    have hk := mertensKernel_nonneg (show 0 ≤ t by linarith [ht])
+    change x < t at ht
+    have hk := mertensKernel_nonneg (show 0 ≤ t by linarith)
     rw [norm_mul, Real.norm_eq_abs, Real.norm_of_nonneg hk]
-    exact mul_le_mul_of_nonneg_right (abs_firstError_le_seven (by linarith [ht])) hk
-  have h := norm_integral_le_of_norm_le hmajor hbound
-  rw [integral_const_mul, integral_mertensKernel (by linarith : 1 < x)] at h
-  simpa [Real.norm_eq_abs, div_eq_mul_inv] using h
+    exact mul_le_mul_of_nonneg_right (abs_firstError_le_seven (by linarith)) hk
+  have hh := norm_integral_le_of_norm_le hmajor hbound
+  rw [integral_const_mul, integral_mertensKernel (by linarith : 1 < x)] at hh
+  simpa [Real.norm_eq_abs, div_eq_mul_inv] using hh
 
 lemma sum_Icc_mangoldt_div (x : ℝ) :
     (∑ k ∈ Icc 0 ⌊x⌋₊, Λ k / (k : ℝ)) = A x := by
@@ -65,8 +67,7 @@ lemma sum_Icc_mangoldt_div (x : ℝ) :
 lemma sum_Icc_mangoldt_div_log (x : ℝ) :
     (∑ k ∈ Icc 0 ⌊x⌋₊, (Real.log (k : ℝ))⁻¹ * (Λ k / (k : ℝ))) = B x := by
   rw [← add_sum_Ioc_eq_sum_Icc (Nat.zero_le ⌊x⌋₊), B_eq_sum_Ioc_vonMangoldt]
-  simp only [Nat.cast_zero, ArithmeticFunction.vonMangoldt_apply_zero, zero_div,
-    mul_zero, zero_add]
+  simp only [Nat.cast_zero, div_zero, mul_zero, zero_add]
   apply sum_congr rfl
   intro k hk
   ring
@@ -85,7 +86,9 @@ theorem B_eq_abel {x : ℝ} (hx : 2 ≤ x) :
     intro t ht
     have ht0 : t ≠ 0 := by linarith [ht.1]
     have hl0 : Real.log t ≠ 0 := (Real.log_pos (by linarith [ht.1])).ne'
-    exact (by fun_prop : ContinuousAt (fun t : ℝ => -t⁻¹ / Real.log t ^ 2) t).continuousWithinAt
+    have hp0 : Real.log t ^ 2 ≠ 0 := pow_ne_zero 2 hl0
+    exact (by fun_prop (disch := assumption) :
+      ContinuousAt (fun t : ℝ => -t⁻¹ / Real.log t ^ 2) t).continuousWithinAt
   have hab := sum_mul_eq_sub_integral_mul₁ (fun k : ℕ => Λ k / (k : ℝ))
     (by simp) (by simp) x hdiff hint
   rw [sum_Icc_mangoldt_div_log, sum_Icc_mangoldt_div] at hab
