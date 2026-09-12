@@ -27,7 +27,9 @@ theorem rhs_le_robinBound_add_sixteen {n : ℕ} (hn : 3 ≤ n) :
   let L : ℝ := Real.log (n : ℝ)
   let E : ℝ := Real.exp Real.eulerMascheroniConstant
   have hnpos : 0 < n := by omega
-  have hx : 1 ≤ x := by exact_mod_cast (show 1 ≤ n by omega)
+  have hx : 1 ≤ x := by
+    dsimp [x]
+    exact_mod_cast (show 1 ≤ n by omega)
   have hLone : 1 < L := one_lt_log hn
   have hL : 0 < L := by linarith
   have hEpos : 0 ≤ E := (Real.exp_pos _).le
@@ -69,6 +71,6 @@ theorem rhs_le_robinBound_add_sixteen {n : ℕ} (hn : 3 ≤ n) :
     rhs n ≤ (L + 1) + E * (x + 1) * (Real.log L + 1 / L) := hupper
     _ = robinBound n + ((L ^ 2 + L) + E * (L * Real.log L) + E * (x + 1)) / L := hexpand
     _ ≤ robinBound n + 16 * x / L :=
-      add_le_add_left (div_le_div_of_nonneg_right hnum hL.le) _
+      add_le_add le_rfl (div_le_div_of_nonneg_right hnum hL.le)
 
 end LeanEval.NumberTheory.Lagarias
