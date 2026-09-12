@@ -64,7 +64,7 @@ def blocks : List Block := [
 set_option maxRecDepth 100000 in
 set_option maxHeartbeats 0 in
 theorem blocks_checked : verifyBlocks 2 5040 blocks = true := by
-  decide
+  decide +kernel
 
 /-- All exceptional small integers required by the RH-conditional argument. -/
 theorem le_bound_of_le_5040 (n : ℕ) (hnpos : 0 < n) (hn : n ≤ 5040) :
