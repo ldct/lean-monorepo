@@ -39,7 +39,7 @@ jobs:
         run: |
           audit_file="$(mktemp ./LagariasLandauAuditXXXXXX.lean)"
           trap 'rm -f "$audit_file"' EXIT
-          for module in Playground.Lagarias.LandauMGF Playground.Lagarias.LandauZeta; do
+          for module in Playground.Lagarias.LandauMGF Playground.Lagarias.LandauZeta Playground.Lagarias.LandauPoles; do
             lake build "$module"
             printf 'import %s\n' "$module" > "$audit_file"
             cat >> "$audit_file" <<'LEAN'
