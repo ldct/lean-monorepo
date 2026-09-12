@@ -1,0 +1,60 @@
+name: Lagarias Landau prerequisites
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/lagarias-landau.yml'
+      - 'v32/playground/Playground/Lagarias/Landau*.lean'
+      - 'v32/playground/lean-toolchain'
+      - 'v32/playground/lakefile.toml'
+      - 'v32/playground/lake-manifest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lagarias-landau-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analytic-prerequisites:
+    name: Landau prerequisites (not the RH equivalence)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build with pinned Lean and Mathlib
+        uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596
+        with:
+          lake-package-directory: v32/playground
+          auto-config: 'false'
+          build: 'true'
+          build-args: Playground.Lagarias.Landau
+          test: 'false'
+          lint: 'false'
+          use-mathlib-cache: 'true'
+      - name: Audit every Landau declaration transitively
+        working-directory: v32/playground
+        run: |
+          audit_file="$(mktemp ./LagariasLandauAuditXXXXXX.lean)"
+          trap 'rm -f "$audit_file"' EXIT
+          cat > "$audit_file" <<'LEAN'
+          import Playground.Lagarias.Landau
+          import Lean.Util.CollectAxioms
+          open Lean Elab Command in
+          run_cmd do
+            let env ← getEnv
+            let root := `LeanEval.NumberTheory.Lagarias.Landau
+            let declarations := env.constants.toList.filter fun entry => root.isPrefixOf entry.1
+            if declarations.isEmpty then
+              throwError "Landau audit found no declarations"
+            let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
+            for (name, _) in declarations do
+              let axioms ← Lean.collectAxioms name
+              let forbidden := axioms.filter fun axiomName => !allowed.contains axiomName
+              unless forbidden.isEmpty do
+                throwError "{name} depends on forbidden axioms: {forbidden}"
+            logInfo m!"Audited {declarations.length} Landau declarations with only standard axioms."
+          LEAN
+          lake env lean "$audit_file"
