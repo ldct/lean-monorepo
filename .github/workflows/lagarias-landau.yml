@@ -34,13 +34,15 @@ jobs:
           test: 'false'
           lint: 'false'
           use-mathlib-cache: 'true'
-      - name: Audit every Landau declaration transitively
+      - name: Build and audit each analytic milestone transitively
         working-directory: v32/playground
         run: |
           audit_file="$(mktemp ./LagariasLandauAuditXXXXXX.lean)"
           trap 'rm -f "$audit_file"' EXIT
-          cat > "$audit_file" <<'LEAN'
-          import Playground.Lagarias.LandauMGF
+          for module in Playground.Lagarias.LandauMGF Playground.Lagarias.LandauZeta; do
+            lake build "$module"
+            printf 'import %s\n' "$module" > "$audit_file"
+            cat >> "$audit_file" <<'LEAN'
           import Lean.Util.CollectAxioms
           open Lean Elab Command in
           run_cmd do
@@ -57,4 +59,5 @@ jobs:
                 throwError "{name} depends on forbidden axioms: {forbidden}"
             logInfo m!"Audited {declarations.length} Landau declarations with only standard axioms."
           LEAN
-          lake env lean "$audit_file"
+            lake env lean "$audit_file"
+          done
