@@ -52,7 +52,6 @@ lemma smoothingDensity_bound {x : ℝ} (hx : 2 ≤ x) :
   have hfactor : x * x * w x = 1 / Real.log x + 1 / (Real.log x) ^ 2 := by
     unfold w
     field_simp
-    ring
   rw [smoothingDensity, Complex.norm_real, Real.norm_eq_abs, abs_mul, abs_mul,
     abs_of_pos hx0, abs_of_nonneg hw0]
   calc
