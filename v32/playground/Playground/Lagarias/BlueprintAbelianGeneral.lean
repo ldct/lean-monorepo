@@ -51,7 +51,7 @@ theorem tendsto_mellin_mean_zero_of_integrable {f : ℝ → ℝ} {a : ℝ} (ha :
     intro x hx
     simpa only [dist_zero_right, Real.norm_eq_abs] using (hN x (hbN.trans hx.le)).le
   have hbase : IntegrableOn (fun x => f x * x ^ (-2 : ℝ)) (Ioi a) := by
-    simpa using hconv 1 (by norm_num)
+    simpa only [show -(1 : ℝ) - 1 = -2 by norm_num] using hconv 1 (by norm_num)
   have hbaseCompact : IntegrableOn (fun x => f x * x ^ (-2 : ℝ)) (Ioc a b) :=
     hbase.mono_set Ioc_subset_Ioi_self
   let C : ℝ := b ^ 2 * ∫ x : ℝ in Ioc a b, ‖f x * x ^ (-2 : ℝ)‖
