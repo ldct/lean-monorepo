@@ -87,13 +87,11 @@ theorem B_eq_abel_h {x : ℝ} (hx : 2 ≤ x) :
   rw [hIntegral] at hab
   simpa only [sub_neg_eq_add] using hab
 
+set_option backward.isDefEq.respectTransparency false in
 lemma hasDerivAt_g_sub_xh {x : ℝ} (hx : 1 < x) :
     HasDerivAt (fun t : ℝ => g t - t * h t) (x * w x) x := by
-  have hd : HasDerivAt (fun t : ℝ => g t - t * h t)
-      (h x - (1 * h x + x * (-w x))) x := by
-    simpa only [Pi.sub_apply, Pi.mul_apply, id_eq] using
-      (hasDerivAt_g hx).sub ((hasDerivAt_id x).mul (hasDerivAt_h hx))
-  convert hd using 1 <;> ring
+  convert! (hasDerivAt_g hx).sub ((hasDerivAt_id x).mul (hasDerivAt_h hx)) using 1 <;>
+    dsimp only [id_eq] <;> ring
 
 lemma integral_x_w {x : ℝ} (hx : 2 ≤ x) :
     (∫ t : ℝ in 2..x, t * w t) = (g x - x * h x) - (g 2 - 2 * h 2) := by
