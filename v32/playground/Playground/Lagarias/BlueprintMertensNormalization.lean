@@ -37,12 +37,14 @@ lemma secondError_mellin_identity {v : ℝ} (hv : 0 < v) :
         Real.eulerMascheroniConstant - mertensConstant := by
   have hB := integrableOn_B_mellin hv
   have hg := integrableOn_g_mellin hv
+  have hBg := hB.sub hg
+  change IntegrableOn (fun x : ℝ => B x * x ^ (-v - 1) - g x * x ^ (-v - 1)) (Ioi 1) at hBg
   have hc := (integrableOn_Ioi_rpow_of_lt (by linarith : -v - 1 < -1) zero_lt_one).const_mul mertensConstant
   have hsplit : (∫ x : ℝ in Ioi 1, secondError x * x ^ (-v - 1)) =
       (∫ x : ℝ in Ioi 1, B x * x ^ (-v - 1)) -
         (∫ x : ℝ in Ioi 1, g x * x ^ (-v - 1)) - mertensConstant / v := by
     simp only [secondError, sub_mul]
-    rw [integral_sub (hB.sub hg) hc, integral_sub hB hg, integral_const_mul,
+    rw [integral_sub hBg hc, integral_sub hB hg, integral_const_mul,
       mellin_kernel_integral zero_lt_one hv, Real.one_rpow]
     ring
   rw [hsplit, mul_sub, mul_sub, ← log_zeta_eq_mellin_B hv, mellin_g_eq hv]
@@ -55,7 +57,7 @@ lemma tendsto_zeta_residue_real :
     apply tendsto_nhdsWithin_iff.mpr
     constructor
     · have hc : Continuous (fun v : ℝ => ((1 + v : ℝ) : ℂ)) := by fun_prop
-      simpa using hc.continuousAt.tendsto.mono_left nhdsWithin_le_nhds
+      simpa using (hc.tendsto (0 : ℝ)).mono_left nhdsWithin_le_nhds
     · filter_upwards [self_mem_nhdsWithin] with v hv
       change 0 < v at hv
       change ((1 + v : ℝ) : ℂ) ≠ 1
@@ -64,14 +66,19 @@ lemma tendsto_zeta_residue_real :
       linarith
   have hres := riemannZeta_residue_one.comp harg
   have hre := (Complex.continuous_re.tendsto (1 : ℂ)).comp hres
-  simpa only [Function.comp_apply, Complex.mul_re, Complex.sub_re, Complex.ofReal_re,
+  change Tendsto (fun v : ℝ =>
+    ((((1 + v : ℝ) : ℂ) - 1) * riemannZeta ((1 + v : ℝ) : ℂ)).re)
+    (𝓝[>] 0) (𝓝 1) at hre
+  simpa only [Complex.mul_re, Complex.sub_re, Complex.ofReal_re,
     Complex.one_re, Complex.sub_im, Complex.ofReal_im, Complex.one_im, sub_self,
-    zero_mul, sub_zero, add_sub_cancel_left] using hre
+    zero_mul, sub_zero, add_sub_cancel_left, add_sub_cancel_right] using hre
 
 lemma tendsto_log_zeta_add_log :
     Tendsto (fun v : ℝ => Real.log (riemannZeta ((1 + v : ℝ) : ℂ)).re + Real.log v)
       (𝓝[>] 0) (𝓝 0) := by
   have hlog := (Real.continuousAt_log (by norm_num : (1 : ℝ) ≠ 0)).tendsto.comp tendsto_zeta_residue_real
+  change Tendsto (fun v : ℝ => Real.log (v * (riemannZeta ((1 + v : ℝ) : ℂ)).re))
+    (𝓝[>] 0) (𝓝 (Real.log 1)) at hlog
   have heq : (fun v : ℝ => Real.log (v * (riemannZeta ((1 + v : ℝ) : ℂ)).re)) =ᶠ[𝓝[>] 0]
       (fun v : ℝ => Real.log (riemannZeta ((1 + v : ℝ) : ℂ)).re + Real.log v) := by
     filter_upwards [self_mem_nhdsWithin] with v hv
