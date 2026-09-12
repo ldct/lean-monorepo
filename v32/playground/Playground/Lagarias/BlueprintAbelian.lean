@@ -102,7 +102,7 @@ theorem tendsto_mellin_mean_zero {f : ℝ → ℝ} {a M : ℝ} (ha : 1 ≤ a)
     |v * (∫ x : ℝ in a..A, f x * x ^ (-v - 1)) +
         v * ∫ x : ℝ in Ioi A, f x * x ^ (-v - 1)| ≤
         |v * (∫ x : ℝ in a..A, f x * x ^ (-v - 1))| +
-          |v * ∫ x : ℝ in Ioi A, f x * x ^ (-v - 1)| := abs_add _ _
+          |v * ∫ x : ℝ in Ioi A, f x * x ^ (-v - 1)| := abs_add_le _ _
     _ ≤ v * C + ε / 2 := by
       apply add_le_add
       · rw [abs_mul, abs_of_pos hv]
