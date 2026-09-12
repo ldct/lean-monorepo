@@ -27,7 +27,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Build isolated helper modules
+      - name: Set up pinned Lean and Mathlib
         uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596
         with:
           lake-package-directory: v32/playground
@@ -37,9 +37,9 @@ jobs:
           test: 'false'
           lint: 'false'
           use-mathlib-cache: 'true'
-      - name: Reject nonstandard transitive axioms in helpers
+      - name: Build and audit every Lagarias helper
         working-directory: v32/playground
-        run: lake env lean Playground/Lagarias/Audit.lean
+        run: bash verify_lagarias.sh
       - name: Check unchanged target still elaborates (not a completeness check)
         working-directory: v32/playground
         run: lake env lean ../Lagarias.lean
