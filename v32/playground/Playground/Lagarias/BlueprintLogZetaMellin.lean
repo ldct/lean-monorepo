@@ -29,7 +29,9 @@ lemma primeLogCoeff_le_inv (n : ℕ) : primeLogCoeff n ≤ (n : ℝ)⁻¹ := by
   rcases n with _ | n
   · simp [primeLogCoeff]
   by_cases h1 : n + 1 = 1
-  · simp [h1, primeLogCoeff]
+  · have hn : n = 0 := by omega
+    subst n
+    norm_num [primeLogCoeff]
   have hn1 : (1 : ℝ) < (n + 1 : ℕ) := by exact_mod_cast (show 1 < n + 1 by omega)
   have hn0 : (0 : ℝ) < (n + 1 : ℕ) := zero_lt_one.trans hn1
   have hlog : 0 < Real.log (n + 1 : ℕ) := Real.log_pos hn1
@@ -51,10 +53,13 @@ lemma B_le_harmonic (x : ℝ) : B x ≤ (harmonic ⌊x⌋₊ : ℝ) := by
   push_cast
   exact sum_le_sum fun n _ => primeLogCoeff_le_inv n
 
-lemma B_le_one_add_log {x : ℝ} (hx : 1 ≤ x) : B x ≤ 1 + Real.log x :=
-  (B_le_harmonic x).trans (harmonic_floor_le_one_add_log x hx)
+lemma B_le_one_add_log {x : ℝ} (hx : 1 ≤ x) : B x ≤ 1 + Real.log x := by
+  have hn : 0 < ⌊x⌋₊ := Nat.floor_pos.mpr hx
+  have hlog : Real.log (⌊x⌋₊ : ℝ) ≤ Real.log x :=
+    Real.log_le_log (by exact_mod_cast hn) (Nat.floor_le (zero_le_one.trans hx))
+  exact (B_le_harmonic x).trans ((harmonic_le_one_add_log ⌊x⌋₊).trans (add_le_add_left hlog 1))
 
-lemma measurable_B : Measurable B := by
+@[fun_prop] lemma measurable_B : Measurable B := by
   have heq : B = (fun N : ℕ => ∑ n ∈ Icc 1 N, primeLogCoeff n) ∘ Nat.floor :=
     funext B_eq_sum_coeff
   rw [heq]
@@ -94,6 +99,7 @@ lemma integrableOn_B_mellin {v : ℝ} (hv : 0 < v) :
   filter_upwards [self_mem_ae_restrict measurableSet_Ioi] with x hx
   change 1 < x at hx
   have hx0 : 0 < x := zero_lt_one.trans hx
+  change ‖B x * x ^ (-v - 1)‖ ≤ (1 + 1 / r) * x ^ (r + (-v - 1))
   rw [norm_mul, Real.norm_of_nonneg (B_nonneg x),
     Real.norm_of_nonneg (Real.rpow_nonneg hx0.le _)]
   calc
@@ -113,13 +119,17 @@ lemma primeLogCoeff_term {v : ℝ} (hv : 0 < v) (n : ℕ) :
   apply congrArg Complex.ofReal
   unfold primeLogCoeff logZetaTerm
   rw [Real.rpow_add hn0, Real.rpow_one, div_div]
+  congr 1
   ring
 
 lemma LSeries_primeLogCoeff {v : ℝ} (hv : 0 < v) :
     LSeries (fun n => (primeLogCoeff n : ℂ)) (v : ℂ) =
       ((Real.log (riemannZeta ((1 + v : ℝ) : ℂ)).re : ℝ) : ℂ) := by
-  rw [LSeries, log_zeta_eq_tsum (by linarith : 1 < 1 + v), Complex.ofReal_tsum]
-  exact tsum_congr (primeLogCoeff_term hv)
+  change (∑' n : ℕ, LSeries.term (fun n => (primeLogCoeff n : ℂ)) (v : ℂ) n) = _
+  calc
+    _ = ∑' n : ℕ, ((logZetaTerm (1 + v) n : ℝ) : ℂ) := tsum_congr (primeLogCoeff_term hv)
+    _ = ((∑' n : ℕ, logZetaTerm (1 + v) n : ℝ) : ℂ) := by rw [Complex.ofReal_tsum]
+    _ = _ := congrArg Complex.ofReal (log_zeta_eq_tsum (by linarith : 1 < 1 + v)).symm
 
 /-- The absolutely convergent identity used in the normalization argument. -/
 theorem log_zeta_eq_mellin_B {v : ℝ} (hv : 0 < v) :
