@@ -36,8 +36,8 @@ theorem cofinal_counterexamples_of_robin_oscillation {C β : ℝ}
     rhs n ≤ robinBound n + 7 * (n : ℝ) / Real.log (n : ℝ) :=
       rhs_le_robinBound_add_error hn27
     _ < robinBound n +
-        C * (n : ℝ) * Real.log (Real.log (n : ℝ)) / (Real.log (n : ℝ)) ^ β :=
-      add_lt_add_left (hM n hnM) _
+        C * (n : ℝ) * Real.log (Real.log (n : ℝ)) / (Real.log (n : ℝ)) ^ β := by
+      linarith only [hM n hnM]
     _ ≤ ((σ 1 n : ℕ) : ℝ) := hSigma
 
 /-- The finite check through 5040 and Robin's upper bound on the remaining
