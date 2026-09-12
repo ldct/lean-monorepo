@@ -2,86 +2,144 @@
 
 Target: `v32/Lagarias.lean`,
 `LeanEval.NumberTheory.riemann_hypothesis_iff_lagarias_elementary_criterion`.
+PR: https://github.com/ldct/lean-monorepo/pull/7
+Branch: `codex/lagarias-formalization`.
 
-**Status: incomplete.** The original theorem still contains its `sorry`.
-No conditional theorem, finite computation, or numerical experiment is a replacement
-for the requested equivalence. Preserve the original definitions and theorem type.
+**Status: incomplete. The original target still contains its original `sorry`.**
+Its definition and theorem statement have not been changed. A conditional
+assembly, finite experiment, or green prerequisite job is not completion.
 
-## Environment
+## Active blueprint
 
-Use `v32/playground`, which pins Lean and Mathlib to `v4.32.0`.
-Build the Lagarias modules explicitly rather than the unrelated playground library.
-The target outside the package can be checked with `lake env lean ../Lagarias.lean`.
+The user supplied *Lagarias's criterion: A self-contained proof of the core
+equivalence*, prepared 12 September 2026, a 32-page PDF named
+`lagarias_self_contained.pdf`. Its Sections 1–11 and Appendices A–B are the
+active blueprint. The manuscript describes itself as not independently
+refereed or formally verified. Each statement used must be proved or matched
+to a checked theorem, not silently imported as an axiom.
 
-## Proof dependency graph
+The original Lagarias/Robin route is historical work. The new converse uses
+least common multiples and a positive Mellin-transform argument instead of
+Robin's quantitative oscillation theorem. The old conditional `Reduction`
+and `Oscillation` modules are retained, but their unproved Robin hypotheses
+are not the dependency graph of the active proof.
 
-Primary reference: Jeffrey C. Lagarias, *An Elementary Problem Equivalent to the
-Riemann Hypothesis*, https://arxiv.org/abs/math/0008177, Section 3.
-Write `H(n) = harmonic n`, `gamma = Real.eulerMascheroniConstant`,
-`S(n) = H(n) + exp(H(n)) * log(H(n))`, and
-`R(n) = exp(gamma) * n * log(log n)`.
+**Notation warning:** in the blueprint namespace `R(x) = psi(x) - x`.
+The older module `robinBound n` is `exp(gamma) * n * log(log n)` and is NOT this
+prime-counting error. `g(x) = log(log x)`, `h(x) = 1/(x log x)`, and
+`w(x) = (log x + 1)/(x^2 log(x)^2)` follow manuscript (3.6).
+`J(x) = gamma + g(x) + h(x) R(x) - B(x)` is exactly (3.7).
 
-1. **Harmonic estimates (Lagarias Lemma 3.1).** Establish
-   `R(n) <= exp(H(n)) * log(H(n))` for `n >= 3`.
-   Mathlib's `NumberTheory/Harmonic/EulerMascheroni.lean` already proves
-   `gamma < H(n) - log n` for positive `n`, the opposite shifted-log bound,
-   positivity bounds for `gamma`, and convergence to `gamma`.
-   Reuse these proofs instead of redoing the improper-integral construction.
-2. **Upper error bound (Lemma 3.2).** Establish an eventual bound
-   `S(n) <= R(n) + K * n / log n` for some fixed positive constant `K`.
-   The paper gives `K = 7` for `n >= 20`; the reverse implication needs only
-   an eventual estimate, so a larger rigorously proved constant is acceptable.
-3. **Finite check.** Prove the original pointwise inequality for
-   `1 <= n <= 5040`, with equality at `1`. Use exact rational certificates
-   and proved bounds for exp/log; floating-point checks are not proofs.
-4. **Robin, forward direction (Proposition 3.1).** From the actual Mathlib
-   `RiemannHypothesis`, prove `sigma(1,n) <= R(n)` for `n >= 5041`.
-5. **Robin, oscillation direction (Proposition 3.2).** From the negation of
-   the actual Mathlib `RiemannHypothesis`, obtain `C > 0`, `0 < beta < 1/2`,
-   and arbitrarily large integers `n` with
-   `R(n) + C * n * log(log n) / (log n)^beta <= sigma(1,n)`.
-6. **Asymptotic comparison and assembly.** The positive error in (5)
-   eventually exceeds the error in (2). Combine (1), (3), (4) for the forward
-   implication and (2), (5) for the reverse implication.
+## Compiler environment and trust boundary
 
-The bare Robin equivalence alone is NOT enough for the reverse direction by a
-pointwise comparison: the Lagarias right-hand side is larger. The quantitative
-oscillation result must be proved or replaced by another complete argument.
+Use `v32/playground`, pinned to Lean and Mathlib `v4.32.0`.
+Repository CI supplies the compiler feedback loop. Local container execution
+has been failing with transport timeouts, so a local build is not claimed.
 
-## Literature dependencies to audit
+Completed helper declarations are checked by a transitive axiom audit allowing
+only `propext`, `Classical.choice`, and `Quot.sound`. No `sorryAx`, project
+axioms, or native-evaluation trust are allowed. The blueprint workflow builds
+and audits each module independently and emits a compact diagnostics job.
+That diagnostics job may succeed while the prerequisite job fails: read the
+reported per-module results, not just its green status.
 
-Lagarias attributes (4) to Guy Robin, *Grandes valeurs de la fonction somme des
-diviseurs et hypothese de Riemann*, J. Math. Pures Appl. (9) 63 (1984), 187–213,
-Theorem 1. He attributes (5) to Proposition 1 of Section 4 of that paper,
-using work of Nicolas and Landau. These citations identify mathematical proof
-obligations; they are not Lean axioms and are not presumed present in Mathlib.
+`verify_lagarias.sh --complete` checks the unchanged actual target type,
+criterion definition and transitive axioms. Ordinary elaboration of the target
+with a `sorry` warning does not pass the completion criterion.
 
-## Acceptance criteria
+## Verified milestones and their manuscript roles
 
-- The target definition and theorem signature are unchanged.
-- All helper modules compile with the pinned toolchain.
-- Every completed milestone has a transitive axiom audit allowing only
-  `propext`, `Classical.choice`, and `Quot.sound`.
-- No project axioms, `sorryAx`, or native-evaluation trust are allowed in the
-  final dependency closure.
-- The final target is explicitly built and audited; an ordinary successful
-  `lake build` that tolerates `sorry` does not establish completion.
+All paths below are under `v32/playground/Playground/Lagarias/`.
 
-## Progress
+| Blueprint material | Checked module and result |
+| --- | --- |
+| Section 2 harmonic comparisons | `Basic`, `Bounds`, `HarmonicBounds`: lower comparison and explicit errors, including 7*n/log n for n>=27 and 16*n/log n for n>=3. |
+| (2.5), (3.6), concavity in Section 9 | `BlueprintSmoothing`: g'=h, h'=-w, supporting-line inequality for g, and an explicit logarithmic harmonic bound with constant 16. |
+| Lemma 7.1 | `BlueprintLocalFactor`: 0 <= E_p(a) <= 2*p^(-a-1), from a proved logarithmic series and geometric tail bound. |
+| Lemma 9.1 | `BlueprintLCM`: log(sigma(L_x)/L_x) >= B(x)-6/sqrt(x), for every real x>=4; L_x is the actual natural-number LCM. |
+| Proposition 9.2, arithmetic conclusion | `BlueprintConverseBound`: the pointwise Lagarias inequality implies J(x)>=-134/sqrt(x) for every real x>=32. No RH, Mertens theorem or oscillation hypothesis is assumed. |
+| First part of Lemma 3.2 | `BlueprintMertensFirst`: abs(A(x)-log x)<=7 for x>=2, from the divisor identity and elementary sum/integral estimates. |
+| Equation (3.3) | `BlueprintPrimePowerSum`: a finite bijection identifies the grouped prime-power B with the von Mangoldt coefficient sum, including endpoint powers. |
+| Equation (3.5), before normalization | `BlueprintMertensSecond`: B(x)=g(x)+c+E2(x), abs(E2(x))<=14/log x and E2(x)->0. The constant c is a concrete convergent integral, NOT defined to equal gamma. |
+| Euler-product input to Lemma 3.2 | `BlueprintLogZeta`: an absolutely convergent real logarithmic zeta series, with its prime-power regrouping proved in the pinned Mathlib version. |
+| Gamma input to Lemma 3.2 | `BlueprintGammaIntegral`: integral log(t)*exp(-t)=-gamma and v*integral_1^infty g(x)x^(-v-1)=-log v-gamma. |
+| Abelian mean lemma | `BlueprintAbelian`: bounded measurable errors tending to zero have vanishing Mellin means. The endpoint-singular extension is listed as a candidate below. |
+| Lemma 10.1 and positivity step | `Landau`, `LandauIntegral`, `LandauMGF`, `LandauMellin`: real convergence boundaries and the positive-transform argument. |
+| Real-axis continuation, not assumed global meromorphicity | `LandauRealAxis`, `LandauMellinAxis`: real-axis analytic germs force actual convergence and analyticity of the integral on the continued half-plane, in the manuscript's x^(-s-1) convention. |
+| Q's initial transform and poles | `LandauZeta`, `LandauPoles`: exact convergent Chebyshev-error Mellin identity and genuine simple poles at zeta zeros with Re<1. |
+| Differential obstruction in Proposition 10.4 | `LandauDoublePole`: a pole of order m<0 becomes a pole of order m-1 in Q-Q', excluding a holomorphic second primitive. |
+| Supported maxima, Section 8 prerequisites | Existing `PrimePower`, `CAThresholds`, `CAConstruction`, `CAInterpolation`, `EulerProduct`: checked local-factor algebra, construction/structure of maximizing integers, and interpolation infrastructure. |
 
-- [x] Read the exact target and pinned package configuration.
-- [x] Read Section 3 of Lagarias and separate the Robin dependencies.
-- [x] Identify existing Mathlib harmonic/Euler–Mascheroni estimates.
-- [ ] Establish a compiler feedback loop for this branch.
-- [ ] Prove and audit the harmonic lower comparison.
-- [ ] Prove and audit an eventual upper error bound.
-- [ ] Prove and audit the finite range through 5040.
-- [ ] Prove Robin's forward bound.
-- [ ] Prove Robin's quantitative oscillation result.
-- [ ] Assemble and audit the unchanged target without `sorry`.
+Evidence checkpoints (imported declaration counts overlap and are not additive):
 
-Compiler status at initialization: no Lean executable is installed in the local
-working container, and direct network access from that container fails DNS.
-Uncompiled candidate code must be labeled as such until actual compiler output
-is obtained. Updates to this ledger and the draft PR should distinguish proved,
-compiler-checked, and still-open milestones.
+- Head `bd33d1fe88d6c2b5ceb5101135b3289ef425baa5`, run
+  https://github.com/ldct/lean-monorepo/actions/runs/34675399049:
+  all then-current Blueprint/Landau modules passed, including the explicit
+  Proposition 9.2 bound (210 declarations in that imported prefix closure).
+- Head `ea1ede5de1f32590def03413db26faf846bf2712`, run
+  https://github.com/ldct/lean-monorepo/actions/runs/34676768290:
+  `BlueprintMertensFirst` and `LandauMellinAxis` passed; later candidates failed.
+- Head `d84de4d04b6b70f2fbe940325fa357ecaccd310d`, run
+  https://github.com/ldct/lean-monorepo/actions/runs/34677672828:
+  `BlueprintPrimePowerSum`, `BlueprintGammaIntegral`, `BlueprintLogZeta` passed;
+  other candidate files failed and have subsequently been repaired.
+- Head `69083d6bebdd0ac42383f02beefec9e6ba478ffb`, run
+  https://github.com/ldct/lean-monorepo/actions/runs/34678206394:
+  `BlueprintMertensSecond` and `BlueprintAbelian` passed. The endpoint-singular
+  Abelian extension and log-zeta Mellin representation had local elaboration
+  failures; repairs are submitted, not yet claimed verified here.
+
+## Current candidates awaiting successful verification
+
+- `BlueprintAbelianGeneral`: endpoint-integrable (not uniformly bounded)
+  errors have vanishing Mellin means. Needed because log log x is unbounded
+  near x=1; applying the bounded lemma there would be incorrect.
+- `BlueprintLogZetaMellin`: the actual convergent identity
+  log zeta(1+v)=v*integral B(x)x^(-v-1), with integrability and coefficient
+  growth justified independently of the Mertens constant.
+- `BlueprintMertensNormalization`: prove c=gamma, abs(J(x))<=22/log x and
+  J(x)->0. These conclusions are not considered proved until this file and
+  its entire dependency closure pass the compiler and axiom audit.
+- `BlueprintSmoothingIdentity`: derive J(a)-J(b)=integral_a^b R(t)w(t) directly
+  from Abel summation. This will prove improper convergence by taking limits;
+  it does not assert unconditional absolute integrability of R*w.
+
+## Remaining essential obligations
+
+1. Finish the pending normalization and smoothing identity; prove continuity
+   and the required finite-interval calculus for the exact J.
+2. Establish the initial Mellin differential identity W''=Q-Q', real-axis
+   continuation and removal at s=0, then apply the checked Landau and pole
+   lemmas to this actual J. Match the resulting zero statement to Mathlib's
+   unchanged `RiemannHypothesis`, including the functional-equation argument.
+3. For the forward direction, prove the needed Hadamard factorization/growth
+   and zero-mass identity, the integrated explicit formula, the RH estimates,
+   and the quantitative prime-by-prime deficit in Sections 4–7. Searching for
+   a file called Hadamard is not proof of these facts: Mathlib's three-lines
+   theorem is not factorization, and the external PNT project's top-level
+   `HadamardFactorization.lean` inspected so far is a blueprint stub.
+4. Prove the fixed-point interval checker sound and verify the complete finite
+   range from Section 8, including event coverage and interpolation.
+5. Assemble and audit the original target without `sorry` or added hypotheses.
+
+## Appendix B reproduction: separate from Lean proof
+
+`v32/playground/blueprint/verify_manuscript_certificate.py` transcribes the
+printed program. Run
+https://github.com/ldct/lean-monorepo/actions/runs/34675077243
+reproduced every mathematical output line, including the 78,801 checked
+supported endpoints, final event (999961,1), and final log N lower bound
+1000007.055927. The optimized Python mode was correctly rejected.
+
+This is an integer-only reproduction, **not a Lean proof of soundness or
+coverage**. The transcription has SHA-256
+`050c015f4cc838d4a829bb2479cae8c26656a56cdf5d66680760e91e0ecb295a`,
+which differs from the manuscript's reported source hash
+`0d553520e6ce19996143452efeff452851b8547b15fd0f05743c717388dda175`.
+Only the printed program was supplied; byte-for-byte identity with an original
+Python attachment has not been established.
+
+The older `FiniteRange.lean` through 5040 was failing during ordinary `decide`
+unfolding. It now uses `decide +kernel`, not native evaluation; successful
+completion of this larger reduction has not yet been observed. The separate
+main helper workflow is therefore not reported as green.
