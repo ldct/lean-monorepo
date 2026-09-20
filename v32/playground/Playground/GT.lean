@@ -78,6 +78,7 @@ variable (m : ℕ) [NeZero m] in
 -- 1.5: direct products.
 variable (G H : Type*) [Group G] [Group H] in
 #synth Group (G × H)
+
 -- 1.6: abelian groups, unordered products, integer scalar multiplication, torsion.
 #check CommGroup
 #check AddCommGroup
@@ -87,10 +88,12 @@ variable (G H : Type*) [Group G] [Group H] in
 #check zsmul_add
 #check AddCommGroup.toIntModule
 #check AddCommGroup.torsion
+
 -- 1.7: general linear groups and change from linear maps to matrices.
 #check Matrix.GeneralLinearGroup
 #check LinearMap.GeneralLinearGroup
 #check Matrix.GeneralLinearGroup.toLin'
+
 -- 1.8: bilinear forms, isometries, orthogonal and symplectic groups.
 #check LinearMap.BilinForm
 #check LinearMap.BilinForm.IsometryEquiv
@@ -101,6 +104,7 @@ variable (G H : Type*) [Group G] [Group H] in
 -- standard symmetric/skew, orthogonal, or symplectic normal forms is not exposed
 -- as one theorem connecting `BilinForm.IsometryEquiv` with `Matrix.orthogonalGroup`.
 -- Caution: in characteristic 2, skew-symmetric need not mean alternating.
+
 -- 1.9: magmas, semigroups, monoids and empty products.
 #check Mul
 #check Semigroup
@@ -144,6 +148,7 @@ variable (G : Type*) [Group G] in
 #check QuaternionGroup 2
 #check QuaternionGroup.card
 #check QuaternionGroup.xa_sq
+
 -- 1.19: transpositions, sign, alternating groups.
 #check Equiv.swap
 #check Equiv.Perm.closure_isSwap

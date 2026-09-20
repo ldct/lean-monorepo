@@ -48,7 +48,7 @@ inductive TokenType
   deriving Repr, Inhabited, BEq
 
 private structure State where
-  input : List Char
+  input : Array Char
   current : Nat := 0
   tokens : Array TokenType := .empty
   error : Option String := .none
@@ -63,7 +63,7 @@ private def peek : M Char := do
 
 private def isAtEnd : M Bool := do
   let s ← get
-  return s.current ≥ s.input.length
+  return s.current ≥ s.input.size
 
 -- todo - is isAtEnd equivalent to peek = '\x00'?
 
@@ -88,8 +88,10 @@ private def advance : M (Option Char) := do
   return some c
 
 private def matchChar (expected : Char) : M Bool := do
-  let some c ← advance | return false
-  return c = expected
+  if (← isAtEnd) then return false
+  if (← peek) ≠ expected then return false
+  _ ← advance
+  return true
 
 private def emit (kind : TokenType) : M Unit :=
   modify fun s => { s with tokens := s.tokens.push kind }
@@ -129,8 +131,8 @@ private def scanToken : M Unit := do
 
    if c == '/' then
     if (← matchChar '/') then
-      -- scan a comment
-      while (← peek) ≠ '\n' do
+      --  A comment goes until the end of the line.
+      while (← peek) ≠ '\n' && !(← isAtEnd) do
         _ ← advance
     else
       emit .slash
@@ -146,7 +148,7 @@ private def scanAll : M Unit := do
 
 def scanTokens (source : String) : (Array TokenType × Option String) :=
   let (_, s) := scanAll.run {
-    input := source.toList
+    input := source.toList.toArray
   }
   (s.tokens, s.error)
 
@@ -167,3 +169,5 @@ def scanTokensOrPanic (source : String) : Array TokenType :=
 "
 
 #eval scanTokens "(@"
+
+#eval scanTokens "!+"
