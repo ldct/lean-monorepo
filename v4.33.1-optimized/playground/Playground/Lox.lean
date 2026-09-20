@@ -1,6 +1,10 @@
+module
+
 import Batteries
 import Init
 import Std
+
+public section
 
 -- Based on https://github.com/munificent/craftinginterpreters/blob/master/java/com/craftinginterpreters/lox/Scanner.java
 
@@ -43,52 +47,60 @@ inductive TokenType
   | true
   | var
   | while
-  | whitespace -- todo delete this
   | EOF
   deriving Repr, Inhabited, BEq
 
+structure Token where
+  type : TokenType
+  lexeme : String
+  line : Nat
+deriving Repr, Inhabited, BEq
+
 private structure State where
-  input : Array Char
+  source : Array Char
+  start : Nat := 0
   current : Nat := 0
-  tokens : Array TokenType := .empty
+  tokens : Array Token := .empty
   error : Option String := .none
 
 private abbrev M := StateM State
 
-private def peek : M Char := do
-  let s ← get
-  match s.input[s.current]? with
-  | some c => return c
-  | none => return '\x00'
-
 private def isAtEnd : M Bool := do
   let s ← get
-  return s.current ≥ s.input.size
+  return s.current ≥ s.source.size
+
+
+private def peek : M Char := do
+  let s ← get
+  return s.source[s.current]?.getD '\x00'
 
 -- todo - is isAtEnd equivalent to peek = '\x00'?
 
--- Scan tokens with 0 lookahead
-def scan0 (c : Char) : Option TokenType := match c with
-  | '(' => some .leftParen
-  | ')' => some .rightParen
-  | '{' => some .leftBrace
-  | '}' => some .rightBrace
-  | ',' => some .comma
-  | '.' => some .dot
-  | '-' => some .minus
-  | '+' => some .plus
-  | ';' => some .semicolon
-  | '*' => some .star
-  | _ => none
+-- -- Scan tokens with 0 lookahead
+-- def scan0 (c : Char) : Option TokenType := match c with
+--   | '(' => some .leftParen
+--   | ')' => some .rightParen
+--   | '{' => some .leftBrace
+--   | '}' => some .rightBrace
+--   | ',' => some .comma
+--   | '.' => some .dot
+--   | '-' => some .minus
+--   | '+' => some .plus
+--   | ';' => some .semicolon
+--   | '*' => some .star
+--   | _ => none
 
 private def incrementCurrent : M Unit := do
   modify fun s => { s with current := s.current + 1 }
 
 private def advance : M (Option Char) := do
   let s ← get
-  let some c := s.input[s.current]? | return none
+  let some c := s.source[s.current]? | return none
   incrementCurrent
   return some c
+
+private def advance' : M Unit := do
+  _ ← advance
 
 private def matchChar (expected : Char) : M Bool := do
   if (← isAtEnd) then return false
@@ -96,96 +108,121 @@ private def matchChar (expected : Char) : M Bool := do
   incrementCurrent
   return true
 
-private def emit (kind : TokenType) : M Unit :=
-  modify fun s => { s with tokens := s.tokens.push kind }
+private def emit (token : Token) : M Unit :=
+  modify fun s => { s with tokens := s.tokens.push token }
 
--- scan with single character lookahead
-private def scan1 (c : Char) : M (Option TokenType) := do
-  if c == '!' then return some (if (← matchChar '=') then .bangEqual else .bang)
-  else if c == '=' then return some (if (← matchChar '=') then .equalEqual else .equal)
-  else if c == '>' then return some (if (← matchChar '=') then .greaterEqual else .greater)
-  else if c == '<' then return some (if (← matchChar '=') then .lessEqual else .less)
-  else
-    return none
+private def addToken (type : TokenType) : M Unit := do
+  modify fun s => { s with tokens := s.tokens.push {
+    type := type,
+    lexeme := String.ofList (s.source[s.start:s.current].toList),
+    line := 0 -- todo - add line number
+  } }
+
+private def peekNext : M Char := do
+  let s ← get
+  return s.source[s.current + 1]?.getD '\x00'
+
+
+private def number : M Unit := do
+  while (← peek).isDigit do
+    advance'
+
+  -- Look for a fractional part.
+  if (← peek) == '.' && (← peekNext).isDigit then
+    -- Consume the "."
+    advance'
+    while (← peek).isDigit do advance'
+
+  addToken .number
 
 private def string : M Unit := do
   while (← peek) ≠ '"' && !(← isAtEnd) do
-    _ ← advance
+    -- line++
+    advance'
 
   if (← isAtEnd) then
     modify fun s => { s with error := some "Unterminated string" }
     return
 
-  -- consume the closing "
-  _ ← advance
+  -- The closing "
+  advance'
 
-  emit .string
+  addToken .string
 
 private def scanToken : M Unit := do
   let some c ← advance | return ()
 
-  if let some kind := scan0 c then
-    emit kind
-    return
+  if c == '(' then addToken .leftParen
+  else if c == ')' then addToken .rightParen
+  else if c == '{' then addToken .leftBrace
+  else if c == '}' then addToken .rightBrace
+  else if c == ',' then addToken .comma
+  else if c == '.' then addToken .dot
+  else if c == '-' then addToken .minus
+  else if c == '+' then addToken .plus
+  else if c == ';' then addToken .semicolon
+  else if c == '*' then addToken .star
 
-  if let some kind := (← scan1 c) then
-    emit kind
-    return
+  else if c == '!' then addToken (if (← matchChar '=') then .bangEqual else .bang)
+  else if c == '=' then addToken (if (← matchChar '=') then .equalEqual else .equal)
+  else if c == '>' then addToken (if (← matchChar '=') then .greaterEqual else .greater)
+  else if c == '<' then addToken (if (← matchChar '=') then .lessEqual else .less)
 
-   if c == '/' then
+  else if c == '/' then
     if (← matchChar '/') then
       --  A comment goes until the end of the line.
-      while (← peek) ≠ '\n' && !(← isAtEnd) do
-        _ ← advance
+      while (← peek) ≠ '\n' && !(← isAtEnd) do advance'
     else
-      emit .slash
+      addToken .slash
+
+  else if c == '"' then string
+
   else if c == ' ' || c == '\t' || c == '\r' || c == '\n' then
-    emit .whitespace
+    modify fun s => s
+  else if c.isDigit then
+    number
   else
     modify fun s => { s with error := some "oh no" }
 
 private def scanAll : M Unit := do
   while !(← isAtEnd) do
+    modify fun s => { s with start := s.current }
     scanToken
-  emit .EOF
+  addToken .EOF
 
-def scanTokens (source : String) : (Array TokenType × Option String) :=
+def scanTokens (source : String) : (Array Token × Option String) :=
   let (_, s) := scanAll.run {
-    input := source.toList.toArray
+    source := source.toList.toArray
   }
   (s.tokens, s.error)
 
-def scanTokensOrPanic (source : String) : Array TokenType :=
+def scanTokens' (source : String) : Option (Array TokenType) :=
   let (tokens, error) := scanTokens source
   match error with
-  | some error => panic! error
-  | none => tokens
+  | some _ => none
+  | none => some (tokens.map (fun t => t.type))
 
+#guard scanTokens' "()+*;" == .some #[.leftParen, .rightParen, .plus, .star, .semicolon, .EOF]
 
-#guard scanTokensOrPanic "()+*;" ==
-  #[.leftParen, .rightParen, .plus, .star, .semicolon, .EOF]
-
-#eval scanTokens "
+#eval scanTokens' "
 // this is a comment
 (( )){} // grouping stuff
 !*+-/=<> <= == // operators
 "
 
-#eval scanTokens "(@"
+#eval scanTokens' "(@"
 
-#eval scanTokens "!+"
+#eval scanTokens' "!+"
 
 -- Failed lookahead preserves the next character.
-#guard scanTokens "!+" ==
-  (#[.bang, .plus, .EOF], none)
+#guard scanTokens' "!+" == .some #[.bang, .plus, .EOF]
 
-#guard scanTokens "/+" ==
-  (#[.slash, .plus, .EOF], none)
+#guard scanTokens' "/+" == .some #[.slash, .plus, .EOF]
 
 -- Comments can end at EOF.
-#guard scanTokens "//" ==
-  (#[.EOF], none)
+#guard scanTokens' "//" == .some #[.EOF]
 
--- NUL produces an error, without truncating the remaining input.
-#guard scanTokens "+\x00-" ==
-  (#[.plus, .minus, .EOF], some "oh no")
+-- NUL produces an error, without truncating the remaining source.
+#guard scanTokens' "+\x00-" == .none
+
+#eval scanTokens' "123 + 123"
