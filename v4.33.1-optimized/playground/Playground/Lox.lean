@@ -60,6 +60,7 @@ private structure State where
   source : Array Char
   start : Nat := 0
   current : Nat := 0
+  line : Nat := 1
   tokens : Array Token := .empty
   error : Option String := .none
 
@@ -69,26 +70,9 @@ private def isAtEnd : M Bool := do
   let s ← get
   return s.current ≥ s.source.size
 
-
 private def peek : M Char := do
   let s ← get
   return s.source[s.current]?.getD '\x00'
-
--- todo - is isAtEnd equivalent to peek = '\x00'?
-
--- -- Scan tokens with 0 lookahead
--- def scan0 (c : Char) : Option TokenType := match c with
---   | '(' => some .leftParen
---   | ')' => some .rightParen
---   | '{' => some .leftBrace
---   | '}' => some .rightBrace
---   | ',' => some .comma
---   | '.' => some .dot
---   | '-' => some .minus
---   | '+' => some .plus
---   | ';' => some .semicolon
---   | '*' => some .star
---   | _ => none
 
 private def incrementCurrent : M Unit := do
   modify fun s => { s with current := s.current + 1 }
@@ -135,9 +119,12 @@ private def number : M Unit := do
 
   addToken .number
 
+private def incrementLine : M Unit := do
+  modify fun s => { s with line := s.line + 1 }
+
 private def string : M Unit := do
   while (← peek) ≠ '"' && !(← isAtEnd) do
-    -- line++
+    if (← peek) == '\n' then incrementLine
     advance'
 
   if (← isAtEnd) then
@@ -178,7 +165,9 @@ private def scanToken : M Unit := do
   else if c == '"' then string
 
   else if c == ' ' || c == '\t' || c == '\r' || c == '\n' then
-    modify fun s => s
+    -- Ignore whitespace.
+    pure ()
+  else if c == '\n' then incrementLine
   else if c.isDigit then
     number
   else
@@ -188,7 +177,11 @@ private def scanAll : M Unit := do
   while !(← isAtEnd) do
     modify fun s => { s with start := s.current }
     scanToken
-  addToken .EOF
+  modify fun s => { s with tokens := s.tokens.push {
+    type := .EOF,
+    lexeme := "",
+    line := s.line
+  } }
 
 def scanTokens (source : String) : (Array Token × Option String) :=
   let (_, s) := scanAll.run {
@@ -201,6 +194,8 @@ def scanTokens' (source : String) : Option (Array TokenType) :=
   match error with
   | some _ => none
   | none => some (tokens.map (fun t => t.type))
+
+#eval scanTokens "+"
 
 #guard scanTokens' "()+*;" == .some #[.leftParen, .rightParen, .plus, .star, .semicolon, .EOF]
 
