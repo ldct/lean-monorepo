@@ -10,7 +10,8 @@ structure Hom (G₁ : Type*) [Group G₁] (G₂ : Type*) [Group G₂] where
   map_mul' : ∀ x y : G₁, toFun (x * y) = toFun x * toFun y
 notation G₁ " →* " G₂ => Hom G₁ G₂
 
--- Proposition 2.5.3b
+/-- Proposition 2.5.3b
+Group homomorphisms map the identity to the identity -/
 @[simp] lemma Hom.map_one (φ : G₁ →* G₂) : φ.toFun 1 = 1 := by
   have : (1 : G₁) * 1 = 1 := by simp
   have := congr(φ.toFun $this)
@@ -19,6 +20,8 @@ notation G₁ " →* " G₂ => Hom G₁ G₂
   simp only [artinGroupCancel, Group.inv_mul_cancel] at this
   exact this
 
+/-- Proposition 2.5.3c
+Group homomorphisms map inverses to inverses -/
 lemma Hom.map_inv (φ : G₁ →* G₂) (x : G₁) : (φ.toFun x)⁻¹ = φ.toFun x⁻¹ := by
   rw [inv_eq_iff, ← φ.map_mul', Group.mul_inv_cancel, Hom.map_one]
 
@@ -61,11 +64,12 @@ lemma mem_lcoset {g x : G} {H : Subgroup G} :
 lemma mem_lcoset_self (g : G) (H : Subgroup G) : g ∈ (g ⨀ H) :=
   mem_lcoset.mpr ⟨1, H.one_mem, Group.mul_one g⟩
 
--- The type of left cosets of H in G
+/- The type of left cosets of H in G -/
 structure LeftCoset (H : Subgroup G) where
   carrier : Finset G
   is_coset : ∃ g, carrier = lcoset g H
 
+-- Proposition 2.5.8, part 1 ↔ part 2
 theorem im_eq_iff_mem_ker (a b : G₁) (φ : G₁ →* G₂) : φ.toFun a = φ.toFun b ↔ (a⁻¹ * b) ∈ (ker φ).carrier := by
   constructor
   · intro h
@@ -78,6 +82,7 @@ theorem im_eq_iff_mem_ker (a b : G₁) (φ : G₁ →* G₂) : φ.toFun a = φ.t
     simp [artinGroupCancel] at h
     grind
 
+-- Proposition 2.5.8, part 2 ↔ part 3
 theorem mem_ker_iff_mem_coset (a b : G₁) (φ : G₁ →* G₂) : (a⁻¹ * b) ∈ (ker φ).carrier ↔ b ∈ a ⨀ (ker φ) := by
   constructor
   · intro h

@@ -2,6 +2,7 @@
 egmo.lean
 imo.lean
 .DS_Store
+.vscode/
 
 cslib-v29-rc1/bench/rmq
 __pycache__/
