@@ -81,16 +81,19 @@ def scan0 (c : Char) : Option TokenType := match c with
   | '*' => some .star
   | _ => none
 
+private def incrementCurrent : M Unit := do
+  modify fun s => { s with current := s.current + 1 }
+
 private def advance : M (Option Char) := do
   let s ← get
   let some c := s.input[s.current]? | return none
-  set { s with current := s.current + 1 }
+  incrementCurrent
   return some c
 
 private def matchChar (expected : Char) : M Bool := do
   if (← isAtEnd) then return false
   if (← peek) ≠ expected then return false
-  _ ← advance
+  incrementCurrent
   return true
 
 private def emit (kind : TokenType) : M Unit :=
@@ -113,7 +116,7 @@ private def string : M Unit := do
     modify fun s => { s with error := some "Unterminated string" }
     return
 
-  -- the closing "
+  -- consume the closing "
   _ ← advance
 
   emit .string
@@ -142,7 +145,7 @@ private def scanToken : M Unit := do
     modify fun s => { s with error := some "oh no" }
 
 private def scanAll : M Unit := do
-  while (← peek) ≠ '\x00' do
+  while !(← isAtEnd) do
     scanToken
   emit .EOF
 
@@ -171,3 +174,18 @@ def scanTokensOrPanic (source : String) : Array TokenType :=
 #eval scanTokens "(@"
 
 #eval scanTokens "!+"
+
+-- Failed lookahead preserves the next character.
+#guard scanTokens "!+" ==
+  (#[.bang, .plus, .EOF], none)
+
+#guard scanTokens "/+" ==
+  (#[.slash, .plus, .EOF], none)
+
+-- Comments can end at EOF.
+#guard scanTokens "//" ==
+  (#[.EOF], none)
+
+-- NUL produces an error, without truncating the remaining input.
+#guard scanTokens "+\x00-" ==
+  (#[.plus, .minus, .EOF], some "oh no")
