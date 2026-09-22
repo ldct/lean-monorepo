@@ -1,0 +1,45 @@
+name: Lagarias partial formalization
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/lagarias.yml'
+      - 'v32/Lagarias.lean'
+      - 'v32/LAGARIAS.md'
+      - 'v32/playground/Playground/Lagarias/**'
+      - 'v32/playground/verify_lagarias.sh'
+      - 'v32/playground/lean-toolchain'
+      - 'v32/playground/lakefile.toml'
+      - 'v32/playground/lake-manifest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lagarias-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  elementary-helpers:
+    name: Elementary helpers only (RH equivalence incomplete)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up pinned Lean and Mathlib
+        uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596
+        with:
+          lake-package-directory: v32/playground
+          auto-config: 'false'
+          build: 'true'
+          build-args: Playground.Lagarias.HarmonicBounds
+          test: 'false'
+          lint: 'false'
+          use-mathlib-cache: 'true'
+      - name: Build and audit every Lagarias helper
+        working-directory: v32/playground
+        run: bash verify_lagarias.sh
+      - name: Check unchanged target still elaborates (not a completeness check)
+        working-directory: v32/playground
+        run: lake env lean ../Lagarias.lean

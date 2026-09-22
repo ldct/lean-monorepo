@@ -1,0 +1,62 @@
+name: Lagarias manuscript certificate reproduction
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/lagarias-manuscript-certificate.yml'
+      - 'v32/playground/blueprint/verify_manuscript_certificate.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lagarias-manuscript-certificate-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  reproduce:
+    name: Reproduce Appendix B (not a Lean proof)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run exact integer certificate and compare the manuscript output
+        working-directory: v32/playground/blueprint
+        run: |
+          set -euo pipefail
+          echo 'This reproduces the supplied Python certificate. It does not prove its soundness in Lean.'
+          echo 'Manuscript-reported SHA-256: 0d553520e6ce19996143452efeff452851b8547b15fd0f05743c717388dda175'
+          sha256sum verify_manuscript_certificate.py
+          python3 verify_manuscript_certificate.py | tee actual.txt
+          grep -v '^Elapsed seconds' actual.txt > mathematical-output.txt
+          cat > expected.txt <<'EXPECTED'
+          Gamma enclosure: 0.577215664068199 < gamma < 0.577215669067700
+          Small range: 2..55440, all strict; equality checked at 1.
+          Small-range minimum certified log margin: 0.012844019280 at n = 12
+          Sieved primes: 85714
+          Strictly ordered events above cutoff: 86035
+          Events processed: 78809
+          CA endpoints checked from 55440: 78801
+          Initial endpoints: [2, 6, 12, 60, 120, 360, 2520, 5040, 55440, 720720]
+          Final event (prime, exponent): (999961, 1)
+          Final log N lower bound: 1000007.055927
+          Minimum certified CA log margin: 0.000057309953
+          Minimum at event: 78809 prime: 999961 exponent: 1 log N lower bound: 1000007.055927
+          CERTIFICATE PASSED
+          EXPECTED
+          diff -u expected.txt mathematical-output.txt
+          if python3 -O verify_manuscript_certificate.py; then
+            echo 'ERROR: optimized Python must be rejected.'
+            exit 1
+          fi
+          {
+            echo '## Appendix B reproduced (not a Lean proof)'
+            echo
+            echo 'The mathematical output matches the supplied manuscript. Soundness and coverage still need kernel-checked Lean proofs.'
+            echo
+            echo '```text'
+            sha256sum verify_manuscript_certificate.py
+            cat mathematical-output.txt
+            echo '```'
+          } >> "$GITHUB_STEP_SUMMARY"
