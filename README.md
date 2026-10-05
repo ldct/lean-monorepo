@@ -19,6 +19,11 @@ This repository is a grab bag of Lean-related materials. The directory layout is
   with the standard Mathlib v4.33.1 cache, a checked scratch file, and reproducible
   performance comparisons. See its README for setup and measurements.
 
+## Stock Lean 4.33.1
+
+- [`v4.33.1/playground/`](v4.33.1/playground/): stock Lean 4.33.1 playground
+  with the standard prebuilt Mathlib v4.33.1 cache.
+
 ## Advent of Code
 
 - `v19/LeanGT/AoC/`: Advent of Code solutions and parsing utilities (`day1.lean`, `day2.lean`, `Parsers.lean`, etc.).

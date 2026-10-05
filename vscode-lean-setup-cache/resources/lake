@@ -1,0 +1,24 @@
+#!/bin/sh
+base=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+project=$(CDPATH= cd -- "$base/../.." && pwd)
+toolchain=
+case "$1" in +*) toolchain=${1#+}; shift;; esac
+if [ "$1" = serve ]; then
+  shift
+  [ "$1" = -- ] && shift
+  target=${1:-$PWD}
+  [ "$#" -gt 0 ] && shift
+  # PATH belongs to the entire extension host. Cache only this enabled project.
+  target_path=$(CDPATH= cd -- "$target" 2>/dev/null && pwd)
+  if [ "$target_path" = "$project" ]; then
+    if [ -n "$toolchain" ]; then
+      exec python3 "$base/serve-with-setup-cache.py" --project "$project" --toolchain "$toolchain" -- "$@"
+    fi
+    exec python3 "$base/serve-with-setup-cache.py" --project "$project" -- "$@"
+  fi
+  set -- serve -- "$target" "$@"
+fi
+if [ -n "$toolchain" ]; then
+  exec elan run "$toolchain" lake "$@"
+fi
+exec "$(elan which lake)" "$@"

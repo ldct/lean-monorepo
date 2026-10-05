@@ -1,0 +1,154 @@
+--- a/src/Lean/Elab/Frontend.lean
++++ b/src/Lean/Elab/Frontend.lean
+@@ -153,7 +153,7 @@
+ `runInitAttrsForModules` walks on load so we skip page-faulting dep-region `Name`s for modules
+ without `[init]` work.
+ -/
+-private structure IncrSnapshot where
++structure IncrSnapshot where
+   snap        : Language.Lean.InitialSnapshot
+   initModIdxs : Array Nat
+ 
+@@ -195,7 +195,7 @@
+   return oleanRegions ++ irRegions
+ 
+ /-- Loads a snapshot saved by `--incr-(header-)save`. -/
+-private unsafe def loadIncrSnapshot (fname : System.FilePath) :
++unsafe def loadIncrSnapshot (fname : System.FilePath) :
+     IO IncrSnapshot := do
+   let depsFile := fname.addExtension "deps"
+   let moduleArts : Array ModuleArtifacts ←
+@@ -247,14 +247,15 @@
+ saved from `--stdin` but is loaded for a real file). For non-truncated snapshots whose
+ `mainModule` already matches, this is effectively a no-op.
+ -/
+-private def setMainModule (snap : Language.Lean.InitialSnapshot) (m : Name) :
++def setMainModule (snap : Language.Lean.InitialSnapshot) (m : Name)
++    (package? : Option PkgId := none) :
+     Language.Lean.InitialSnapshot := Id.run do
+   let some parsed := snap.result? | return snap
+   let processed := parsed.processedSnap.get
+   let some hps := processed.result? | return snap
+-  if hps.cmdState.env.header.mainModule == m then
++  if hps.cmdState.env.header.mainModule == m && hps.cmdState.env.getModulePackage? == package? then
+     return snap
+-  let newEnv := hps.cmdState.env.setMainModule m
++  let newEnv := hps.cmdState.env.setMainModule m |>.setModulePackage package?
+   -- `Command.mkState` derives `auxDeclNGen.namePrefix` from `mkPrivateName env .anonymous`, which
+   -- bakes in `env.mainModule`. Re-derive so aux decls land in the new module's private namespace
+   -- (otherwise `delabConst` flags them as inaccessible and pretty-prints them with `✝`).
+--- a/src/Lean/Language/Basic.lean
++++ b/src/Lean/Language/Basic.lean
+@@ -504,9 +504,10 @@
+ /--
+   Builds a function for processing a language using incremental snapshots by passing the previous
+   snapshot to `Language.process` on subsequent invocations. -/
+-def Language.mkIncrementalProcessor (process : Option InitSnap → ProcessingM InitSnap) :
++def Language.mkIncrementalProcessor (process : Option InitSnap → ProcessingM InitSnap)
++    (initial? : Option InitSnap := none) :
+     BaseIO (Parser.InputContext → BaseIO InitSnap) := do
+-  let oldRef ← IO.mkRef none
++  let oldRef ← IO.mkRef initial?
+   return fun ictx => do
+     let snap ← process (← oldRef.get) { ictx with }
+     oldRef.set (some snap)
+--- a/src/Lean/Server/FileWorker.lean
++++ b/src/Lean/Server/FileWorker.lean
+@@ -12,6 +12,7 @@
+ 
+ 
+ public import Lean.Language.Lean
++import Lean.Elab.Frontend
+ 
+ 
+ public import Lean.Server.FileWorker.Utils
+@@ -446,6 +447,67 @@
+ 
+ /- Worker initialization sequence. -/
+ section Initialization
++  /-- Match `reparseOptions`' name normalization without consulting option declarations that are
++  registered only when imported initializers run. Values remain exact and are compared below. -/
++  private def normalizeWeakOptionNames (opts : Options) : Options := Id.run do
++    let mut out : Options := {}
++    for (name, value) in opts do
++      let name := if name.getRoot == `weak then name.replacePrefix `weak Name.anonymous else name
++      out := out.insert name value
++    return out
++
++  /--
++  Experimental, deliberately narrow snapshot restoration for a file worker. The launcher is
++  responsible for validating binary/runtime and dependency identity before setting the variable.
++  We still validate the source-position-sensitive header and the effective editor setup here,
++  before replaying any initializers. Any mismatch returns the ordinary processor path.
++  -/
++  private unsafe def prepareServerSnapshot? (doc : DocumentMeta) (opts : Options)
++      (chanOut : Std.Channel OutputMessage) (path : System.FilePath) :
++      IO (Option Language.Lean.InitialSnapshot ×
++        Option (Except Language.Lean.HeaderProcessedSnapshot Language.Lean.SetupImportsResult)) := do
++    let inputCtx := doc.mkInputContext
++    let (headerStx, _, headerMsgs) ← Parser.parseHeader inputCtx
++    if headerMsgs.hasErrors then
++      IO.eprintln "LEAN_SERVER_SNAPSHOT fallback: header parse failed"
++      return (none, none)
++    let incr? ← try
++      some <$> Lean.Elab.loadIncrSnapshot path
++    catch e =>
++      IO.eprintln s!"LEAN_SERVER_SNAPSHOT fallback: load failed: {e}"
++      pure none
++    let some incr := incr?
++      | return (none, none)
++    let snap0 := incr.snap
++    unless headerStx.raw.unsetTrailing.eqWithInfo snap0.stx.unsetTrailing do
++      IO.eprintln "LEAN_SERVER_SNAPSHOT fallback: header mismatch"
++      return (none, none)
++    let setup ← (setupImports doc opts chanOut ⟨headerStx.raw.unsetTrailing⟩) { inputCtx with }
++    let .ok setupOk := setup
++      | IO.eprintln "LEAN_SERVER_SNAPSHOT fallback: setup failed"
++        return (none, some setup)
++    let snap := Lean.Elab.setMainModule snap0 doc.mod setupOk.package?
++    let savedProcessed? := snap.processedResult.get
++    let some savedProcessed := savedProcessed?
++      | IO.eprintln "LEAN_SERVER_SNAPSHOT fallback: snapshot has no processed header"
++        return (none, some setup)
++    let savedOpts := savedProcessed.cmdState.scopes[0]!.opts
++    let setupOpts := normalizeWeakOptionNames setupOk.opts |>.erase `internal.cmdlineSnapshots
++    let snapshotOpts := savedOpts.erase `internal.cmdlineSnapshots
++    let sourceImports := Elab.HeaderSyntax.toModuleHeader ⟨headerStx⟩ |>.imports
++    if !setupOk.plugins.isEmpty || setupOk.imports != sourceImports ||
++        !(setupOpts == snapshotOpts) ||
++        !Elab.inServer.get savedOpts || !Elab.async.get savedOpts ||
++        Lean.internal.cmdlineSnapshots.get savedOpts then
++      IO.eprintln s!"LEAN_SERVER_SNAPSHOT fallback: editor setup/options mismatch; setup={setupOpts}; snapshot={snapshotOpts}"
++      return (none, some setup)
++    withImporting do
++      unsafe Lean.enableInitializersExecution
++      unsafe Lean.runInitAttrsForModules savedProcessed.cmdState.env incr.initModIdxs savedOpts
++    unsafe Lean.enableInitializersExecution
++    IO.eprintln s!"LEAN_SERVER_SNAPSHOT hit: {path}"
++    return (some snap, none)
++
+   def initializeWorker (doc : DocumentMeta) (o e : FS.Stream) (initParams : InitializeParams) (opts : Options)
+       : IO (WorkerContext × WorkerState) := do
+     let clientHasWidgets := initParams.initializationOptions?.bind (·.hasWidgets?) |>.getD false
+@@ -463,8 +525,19 @@
+           -- Emit a refresh request after a file worker restart.
+           pendingRefreshInfo? := some { lastRefreshTimestamp := timestamp, successiveRefreshAttempts := 0 }
+         })
+-    let processor := Language.Lean.process (setupImports doc opts chanOut)
+-    let processor ← Language.mkIncrementalProcessor processor
++    let (initialSnapshot?, cachedSetup?) ← match ← IO.getEnv "LEAN_SERVER_SNAPSHOT" with
++      | some path => unsafe prepareServerSnapshot? doc opts chanOut path
++      | none => pure (none, none)
++    let cachedSetupRef ← IO.mkRef cachedSetup?
++    let setupImportsCached (stx : Elab.HeaderSyntax) :
++        Language.ProcessingT IO
++          (Except Language.Lean.HeaderProcessedSnapshot Language.Lean.SetupImportsResult) :=
++      fun pctx => do
++        if let some setup ← cachedSetupRef.modifyGet fun setup => (setup, none) then
++          return setup
++        setupImports doc opts chanOut stx pctx
++    let processor := Language.Lean.process setupImportsCached
++    let processor ← Language.mkIncrementalProcessor processor initialSnapshot?
+     let initSnap ← processor doc.mkInputContext
+     let _ ← ServerTask.IO.asTask do
+       let importClosure ← IO.lazyPure fun _ => getImportClosure? initSnap

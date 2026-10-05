@@ -1,0 +1,7 @@
+.git/**
+*.vsix
+test.js
+test-cache.py
+package-lock.json
+node_modules/**
+**/__pycache__/**

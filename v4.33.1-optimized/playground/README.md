@@ -55,6 +55,51 @@ not necessarily match an editor worker's configuration. Removing `.lake/` also
 removes the linked compiler; rerun setup before using this project again.
 Existing version directories and their toolchains are independent.
 
+## Editor setup cache
+
+The local Infoview investigation found that repeatedly resolving/checking the
+dependency graph costs seconds; serializing and parsing its 7.2 MB JSON costs
+about a tenth of a second. An experimental, project-local cache can avoid the
+repeated graph work:
+
+```sh
+python3 scripts/install-editor-cache.py
+```
+
+It wraps only this optimized toolchain's Lake executable. Editor `setup-file`
+requests for files in `Playground/` reuse successful responses without scanning
+sources, artifacts, the compiler, or Git metadata. The parsed header (including
+unsaved imports), file path, arguments, and environment remain cache keys.
+Dependency edits, artifact changes, additions, removals, and renames do not
+invalidate entries. After such changes, clear the stored responses:
+
+```sh
+find .lake/editor-setup-cache -name '*.json' ! -name configuration.json -delete
+```
+
+The installer locks package configurations/manifests by content. Changes to those
+still bypass caching until reinstalling; clear stored responses before reinstalling.
+External Lean search paths, dynamic libraries/plugins, and custom setup flags
+bypass caching. Normal Lake commands and builds still perform their usual checks.
+
+Skipping filesystem validation reduced measured file-open time from 4.65 to
+3.19 seconds. Mathlib import time remains. Request diagnostics are recorded in
+`.lake/editor-setup-cache/last-request.json`; `files: 0` reflects the removed scan.
+
+```sh
+# Restore the original Lake executable (also use before rebuilding Lean).
+python3 scripts/install-editor-cache.py --disable
+# Or bypass caching for one process and its children:
+LEAN_EDITOR_SETUP_CACHE=0 lake serve
+# Run cache tests and an actual LSP opening probe:
+python3 scripts/test-editor-setup-cache.py
+python3 scripts/probe-editor.py warm
+LEAN_EDITOR_SETUP_CACHE=0 python3 scripts/probe-editor.py baseline
+```
+
+The probe records timings and protocol traces under `.lake/infoview-investigation`.
+Restart the file in VS Code after installing or disabling the wrapper.
+
 ## Benchmarks
 
 See [BENCHMARKS.md](BENCHMARKS.md) for the measured results on this machine.

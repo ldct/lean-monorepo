@@ -1,0 +1,59 @@
+{
+  "name": "lean-setup-cache-experimental",
+  "displayName": "Lean Setup Cache (Experimental)",
+  "description": "Opt-in background validation for Lean Lake setup-file responses.",
+  "version": "0.1.0",
+  "publisher": "xuanji",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "extensionKind": [
+    "workspace"
+  ],
+  "extensionDependencies": [
+    "leanprover.lean4"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false
+    },
+    "virtualWorkspaces": {
+      "supported": false
+    }
+  },
+  "main": "./extension.js",
+  "activationEvents": [
+    "onCommand:leanSetupCache.enable",
+    "onCommand:leanSetupCache.disable",
+    "onCommand:leanSetupCache.clear",
+    "onCommand:leanSetupCache.status"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "leanSetupCache.enable",
+        "title": "Lean Setup Cache: Enable for Workspace"
+      },
+      {
+        "command": "leanSetupCache.disable",
+        "title": "Lean Setup Cache: Disable for Workspace"
+      },
+      {
+        "command": "leanSetupCache.clear",
+        "title": "Lean Setup Cache: Clear Workspace Cache"
+      },
+      {
+        "command": "leanSetupCache.status",
+        "title": "Lean Setup Cache: Show Status"
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node test.js && python3 test-cache.py",
+    "package": "npx @vscode/vsce@3.9.2 package --allow-missing-repository"
+  }
+}

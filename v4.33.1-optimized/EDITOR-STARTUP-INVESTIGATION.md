@@ -1,5 +1,9 @@
 # Cursor / Lean Infoview startup investigation
 
+**Follow-up:** [VS Code phase measurements and a validated local setup cache](VSCODE-INFOVIEW-FOLLOWUP.md)
+show that JSON is a small fraction of the delay and document the measured
+7.81 → 4.48 second improvement on the M1 Max machine.
+
 Investigated on 2026-09-11 on an Apple M5 Max with 64 GiB RAM, macOS 26.5.2,
 and Cursor's `leanprover.lean4` extension version 0.0.239.
 
