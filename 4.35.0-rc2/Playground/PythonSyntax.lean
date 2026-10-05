@@ -15,7 +15,7 @@ Supported:
 * the builtins `len(xs)`, `sum(xs)`, `range(n)` and `range(a, b)`.
 
 Blocks are delimited by indentation, using the same column-sensitive parser
-combinator (`many1Indent`) that Lean's own `do` blocks are built from.
+combinators (`colGt`, `many1Indent`) that Lean's own `do` blocks are built from.
 -/
 
 /-! ## Builtins
@@ -39,8 +39,9 @@ as Lean reads a bare `0` as a `Nat`. -/
 syntax ident ": " term:51 " = " term : pystmt
 syntax ident " += " term : pystmt
 syntax ident " -= " term : pystmt
-/-- A `for` loop; the body is the indented block that follows. -/
-syntax "for " ident " in " term ":" many1Indent(pystmt) : pystmt
+/-- A `for` loop; the body is the block that follows, indented further than
+the `for` (`colGt`). -/
+syntax "for " ident " in " term ":" colGt many1Indent(pystmt) : pystmt
 syntax "return " term : pystmt
 
 section
@@ -57,27 +58,39 @@ partial def pyBlock (bound : Array Name) (stmts : Array (TSyntax `pystmt)) :
   let mut bound := bound
   let mut elems : Array (TSyntax `doElem) := #[]
   for stmt in stmts do
-    match stmt with
-    | `(pystmt| $x:ident : $ty = $e) =>
-      bound := bound.push x.getId
-      elems := elems.push (← `(doElem| let mut $x:ident : $ty := $e))
-    | `(pystmt| $x:ident = $e) =>
-      if bound.contains x.getId then
-        elems := elems.push (← `(doElem| $x:ident := $e))
-      else
-        bound := bound.push x.getId
-        elems := elems.push (← `(doElem| let mut $x:ident := $e))
-    | `(pystmt| $x:ident += $e) =>
-      elems := elems.push (← `(doElem| $x:ident := $x + $e))
-    | `(pystmt| $x:ident -= $e) =>
-      elems := elems.push (← `(doElem| $x:ident := $x - $e))
-    | `(pystmt| for $x:ident in $xs : $body:pystmt*) =>
-      let inner ← pyBlock bound body
-      -- The hidden `h : x ∈ xs` is what lets `A[i]` discharge its bounds check.
-      elems := elems.push (← `(doElem| for h : $x:ident in $xs do $[$inner:doElem]*))
-    | `(pystmt| return $e) =>
-      elems := elems.push (← `(doElem| return $e))
-    | _ => Macro.throwErrorAt stmt "unsupported Python statement"
+    -- `withRef` makes errors in the generated code point at this statement.
+    let (elem, introduced) ← withRef stmt do
+      match stmt with
+      | `(pystmt| $x:ident : $ty = $e) =>
+        return (← `(doElem| let mut $x:ident : $ty := $e), some x.getId)
+      | `(pystmt| $x:ident = $e) =>
+        if bound.contains x.getId then
+          return (← `(doElem| $x:ident := $e), none)
+        else
+          return (← `(doElem| let mut $x:ident := $e), some x.getId)
+      | `(pystmt| $x:ident += $e) =>
+        return (← `(doElem| $x:ident := $x + $e), none)
+      | `(pystmt| $x:ident -= $e) =>
+        return (← `(doElem| $x:ident := $x - $e), none)
+      | `(pystmt| for $x:ident in $xs : $body:pystmt*) =>
+        let inner ← pyBlock bound body
+        -- A `range` loop binds a hidden `h : x ∈ xs`, which is what lets `A[i]`
+        -- discharge its bounds check. Other loops expand to a plain `for`.
+        let isRange := match xs with
+          | `(range($_)) => true
+          | `(range($_, $_)) => true
+          | _ => false
+        let loop ← if isRange then
+          `(doElem| for h : $x:ident in $xs do $[$inner:doElem]*)
+        else
+          `(doElem| for $x:ident in $xs do $[$inner:doElem]*)
+        return (loop, none)
+      | `(pystmt| return $e) =>
+        return (← `(doElem| return $e), none)
+      | _ => Macro.throwError "unsupported Python statement"
+    elems := elems.push elem
+    if let some x := introduced then
+      bound := bound.push x
   return elems
 
 /-! ## Functions -/
@@ -90,7 +103,7 @@ syntax ident ": " term : pyparam
 This shares the `def` keyword with Lean's own definitions. Lean keeps whichever
 parse consumes more input, and an ordinary definition never has the `->`, so
 ordinary definitions are unaffected. -/
-syntax "def " ident "(" pyparam,* ")" " -> " term ":" many1Indent(pystmt) : command
+syntax "def " ident "(" pyparam,* ")" " -> " term ":" colGt many1Indent(pystmt) : command
 
 macro_rules
   | `(command| def $name:ident ($params:pyparam,*) -> $ret : $body:pystmt*) => do
