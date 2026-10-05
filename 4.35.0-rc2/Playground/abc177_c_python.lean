@@ -1,10 +1,10 @@
-import Playground.PairSum
+import Playground.abc177_c
 import Playground.PythonSyntax
 
 /-!
 # `ans1` and `ans5` in Python syntax
 
-The two imperative solutions from `Playground.PairSum`, written with the
+The two imperative solutions from `Playground.abc177_c`, written with the
 syntax defined in `Playground.PythonSyntax`.
 -/
 
@@ -30,7 +30,7 @@ def ans5(A: Array Int) -> Int:
 end Py
 
 -- The Python definitions expand to the same code as the hand-written ones, so
--- every correctness proof in `Playground.PairSum` applies to them unchanged.
+-- every correctness proof in `Playground.abc177_c` applies to them unchanged.
 example : Py.ans1 = ans1 := rfl
 example : Py.ans5 = ans5 := rfl
 

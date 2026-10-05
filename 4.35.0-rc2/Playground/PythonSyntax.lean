@@ -4,7 +4,7 @@
 A small embedded syntax for writing imperative Lean code the way one would in
 Python. It is only surface syntax: a Python `def` expands into an ordinary
 `Id.run do` definition, the same code one would write by hand. See
-`Playground.PairSumPython` for an example.
+`Playground.abc177_c_python` for an example.
 
 Supported:
 
