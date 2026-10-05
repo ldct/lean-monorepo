@@ -3,10 +3,6 @@
 How to grow `PythonSyntax.lean` from the two functions in
 `abc177_c_python.lean` into a larger subset of Python.
 
-**Status:** the Python syntax files have not been compiled yet (no Lean
-toolchain was available when they were written). Run
-`lake build Playground.abc177_c_python` and fix what breaks before extending.
-
 ## Keep the whole-function translator
 
 Python decides which variables exist per function, not per block, so some

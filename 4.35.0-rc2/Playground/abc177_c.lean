@@ -40,6 +40,16 @@ def ans1 (A : Array Int) : Int := Id.run do
 
   return total
 
+-- O(n²) algorithm, global mutability
+def ans1' (A : Array Int) : Int :=
+  let accumulatePairs : StateM Int Unit := do
+    for hi : i in [0:A.size] do
+      for hj : j in [i + 1:A.size] do
+          let total ← get
+          set (total + A[i] * A[j])
+  let (_, total) := (accumulatePairs).run 0
+  total % MODULUS
+
 -- O(n²) algorithm, functional
 -- This is kind of useless as it's less clear than the spec or mutable version.
 -- The primary advantage is that can easily be ported to functional languages.
@@ -71,6 +81,7 @@ def ans4 (A : Array Int) : Int :=
 
   ret % MODULUS
 
+-- cofactor loop, local mut
 def ans5 (A : Array Int) : Int := Id.run do
   let mut ret : Int := 0
   let mut cofactor := A.sum
@@ -81,6 +92,22 @@ def ans5 (A : Array Int) : Int := Id.run do
 
   return ret % MODULUS
 
+structure CofactorState where
+  ret : Int
+  cofactor : Int
+
+def ans2StateM (A : Array Int) : Int :=
+  let computation : StateM CofactorState Int := do
+    for a in A do
+      modify fun s => { s with cofactor := s.cofactor - a }
+      modify fun s => { s with ret := s.ret + a * s.cofactor }
+
+    return (← get).ret % MODULUS
+
+  computation.run' {
+    ret := 0
+    cofactor := A.foldl (· + ·) 0
+  }
 
 private theorem filterMapPairs (xs : List α) (p : α → Bool) (f : α → β) :
     (xs.filter p).map f = xs.flatMap (fun a => if p a then [f a] else []) := by
