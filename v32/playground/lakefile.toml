@@ -18,3 +18,7 @@ rev = "v4.32.0"
 
 [[lean_lib]]
 name = "Playground"
+
+# Minimal pinned analytic prerequisites; see SOURCE_PROVENANCE.json.
+[[lean_lib]]
+name = "PrimeNumberTheoremAnd"

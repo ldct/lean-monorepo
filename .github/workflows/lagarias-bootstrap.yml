@@ -1,0 +1,98 @@
+name: Lagarias offline development bootstrap
+
+# Temporary bootstrap, triggered only by edits to this workflow. The archive
+# contains public toolchain/package files, never Git metadata or credentials.
+on:
+  push:
+    branches: ['codex/lagarias-formalization']
+    paths: ['.github/workflows/lagarias-bootstrap.yml']
+
+permissions:
+  contents: read
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove checkout authentication before preparing public files
+        # Recursive cleanup fails on the unrelated tutorials/Simons2025 gitlink.
+        run: git config --local --unset-all http.https://github.com/.extraheader
+      - uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596
+        with:
+          lake-package-directory: v32/playground
+          auto-config: 'false'
+          build: 'false'
+          test: 'false'
+          lint: 'false'
+          use-mathlib-cache: 'true'
+          use-github-cache: 'false'
+      - name: Prepare public runtime and source files
+        working-directory: v32/playground
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/lagarias-environment"
+          mkdir -p "$root/toolchain" "$root/project"
+          toolchain="$(dirname "$(dirname "$(elan which lean)")")"
+          rsync -a --exclude='*.a' --exclude='*.o' --exclude='*.c' \
+            --exclude='src' "$toolchain/" "$root/toolchain/"
+          rsync -a --exclude='.git' --exclude='node_modules' \
+            --exclude='*.a' --exclude='*.o' --exclude='*.c' \
+            --exclude='build/ir' --exclude='build/bin' \
+            ./ "$root/project/"
+          cp ../Lagarias.lean "$root/Lagarias.lean"
+          cp ../LAGARIAS.md "$root/LAGARIAS.md"
+          find "$root/project/.lake/packages" -path '*/.lake/build/lib/lean' \
+            -type d | sed "s|$root/project/||" | sort > "$root/package-paths.txt"
+          tar -C "$RUNNER_TEMP" -I 'zstd -T2 -6' \
+            -cf "$RUNNER_TEMP/lagarias-environment.tar.zst" lagarias-environment
+          # The connector has a 512 MiB artifact limit. Each independent ZIP
+          # wraps one 400 MiB chunk; concatenate chunks before decompression.
+          split -b 400M -d -a 2 "$RUNNER_TEMP/lagarias-environment.tar.zst" \
+            "$RUNNER_TEMP/lagarias-environment.part-"
+          cd "$RUNNER_TEMP"
+          sha256sum lagarias-environment.part-* > lagarias-environment.sha256
+          ls -lh lagarias-environment.part-*
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lagarias-environment-part-00
+          path: ${{ runner.temp }}/lagarias-environment.part-00
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lagarias-environment-part-01
+          path: ${{ runner.temp }}/lagarias-environment.part-01
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lagarias-environment-part-02
+          path: ${{ runner.temp }}/lagarias-environment.part-02
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lagarias-environment-part-03
+          path: ${{ runner.temp }}/lagarias-environment.part-03
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lagarias-environment-part-04
+          path: ${{ runner.temp }}/lagarias-environment.part-04
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lagarias-environment-part-05
+          path: ${{ runner.temp }}/lagarias-environment.part-05
+          compression-level: 0
+          retention-days: 1
+      - uses: actions/upload-artifact@v4
+        with:
+          name: lagarias-environment-checksums
+          path: ${{ runner.temp }}/lagarias-environment.sha256
+          retention-days: 1

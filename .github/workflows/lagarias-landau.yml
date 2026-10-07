@@ -1,0 +1,131 @@
+name: Lagarias Landau prerequisites
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/lagarias-landau.yml'
+      - 'v32/playground/Playground/Lagarias/Landau*.lean'
+      - 'v32/playground/Playground/Lagarias/Blueprint*.lean'
+      - 'v32/playground/PrimeNumberTheoremAnd/**'
+      - 'v32/playground/lean-toolchain'
+      - 'v32/playground/lakefile.toml'
+      - 'v32/playground/lake-manifest.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lagarias-landau-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  analytic-prerequisites:
+    name: Blueprint prerequisites (not the RH equivalence)
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      report: ${{ steps.verify.outputs.report }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare pinned Lean and Mathlib
+        uses: leanprover/lean-action@50fcf42d2e460296f1a34b402e990d1b24f8b596
+        with:
+          lake-package-directory: v32/playground
+          auto-config: 'false'
+          build: 'false'
+          test: 'false'
+          lint: 'false'
+          use-mathlib-cache: 'true'
+      - name: Restore previously built proof objects
+        uses: actions/cache/restore@v5
+        with:
+          path: v32/playground/.lake/build
+          key: lagarias-proofs-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('v32/playground/lean-toolchain', 'v32/playground/lake-manifest.json', 'v32/playground/PrimeNumberTheoremAnd/SOURCE_PROVENANCE.json') }}-${{ github.run_id }}
+          restore-keys: |
+            lagarias-proofs-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('v32/playground/lean-toolchain', 'v32/playground/lake-manifest.json', 'v32/playground/PrimeNumberTheoremAnd/SOURCE_PROVENANCE.json') }}-
+      - name: Build and audit each blueprint milestone transitively
+        id: verify
+        working-directory: v32/playground
+        run: |
+          audit_file="$(mktemp ./LagariasBlueprintAuditXXXXXX.lean)"
+          log_file="$(mktemp ./LagariasBlueprintLogXXXXXX.txt)"
+          report="$(mktemp ./LagariasBlueprintReportXXXXXX.md)"
+          finish() {
+            {
+              echo 'report<<LAGARIAS_BLUEPRINT_REPORT_END'
+              cat "$report"
+              echo 'LAGARIAS_BLUEPRINT_REPORT_END'
+            } >> "$GITHUB_OUTPUT"
+            cat "$report" >> "$GITHUB_STEP_SUMMARY"
+            rm -f "$audit_file" "$log_file" "$report"
+          }
+          trap finish EXIT
+          printf '## Blueprint prerequisite verification\n\nCommit `%s`, run `%s`.\n\nThese checks do not prove the final RH equivalence. Lake validates source hashes before reusing cached proof objects; every milestone is audited again.\n' \
+            "$GITHUB_SHA" "$GITHUB_RUN_ID" > "$report"
+          append_report() {
+            printf '\n### %s: %s\n\n```text\n' "$1" "$2" >> "$report"
+            grep -v '^trace: ' "$log_file" | tail -c 6000 >> "$report" || true
+            printf '\n```\n' >> "$report"
+          }
+          failures=0
+          shopt -s nullglob
+          for source in Playground/Lagarias/Landau*.lean Playground/Lagarias/Blueprint*.lean; do
+            module="Playground.Lagarias.${source##*/}"
+            module="${module%.lean}"
+            if ! lake build "$module" > "$log_file" 2>&1; then
+              cat "$log_file"
+              append_report "$module" 'compilation failed'
+              failures=1
+              continue
+            fi
+            cat "$log_file"
+            printf 'import %s\n' "$module" > "$audit_file"
+            cat >> "$audit_file" <<'LEAN'
+          import Lean.Util.CollectAxioms
+          open Lean Elab Command in
+          run_cmd do
+            let env ← getEnv
+            let root := `LeanEval.NumberTheory.Lagarias
+            let declarations := env.constants.toList.filter fun entry => root.isPrefixOf entry.1
+            if declarations.isEmpty then
+              throwError "Blueprint audit found no declarations"
+            let allowed := #[``propext, ``Classical.choice, ``Quot.sound]
+            for (name, _) in declarations do
+              let axioms ← Lean.collectAxioms name
+              let forbidden := axioms.filter fun axiomName => !allowed.contains axiomName
+              unless forbidden.isEmpty do
+                throwError "{name} depends on forbidden axioms: {forbidden}"
+            logInfo m!"Audited {declarations.length} Lagarias declarations with only standard axioms."
+          LEAN
+            if lake env lean "$audit_file" > "$log_file" 2>&1; then
+              cat "$log_file"
+              append_report "$module" 'compiled and audited'
+            else
+              cat "$log_file"
+              append_report "$module" 'axiom audit failed'
+              failures=1
+            fi
+          done
+          exit "$failures"
+      - name: Save checked build products for the next iteration
+        if: always() && !cancelled()
+        uses: actions/cache/save@v5
+        with:
+          path: v32/playground/.lake/build
+          key: lagarias-proofs-${{ runner.os }}-${{ runner.arch }}-${{ hashFiles('v32/playground/lean-toolchain', 'v32/playground/lake-manifest.json', 'v32/playground/PrimeNumberTheoremAnd/SOURCE_PROVENANCE.json') }}-${{ github.run_id }}
+  diagnostics:
+    name: Compact blueprint diagnostics
+    needs: analytic-prerequisites
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Print verification report
+        env:
+          REPORT: ${{ needs.analytic-prerequisites.outputs.report }}
+          RESULT: ${{ needs.analytic-prerequisites.result }}
+        run: |
+          printf '%s\n' "$REPORT"
+          printf '\nPrerequisite job result: %s\n' "$RESULT"
+          test -n "$REPORT"
